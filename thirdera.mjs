@@ -84,6 +84,11 @@ Hooks.once("init", function () {
     // Register Handlebars helpers
     registerHandlebarsHelpers();
 
+    // Register Handlebars partials
+    loadTemplates([
+        "systems/thirdera/templates/partials/editor-box.hbs"
+    ]);
+
     console.log("Third Era | System initialized");
 });
 

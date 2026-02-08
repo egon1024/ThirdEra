@@ -42,5 +42,19 @@
             "character": "Character",
             "npc": "NPC"
         }
+    },
+    "TYPES": {
+        "Item": {
+            "spell": "Spell",
+            "weapon": "Weapon",
+            "armor": "Armor",
+            "equipment": "Equipment",
+            "feat": "Feat",
+            "skill": "Skill"
+        },
+        "Actor": {
+            "character": "Character",
+            "npc": "NPC"
+        }
     }
 }

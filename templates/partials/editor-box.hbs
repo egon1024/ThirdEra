@@ -1,0 +1,28 @@
+{{!--
+Reusable editor box component with display/edit mode toggle
+
+Parameters:
+- label: (string) The header label to display above the editor
+- name: (string) The field name for the prose-mirror element (e.g. "system.description")
+- value: (string) The current value of the field
+- enrichedContent: (string) The enriched HTML content to display
+- documentUuid: (string) The document UUID for the prose-mirror element
+- minHeight: (string, optional) The minimum height in edit mode (default: "10em")
+
+Usage:
+{{> editor-box
+label="Description"
+name="system.description"
+value=system.description
+enrichedContent=enriched.description
+documentUuid=item.uuid
+minHeight="15em"
+}}
+--}}
+<div class="editor-box">
+    <label>{{label}}</label>
+    <prose-mirror name="{{name}}" data-document-u-u-i-d="{{documentUuid}}" value="{{value}}" toggled="false"
+        style="--editor-min-height: {{#if minHeight}}{{minHeight}}{{else}}10em{{/if}};">
+        {{{enrichedContent}}}
+    </prose-mirror>
+</div>

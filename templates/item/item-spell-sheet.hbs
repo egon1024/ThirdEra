@@ -18,22 +18,21 @@
         {{!-- Description Tab --}}
         <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
             data-tab="description">
-            <div class="editor-box">
-                <label>Description</label>
-                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
-                    value="{{system.description}}" toggled="false">
-                    {{{enriched.description}}}
-                </prose-mirror>
-            </div>
+            {{> systems/thirdera/templates/partials/editor-box.hbs
+            label="Description"
+            name="system.description"
+            value=system.description
+            enrichedContent=enriched.description
+            documentUuid=item.uuid
+            }}
 
-            <div class="editor-box">
-                <label>Material Components</label>
-                <prose-mirror name="system.components.materialDescription" data-document-u-u-i-d="{{item.uuid}}"
-                    value="{{#if system.components.materialDescription}}{{system.components.materialDescription}}{{else}}<ul><li></li></ul>{{/if}}"
-                    toggled="false">
-                    {{{enriched.materialDescription}}}
-                </prose-mirror>
-            </div>
+            {{> systems/thirdera/templates/partials/editor-box.hbs
+            label="Material Components"
+            name="system.components.materialDescription"
+            value=system.components.materialDescription
+            enrichedContent=enriched.materialDescription
+            documentUuid=item.uuid
+            }}
         </div>
 
         {{!-- Details Tab --}}

@@ -26,6 +26,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
     };
 
+
+
     /** @override */
     tabGroups = {
         primary: "description"

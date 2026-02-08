@@ -129,16 +129,14 @@
 }
 
 /* Fix Edit Mode */
-.thirdera prose-mirror[toggled="true"],
-.thirdera prose-mirror.active {
+.thirdera prose-mirror[toggled="true"] {
   min-height: 200px !important;
   display: flex !important;
   flex-direction: column !important;
   border: 1px solid #782e22;
 }
 
-.thirdera prose-mirror[toggled="true"] .editor-container,
-.thirdera prose-mirror.active .editor-container {
+.thirdera prose-mirror[toggled="true"] .editor-container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -146,11 +144,15 @@
   position: relative !important;
 }
 
-.thirdera prose-mirror[toggled="true"] .ProseMirror,
-.thirdera prose-mirror.active .ProseMirror {
+.thirdera prose-mirror:not([toggled="true"]) .editor-container,
+.thirdera prose-mirror:not([toggled="true"]) .cm-editor {
+  display: none !important;
+}
+
+.thirdera prose-mirror[toggled="true"] .ProseMirror {
   flex: 1;
-  min-height: 10em !important;
-  /* At least 10em height */
+  min-height: var(--editor-min-height, 10em) !important;
+  /* Configurable minimum height, defaults to 10em */
   height: auto !important;
   overflow-y: auto !important;
   background: transparent !important;
@@ -159,6 +161,11 @@
   position: relative !important;
   resize: vertical;
   /* Allow vertical resizing */
+}
+
+.thirdera prose-mirror[toggled="true"] .cm-editor {
+  background: transparent !important;
+  min-height: var(--editor-min-height, 10em) !important;
 }
 
 /* Abilities */
