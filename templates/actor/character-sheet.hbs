@@ -60,7 +60,7 @@
           <h4 class="ability-name">{{lookup @root.abilityScores key}}</h4>
           <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"
             placeholder="10" />
-          <span class="ability-mod">{{signedNumber ability.mod}}</span>
+          <span class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}">{{signedNumber ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span class="dex-cap-note" title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by armor">(max)</span>{{/if}}{{/if}}</span>
           <a class="ability-check" data-action="abilityCheck" data-ability="{{key}}">
             <i class="fas fa-dice-d20"></i>
           </a>
@@ -228,8 +228,8 @@
           </div>
           <div class="item-controls">
             <span class="item-detail">AC +{{item.system.armor.bonus}}</span>
-            <a class="item-equip" data-action="toggleEquip" title="Toggle Equipped">
-              <i class="fas {{#if (eq item.system.equipped 'true')}}fa-shield-alt{{else}}fa-shield{{/if}}"></i>
+            <a class="item-equip {{#if (eq item.system.equipped 'true')}}equipped{{else}}unequipped{{/if}}" data-action="toggleEquip" title="Toggle Equipped">
+              <i class="{{#if (eq item.system.equipped 'true')}}fas fa-check-circle{{else}}far fa-circle{{/if}}"></i>
             </a>
             <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>

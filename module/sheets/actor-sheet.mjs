@@ -58,6 +58,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /** @override */
+    async _preRender(context, options) {
+        await super._preRender(context, options);
+        const focused = this.element?.querySelector(":focus");
+        this._focusedInputName = focused?.name || null;
+    }
+
+    /** @override */
+    _onRender(context, options) {
+        super._onRender(context, options);
+        if (this._focusedInputName) {
+            const input = this.element.querySelector(`[name="${this._focusedInputName}"]`);
+            if (input) {
+                input.focus();
+            }
+            this._focusedInputName = null;
+        }
+    }
+
+    /** @override */
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
 
@@ -78,6 +97,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         // Ensure tabs state exists
         const tabs = this.tabGroups || { primary: "description" };
 
+        // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
+        const uncappedDexMod = Math.floor((systemData.abilities.dex.value - 10) / 2);
+        const dexCap = {
+            isCapped: systemData.abilities.dex.mod < uncappedDexMod,
+            uncappedMod: uncappedDexMod
+        };
+
         // Enrich HTML biography
         const enriched = {
             biography: await TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
@@ -93,6 +119,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             config,
             tabs,
             enriched,
+            dexCap,
             editable: this.isEditable
         };
     }
@@ -263,10 +290,33 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     static async #onToggleEquip(event, target) {
         const itemId = target.closest("[data-item-id]")?.dataset.itemId;
         const item = this.actor.items.get(itemId);
-        if (item) {
-            const newValue = item.system.equipped === "true" ? "false" : "true";
-            await item.update({ "system.equipped": newValue });
+        if (!item) return;
+
+        const equipping = item.system.equipped !== "true";
+        if (!equipping) {
+            // Unequipping — just toggle off
+            return await item.update({ "system.equipped": "false" });
         }
+
+        // Equipping — unequip any other item in the same slot (body armor or shield)
+        const isShield = item.system.armor?.type === "shield";
+        const updates = [];
+        for (const other of this.actor.items) {
+            if (other.id === item.id) continue;
+            if (other.type !== "armor") continue;
+            if (other.system.equipped !== "true") continue;
+            const otherIsShield = other.system.armor?.type === "shield";
+            // Only conflict if both are shields or both are body armor
+            if (isShield === otherIsShield) {
+                updates.push({ _id: other.id, "system.equipped": "false" });
+            }
+        }
+        if (updates.length) {
+            const unequippedNames = updates.map(u => this.actor.items.get(u._id)?.name).filter(Boolean);
+            await this.actor.updateEmbeddedDocuments("Item", updates);
+            ui.notifications.info(`Unequipped ${unequippedNames.join(", ")} to equip ${item.name}.`);
+        }
+        await item.update({ "system.equipped": "true" });
     }
 
     /**

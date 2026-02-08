@@ -91,8 +91,24 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /** @override */
+    async _preRender(context, options) {
+        await super._preRender(context, options);
+        const focused = this.element?.querySelector(":focus");
+        this._focusedInputName = focused?.name || null;
+    }
+
+    /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
+
+        // Restore focus after re-render (preserves tab navigation with submitOnChange)
+        if (this._focusedInputName) {
+            const input = this.element.querySelector(`[name="${this._focusedInputName}"]`);
+            if (input) {
+                input.focus();
+            }
+            this._focusedInputName = null;
+        }
 
         // Manual listener for ProseMirror changes
         const editors = this.element.querySelectorAll("prose-mirror");

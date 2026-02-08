@@ -1,5 +1,5 @@
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
-import { computeAC } from "./_ac-helpers.mjs";
+import { getEffectiveMaxDex, applyMaxDex, computeAC } from "./_ac-helpers.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -112,6 +112,10 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         for (const [key, ability] of Object.entries(this.abilities)) {
             ability.mod = Math.floor((ability.value - 10) / 2);
         }
+
+        // Apply armor max-Dex cap to Dex modifier before any derived calculations
+        const effectiveMaxDex = getEffectiveMaxDex(this);
+        applyMaxDex(this, effectiveMaxDex);
 
         // Calculate initiative
         this.attributes.initiative.bonus = this.abilities.dex.mod;

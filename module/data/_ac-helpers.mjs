@@ -1,19 +1,60 @@
 /**
- * Shared AC calculation logic for Character and NPC data models.
+ * Shared armor and AC calculation logic for Character and NPC data models.
  *
  * D&D 3.5 SRD AC formula (subset implemented here):
- *   AC = 10 + armor bonus + shield bonus + dex mod (capped) + size mod + misc
- *   Touch AC = 10 + dex mod (capped) + size mod + misc
+ *   AC = 10 + armor bonus + shield bonus + dex mod (already capped) + size mod + misc
+ *   Touch AC = 10 + dex mod (already capped) + size mod + misc
  *   Flat-Footed AC = AC but dex contribution clamped to min(dex, 0)
  */
 
 /**
+ * Calculate the effective maximum Dex bonus imposed by equipped armor/shields.
+ * Should be called early in prepareDerivedData() so dex.mod can be capped before
+ * any derived calculations (initiative, reflex, skills, AC, etc.).
+ *
+ * @param {TypeDataModel} system  The actor's system data.
+ * @returns {number|null}  The lowest maxDex across all equipped armor/shields, or null if unlimited.
+ */
+export function getEffectiveMaxDex(system) {
+    let effectiveMaxDex = null;
+
+    for (const item of system.parent.items) {
+        if (item.type !== "armor") continue;
+        if (item.system.equipped !== "true") continue;
+        if (item.system.armor.type === "shield") continue; // SRD: shields don't limit max Dex
+
+        const maxDex = item.system.armor.maxDex;
+        if (maxDex !== null) {
+            effectiveMaxDex = effectiveMaxDex === null
+                ? maxDex
+                : Math.min(effectiveMaxDex, maxDex);
+        }
+    }
+
+    return effectiveMaxDex;
+}
+
+/**
+ * Apply the armor max-Dex cap to the Dex modifier.
+ * Stores the uncapped mod and max-Dex value on the dex ability object for display.
+ * Must be called after ability mods are calculated but before any derived stats.
+ *
+ * @param {TypeDataModel} system        The actor's system data.
+ * @param {number|null}   effectiveMaxDex  From getEffectiveMaxDex(), or null if unlimited.
+ */
+export function applyMaxDex(system, effectiveMaxDex) {
+    const dex = system.abilities.dex;
+    if (effectiveMaxDex !== null && dex.mod > effectiveMaxDex) {
+        dex.mod = effectiveMaxDex;
+    }
+}
+
+/**
  * Compute AC values and a human-readable breakdown from the actor's system data.
+ * Expects dex.mod to already be capped via applyMaxDex().
  * Mutates `system.attributes.ac` in place (value, touch, flatFooted, breakdown).
  *
  * @param {TypeDataModel} system  The actor's system data (CharacterData or NPCData).
- *                                Must have: parent.items, abilities.dex.mod, details.size,
- *                                attributes.ac.misc
  */
 export function computeAC(system) {
     const ac = system.attributes.ac;
@@ -22,19 +63,17 @@ export function computeAC(system) {
     const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[sizeName] ?? 0;
     const misc = ac.misc ?? 0;
 
-    // Gather equipped armor items
+    // Gather equipped armor items (bonuses only; maxDex already applied to dex.mod)
     let armorBonus = 0;
     let shieldBonus = 0;
     let armorName = null;
     let shieldName = null;
-    let effectiveMaxDex = null; // null = unlimited
 
     for (const item of system.parent.items) {
         if (item.type !== "armor") continue;
         if (item.system.equipped !== "true") continue;
 
         const bonus = item.system.armor.bonus ?? 0;
-        const maxDex = item.system.armor.maxDex; // null means no limit
         const isShield = item.system.armor.type === "shield";
 
         if (isShield) {
@@ -48,30 +87,15 @@ export function computeAC(system) {
                 armorName = item.name;
             }
         }
-
-        // Effective maxDex is the lowest maxDex across all equipped armor/shields
-        if (maxDex !== null) {
-            effectiveMaxDex = effectiveMaxDex === null
-                ? maxDex
-                : Math.min(effectiveMaxDex, maxDex);
-        }
     }
-
-    // Cap dex modifier by effective maxDex
-    const cappedDex = effectiveMaxDex !== null
-        ? Math.min(dexMod, effectiveMaxDex)
-        : dexMod;
 
     // Flat-footed: lose positive dex bonus (negative dex still applies)
     const flatFootedDex = Math.min(dexMod, 0);
-    const cappedFlatFootedDex = effectiveMaxDex !== null
-        ? Math.min(flatFootedDex, effectiveMaxDex)
-        : flatFootedDex;
 
     // Calculate totals
-    ac.value = 10 + armorBonus + shieldBonus + cappedDex + sizeMod + misc;
-    ac.touch = 10 + cappedDex + sizeMod + misc;
-    ac.flatFooted = 10 + armorBonus + shieldBonus + cappedFlatFootedDex + sizeMod + misc;
+    ac.value = 10 + armorBonus + shieldBonus + dexMod + sizeMod + misc;
+    ac.touch = 10 + dexMod + sizeMod + misc;
+    ac.flatFooted = 10 + armorBonus + shieldBonus + flatFootedDex + sizeMod + misc;
 
     // Build breakdown for display (modifiers only; base 10 shown separately in template)
     const breakdown = [];
@@ -82,15 +106,9 @@ export function computeAC(system) {
     if (shieldBonus !== 0) {
         breakdown.push({ label: shieldName, value: shieldBonus });
     }
-
-    // Show dex line with max-dex note if capped
-    const dexLabel = (effectiveMaxDex !== null && dexMod > effectiveMaxDex)
-        ? `Dex (max ${signedInt(effectiveMaxDex)})`
-        : "Dex";
-    if (cappedDex !== 0) {
-        breakdown.push({ label: dexLabel, value: cappedDex });
+    if (dexMod !== 0) {
+        breakdown.push({ label: "Dex", value: dexMod });
     }
-
     if (sizeMod !== 0) {
         breakdown.push({ label: "Size", value: sizeMod });
     }
@@ -99,9 +117,4 @@ export function computeAC(system) {
     }
 
     ac.breakdown = breakdown;
-}
-
-/** Format an integer with explicit sign ("+2", "-1", "+0"). */
-function signedInt(n) {
-    return n >= 0 ? `+${n}` : `${n}`;
 }
