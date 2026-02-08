@@ -1,0 +1,60 @@
+{
+  "id": "thirdera",
+  "title": "Third Era (D&D 3.5 SRD)",
+  "description": "A D&D 3.5 Edition game system for Foundry VTT using the System Reference Document (SRD) under the Open Game License.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "ThirdEra Development Team"
+    }
+  ],
+  "esmodules": [
+    "thirdera.mjs"
+  ],
+  "styles": [
+    "styles/thirdera.css"
+  ],
+  "packs": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": ["biography"]
+      },
+      "npc": {
+        "htmlFields": ["biography"]
+      }
+    },
+    "Item": {
+      "weapon": {},
+      "armor": {},
+      "equipment": {},
+      "spell": {},
+      "feat": {},
+      "skill": {}
+    }
+  },
+  "socket": false,
+  "initiative": "1d20 + @abilities.dex.mod",
+  "grid": {
+    "distance": 5,
+    "units": "ft"
+  },
+  "primaryTokenAttribute": "attributes.hp",
+  "secondaryTokenAttribute": null,
+  "url": "https://github.com/egon1024/ThirdEra",
+  "manifest": "https://github.com/egon1024/ThirdEra/releases/latest/download/system.json",
+  "download": "https://github.com/egon1024/ThirdEra/archive/refs/heads/main.zip",
+  "license": "LICENSE",
+  "readme": "README.md"
+}

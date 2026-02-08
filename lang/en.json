@@ -1,0 +1,60 @@
+{
+    "THIRDERA": {
+        "SheetLabels": {
+            "Actor": "Third Era Character Sheet",
+            "Item": "Third Era Item Sheet"
+        },
+        "AbilityScores": {
+            "str": "Strength",
+            "dex": "Dexterity",
+            "con": "Constitution",
+            "int": "Intelligence",
+            "wis": "Wisdom",
+            "cha": "Charisma"
+        },
+        "AbilityScoresAbbr": {
+            "str": "STR",
+            "dex": "DEX",
+            "con": "CON",
+            "int": "INT",
+            "wis": "WIS",
+            "cha": "CHA"
+        },
+        "Saves": {
+            "fort": "Fortitude",
+            "ref": "Reflex",
+            "will": "Will"
+        },
+        "SavesAbbr": {
+            "fort": "Fort",
+            "ref": "Ref",
+            "will": "Will"
+        },
+        "ItemTypes": {
+            "weapon": "Weapon",
+            "armor": "Armor",
+            "equipment": "Equipment",
+            "spell": "Spell",
+            "feat": "Feat",
+            "skill": "Skill"
+        },
+        "ActorTypes": {
+            "character": "Character",
+            "npc": "NPC"
+        }
+    },
+    "TYPES": {
+        "Item": {
+            "spell": "Spell",
+            "weapon": "Weapon",
+            "armor": "Armor",
+            "equipment": "Equipment",
+            "feat": "Feat",
+            "skill": "Skill"
+        },
+        "Actor": {
+            "character": "Character",
+            "npc": "NPC"
+        }
+    }
+}

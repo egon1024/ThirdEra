@@ -1,0 +1,62 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Item Name" /></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item active" data-action="changeTab" data-group="primary" data-tab="description">Description</a>
+        <a class="item" data-action="changeTab" data-group="primary" data-tab="attributes">Attributes</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        {{!-- Description Tab --}}
+        <div class="tab active" data-group="primary" data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+
+        {{!-- Attributes Tab --}}
+        <div class="tab attributes {{#if (eq tabs.primary 'attributes')}}active{{/if}}" data-group="primary"
+            data-tab="attributes">
+            <div class="form-group">
+                <label>Damage Dice</label>
+                <input type="text" name="system.damage.dice" value="{{system.damage.dice}}" data-dtype="String" />
+            </div>
+            <div class="form-group">
+                <label>Damage Type</label>
+                <input type="text" name="system.damage.type" value="{{system.damage.type}}" data-dtype="String" />
+            </div>
+            <div class="form-group">
+                <label>Critical Range</label>
+                <input type="text" name="system.critical.range" value="{{system.critical.range}}" data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Critical Multiplier</label>
+                <input type="text" name="system.critical.multiplier" value="{{system.critical.multiplier}}"
+                    data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Range (ft)</label>
+                <input type="text" name="system.range" value="{{system.range}}" data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Cost (gp)</label>
+                <input type="text" name="system.cost" value="{{system.cost}}" data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Weight (lbs)</label>
+                <input type="text" name="system.weight" value="{{system.weight}}" data-dtype="Number" />
+            </div>
+        </div>
+    </section>
+</form>

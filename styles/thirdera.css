@@ -1,0 +1,439 @@
+/* Third Era System Styles */
+
+.thirdera {
+  font-family: "Signika", sans-serif;
+}
+
+.thirdera .window-content {
+  height: 100%;
+  padding: 5px;
+  overflow-y: scroll;
+}
+
+.thirdera .sheet-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 2px solid #000;
+}
+
+.thirdera .sheet-header .profile-img {
+  flex: 0 0 100px;
+  height: 100px;
+  margin-right: 10px;
+  border: none;
+}
+
+.thirdera .sheet-header .header-fields {
+  flex: 1;
+}
+
+.thirdera .sheet-header h1.charname {
+  margin: 0;
+  padding: 0;
+  border-bottom: 0;
+}
+
+.thirdera .sheet-header h1.charname input {
+  width: 100%;
+  height: 36px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+}
+
+.thirdera .sheet-tabs {
+  flex: 0;
+  border-top: 1px solid #AAA;
+  border-bottom: 1px solid #AAA;
+}
+
+.thirdera .sheet-body {
+  flex: 1;
+  overflow: hidden;
+}
+
+.thirdera .sheet-body .tab {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.thirdera .sheet-body .tab.active {
+  display: block;
+}
+
+.thirdera .grid {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-row-gap: 5px;
+  justify-items: start;
+  align-items: center;
+}
+
+.thirdera .grid-3col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.thirdera .resource {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.thirdera .resource-label {
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.thirdera .resource input {
+  width: 100%;
+  height: 28px;
+  margin-top: 2px;
+}
+
+/* Dynamic Editor Sizing */
+.thirdera .editor-box {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.thirdera .editor-box label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.thirdera prose-mirror {
+  display: block;
+  width: 100%;
+  height: auto !important;
+  min-height: 20px !important;
+  border: 1px solid transparent;
+}
+
+/* Fix View Mode */
+.thirdera prose-mirror .editor-content {
+  height: auto !important;
+  min-height: 1.5em;
+  position: relative !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  padding: 4px;
+}
+
+/* Fix Edit Mode */
+.thirdera prose-mirror.active {
+  min-height: 200px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border: 1px solid #782e22;
+}
+
+.thirdera prose-mirror.active .editor-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative !important;
+}
+
+.thirdera prose-mirror.inactive .editor-container,
+.thirdera prose-mirror.inactive .cm-editor {
+  display: none !important;
+}
+
+.thirdera prose-mirror.active .ProseMirror {
+  flex: 1;
+  min-height: var(--editor-min-height, 10em) !important;
+  /* Configurable minimum height, defaults to 10em */
+  height: auto !important;
+  overflow-y: auto !important;
+  background: transparent !important;
+  /* Match panel background */
+  padding: 5px;
+  position: relative !important;
+  resize: vertical;
+  /* Allow vertical resizing */
+}
+
+.thirdera prose-mirror.active .cm-editor {
+  background: transparent !important;
+  min-height: var(--editor-min-height, 10em) !important;
+}
+
+/* Abilities */
+.thirdera .abilities-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .abilities-list .ability {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #CCC;
+}
+
+.thirdera .abilities-list .ability h4 {
+  flex: 0 0 120px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.thirdera .abilities-list .ability input {
+  flex: 0 0 60px;
+  margin: 0 10px;
+  text-align: center;
+}
+
+.thirdera .abilities-list .ability .ability-mod {
+  flex: 0 0 40px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.thirdera .abilities-list .ability a.rollable {
+  flex: 0 0 30px;
+  text-align: center;
+  color: #4169E1;
+}
+
+.thirdera .abilities-list .ability a.rollable:hover {
+  color: #FFA500;
+  text-shadow: 0 0 10px #FFA500;
+}
+
+/* Combat Stats */
+.thirdera .combat-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  margin: 15px 0;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid #CCC;
+}
+
+.thirdera .stat-block {
+  text-align: center;
+}
+
+.thirdera .stat-block label {
+  display: block;
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.thirdera .stat-block .stat-value {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.thirdera .stat-block input {
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Saves */
+.thirdera .saves-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .saves-list .save {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #CCC;
+}
+
+.thirdera .saves-list .save h4 {
+  flex: 0 0 120px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.thirdera .saves-list .save input {
+  flex: 0 0 60px;
+  margin: 0 10px;
+  text-align: center;
+}
+
+.thirdera .saves-list .save .save-total {
+  flex: 0 0 40px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.thirdera .saves-list .save a.rollable {
+  flex: 0 0 30px;
+  text-align: center;
+  color: #4169E1;
+}
+
+.thirdera .saves-list .save a.rollable:hover {
+  color: #FFA500;
+  text-shadow: 0 0 10px #FFA500;
+}
+
+/* Items Lists */
+.thirdera .items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0 5px;
+  padding: 5px;
+  background: #4169E1;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.thirdera .items-header h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.thirdera .items-header .item-create {
+  color: white;
+  cursor: pointer;
+}
+
+.thirdera .items-header .item-create:hover {
+  text-shadow: 0 0 10px white;
+}
+
+.thirdera .items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .items-list .item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #CCC;
+}
+
+.thirdera .items-list .item:hover {
+  background: transparent;
+  color: #007bff;
+}
+
+.thirdera .items-list .item:hover h4 {
+  color: #007bff;
+}
+
+.thirdera .items-list .item .item-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.thirdera .items-list .item .item-image {
+  flex: 0 0 30px;
+  margin-right: 10px;
+}
+
+.thirdera .items-list .item .item-image img {
+  border: none;
+}
+
+.thirdera .items-list .item h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.thirdera .items-list .item .item-controls {
+  flex: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.thirdera .items-list .item .item-detail {
+  font-size: 12px;
+  color: #666;
+  margin-right: 10px;
+}
+
+.thirdera .items-list .item .item-controls a {
+  font-size: 14px;
+  color: #4169E1;
+}
+
+.thirdera .items-list .item .item-controls a:hover {
+  color: #FFA500;
+  text-shadow: 0 0 10px #FFA500;
+}
+
+.thirdera .items-list .item .item-controls input {
+  width: 50px;
+  text-align: center;
+}
+
+/* Skill specific */
+.thirdera .items-list .item .skill-total {
+  font-weight: bold;
+  margin-left: 10px;
+  margin-right: 10px;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Flexrow */
+.thirdera .flexrow {
+  display: flex;
+  align-items: center;
+}
+
+.thirdera .flex-group-center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.thirdera .flexcol {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Editor */
+.thirdera .editor {
+  height: 100%;
+}
+
+/* Form Groups */
+.thirdera .form-group {
+  margin: 10px 0;
+}
+
+.thirdera .form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.thirdera .form-group input {
+  width: 100%;
+}
+
+/* Rollable highlighting */
+.rollable:hover {
+  cursor: pointer;
+}

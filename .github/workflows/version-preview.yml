@@ -1,0 +1,100 @@
+name: Version Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  version-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine version bump and preview
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const COMMENT_MARKER = '<!-- version-preview-bot -->';
+
+            // Get PR description
+            const pr = context.payload.pull_request;
+            const body = pr.body || '';
+
+            // Scan for bump directive at the beginning of a line
+            let bumpType = null;
+            for (const line of body.split('\n')) {
+              const trimmed = line.trim().toLowerCase();
+              if (trimmed.startsWith('#major')) { bumpType = 'major'; break; }
+              if (trimmed.startsWith('#minor')) { bumpType = 'minor'; break; }
+              if (trimmed.startsWith('#patch')) { bumpType = 'patch'; break; }
+            }
+            const bumpExplicit = bumpType !== null;
+            if (!bumpExplicit) bumpType = 'minor';
+
+            // Get the latest release tag to determine current version
+            let currentVersion = '0.0.0';
+            try {
+              const { data: releases } = await github.rest.repos.listReleases({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 1
+              });
+              if (releases.length > 0) {
+                currentVersion = releases[0].tag_name.replace(/^v/, '');
+              }
+            } catch (e) {
+              core.info(`No releases found, defaulting to ${currentVersion}`);
+            }
+
+            // Calculate next version using semver
+            const parts = currentVersion.split('.').map(Number);
+            let [major, minor, patch] = parts;
+            if (bumpType === 'major') { major++; minor = 0; patch = 0; }
+            else if (bumpType === 'minor') { minor++; patch = 0; }
+            else if (bumpType === 'patch') { patch++; }
+            const nextVersion = `${major}.${minor}.${patch}`;
+
+            // Build the comment body
+            const commentBody = [
+              COMMENT_MARKER,
+              '## :package: Version Preview',
+              '',
+              '| | Version |',
+              '|---|---|',
+              `| **Current Release** | \`${currentVersion}\` |`,
+              `| **Bump Type** | \`${bumpType}\` |`,
+              `| **Next Version** | \`${nextVersion}\` |`,
+              '',
+              bumpExplicit
+                ? `> Detected \`#${bumpType}\` in PR description.`
+                : `> :warning: No version tag found in PR description — defaulting to \`#minor\`. Add \`#major\`, \`#minor\`, or \`#patch\` at the start of a line in the PR body to specify.`,
+              ''
+            ].join('\n');
+
+            // Remove any previous version preview comments
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number
+            });
+
+            for (const comment of comments) {
+              if (comment.body.includes(COMMENT_MARKER)) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id
+                });
+              }
+            }
+
+            // Post new comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: commentBody
+            });
+
+            core.info(`Version preview: ${currentVersion} -> ${nextVersion} (${bumpType})`);
