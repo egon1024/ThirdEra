@@ -63,7 +63,7 @@ jobs:
           errors=0
 
           # Check templates referenced in loadTemplates calls
-          for tmpl in $(grep -roh 'systems/thirdera/templates/[^"]*\.hbs' *.mjs module/ 2>/dev/null | sort -u); do
+          for tmpl in $(grep -roh 'systems/thirdera/templates/[^"]*\.hbs' *.mjs module/ 2>/dev/null | grep -v '[${}]' | sort -u); do
             # loadTemplates paths are relative to Foundry's root; strip the systems/thirdera/ prefix
             local_path="${tmpl#systems/thirdera/}"
             if [ -f "$local_path" ]; then
