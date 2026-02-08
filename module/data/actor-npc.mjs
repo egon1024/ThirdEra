@@ -1,4 +1,5 @@
 const { HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
+import { computeAC } from "./_ac-helpers.mjs";
 
 /**
  * Data model for D&D 3.5 NPC actors
@@ -52,7 +53,8 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 ac: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
                     touch: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
-                    flatFooted: new NumberField({ required: true, integer: true, min: 0, initial: 10 })
+                    flatFooted: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
+                    misc: new NumberField({ required: true, integer: true, initial: 0 })
                 }),
                 initiative: new SchemaField({
                     bonus: new NumberField({ required: true, integer: true, initial: 0 })
@@ -108,5 +110,8 @@ export class NPCData extends foundry.abstract.TypeDataModel {
 
         // Calculate grapple
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;
+
+        // Calculate AC values from equipped armor, dex, size, and misc
+        computeAC(this);
     }
 }

@@ -10,6 +10,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     static DEFAULT_OPTIONS = {
         classes: ["thirdera", "sheet", "actor"],
         position: { width: 720, height: 680 },
+        form: { submitOnChange: true },
         actions: {
             abilityCheck: ThirdEraActorSheet.#onAbilityCheck,
             saveRoll: ThirdEraActorSheet.#onSaveRoll,
@@ -19,6 +20,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             createItem: ThirdEraActorSheet.#onItemCreate,
             editItem: ThirdEraActorSheet.#onItemEdit,
             deleteItem: ThirdEraActorSheet.#onItemDelete,
+            toggleEquip: ThirdEraActorSheet.#onToggleEquip,
             changeTab: ThirdEraActorSheet.#onChangeTab,
             deleteActor: ThirdEraActorSheet.#onActorDeleteHeader
         },
@@ -69,7 +71,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         // Add CONFIG data
         const config = {
             abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
-            saves: CONFIG.THIRDERA?.Saves || {}
+            saves: CONFIG.THIRDERA?.Saves || {},
+            armorTypes: CONFIG.THIRDERA?.armorTypes || {}
         };
 
         // Ensure tabs state exists
@@ -86,6 +89,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             system: systemData,
             items: actor.items,
             ...items,
+            ...config,
             config,
             tabs,
             enriched,
@@ -249,6 +253,21 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
     }
 
+
+    /**
+     * Handle toggling an item's equipped state
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onToggleEquip(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const item = this.actor.items.get(itemId);
+        if (item) {
+            const newValue = item.system.equipped === "true" ? "false" : "true";
+            await item.update({ "system.equipped": newValue });
+        }
+    }
 
     /**
      * Handle tab changes

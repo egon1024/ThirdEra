@@ -8,6 +8,24 @@
   height: 100%;
   padding: 5px;
   overflow-y: scroll;
+  background: #f4e8d3;
+  color: #1a1a1a;
+}
+
+.thirdera h1,
+.thirdera h2,
+.thirdera h3,
+.thirdera h4,
+.thirdera label,
+.thirdera span {
+  color: #1a1a1a;
+}
+
+.thirdera input,
+.thirdera select {
+  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid #c4a882;
 }
 
 .thirdera .sheet-header {
@@ -18,11 +36,56 @@
   border-bottom: 2px solid #000;
 }
 
+.thirdera .sheet-header--character {
+  background: #d6e4f0;
+  border-bottom-color: #4169E1;
+}
+
+.thirdera .sheet-header--npc {
+  background: #f0d6d6;
+  border-bottom-color: #8B2500;
+}
+
+.thirdera .charname-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thirdera .actor-type-badge {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.thirdera .badge--character {
+  background: #4169E1;
+  color: #fff;
+}
+
+.thirdera .badge--npc {
+  background: #8B2500;
+  color: #fff;
+}
+
 .thirdera .sheet-header .profile-img {
   flex: 0 0 100px;
   height: 100px;
   margin-right: 10px;
-  border: none;
+  background: #2a2a2a;
+  border: 3px solid #555;
+}
+
+.thirdera .sheet-header--character .profile-img {
+  border-color: #2a4a8a;
+}
+
+.thirdera .sheet-header--npc .profile-img {
+  border-color: #5c1a00;
 }
 
 .thirdera .sheet-header .header-fields {
@@ -48,6 +111,16 @@
   flex: 0;
   border-top: 1px solid #AAA;
   border-bottom: 1px solid #AAA;
+  background: #e6d5b8;
+}
+
+.thirdera .sheet-tabs .item {
+  color: #4b4a44;
+}
+
+.thirdera .sheet-tabs .item.active {
+  color: #1a1a1a;
+  font-weight: bold;
 }
 
 .thirdera .sheet-body {
@@ -215,7 +288,7 @@
 /* Combat Stats */
 .thirdera .combat-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px;
   margin: 15px 0;
   padding: 10px;
@@ -244,6 +317,87 @@
   width: 60px;
   text-align: center;
   font-size: 16px;
+}
+
+/* AC Section */
+.thirdera .ac-section {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #CCC;
+}
+
+.thirdera .ac-totals {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.thirdera .ac-total {
+  text-align: center;
+}
+
+.thirdera .ac-total label {
+  display: block;
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.thirdera .ac-total .ac-value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.thirdera .ac-breakdown {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  justify-content: center;
+  font-size: 12px;
+  color: #555;
+}
+
+.thirdera .ac-breakdown li {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.thirdera .ac-breakdown-label {
+  color: #666;
+}
+
+.thirdera .ac-breakdown-value {
+  font-weight: bold;
+  color: #333;
+}
+
+.thirdera .ac-misc-input {
+  width: 36px;
+  text-align: center;
+  font-size: 12px;
+  padding: 1px 2px;
+  border: 1px solid #CCC;
+}
+
+/* Equip Toggle */
+.thirdera .items-list .item .item-equip {
+  color: #999;
+  font-size: 14px;
+}
+
+.thirdera .items-list .item.equipped .item-equip {
+  color: #4169E1;
+}
+
+.thirdera .items-list .item .item-equip:hover {
+  color: #FFA500;
+  text-shadow: 0 0 10px #FFA500;
 }
 
 /* Saves */

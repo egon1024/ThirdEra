@@ -1,4 +1,5 @@
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
+import { computeAC } from "./_ac-helpers.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -59,7 +60,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 ac: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10, label: "Armor Class" }),
                     touch: new NumberField({ required: true, integer: true, min: 0, initial: 10, label: "Touch AC" }),
-                    flatFooted: new NumberField({ required: true, integer: true, min: 0, initial: 10, label: "Flat-Footed AC" })
+                    flatFooted: new NumberField({ required: true, integer: true, min: 0, initial: 10, label: "Flat-Footed AC" }),
+                    misc: new NumberField({ required: true, integer: true, initial: 0, label: "Misc AC Bonus" })
                 }),
                 initiative: new SchemaField({
                     bonus: new NumberField({ required: true, integer: true, initial: 0, label: "Initiative Bonus" })
@@ -123,10 +125,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         // TODO: Add size modifier calculation
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;
 
-        // Calculate AC values
-        // Base AC = 10 + armor + shield + dex mod + size + natural + deflection + misc
-        // For now, we'll just ensure touch and flat-footed are at least 10
-        if (!this.attributes.ac.touch) this.attributes.ac.touch = 10 + this.abilities.dex.mod;
-        if (!this.attributes.ac.flatFooted) this.attributes.ac.flatFooted = 10;
+        // Calculate AC values from equipped armor, dex, size, and misc
+        computeAC(this);
     }
 }
