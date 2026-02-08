@@ -1,0 +1,105 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Item Name" /></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="details">Details</a>
+    </nav>
+
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
+            <div class="editor-box">
+                <label>Description</label>
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+
+            <div class="editor-box">
+                <label>Material Components</label>
+                <prose-mirror name="system.components.materialDescription" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{#if system.components.materialDescription}}{{system.components.materialDescription}}{{else}}<ul><li></li></ul>{{/if}}"
+                    toggled="false">
+                    {{{enriched.materialDescription}}}
+                </prose-mirror>
+            </div>
+        </div>
+
+        {{!-- Details Tab --}}
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
+            <div class="grid grid-2col">
+                <div class="form-group">
+                    <label>Level</label>
+                    <input type="text" name="system.level" value="{{system.level}}" data-dtype="Number" />
+                </div>
+                <div class="form-group">
+                    <label>School</label>
+                    <input type="text" name="system.school" value="{{system.school}}" />
+                </div>
+                <div class="form-group">
+                    <label>Casting Time</label>
+                    <input type="text" name="system.castingTime" value="{{system.castingTime}}" />
+                </div>
+                <div class="form-group">
+                    <label>Range</label>
+                    <input type="text" name="system.range" value="{{system.range}}" />
+                </div>
+                <div class="form-group">
+                    <label>Target/Area</label>
+                    <input type="text" name="system.target" value="{{system.target}}" />
+                </div>
+                <div class="form-group">
+                    <label>Duration</label>
+                    <input type="text" name="system.duration" value="{{system.duration}}" />
+                </div>
+                <div class="form-group">
+                    <label>Saving Throw</label>
+                    <input type="text" name="system.savingThrow" value="{{system.savingThrow}}" />
+                </div>
+                <div class="form-group">
+                    <label>Spell Resistance</label>
+                    <input type="text" name="system.spellResistance" value="{{system.spellResistance}}" />
+                </div>
+            </div>
+
+            <h3 class="form-header">Components</h3>
+            <div class="form-group">
+                <label class="checkbox">
+                    <input type="checkbox" name="system.components.verbal" {{checked system.components.verbal}} />
+                    Verbal
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="system.components.somatic" {{checked system.components.somatic}} />
+                    Somatic
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="system.components.material" {{checked system.components.material}} />
+                    Material
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="system.components.focus" {{checked system.components.focus}} /> Focus
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="system.components.divineFocus" {{checked
+                        system.components.divineFocus}} /> Divine Focus
+                </label>
+            </div>
+            <div class="form-group">
+                <label>XP Cost</label>
+                <input type="text" name="system.components.xp" value="{{system.components.xp}}" data-dtype="Number" />
+            </div>
+        </div>
+    </section>
+</form>

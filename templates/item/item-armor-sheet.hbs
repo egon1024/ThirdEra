@@ -1,0 +1,79 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Item Name" /></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="details">Details</a>
+    </nav>
+
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        {{!-- Description Tab --}}
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+
+        {{!-- Details Tab --}}
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
+            <div class="form-group">
+                <label>Armor Type</label>
+                <select name="system.armor.type" data-dtype="String">
+                    {{selectOptions config.armorTypes selected=system.armor.type localize=true}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Armor Bonus</label>
+                <input type="text" name="system.armor.bonus" value="{{system.armor.bonus}}" data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Max Dex Bonus</label>
+                <input type="text" name="system.armor.maxDex" value="{{system.armor.maxDex}}" data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Check Penalty</label>
+                <input type="text" name="system.armor.checkPenalty" value="{{system.armor.checkPenalty}}"
+                    data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Arcane Spell Failure %</label>
+                <input type="text" name="system.armor.spellFailure" value="{{system.armor.spellFailure}}"
+                    data-dtype="Number" />
+            </div>
+            <div class="grid grid-2col">
+                <div class="form-group">
+                    <label>Speed (30ft)</label>
+                    <input type="text" name="system.speed.ft30" value="{{system.speed.ft30}}" data-dtype="Number" />
+                </div>
+                <div class="form-group">
+                    <label>Speed (20ft)</label>
+                    <input type="text" name="system.speed.ft20" value="{{system.speed.ft20}}" data-dtype="Number" />
+                </div>
+            </div>
+            <div class="grid grid-2col">
+                <div class="form-group">
+                    <label>Cost (gp)</label>
+                    <input type="text" name="system.cost" value="{{system.cost}}" data-dtype="Number" />
+                </div>
+                <div class="form-group">
+                    <label>Weight (lbs)</label>
+                    <input type="text" name="system.weight" value="{{system.weight}}" data-dtype="Number" />
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

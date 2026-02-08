@@ -1,0 +1,61 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Item Name" /></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="details">Details</a>
+    </nav>
+
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+
+        {{!-- Details Tab --}}
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
+            <div class="form-group">
+                <label>Key Ability</label>
+                <select name="system.ability" data-dtype="String">
+                    {{selectOptions config.abilityScores selected=system.ability localize=true}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ranks</label>
+                <input type="text" name="system.ranks" value="{{system.ranks}}" data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Misc Modifier</label>
+                <input type="text" name="system.modifier.misc" value="{{system.modifier.misc}}" data-dtype="Number" />
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox">
+                    <input type="checkbox" name="system.classSkill" {{checked system.classSkill}} /> Class Skill
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="system.trainedOnly" {{checked system.trainedOnly}} /> Trained Only
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="system.armorCheckPenalty" {{checked system.armorCheckPenalty}} /> Armor
+                    Check Penalty Applies
+                </label>
+            </div>
+        </div>
+    </section>
+</form>
