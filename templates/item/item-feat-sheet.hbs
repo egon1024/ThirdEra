@@ -14,43 +14,44 @@
             data-tab="details">Details</a>
     </nav>
 
-    {{!-- Description Tab --}}
-    <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary" data-tab="description">
-        <div class="editor-box">
-            <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}" value="{{system.description}}"
-                toggled="false">
-                {{{enriched.description}}}
-            </prose-mirror>
-        </div>
-    </div>
-
-    {{!-- Details Tab --}}
-    <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary" data-tab="details">
-        <div class="form-group">
-            <label>Feat Type</label>
-            <input type="text" name="system.type" value="{{system.type}}"
-                placeholder="General, Combat, Metamagic, etc." />
-        </div>
-        <div class="form-group">
-            <label>Prerequisites</label>
-            <input type="text" name="system.prerequisites" value="{{system.prerequisites}}" />
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary" data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}" value="{{system.description}}"
+                    toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
         </div>
 
-        <h3 class="form-header">Benefit</h3>
-        <div class="editor-box">
-            <prose-mirror name="system.benefit" data-document-u-u-i-d="{{item.uuid}}" value="{{system.benefit}}"
-                toggled="false">
-                {{{enriched.benefit}}}
-            </prose-mirror>
-        </div>
+        {{!-- Details Tab --}}
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary" data-tab="details">
+            <div class="form-group">
+                <label>Feat Type</label>
+                <input type="text" name="system.type" value="{{system.type}}"
+                    placeholder="General, Combat, Metamagic, etc." />
+            </div>
+            <div class="form-group">
+                <label>Prerequisites</label>
+                <input type="text" name="system.prerequisites" value="{{system.prerequisites}}" />
+            </div>
 
-        <h3 class="form-header">Special</h3>
-        <div class="editor-box">
-            <prose-mirror name="system.special" data-document-u-u-i-d="{{item.uuid}}" value="{{system.special}}"
-                toggled="false">
-                {{{enriched.special}}}
-            </prose-mirror>
+            <h3 class="form-header">Benefit</h3>
+            <div class="editor-box">
+                <prose-mirror name="system.benefit" data-document-u-u-i-d="{{item.uuid}}" value="{{system.benefit}}"
+                    toggled="false">
+                    {{{enriched.benefit}}}
+                </prose-mirror>
+            </div>
+
+            <h3 class="form-header">Special</h3>
+            <div class="editor-box">
+                <prose-mirror name="system.special" data-document-u-u-i-d="{{item.uuid}}" value="{{system.special}}"
+                    toggled="false">
+                    {{{enriched.special}}}
+                </prose-mirror>
+            </div>
         </div>
-    </div>
     </section>
 </form>

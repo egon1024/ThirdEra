@@ -16,15 +16,15 @@
 
     <section class="sheet-body">
         {{!-- Description Tab --}}
-        {{!-- Description Tab --}}
         <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
             data-tab="description">
-            <div class="editor-box">
-                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
-                    value="{{system.description}}" toggled="false">
-                    {{{enriched.description}}}
-                </prose-mirror>
-            </div>
+            {{> systems/thirdera/templates/partials/editor-box.hbs
+            label="Description"
+            name="system.description"
+            value=system.description
+            enrichedContent=enriched.description
+            documentUuid=item.uuid
+            }}
         </div>
 
         {{!-- Details Tab --}}

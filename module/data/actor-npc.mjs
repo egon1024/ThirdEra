@@ -40,7 +40,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 type: new StringField({ required: true, blank: true, initial: "" }),
                 cr: new StringField({ required: true, blank: true, initial: "1" }),
                 alignment: new StringField({ required: true, blank: true, initial: "" }),
-                size: new StringField({ required: true, blank: false, initial: "Medium" })
+                size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes })
             }),
 
             // Hit Points

@@ -19,16 +19,41 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             createItem: ThirdEraActorSheet.#onItemCreate,
             editItem: ThirdEraActorSheet.#onItemEdit,
             deleteItem: ThirdEraActorSheet.#onItemDelete,
-            changeTab: ThirdEraActorSheet.#onChangeTab
+            changeTab: ThirdEraActorSheet.#onChangeTab,
+            deleteActor: ThirdEraActorSheet.#onActorDeleteHeader
+        },
+        window: {
+            controls: [
+                {
+                    icon: "fa-solid fa-trash",
+                    label: "Delete",
+                    action: "deleteActor",
+                }
+            ]
         }
     };
 
     /** @override */
+    /** @override */
     static PARTS = {
         sheet: {
-            template: "systems/thirdera/templates/actor/character-sheet.hbs"
+            template: "systems/thirdera/templates/actor/character-sheet.hbs",
+            scrollable: [".sheet-body"],
+            root: true
         }
     };
+
+    /** @override */
+    _configureRenderParts(options) {
+        const parts = super._configureRenderParts(options);
+        // Dynamically set the template based on actor type
+        if (this.document.type === 'npc') {
+            parts.sheet.template = "systems/thirdera/templates/actor/npc-sheet.hbs";
+        } else {
+            parts.sheet.template = "systems/thirdera/templates/actor/character-sheet.hbs";
+        }
+        return parts;
+    }
 
     /** @override */
     async _prepareContext(options) {
@@ -206,6 +231,24 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             return await item.delete();
         }
     }
+
+    /**
+     * Handle deleting the actor from the header
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onActorDeleteHeader(event, target) {
+        const confirm = await Dialog.confirm({
+            title: "Delete Actor",
+            content: `<h4>Are you sure you want to delete ${this.actor.name}?</h4>`
+        });
+        if (confirm) {
+            await this.actor.delete();
+            this.close();
+        }
+    }
+
 
     /**
      * Handle tab changes

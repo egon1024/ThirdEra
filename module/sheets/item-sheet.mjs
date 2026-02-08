@@ -10,10 +10,24 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     static DEFAULT_OPTIONS = {
         classes: ["thirdera", "sheet", "item"],
         position: { width: 520, height: 600 },
+        form: {
+            submitOnChange: true,
+            closeOnSubmit: false
+        },
+        window: {
+            controls: [
+                {
+                    icon: "fa-solid fa-trash",
+                    label: "Delete",
+                    action: "deleteItem",
+                }
+            ]
+        },
         actions: {
             rollAttack: ThirdEraItemSheet.#onRollAttack,
             rollDamage: ThirdEraItemSheet.#onRollDamage,
-            changeTab: ThirdEraItemSheet.#onChangeTab
+            changeTab: ThirdEraItemSheet.#onChangeTab,
+            deleteItem: ThirdEraItemSheet.#onItemDeleteHeader
         }
     };
 
@@ -49,8 +63,13 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const item = this.document;
         const systemData = item.system;
 
-        // Add CONFIG data if needed
-        const config = CONFIG.THIRDERA || {};
+        // Add CONFIG data
+        const config = {
+            abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
+            saves: CONFIG.THIRDERA?.Saves || {},
+            armorTypes: CONFIG.THIRDERA?.armorTypes || {},
+            sizes: CONFIG.THIRDERA?.sizes || {}
+        };
 
         // Enrich HTML description and other fields
         const enriched = {
@@ -139,5 +158,22 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const body = this.element.querySelector('.sheet-body');
         body.querySelectorAll(`.tab[data-group="${group}"]`).forEach(t => t.classList.remove('active'));
         body.querySelector(`.tab[data-group="${group}"][data-tab="${tab}"]`)?.classList.add('active');
+    }
+
+    /**
+     * Handle deleting the item from the header
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onItemDeleteHeader(event, target) {
+        const confirm = await Dialog.confirm({
+            title: "Delete Item",
+            content: `<h4>Are you sure you want to delete ${this.item.name}?</h4>`
+        });
+        if (confirm) {
+            await this.item.delete();
+            this.close();
+        }
     }
 }

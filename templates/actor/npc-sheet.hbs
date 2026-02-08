@@ -24,22 +24,27 @@
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="description">Description</a>
-        <a class="item" data-tab="attributes">Attributes</a>
-        <a class="item" data-tab="items">Equipment</a>
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'attributes')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="attributes">Attributes</a>
+        <a class="item {{#if (eq tabs.primary 'items')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="items">Equipment</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
         {{!-- Description Tab --}}
-        <div class="tab" data-group="primary" data-tab="description">
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
             {{editor system.biography target="system.biography" button=true owner=owner editable=editable
             enriched=true}}
         </div>
 
         {{!-- Attributes Tab --}}
-        <div class="tab attributes" data-group="primary" data-tab="attributes">
+        <div class="tab attributes {{#if (eq tabs.primary 'attributes')}}active{{/if}}" data-group="primary"
+            data-tab="attributes">
             {{!-- Ability Scores --}}
             <div class="abilities-header">
                 <h3 class="items-header">Ability Scores</h3>
@@ -51,7 +56,7 @@
                     <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}"
                         data-dtype="Number" placeholder="10" />
                     <span class="ability-mod">{{signedNumber ability.mod}}</span>
-                    <a class="ability-check rollable" data-ability="{{key}}">
+                    <a class="ability-check rollable" data-action="abilityCheck" data-ability="{{key}}">
                         <i class="fas fa-dice-d20"></i>
                     </a>
                 </li>
@@ -102,7 +107,7 @@
                     <input type="text" name="system.saves.{{key}}.base" value="{{save.base}}" data-dtype="Number"
                         placeholder="0" />
                     <span class="save-total">{{signedNumber save.total}}</span>
-                    <a class="save-roll rollable" data-save="{{key}}">
+                    <a class="save-roll rollable" data-action="saveRoll" data-save="{{key}}">
                         <i class="fas fa-dice-d20"></i>
                     </a>
                 </li>
@@ -111,11 +116,12 @@
         </div>
 
         {{!-- Items Tab --}}
-        <div class="tab items" data-group="primary" data-tab="items">
+        <div class="tab items {{#if (eq tabs.primary 'items')}}active{{/if}}" data-group="primary" data-tab="items">
             {{!-- Weapons --}}
             <div class="items-header">
                 <h3 class="items-header">Weapons</h3>
-                <a class="item-create" data-type="weapon"><i class="fas fa-plus"></i> Add Weapon</a>
+                <a class="item-create" data-action="createItem" data-type="weapon"><i class="fas fa-plus"></i> Add
+                    Weapon</a>
             </div>
             <ol class="items-list">
                 {{#each weapons as |item id|}}
@@ -127,10 +133,13 @@
                     </div>
                     <div class="item-controls">
                         <span class="item-detail">{{item.system.damage.dice}}</span>
-                        <a class="weapon-attack rollable" title="Attack"><i class="fas fa-dice-d20"></i></a>
-                        <a class="weapon-damage rollable" title="Damage"><i class="fas fa-dice-d6"></i></a>
-                        <a class="item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-                        <a class="item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        <a class="weapon-attack rollable" data-action="weaponAttack" title="Attack"><i
+                                class="fas fa-dice-d20"></i></a>
+                        <a class="weapon-damage rollable" data-action="weaponDamage" title="Damage"><i
+                                class="fas fa-dice-d6"></i></a>
+                        <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
+                        <a class="item-delete" data-action="deleteItem" title="Delete Item"><i
+                                class="fas fa-trash"></i></a>
                     </div>
                 </li>
                 {{/each}}
@@ -139,7 +148,8 @@
             {{!-- Equipment --}}
             <div class="items-header">
                 <h3 class="items-header">Equipment</h3>
-                <a class="item-create" data-type="equipment"><i class="fas fa-plus"></i> Add Equipment</a>
+                <a class="item-create" data-action="createItem" data-type="equipment"><i class="fas fa-plus"></i> Add
+                    Equipment</a>
             </div>
             <ol class="items-list">
                 {{#each equipment as |item id|}}
@@ -151,8 +161,9 @@
                     </div>
                     <div class="item-controls">
                         <span class="item-detail">Qty: {{item.system.quantity}}</span>
-                        <a class="item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-                        <a class="item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                        <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
+                        <a class="item-delete" data-action="deleteItem" title="Delete Item"><i
+                                class="fas fa-trash"></i></a>
                     </div>
                 </li>
                 {{/each}}

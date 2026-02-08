@@ -42,7 +42,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 level: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Level" }),
                 alignment: new StringField({ required: true, blank: true, initial: "", label: "Alignment" }),
                 deity: new StringField({ required: true, blank: true, initial: "", label: "Deity" }),
-                size: new StringField({ required: true, blank: false, initial: "Medium", label: "Size" }),
+                size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes, label: "Size" }),
                 age: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Age" }),
                 gender: new StringField({ required: true, blank: true, initial: "", label: "Gender" }),
                 height: new StringField({ required: true, blank: true, initial: "", label: "Height" }),

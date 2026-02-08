@@ -129,14 +129,14 @@
 }
 
 /* Fix Edit Mode */
-.thirdera prose-mirror[toggled="true"] {
+.thirdera prose-mirror.active {
   min-height: 200px !important;
   display: flex !important;
   flex-direction: column !important;
   border: 1px solid #782e22;
 }
 
-.thirdera prose-mirror[toggled="true"] .editor-container {
+.thirdera prose-mirror.active .editor-container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -144,12 +144,12 @@
   position: relative !important;
 }
 
-.thirdera prose-mirror:not([toggled="true"]) .editor-container,
-.thirdera prose-mirror:not([toggled="true"]) .cm-editor {
+.thirdera prose-mirror.inactive .editor-container,
+.thirdera prose-mirror.inactive .cm-editor {
   display: none !important;
 }
 
-.thirdera prose-mirror[toggled="true"] .ProseMirror {
+.thirdera prose-mirror.active .ProseMirror {
   flex: 1;
   min-height: var(--editor-min-height, 10em) !important;
   /* Configurable minimum height, defaults to 10em */
@@ -163,7 +163,7 @@
   /* Allow vertical resizing */
 }
 
-.thirdera prose-mirror[toggled="true"] .cm-editor {
+.thirdera prose-mirror.active .cm-editor {
   background: transparent !important;
   min-height: var(--editor-min-height, 10em) !important;
 }
@@ -331,7 +331,12 @@
 }
 
 .thirdera .items-list .item:hover {
-  background: #F5F5F5;
+  background: transparent;
+  color: #007bff;
+}
+
+.thirdera .items-list .item:hover h4 {
+  color: #007bff;
 }
 
 .thirdera .items-list .item .item-name {

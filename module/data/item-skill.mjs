@@ -17,7 +17,6 @@ export class SkillData extends foundry.abstract.TypeDataModel {
                 total: new NumberField({ required: true, integer: true, initial: 0, label: "Total Modifier" })
             }),
 
-            classSkill: new StringField({ required: true, blank: false, initial: "false", label: "Class Skill" }),
             trainedOnly: new StringField({ required: true, blank: false, initial: "false", label: "Trained Only" }),
             armorCheckPenalty: new StringField({ required: true, blank: false, initial: "false", label: "Armor Check Penalty Applies" })
         };

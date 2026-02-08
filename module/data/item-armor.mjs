@@ -17,6 +17,8 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
                 spellFailure: new NumberField({ required: true, integer: true, min: 0, max: 100, initial: 0, label: "Arcane Spell Failure %" })
             }),
 
+            size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes, label: "Size" }),
+
             speed: new SchemaField({
                 ft30: new NumberField({ required: true, integer: true, min: 0, initial: 30, label: "Speed (30 ft base)" }),
                 ft20: new NumberField({ required: true, integer: true, min: 0, initial: 20, label: "Speed (20 ft base)" })
