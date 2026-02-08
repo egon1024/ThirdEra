@@ -1,0 +1,103 @@
+name: Validate
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate JSON files
+        run: |
+          echo "Validating JSON files..."
+          errors=0
+          for f in system.json lang/en.json; do
+            if [ -f "$f" ]; then
+              if node -e "JSON.parse(require('fs').readFileSync('$f', 'utf8'))"; then
+                echo "  ✓ $f"
+              else
+                echo "  ✗ $f — invalid JSON"
+                errors=$((errors + 1))
+              fi
+            else
+              echo "  ✗ $f — file not found"
+              errors=$((errors + 1))
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "JSON validation failed with $errors error(s)"
+            exit 1
+          fi
+          echo "JSON validation passed"
+
+      - name: Validate JavaScript modules
+        run: |
+          echo "Validating JavaScript modules..."
+          errors=0
+          for f in $(find . -name '*.mjs' -not -path './node_modules/*'); do
+            if node --check "$f" 2>/dev/null; then
+              echo "  ✓ $f"
+            else
+              echo "  ✗ $f — syntax error"
+              errors=$((errors + 1))
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "JavaScript validation failed with $errors error(s)"
+            exit 1
+          fi
+          echo "JavaScript validation passed"
+
+      - name: Validate template files exist
+        run: |
+          echo "Validating template references..."
+          errors=0
+
+          # Check templates referenced in loadTemplates calls
+          for tmpl in $(grep -roh 'systems/thirdera/templates/[^"]*\.hbs' *.mjs module/ 2>/dev/null | sort -u); do
+            # loadTemplates paths are relative to Foundry's root; strip the systems/thirdera/ prefix
+            local_path="${tmpl#systems/thirdera/}"
+            if [ -f "$local_path" ]; then
+              echo "  ✓ $tmpl"
+            else
+              echo "  ✗ $tmpl — file not found"
+              errors=$((errors + 1))
+            fi
+          done
+
+          # Check that each item type has a corresponding template
+          for type in weapon armor equipment spell feat skill; do
+            tmpl="templates/item/item-${type}-sheet.hbs"
+            if [ -f "$tmpl" ]; then
+              echo "  ✓ $tmpl"
+            else
+              echo "  ✗ $tmpl — missing item template"
+              errors=$((errors + 1))
+            fi
+          done
+
+          # Check actor templates
+          for type in character npc; do
+            tmpl="templates/actor/${type}-sheet.hbs"
+            if [ -f "$tmpl" ]; then
+              echo "  ✓ $tmpl"
+            else
+              echo "  ✗ $tmpl — missing actor template"
+              errors=$((errors + 1))
+            fi
+          done
+
+          if [ $errors -gt 0 ]; then
+            echo "Template validation failed with $errors error(s)"
+            exit 1
+          fi
+          echo "Template validation passed"
