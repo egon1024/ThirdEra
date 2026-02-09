@@ -79,6 +79,15 @@
                     </div>
                 </div>
                 <div class="stat-block">
+                    <label>Speed</label>
+                    <div class="stat-value {{#if speedInfo.isReduced}}value-modified{{/if}}">
+                        <span>{{system.attributes.speed.value}} ft</span>
+                        {{#if speedInfo.isReduced}}
+                        <span class="modified-note" title="Base speed: {{speedInfo.baseSpeed}} ft — reduced by armor">(reduced)</span>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="stat-block">
                     <label>Initiative</label>
                     <div class="stat-value">
                         {{signedNumber system.attributes.initiative.bonus}}

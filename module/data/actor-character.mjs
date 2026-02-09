@@ -1,5 +1,5 @@
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
-import { getEffectiveMaxDex, applyMaxDex, computeAC } from "./_ac-helpers.mjs";
+import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -131,5 +131,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
         // Calculate AC values from equipped armor, dex, size, and misc
         computeAC(this);
+
+        // Apply armor speed reduction (medium/heavy armor)
+        computeSpeed(this);
     }
 }

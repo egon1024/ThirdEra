@@ -104,6 +104,15 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             uncappedMod: uncappedDexMod
         };
 
+        // Compute speed reduction display info
+        // speed.value is already the effective (possibly reduced) speed from prepareDerivedData
+        // Recover the base speed from the source data to detect reduction
+        const baseSpeed = actor._source.system.attributes.speed.value;
+        const speedInfo = {
+            isReduced: systemData.attributes.speed.value < baseSpeed,
+            baseSpeed
+        };
+
         // Enrich HTML biography
         const enriched = {
             biography: await TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
@@ -120,6 +129,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             tabs,
             enriched,
             dexCap,
+            speedInfo,
             editable: this.isEditable
         };
     }

@@ -1,5 +1,5 @@
 /**
- * Shared armor and AC calculation logic for Character and NPC data models.
+ * Shared armor calculation logic for Character and NPC data models.
  *
  * D&D 3.5 SRD AC formula (subset implemented here):
  *   AC = 10 + armor bonus + shield bonus + dex mod (already capped) + size mod + misc
@@ -117,4 +117,46 @@ export function computeAC(system) {
     }
 
     ac.breakdown = breakdown;
+}
+
+/**
+ * Compute effective speed based on equipped body armor.
+ * SRD: medium/heavy armor reduces speed. Light armor and shields do not.
+ * Mutates `system.attributes.speed.value` to the effective speed.
+ *
+ * @param {TypeDataModel} system  The actor's system data.
+ * @returns {{ reduced: boolean, baseSpeed: number, armorName: string|null }}
+ *          Info for display purposes (passed via _prepareContext).
+ */
+export function computeSpeed(system) {
+    const baseSpeed = system.attributes.speed.value;
+    let armorName = null;
+
+    for (const item of system.parent.items) {
+        if (item.type !== "armor") continue;
+        if (item.system.equipped !== "true") continue;
+        if (item.system.armor.type === "shield") continue; // shields don't affect speed
+
+        const armorType = item.system.armor.type;
+        if (armorType === "medium" || armorType === "heavy") {
+            // Use the armor's stored speed for the matching base speed
+            let reducedSpeed;
+            if (baseSpeed >= 30) {
+                reducedSpeed = item.system.speed.ft30;
+            } else {
+                reducedSpeed = item.system.speed.ft20;
+            }
+            if (reducedSpeed < baseSpeed) {
+                system.attributes.speed.value = reducedSpeed;
+                armorName = item.name;
+            }
+            break; // only one body armor can be equipped
+        }
+    }
+
+    return {
+        reduced: system.attributes.speed.value < baseSpeed,
+        baseSpeed,
+        armorName
+    };
 }
