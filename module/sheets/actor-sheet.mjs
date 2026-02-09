@@ -335,6 +335,20 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 updates.push({ _id: other.id, "system.equipped": "false" });
             }
         }
+
+        // If equipping a shield, unequip any off-hand weapon (shield occupies off-hand)
+        if (isShield) {
+            for (const other of this.actor.items) {
+                if (other.type !== "weapon") continue;
+                let otherEquipped = other.system.equipped;
+                if (otherEquipped === "true") otherEquipped = "primary";
+                else if (otherEquipped === "false") otherEquipped = "none";
+                if (otherEquipped === "offhand") {
+                    updates.push({ _id: other.id, "system.equipped": "none" });
+                }
+            }
+        }
+
         if (updates.length) {
             const unequippedNames = updates.map(u => this.actor.items.get(u._id)?.name).filter(Boolean);
             await this.actor.updateEmbeddedDocuments("Item", updates);
@@ -412,6 +426,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             else if (otherEquipped === "false") otherEquipped = "none";
             if (otherEquipped === hand) {
                 updates.push({ _id: other.id, "system.equipped": "none" });
+            }
+        }
+
+        // If equipping to off-hand, unequip any equipped shield (shield occupies off-hand)
+        if (hand === "offhand") {
+            for (const other of this.actor.items) {
+                if (other.type !== "armor") continue;
+                if (other.system.equipped !== "true") continue;
+                if (other.system.armor?.type === "shield") {
+                    updates.push({ _id: other.id, "system.equipped": "false" });
+                }
             }
         }
 
