@@ -1,3 +1,5 @@
+import { getEffectiveDamage } from "./_damage-helpers.mjs";
+
 const { NumberField, SchemaField, StringField, HTMLField } = foundry.data.fields;
 
 /**
@@ -32,5 +34,10 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
 
             equipped: new StringField({ required: true, blank: false, initial: "false", label: "Equipped" })
         };
+    }
+
+    /** @override */
+    prepareDerivedData() {
+        this.damage.effectiveDice = getEffectiveDamage(this.damage.dice, this.properties.size);
     }
 }

@@ -7,7 +7,7 @@
                 <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="NPC Name" /></h1>
                 <span class="actor-type-badge badge--npc">NPC</span>
             </div>
-            <div class="resources grid grid-3col">
+            <div class="resources grid grid-4col">
                 <div class="resource flex-group-center">
                     <label for="system.details.type" class="resource-label">Type</label>
                     <input type="text" name="system.details.type" value="{{system.details.type}}" data-dtype="String" />
@@ -20,6 +20,14 @@
                     <label for="system.details.alignment" class="resource-label">Alignment</label>
                     <input type="text" name="system.details.alignment" value="{{system.details.alignment}}"
                         data-dtype="String" />
+                </div>
+                <div class="resource flex-group-center">
+                    <label for="system.details.size" class="resource-label">Size</label>
+                    <select name="system.details.size">
+                        {{#each config.sizes as |label key|}}
+                        <option value="{{key}}" {{#if (eq key ../system.details.size)}}selected{{/if}}>{{label}}</option>
+                        {{/each}}
+                    </select>
                 </div>
             </div>
         </div>
@@ -169,10 +177,10 @@
                     <div class="item-name">
                         <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" />
                         </div>
-                        <h4>{{item.name}}</h4>
+                        <h4>{{item.name}}{{#unless (eq item.system.properties.size "Medium")}} <span class="item-size-label">({{item.system.properties.size}})</span>{{/unless}}</h4>
                     </div>
                     <div class="item-controls">
-                        <span class="item-detail">{{item.system.damage.dice}}</span>
+                        <span class="item-detail">{{item.system.damage.effectiveDice}}</span>
                         <a class="weapon-attack rollable" data-action="weaponAttack" title="Attack"><i
                                 class="fas fa-dice-d20"></i></a>
                         <a class="weapon-damage rollable" data-action="weaponDamage" title="Damage"><i
@@ -193,11 +201,11 @@
             </div>
             <ol class="items-list">
                 {{#each armor as |item id|}}
-                <li class="item flexrow {{#if (eq item.system.equipped 'true')}}equipped{{/if}}" data-item-id="{{item._id}}">
+                <li class="item flexrow {{#if (eq item.system.equipped 'true')}}equipped{{/if}} {{#unless (eq item.system.size ../system.details.size)}}size-mismatch{{/unless}}" data-item-id="{{item._id}}" {{#unless (eq item.system.size ../system.details.size)}}title="Size mismatch: armor is {{item.system.size}}, NPC is {{../system.details.size}}"{{/unless}}>
                     <div class="item-name">
                         <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" />
                         </div>
-                        <h4>{{item.name}}</h4>
+                        <h4>{{item.name}}{{#unless (eq item.system.size "Medium")}} <span class="item-size-label">({{item.system.size}})</span>{{/unless}}</h4>
                     </div>
                     <div class="item-controls">
                         <span class="item-detail">AC +{{item.system.armor.bonus}}</span>

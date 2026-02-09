@@ -83,7 +83,7 @@ export class ThirdEraItem extends Item {
         }
 
         const weaponData = this.system;
-        const damageDice = weaponData.damage.dice;
+        const damageDice = weaponData.damage.effectiveDice ?? weaponData.damage.dice;
 
         // Get strength modifier if actor exists and weapon is melee
         let strMod = 0;

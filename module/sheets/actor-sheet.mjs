@@ -91,7 +91,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const config = {
             abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
             saves: CONFIG.THIRDERA?.Saves || {},
-            armorTypes: CONFIG.THIRDERA?.armorTypes || {}
+            armorTypes: CONFIG.THIRDERA?.armorTypes || {},
+            sizes: CONFIG.THIRDERA?.sizes || {}
         };
 
         // Ensure tabs state exists
@@ -306,6 +307,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!equipping) {
             // Unequipping — just toggle off
             return await item.update({ "system.equipped": "false" });
+        }
+
+        // Check size compatibility
+        const actorSize = this.actor.system.details.size;
+        const armorSize = item.system.size;
+        if (armorSize !== actorSize) {
+            ui.notifications.warn(`Cannot equip ${item.name} — it is ${armorSize} but ${this.actor.name} is ${actorSize}.`);
+            return;
         }
 
         // Equipping — unequip any other item in the same slot (body armor or shield)

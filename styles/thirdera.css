@@ -1,15 +1,66 @@
 /* Third Era System Styles */
 
 .thirdera {
-  font-family: "Signika", sans-serif;
+  /* Text */
+  --color-text-primary: #1a1a1a;
+  --color-text-dark: #333;
+  --color-text-secondary: #555;
+  --color-text-muted: #666;
+  --color-text-tab-inactive: #4b4a44;
+  --color-text-faint: #aaa;
+  --color-text-light: #fff;
+
+  /* Backgrounds */
+  --color-bg-parchment: #f4e8d3;
+  --color-bg-parchment-dark: #e6d5b8;
+  --color-bg-input: rgba(255, 255, 255, 0.4);
+  --color-bg-dark: #2a2a2a;
+
+  /* Character theme */
+  --color-character-accent: #4169E1;
+  --color-character-bg: #d6e4f0;
+  --color-character-border: #2a4a8a;
+
+  /* NPC theme */
+  --color-npc-accent: #8B2500;
+  --color-npc-bg: #f0d6d6;
+  --color-npc-border: #5c1a00;
+
+  /* Interaction */
+  --color-hover: #FFA500;
+  --color-hover-alt: #007bff;
+
+  /* Status indicators */
+  --color-modified: #b8860b;
+  --color-equipped: #2d8a4e;
+
+  /* Borders */
+  --color-border-input: #c4a882;
+  --color-border-divider: #CCC;
+  --color-border-tab: #AAA;
+  --color-border-dark: #000;
+  --color-border-editor: #782e22;
+  --color-border-profile: #555;
+
+  /* Typography */
+  --font-family: "Signika", sans-serif;
+  --font-size-note: 11px;
+  --font-size-label: 12px;
+  --font-size-body: 14px;
+  --font-size-value: 16px;
+  --font-size-value-lg: 18px;
+  --font-size-value-xl: 20px;
+  --font-size-heading: 24px;
+
+  font-family: var(--font-family);
 }
 
 .thirdera .window-content {
   height: 100%;
   padding: 5px;
   overflow-y: scroll;
-  background: #f4e8d3;
-  color: #1a1a1a;
+  background: var(--color-bg-parchment);
+  color: var(--color-text-primary);
 }
 
 .thirdera h1,
@@ -18,14 +69,14 @@
 .thirdera h4,
 .thirdera label,
 .thirdera span {
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .thirdera input,
 .thirdera select {
-  color: #1a1a1a;
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid #c4a882;
+  color: var(--color-text-primary);
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
 }
 
 .thirdera .sheet-header {
@@ -33,17 +84,17 @@
   display: flex;
   align-items: center;
   padding: 5px;
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid var(--color-border-dark);
 }
 
 .thirdera .sheet-header--character {
-  background: #d6e4f0;
-  border-bottom-color: #4169E1;
+  background: var(--color-character-bg);
+  border-bottom-color: var(--color-character-accent);
 }
 
 .thirdera .sheet-header--npc {
-  background: #f0d6d6;
-  border-bottom-color: #8B2500;
+  background: var(--color-npc-bg);
+  border-bottom-color: var(--color-npc-accent);
 }
 
 .thirdera .charname-row {
@@ -56,36 +107,42 @@
   flex: 0 0 auto;
   padding: 2px 8px;
   border-radius: 3px;
-  font-size: 11px;
+  font-size: var(--font-size-note);
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .thirdera .badge--character {
-  background: #4169E1;
-  color: #fff;
+  background: var(--color-character-accent);
+  color: var(--color-text-light);
 }
 
 .thirdera .badge--npc {
-  background: #8B2500;
-  color: #fff;
+  background: var(--color-npc-accent);
+  color: var(--color-text-light);
+}
+
+.thirdera .item-size-label {
+  font-size: 0.85em;
+  font-weight: normal;
+  color: var(--color-text-muted);
 }
 
 .thirdera .sheet-header .profile-img {
   flex: 0 0 100px;
   height: 100px;
   margin-right: 10px;
-  background: #2a2a2a;
-  border: 3px solid #555;
+  background: var(--color-bg-dark);
+  border: 3px solid var(--color-border-profile);
 }
 
 .thirdera .sheet-header--character .profile-img {
-  border-color: #2a4a8a;
+  border-color: var(--color-character-border);
 }
 
 .thirdera .sheet-header--npc .profile-img {
-  border-color: #5c1a00;
+  border-color: var(--color-npc-border);
 }
 
 .thirdera .sheet-header .header-fields {
@@ -102,24 +159,24 @@
   width: 100%;
   height: 36px;
   margin: 0;
-  font-size: 24px;
+  font-size: var(--font-size-heading);
   font-weight: bold;
   border: none;
 }
 
 .thirdera .sheet-tabs {
   flex: 0;
-  border-top: 1px solid #AAA;
-  border-bottom: 1px solid #AAA;
-  background: #e6d5b8;
+  border-top: 1px solid var(--color-border-tab);
+  border-bottom: 1px solid var(--color-border-tab);
+  background: var(--color-bg-parchment-dark);
 }
 
 .thirdera .sheet-tabs .item {
-  color: #4b4a44;
+  color: var(--color-text-tab-inactive);
 }
 
 .thirdera .sheet-tabs .item.active {
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   font-weight: bold;
 }
 
@@ -151,6 +208,10 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
+.thirdera .grid-4col {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .thirdera .resource {
   display: flex;
   flex-direction: column;
@@ -160,7 +221,7 @@
 
 .thirdera .resource-label {
   font-weight: bold;
-  font-size: 12px;
+  font-size: var(--font-size-label);
   text-transform: uppercase;
 }
 
@@ -206,7 +267,7 @@
   min-height: 200px !important;
   display: flex !important;
   flex-direction: column !important;
-  border: 1px solid #782e22;
+  border: 1px solid var(--color-border-editor);
 }
 
 .thirdera prose-mirror.active .editor-container {
@@ -252,13 +313,13 @@
   display: flex;
   align-items: center;
   padding: 5px;
-  border-bottom: 1px solid #CCC;
+  border-bottom: 1px solid var(--color-border-divider);
 }
 
 .thirdera .abilities-list .ability h4 {
   flex: 0 0 120px;
   margin: 0;
-  font-size: 14px;
+  font-size: var(--font-size-body);
 }
 
 .thirdera .abilities-list .ability input {
@@ -272,41 +333,41 @@
   min-width: 40px;
   text-align: center;
   font-weight: bold;
-  font-size: 16px;
+  font-size: var(--font-size-value);
 }
 
 .thirdera .abilities-list .ability .ability-mod.dex-capped {
-  color: #b8860b;
+  color: var(--color-modified);
 }
 
 .thirdera .dex-cap-note {
-  font-size: 11px;
+  font-size: var(--font-size-note);
   font-weight: normal;
-  color: #b8860b;
+  color: var(--color-modified);
   cursor: help;
 }
 
 /* Reusable indicator for values modified by external factors */
 .thirdera .value-modified {
-  color: #b8860b;
+  color: var(--color-modified);
 }
 
 .thirdera .modified-note {
-  font-size: 11px;
+  font-size: var(--font-size-note);
   font-weight: normal;
-  color: #b8860b;
+  color: var(--color-modified);
   cursor: help;
 }
 
 .thirdera .abilities-list .ability a.rollable {
   flex: 0 0 30px;
   text-align: center;
-  color: #4169E1;
+  color: var(--color-character-accent);
 }
 
 .thirdera .abilities-list .ability a.rollable:hover {
-  color: #FFA500;
-  text-shadow: 0 0 10px #FFA500;
+  color: var(--color-hover);
+  text-shadow: 0 0 10px var(--color-hover);
 }
 
 /* Combat Stats */
@@ -317,7 +378,7 @@
   margin: 15px 0;
   padding: 10px;
   background: transparent;
-  border: 1px solid #CCC;
+  border: 1px solid var(--color-border-divider);
 }
 
 .thirdera .stat-block {
@@ -327,27 +388,27 @@
 .thirdera .stat-block label {
   display: block;
   font-weight: bold;
-  font-size: 12px;
+  font-size: var(--font-size-label);
   text-transform: uppercase;
   margin-bottom: 5px;
 }
 
 .thirdera .stat-block .stat-value {
-  font-size: 18px;
+  font-size: var(--font-size-value-lg);
   font-weight: bold;
 }
 
 .thirdera .stat-block input {
   width: 60px;
   text-align: center;
-  font-size: 16px;
+  font-size: var(--font-size-value);
 }
 
 /* AC Section */
 .thirdera .ac-section {
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid #CCC;
+  border: 1px solid var(--color-border-divider);
 }
 
 .thirdera .ac-totals {
@@ -364,13 +425,13 @@
 .thirdera .ac-total label {
   display: block;
   font-weight: bold;
-  font-size: 12px;
+  font-size: var(--font-size-label);
   text-transform: uppercase;
   margin-bottom: 2px;
 }
 
 .thirdera .ac-total .ac-value {
-  font-size: 20px;
+  font-size: var(--font-size-value-xl);
   font-weight: bold;
 }
 
@@ -382,8 +443,8 @@
   flex-wrap: wrap;
   gap: 2px 16px;
   justify-content: center;
-  font-size: 12px;
-  color: #555;
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
 }
 
 .thirdera .ac-breakdown li {
@@ -393,38 +454,43 @@
 }
 
 .thirdera .ac-breakdown-label {
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .thirdera .ac-breakdown-value {
   font-weight: bold;
-  color: #333;
+  color: var(--color-text-dark);
 }
 
 .thirdera .ac-misc-input {
   width: 36px;
   text-align: center;
-  font-size: 12px;
+  font-size: var(--font-size-label);
   padding: 1px 2px;
-  border: 1px solid #CCC;
+  border: 1px solid var(--color-border-divider);
 }
 
 /* Equip Toggle */
 .thirdera .items-list .item .item-equip {
-  font-size: 14px;
+  font-size: var(--font-size-body);
   cursor: pointer;
 }
 
 .thirdera .items-list .item .item-equip.unequipped {
-  color: #aaa;
+  color: var(--color-text-faint);
 }
 
 .thirdera .items-list .item .item-equip.equipped {
-  color: #2d8a4e;
+  color: var(--color-equipped);
 }
 
 .thirdera .items-list .item .item-equip:hover {
-  color: #FFA500;
+  color: var(--color-hover);
+}
+
+/* Size mismatch indicator for armor */
+.thirdera .items-list .item.size-mismatch {
+  opacity: 0.5;
 }
 
 /* Saves */
@@ -438,13 +504,13 @@
   display: flex;
   align-items: center;
   padding: 5px;
-  border-bottom: 1px solid #CCC;
+  border-bottom: 1px solid var(--color-border-divider);
 }
 
 .thirdera .saves-list .save h4 {
   flex: 0 0 120px;
   margin: 0;
-  font-size: 14px;
+  font-size: var(--font-size-body);
 }
 
 .thirdera .saves-list .save input {
@@ -457,18 +523,18 @@
   flex: 0 0 40px;
   text-align: center;
   font-weight: bold;
-  font-size: 16px;
+  font-size: var(--font-size-value);
 }
 
 .thirdera .saves-list .save a.rollable {
   flex: 0 0 30px;
   text-align: center;
-  color: #4169E1;
+  color: var(--color-character-accent);
 }
 
 .thirdera .saves-list .save a.rollable:hover {
-  color: #FFA500;
-  text-shadow: 0 0 10px #FFA500;
+  color: var(--color-hover);
+  text-shadow: 0 0 10px var(--color-hover);
 }
 
 /* Items Lists */
@@ -478,24 +544,24 @@
   align-items: center;
   margin: 15px 0 5px;
   padding: 5px;
-  background: #4169E1;
-  color: white;
+  background: var(--color-character-accent);
+  color: var(--color-text-light);
   font-weight: bold;
   text-transform: uppercase;
 }
 
 .thirdera .items-header h3 {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--font-size-body);
 }
 
 .thirdera .items-header .item-create {
-  color: white;
+  color: var(--color-text-light);
   cursor: pointer;
 }
 
 .thirdera .items-header .item-create:hover {
-  text-shadow: 0 0 10px white;
+  text-shadow: 0 0 10px var(--color-text-light);
 }
 
 .thirdera .items-list {
@@ -508,16 +574,16 @@
   display: flex;
   align-items: center;
   padding: 5px;
-  border-bottom: 1px solid #CCC;
+  border-bottom: 1px solid var(--color-border-divider);
 }
 
 .thirdera .items-list .item:hover {
   background: transparent;
-  color: #007bff;
+  color: var(--color-hover-alt);
 }
 
 .thirdera .items-list .item:hover h4 {
-  color: #007bff;
+  color: var(--color-hover-alt);
 }
 
 .thirdera .items-list .item .item-name {
@@ -537,7 +603,7 @@
 
 .thirdera .items-list .item h4 {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--font-size-body);
 }
 
 .thirdera .items-list .item .item-controls {
@@ -548,19 +614,19 @@
 }
 
 .thirdera .items-list .item .item-detail {
-  font-size: 12px;
-  color: #666;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
   margin-right: 10px;
 }
 
 .thirdera .items-list .item .item-controls a {
-  font-size: 14px;
-  color: #4169E1;
+  font-size: var(--font-size-body);
+  color: var(--color-character-accent);
 }
 
 .thirdera .items-list .item .item-controls a:hover {
-  color: #FFA500;
-  text-shadow: 0 0 10px #FFA500;
+  color: var(--color-hover);
+  text-shadow: 0 0 10px var(--color-hover);
 }
 
 .thirdera .items-list .item .item-controls input {
