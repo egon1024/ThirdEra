@@ -52,6 +52,12 @@
                 <input type="text" name="system.range" value="{{system.range}}" data-dtype="Number" />
             </div>
             <div class="form-group">
+                <label>Handedness</label>
+                <select name="system.properties.handedness" data-dtype="String">
+                    {{selectOptions config.weaponHandedness selected=system.properties.handedness}}
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Size</label>
                 <select name="system.properties.size" data-dtype="String">
                     {{selectOptions config.sizes selected=system.properties.size}}

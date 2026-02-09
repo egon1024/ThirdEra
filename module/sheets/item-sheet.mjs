@@ -68,7 +68,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
             saves: CONFIG.THIRDERA?.Saves || {},
             armorTypes: CONFIG.THIRDERA?.armorTypes || {},
-            sizes: CONFIG.THIRDERA?.sizes || {}
+            sizes: CONFIG.THIRDERA?.sizes || {},
+            weaponHandedness: CONFIG.THIRDERA?.weaponHandedness || {}
         };
 
         // Enrich HTML description and other fields

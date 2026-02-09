@@ -63,6 +63,11 @@ Hooks.once("init", function () {
             Gargantuan: "Gargantuan",
             Colossal: "Colossal"
         },
+        weaponHandedness: {
+            light: "Light",
+            oneHanded: "One-Handed",
+            twoHanded: "Two-Handed"
+        },
         sizeModifiers: {
             Fine: 8,
             Diminutive: 4,

@@ -25,6 +25,7 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
 
             properties: new SchemaField({
                 melee: new StringField({ required: true, blank: false, initial: "melee", label: "Weapon Type" }), // melee or ranged
+                handedness: new StringField({ required: true, blank: false, initial: "oneHanded", choices: () => CONFIG.THIRDERA.weaponHandedness, label: "Handedness" }),
                 size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes, label: "Size" }),
                 proficiency: new StringField({ required: true, blank: true, initial: "simple", label: "Proficiency" }) // simple, martial, exotic
             }),
