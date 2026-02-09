@@ -1,3 +1,5 @@
+import { getWieldingInfo } from "../data/_damage-helpers.mjs";
+
 /**
  * Extended Item document class for Third Era
  * @extends {Item}
@@ -39,7 +41,15 @@ export class ThirdEraItem extends Item {
      */
     _prepareWeaponData(itemData) {
         const systemData = itemData.system;
-        // Add any weapon-specific calculations here
+
+        // Compute wielding info when owned by an actor
+        if (this.actor) {
+            systemData.wielding = getWieldingInfo(
+                systemData.properties.size,
+                systemData.properties.handedness,
+                this.actor.system.details.size
+            );
+        }
     }
 
     /**
@@ -118,22 +128,27 @@ export class ThirdEraItem extends Item {
         const weaponData = this.system;
         const actorData = this.actor.system;
 
-        // Determine which ability modifier to use
-        let abilityMod = 0;
-        if (weaponData.properties.melee === 'melee') {
-            abilityMod = actorData.abilities.str?.mod || 0;
-        } else {
-            abilityMod = actorData.abilities.dex?.mod || 0;
+        // Block attack if weapon can't be wielded due to size mismatch
+        if (weaponData.wielding && !weaponData.wielding.canWield) {
+            ui.notifications.warn(`${this.name} is too large/small for ${this.actor.name} to wield.`);
+            return null;
         }
 
-        const bab = actorData.combat.bab || 0;
-        const attackBonus = bab + abilityMod;
+        // Use precomputed melee/ranged attack totals (includes BAB + ability mod + misc)
+        const baseAttack = (weaponData.properties.melee === 'melee')
+            ? actorData.combat.meleeAttack.total
+            : actorData.combat.rangedAttack.total;
+        const sizePenalty = weaponData.wielding?.attackPenalty || 0;
+        const attackBonus = baseAttack + sizePenalty;
 
         const roll = await new Roll(`1d20 + ${attackBonus}`).roll();
 
+        let flavor = `${this.name} Attack`;
+        if (sizePenalty) flavor += ` (${sizePenalty} size)`;
+
         roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-            flavor: `${this.name} Attack`
+            flavor
         });
 
         return roll;

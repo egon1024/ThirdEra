@@ -470,6 +470,60 @@
   border: 1px solid var(--color-border-divider);
 }
 
+/* Attack Section */
+.thirdera .attack-section {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid var(--color-border-divider);
+}
+
+.thirdera .attack-grid {
+  display: grid;
+  grid-template-columns: auto repeat(3, 1fr) auto;
+  gap: 4px 12px;
+  align-items: center;
+  justify-items: center;
+}
+
+.thirdera .attack-col-header {
+  font-weight: bold;
+  font-size: var(--font-size-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .attack-row-label {
+  font-weight: bold;
+  font-size: var(--font-size-body);
+  color: var(--color-text-dark);
+  justify-self: end;
+}
+
+.thirdera .attack-cell {
+  font-size: var(--font-size-value);
+  font-weight: bold;
+  color: var(--color-text-dark);
+}
+
+.thirdera .attack-ability-tag {
+  font-size: var(--font-size-note);
+  font-weight: normal;
+  color: var(--color-text-muted);
+}
+
+.thirdera .attack-input {
+  width: 40px;
+  text-align: center;
+  font-size: var(--font-size-value);
+  padding: 1px 2px;
+}
+
+.thirdera .attack-total {
+  font-size: var(--font-size-value-lg);
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
 /* Equip Toggle */
 .thirdera .items-list .item .item-equip {
   font-size: var(--font-size-body);

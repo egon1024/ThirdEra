@@ -83,7 +83,15 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             // Combat Stats
             combat: new SchemaField({
                 bab: new NumberField({ required: true, integer: true, initial: 0 }),
-                grapple: new NumberField({ required: true, integer: true, initial: 0 })
+                grapple: new NumberField({ required: true, integer: true, initial: 0 }),
+                meleeAttack: new SchemaField({
+                    misc: new NumberField({ required: true, integer: true, initial: 0 }),
+                    total: new NumberField({ required: true, integer: true, initial: 0 })
+                }),
+                rangedAttack: new SchemaField({
+                    misc: new NumberField({ required: true, integer: true, initial: 0 }),
+                    total: new NumberField({ required: true, integer: true, initial: 0 })
+                })
             }),
 
             // Biography/Description
@@ -114,6 +122,19 @@ export class NPCData extends foundry.abstract.TypeDataModel {
 
         // Calculate grapple
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;
+
+        // Calculate melee and ranged attack bonuses
+        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + this.combat.meleeAttack.misc;
+        this.combat.meleeAttack.breakdown = [
+            { label: "BAB", value: this.combat.bab },
+            { label: "STR", value: this.abilities.str.mod }
+        ];
+
+        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + this.combat.rangedAttack.misc;
+        this.combat.rangedAttack.breakdown = [
+            { label: "BAB", value: this.combat.bab },
+            { label: "DEX", value: this.abilities.dex.mod }
+        ];
 
         // Calculate AC values from equipped armor, dex, size, and misc
         computeAC(this);

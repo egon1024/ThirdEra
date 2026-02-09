@@ -92,7 +92,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
             saves: CONFIG.THIRDERA?.Saves || {},
             armorTypes: CONFIG.THIRDERA?.armorTypes || {},
-            sizes: CONFIG.THIRDERA?.sizes || {}
+            sizes: CONFIG.THIRDERA?.sizes || {},
+            weaponHandedness: CONFIG.THIRDERA?.weaponHandedness || {}
         };
 
         // Ensure tabs state exists

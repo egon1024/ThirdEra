@@ -33,6 +33,43 @@ const DAMAGE_PROGRESSIONS = {
     "2d10": ["1d8", "1d10","2d6", "2d8",  "2d10", "4d8",  "6d8",  "8d8",  "12d8"]
 };
 
+/** Handedness categories in order from lightest to heaviest. */
+const HANDEDNESS_ORDER = ["light", "oneHanded", "twoHanded"];
+
+/**
+ * Determine how a weapon's handedness and attack penalty are affected when
+ * the weapon's size differs from the wielder's size (SRD rules).
+ *
+ * @param {string} weaponSize       Size key of the weapon (e.g. "Large")
+ * @param {string} weaponHandedness Base handedness key (e.g. "oneHanded")
+ * @param {string} wielderSize      Size key of the wielder (e.g. "Medium")
+ * @returns {{ effectiveHandedness: string|null, attackPenalty: number, canWield: boolean }}
+ */
+export function getWieldingInfo(weaponSize, weaponHandedness, wielderSize) {
+    const weaponSizeIdx = SIZE_ORDER.indexOf(weaponSize);
+    const wielderSizeIdx = SIZE_ORDER.indexOf(wielderSize);
+    const handednessIdx = HANDEDNESS_ORDER.indexOf(weaponHandedness);
+
+    // If any input is unrecognized, return safe defaults
+    if (weaponSizeIdx === -1 || wielderSizeIdx === -1 || handednessIdx === -1) {
+        return { effectiveHandedness: weaponHandedness, attackPenalty: 0, canWield: true, wielderSize };
+    }
+
+    const sizeSteps = weaponSizeIdx - wielderSizeIdx;
+
+    // No mismatch
+    if (sizeSteps === 0) {
+        return { effectiveHandedness: weaponHandedness, attackPenalty: 0, canWield: true, wielderSize };
+    }
+
+    const effectiveIdx = handednessIdx + sizeSteps;
+    const canWield = effectiveIdx >= 0 && effectiveIdx <= 2;
+    const effectiveHandedness = canWield ? HANDEDNESS_ORDER[effectiveIdx] : null;
+    const attackPenalty = Math.abs(sizeSteps) * -2;
+
+    return { effectiveHandedness, attackPenalty, canWield, wielderSize };
+}
+
 /**
  * Look up the effective damage dice for a weapon given its Medium base
  * damage and its current size.
