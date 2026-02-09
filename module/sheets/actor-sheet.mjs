@@ -1,3 +1,5 @@
+import { getWieldingInfo } from "../data/_damage-helpers.mjs";
+
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
  * @extends {foundry.applications.sheets.ActorSheetV2}
@@ -21,6 +23,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             editItem: ThirdEraActorSheet.#onItemEdit,
             deleteItem: ThirdEraActorSheet.#onItemDelete,
             toggleEquip: ThirdEraActorSheet.#onToggleEquip,
+            equipWeaponHand: ThirdEraActorSheet.#onEquipWeaponHand,
             changeTab: ThirdEraActorSheet.#onChangeTab,
             deleteActor: ThirdEraActorSheet.#onActorDeleteHeader
         },
@@ -91,7 +94,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const config = {
             abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
             saves: CONFIG.THIRDERA?.Saves || {},
-            armorTypes: CONFIG.THIRDERA?.armorTypes || {}
+            armorTypes: CONFIG.THIRDERA?.armorTypes || {},
+            sizes: CONFIG.THIRDERA?.sizes || {},
+            weaponHandedness: CONFIG.THIRDERA?.weaponHandedness || {},
+            weaponHand: CONFIG.THIRDERA?.weaponHand || {}
         };
 
         // Ensure tabs state exists
@@ -308,6 +314,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             return await item.update({ "system.equipped": "false" });
         }
 
+        // Check size compatibility
+        const actorSize = this.actor.system.details.size;
+        const armorSize = item.system.size;
+        if (armorSize !== actorSize) {
+            ui.notifications.warn(`Cannot equip ${item.name} — it is ${armorSize} but ${this.actor.name} is ${actorSize}.`);
+            return;
+        }
+
         // Equipping — unequip any other item in the same slot (body armor or shield)
         const isShield = item.system.armor?.type === "shield";
         const updates = [];
@@ -321,12 +335,128 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 updates.push({ _id: other.id, "system.equipped": "false" });
             }
         }
+
+        // If equipping a shield, unequip any off-hand weapon (shield occupies off-hand)
+        if (isShield) {
+            for (const other of this.actor.items) {
+                if (other.type !== "weapon") continue;
+                let otherEquipped = other.system.equipped;
+                if (otherEquipped === "true") otherEquipped = "primary";
+                else if (otherEquipped === "false") otherEquipped = "none";
+                if (otherEquipped === "offhand") {
+                    updates.push({ _id: other.id, "system.equipped": "none" });
+                }
+            }
+        }
+
         if (updates.length) {
             const unequippedNames = updates.map(u => this.actor.items.get(u._id)?.name).filter(Boolean);
             await this.actor.updateEmbeddedDocuments("Item", updates);
             ui.notifications.info(`Unequipped ${unequippedNames.join(", ")} to equip ${item.name}.`);
         }
         await item.update({ "system.equipped": "true" });
+    }
+
+    /**
+     * Handle equipping a weapon to a specific hand (primary / off-hand)
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onEquipWeaponHand(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
+        const hand = target.dataset.hand; // "primary" or "offhand"
+
+        // Normalize current equipped value for legacy data
+        let currentEquipped = item.system.equipped;
+        if (currentEquipped === "true") currentEquipped = "primary";
+        else if (currentEquipped === "false") currentEquipped = "none";
+
+        // Toggle off if already in this hand
+        if (currentEquipped === hand) {
+            return await item.update({ "system.equipped": "none" });
+        }
+
+        // Check size compatibility — can this weapon be wielded at all?
+        const wielding = getWieldingInfo(
+            item.system.properties.size,
+            item.system.properties.handedness,
+            this.actor.system.details.size
+        );
+        if (!wielding.canWield) {
+            ui.notifications.warn(`${item.name} cannot be wielded by ${this.actor.name} — size mismatch.`);
+            return;
+        }
+
+        // Block off-hand assignment if weapon is effectively two-handed
+        if (hand === "offhand" && wielding.effectiveHandedness === "twoHanded") {
+            ui.notifications.warn(`${item.name} requires two hands and cannot be used in the off-hand.`);
+            return;
+        }
+
+        // Block off-hand if current primary weapon is effectively two-handed
+        if (hand === "offhand") {
+            for (const other of this.actor.items) {
+                if (other.id === item.id || other.type !== "weapon") continue;
+                let otherEquipped = other.system.equipped;
+                if (otherEquipped === "true") otherEquipped = "primary";
+                else if (otherEquipped === "false") otherEquipped = "none";
+                if (otherEquipped !== "primary") continue;
+                const otherWielding = getWieldingInfo(
+                    other.system.properties.size,
+                    other.system.properties.handedness,
+                    this.actor.system.details.size
+                );
+                if (otherWielding.effectiveHandedness === "twoHanded") {
+                    ui.notifications.warn(`Cannot equip off-hand — ${other.name} is wielded two-handed.`);
+                    return;
+                }
+            }
+        }
+
+        // Unequip any other weapon in the same hand slot
+        const updates = [];
+        for (const other of this.actor.items) {
+            if (other.id === item.id || other.type !== "weapon") continue;
+            let otherEquipped = other.system.equipped;
+            if (otherEquipped === "true") otherEquipped = "primary";
+            else if (otherEquipped === "false") otherEquipped = "none";
+            if (otherEquipped === hand) {
+                updates.push({ _id: other.id, "system.equipped": "none" });
+            }
+        }
+
+        // If equipping to off-hand, unequip any equipped shield (shield occupies off-hand)
+        if (hand === "offhand") {
+            for (const other of this.actor.items) {
+                if (other.type !== "armor") continue;
+                if (other.system.equipped !== "true") continue;
+                if (other.system.armor?.type === "shield") {
+                    updates.push({ _id: other.id, "system.equipped": "false" });
+                }
+            }
+        }
+
+        // If equipping a two-handed weapon to primary, also unequip any off-hand weapon
+        if (hand === "primary" && wielding.effectiveHandedness === "twoHanded") {
+            for (const other of this.actor.items) {
+                if (other.id === item.id || other.type !== "weapon") continue;
+                let otherEquipped = other.system.equipped;
+                if (otherEquipped === "true") otherEquipped = "primary";
+                else if (otherEquipped === "false") otherEquipped = "none";
+                if (otherEquipped === "offhand") {
+                    updates.push({ _id: other.id, "system.equipped": "none" });
+                }
+            }
+        }
+
+        if (updates.length) {
+            await this.actor.updateEmbeddedDocuments("Item", updates);
+        }
+        await item.update({ "system.equipped": hand });
     }
 
     /**

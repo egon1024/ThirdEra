@@ -2,21 +2,20 @@
     <header class="sheet-header">
         <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Item Name" /></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Item Name" />{{#unless (eq system.properties.size "Medium")}} <span class="item-size-label">({{system.properties.size}})</span>{{/unless}}</h1>
         </div>
     </header>
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item active" data-action="changeTab" data-group="primary" data-tab="description">Description</a>
-        <a class="item" data-action="changeTab" data-group="primary" data-tab="attributes">Attributes</a>
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab" data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'attributes')}}active{{/if}}" data-action="changeTab" data-group="primary" data-tab="attributes">Attributes</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
         {{!-- Description Tab --}}
-        {{!-- Description Tab --}}
-        <div class="tab active" data-group="primary" data-tab="description">
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary" data-tab="description">
             <div class="editor-box">
                 <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
                     value="{{system.description}}" toggled="false">
@@ -29,8 +28,11 @@
         <div class="tab attributes {{#if (eq tabs.primary 'attributes')}}active{{/if}}" data-group="primary"
             data-tab="attributes">
             <div class="form-group">
-                <label>Damage Dice</label>
+                <label>Damage Dice (Medium Base)</label>
                 <input type="text" name="system.damage.dice" value="{{system.damage.dice}}" data-dtype="String" />
+                {{#unless (eq system.damage.effectiveDice system.damage.dice)}}
+                <span class="value-modified" title="Base: {{system.damage.dice}} — adjusted for {{system.properties.size}} size">Effective Damage: {{system.damage.effectiveDice}}</span>
+                {{/unless}}
             </div>
             <div class="form-group">
                 <label>Damage Type</label>
@@ -48,6 +50,27 @@
             <div class="form-group">
                 <label>Range (ft)</label>
                 <input type="text" name="system.range" value="{{system.range}}" data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Handedness</label>
+                <select name="system.properties.handedness" data-dtype="String">
+                    {{selectOptions config.weaponHandedness selected=system.properties.handedness}}
+                </select>
+                {{#if system.wielding}}
+                    {{#unless system.wielding.canWield}}
+                <span class="value-modified" title="A {{system.wielding.wielderSize}} creature cannot wield this {{system.properties.size}} weapon — handedness shifts beyond two-handed">Cannot wield (size mismatch, {{system.wielding.attackPenalty}} attack)</span>
+                    {{else}}
+                        {{#unless (eq system.wielding.effectiveHandedness system.properties.handedness)}}
+                <span class="value-modified" title="Base: {{lookup config.weaponHandedness system.properties.handedness}} — shifted for {{system.wielding.wielderSize}} wielder">Effective: {{lookup config.weaponHandedness system.wielding.effectiveHandedness}} ({{system.wielding.attackPenalty}} attack)</span>
+                        {{/unless}}
+                    {{/unless}}
+                {{/if}}
+            </div>
+            <div class="form-group">
+                <label>Size</label>
+                <select name="system.properties.size" data-dtype="String">
+                    {{selectOptions config.sizes selected=system.properties.size}}
+                </select>
             </div>
             <div class="form-group">
                 <label>Cost (gp)</label>

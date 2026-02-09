@@ -1,3 +1,5 @@
+import { getEffectiveDamage } from "./_damage-helpers.mjs";
+
 const { NumberField, SchemaField, StringField, HTMLField } = foundry.data.fields;
 
 /**
@@ -23,6 +25,7 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
 
             properties: new SchemaField({
                 melee: new StringField({ required: true, blank: false, initial: "melee", label: "Weapon Type" }), // melee or ranged
+                handedness: new StringField({ required: true, blank: false, initial: "oneHanded", choices: () => CONFIG.THIRDERA.weaponHandedness, label: "Handedness" }),
                 size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes, label: "Size" }),
                 proficiency: new StringField({ required: true, blank: true, initial: "simple", label: "Proficiency" }) // simple, martial, exotic
             }),
@@ -30,7 +33,12 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
             cost: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Cost (gp)" }),
             weight: new NumberField({ required: true, nullable: false, min: 0, initial: 0, label: "Weight (lbs)" }),
 
-            equipped: new StringField({ required: true, blank: false, initial: "false", label: "Equipped" })
+            equipped: new StringField({ required: true, blank: false, initial: "none", label: "Equipped" })
         };
+    }
+
+    /** @override */
+    prepareDerivedData() {
+        this.damage.effectiveDice = getEffectiveDamage(this.damage.dice, this.properties.size);
     }
 }
