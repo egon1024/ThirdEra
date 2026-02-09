@@ -205,6 +205,16 @@
                         <h4>{{item.name}}{{#unless (eq item.system.properties.size "Medium")}} <span class="item-size-label">({{item.system.properties.size}})</span>{{/unless}}</h4>
                     </div>
                     <div class="item-controls">
+                        {{!-- Hand assignment icons --}}
+                        <a class="weapon-hand {{#if (eq item.system.equipped 'primary')}}hand-active{{/if}}"
+                           data-action="equipWeaponHand" data-hand="primary"
+                           title="{{#if (eq item.system.equipped 'primary')}}Unequip{{else}}Equip Primary Hand{{/if}}">P</a>
+                        <a class="weapon-hand {{#if (eq item.system.equipped 'offhand')}}hand-active{{/if}}"
+                           data-action="equipWeaponHand" data-hand="offhand"
+                           title="{{#if (eq item.system.equipped 'offhand')}}Unequip{{else}}Equip Off-Hand{{/if}}">O</a>
+                        {{#if item.system.twf.active}}
+                        <span class="item-detail value-modified" title="Two-weapon fighting penalty">{{signedNumber item.system.twf.penalty}} TWF</span>
+                        {{/if}}
                         <span class="item-detail">{{item.system.damage.effectiveDice}}</span>
                         {{#if item.system.wielding}}{{#if item.system.wielding.effectiveHandedness}}{{#unless (eq item.system.wielding.effectiveHandedness item.system.properties.handedness)}}<span class="item-detail value-modified" title="Base: {{lookup @root.config.weaponHandedness item.system.properties.handedness}} — shifted by size mismatch ({{item.system.wielding.attackPenalty}} attack)">{{lookup @root.config.weaponHandedness item.system.wielding.effectiveHandedness}}</span>{{/unless}}{{/if}}{{/if}}
                         <a class="weapon-attack rollable" data-action="weaponAttack" title="Attack"><i

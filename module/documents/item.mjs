@@ -1,4 +1,4 @@
-import { getWieldingInfo } from "../data/_damage-helpers.mjs";
+import { getWieldingInfo, getTWFPenalties, getStrMultiplier } from "../data/_damage-helpers.mjs";
 
 /**
  * Extended Item document class for Third Era
@@ -42,6 +42,10 @@ export class ThirdEraItem extends Item {
     _prepareWeaponData(itemData) {
         const systemData = itemData.system;
 
+        // Normalize legacy equipped values: "true" → "primary", "false" → "none"
+        if (systemData.equipped === "true") systemData.equipped = "primary";
+        else if (systemData.equipped === "false") systemData.equipped = "none";
+
         // Compute wielding info when owned by an actor
         if (this.actor) {
             systemData.wielding = getWieldingInfo(
@@ -49,6 +53,55 @@ export class ThirdEraItem extends Item {
                 systemData.properties.handedness,
                 this.actor.system.details.size
             );
+
+            // Determine TWF state by scanning sibling weapons
+            const hand = systemData.equipped; // "none", "primary", or "offhand"
+            systemData.twf = { active: false, penalty: 0, label: "" };
+
+            if (hand === "primary" || hand === "offhand") {
+                const otherHand = hand === "primary" ? "offhand" : "primary";
+                let siblingInOtherHand = null;
+
+                for (const other of this.actor.items) {
+                    if (other.id === this.id) continue;
+                    if (other.type !== "weapon") continue;
+                    // Normalize sibling's equipped value for comparison
+                    let otherEquipped = other.system.equipped;
+                    if (otherEquipped === "true") otherEquipped = "primary";
+                    else if (otherEquipped === "false") otherEquipped = "none";
+                    if (otherEquipped === otherHand) {
+                        siblingInOtherHand = other;
+                        break;
+                    }
+                }
+
+                // TWF applies when both hands are occupied, or when this weapon
+                // is in the off-hand (off-hand attacks are inherently TWF per SRD)
+                const twfActive = siblingInOtherHand !== null || hand === "offhand";
+
+                if (twfActive) {
+                    // Compute the off-hand weapon's effective handedness on-the-fly
+                    const offhandWeapon = hand === "offhand" ? this : siblingInOtherHand;
+                    const offhandWielding = getWieldingInfo(
+                        offhandWeapon.system.properties.size,
+                        offhandWeapon.system.properties.handedness,
+                        this.actor.system.details.size
+                    );
+                    const offhandEffective = offhandWielding.effectiveHandedness || "oneHanded";
+                    const penalties = getTWFPenalties(offhandEffective);
+
+                    const myPenalty = hand === "primary" ? penalties.primaryPenalty : penalties.offhandPenalty;
+                    systemData.twf = {
+                        active: true,
+                        penalty: myPenalty,
+                        label: `${myPenalty} TWF`
+                    };
+                }
+            }
+
+            // Compute STR damage multiplier
+            const effectiveHandedness = systemData.wielding?.effectiveHandedness || systemData.properties.handedness;
+            systemData.strMultiplier = getStrMultiplier(hand, effectiveHandedness);
         }
     }
 
@@ -96,16 +149,26 @@ export class ThirdEraItem extends Item {
         const damageDice = weaponData.damage.effectiveDice ?? weaponData.damage.dice;
 
         // Get strength modifier if actor exists and weapon is melee
+        // SRD: 0.5x/1.5x multipliers only apply to positive STR bonuses;
+        // STR penalties are always applied at full value regardless of hand
         let strMod = 0;
         if (this.actor && weaponData.properties.melee === 'melee') {
-            strMod = this.actor.system.abilities.str?.mod || 0;
+            const rawStr = this.actor.system.abilities.str?.mod || 0;
+            const multiplier = weaponData.strMultiplier ?? 1;
+            strMod = rawStr >= 0 ? Math.floor(rawStr * multiplier) : rawStr;
         }
 
         const roll = await new Roll(`${damageDice} + ${strMod}`).roll();
 
+        // Build flavor text with hand label
+        const handLabels = { primary: "Primary", offhand: "Off-Hand" };
+        const handLabel = handLabels[weaponData.equipped] || "";
+        let flavor = `${this.name} Damage`;
+        if (handLabel) flavor += ` (${handLabel})`;
+
         roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-            flavor: `${this.name} Damage`
+            flavor
         });
 
         return roll;
@@ -139,12 +202,21 @@ export class ThirdEraItem extends Item {
             ? actorData.combat.meleeAttack.total
             : actorData.combat.rangedAttack.total;
         const sizePenalty = weaponData.wielding?.attackPenalty || 0;
-        const attackBonus = baseAttack + sizePenalty;
+        const twfPenalty = weaponData.twf?.penalty || 0;
+        const attackBonus = baseAttack + sizePenalty + twfPenalty;
 
         const roll = await new Roll(`1d20 + ${attackBonus}`).roll();
 
+        // Build flavor text with hand label and penalty breakdown
+        const handLabels = { primary: "Primary", offhand: "Off-Hand" };
+        const handLabel = handLabels[weaponData.equipped] || "";
         let flavor = `${this.name} Attack`;
-        if (sizePenalty) flavor += ` (${sizePenalty} size)`;
+        if (handLabel) flavor += ` (${handLabel})`;
+
+        const penalties = [];
+        if (twfPenalty) penalties.push(`${twfPenalty} TWF`);
+        if (sizePenalty) penalties.push(`${sizePenalty} size`);
+        if (penalties.length) flavor += ` [${penalties.join(", ")}]`;
 
         roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this.actor }),

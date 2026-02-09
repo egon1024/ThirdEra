@@ -71,6 +71,35 @@ export function getWieldingInfo(weaponSize, weaponHandedness, wielderSize) {
 }
 
 /**
+ * Compute two-weapon fighting attack penalties based on the off-hand weapon's
+ * effective handedness (SRD Table: Two-Weapon Fighting Penalties).
+ *
+ * @param {string} offhandEffectiveHandedness  "light" or "oneHanded"
+ * @returns {{ primaryPenalty: number, offhandPenalty: number }}
+ */
+export function getTWFPenalties(offhandEffectiveHandedness) {
+    if (offhandEffectiveHandedness === "light") {
+        return { primaryPenalty: -4, offhandPenalty: -8 };
+    }
+    // One-handed (or anything else) off-hand
+    return { primaryPenalty: -6, offhandPenalty: -10 };
+}
+
+/**
+ * Return the STR damage multiplier for a weapon based on which hand it is
+ * wielded in and its effective handedness.
+ *
+ * @param {string} hand                   "primary", "offhand", or "none"
+ * @param {string} effectiveHandedness    "light", "oneHanded", or "twoHanded"
+ * @returns {number}  1.0, 0.5, or 1.5
+ */
+export function getStrMultiplier(hand, effectiveHandedness) {
+    if (hand === "offhand") return 0.5;
+    if (effectiveHandedness === "twoHanded") return 1.5;
+    return 1.0;
+}
+
+/**
  * Look up the effective damage dice for a weapon given its Medium base
  * damage and its current size.
  *

@@ -542,6 +542,38 @@
   color: var(--color-hover);
 }
 
+/* Weapon hand assignment */
+.thirdera .items-list .item .weapon-hand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  border: 1px solid var(--color-text-faint);
+  border-radius: 2px;
+  cursor: pointer;
+  color: var(--color-text-faint);
+}
+
+.thirdera .items-list .item .weapon-hand.hand-active {
+  color: var(--color-text-light);
+  background: var(--color-equipped);
+  border-color: var(--color-equipped);
+}
+
+.thirdera .items-list .item .weapon-hand:hover {
+  color: var(--color-hover);
+  border-color: var(--color-hover);
+}
+
+.thirdera .items-list .item .weapon-hand.hand-active:hover {
+  background: var(--color-hover);
+  border-color: var(--color-hover);
+  color: var(--color-text-light);
+}
+
 /* Size mismatch indicator for armor */
 .thirdera .items-list .item.size-mismatch {
   opacity: 0.5;

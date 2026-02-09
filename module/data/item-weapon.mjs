@@ -33,7 +33,7 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
             cost: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Cost (gp)" }),
             weight: new NumberField({ required: true, nullable: false, min: 0, initial: 0, label: "Weight (lbs)" }),
 
-            equipped: new StringField({ required: true, blank: false, initial: "false", label: "Equipped" })
+            equipped: new StringField({ required: true, blank: false, initial: "none", label: "Equipped" })
         };
     }
 

@@ -68,6 +68,11 @@ Hooks.once("init", function () {
             oneHanded: "One-Handed",
             twoHanded: "Two-Handed"
         },
+        weaponHand: {
+            none: "Not Equipped",
+            primary: "Primary Hand",
+            offhand: "Off-Hand"
+        },
         sizeModifiers: {
             Fine: 8,
             Diminutive: 4,
