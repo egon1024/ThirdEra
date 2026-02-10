@@ -36,7 +36,8 @@
             "equipment": "Equipment",
             "spell": "Spell",
             "feat": "Feat",
-            "skill": "Skill"
+            "skill": "Skill",
+            "race": "Race"
         },
         "ActorTypes": {
             "character": "Character",
@@ -50,7 +51,8 @@
             "armor": "Armor",
             "equipment": "Equipment",
             "feat": "Feat",
-            "skill": "Skill"
+            "skill": "Skill",
+            "race": "Race"
         },
         "Actor": {
             "character": "Character",

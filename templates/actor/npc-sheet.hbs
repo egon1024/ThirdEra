@@ -115,12 +115,14 @@
                     <span class="attack-col-header"></span>
                     <span class="attack-col-header">BAB</span>
                     <span class="attack-col-header">Ability</span>
+                    <span class="attack-col-header">Size</span>
                     <span class="attack-col-header">Misc</span>
                     <span class="attack-col-header">Total</span>
 
                     <span class="attack-row-label">Melee</span>
                     <span class="attack-cell">{{signedNumber system.combat.bab}}</span>
                     <span class="attack-cell">{{signedNumber system.abilities.str.mod}} <span class="attack-ability-tag">STR</span></span>
+                    <span class="attack-cell">{{signedNumber system.combat.sizeMod}}</span>
                     <input type="text" name="system.combat.meleeAttack.misc"
                         value="{{system.combat.meleeAttack.misc}}" data-dtype="Number" class="attack-input" />
                     <span class="attack-total">{{signedNumber system.combat.meleeAttack.total}}</span>
@@ -128,6 +130,7 @@
                     <span class="attack-row-label">Ranged</span>
                     <span class="attack-cell">{{signedNumber system.combat.bab}}</span>
                     <span class="attack-cell">{{signedNumber system.abilities.dex.mod}} <span class="attack-ability-tag">DEX</span></span>
+                    <span class="attack-cell">{{signedNumber system.combat.sizeMod}}</span>
                     <input type="text" name="system.combat.rangedAttack.misc"
                         value="{{system.combat.rangedAttack.misc}}" data-dtype="Number" class="attack-input" />
                     <span class="attack-total">{{signedNumber system.combat.rangedAttack.total}}</span>

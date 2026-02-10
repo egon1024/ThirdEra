@@ -38,7 +38,6 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
             // Character Details
             details: new SchemaField({
-                race: new StringField({ required: true, blank: true, initial: "", label: "Race" }),
                 class: new StringField({ required: true, blank: true, initial: "", label: "Class" }),
                 level: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Level" }),
                 alignment: new StringField({ required: true, blank: true, initial: "", label: "Alignment" }),
@@ -116,9 +115,12 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
      * Prepare derived data for the character
      */
     prepareDerivedData() {
-        // Calculate ability modifiers
+        // Apply racial ability adjustments and calculate modifiers
+        const race = this.parent.items.find(i => i.type === "race");
         for (const [key, ability] of Object.entries(this.abilities)) {
-            ability.mod = Math.floor((ability.value - 10) / 2);
+            ability.racial = race?.system.abilityAdjustments[key] ?? 0;
+            ability.effective = ability.value + ability.racial;
+            ability.mod = Math.floor((ability.effective - 10) / 2);
         }
 
         // Apply armor max-Dex cap to Dex modifier before any derived calculations
@@ -133,21 +135,27 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         this.saves.ref.total = this.saves.ref.base + this.abilities.dex.mod;
         this.saves.will.total = this.saves.will.base + this.abilities.wis.mod;
 
+        // Size modifier for attack rolls and grapple
+        const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[this.details.size] ?? 0;
+        this.combat.sizeMod = sizeMod;
+
         // Calculate grapple (BAB + STR mod + size modifier)
         // TODO: Add size modifier calculation
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;
 
         // Calculate melee and ranged attack bonuses
-        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + this.combat.meleeAttack.misc;
+        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + sizeMod + this.combat.meleeAttack.misc;
         this.combat.meleeAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
-            { label: "STR", value: this.abilities.str.mod }
+            { label: "STR", value: this.abilities.str.mod },
+            { label: "Size", value: sizeMod }
         ];
 
-        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + this.combat.rangedAttack.misc;
+        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + sizeMod + this.combat.rangedAttack.misc;
         this.combat.rangedAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
-            { label: "DEX", value: this.abilities.dex.mod }
+            { label: "DEX", value: this.abilities.dex.mod },
+            { label: "Size", value: sizeMod }
         ];
 
         // Calculate AC values from equipped armor, dex, size, and misc

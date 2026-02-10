@@ -41,7 +41,8 @@
       "equipment": {},
       "spell": {},
       "feat": {},
-      "skill": {}
+      "skill": {},
+      "race": {}
     }
   },
   "socket": false,
