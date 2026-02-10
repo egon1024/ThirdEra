@@ -55,7 +55,11 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 hp: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 1, label: "Current HP" }),
                     max: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Maximum HP" }),
-                    temp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Temporary HP" })
+                    temp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Temporary HP" }),
+                    adjustments: new ArrayField(new SchemaField({
+                        value: new NumberField({ required: true, integer: true, initial: 0, label: "Adjustment" }),
+                        label: new StringField({ required: true, blank: false, initial: "Misc", label: "Reason" })
+                    }))
                 }),
                 ac: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10, label: "Armor Class" }),
@@ -173,13 +177,40 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 this.saves[save].base = saveTotals[save];
                 this.saves[save].breakdown = saveBreakdown[save];
             }
+            // Derive HP max from levelHistory
+            const classMap = new Map(classes.map(c => [c.id, c]));
+            let hpTotal = 0;
+            const hpBreakdown = [];
+            for (let i = 0; i < this.levelHistory.length; i++) {
+                const entry = this.levelHistory[i];
+                const cls = classMap.get(entry.classItemId);
+                const className = cls?.name ?? "Unknown";
+                const hpFromDie = entry.hpRolled || 0;
+                const hpFromCon = this.abilities.con.mod;
+                const levelHp = Math.max(1, hpFromDie + hpFromCon);
+                hpTotal += levelHp;
+                hpBreakdown.push({
+                    characterLevel: i + 1,
+                    className,
+                    hpRolled: hpFromDie,
+                    conMod: hpFromCon,
+                    subtotal: levelHp
+                });
+            }
+            this.attributes.hp.max = Math.max(1, hpTotal);
+            this.attributes.hp.hpBreakdown = hpBreakdown;
         } else {
             this.details.totalLevel = this.details.level;
             this.combat.babBreakdown = [];
+            this.attributes.hp.hpBreakdown = [];
             for (const save of ["fort", "ref", "will"]) {
                 this.saves[save].breakdown = [];
             }
         }
+
+        // Apply HP adjustments (feats, curses, magic items, etc.)
+        const hpAdjTotal = this.attributes.hp.adjustments.reduce((sum, adj) => sum + adj.value, 0);
+        this.attributes.hp.max = Math.max(1, this.attributes.hp.max + hpAdjTotal);
 
         // Calculate initiative
         this.attributes.initiative.bonus = this.abilities.dex.mod;

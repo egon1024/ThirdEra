@@ -944,6 +944,113 @@
   padding: 4px 8px;
 }
 
+/* HP Adjustments */
+.thirdera .hp-adjustments-section {
+  margin: 4px 0 10px;
+  padding: 0 10px;
+}
+
+.thirdera .hp-adjustments-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.thirdera .hp-adjustments-title {
+  font-size: var(--font-size-label);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .hp-adj-add {
+  font-size: var(--font-size-note);
+  color: var(--color-character-accent);
+  cursor: pointer;
+}
+
+.thirdera .hp-adj-add:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .hp-adjustments-grid {
+  display: grid;
+  grid-template-columns: 1fr 60px 20px;
+  gap: 4px 8px;
+  align-items: center;
+}
+
+.thirdera .hp-adj-label-input {
+  font-size: var(--font-size-body);
+  padding: 1px 4px;
+}
+
+.thirdera .hp-adj-value-input {
+  width: 50px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+.thirdera .hp-adj-remove {
+  font-size: var(--font-size-note);
+  color: var(--color-text-faint);
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.thirdera .hp-adj-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+/* Level History grid */
+.thirdera .level-history-hp-total {
+  font-size: var(--font-size-body);
+  color: var(--color-text-light);
+}
+
+.thirdera .level-history-grid {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px 60px 50px 50px;
+  gap: 4px 8px;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.thirdera .level-history-col-header {
+  font-weight: bold;
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.thirdera .level-history-cell {
+  font-size: var(--font-size-body);
+  text-align: center;
+}
+
+.thirdera .level-history-level {
+  font-weight: bold;
+}
+
+.thirdera .level-history-class {
+  text-align: left;
+}
+
+.thirdera .level-history-subtotal {
+  font-weight: bold;
+}
+
+.thirdera .level-history-input {
+  width: 50px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
 /* Save base value (derived from classes) */
 .thirdera .saves-list .save .save-base {
   flex: 0 0 60px;

@@ -172,8 +172,12 @@
             <input type="text" name="system.attributes.hp.value" value="{{system.attributes.hp.value}}"
               data-dtype="Number" />
             <span>/</span>
+            {{#if classes.length}}
+            <span title="Derived from level history — edit HP Rolled values on Classes tab">{{system.attributes.hp.max}}</span>
+            {{else}}
             <input type="text" name="system.attributes.hp.max" value="{{system.attributes.hp.max}}"
               data-dtype="Number" />
+            {{/if}}
           </div>
         </div>
         <div class="stat-block">
@@ -203,6 +207,26 @@
           </div>
           {{/if}}
         </div>
+      </div>
+
+      {{!-- HP Adjustments --}}
+      <div class="hp-adjustments-section">
+        <div class="hp-adjustments-header">
+          <span class="hp-adjustments-title">HP Adjustments</span>
+          <a class="hp-adj-add" data-action="addHpAdjustment" title="Add Adjustment"><i class="fas fa-plus"></i></a>
+        </div>
+        {{#if system.attributes.hp.adjustments.length}}
+        <div class="hp-adjustments-grid">
+          {{#each system.attributes.hp.adjustments as |adj|}}
+          <input type="text" data-hp-adj-index="{{@index}}" data-hp-adj-field="label"
+            value="{{adj.label}}" class="hp-adj-label-input" />
+          <input type="text" data-hp-adj-index="{{@index}}" data-hp-adj-field="value"
+            value="{{adj.value}}" data-dtype="Number" class="hp-adj-value-input" />
+          <a class="hp-adj-remove" data-action="removeHpAdjustment" data-adj-index="{{@index}}"
+            title="Remove Adjustment"><i class="fas fa-times"></i></a>
+          {{/each}}
+        </div>
+        {{/if}}
       </div>
 
       {{!-- Attack Bonuses --}}
@@ -343,6 +367,32 @@
       </ol>
       {{else}}
       <p class="no-items hint">No classes — drag a class item here</p>
+      {{/if}}
+
+      {{!-- Level History --}}
+      {{#if levelHistory.length}}
+      <div class="items-header level-history-header">
+        <h3 class="items-header">Level History</h3>
+        <span class="level-history-hp-total">HP Max: {{system.attributes.hp.max}}</span>
+      </div>
+      <div class="level-history-grid">
+        <span class="level-history-col-header">Lvl</span>
+        <span class="level-history-col-header">Class</span>
+        <span class="level-history-col-header">Hit Die</span>
+        <span class="level-history-col-header">HP Rolled</span>
+        <span class="level-history-col-header">CON</span>
+        <span class="level-history-col-header">Total</span>
+
+        {{#each levelHistory as |entry|}}
+        <span class="level-history-cell level-history-level">{{entry.characterLevel}}</span>
+        <span class="level-history-cell level-history-class">{{entry.className}}</span>
+        <span class="level-history-cell">{{entry.hitDie}}</span>
+        <input type="text" data-level-hp-index="{{entry.index}}" value="{{entry.hpRolled}}"
+          data-dtype="Number" class="level-history-input" />
+        <span class="level-history-cell">{{signedNumber entry.conMod}}</span>
+        <span class="level-history-cell level-history-subtotal">{{entry.subtotal}}</span>
+        {{/each}}
+      </div>
       {{/if}}
     </div>
 

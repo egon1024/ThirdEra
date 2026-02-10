@@ -31,7 +31,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             openClass: ThirdEraActorSheet.#onOpenClass,
             removeClass: ThirdEraActorSheet.#onRemoveClass,
             addClassLevel: ThirdEraActorSheet.#onAddClassLevel,
-            removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel
+            removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel,
+            addHpAdjustment: ThirdEraActorSheet.#onAddHpAdjustment,
+            removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment
         },
         window: {
             controls: [
@@ -83,6 +85,32 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             this._focusedInputName = null;
         }
+
+        // Attach change listeners for level history HP inputs (not form-bound)
+        this.element.querySelectorAll("input[data-level-hp-index]").forEach(input => {
+            input.addEventListener("change", async (event) => {
+                const index = parseInt(event.target.dataset.levelHpIndex);
+                const value = Math.max(0, parseInt(event.target.value) || 0);
+                const history = foundry.utils.deepClone(this.actor.system.levelHistory);
+                if (history[index]) {
+                    history[index].hpRolled = value;
+                    await this.actor.update({ "system.levelHistory": history });
+                }
+            });
+        });
+
+        // Attach change listeners for HP adjustment inputs (not form-bound)
+        this.element.querySelectorAll("input[data-hp-adj-index]").forEach(input => {
+            input.addEventListener("change", async (event) => {
+                const index = parseInt(event.target.dataset.hpAdjIndex);
+                const field = event.target.dataset.hpAdjField; // "value" or "label"
+                const adjustments = foundry.utils.deepClone(this.actor.system.attributes.hp.adjustments);
+                if (adjustments[index]) {
+                    adjustments[index][field] = field === "value" ? (parseInt(event.target.value) || 0) : event.target.value;
+                    await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
+                }
+            });
+        });
     }
 
     /** @override */
@@ -149,6 +177,22 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             .join(" / ");
         const totalLevel = systemData.details.totalLevel ?? systemData.details.level;
 
+        // Prepare level history display data for Classes tab
+        const hpBreakdown = systemData.attributes.hp.hpBreakdown || [];
+        const levelHistory = (systemData.levelHistory || []).map((entry, i) => {
+            const cls = actor.items.get(entry.classItemId);
+            const bp = hpBreakdown[i];
+            return {
+                index: i,
+                characterLevel: i + 1,
+                className: cls?.name ?? "Unknown",
+                hitDie: cls?.system.hitDie ?? "?",
+                hpRolled: entry.hpRolled,
+                conMod: bp?.conMod ?? 0,
+                subtotal: bp?.subtotal ?? 0
+            };
+        });
+
         // Enrich HTML biography
         const enriched = {
             biography: await TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
@@ -170,6 +214,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             totalLevel,
             equippedWeapons,
             equippedArmor,
+            levelHistory,
             editable: this.isEditable
         };
     }
@@ -647,6 +692,33 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (lastIndex >= 0) {
             history.splice(lastIndex, 1);
             await this.actor.update({ "system.levelHistory": history });
+        }
+    }
+
+    /**
+     * Handle adding an HP adjustment entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddHpAdjustment(event, target) {
+        const adjustments = [...(this.actor.system.attributes.hp.adjustments || [])];
+        adjustments.push({ value: 0, label: "Misc" });
+        await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
+    }
+
+    /**
+     * Handle removing an HP adjustment entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveHpAdjustment(event, target) {
+        const index = parseInt(target.dataset.adjIndex);
+        const adjustments = [...(this.actor.system.attributes.hp.adjustments || [])];
+        if (index >= 0 && index < adjustments.length) {
+            adjustments.splice(index, 1);
+            await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
         }
     }
 
