@@ -106,7 +106,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const tabs = this.tabGroups || { primary: "description" };
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
-        const uncappedDexMod = Math.floor((systemData.abilities.dex.value - 10) / 2);
+        // Use effective score (base + racial) for characters; fall back to value for NPCs
+        const dexScore = systemData.abilities.dex.effective ?? systemData.abilities.dex.value;
+        const uncappedDexMod = Math.floor((dexScore - 10) / 2);
         const dexCap = {
             isCapped: systemData.abilities.dex.mod < uncappedDexMod,
             uncappedMod: uncappedDexMod

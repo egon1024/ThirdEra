@@ -120,20 +120,26 @@ export class NPCData extends foundry.abstract.TypeDataModel {
         this.saves.ref.total = this.saves.ref.base + this.abilities.dex.mod;
         this.saves.will.total = this.saves.will.base + this.abilities.wis.mod;
 
+        // Size modifier for attack rolls and grapple
+        const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[this.details.size] ?? 0;
+        this.combat.sizeMod = sizeMod;
+
         // Calculate grapple
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;
 
         // Calculate melee and ranged attack bonuses
-        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + this.combat.meleeAttack.misc;
+        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + sizeMod + this.combat.meleeAttack.misc;
         this.combat.meleeAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
-            { label: "STR", value: this.abilities.str.mod }
+            { label: "STR", value: this.abilities.str.mod },
+            { label: "Size", value: sizeMod }
         ];
 
-        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + this.combat.rangedAttack.misc;
+        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + sizeMod + this.combat.rangedAttack.misc;
         this.combat.rangedAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
-            { label: "DEX", value: this.abilities.dex.mod }
+            { label: "DEX", value: this.abilities.dex.mod },
+            { label: "Size", value: sizeMod }
         ];
 
         // Calculate AC values from equipped armor, dex, size, and misc

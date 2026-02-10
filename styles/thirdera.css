@@ -498,7 +498,7 @@
 
 .thirdera .attack-grid {
   display: grid;
-  grid-template-columns: auto repeat(3, 1fr) auto;
+  grid-template-columns: auto repeat(4, 1fr) auto;
   gap: 4px 12px;
   align-items: center;
   justify-items: center;
