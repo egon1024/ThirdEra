@@ -766,6 +766,67 @@
   width: 100%;
 }
 
+/* Race display in character header */
+.thirdera .race-name {
+  cursor: pointer;
+  font-size: var(--font-size-value);
+  font-weight: bold;
+  color: var(--color-character-accent);
+}
+
+.thirdera .race-name:hover {
+  color: var(--color-hover);
+  text-decoration: underline;
+}
+
+.thirdera .race-name.race-empty {
+  cursor: default;
+  color: var(--color-text-muted);
+  font-weight: normal;
+  font-style: italic;
+}
+
+.thirdera .race-name.race-empty:hover {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.thirdera .race-remove {
+  margin-left: 4px;
+  font-size: var(--font-size-note);
+  color: var(--color-text-faint);
+  cursor: pointer;
+}
+
+.thirdera .race-remove:hover {
+  color: var(--color-hover);
+}
+
+/* Race item sheet — ability adjustments grid */
+.thirdera .ability-adjustments {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.thirdera .ability-adj-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.thirdera .ability-adj-entry label {
+  font-size: var(--font-size-label);
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.thirdera .ability-adj-entry input {
+  width: 60px;
+  text-align: center;
+}
+
 /* Rollable highlighting */
 .rollable:hover {
   cursor: pointer;

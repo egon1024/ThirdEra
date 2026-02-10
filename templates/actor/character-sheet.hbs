@@ -9,8 +9,13 @@
       </div>
       <div class="resources grid grid-4col">
         <div class="resource flex-group-center">
-          <label for="system.details.race" class="resource-label">Race</label>
-          <input type="text" name="system.details.race" value="{{system.details.race}}" data-dtype="String" />
+          <label class="resource-label">Race</label>
+          {{#if race}}
+          <span class="race-name" data-action="openRace">{{race.name}}</span>
+          <a class="race-remove" data-action="removeRace" title="Remove Race"><i class="fas fa-times"></i></a>
+          {{else}}
+          <span class="race-name race-empty">None</span>
+          {{/if}}
         </div>
         <div class="resource flex-group-center">
           <label for="system.details.class" class="resource-label">Class</label>

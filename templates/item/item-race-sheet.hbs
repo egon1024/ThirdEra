@@ -1,0 +1,58 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Race Name" /></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="details">Details</a>
+    </nav>
+
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary" data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}" value="{{system.description}}"
+                    toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+
+        {{!-- Details Tab --}}
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary" data-tab="details">
+            <div class="form-group">
+                <label>Size</label>
+                <select name="system.size">
+                    {{#each config.sizes as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.size)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Base Land Speed (ft)</label>
+                <input type="number" name="system.speed" value="{{system.speed}}" data-dtype="Number" />
+            </div>
+            <div class="form-group">
+                <label>Favored Class</label>
+                <input type="text" name="system.favoredClass" value="{{system.favoredClass}}" placeholder="Any, Wizard, etc." />
+            </div>
+
+            <h3 class="form-header">Ability Adjustments</h3>
+            <div class="ability-adjustments">
+                {{#each config.abilityScores as |label key|}}
+                <div class="ability-adj-entry">
+                    <label>{{label}}</label>
+                    <input type="number" name="system.abilityAdjustments.{{key}}" value="{{lookup ../system.abilityAdjustments key}}" data-dtype="Number" />
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+</form>

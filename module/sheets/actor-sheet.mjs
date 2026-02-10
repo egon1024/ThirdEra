@@ -25,7 +25,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             toggleEquip: ThirdEraActorSheet.#onToggleEquip,
             equipWeaponHand: ThirdEraActorSheet.#onEquipWeaponHand,
             changeTab: ThirdEraActorSheet.#onChangeTab,
-            deleteActor: ThirdEraActorSheet.#onActorDeleteHeader
+            deleteActor: ThirdEraActorSheet.#onActorDeleteHeader,
+            openRace: ThirdEraActorSheet.#onOpenRace,
+            removeRace: ThirdEraActorSheet.#onRemoveRace
         },
         window: {
             controls: [
@@ -152,6 +154,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const spells = [];
         const feats = [];
         const skills = [];
+        let race = null;
 
         for (const item of items) {
             const itemData = item;
@@ -161,9 +164,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             else if (item.type === 'spell') spells.push(itemData);
             else if (item.type === 'feat') feats.push(itemData);
             else if (item.type === 'skill') skills.push(itemData);
+            else if (item.type === 'race' && !race) race = itemData;
         }
 
-        return { weapons, armor, equipment, spells, feats, skills };
+        return { weapons, armor, equipment, spells, feats, skills, race };
+    }
+
+    /**
+     * Handle dropping an item onto the actor sheet.
+     * Enforces single-race: if a race is dropped, delete any existing race first.
+     * @override
+     */
+    async _onDropItem(event, item) {
+        if (item.type === "race") {
+            const existing = this.actor.items.find(i => i.type === "race");
+            if (existing) {
+                await existing.delete();
+            }
+        }
+        return await super._onDropItem(event, item);
     }
 
     /* -------------------------------------------- */
@@ -457,6 +476,32 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             await this.actor.updateEmbeddedDocuments("Item", updates);
         }
         await item.update({ "system.equipped": hand });
+    }
+
+    /**
+     * Handle opening the embedded race item sheet
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenRace(event, target) {
+        const race = this.actor.items.find(i => i.type === "race");
+        if (race) {
+            race.sheet.render({ force: true });
+        }
+    }
+
+    /**
+     * Handle removing the embedded race item
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveRace(event, target) {
+        const race = this.actor.items.find(i => i.type === "race");
+        if (race) {
+            await race.delete();
+        }
     }
 
     /**

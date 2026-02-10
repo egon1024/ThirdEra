@@ -12,6 +12,7 @@ import { EquipmentData } from "./module/data/item-equipment.mjs";
 import { SpellData } from "./module/data/item-spell.mjs";
 import { FeatData } from "./module/data/item-feat.mjs";
 import { SkillData } from "./module/data/item-skill.mjs";
+import { RaceData } from "./module/data/item-race.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -99,7 +100,8 @@ Hooks.once("init", function () {
         equipment: EquipmentData,
         spell: SpellData,
         feat: FeatData,
-        skill: SkillData
+        skill: SkillData,
+        race: RaceData
     };
 
     // Register sheet application classes

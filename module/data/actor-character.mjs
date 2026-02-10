@@ -38,7 +38,6 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
             // Character Details
             details: new SchemaField({
-                race: new StringField({ required: true, blank: true, initial: "", label: "Race" }),
                 class: new StringField({ required: true, blank: true, initial: "", label: "Class" }),
                 level: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Level" }),
                 alignment: new StringField({ required: true, blank: true, initial: "", label: "Alignment" }),
