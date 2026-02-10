@@ -13,6 +13,7 @@ import { SpellData } from "./module/data/item-spell.mjs";
 import { FeatData } from "./module/data/item-feat.mjs";
 import { SkillData } from "./module/data/item-skill.mjs";
 import { RaceData } from "./module/data/item-race.mjs";
+import { ClassData } from "./module/data/item-class.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -84,6 +85,22 @@ Hooks.once("init", function () {
             Huge: -2,
             Gargantuan: -4,
             Colossal: -8
+        },
+        hitDice: {
+            d4: "d4",
+            d6: "d6",
+            d8: "d8",
+            d10: "d10",
+            d12: "d12"
+        },
+        babProgressions: {
+            good: "Good (+1/level)",
+            average: "Average (+3/4 levels)",
+            poor: "Poor (+1/2 levels)"
+        },
+        saveProgressions: {
+            good: "Good (+2 + level/2)",
+            poor: "Poor (+level/3)"
         }
     };
 
@@ -101,7 +118,8 @@ Hooks.once("init", function () {
         spell: SpellData,
         feat: FeatData,
         skill: SkillData,
-        race: RaceData
+        race: RaceData,
+        class: ClassData
     };
 
     // Register sheet application classes

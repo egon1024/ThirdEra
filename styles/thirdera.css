@@ -34,6 +34,12 @@
   --color-modified: #b8860b;
   --color-equipped: #2d8a4e;
 
+  /* Popups / Dropdowns */
+  --color-popup-bg: #f4e8d3;
+  --color-popup-text: #1a1a1a;
+  --color-popup-border: #c4a882;
+  --color-popup-hover-bg: #e6d5b8;
+
   /* Borders */
   --color-border-input: #c4a882;
   --color-border-divider: #CCC;
@@ -61,6 +67,40 @@
   overflow-y: scroll;
   background: var(--color-bg-parchment);
   color: var(--color-text-primary);
+}
+
+/* Window controls dropdown (three-dot menu) */
+.thirdera .controls-dropdown {
+  background: var(--color-popup-bg);
+  border: 1px solid var(--color-popup-border);
+}
+
+.thirdera .controls-dropdown .header-control > button {
+  color: var(--color-popup-text);
+}
+
+.thirdera .controls-dropdown .header-control > button:hover {
+  background: var(--color-popup-hover-bg);
+  color: var(--color-hover);
+}
+
+/* Context menus (right-click menus) */
+.thirdera #context-menu,
+.thirdera ~ #context-menu {
+  background: var(--color-popup-bg);
+  border: 1px solid var(--color-popup-border);
+  color: var(--color-popup-text);
+}
+
+.thirdera #context-menu li,
+.thirdera ~ #context-menu li {
+  color: var(--color-popup-text);
+}
+
+.thirdera #context-menu li:hover,
+.thirdera ~ #context-menu li:hover {
+  background: var(--color-popup-hover-bg);
+  color: var(--color-hover);
 }
 
 .thirdera h1,
@@ -712,16 +752,17 @@
 }
 
 .thirdera .items-list .item .item-controls {
-  flex: 0;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .thirdera .items-list .item .item-detail {
   font-size: var(--font-size-label);
   color: var(--color-text-muted);
-  margin-right: 10px;
+  white-space: nowrap;
 }
 
 .thirdera .items-list .item .item-controls a {
@@ -844,6 +885,71 @@
 .thirdera .ability-adj-entry input {
   width: 60px;
   text-align: center;
+}
+
+/* Class display in character header */
+.thirdera .class-summary {
+  font-size: var(--font-size-value);
+  font-weight: bold;
+  color: var(--color-character-accent);
+}
+
+.thirdera .class-summary.class-empty {
+  color: var(--color-text-muted);
+  font-weight: normal;
+  font-style: italic;
+}
+
+.thirdera .level-display {
+  font-size: var(--font-size-value);
+  font-weight: bold;
+}
+
+/* Class list on character sheet */
+.thirdera .class-name-link {
+  cursor: pointer;
+  color: var(--color-character-accent);
+}
+
+.thirdera .class-name-link:hover {
+  color: var(--color-hover);
+  text-decoration: underline;
+}
+
+/* Class level add/remove buttons */
+.thirdera .class-level-add {
+  color: var(--color-character-accent);
+  cursor: pointer;
+}
+
+.thirdera .class-level-add:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .class-level-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .class-level-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+.thirdera .no-items {
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding: 4px 8px;
+}
+
+/* Save base value (derived from classes) */
+.thirdera .saves-list .save .save-base {
+  flex: 0 0 60px;
+  margin: 0 10px;
+  text-align: center;
+  font-size: var(--font-size-body);
 }
 
 /* Rollable highlighting */

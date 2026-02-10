@@ -27,7 +27,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             changeTab: ThirdEraActorSheet.#onChangeTab,
             deleteActor: ThirdEraActorSheet.#onActorDeleteHeader,
             openRace: ThirdEraActorSheet.#onOpenRace,
-            removeRace: ThirdEraActorSheet.#onRemoveRace
+            removeRace: ThirdEraActorSheet.#onRemoveRace,
+            openClass: ThirdEraActorSheet.#onOpenClass,
+            removeClass: ThirdEraActorSheet.#onRemoveClass,
+            addClassLevel: ThirdEraActorSheet.#onAddClassLevel,
+            removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel
         },
         window: {
             controls: [
@@ -99,7 +103,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             armorTypes: CONFIG.THIRDERA?.armorTypes || {},
             sizes: CONFIG.THIRDERA?.sizes || {},
             weaponHandedness: CONFIG.THIRDERA?.weaponHandedness || {},
-            weaponHand: CONFIG.THIRDERA?.weaponHand || {}
+            weaponHand: CONFIG.THIRDERA?.weaponHand || {},
+            hitDice: CONFIG.THIRDERA?.hitDice || {},
+            babProgressions: CONFIG.THIRDERA?.babProgressions || {},
+            saveProgressions: CONFIG.THIRDERA?.saveProgressions || {}
         };
 
         // Ensure tabs state exists
@@ -123,6 +130,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             baseSpeed
         };
 
+        // Compute per-class level counts from derived data and augment class items
+        const classLevelCounts = systemData.details.classLevels || {};
+        for (const cls of items.classes) {
+            cls.derivedLevels = classLevelCounts[cls.id] || 0;
+        }
+
+        // Filter equipped items for Combat tab
+        const equippedWeapons = items.weapons.filter(w =>
+            w.system.equipped === "primary" || w.system.equipped === "offhand"
+        );
+        const equippedArmor = items.armor.filter(a => a.system.equipped === "true");
+
+        // Compute class summary for header display
+        const classSummary = items.classes
+            .filter(c => c.derivedLevels > 0)
+            .map(c => `${c.name} ${c.derivedLevels}`)
+            .join(" / ");
+        const totalLevel = systemData.details.totalLevel ?? systemData.details.level;
+
         // Enrich HTML biography
         const enriched = {
             biography: await TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
@@ -140,6 +166,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             enriched,
             dexCap,
             speedInfo,
+            classSummary,
+            totalLevel,
+            equippedWeapons,
+            equippedArmor,
             editable: this.isEditable
         };
     }
@@ -156,6 +186,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const spells = [];
         const feats = [];
         const skills = [];
+        const classes = [];
         let race = null;
 
         for (const item of items) {
@@ -167,9 +198,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             else if (item.type === 'feat') feats.push(itemData);
             else if (item.type === 'skill') skills.push(itemData);
             else if (item.type === 'race' && !race) race = itemData;
+            else if (item.type === 'class') classes.push(itemData);
         }
 
-        return { weapons, armor, equipment, spells, feats, skills, race };
+        return { weapons, armor, equipment, spells, feats, skills, race, classes };
     }
 
     /**
@@ -184,6 +216,19 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 await existing.delete();
             }
         }
+
+        // If this class already exists on the actor, add a level instead of duplicating
+        if (item.type === "class") {
+            const itemName = item.name;
+            const existing = this.actor.items.find(i => i.type === "class" && i.name === itemName);
+            if (existing) {
+                const history = [...(this.actor.system.levelHistory || [])];
+                history.push({ classItemId: existing.id, hpRolled: 0 });
+                await this.actor.update({ "system.levelHistory": history });
+                return false;
+            }
+        }
+
         const result = await super._onDropItem(event, item);
 
         // When a race is dropped, set the actor's size and speed to match
@@ -194,6 +239,16 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     "system.details.size": raceData.size,
                     "system.attributes.speed.value": raceData.speed
                 });
+            }
+        }
+
+        // When a new class is dropped, add first level to levelHistory
+        if (item.type === "class" && result) {
+            const created = Array.isArray(result) ? result[0] : result;
+            if (created?.id) {
+                const history = [...(this.actor.system.levelHistory || [])];
+                history.push({ classItemId: created.id, hpRolled: 0 });
+                await this.actor.update({ "system.levelHistory": history });
             }
         }
 
@@ -516,6 +571,82 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const race = this.actor.items.find(i => i.type === "race");
         if (race) {
             await race.delete();
+        }
+    }
+
+    /**
+     * Handle opening an embedded class item sheet
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenClass(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const cls = this.actor.items.get(itemId);
+        if (cls) {
+            cls.sheet.render({ force: true });
+        }
+    }
+
+    /**
+     * Handle removing an embedded class item
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveClass(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const cls = this.actor.items.get(itemId);
+        if (cls) {
+            // Remove levelHistory entries for this class
+            const history = (this.actor.system.levelHistory || []).filter(e => e.classItemId !== itemId);
+            await this.actor.update({ "system.levelHistory": history });
+            await cls.delete();
+        }
+    }
+
+    /**
+     * Handle adding a level to an existing class
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddClassLevel(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const cls = this.actor.items.get(itemId);
+        if (cls) {
+            const history = [...(this.actor.system.levelHistory || [])];
+            history.push({ classItemId: cls.id, hpRolled: 0 });
+            await this.actor.update({ "system.levelHistory": history });
+        }
+    }
+
+    /**
+     * Handle removing the most recent level of a class (with confirmation)
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveClassLevel(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const cls = this.actor.items.get(itemId);
+        if (!cls) return;
+
+        const classLevels = (this.actor.system.details.classLevels || {})[itemId] || 0;
+        if (classLevels <= 0) return;
+
+        const confirmed = await Dialog.confirm({
+            title: `Remove ${cls.name} Level`,
+            content: `<p>Remove one level of ${cls.name} from ${this.actor.name}? (${classLevels} → ${classLevels - 1})</p>`
+        });
+        if (!confirmed) return;
+
+        // Remove the last levelHistory entry for this class
+        const history = [...(this.actor.system.levelHistory || [])];
+        const lastIndex = history.findLastIndex(e => e.classItemId === itemId);
+        if (lastIndex >= 0) {
+            history.splice(lastIndex, 1);
+            await this.actor.update({ "system.levelHistory": history });
         }
     }
 

@@ -1,5 +1,6 @@
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
+import { ClassData } from "./item-class.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -107,7 +108,13 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             experience: new SchemaField({
                 value: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Current XP" }),
                 max: new NumberField({ required: true, integer: true, min: 0, initial: 1000, label: "XP for Next Level" })
-            })
+            }),
+
+            // Class level advancement history (ordered by character level)
+            levelHistory: new ArrayField(new SchemaField({
+                classItemId: new StringField({ required: true, blank: false, label: "Class Item ID" }),
+                hpRolled: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "HP Rolled" })
+            }))
         };
     }
 
@@ -126,6 +133,53 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         // Apply armor max-Dex cap to Dex modifier before any derived calculations
         const effectiveMaxDex = getEffectiveMaxDex(this);
         applyMaxDex(this, effectiveMaxDex);
+
+        // Derive class level counts from levelHistory
+        const classLevelCounts = {};
+        for (const entry of this.levelHistory) {
+            classLevelCounts[entry.classItemId] = (classLevelCounts[entry.classItemId] || 0) + 1;
+        }
+        this.details.classLevels = classLevelCounts;
+
+        // Calculate class-derived values (BAB, base saves, total level)
+        const classes = this.parent.items.filter(i => i.type === "class");
+        const totalLevel = this.levelHistory.length;
+        if (totalLevel > 0) {
+            let totalBAB = 0;
+            const babBreakdown = [];
+            const saveBreakdown = { fort: [], ref: [], will: [] };
+            const saveTotals = { fort: 0, ref: 0, will: 0 };
+
+            for (const cls of classes) {
+                const lvl = classLevelCounts[cls.id] || 0;
+                if (lvl <= 0) continue;
+
+                const classBab = ClassData.computeBAB(lvl, cls.system.babProgression);
+                totalBAB += classBab;
+                babBreakdown.push({ label: cls.name, value: classBab });
+
+                for (const save of ["fort", "ref", "will"]) {
+                    const baseSave = ClassData.computeBaseSave(lvl, cls.system.saves[save]);
+                    saveTotals[save] += baseSave;
+                    saveBreakdown[save].push({ label: cls.name, value: baseSave });
+                }
+            }
+
+            this.combat.bab = totalBAB;
+            this.combat.babBreakdown = babBreakdown;
+            this.details.totalLevel = totalLevel;
+
+            for (const save of ["fort", "ref", "will"]) {
+                this.saves[save].base = saveTotals[save];
+                this.saves[save].breakdown = saveBreakdown[save];
+            }
+        } else {
+            this.details.totalLevel = this.details.level;
+            this.combat.babBreakdown = [];
+            for (const save of ["fort", "ref", "will"]) {
+                this.saves[save].breakdown = [];
+            }
+        }
 
         // Calculate initiative
         this.attributes.initiative.bonus = this.abilities.dex.mod;

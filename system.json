@@ -42,7 +42,8 @@
       "spell": {},
       "feat": {},
       "skill": {},
-      "race": {}
+      "race": {},
+      "class": {}
     }
   },
   "socket": false,
