@@ -67,19 +67,26 @@
       <div class="abilities-header">
         <h3 class="items-header">Ability Scores</h3>
       </div>
-      <ol class="abilities-list">
+      <div class="abilities-grid">
+        <span class="abilities-col-header"></span>
+        <span class="abilities-col-header">Base</span>
+        <span class="abilities-col-header">Racial</span>
+        <span class="abilities-col-header">Score</span>
+        <span class="abilities-col-header">Mod</span>
+        <span class="abilities-col-header"></span>
+
         {{#each system.abilities as |ability key|}}
-        <li class="ability flexrow">
-          <h4 class="ability-name">{{lookup @root.abilityScores key}}</h4>
-          <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"
-            placeholder="10" />
-          <span class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}">{{signedNumber ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span class="dex-cap-note" title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by armor">(max)</span>{{/if}}{{/if}}</span>
-          <a class="ability-check" data-action="abilityCheck" data-ability="{{key}}">
-            <i class="fas fa-dice-d20"></i>
-          </a>
-        </li>
+        <h4 class="ability-name">{{lookup @root.abilityScores key}}</h4>
+        <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"
+          placeholder="10" class="ability-base" />
+        <span class="ability-racial">{{#if ability.racial}}{{signedNumber ability.racial}}{{/if}}</span>
+        <span class="ability-effective">{{#if ability.racial}}{{ability.effective}}{{else}}{{ability.value}}{{/if}}</span>
+        <span class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}">{{signedNumber ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span class="dex-cap-note" title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by armor">(max)</span>{{/if}}{{/if}}</span>
+        <a class="ability-check" data-action="abilityCheck" data-ability="{{key}}">
+          <i class="fas fa-dice-d20"></i>
+        </a>
         {{/each}}
-      </ol>
+      </div>
 
       {{!-- Combat Stats --}}
       <div class="combat-stats">

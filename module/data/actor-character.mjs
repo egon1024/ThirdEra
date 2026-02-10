@@ -115,9 +115,12 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
      * Prepare derived data for the character
      */
     prepareDerivedData() {
-        // Calculate ability modifiers
+        // Apply racial ability adjustments and calculate modifiers
+        const race = this.parent.items.find(i => i.type === "race");
         for (const [key, ability] of Object.entries(this.abilities)) {
-            ability.mod = Math.floor((ability.value - 10) / 2);
+            ability.racial = race?.system.abilityAdjustments[key] ?? 0;
+            ability.effective = ability.value + ability.racial;
+            ability.mod = Math.floor((ability.effective - 10) / 2);
         }
 
         // Apply armor max-Dex cap to Dex modifier before any derived calculations

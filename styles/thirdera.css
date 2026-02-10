@@ -302,42 +302,61 @@
   min-height: var(--editor-min-height, 10em) !important;
 }
 
-/* Abilities */
-.thirdera .abilities-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.thirdera .abilities-list .ability {
-  display: flex;
+/* Abilities Grid */
+.thirdera .abilities-grid {
+  display: grid;
+  grid-template-columns: 120px 60px 40px 40px 60px 30px;
+  gap: 4px 8px;
   align-items: center;
-  padding: 5px;
-  border-bottom: 1px solid var(--color-border-divider);
+  justify-items: center;
+  padding: 0 5px;
 }
 
-.thirdera .abilities-list .ability h4 {
-  flex: 0 0 120px;
+.thirdera .abilities-grid .abilities-col-header {
+  font-weight: bold;
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .abilities-grid .ability-name {
+  justify-self: start;
   margin: 0;
   font-size: var(--font-size-body);
 }
 
-.thirdera .abilities-list .ability input {
-  flex: 0 0 60px;
-  margin: 0 10px;
+.thirdera .abilities-grid .ability-base {
+  width: 100%;
   text-align: center;
 }
 
-.thirdera .abilities-list .ability .ability-mod {
-  flex: 0 0 auto;
-  min-width: 40px;
-  text-align: center;
+.thirdera .abilities-grid .ability-racial {
+  font-size: var(--font-size-label);
+  color: var(--color-modified);
+}
+
+.thirdera .abilities-grid .ability-effective {
   font-weight: bold;
   font-size: var(--font-size-value);
 }
 
-.thirdera .abilities-list .ability .ability-mod.dex-capped {
+.thirdera .abilities-grid .ability-mod {
+  font-weight: bold;
+  font-size: var(--font-size-value);
+}
+
+.thirdera .abilities-grid .ability-mod.dex-capped {
   color: var(--color-modified);
+}
+
+.thirdera .abilities-grid .ability-check {
+  color: var(--color-character-accent);
+}
+
+.thirdera .abilities-grid .ability-check:hover {
+  color: var(--color-hover);
+  text-shadow: 0 0 10px var(--color-hover);
+  cursor: pointer;
 }
 
 .thirdera .dex-cap-note {
