@@ -182,7 +182,20 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 await existing.delete();
             }
         }
-        return await super._onDropItem(event, item);
+        const result = await super._onDropItem(event, item);
+
+        // When a race is dropped, set the actor's size and speed to match
+        if (item.type === "race" && result) {
+            const raceData = item.system || item.toObject?.().system;
+            if (raceData) {
+                await this.actor.update({
+                    "system.details.size": raceData.size,
+                    "system.attributes.speed.value": raceData.speed
+                });
+            }
+        }
+
+        return result;
     }
 
     /* -------------------------------------------- */
