@@ -33,6 +33,9 @@
   /* Status indicators */
   --color-modified: #b8860b;
   --color-equipped: #2d8a4e;
+  --color-hp-full: #c8e6c9;
+  --color-hp-warning: #fff3c4;
+  --color-hp-danger: #f8c4c4;
 
   /* Popups / Dropdowns */
   --color-popup-bg: #f4e8d3;
@@ -236,6 +239,35 @@
   display: block;
 }
 
+/* Subtabs (nested tab groups) */
+.thirdera .subtabs {
+  flex: 0;
+  border-bottom: 1px solid var(--color-border-divider);
+  background: transparent;
+  font-size: var(--font-size-label);
+  padding: 0 4px;
+}
+
+.thirdera .subtabs .item {
+  color: var(--color-text-tab-inactive);
+  font-size: var(--font-size-label);
+  padding: 4px 10px;
+}
+
+.thirdera .subtabs .item.active {
+  color: var(--color-text-primary);
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-character-accent);
+}
+
+.thirdera .subtab {
+  display: none;
+}
+
+.thirdera .subtab.active {
+  display: block;
+}
+
 .thirdera .grid {
   display: grid;
   grid-column-gap: 10px;
@@ -250,6 +282,10 @@
 
 .thirdera .grid-4col {
   grid-template-columns: repeat(4, 1fr);
+}
+
+.thirdera .grid-5col {
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .thirdera .resource {
@@ -269,6 +305,52 @@
   width: 100%;
   height: 28px;
   margin-top: 2px;
+}
+
+/* Header HP display */
+.thirdera .header-hp-display {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.thirdera .header-hp-current {
+  width: 42px;
+  height: 28px;
+  text-align: center;
+  font-size: var(--font-size-value);
+  font-weight: bold;
+  padding: 1px 2px;
+}
+
+/* HP status background coloring (header and combat tab) */
+.thirdera input.hp-full {
+  background: var(--color-hp-full);
+}
+
+.thirdera input.hp-warning {
+  background: var(--color-hp-warning);
+}
+
+.thirdera input.hp-danger {
+  background: var(--color-hp-danger);
+}
+
+.thirdera input.hp-full:focus,
+.thirdera input.hp-warning:focus,
+.thirdera input.hp-danger:focus {
+  background: var(--color-bg-input);
+}
+
+.thirdera .header-hp-sep {
+  font-size: var(--font-size-value);
+  color: var(--color-text-muted);
+}
+
+.thirdera .header-hp-max {
+  font-size: var(--font-size-value);
+  font-weight: bold;
 }
 
 /* Dynamic Editor Sizing */
@@ -1051,12 +1133,193 @@
   padding: 1px 2px;
 }
 
+.thirdera .level-history-roll-hp {
+  cursor: pointer;
+  color: var(--color-character-accent);
+  font-weight: bold;
+}
+
+.thirdera .level-history-roll-hp:hover {
+  color: var(--color-hover);
+}
+
 /* Save base value (derived from classes) */
 .thirdera .saves-list .save .save-base {
   flex: 0 0 60px;
   margin: 0 10px;
   text-align: center;
   font-size: var(--font-size-body);
+}
+
+/* Skill point budget */
+.thirdera .skill-point-budget {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+}
+
+.thirdera .skill-point-budget .sp-label {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .skill-point-budget .sp-remaining {
+  font-weight: bold;
+  color: var(--color-equipped);
+}
+
+.thirdera .skill-point-budget .sp-remaining.sp-zero {
+  color: var(--color-text-muted);
+}
+
+/* Skill ranks input on actor sheet */
+.thirdera .skill-ranks-input {
+  width: 45px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+/* Class skill indicator */
+.thirdera .class-skill-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: var(--color-text-light);
+  background: var(--color-character-accent);
+  border-radius: 2px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* GM-granted skill indicator */
+.thirdera .granted-skill-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: var(--color-text-light);
+  background: var(--color-equipped);
+  border-radius: 2px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* GM-granted skills section on character sheet */
+.thirdera .granted-skills-section {
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  border: 1px dashed var(--color-border-divider);
+  border-radius: 4px;
+}
+
+.thirdera .granted-skills-header {
+  font-size: var(--font-size-label);
+  margin: 0 0 4px 0;
+}
+
+.thirdera .granted-skills-hint {
+  font-weight: normal;
+  font-style: italic;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-note);
+}
+
+/* Cross-class skill visual treatment */
+.thirdera .cross-class-skill-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 16px;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: var(--color-text-muted);
+  background: var(--color-border-divider);
+  border-radius: 2px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.thirdera .skills-list .cross-class-skill h4 {
+  color: var(--color-text-muted);
+}
+
+/* Armor check penalty on skill row */
+.thirdera .skill-acp {
+  font-size: var(--font-size-label);
+  color: var(--color-modified);
+  font-weight: bold;
+}
+
+/* Skill reference lists (class skills on class sheet, excluded skills on race sheet) */
+.thirdera .skill-ref-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .skill-ref-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--color-border-divider);
+  font-size: var(--font-size-body);
+}
+
+.thirdera .skill-ref-name {
+  flex: 1;
+}
+
+.thirdera .skill-ref-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .skill-ref-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+/* Forbidden skill styling on character sheet */
+.thirdera .skills-list .skill-forbidden {
+  opacity: 0.5;
+}
+
+.thirdera .skill-forbidden-indicator {
+  color: var(--color-npc-accent);
+  font-size: var(--font-size-note);
+  margin-left: 4px;
+}
+
+.thirdera .skill-forbidden-label {
+  font-size: var(--font-size-label);
+  color: var(--color-npc-accent);
+  font-style: italic;
+}
+
+/* Draggable roll elements (hotbar macro support) */
+.thirdera [data-drag-type] {
+  cursor: grab;
+}
+
+.thirdera [data-drag-type]:active {
+  cursor: grabbing;
 }
 
 /* Rollable highlighting */

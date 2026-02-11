@@ -118,6 +118,12 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             levelHistory: new ArrayField(new SchemaField({
                 classItemId: new StringField({ required: true, blank: false, label: "Class Item ID" }),
                 hpRolled: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "HP Rolled" })
+            })),
+
+            // GM-granted skills (override forbidden status, treat as class skills)
+            grantedSkills: new ArrayField(new SchemaField({
+                key: new StringField({ required: true, blank: false, label: "Skill Key" }),
+                name: new StringField({ required: true, blank: false, label: "Skill Name" })
             }))
         };
     }
@@ -207,6 +213,112 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 this.saves[save].breakdown = [];
             }
         }
+
+        // Derive class skill keys — union of all class items' classSkills arrays
+        const classSkillKeys = new Set();
+        for (const cls of classes) {
+            const lvl = classLevelCounts[cls.id] || 0;
+            if (lvl <= 0) continue;
+            for (const entry of (cls.system.classSkills || [])) {
+                classSkillKeys.add(entry.key);
+            }
+        }
+        this.classSkillKeys = classSkillKeys;
+
+        // Build excluded skill keys from race
+        const excludedSkillKeys = new Set();
+        if (race) {
+            for (const entry of (race.system.excludedSkills || [])) {
+                excludedSkillKeys.add(entry.key);
+            }
+        }
+        this.excludedSkillKeys = excludedSkillKeys;
+
+        // Build GM-granted skill keys (override forbidden, treated as class skills)
+        const grantedSkillKeys = new Set();
+        for (const entry of (this.grantedSkills || [])) {
+            grantedSkillKeys.add(entry.key);
+        }
+        this.grantedSkillKeys = grantedSkillKeys;
+
+        // Calculate skill point budget
+        const skillClassMap = new Map(classes.map(c => [c.id, c]));
+        let skillPointsAvailable = 0;
+        for (let i = 0; i < this.levelHistory.length; i++) {
+            const entry = this.levelHistory[i];
+            const cls = skillClassMap.get(entry.classItemId);
+            const basePoints = cls?.system.skillPointsPerLevel ?? 0;
+            const intMod = this.abilities.int.mod;
+            let points = Math.max(1, basePoints + intMod);
+            // First character level gets 4x skill points
+            if (i === 0) points *= 4;
+            skillPointsAvailable += points;
+        }
+
+        // Annotate skill items with class skill status, max ranks, and armor penalty
+        // This runs in the actor's prepareDerivedData (after items are prepared),
+        // so classSkillKeys is available here.
+        const skillItems = this.parent.items.filter(i => i.type === "skill");
+        let skillPointsSpent = 0;
+
+        // Compute total armor check penalty once (sum of all equipped armor/shields)
+        let totalArmorCheckPenalty = 0;
+        for (const item of this.parent.items) {
+            if (item.type !== "armor") continue;
+            if (item.system.equipped !== "true") continue;
+            totalArmorCheckPenalty += (item.system.armor?.checkPenalty || 0);
+        }
+
+        for (const skill of skillItems) {
+            const sd = skill.system;
+            const ranks = sd.ranks || 0;
+            const isGranted = !!(sd.key && grantedSkillKeys.has(sd.key));
+            const isClassSkill = isGranted || !!(sd.key && classSkillKeys.has(sd.key));
+            const maxRanks = isClassSkill ? totalLevel + 3 : (totalLevel + 3) / 2;
+
+            // Determine forbidden status (GM-granted skills override all restrictions)
+            let isForbidden = false;
+            let forbiddenReason = "";
+            if (!isGranted) {
+                if (sd.key && excludedSkillKeys.has(sd.key)) {
+                    isForbidden = true;
+                    forbiddenReason = "Excluded by race";
+                } else if (sd.exclusive === "true" && sd.key && !classSkillKeys.has(sd.key)) {
+                    isForbidden = true;
+                    forbiddenReason = "Exclusive — requires a class that grants this skill";
+                }
+            }
+
+            sd.isGranted = isGranted;
+            sd.isClassSkill = isClassSkill;
+            sd.maxRanks = maxRanks;
+            sd.isForbidden = isForbidden;
+            sd.forbiddenReason = forbiddenReason;
+
+            // Apply armor check penalty to skills flagged for it
+            let armorPenalty = 0;
+            if (sd.armorCheckPenalty === "true") {
+                armorPenalty = totalArmorCheckPenalty;
+            }
+            sd.armorPenalty = armorPenalty;
+
+            // Recalculate total with armor penalty
+            const abilityMod = this.abilities[sd.ability]?.mod || 0;
+            const misc = sd.modifier?.misc || 0;
+            sd.modifier.total = abilityMod + ranks + misc + armorPenalty;
+
+            // Cross-class skills cost 2 points per rank, class skills cost 1
+            // Forbidden skills don't count toward spent (shouldn't have ranks)
+            if (!isForbidden) {
+                skillPointsSpent += isClassSkill ? ranks : ranks * 2;
+            }
+        }
+
+        this.skillPointBudget = {
+            available: skillPointsAvailable,
+            spent: skillPointsSpent,
+            remaining: skillPointsAvailable - skillPointsSpent
+        };
 
         // Apply HP adjustments (feats, curses, magic items, etc.)
         const hpAdjTotal = this.attributes.hp.adjustments.reduce((sum, adj) => sum + adj.value, 0);

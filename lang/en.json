@@ -43,6 +43,20 @@
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"
+        },
+        "Skills": {
+            "classSkill": "Class Skill",
+            "crossClassSkill": "Cross-Class Skill",
+            "skillPoints": "Skill Points",
+            "available": "Available",
+            "spent": "Spent",
+            "remaining": "Remaining",
+            "maxRanks": "Max Ranks",
+            "forbidden": "Forbidden",
+            "exclusive": "Exclusive",
+            "excludedByRace": "Excluded by race",
+            "exclusiveRequiresClass": "Exclusive — requires a class that grants this skill",
+            "gmGranted": "GM-Granted"
         }
     },
     "TYPES": {

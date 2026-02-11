@@ -27,7 +27,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             rollAttack: ThirdEraItemSheet.#onRollAttack,
             rollDamage: ThirdEraItemSheet.#onRollDamage,
             changeTab: ThirdEraItemSheet.#onChangeTab,
-            deleteItem: ThirdEraItemSheet.#onItemDeleteHeader
+            deleteItem: ThirdEraItemSheet.#onItemDeleteHeader,
+            removeClassSkill: ThirdEraItemSheet.#onRemoveClassSkill,
+            removeExcludedSkill: ThirdEraItemSheet.#onRemoveExcludedSkill
         }
     };
 
@@ -90,7 +92,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             config,
             enriched,
             tabs: this.tabGroups,
-            editable: this.isEditable
+            editable: this.isEditable,
+            isOwned: !!item.parent
         };
     }
 
@@ -121,6 +124,51 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 this.submit();
             });
         });
+
+        // Enable drag-and-drop for class and race item sheets (skill assignment)
+        if (this.document.type === "class" || this.document.type === "race") {
+            new DragDrop.implementation({
+                permissions: { drop: () => this.isEditable },
+                callbacks: { drop: this._onDrop.bind(this) }
+            }).bind(this.element);
+        }
+    }
+
+    /**
+     * Handle drop events on class/race item sheets.
+     * @param {DragEvent} event
+     */
+    async _onDrop(event) {
+        const data = TextEditor.implementation.getDragEventData(event);
+        if (data.type !== "Item") return;
+        const droppedItem = await Item.implementation.fromDropData(data);
+        if (!droppedItem || droppedItem.type !== "skill") return;
+
+        const skillKey = droppedItem.system?.key;
+        if (!skillKey) {
+            ui.notifications.warn(`${droppedItem.name} has no skill key set — set one on the skill's Details tab first.`);
+            return;
+        }
+
+        if (this.document.type === "class") {
+            const current = [...(this.document.system.classSkills || [])];
+            if (current.some(e => e.key === skillKey)) {
+                ui.notifications.info(`${droppedItem.name} is already a class skill for ${this.document.name}.`);
+                return;
+            }
+            current.push({ key: skillKey, name: droppedItem.name });
+            current.sort((a, b) => a.name.localeCompare(b.name));
+            await this.document.update({ "system.classSkills": current });
+        } else if (this.document.type === "race") {
+            const current = [...(this.document.system.excludedSkills || [])];
+            if (current.some(e => e.key === skillKey)) {
+                ui.notifications.info(`${droppedItem.name} is already excluded by ${this.document.name}.`);
+                return;
+            }
+            current.push({ key: skillKey, name: droppedItem.name });
+            current.sort((a, b) => a.name.localeCompare(b.name));
+            await this.document.update({ "system.excludedSkills": current });
+        }
     }
 
     /** @override */
@@ -195,5 +243,31 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             await this.item.delete();
             this.close();
         }
+    }
+
+    /**
+     * Handle removing a class skill entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveClassSkill(event, target) {
+        const skillKey = target.dataset.skillKey;
+        if (!skillKey) return;
+        const current = (this.item.system.classSkills || []).filter(e => e.key !== skillKey);
+        await this.item.update({ "system.classSkills": current });
+    }
+
+    /**
+     * Handle removing an excluded skill entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveExcludedSkill(event, target) {
+        const skillKey = target.dataset.skillKey;
+        if (!skillKey) return;
+        const current = (this.item.system.excludedSkills || []).filter(e => e.key !== skillKey);
+        await this.item.update({ "system.excludedSkills": current });
     }
 }

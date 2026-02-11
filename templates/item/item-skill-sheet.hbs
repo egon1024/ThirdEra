@@ -35,14 +35,16 @@
                     {{selectOptions config.abilityScores selected=system.ability localize=true}}
                 </select>
             </div>
+            {{#if isOwned}}
             <div class="form-group">
                 <label>Ranks</label>
-                <input type="text" name="system.ranks" value="{{system.ranks}}" data-dtype="Number" />
+                <input type="number" step="0.5" min="0" name="system.ranks" value="{{system.ranks}}" data-dtype="Number" />
             </div>
             <div class="form-group">
                 <label>Misc Modifier</label>
                 <input type="text" name="system.modifier.misc" value="{{system.modifier.misc}}" data-dtype="Number" />
             </div>
+            {{/if}}
 
             <div class="form-group">
                 <label class="checkbox">
@@ -51,6 +53,9 @@
                 <label class="checkbox">
                     <input type="checkbox" name="system.armorCheckPenalty" {{checked system.armorCheckPenalty}} /> Armor
                     Check Penalty Applies
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="system.exclusive" {{checked system.exclusive}} /> Exclusive (class skill only)
                 </label>
             </div>
         </div>

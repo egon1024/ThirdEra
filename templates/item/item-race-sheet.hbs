@@ -53,6 +53,21 @@
                 </div>
                 {{/each}}
             </div>
+
+            <h3 class="form-header">Excluded Skills</h3>
+            <p class="hint">Drag skill items here to mark them as forbidden for this race.</p>
+            {{#if system.excludedSkills.length}}
+            <ol class="skill-ref-list">
+                {{#each system.excludedSkills as |entry|}}
+                <li class="skill-ref-entry">
+                    <span class="skill-ref-name">{{entry.name}}</span>
+                    <a class="skill-ref-remove" data-action="removeExcludedSkill" data-skill-key="{{entry.key}}" title="Remove"><i class="fas fa-times"></i></a>
+                </li>
+                {{/each}}
+            </ol>
+            {{else}}
+            <p class="no-items hint">No excluded skills</p>
+            {{/if}}
         </div>
     </section>
 </form>

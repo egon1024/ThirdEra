@@ -33,7 +33,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             addClassLevel: ThirdEraActorSheet.#onAddClassLevel,
             removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel,
             addHpAdjustment: ThirdEraActorSheet.#onAddHpAdjustment,
-            removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment
+            removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment,
+            removeGrantedSkill: ThirdEraActorSheet.#onRemoveGrantedSkill,
+            rollHitDie: ThirdEraActorSheet.#onRollHitDie
         },
         window: {
             controls: [
@@ -99,6 +101,50 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
         });
 
+        // Attach change listeners for skill rank inputs (embedded items, not form-bound)
+        this.element.querySelectorAll("input[data-skill-item-id]").forEach(input => {
+            input.addEventListener("change", async (event) => {
+                const itemId = event.target.dataset.skillItemId;
+                const skill = this.actor.items.get(itemId);
+                if (!skill) return;
+                const maxRanks = parseFloat(event.target.dataset.skillMaxRanks) || 999;
+                let value = parseFloat(event.target.value) || 0;
+                value = Math.max(0, Math.min(value, maxRanks));
+                // Round to nearest 0.5
+                value = Math.round(value * 2) / 2;
+                await skill.update({ "system.ranks": value });
+            });
+        });
+
+        // Attach dragstart listeners for hotbar macro support
+        this.element.querySelectorAll("[data-drag-type]").forEach(el => {
+            el.addEventListener("dragstart", (event) => {
+                const dragType = el.dataset.dragType;
+                const itemId = el.closest("[data-item-id]")?.dataset.itemId;
+                const item = this.actor.items.get(itemId);
+                if (!item) return;
+                const dragData = {
+                    type: "ThirdEraRoll",
+                    rollType: dragType,
+                    actorId: this.actor.id,
+                    itemId: itemId,
+                    itemName: item.name,
+                    sceneId: canvas.scene?.id ?? null,
+                    tokenId: this.token?.id ?? null
+                };
+                event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+            });
+        });
+
+        // Attach change listener for header HP input (not form-bound, avoids duplicate name)
+        const headerHpInput = this.element.querySelector("input[data-header-hp]");
+        if (headerHpInput) {
+            headerHpInput.addEventListener("change", async (event) => {
+                const value = Math.max(0, parseInt(event.target.value) || 0);
+                await this.actor.update({ "system.attributes.hp.value": value });
+            });
+        }
+
         // Attach change listeners for HP adjustment inputs (not form-bound)
         this.element.querySelectorAll("input[data-hp-adj-index]").forEach(input => {
             input.addEventListener("change", async (event) => {
@@ -138,7 +184,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         };
 
         // Ensure tabs state exists
-        const tabs = this.tabGroups || { primary: "description" };
+        if (!this.tabGroups.abilities) this.tabGroups.abilities = "scores";
+        const tabs = this.tabGroups;
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
         // Use effective score (base + racial) for characters; fall back to value for NPCs
@@ -198,6 +245,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             biography: await TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
         };
 
+        // Compute HP status for header colorization
+        const hpCurrent = systemData.attributes.hp.value;
+        const hpMax = systemData.attributes.hp.max;
+        const hpStatus = hpCurrent >= hpMax ? "hp-full" : (hpCurrent >= hpMax * 0.5 ? "hp-warning" : "hp-danger");
+
         return {
             ...context,
             actor,
@@ -210,11 +262,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             enriched,
             dexCap,
             speedInfo,
+            hpStatus,
             classSummary,
             totalLevel,
             equippedWeapons,
             equippedArmor,
             levelHistory,
+            skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
+            grantedSkills: systemData.grantedSkills || [],
             editable: this.isEditable
         };
     }
@@ -246,6 +301,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             else if (item.type === 'class') classes.push(itemData);
         }
 
+        skills.sort((a, b) => a.name.localeCompare(b.name));
+
         return { weapons, armor, equipment, spells, feats, skills, race, classes };
     }
 
@@ -274,6 +331,27 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        // If a skill is dropped onto the granted-skills zone, add to grantedSkills instead of embedding
+        if (item.type === "skill") {
+            const dropTarget = event.target.closest("[data-drop-zone='granted-skills']");
+            if (dropTarget) {
+                const skillKey = item.system?.key;
+                if (!skillKey) {
+                    ui.notifications.warn(`${item.name} has no skill key set — set one on the skill's Details tab first.`);
+                    return false;
+                }
+                const current = [...(this.actor.system.grantedSkills || [])];
+                if (current.some(e => e.key === skillKey)) {
+                    ui.notifications.info(`${item.name} is already a GM-granted skill for ${this.actor.name}.`);
+                    return false;
+                }
+                current.push({ key: skillKey, name: item.name });
+                current.sort((a, b) => a.name.localeCompare(b.name));
+                await this.actor.update({ "system.grantedSkills": current });
+                return false;
+            }
+        }
+
         const result = await super._onDropItem(event, item);
 
         // When a race is dropped, set the actor's size and speed to match
@@ -287,13 +365,33 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
-        // When a new class is dropped, add first level to levelHistory
+        // When a new class is dropped, add first level to levelHistory and auto-populate skills
         if (item.type === "class" && result) {
             const created = Array.isArray(result) ? result[0] : result;
             if (created?.id) {
                 const history = [...(this.actor.system.levelHistory || [])];
                 history.push({ classItemId: created.id, hpRolled: 0 });
                 await this.actor.update({ "system.levelHistory": history });
+
+                // Auto-populate class skills that the actor doesn't already have
+                const classSkills = created.system?.classSkills || [];
+                const existingSkillKeys = new Set();
+                for (const actorItem of this.actor.items) {
+                    if (actorItem.type === "skill" && actorItem.system.key) {
+                        existingSkillKeys.add(actorItem.system.key);
+                    }
+                }
+                const toCreate = [];
+                for (const entry of classSkills) {
+                    if (existingSkillKeys.has(entry.key)) continue;
+                    const sourceSkill = game.items.find(i => i.type === "skill" && i.system.key === entry.key);
+                    if (sourceSkill) {
+                        toCreate.push(sourceSkill.toObject());
+                    }
+                }
+                if (toCreate.length) {
+                    await this.actor.createEmbeddedDocuments("Item", toCreate);
+                }
             }
         }
 
@@ -723,6 +821,30 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
+     * Handle rolling a hit die for a level history entry (only when hpRolled is 0)
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRollHitDie(event, target) {
+        const hitDie = target.dataset.hitDie;
+        const index = parseInt(target.dataset.levelIndex);
+        if (!hitDie || isNaN(index)) return;
+
+        const history = foundry.utils.deepClone(this.actor.system.levelHistory);
+        if (!history[index] || history[index].hpRolled !== 0) return;
+
+        const roll = await new Roll(`1${hitDie}`).evaluate();
+        await roll.toMessage({
+            speaker: ChatMessage.implementation.getSpeaker({ actor: this.actor }),
+            flavor: `${this.actor.name} rolls HP for level ${index + 1}`
+        });
+
+        history[index].hpRolled = roll.total;
+        await this.actor.update({ "system.levelHistory": history });
+    }
+
+    /**
      * Handle tab changes
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
@@ -740,9 +862,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         nav.querySelectorAll('.item').forEach(t => t.classList.remove('active'));
         target.classList.add('active');
 
-        // Show the corresponding tab content
+        // Show the corresponding tab/subtab content
         const body = this.element.querySelector('.sheet-body');
-        body.querySelectorAll(`.tab[data-group="${group}"]`).forEach(t => t.classList.remove('active'));
-        body.querySelector(`.tab[data-group="${group}"][data-tab="${tab}"]`)?.classList.add('active');
+        body.querySelectorAll(`.tab[data-group="${group}"], .subtab[data-group="${group}"]`).forEach(t => t.classList.remove('active'));
+        (body.querySelector(`.tab[data-group="${group}"][data-tab="${tab}"]`) ||
+         body.querySelector(`.subtab[data-group="${group}"][data-tab="${tab}"]`))?.classList.add('active');
+    }
+
+    /**
+     * Handle removing a GM-granted skill
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveGrantedSkill(event, target) {
+        const skillKey = target.dataset.skillKey;
+        if (!skillKey) return;
+        const current = (this.actor.system.grantedSkills || []).filter(e => e.key !== skillKey);
+        await this.actor.update({ "system.grantedSkills": current });
     }
 }

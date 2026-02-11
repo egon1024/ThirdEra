@@ -12,6 +12,8 @@
             data-group="primary" data-tab="description">Description</a>
         <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
             data-tab="details">Details</a>
+        <a class="item {{#if (eq tabs.primary 'skills')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="skills">Skills</a>
     </nav>
 
     <section class="sheet-body">
@@ -83,6 +85,24 @@
                     <option value="true" {{#if (eq system.isPrestige "true")}}selected{{/if}}>Yes</option>
                 </select>
             </div>
+        </div>
+
+        {{!-- Skills Tab --}}
+        <div class="tab skills {{#if (eq tabs.primary 'skills')}}active{{/if}}" data-group="primary" data-tab="skills">
+            <h3 class="form-header">Class Skills</h3>
+            <p class="hint">Drag skill items here to add them as class skills.</p>
+            {{#if system.classSkills.length}}
+            <ol class="skill-ref-list">
+                {{#each system.classSkills as |entry|}}
+                <li class="skill-ref-entry">
+                    <span class="skill-ref-name">{{entry.name}}</span>
+                    <a class="skill-ref-remove" data-action="removeClassSkill" data-skill-key="{{entry.key}}" title="Remove"><i class="fas fa-times"></i></a>
+                </li>
+                {{/each}}
+            </ol>
+            {{else}}
+            <p class="no-items hint">No class skills assigned</p>
+            {{/if}}
         </div>
     </section>
 </form>

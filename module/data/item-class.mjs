@@ -1,4 +1,4 @@
-const { HTMLField, SchemaField, StringField, NumberField } = foundry.data.fields;
+const { HTMLField, SchemaField, StringField, NumberField, ArrayField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Class items
@@ -43,6 +43,11 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                 required: true, integer: true, min: 0, initial: 2,
                 label: "Skill Points per Level"
             }),
+
+            classSkills: new ArrayField(new SchemaField({
+                key: new StringField({ required: true, blank: false, label: "Skill Key" }),
+                name: new StringField({ required: true, blank: false, label: "Skill Name" })
+            }), { label: "Class Skills" }),
 
             isPrestige: new StringField({
                 required: true, blank: false, initial: "false",

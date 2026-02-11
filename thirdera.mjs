@@ -152,6 +152,60 @@ Hooks.once("ready", function () {
 });
 
 /**
+ * Handle hotbar drops — create macros for weapon attack/damage and skill check rolls
+ */
+Hooks.on("hotbarDrop", (bar, data, slot) => {
+    if (data.type !== "ThirdEraRoll") return;
+    createThirdEraMacro(data, slot);
+    return false;
+});
+
+/**
+ * Create a macro from hotbar drop data
+ * @param {Object} data   The drag data
+ * @param {number} slot   The hotbar slot
+ */
+async function createThirdEraMacro(data, slot) {
+    const { rollType, actorId, itemId, itemName, sceneId, tokenId } = data;
+
+    // Build the macro label and icon
+    const labels = {
+        weaponAttack: { name: `Attack: ${itemName}`, icon: "icons/skills/melee/blade-tip-orange.webp" },
+        weaponDamage: { name: `Damage: ${itemName}`, icon: "icons/skills/melee/strike-blade-orange.webp" },
+        skillCheck: { name: `Skill: ${itemName}`, icon: "icons/skills/targeting/crosshair-bars-yellow.webp" }
+    };
+    const label = labels[rollType] || { name: itemName, icon: "icons/svg/dice-target.svg" };
+
+    // Build the macro script — resolves actor from token or world at runtime
+    const command = `// Third Era ${rollType} macro
+const speaker = ChatMessage.implementation.getSpeaker();
+let actor;
+if (speaker.token) {
+    const scene = game.scenes.get(speaker.scene);
+    const token = scene?.tokens.get(speaker.token);
+    actor = token?.actor;
+}
+actor ??= game.actors.get("${actorId}");
+if (!actor) return ui.notifications.warn("No actor found for this macro.");
+const item = actor.items.get("${itemId}") ?? actor.items.find(i => i.name === "${itemName.replace(/"/g, '\\"')}");
+if (!item) return ui.notifications.warn("${itemName.replace(/"/g, '\\"')} not found on " + actor.name);
+${rollType === "weaponAttack" ? "item.rollAttack();" : rollType === "weaponDamage" ? "item.rollDamage();" : `actor.rollSkillCheck("${itemName.replace(/"/g, '\\"')}");`}`;
+
+    // Check for an existing macro with the same name
+    let macro = game.macros.find(m => m.name === label.name && m.command === command);
+    if (!macro) {
+        macro = await Macro.implementation.create({
+            name: label.name,
+            type: "script",
+            img: label.icon,
+            command,
+            flags: { "thirdera.rollMacro": true }
+        });
+    }
+    game.user.assignHotbarMacro(macro, slot);
+}
+
+/**
  * Register Handlebars helpers
  */
 function registerHandlebarsHelpers() {
@@ -176,6 +230,7 @@ function registerHandlebarsHelpers() {
         args.pop(); // Remove Handlebars options object
         return args.join("");
     });
+
 }
 
 /* -------------------------------------------- */
