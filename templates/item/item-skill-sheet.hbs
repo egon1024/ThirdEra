@@ -46,16 +46,15 @@
             </div>
             {{/if}}
 
-            <div class="form-group">
+            <div class="checkbox-group">
                 <label class="checkbox">
-                    <input type="checkbox" name="system.trainedOnly" {{checked system.trainedOnly}} /> Trained Only
+                    <input type="checkbox" data-string-field="system.trainedOnly" {{checked (eq system.trainedOnly "true")}} /> Trained Only
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="system.armorCheckPenalty" {{checked system.armorCheckPenalty}} /> Armor
-                    Check Penalty Applies
+                    <input type="checkbox" data-string-field="system.armorCheckPenalty" {{checked (eq system.armorCheckPenalty "true")}} /> Armor Check Penalty Applies
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="system.exclusive" {{checked system.exclusive}} /> Exclusive (class skill only)
+                    <input type="checkbox" data-string-field="system.exclusive" {{checked (eq system.exclusive "true")}} /> Exclusive (class skill only)
                 </label>
             </div>
         </div>

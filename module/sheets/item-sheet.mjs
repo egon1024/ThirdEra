@@ -125,6 +125,15 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             });
         });
 
+        // Manual listeners for string-boolean checkboxes (not form-bound)
+        this.element.querySelectorAll("input[data-string-field]").forEach(cb => {
+            cb.addEventListener("change", async (event) => {
+                const field = event.target.dataset.stringField;
+                const value = event.target.checked ? "true" : "false";
+                await this.document.update({ [field]: value });
+            });
+        });
+
         // Enable drag-and-drop for class and race item sheets (skill assignment)
         if (this.document.type === "class" || this.document.type === "race") {
             new DragDrop.implementation({

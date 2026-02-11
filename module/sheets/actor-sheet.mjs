@@ -145,6 +145,18 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
         }
 
+        // Context menu on race name
+        new ContextMenu(this.element, ".race-name[data-action='openRace']", [
+            {
+                name: "Remove Race",
+                icon: '<i class="fas fa-trash"></i>',
+                callback: async () => {
+                    const race = this.actor.items.find(i => i.type === "race");
+                    if (race) await race.delete();
+                }
+            }
+        ], { jQuery: false });
+
         // Attach change listeners for HP adjustment inputs (not form-bound)
         this.element.querySelectorAll("input[data-hp-adj-index]").forEach(input => {
             input.addEventListener("change", async (event) => {
@@ -541,6 +553,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!item) return;
 
         const equipping = item.system.equipped !== "true";
+
+        // Equipment items: simple toggle, no slot/size logic
+        if (item.type === "equipment") {
+            return await item.update({ "system.equipped": equipping ? "true" : "false" });
+        }
+
         if (!equipping) {
             // Unequipping — just toggle off
             return await item.update({ "system.equipped": "false" });

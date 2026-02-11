@@ -908,6 +908,30 @@
   width: 100%;
 }
 
+/* Checkbox groups — labels inline with checkboxes */
+.thirdera .checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.thirdera .checkbox-group label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.thirdera .checkbox-group input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--color-character-accent);
+}
+
 /* Race display in character header */
 .thirdera .race-name {
   cursor: pointer;
@@ -931,17 +955,6 @@
 .thirdera .race-name.race-empty:hover {
   color: var(--color-text-muted);
   text-decoration: none;
-}
-
-.thirdera .race-remove {
-  margin-left: 4px;
-  font-size: var(--font-size-note);
-  color: var(--color-text-faint);
-  cursor: pointer;
-}
-
-.thirdera .race-remove:hover {
-  color: var(--color-hover);
 }
 
 /* Race item sheet — ability adjustments grid */

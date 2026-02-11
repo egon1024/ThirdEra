@@ -12,7 +12,6 @@
           <label class="resource-label">Race</label>
           {{#if race}}
           <span class="race-name" data-action="openRace">{{race.name}}</span>
-          <a class="race-remove" data-action="removeRace" title="Remove Race"><i class="fas fa-times"></i></a>
           {{else}}
           <span class="race-name race-empty">None</span>
           {{/if}}
@@ -531,6 +530,9 @@
           </div>
           <div class="item-controls">
             <span class="item-detail">Qty: {{item.system.quantity}}</span>
+            <a class="item-equip {{#if (eq item.system.equipped 'true')}}equipped{{else}}unequipped{{/if}}" data-action="toggleEquip" title="{{#if (eq item.system.equipped 'true')}}Unequip{{else}}Equip{{/if}}">
+              <i class="{{#if (eq item.system.equipped 'true')}}fas fa-check-circle{{else}}far fa-circle{{/if}}"></i>
+            </a>
             <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
           </div>

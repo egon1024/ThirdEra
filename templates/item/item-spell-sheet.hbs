@@ -74,25 +74,21 @@
             </div>
 
             <h3 class="form-header">Components</h3>
-            <div class="form-group">
+            <div class="checkbox-group">
                 <label class="checkbox">
-                    <input type="checkbox" name="system.components.verbal" {{checked system.components.verbal}} />
-                    Verbal
+                    <input type="checkbox" data-string-field="system.components.verbal" {{checked (eq system.components.verbal "true")}} /> Verbal
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="system.components.somatic" {{checked system.components.somatic}} />
-                    Somatic
+                    <input type="checkbox" data-string-field="system.components.somatic" {{checked (eq system.components.somatic "true")}} /> Somatic
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="system.components.material" {{checked system.components.material}} />
-                    Material
+                    <input type="checkbox" data-string-field="system.components.material" {{checked (eq system.components.material "true")}} /> Material
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="system.components.focus" {{checked system.components.focus}} /> Focus
+                    <input type="checkbox" data-string-field="system.components.focus" {{checked (eq system.components.focus "true")}} /> Focus
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" name="system.components.divineFocus" {{checked
-                        system.components.divineFocus}} /> Divine Focus
+                    <input type="checkbox" data-string-field="system.components.divineFocus" {{checked (eq system.components.divineFocus "true")}} /> Divine Focus
                 </label>
             </div>
             <div class="form-group">
