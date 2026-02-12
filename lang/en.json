@@ -57,6 +57,12 @@
             "excludedByRace": "Excluded by race",
             "exclusiveRequiresClass": "Exclusive — requires a class that grants this skill",
             "gmGranted": "GM-Granted"
+        },
+        "Features": {
+            "classFeatures": "Class Features",
+            "scalingTable": "Scaling Table",
+            "grantLevel": "Grant Level",
+            "noFeatures": "No class features assigned"
         }
     },
     "TYPES": {

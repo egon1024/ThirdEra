@@ -29,7 +29,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             changeTab: ThirdEraItemSheet.#onChangeTab,
             deleteItem: ThirdEraItemSheet.#onItemDeleteHeader,
             removeClassSkill: ThirdEraItemSheet.#onRemoveClassSkill,
-            removeExcludedSkill: ThirdEraItemSheet.#onRemoveExcludedSkill
+            removeExcludedSkill: ThirdEraItemSheet.#onRemoveExcludedSkill,
+            removeFeature: ThirdEraItemSheet.#onRemoveFeature,
+            addScalingRow: ThirdEraItemSheet.#onAddScalingRow,
+            removeScalingRow: ThirdEraItemSheet.#onRemoveScalingRow
         }
     };
 
@@ -54,6 +57,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const parts = super._configureRenderParts(options);
         // Dynamically set the template based on item type
         parts.sheet.template = `systems/thirdera/templates/item/item-${this.document.type}-sheet.hbs`;
+        parts.sheet.scrollable = [".sheet-body .tab"];
         return parts;
     }
 
@@ -108,6 +112,21 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     _onRender(context, options) {
         super._onRender(context, options);
 
+        // Restore manual scroll position if set (prevents jumping when adding/removing rows)
+        if (this._preservedScrollTop !== undefined) {
+            const tab = this.element.querySelector(".sheet-body .tab.active");
+            if (tab) {
+                tab.scrollTop = this._preservedScrollTop;
+                this._preservedScrollTop = undefined;
+                requestAnimationFrame(() => {
+                    if (this._preservedScrollTop !== undefined) return;
+                    if (tab.scrollTop === 0 && this._preservedScrollTop > 0) {
+                        tab.scrollTop = this._preservedScrollTop;
+                    }
+                });
+            }
+        }
+
         // Restore focus after re-render (preserves tab navigation with submitOnChange)
         if (this._focusedInputName) {
             const input = this.element.querySelector(`[name="${this._focusedInputName}"]`);
@@ -134,7 +153,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             });
         });
 
-        // Enable drag-and-drop for class and race item sheets (skill assignment)
+        // Enable drag-and-drop for class and race item sheets (skill and feat assignment)
         if (this.document.type === "class" || this.document.type === "race") {
             new DragDrop.implementation({
                 permissions: { drop: () => this.isEditable },
@@ -151,7 +170,41 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const data = TextEditor.implementation.getDragEventData(event);
         if (data.type !== "Item") return;
         const droppedItem = await Item.implementation.fromDropData(data);
-        if (!droppedItem || droppedItem.type !== "skill") return;
+        if (!droppedItem) return;
+
+        // Handle feat drops on class sheets (class features)
+        if (droppedItem.type === "feat" && this.document.type === "class") {
+            const featKey = droppedItem.system?.key;
+            if (!featKey) {
+                ui.notifications.warn(`${droppedItem.name} has no feat key set — save the feat first to auto-generate one.`);
+                return;
+            }
+
+            // Prompt for grant level
+            const levelInput = await foundry.applications.api.DialogV2.prompt({
+                window: { title: "Assign Class Feature" },
+                content: `<form><div class="form-group"><label>At what level does ${this.document.name} gain ${droppedItem.name}?</label><input type="number" name="level" value="1" min="1" autofocus /></div></form>`,
+                ok: {
+                    callback: (event, button, dialog) => parseInt(button.form.elements.level.value) || 1
+                },
+                rejectClose: false
+            });
+            if (!levelInput) return;
+
+            const current = [...(this.document.system.features || [])];
+            // Check for duplicate (same feat at same level)
+            if (current.some(e => e.featKey === featKey && e.level === levelInput)) {
+                ui.notifications.info(`${droppedItem.name} is already granted at level ${levelInput} for ${this.document.name}.`);
+                return;
+            }
+            current.push({ level: levelInput, featItemId: droppedItem.id, featName: droppedItem.name, featKey });
+            current.sort((a, b) => a.level - b.level || a.featName.localeCompare(b.featName));
+            await this.document.update({ "system.features": current });
+            return;
+        }
+
+        // Handle skill drops (existing logic)
+        if (droppedItem.type !== "skill") return;
 
         const skillKey = droppedItem.system?.key;
         if (!skillKey) {
@@ -244,9 +297,11 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @this {ThirdEraItemSheet}
      */
     static async #onItemDeleteHeader(event, target) {
-        const confirm = await Dialog.confirm({
-            title: "Delete Item",
-            content: `<h4>Are you sure you want to delete ${this.item.name}?</h4>`
+        const confirm = await foundry.applications.api.DialogV2.confirm({
+            window: { title: "Delete Item" },
+            content: `<h4>Are you sure you want to delete ${this.item.name}?</h4>`,
+            rejectClose: false,
+            modal: true
         });
         if (confirm) {
             await this.item.delete();
@@ -278,5 +333,55 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (!skillKey) return;
         const current = (this.item.system.excludedSkills || []).filter(e => e.key !== skillKey);
         await this.item.update({ "system.excludedSkills": current });
+    }
+
+    /**
+     * Handle removing a class feature entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveFeature(event, target) {
+        const index = parseInt(target.dataset.featureIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.features || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.features": current });
+    }
+
+    /**
+     * Handle adding a scaling table row to a feat
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onAddScalingRow(event, target) {
+        // Manual scroll preservation
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const current = [...(this.item.system.scalingTable || [])];
+        // Default next level: one higher than the last entry, or 1 if empty
+        const nextLevel = current.length > 0 ? current[current.length - 1].minLevel + 1 : 1;
+        current.push({ minLevel: nextLevel, value: "" });
+        await this.item.update({ "system.scalingTable": current });
+    }
+
+    /**
+     * Handle removing a scaling table row from a feat
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveScalingRow(event, target) {
+        // Manual scroll preservation
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const index = parseInt(target.dataset.scalingIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.scalingTable || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.scalingTable": current });
     }
 }

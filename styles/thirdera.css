@@ -64,13 +64,23 @@
   font-family: var(--font-family);
 }
 
+.thirdera form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .thirdera .window-content {
   height: 100%;
   padding: 5px;
-  overflow-y: scroll;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
   background: var(--color-bg-parchment);
   color: var(--color-text-primary);
 }
+
+
 
 /* Window controls dropdown (three-dot menu) */
 .thirdera .controls-dropdown {
@@ -78,30 +88,30 @@
   border: 1px solid var(--color-popup-border);
 }
 
-.thirdera .controls-dropdown .header-control > button {
+.thirdera .controls-dropdown .header-control>button {
   color: var(--color-popup-text);
 }
 
-.thirdera .controls-dropdown .header-control > button:hover {
+.thirdera .controls-dropdown .header-control>button:hover {
   background: var(--color-popup-hover-bg);
   color: var(--color-hover);
 }
 
 /* Context menus (right-click menus) */
 .thirdera #context-menu,
-.thirdera ~ #context-menu {
+.thirdera~#context-menu {
   background: var(--color-popup-bg);
   border: 1px solid var(--color-popup-border);
   color: var(--color-popup-text);
 }
 
 .thirdera #context-menu li,
-.thirdera ~ #context-menu li {
+.thirdera~#context-menu li {
   color: var(--color-popup-text);
 }
 
 .thirdera #context-menu li:hover,
-.thirdera ~ #context-menu li:hover {
+.thirdera~#context-menu li:hover {
   background: var(--color-popup-hover-bg);
   color: var(--color-hover);
 }
@@ -1338,4 +1348,174 @@
 /* Rollable highlighting */
 .rollable:hover {
   cursor: pointer;
+}
+
+/* ---- Class Features ---- */
+
+/* Feature list on class item sheet */
+.thirdera .feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .feature-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--color-border-divider);
+  font-size: var(--font-size-body);
+}
+
+.thirdera .feature-level-badge {
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: var(--color-text-light);
+  background: var(--color-character-accent);
+  border-radius: 2px;
+  padding: 1px 4px;
+  white-space: nowrap;
+}
+
+.thirdera .feature-level-input {
+  width: 40px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+.thirdera .feature-name {
+  flex: 1;
+}
+
+.thirdera .feature-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .feature-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+/* Class-granted features on character sheet (Classes tab) */
+.thirdera .class-features-sublist {
+  list-style: none;
+  padding: 0 0 0 40px;
+  margin: 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .class-granted-features {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 4px;
+}
+
+.thirdera .class-granted-feature {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+}
+
+/* Scaling value display */
+.thirdera .feature-scaling-value {
+  font-size: var(--font-size-label);
+  color: var(--color-character-accent);
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* Source badge on Feats subtab */
+.thirdera .feature-source-badge {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Feats subtab section header */
+.thirdera .feats-section-header {
+  margin: 8px 0 4px;
+  padding: 3px 8px;
+  font-size: var(--font-size-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+/* Granted features list */
+.thirdera .granted-features-list .granted-feature {
+  background: var(--color-bg-input);
+}
+
+/* ---- Scaling Table (Feat sheet) ---- */
+
+.thirdera .scaling-section {
+  margin-top: 12px;
+}
+
+.thirdera .scaling-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thirdera .scaling-header .form-header {
+  margin: 0;
+}
+
+.thirdera .scaling-add {
+  font-size: var(--font-size-note);
+  color: var(--color-character-accent);
+  cursor: pointer;
+}
+
+.thirdera .scaling-add:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .scaling-grid {
+  display: grid;
+  grid-template-columns: 60px 1fr 20px;
+  gap: 4px 8px;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.thirdera .scaling-col-header {
+  font-weight: bold;
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .scaling-level-input {
+  width: 50px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+.thirdera .scaling-value-input {
+  width: 100%;
+  font-size: var(--font-size-body);
+  padding: 1px 4px;
+}
+
+.thirdera .scaling-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .scaling-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
 }

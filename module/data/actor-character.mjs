@@ -225,6 +225,77 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         }
         this.classSkillKeys = classSkillKeys;
 
+        // ---- Class Feature Aggregation ----
+        // Walk each class's features array and collect granted features
+        const grantedFeatMap = new Map(); // featKey -> aggregated feature object
+        const grantedFeaturesByClass = new Map(); // classItemId -> array of features
+
+        for (const cls of classes) {
+            const lvl = classLevelCounts[cls.id] || 0;
+            if (lvl <= 0) continue;
+            const classFeatures = [];
+
+            for (const feature of (cls.system.features || [])) {
+                if (feature.level > lvl) continue;
+
+                // Try to resolve scaling value from sidebar feat item
+                let scalingValue = null;
+                try {
+                    const sidebarFeat = game.items.get(feature.featItemId);
+                    if (sidebarFeat?.system?.scalingTable?.length) {
+                        // Find the last entry where minLevel <= classLevel
+                        const table = sidebarFeat.system.scalingTable;
+                        for (let i = table.length - 1; i >= 0; i--) {
+                            if (table[i].minLevel <= lvl) {
+                                scalingValue = table[i].value;
+                                break;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Sidebar item may not exist (deleted); scaling stays null
+                }
+
+                const featureEntry = {
+                    featKey: feature.featKey,
+                    featName: feature.featName,
+                    featItemId: feature.featItemId,
+                    grantLevel: feature.level,
+                    scalingValue,
+                    className: cls.name,
+                    classItemId: cls.id,
+                    classLevel: lvl
+                };
+                classFeatures.push(featureEntry);
+
+                // Aggregate for deduplication on Feats subtab
+                if (grantedFeatMap.has(feature.featKey)) {
+                    const existing = grantedFeatMap.get(feature.featKey);
+                    existing.sources.push({ className: cls.name, grantLevel: feature.level });
+                    existing.isDuplicate = true;
+                    // Use the highest class-level scaling value
+                    if (scalingValue !== null) existing.scalingValue = scalingValue;
+                } else {
+                    grantedFeatMap.set(feature.featKey, {
+                        featKey: feature.featKey,
+                        featName: feature.featName,
+                        featItemId: feature.featItemId,
+                        scalingValue,
+                        sources: [{ className: cls.name, grantLevel: feature.level }],
+                        isDuplicate: false
+                    });
+                }
+            }
+
+            if (classFeatures.length) {
+                grantedFeaturesByClass.set(cls.id, classFeatures);
+            }
+        }
+
+        this.grantedFeatures = Array.from(grantedFeatMap.values());
+        this.grantedFeaturesByClass = grantedFeaturesByClass;
+        this.grantedFeatKeys = new Set(grantedFeatMap.keys());
+
         // Build excluded skill keys from race
         const excludedSkillKeys = new Set();
         if (race) {

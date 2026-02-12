@@ -221,6 +221,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const classLevelCounts = systemData.details.classLevels || {};
         for (const cls of items.classes) {
             cls.derivedLevels = classLevelCounts[cls.id] || 0;
+            // Attach granted features for this class (for Classes tab display)
+            cls.grantedFeatures = (systemData.grantedFeaturesByClass?.get(cls.id) || [])
+                .map(f => ({
+                    featName: f.featName,
+                    grantLevel: f.grantLevel,
+                    scalingValue: f.scalingValue
+                }));
         }
 
         // Filter equipped items for Combat tab
@@ -282,6 +289,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             levelHistory,
             skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
             grantedSkills: systemData.grantedSkills || [],
+            grantedFeatures: systemData.grantedFeatures || [],
             editable: this.isEditable
         };
     }
@@ -530,9 +538,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @this {ThirdEraActorSheet}
      */
     static async #onActorDeleteHeader(event, target) {
-        const confirm = await Dialog.confirm({
-            title: "Delete Actor",
-            content: `<h4>Are you sure you want to delete ${this.actor.name}?</h4>`
+        const confirm = await foundry.applications.api.DialogV2.confirm({
+            window: { title: "Delete Actor" },
+            content: `<h4>Are you sure you want to delete ${this.actor.name}?</h4>`,
+            rejectClose: false,
+            modal: true
         });
         if (confirm) {
             await this.actor.delete();
@@ -796,9 +806,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const classLevels = (this.actor.system.details.classLevels || {})[itemId] || 0;
         if (classLevels <= 0) return;
 
-        const confirmed = await Dialog.confirm({
-            title: `Remove ${cls.name} Level`,
-            content: `<p>Remove one level of ${cls.name} from ${this.actor.name}? (${classLevels} → ${classLevels - 1})</p>`
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+            window: { title: `Remove ${cls.name} Level` },
+            content: `<p>Remove one level of ${cls.name} from ${this.actor.name}? (${classLevels} → ${classLevels - 1})</p>`,
+            rejectClose: false,
+            modal: true
         });
         if (!confirmed) return;
 
@@ -884,7 +896,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const body = this.element.querySelector('.sheet-body');
         body.querySelectorAll(`.tab[data-group="${group}"], .subtab[data-group="${group}"]`).forEach(t => t.classList.remove('active'));
         (body.querySelector(`.tab[data-group="${group}"][data-tab="${tab}"]`) ||
-         body.querySelector(`.subtab[data-group="${group}"][data-tab="${tab}"]`))?.classList.add('active');
+            body.querySelector(`.subtab[data-group="${group}"][data-tab="${tab}"]`))?.classList.add('active');
     }
 
     /**

@@ -290,19 +290,16 @@ function _addSidebarDeleteButton(app, html, type) {
 
             const document = app.documents.get(documentId);
             if (document) {
-                /*
-                // Use standard Dialog.confirm
-                const confirmed = await Dialog.confirm({
-                    title: `Delete ${type}: ${document.name}`,
-                    content: `<h4>Are you sure you want to delete this ${type}?</h4><p>This action cannot be undone.</p>`
+                const confirmed = await foundry.applications.api.DialogV2.confirm({
+                    window: { title: `Delete ${type}: ${document.name}` },
+                    content: `<h4>Are you sure you want to delete this ${type}?</h4><p>This action cannot be undone.</p>`,
+                    rejectClose: false,
+                    modal: true
                 });
 
                 if (confirmed) {
                     await document.delete();
                 }
-                */
-                // Actually, document.deleteDialog() is better as it handles the logic for us
-                document.deleteDialog();
             }
         });
 

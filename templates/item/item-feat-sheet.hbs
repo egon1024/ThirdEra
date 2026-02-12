@@ -16,17 +16,19 @@
 
     <section class="sheet-body">
         {{!-- Description Tab --}}
-        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary" data-tab="description">
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
             <div class="editor-box">
-                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}" value="{{system.description}}"
-                    toggled="false">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
                     {{{enriched.description}}}
                 </prose-mirror>
             </div>
         </div>
 
         {{!-- Details Tab --}}
-        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary" data-tab="details">
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
             <div class="form-group">
                 <label>Feat Type</label>
                 <input type="text" name="system.type" value="{{system.type}}"
@@ -51,6 +53,30 @@
                     toggled="false">
                     {{{enriched.special}}}
                 </prose-mirror>
+            </div>
+
+            <div class="scaling-section">
+                <div class="scaling-header">
+                    <h3 class="form-header">Scaling Table</h3>
+                    <a class="scaling-add" data-action="addScalingRow" title="Add Row"><i class="fas fa-plus"></i></a>
+                </div>
+                <p class="hint">For feats that scale with class level (e.g. Sneak Attack). Leave empty for non-scaling
+                    feats.</p>
+                {{#if system.scalingTable.length}}
+                <div class="scaling-grid">
+                    <span class="scaling-col-header">Level</span>
+                    <span class="scaling-col-header">Value</span>
+                    <span class="scaling-col-header"></span>
+                    {{#each system.scalingTable as |row|}}
+                    <input type="number" name="system.scalingTable.{{@index}}.minLevel" value="{{row.minLevel}}" min="1"
+                        data-dtype="Number" class="scaling-level-input" />
+                    <input type="text" name="system.scalingTable.{{@index}}.value" value="{{row.value}}"
+                        class="scaling-value-input" placeholder="e.g. 1d6" />
+                    <a class="scaling-remove" data-action="removeScalingRow" data-scaling-index="{{@index}}"
+                        title="Remove"><i class="fas fa-times"></i></a>
+                    {{/each}}
+                </div>
+                {{/if}}
             </div>
         </div>
     </section>

@@ -49,6 +49,13 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                 name: new StringField({ required: true, blank: false, label: "Skill Name" })
             }), { label: "Class Skills" }),
 
+            features: new ArrayField(new SchemaField({
+                level: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Level" }),
+                featItemId: new StringField({ required: true, blank: false, label: "Feat Item ID" }),
+                featName: new StringField({ required: true, blank: false, label: "Feat Name" }),
+                featKey: new StringField({ required: true, blank: false, label: "Feat Key" })
+            }), { label: "Class Features" }),
+
             isPrestige: new StringField({
                 required: true, blank: false, initial: "false",
                 label: "Prestige Class"
