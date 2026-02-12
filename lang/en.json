@@ -74,7 +74,8 @@
             "feat": "Feat",
             "skill": "Skill",
             "race": "Race",
-            "class": "Class"
+            "class": "Class",
+            "feature": "Class Feature"
         },
         "Actor": {
             "character": "Character",

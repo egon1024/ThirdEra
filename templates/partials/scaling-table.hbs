@@ -1,0 +1,22 @@
+<div class="scaling-section">
+    <div class="scaling-header">
+        <h3 class="form-header">Scaling Table</h3>
+        <a class="scaling-add" data-action="addScalingRow" title="Add Row"><i class="fas fa-plus"></i></a>
+    </div>
+    <p class="hint">For items that scale with class level. Leave empty for non-scaling items.</p>
+    {{#if system.scalingTable.length}}
+    <div class="scaling-grid">
+        <span class="scaling-col-header">Level</span>
+        <span class="scaling-col-header">Value</span>
+        <span class="scaling-col-header"></span>
+        {{#each system.scalingTable as |row|}}
+        <input type="number" name="system.scalingTable.{{@index}}.minLevel" value="{{row.minLevel}}" min="1"
+            data-dtype="Number" class="scaling-level-input" />
+        <input type="text" name="system.scalingTable.{{@index}}.value" value="{{row.value}}" class="scaling-value-input"
+            placeholder="e.g. 1d6" />
+        <a class="scaling-remove" data-action="removeScalingRow" data-scaling-index="{{@index}}" title="Remove"><i
+                class="fas fa-times"></i></a>
+        {{/each}}
+    </div>
+    {{/if}}
+</div>

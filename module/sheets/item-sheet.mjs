@@ -45,8 +45,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
     };
 
-
-
     /** @override */
     tabGroups = {
         primary: "description"
@@ -83,10 +81,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
         // Enrich HTML description and other fields
         const enriched = {
-            description: await TextEditor.enrichHTML(systemData.description, { async: true, relativeTo: item }),
-            materialDescription: await TextEditor.enrichHTML(systemData.components?.materialDescription || "<ul><li></li></ul>", { async: true, relativeTo: item }),
-            benefit: systemData.benefit ? await TextEditor.enrichHTML(systemData.benefit, { async: true, relativeTo: item }) : "",
-            special: systemData.special ? await TextEditor.enrichHTML(systemData.special, { async: true, relativeTo: item }) : ""
+            description: await foundry.applications.ux.TextEditor.enrichHTML(systemData.description, { async: true, relativeTo: item }),
+            materialDescription: await foundry.applications.ux.TextEditor.enrichHTML(systemData.components?.materialDescription || "<ul><li></li></ul>", { async: true, relativeTo: item }),
+            benefit: systemData.benefit ? await foundry.applications.ux.TextEditor.enrichHTML(systemData.benefit, { async: true, relativeTo: item }) : "",
+            special: systemData.special ? await foundry.applications.ux.TextEditor.enrichHTML(systemData.special, { async: true, relativeTo: item }) : ""
         };
 
         return {
@@ -104,8 +102,13 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     /** @override */
     async _preRender(context, options) {
         await super._preRender(context, options);
-        const focused = this.element?.querySelector(":focus");
-        this._focusedInputName = focused?.name || null;
+        // Only capture focus if it hasn't been explicitly tracked by _processFormData (e.g. following a row)
+        if (!this._focusedInputName) {
+            const focused = document.activeElement;
+            if (this.element?.contains(focused) && focused.name) {
+                this._focusedInputName = focused.name;
+            }
+        }
     }
 
     /** @override */
@@ -167,13 +170,13 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {DragEvent} event
      */
     async _onDrop(event) {
-        const data = TextEditor.implementation.getDragEventData(event);
+        const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
         if (data.type !== "Item") return;
         const droppedItem = await Item.implementation.fromDropData(data);
         if (!droppedItem) return;
 
-        // Handle feat drops on class sheets (class features)
-        if (droppedItem.type === "feat" && this.document.type === "class") {
+        // Handle feat/feature drops on class sheets (class features)
+        if ((droppedItem.type === "feat" || droppedItem.type === "feature") && this.document.type === "class") {
             const featKey = droppedItem.system?.key;
             if (!featKey) {
                 ui.notifications.warn(`${droppedItem.name} has no feat key set — save the feat first to auto-generate one.`);
@@ -233,9 +236,56 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
     }
 
+    constructor(options = {}) {
+        super(options);
+    }
+
     /** @override */
     _processFormData(event, form, formData) {
-        return super._processFormData(event, form, formData);
+        const data = super._processFormData(event, form, formData);
+
+        // Identify the anchor row and field from the event target (the element that just changed)
+        // We use event.target because document.activeElement can be lost during the submit process.
+        const anchor = event.target;
+        let focusRowIdentity = null;
+        let targetField = null;
+
+        if (anchor?.name?.startsWith("system.scalingTable.")) {
+            const parts = anchor.name.split(".");
+            const oldIndex = parseInt(parts[2]);
+            const field = parts[3];
+
+            // Associative focus: if Level changed, we target Value to follow standard Tab-forward flow.
+            targetField = (field === "minLevel") ? "value" : field;
+
+            // Get the row object identity from the data (already expanded by super)
+            if (data.system?.scalingTable) {
+                const table = Array.isArray(data.system.scalingTable) ? data.system.scalingTable : Object.values(data.system.scalingTable);
+                focusRowIdentity = table[oldIndex];
+            }
+        }
+
+        // Sort scaling table by level if present in the data
+        if (data.system?.scalingTable) {
+            let table = Array.isArray(data.system.scalingTable)
+                ? data.system.scalingTable
+                : Object.values(data.system.scalingTable);
+
+            table = table.filter(i => i && typeof i === 'object');
+            table.sort((a, b) => (Number(a.minLevel) || 0) - (Number(b.minLevel) || 0));
+
+            // If we are tracking a row, find its new index after sorting and update focus goal
+            if (focusRowIdentity) {
+                const newIndex = table.indexOf(focusRowIdentity);
+                if (newIndex !== -1) {
+                    this._focusedInputName = `system.scalingTable.${newIndex}.${targetField}`;
+                }
+            }
+
+            data.system.scalingTable = table;
+        }
+
+        return data;
     }
 
     /* -------------------------------------------- */

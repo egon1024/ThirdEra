@@ -265,9 +265,15 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         };
 
         // Compute HP status for header colorization
+        // Compute HP status for header colorization
         const hpCurrent = systemData.attributes.hp.value;
         const hpMax = systemData.attributes.hp.max;
         const hpStatus = hpCurrent >= hpMax ? "hp-full" : (hpCurrent >= hpMax * 0.5 ? "hp-warning" : "hp-danger");
+
+        // Split granted features by type
+        const grantedFeatures = systemData.grantedFeatures || [];
+        const grantedFeats = grantedFeatures.filter(f => f.type === 'feat');
+        const grantedClassFeatures = grantedFeatures.filter(f => f.type !== 'feat');
 
         return {
             ...context,
@@ -289,7 +295,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             levelHistory,
             skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
             grantedSkills: systemData.grantedSkills || [],
-            grantedFeatures: systemData.grantedFeatures || [],
+            grantedFeatures,
+            grantedFeats,
+            grantedClassFeatures,
             editable: this.isEditable
         };
     }
@@ -305,6 +313,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const equipment = [];
         const spells = [];
         const feats = [];
+        const classFeatures = [];
         const skills = [];
         const classes = [];
         let race = null;
@@ -316,14 +325,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             else if (item.type === 'equipment') equipment.push(itemData);
             else if (item.type === 'spell') spells.push(itemData);
             else if (item.type === 'feat') feats.push(itemData);
+            else if (item.type === 'feature') classFeatures.push(itemData);
             else if (item.type === 'skill') skills.push(itemData);
             else if (item.type === 'race' && !race) race = itemData;
             else if (item.type === 'class') classes.push(itemData);
         }
 
         skills.sort((a, b) => a.name.localeCompare(b.name));
+        classFeatures.sort((a, b) => a.name.localeCompare(b.name));
+        feats.sort((a, b) => a.name.localeCompare(b.name));
 
-        return { weapons, armor, equipment, spells, feats, skills, race, classes };
+        return { weapons, armor, equipment, spells, feats, classFeatures, skills, race, classes };
     }
 
     /**

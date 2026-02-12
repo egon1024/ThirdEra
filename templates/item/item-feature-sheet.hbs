@@ -2,7 +2,7 @@
     <header class="sheet-header">
         <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Item Name" /></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Feature Name" /></h1>
         </div>
     </header>
 
@@ -29,31 +29,6 @@
         {{!-- Details Tab --}}
         <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
             data-tab="details">
-            <div class="form-group">
-                <label>Feat Type</label>
-                <input type="text" name="system.type" value="{{system.type}}"
-                    placeholder="General, Combat, Metamagic, etc." />
-            </div>
-            <div class="form-group">
-                <label>Prerequisites</label>
-                <input type="text" name="system.prerequisites" value="{{system.prerequisites}}" />
-            </div>
-
-            <h3 class="form-header">Benefit</h3>
-            <div class="editor-box">
-                <prose-mirror name="system.benefit" data-document-u-u-i-d="{{item.uuid}}" value="{{system.benefit}}"
-                    toggled="false">
-                    {{{enriched.benefit}}}
-                </prose-mirror>
-            </div>
-
-            <h3 class="form-header">Special</h3>
-            <div class="editor-box">
-                <prose-mirror name="system.special" data-document-u-u-i-d="{{item.uuid}}" value="{{system.special}}"
-                    toggled="false">
-                    {{{enriched.special}}}
-                </prose-mirror>
-            </div>
 
             {{> systems/thirdera/templates/partials/scaling-table.hbs}}
         </div>

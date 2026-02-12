@@ -238,17 +238,21 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             for (const feature of (cls.system.features || [])) {
                 if (feature.level > lvl) continue;
 
-                // Try to resolve scaling value from sidebar feat item
+                // Try to resolve scaling value and type from sidebar feat item
                 let scalingValue = null;
+                let featureType = "feature"; // Default to feature
                 try {
                     const sidebarFeat = game.items.get(feature.featItemId);
-                    if (sidebarFeat?.system?.scalingTable?.length) {
-                        // Find the last entry where minLevel <= classLevel
-                        const table = sidebarFeat.system.scalingTable;
-                        for (let i = table.length - 1; i >= 0; i--) {
-                            if (table[i].minLevel <= lvl) {
-                                scalingValue = table[i].value;
-                                break;
+                    if (sidebarFeat) {
+                        featureType = sidebarFeat.type;
+                        if (sidebarFeat.system?.scalingTable?.length) {
+                            // Find the last entry where minLevel <= classLevel
+                            const table = sidebarFeat.system.scalingTable;
+                            for (let i = table.length - 1; i >= 0; i--) {
+                                if (table[i].minLevel <= lvl) {
+                                    scalingValue = table[i].value;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -264,7 +268,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                     scalingValue,
                     className: cls.name,
                     classItemId: cls.id,
-                    classLevel: lvl
+                    classLevel: lvl,
+                    type: featureType
                 };
                 classFeatures.push(featureEntry);
 
@@ -282,7 +287,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                         featItemId: feature.featItemId,
                         scalingValue,
                         sources: [{ className: cls.name, grantLevel: feature.level }],
-                        isDuplicate: false
+                        isDuplicate: false,
+                        type: featureType
                     });
                 }
             }

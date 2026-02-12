@@ -29,10 +29,14 @@
   "documentTypes": {
     "Actor": {
       "character": {
-        "htmlFields": ["biography"]
+        "htmlFields": [
+          "biography"
+        ]
       },
       "npc": {
-        "htmlFields": ["biography"]
+        "htmlFields": [
+          "biography"
+        ]
       }
     },
     "Item": {
@@ -43,7 +47,8 @@
       "feat": {},
       "skill": {},
       "race": {},
-      "class": {}
+      "class": {},
+      "feature": {}
     }
   },
   "socket": false,

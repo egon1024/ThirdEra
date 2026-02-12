@@ -14,6 +14,7 @@ import { FeatData } from "./module/data/item-feat.mjs";
 import { SkillData } from "./module/data/item-skill.mjs";
 import { RaceData } from "./module/data/item-race.mjs";
 import { ClassData } from "./module/data/item-class.mjs";
+import { FeatureData } from "./module/data/item-feature.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -26,7 +27,7 @@ import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 /**
  * Initialize the Third Era system
  */
-Hooks.once("init", function () {
+Hooks.once("init", async function () {
     console.log("Third Era | Initializing Third Era Game System");
 
     // Register custom Document classes
@@ -117,18 +118,19 @@ Hooks.once("init", function () {
         equipment: EquipmentData,
         spell: SpellData,
         feat: FeatData,
+        feature: FeatureData,
         skill: SkillData,
         race: RaceData,
         class: ClassData
     };
 
     // Register sheet application classes
-    DocumentSheetConfig.registerSheet(Actor, "thirdera", ThirdEraActorSheet, {
+    foundry.applications.apps.DocumentSheetConfig.registerSheet(Actor, "thirdera", ThirdEraActorSheet, {
         makeDefault: true,
         label: "THIRDERA.SheetLabels.Actor"
     });
 
-    DocumentSheetConfig.registerSheet(Item, "thirdera", ThirdEraItemSheet, {
+    foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "thirdera", ThirdEraItemSheet, {
         makeDefault: true,
         label: "THIRDERA.SheetLabels.Item"
     });
@@ -137,8 +139,9 @@ Hooks.once("init", function () {
     registerHandlebarsHelpers();
 
     // Register Handlebars partials
-    loadTemplates([
-        "systems/thirdera/templates/partials/editor-box.hbs"
+    await foundry.applications.handlebars.loadTemplates([
+        "systems/thirdera/templates/partials/editor-box.hbs",
+        "systems/thirdera/templates/partials/scaling-table.hbs"
     ]);
 
     console.log("Third Era | System initialized");
@@ -258,7 +261,7 @@ Hooks.on("renderItemDirectory", (app, html, data) => {
  * @param {string} type       The document type (Actor/Item)
  */
 function _addSidebarDeleteButton(app, html, type) {
-    const directoryItems = html.find(".directory-item.document");
+    const directoryItems = $(html).find(".directory-item.document");
 
     directoryItems.each((index, element) => {
         const li = $(element);
