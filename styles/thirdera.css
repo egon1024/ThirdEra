@@ -36,6 +36,7 @@
   --color-hp-full: #c8e6c9;
   --color-hp-warning: #fff3c4;
   --color-hp-danger: #f8c4c4;
+  --color-danger: #d61400;
 
   /* Popups / Dropdowns */
   --color-popup-bg: #f4e8d3;
@@ -1518,4 +1519,172 @@
 .thirdera .scaling-remove:hover {
   color: var(--color-hover);
   opacity: 1;
+}
+
+/* Inventory Footer (Currency & Encumbrance) */
+.thirdera .inventory-footer {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+.thirdera .currency-section {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.thirdera .currency-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 5px;
+}
+
+.thirdera .currency-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.thirdera .currency-item label {
+  flex: 0 0 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: var(--font-size-note);
+  text-align: right;
+}
+
+.thirdera .currency-item input {
+  width: 100%;
+  text-align: center;
+}
+
+.thirdera .encumbrance-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.thirdera .encumbrance-details {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+}
+
+.thirdera .weight-label,
+.thirdera .load-label {
+  font-weight: bold;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
+
+.thirdera .weight-value,
+.thirdera .load-value {
+  font-weight: bold;
+  font-size: var(--font-size-value);
+}
+
+.thirdera .load-value.medium {
+  color: #d68100;
+}
+
+.thirdera .load-value.heavy {
+  color: #d64d00;
+}
+
+.thirdera .load-value.overload {
+  color: #d61400;
+}
+
+.thirdera .encumbrance-bar-container {
+  position: relative;
+  height: 20px;
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 3px;
+  margin: 5px 10px;
+  overflow: hidden;
+}
+
+.thirdera .encumbrance-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-equipped);
+  /* Default/Light */
+}
+
+.thirdera .encumbrance-bar.medium {
+  background: var(--color-modified);
+}
+
+.thirdera .encumbrance-bar.heavy {
+  background: var(--color-danger);
+}
+
+.thirdera .encumbrance-bar.overload {
+  background: #900;
+}
+
+.thirdera .encumbrance-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
+  pointer-events: none;
+}
+
+.thirdera .encumbrance-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+}
+
+.thirdera .encumbrance-marker:hover {
+  background: #fff;
+  width: 4px;
+  margin-left: -1px;
+}
+
+/* Encumbrance Breakdown */
+.thirdera .encumbrance-breakdown {
+  margin: 10px 10px 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border-dark);
+  font-size: var(--font-size-note);
+}
+
+.thirdera .breakdown-row {
+  display: grid;
+  grid-template-columns: 80px 80px 1fr;
+  gap: 10px;
+  padding: 2px 0;
+}
+
+.thirdera .breakdown-row.header {
+  font-weight: bold;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-size: calc(var(--font-size-note) - 1px);
+}
+
+.thirdera .breakdown-row .load-label {
+  font-weight: bold;
+}
+
+.thirdera .breakdown-row .load-calc {
+  color: var(--color-text-muted);
+  font-style: italic;
 }

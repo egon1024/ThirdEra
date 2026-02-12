@@ -678,6 +678,73 @@
         </li>
         {{/each}}
       </ol>
+
+      <div class="inventory-footer flexrow">
+        <div class="currency-section flexcol">
+          <h4 class="items-header">Currency</h4>
+          <div class="currency-grid">
+            <div class="currency-item">
+              <label title="{{localize 'THIRDERA.Currency.pp'}}">{{localize 'THIRDERA.Currency.ppAbbr'}}</label>
+              <input type="number" name="system.currency.pp" value="{{system.currency.pp}}" min="0"
+                data-dtype="Number" />
+            </div>
+            <div class="currency-item">
+              <label title="{{localize 'THIRDERA.Currency.gp'}}">{{localize 'THIRDERA.Currency.gpAbbr'}}</label>
+              <input type="number" name="system.currency.gp" value="{{system.currency.gp}}" min="0"
+                data-dtype="Number" />
+            </div>
+            <div class="currency-item">
+              <label title="{{localize 'THIRDERA.Currency.sp'}}">{{localize 'THIRDERA.Currency.spAbbr'}}</label>
+              <input type="number" name="system.currency.sp" value="{{system.currency.sp}}" min="0"
+                data-dtype="Number" />
+            </div>
+            <div class="currency-item">
+              <label title="{{localize 'THIRDERA.Currency.cp'}}">{{localize 'THIRDERA.Currency.cpAbbr'}}</label>
+              <input type="number" name="system.currency.cp" value="{{system.currency.cp}}" min="0"
+                data-dtype="Number" />
+            </div>
+          </div>
+        </div>
+
+        <div class="encumbrance-section flexcol">
+          <h4 class="items-header">{{localize 'THIRDERA.Inventory.Load'}}</h4>
+          <div class="encumbrance-details">
+            <div class="weight-total">
+              <span class="weight-label">{{localize 'THIRDERA.Inventory.TotalWeight'}}:</span>
+              <span class="weight-value">{{inventory.totalWeight}} {{localize 'THIRDERA.Inventory.Lbs'}}</span>
+            </div>
+            <div class="load-status">
+              <span class="load-label">{{localize 'THIRDERA.Inventory.Load'}}:</span>
+              <span class="load-value {{inventory.load}}">{{localize (concat 'THIRDERA.Inventory.' (capitalize
+                inventory.load))}}</span>
+            </div>
+          </div>
+          <div class="encumbrance-bar-container">
+            <div class="encumbrance-bar {{inventory.load}}" style="width: {{encumbrancePercent}}%">
+              <span class="encumbrance-text">{{inventory.totalWeight}} / {{inventory.capacity.heavy}} {{localize
+                'THIRDERA.Inventory.Lbs'}}</span>
+            </div>
+            <div class="encumbrance-marker light" style="left: {{encumbranceMarkers.light}}%"
+              title="Light: {{inventory.capacity.light}}"></div>
+            <div class="encumbrance-marker medium" style="left: {{encumbranceMarkers.medium}}%"
+              title="Medium: {{inventory.capacity.medium}}"></div>
+          </div>
+          <div class="encumbrance-breakdown">
+            <div class="breakdown-row header">
+              <span>{{localize 'THIRDERA.Inventory.Load'}}</span>
+              <span>{{localize 'THIRDERA.Inventory.Weight'}}</span>
+              <span>Calculation</span>
+            </div>
+            {{#each encumbranceBreakdown as |item|}}
+            <div class="breakdown-row">
+              <span class="load-label">{{localize item.label}}</span>
+              <span class="load-value">{{item.value}} {{localize 'THIRDERA.Inventory.Lbs'}}</span>
+              <span class="load-calc">{{item.calculation}}</span>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
     </div>
 
     {{!-- Spells Tab --}}

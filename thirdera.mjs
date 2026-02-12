@@ -105,6 +105,22 @@ Hooks.once("init", async function () {
         }
     };
 
+    // Register World Settings
+    game.settings.register("thirdera", "currencyWeight", {
+        name: "THIRDERA.Settings.CurrencyWeight.Name",
+        hint: "THIRDERA.Settings.CurrencyWeight.Hint",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: () => {
+            // Trigger a re-render of all actors to update weight calculations
+            for (const actor of game.actors) {
+                actor.prepareData();
+                actor.render(false);
+            }
+        }
+    });
 
     // Register data models
     CONFIG.Actor.dataModels = {
@@ -232,6 +248,11 @@ function registerHandlebarsHelpers() {
     Handlebars.registerHelper("concat", function (...args) {
         args.pop(); // Remove Handlebars options object
         return args.join("");
+    });
+
+    Handlebars.registerHelper("capitalize", function (str) {
+        if (!str) return "";
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     });
 
 }

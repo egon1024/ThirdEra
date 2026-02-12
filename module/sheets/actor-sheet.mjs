@@ -261,7 +261,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Enrich HTML biography
         const enriched = {
-            biography: await TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
+            biography: await foundry.applications.ux.TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
         };
 
         // Compute HP status for header colorization
@@ -275,6 +275,37 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const grantedFeats = grantedFeatures.filter(f => f.type === 'feat');
         const grantedClassFeatures = grantedFeatures.filter(f => f.type !== 'feat');
 
+        // Compute encumbrance display info
+        const inv = systemData.inventory || { totalWeight: 0, capacity: { light: 0, medium: 0, heavy: 1, metadata: { baseMaxLoad: 0, sizeMod: 1 } }, load: "light" };
+        const heavyCap = inv.capacity.heavy || 1;
+        const encumbrancePercent = Math.min((inv.totalWeight / heavyCap) * 100, 100);
+        const encumbranceMarkers = {
+            light: (inv.capacity.light / heavyCap) * 100,
+            medium: (inv.capacity.medium / heavyCap) * 100
+        };
+
+        // Format breakdown display
+        const meta = inv.capacity.metadata || { baseMaxLoad: 0, sizeMod: 1 };
+        const str = systemData.abilities.str.effective;
+        const sizeLabel = systemData.details.size || "Medium";
+        const breakdown = {
+            light: {
+                label: "THIRDERA.Inventory.Light",
+                value: inv.capacity.light,
+                calculation: `1/3 of ${inv.capacity.heavy} lbs.`
+            },
+            medium: {
+                label: "THIRDERA.Inventory.Medium",
+                value: inv.capacity.medium,
+                calculation: `2/3 of ${inv.capacity.heavy} lbs.`
+            },
+            heavy: {
+                label: "THIRDERA.Inventory.Heavy",
+                value: inv.capacity.heavy,
+                calculation: `Base ${meta.baseMaxLoad} lbs. (Str ${str}) × ${meta.sizeMod} (${sizeLabel})`
+            }
+        };
+
         return {
             ...context,
             actor,
@@ -284,9 +315,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             ...config,
             config,
             tabs,
-            enriched,
             dexCap,
             speedInfo,
+            inventory: inv,
+            encumbrancePercent,
+            encumbranceMarkers,
+            encumbranceBreakdown: breakdown,
             hpStatus,
             classSummary,
             totalLevel,

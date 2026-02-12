@@ -63,6 +63,34 @@
             "scalingTable": "Scaling Table",
             "grantLevel": "Grant Level",
             "noFeatures": "No class features assigned"
+        },
+        "Settings": {
+            "CurrencyWeight": {
+                "Name": "Track Currency Weight",
+                "Hint": "If enabled, every 50 coins will add 1 lb to the total weight (D&D 3.5 standard)."
+            }
+        },
+        "Inventory": {
+            "TotalWeight": "Total Weight",
+            "CarryingCapacity": "Carrying Capacity",
+            "Load": "Load",
+            "Light": "Light",
+            "Medium": "Medium",
+            "Heavy": "Heavy",
+            "Overload": "Overload",
+            "Quantity": "Quantity",
+            "Weight": "Weight",
+            "Lbs": "lbs."
+        },
+        "Currency": {
+            "pp": "Platinum (pp)",
+            "gp": "Gold (gp)",
+            "sp": "Silver (sp)",
+            "cp": "Copper (cp)",
+            "ppAbbr": "pp",
+            "gpAbbr": "gp",
+            "spAbbr": "sp",
+            "cpAbbr": "cp"
         }
     },
     "TYPES": {

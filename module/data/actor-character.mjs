@@ -1,5 +1,6 @@
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
+import { getCarryingCapacity, getLoadStatus } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
 
 /**
@@ -124,7 +125,15 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             grantedSkills: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: false, label: "Skill Key" }),
                 name: new StringField({ required: true, blank: false, label: "Skill Name" })
-            }))
+            })),
+
+            // Currency
+            currency: new SchemaField({
+                pp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Platinum (pp)" }),
+                gp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Gold (gp)" }),
+                sp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Silver (sp)" }),
+                cp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Copper (cp)" })
+            })
         };
     }
 
@@ -437,5 +446,32 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
         // Apply armor speed reduction (medium/heavy armor)
         computeSpeed(this);
+
+        // Calculate inventory weight and load
+        let totalWeight = 0;
+        for (const item of this.parent.items) {
+            const weight = item.system.weight || 0;
+            const quantity = item.system.quantity || 1;
+            totalWeight += weight * quantity;
+        }
+
+        // Add currency weight if setting enabled
+        const trackCoinWeight = game.settings.get("thirdera", "currencyWeight");
+        if (trackCoinWeight) {
+            const c = this.currency;
+            const totalCoins = (c.pp || 0) + (c.gp || 0) + (c.sp || 0) + (c.cp || 0);
+            if (totalCoins > 0) {
+                totalWeight += Math.floor(totalCoins / 50);
+            }
+        }
+
+        const capacity = getCarryingCapacity(this.abilities.str.effective, this.details.size);
+        const load = getLoadStatus(totalWeight, capacity);
+
+        this.inventory = {
+            totalWeight,
+            capacity,
+            load
+        };
     }
 }
