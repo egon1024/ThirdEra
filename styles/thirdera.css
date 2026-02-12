@@ -1524,6 +1524,7 @@
 /* Inventory Footer (Currency & Encumbrance) */
 .thirdera .inventory-footer {
   display: flex;
+  align-items: flex-start;
   gap: 20px;
   margin-top: 20px;
   padding: 10px;
@@ -1535,6 +1536,10 @@
   flex: 0 0 200px;
   display: flex;
   flex-direction: column;
+}
+
+.thirdera .inventory-footer .items-header {
+  margin-top: 0;
 }
 
 .thirdera .currency-grid {
