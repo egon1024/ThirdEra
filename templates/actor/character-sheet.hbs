@@ -7,23 +7,26 @@
         <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Character Name" /></h1>
         <span class="actor-type-badge badge--character">PC</span>
       </div>
-      <div class="resources grid grid-4col">
+      <div class="resources grid grid-5col">
         <div class="resource flex-group-center">
           <label class="resource-label">Race</label>
           {{#if race}}
           <span class="race-name" data-action="openRace">{{race.name}}</span>
-          <a class="race-remove" data-action="removeRace" title="Remove Race"><i class="fas fa-times"></i></a>
           {{else}}
           <span class="race-name race-empty">None</span>
           {{/if}}
         </div>
         <div class="resource flex-group-center">
-          <label for="system.details.class" class="resource-label">Class</label>
-          <input type="text" name="system.details.class" value="{{system.details.class}}" data-dtype="String" />
+          <label class="resource-label">Class</label>
+          {{#if classSummary}}
+          <span class="class-summary">{{classSummary}}</span>
+          {{else}}
+          <span class="class-summary class-empty">None</span>
+          {{/if}}
         </div>
         <div class="resource flex-group-center">
-          <label for="system.details.level" class="resource-label">Level</label>
-          <input type="text" name="system.details.level" value="{{system.details.level}}" data-dtype="Number" />
+          <label class="resource-label">Level</label>
+          <span class="level-display">{{totalLevel}}</span>
         </div>
         <div class="resource flex-group-center">
           <label for="system.details.size" class="resource-label">Size</label>
@@ -32,6 +35,15 @@
             <option value="{{key}}" {{#if (eq key ../system.details.size)}}selected{{/if}}>{{label}}</option>
             {{/each}}
           </select>
+        </div>
+        <div class="resource flex-group-center header-hp">
+          <label class="resource-label">HP</label>
+          <div class="header-hp-display">
+            <input type="number" data-header-hp value="{{system.attributes.hp.value}}"
+              class="header-hp-current {{hpStatus}}" min="0" />
+            <span class="header-hp-sep">/</span>
+            <span class="header-hp-max">{{system.attributes.hp.max}}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -43,8 +55,12 @@
       data-tab="description">Description</a>
     <a class="item {{#if (eq tabs.primary 'abilities')}}active{{/if}}" data-action="changeTab" data-group="primary"
       data-tab="abilities">Abilities</a>
-    <a class="item {{#if (eq tabs.primary 'items')}}active{{/if}}" data-action="changeTab" data-group="primary"
-      data-tab="items">Equipment</a>
+    <a class="item {{#if (eq tabs.primary 'combat')}}active{{/if}}" data-action="changeTab" data-group="primary"
+      data-tab="combat">Combat</a>
+    <a class="item {{#if (eq tabs.primary 'classes')}}active{{/if}}" data-action="changeTab" data-group="primary"
+      data-tab="classes">Classes</a>
+    <a class="item {{#if (eq tabs.primary 'equipment')}}active{{/if}}" data-action="changeTab" data-group="primary"
+      data-tab="equipment">Equipment</a>
     <a class="item {{#if (eq tabs.primary 'spells')}}active{{/if}}" data-action="changeTab" data-group="primary"
       data-tab="spells">Spells</a>
   </nav>
@@ -63,30 +79,234 @@
     {{!-- Abilities Tab --}}
     <div class="tab abilities {{#if (eq tabs.primary 'abilities')}}active{{/if}}" data-group="primary"
       data-tab="abilities">
-      {{!-- Ability Scores --}}
-      <div class="abilities-header">
-        <h3 class="items-header">Ability Scores</h3>
-      </div>
-      <div class="abilities-grid">
-        <span class="abilities-col-header"></span>
-        <span class="abilities-col-header">Base</span>
-        <span class="abilities-col-header">Racial</span>
-        <span class="abilities-col-header">Score</span>
-        <span class="abilities-col-header">Mod</span>
-        <span class="abilities-col-header"></span>
 
-        {{#each system.abilities as |ability key|}}
-        <h4 class="ability-name">{{lookup @root.abilityScores key}}</h4>
-        <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"
-          placeholder="10" class="ability-base" />
-        <span class="ability-racial">{{#if ability.racial}}{{signedNumber ability.racial}}{{/if}}</span>
-        <span class="ability-effective">{{#if ability.racial}}{{ability.effective}}{{else}}{{ability.value}}{{/if}}</span>
-        <span class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}">{{signedNumber ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span class="dex-cap-note" title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by armor">(max)</span>{{/if}}{{/if}}</span>
-        <a class="ability-check" data-action="abilityCheck" data-ability="{{key}}">
-          <i class="fas fa-dice-d20"></i>
-        </a>
-        {{/each}}
+      {{!-- Subtab Navigation --}}
+      <nav class="subtabs tabs" data-group="abilities">
+        <a class="item {{#if (eq tabs.abilities 'scores')}}active{{/if}}" data-action="changeTab" data-group="abilities"
+          data-tab="scores">Scores & Saves</a>
+        <a class="item {{#if (eq tabs.abilities 'skills')}}active{{/if}}" data-action="changeTab" data-group="abilities"
+          data-tab="skills">Skills</a>
+        <a class="item {{#if (eq tabs.abilities 'feats')}}active{{/if}}" data-action="changeTab" data-group="abilities"
+          data-tab="feats">Feats</a>
+        <a class="item {{#if (eq tabs.abilities 'features')}}active{{/if}}" data-action="changeTab"
+          data-group="abilities" data-tab="features">Class Features</a>
+      </nav>
+
+      {{!-- Scores & Saves Subtab --}}
+      <div class="subtab {{#if (eq tabs.abilities 'scores')}}active{{/if}}" data-group="abilities" data-tab="scores">
+        {{!-- Ability Scores --}}
+        <div class="abilities-header">
+          <h3 class="items-header">Ability Scores</h3>
+        </div>
+        <div class="abilities-grid">
+          <span class="abilities-col-header"></span>
+          <span class="abilities-col-header">Base</span>
+          <span class="abilities-col-header">Racial</span>
+          <span class="abilities-col-header">Score</span>
+          <span class="abilities-col-header">Mod</span>
+          <span class="abilities-col-header"></span>
+
+          {{#each system.abilities as |ability key|}}
+          <h4 class="ability-name">{{lookup @root.abilityScores key}}</h4>
+          <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"
+            placeholder="10" class="ability-base" />
+          <span class="ability-racial">{{#if ability.racial}}{{signedNumber ability.racial}}{{/if}}</span>
+          <span class="ability-effective">{{#if
+            ability.racial}}{{ability.effective}}{{else}}{{ability.value}}{{/if}}</span>
+          <span
+            class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isOverloaded}}dex-overloaded{{else}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}{{/if}}"
+            {{#if (eq key 'dex' )}}{{#if
+            @root.dexCap.isCapped}}title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by {{#if (eq @root.dexCap.reason 'both')}}armor and load{{else}}{{@root.dexCap.reason}}{{/if}} (Max Dex: {{#if (eq @root.dexCap.maxDex null)}}Unlimited{{else}}{{@root.dexCap.maxDex}}{{/if}})"
+            {{/if}}{{/if}}>{{signedNumber
+            ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span
+              class="dex-cap-note {{#if @root.dexCap.isOverloaded}}dex-overloaded{{/if}}">(max)</span>{{/if}}{{/if}}</span>
+          <a class="ability-check" data-action="abilityCheck" data-ability="{{key}}">
+            <i class="fas fa-dice-d20"></i>
+          </a>
+          {{/each}}
+        </div>
+
+        {{!-- Saving Throws --}}
+        <div class="saves-header">
+          <h3 class="items-header">Saving Throws</h3>
+        </div>
+        <ol class="saves-list">
+          {{#each system.saves as |save key|}}
+          <li class="save flexrow">
+            <h4 class="save-name">{{lookup @root.saves key}}</h4>
+            {{#if @root.classes.length}}
+            <span class="save-base"
+              title="{{#each save.breakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{save.base}}</span>
+            {{else}}
+            <input type="text" name="system.saves.{{key}}.base" value="{{save.base}}" data-dtype="Number"
+              placeholder="0" />
+            {{/if}}
+            <span class="save-total">{{signedNumber save.total}}</span>
+            <a class="save-roll" data-action="saveRoll" data-save="{{key}}">
+              <i class="fas fa-dice-d20"></i>
+            </a>
+          </li>
+          {{/each}}
+        </ol>
       </div>
+
+      {{!-- Skills Subtab --}}
+      <div class="subtab {{#if (eq tabs.abilities 'skills')}}active{{/if}}" data-group="abilities" data-tab="skills">
+        {{#if levelHistory.length}}
+        <div class="skill-point-budget">
+          <span class="sp-label">Skill Points:</span>
+          <span class="sp-available">{{skillPointBudget.available}} available</span>
+          <span class="sp-sep">/</span>
+          <span class="sp-spent">{{skillPointBudget.spent}} spent</span>
+          <span class="sp-sep">/</span>
+          <span
+            class="sp-remaining {{#if (eq skillPointBudget.remaining 0)}}sp-zero{{/if}}">{{skillPointBudget.remaining}}
+            remaining</span>
+        </div>
+        {{/if}}
+
+        {{!-- GM-Granted Skills --}}
+        <div class="granted-skills-section" data-drop-zone="granted-skills">
+          <h4 class="granted-skills-header">GM-Granted Skills
+            <span class="granted-skills-hint">(drag skill items here to override restrictions)</span>
+          </h4>
+          {{#if grantedSkills.length}}
+          <ul class="skill-ref-list">
+            {{#each grantedSkills as |entry|}}
+            <li class="skill-ref-entry">
+              <span class="skill-ref-name">{{entry.name}}</span>
+              <a class="skill-ref-remove" data-action="removeGrantedSkill" data-skill-key="{{entry.key}}"
+                title="Remove"><i class="fas fa-times"></i></a>
+            </li>
+            {{/each}}
+          </ul>
+          {{/if}}
+        </div>
+
+        <ol class="items-list skills-list">
+          {{#each skills as |item id|}}
+          <li
+            class="item flexrow {{#if item.system.isForbidden}}skill-forbidden{{else}}{{#if item.system.isClassSkill}}class-skill{{else}}cross-class-skill{{/if}}{{/if}}"
+            data-item-id="{{item._id}}" {{#if item.system.isForbidden}}title="{{item.system.forbiddenReason}}"
+            {{else}}draggable="true" data-drag-type="skillCheck" {{/if}}>
+            <div class="item-name">
+              <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
+              <h4>{{item.name}}</h4>
+              {{#if item.system.isForbidden}}<span class="skill-forbidden-indicator"
+                title="{{item.system.forbiddenReason}}"><i class="fas fa-ban"></i></span>
+              {{else}}{{#if item.system.isGranted}}<span class="granted-skill-indicator"
+                title="GM-Granted">G</span>{{else}}{{#if item.system.isClassSkill}}<span class="class-skill-indicator"
+                title="Class Skill">C</span>{{else}}<span class="cross-class-skill-indicator"
+                title="Cross-Class">CC</span>{{/if}}{{/if}}{{/if}}
+            </div>
+            <div class="item-controls">
+              {{#if item.system.isForbidden}}
+              <span class="skill-forbidden-label">Forbidden</span>
+              {{else}}
+              <input type="number" step="0.5" min="0" max="{{item.system.maxRanks}}" data-skill-item-id="{{item._id}}"
+                data-skill-max-ranks="{{item.system.maxRanks}}" value="{{item.system.ranks}}" class="skill-ranks-input"
+                title="Max: {{item.system.maxRanks}}" />
+              {{#if item.system.armorPenalty}}<span class="skill-acp"
+                title="Armor Check Penalty">{{item.system.armorPenalty}}</span>{{/if}}
+              <span class="skill-total" title="{{item.system.modifier.breakdown_formatted}}">{{signedNumber
+                item.system.modifier.total}}</span>
+              <a class="skill-check" data-action="skillCheck" title="Roll Skill"><i class="fas fa-dice-d20"></i></a>
+              {{/if}}
+              <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
+              <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+      </div>
+
+      {{!-- Feats Subtab --}}
+      <div class="subtab {{#if (eq tabs.abilities 'feats')}}active{{/if}}" data-group="abilities" data-tab="feats">
+        {{!-- Granted Feats --}}
+        {{#if grantedFeats.length}}
+        <h4 class="feats-section-header">Granted Feats</h4>
+        <ol class="items-list granted-features-list">
+          {{#each grantedFeats as |feat|}}
+          <li class="item flexrow granted-feature">
+            <div class="item-name">
+              <h4>{{feat.featName}}</h4>
+              {{#if feat.scalingValue}}<span class="feature-scaling-value">({{feat.scalingValue}})</span>{{/if}}
+            </div>
+            <div class="item-controls">
+              <span class="feature-source-badge">{{#each feat.sources}}{{className}} {{grantLevel}}{{#unless @last}},
+                {{/unless}}{{/each}}</span>
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+        {{/if}}
+        {{!-- Manually-Added Feats --}}
+        <h4 class="items-header">
+          Feats
+          <a class="item-create" data-action="createItem" data-type="feat"><i class="fas fa-plus"></i></a>
+        </h4>
+        <ol class="items-list">
+          {{#each feats as |item id|}}
+          <li class="item flexrow" data-item-id="{{item._id}}">
+            <div class="item-name">
+              <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
+              <h4>{{item.name}}</h4>
+            </div>
+            <div class="item-controls">
+              <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
+              <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+      </div>
+
+      {{!-- Class Features Subtab --}}
+      <div class="subtab {{#if (eq tabs.abilities 'features')}}active{{/if}}" data-group="abilities"
+        data-tab="features">
+        {{!-- Granted Class Features --}}
+        {{#if grantedClassFeatures.length}}
+        <h4 class="feats-section-header">Granted Features</h4>
+        <ol class="items-list granted-features-list">
+          {{#each grantedClassFeatures as |feat|}}
+          <li class="item flexrow granted-feature">
+            <div class="item-name">
+              <h4>{{feat.featName}}</h4>
+              {{#if feat.scalingValue}}<span class="feature-scaling-value">({{feat.scalingValue}})</span>{{/if}}
+            </div>
+            <div class="item-controls">
+              <span class="feature-source-badge">{{#each feat.sources}}{{className}} {{grantLevel}}{{#unless @last}},
+                {{/unless}}{{/each}}</span>
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+        {{/if}}
+        {{!-- Manually-Added Class Features --}}
+        <h4 class="items-header">
+          Class Features
+          <a class="item-create" data-action="createItem" data-type="feature"><i class="fas fa-plus"></i></a>
+        </h4>
+        <ol class="items-list">
+          {{#each classFeatures as |item id|}}
+          <li class="item flexrow" data-item-id="{{item._id}}">
+            <div class="item-name">
+              <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
+              <h4>{{item.name}}</h4>
+            </div>
+            <div class="item-controls">
+              <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
+              <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+      </div>
+
+    </div>
+
+    {{!-- Combat Tab --}}
+    <div class="tab combat {{#if (eq tabs.primary 'combat')}}active{{/if}}" data-group="primary" data-tab="combat">
 
       {{!-- Combat Stats --}}
       <div class="combat-stats">
@@ -94,18 +314,28 @@
           <label>HP</label>
           <div class="stat-value">
             <input type="text" name="system.attributes.hp.value" value="{{system.attributes.hp.value}}"
-              data-dtype="Number" />
+              class="{{hpStatus}}" data-dtype="Number" />
             <span>/</span>
+            {{#if classes.length}}
+            <span
+              title="Derived from level history — edit HP Rolled values on Classes tab">{{system.attributes.hp.max}}</span>
+            {{else}}
             <input type="text" name="system.attributes.hp.max" value="{{system.attributes.hp.max}}"
               data-dtype="Number" />
+            {{/if}}
           </div>
         </div>
         <div class="stat-block">
           <label>Speed</label>
-          <div class="stat-value {{#if speedInfo.isReduced}}value-modified{{/if}}">
-            <span>{{system.attributes.speed.value}} ft</span>
-            {{#if speedInfo.isReduced}}
-            <span class="modified-note" title="Base speed: {{speedInfo.baseSpeed}} ft — reduced by armor">(reduced)</span>
+          <div class="stat-value {{#if speedInfo.reduced}}value-modified{{/if}}" {{#if
+            speedInfo.reduced}}title="{{#if speedInfo.overloaded}}Overloaded! Maximum load exceeded — cannot move.{{else}}Reduced from {{speedInfo.baseSpeed}} ft by {{speedInfo.reason}}{{/if}}"
+            {{/if}}>
+            <span
+              class="{{#if speedInfo.overloaded}}speed-overloaded{{else}}{{#if speedInfo.reduced}}speed-reduced{{/if}}{{/if}}">{{system.attributes.speed.value}}
+              ft</span>
+            {{#if speedInfo.reduced}}
+            <span class="modified-note {{#if speedInfo.overloaded}}speed-overloaded{{/if}}">({{#if
+              speedInfo.overloaded}}overloaded{{else}}reduced{{/if}})</span>
             {{/if}}
           </div>
         </div>
@@ -117,10 +347,37 @@
         </div>
         <div class="stat-block">
           <label>BAB</label>
+          {{#if classes.length}}
+          <div class="stat-value"
+            title="{{#each system.combat.babBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">
+            {{signedNumber system.combat.bab}}
+          </div>
+          {{else}}
           <div class="stat-value">
             <input type="text" name="system.combat.bab" value="{{system.combat.bab}}" data-dtype="Number" />
           </div>
+          {{/if}}
         </div>
+      </div>
+
+      {{!-- HP Adjustments --}}
+      <div class="hp-adjustments-section">
+        <div class="hp-adjustments-header">
+          <span class="hp-adjustments-title">HP Adjustments</span>
+          <a class="hp-adj-add" data-action="addHpAdjustment" title="Add Adjustment"><i class="fas fa-plus"></i></a>
+        </div>
+        {{#if system.attributes.hp.adjustments.length}}
+        <div class="hp-adjustments-grid">
+          {{#each system.attributes.hp.adjustments as |adj|}}
+          <input type="text" data-hp-adj-index="{{@index}}" data-hp-adj-field="label" value="{{adj.label}}"
+            class="hp-adj-label-input" />
+          <input type="text" data-hp-adj-index="{{@index}}" data-hp-adj-field="value" value="{{adj.value}}"
+            data-dtype="Number" class="hp-adj-value-input" />
+          <a class="hp-adj-remove" data-action="removeHpAdjustment" data-adj-index="{{@index}}"
+            title="Remove Adjustment"><i class="fas fa-times"></i></a>
+          {{/each}}
+        </div>
+        {{/if}}
       </div>
 
       {{!-- Attack Bonuses --}}
@@ -135,18 +392,20 @@
 
           <span class="attack-row-label">Melee</span>
           <span class="attack-cell">{{signedNumber system.combat.bab}}</span>
-          <span class="attack-cell">{{signedNumber system.abilities.str.mod}} <span class="attack-ability-tag">STR</span></span>
+          <span class="attack-cell">{{signedNumber system.abilities.str.mod}} <span
+              class="attack-ability-tag">STR</span></span>
           <span class="attack-cell">{{signedNumber system.combat.sizeMod}}</span>
-          <input type="text" name="system.combat.meleeAttack.misc"
-            value="{{system.combat.meleeAttack.misc}}" data-dtype="Number" class="attack-input" />
+          <input type="text" name="system.combat.meleeAttack.misc" value="{{system.combat.meleeAttack.misc}}"
+            data-dtype="Number" class="attack-input" />
           <span class="attack-total">{{signedNumber system.combat.meleeAttack.total}}</span>
 
           <span class="attack-row-label">Ranged</span>
           <span class="attack-cell">{{signedNumber system.combat.bab}}</span>
-          <span class="attack-cell">{{signedNumber system.abilities.dex.mod}} <span class="attack-ability-tag">DEX</span></span>
+          <span class="attack-cell">{{signedNumber system.abilities.dex.mod}} <span
+              class="attack-ability-tag">DEX</span></span>
           <span class="attack-cell">{{signedNumber system.combat.sizeMod}}</span>
-          <input type="text" name="system.combat.rangedAttack.misc"
-            value="{{system.combat.rangedAttack.misc}}" data-dtype="Number" class="attack-input" />
+          <input type="text" name="system.combat.rangedAttack.misc" value="{{system.combat.rangedAttack.misc}}"
+            data-dtype="Number" class="attack-input" />
           <span class="attack-total">{{signedNumber system.combat.rangedAttack.total}}</span>
         </div>
       </div>
@@ -186,68 +445,146 @@
         </ul>
       </div>
 
-      {{!-- Saving Throws --}}
-      <div class="saves-header">
-        <h3 class="items-header">Saving Throws</h3>
-      </div>
-      <ol class="saves-list">
-        {{#each system.saves as |save key|}}
-        <li class="save flexrow">
-          <h4 class="save-name">{{lookup @root.saves key}}</h4>
-          <input type="text" name="system.saves.{{key}}.base" value="{{save.base}}" data-dtype="Number"
-            placeholder="0" />
-          <span class="save-total">{{signedNumber save.total}}</span>
-          <a class="save-roll" data-action="saveRoll" data-save="{{key}}">
-            <i class="fas fa-dice-d20"></i>
-          </a>
-        </li>
-        {{/each}}
-      </ol>
-
-      {{!-- Skills --}}
-      <div class="skills-header">
-        <h3 class="items-header">Skills</h3>
+      {{!-- Equipped Weapons --}}
+      {{#if equippedWeapons.length}}
+      <div class="items-header">
+        <h3 class="items-header">Weapons</h3>
       </div>
       <ol class="items-list">
-        {{#each skills as |item id|}}
-        <li class="item flexrow" data-item-id="{{item._id}}">
+        {{#each equippedWeapons as |item id|}}
+        <li
+          class="item flexrow {{#if item.system.wielding}}{{#unless item.system.wielding.canWield}}size-mismatch{{/unless}}{{/if}}"
+          data-item-id="{{item._id}}" {{#if item.system.wielding}}{{#unless
+          item.system.wielding.canWield}}title="Cannot wield: {{item.system.properties.size}} weapon is too large/small for a {{../system.details.size}} character"
+          {{/unless}}{{/if}}>
           <div class="item-name">
             <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
-            <h4>{{item.name}}</h4>
+            <h4>{{item.name}}{{#unless (eq item.system.properties.size "Medium")}} <span
+                class="item-size-label">({{item.system.properties.size}})</span>{{/unless}}</h4>
           </div>
           <div class="item-controls">
-            <input type="text" name="system.ranks" value="{{item.system.ranks}}" data-dtype="Number" placeholder="0" />
-            <span class="skill-total">{{signedNumber item.system.modifier.total}}</span>
-            <a class="skill-check" data-action="skillCheck" title="Roll Skill"><i class="fas fa-dice-d20"></i></a>
-            <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
-            <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
+            {{#if item.system.twf.active}}
+            <span class="item-detail value-modified" title="Two-weapon fighting penalty">{{signedNumber
+              item.system.twf.penalty}} TWF</span>
+            {{/if}}
+            <span class="item-detail">{{item.system.damage.effectiveDice}}</span>
+            {{#if item.system.wielding}}{{#if item.system.wielding.effectiveHandedness}}{{#unless (eq
+            item.system.wielding.effectiveHandedness item.system.properties.handedness)}}<span
+              class="item-detail value-modified"
+              title="Base: {{lookup @root.config.weaponHandedness item.system.properties.handedness}} — shifted by size mismatch ({{item.system.wielding.attackPenalty}} attack)">{{lookup
+              @root.config.weaponHandedness item.system.wielding.effectiveHandedness}}</span>{{/unless}}{{/if}}{{/if}}
+            <a class="weapon-attack" data-action="weaponAttack" title="Attack" draggable="true"
+              data-drag-type="weaponAttack"><i class="fas fa-dice-d20"></i></a>
+            <a class="weapon-damage" data-action="weaponDamage" title="Damage" draggable="true"
+              data-drag-type="weaponDamage"><i class="fas fa-dice-d6"></i></a>
           </div>
         </li>
         {{/each}}
       </ol>
+      {{/if}}
 
-      {{!-- Feats --}}
-      <div class="feats-header">
-        <h3 class="items-header">Feats</h3>
+      {{!-- Equipped Armor --}}
+      {{#if equippedArmor.length}}
+      <div class="items-header">
+        <h3 class="items-header">Armor</h3>
       </div>
       <ol class="items-list">
-        {{#each feats as |item id|}}
-        <li class="item flexrow" data-item-id="{{item._id}}">
+        {{#each equippedArmor as |item id|}}
+        <li class="item flexrow equipped" data-item-id="{{item._id}}">
           <div class="item-name">
             <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
-            <h4>{{item.name}}</h4>
+            <h4>{{item.name}}{{#unless (eq item.system.size "Medium")}} <span
+                class="item-size-label">({{item.system.size}})</span>{{/unless}}</h4>
           </div>
           <div class="item-controls">
-            <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
-            <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
+            <span class="item-detail">AC +{{item.system.armor.bonus}}</span>
           </div>
         </li>
         {{/each}}
       </ol>
+      {{/if}}
     </div>
 
-    {{!-- Items Tab --}}
-    <div class="tab items {{#if (eq tabs.primary 'items')}}active{{/if}}" data-group="primary" data-tab="items">
+    {{!-- Classes Tab --}}
+    <div class="tab classes {{#if (eq tabs.primary 'classes')}}active{{/if}}" data-group="primary" data-tab="classes">
+      <div class="classes-header">
+        <h3 class="items-header">Classes</h3>
+        <a class="item-create" data-action="createItem" data-type="class"><i class="fas fa-plus"></i> Add Class</a>
+      </div>
+      {{#if classes.length}}
+      <ol class="items-list classes-list">
+        {{#each classes as |cls|}}
+        <li class="item flexrow" data-item-id="{{cls._id}}">
+          <div class="item-name">
+            <div class="item-image"><img src="{{cls.img}}" title="{{cls.name}}" width="24" height="24" /></div>
+            <h4 class="class-name-link" data-action="openClass">{{cls.name}}</h4>
+          </div>
+          <div class="item-controls">
+            <a class="class-level-remove" data-action="removeClassLevel" title="Remove Level"><i
+                class="fas fa-minus"></i></a>
+            <span class="item-detail">Lvl {{cls.derivedLevels}}</span>
+            <a class="class-level-add" data-action="addClassLevel" title="Add Level"><i class="fas fa-plus"></i></a>
+            <span class="item-detail">{{cls.system.hitDie}}</span>
+            <span class="item-detail">BAB: {{lookup @root.config.babProgressions cls.system.babProgression}}</span>
+            <a class="item-edit" data-action="editItem" title="Edit Class"><i class="fas fa-edit"></i></a>
+            <a class="item-delete" data-action="removeClass" title="Remove Class"><i class="fas fa-trash"></i></a>
+          </div>
+        </li>
+        {{#if cls.grantedFeatures.length}}
+        <li class="class-features-sublist">
+          <ul class="class-granted-features">
+            {{#each cls.grantedFeatures as |feat|}}
+            <li class="class-granted-feature">
+              <span class="feature-level-badge">Lvl {{feat.grantLevel}}</span>
+              <span class="feature-name">{{feat.featName}}</span>
+              {{#if feat.scalingValue}}<span class="feature-scaling-value">({{feat.scalingValue}})</span>{{/if}}
+            </li>
+            {{/each}}
+          </ul>
+        </li>
+        {{/if}}
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="no-items hint">No classes — drag a class item here</p>
+      {{/if}}
+
+      {{!-- Level History --}}
+      {{#if levelHistory.length}}
+      <div class="items-header level-history-header">
+        <h3 class="items-header">Level History</h3>
+        <span class="level-history-hp-total">HP Max: {{system.attributes.hp.max}}</span>
+      </div>
+      <div class="level-history-grid">
+        <span class="level-history-col-header">Lvl</span>
+        <span class="level-history-col-header">Class</span>
+        <span class="level-history-col-header">Hit Die</span>
+        <span class="level-history-col-header">HP Rolled</span>
+        <span class="level-history-col-header">CON</span>
+        <span class="level-history-col-header">Total</span>
+
+        {{#each levelHistory as |entry|}}
+        <span class="level-history-cell level-history-level">{{entry.characterLevel}}</span>
+        <span class="level-history-cell level-history-class">{{entry.className}}</span>
+        {{#if (eq entry.hpRolled 0)}}
+        <a class="level-history-cell level-history-roll-hp" data-action="rollHitDie" data-hit-die="{{entry.hitDie}}"
+          data-level-index="{{entry.index}}" title="Click to roll {{entry.hitDie}}">{{entry.hitDie}} <i
+            class="fas fa-dice-d20"></i></a>
+        {{else}}
+        <span class="level-history-cell">{{entry.hitDie}}</span>
+        {{/if}}
+        <input type="text" data-level-hp-index="{{entry.index}}" value="{{entry.hpRolled}}" data-dtype="Number"
+          class="level-history-input" />
+        <span class="level-history-cell">{{signedNumber entry.conMod}}</span>
+        <span class="level-history-cell level-history-subtotal">{{entry.subtotal}}</span>
+        {{/each}}
+      </div>
+      {{/if}}
+    </div>
+
+    {{!-- Equipment Tab --}}
+    <div class="tab equipment {{#if (eq tabs.primary 'equipment')}}active{{/if}}" data-group="primary"
+      data-tab="equipment">
       {{!-- Weapons --}}
       <div class="items-header">
         <h3 class="items-header">Weapons</h3>
@@ -255,26 +592,38 @@
       </div>
       <ol class="items-list">
         {{#each weapons as |item id|}}
-        <li class="item flexrow {{#if item.system.wielding}}{{#unless item.system.wielding.canWield}}size-mismatch{{/unless}}{{/if}}" data-item-id="{{item._id}}" {{#if item.system.wielding}}{{#unless item.system.wielding.canWield}}title="Cannot wield: {{item.system.properties.size}} weapon is too large/small for a {{../system.details.size}} character"{{/unless}}{{/if}}>
+        <li
+          class="item flexrow {{#if item.system.wielding}}{{#unless item.system.wielding.canWield}}size-mismatch{{/unless}}{{/if}}"
+          data-item-id="{{item._id}}" {{#if item.system.wielding}}{{#unless
+          item.system.wielding.canWield}}title="Cannot wield: {{item.system.properties.size}} weapon is too large/small for a {{../system.details.size}} character"
+          {{/unless}}{{/if}}>
           <div class="item-name">
             <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
-            <h4>{{item.name}}{{#unless (eq item.system.properties.size "Medium")}} <span class="item-size-label">({{item.system.properties.size}})</span>{{/unless}}</h4>
+            <h4>{{item.name}}{{#unless (eq item.system.properties.size "Medium")}} <span
+                class="item-size-label">({{item.system.properties.size}})</span>{{/unless}}</h4>
           </div>
           <div class="item-controls">
             {{!-- Hand assignment icons --}}
             <a class="weapon-hand {{#if (eq item.system.equipped 'primary')}}hand-active{{/if}}"
-               data-action="equipWeaponHand" data-hand="primary"
-               title="{{#if (eq item.system.equipped 'primary')}}Unequip{{else}}Equip Primary Hand{{/if}}">P</a>
+              data-action="equipWeaponHand" data-hand="primary"
+              title="{{#if (eq item.system.equipped 'primary')}}Unequip{{else}}Equip Primary Hand{{/if}}">P</a>
             <a class="weapon-hand {{#if (eq item.system.equipped 'offhand')}}hand-active{{/if}}"
-               data-action="equipWeaponHand" data-hand="offhand"
-               title="{{#if (eq item.system.equipped 'offhand')}}Unequip{{else}}Equip Off-Hand{{/if}}">O</a>
+              data-action="equipWeaponHand" data-hand="offhand"
+              title="{{#if (eq item.system.equipped 'offhand')}}Unequip{{else}}Equip Off-Hand{{/if}}">O</a>
             {{#if item.system.twf.active}}
-            <span class="item-detail value-modified" title="Two-weapon fighting penalty">{{signedNumber item.system.twf.penalty}} TWF</span>
+            <span class="item-detail value-modified" title="Two-weapon fighting penalty">{{signedNumber
+              item.system.twf.penalty}} TWF</span>
             {{/if}}
             <span class="item-detail">{{item.system.damage.effectiveDice}}</span>
-            {{#if item.system.wielding}}{{#if item.system.wielding.effectiveHandedness}}{{#unless (eq item.system.wielding.effectiveHandedness item.system.properties.handedness)}}<span class="item-detail value-modified" title="Base: {{lookup @root.config.weaponHandedness item.system.properties.handedness}} — shifted by size mismatch ({{item.system.wielding.attackPenalty}} attack)">{{lookup @root.config.weaponHandedness item.system.wielding.effectiveHandedness}}</span>{{/unless}}{{/if}}{{/if}}
-            <a class="weapon-attack" data-action="weaponAttack" title="Attack"><i class="fas fa-dice-d20"></i></a>
-            <a class="weapon-damage" data-action="weaponDamage" title="Damage"><i class="fas fa-dice-d6"></i></a>
+            {{#if item.system.wielding}}{{#if item.system.wielding.effectiveHandedness}}{{#unless (eq
+            item.system.wielding.effectiveHandedness item.system.properties.handedness)}}<span
+              class="item-detail value-modified"
+              title="Base: {{lookup @root.config.weaponHandedness item.system.properties.handedness}} — shifted by size mismatch ({{item.system.wielding.attackPenalty}} attack)">{{lookup
+              @root.config.weaponHandedness item.system.wielding.effectiveHandedness}}</span>{{/unless}}{{/if}}{{/if}}
+            <a class="weapon-attack" data-action="weaponAttack" title="Attack" draggable="true"
+              data-drag-type="weaponAttack"><i class="fas fa-dice-d20"></i></a>
+            <a class="weapon-damage" data-action="weaponDamage" title="Damage" draggable="true"
+              data-drag-type="weaponDamage"><i class="fas fa-dice-d6"></i></a>
             <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
           </div>
@@ -289,14 +638,20 @@
       </div>
       <ol class="items-list">
         {{#each armor as |item id|}}
-        <li class="item flexrow {{#if (eq item.system.equipped 'true')}}equipped{{/if}} {{#unless (eq item.system.size ../system.details.size)}}size-mismatch{{/unless}}" data-item-id="{{item._id}}" {{#unless (eq item.system.size ../system.details.size)}}title="Size mismatch: armor is {{item.system.size}}, character is {{../system.details.size}}"{{/unless}}>
+        <li
+          class="item flexrow {{#if (eq item.system.equipped 'true')}}equipped{{/if}} {{#unless (eq item.system.size ../system.details.size)}}size-mismatch{{/unless}}"
+          data-item-id="{{item._id}}" {{#unless (eq item.system.size
+          ../system.details.size)}}title="Size mismatch: armor is {{item.system.size}}, character is {{../system.details.size}}"
+          {{/unless}}>
           <div class="item-name">
             <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
-            <h4>{{item.name}}{{#unless (eq item.system.size "Medium")}} <span class="item-size-label">({{item.system.size}})</span>{{/unless}}</h4>
+            <h4>{{item.name}}{{#unless (eq item.system.size "Medium")}} <span
+                class="item-size-label">({{item.system.size}})</span>{{/unless}}</h4>
           </div>
           <div class="item-controls">
             <span class="item-detail">AC +{{item.system.armor.bonus}}</span>
-            <a class="item-equip {{#if (eq item.system.equipped 'true')}}equipped{{else}}unequipped{{/if}}" data-action="toggleEquip" title="Toggle Equipped">
+            <a class="item-equip {{#if (eq item.system.equipped 'true')}}equipped{{else}}unequipped{{/if}}"
+              data-action="toggleEquip" title="Toggle Equipped">
               <i class="{{#if (eq item.system.equipped 'true')}}fas fa-check-circle{{else}}far fa-circle{{/if}}"></i>
             </a>
             <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
@@ -321,12 +676,83 @@
           </div>
           <div class="item-controls">
             <span class="item-detail">Qty: {{item.system.quantity}}</span>
+            <a class="item-equip {{#if (eq item.system.equipped 'true')}}equipped{{else}}unequipped{{/if}}"
+              data-action="toggleEquip" title="{{#if (eq item.system.equipped 'true')}}Unequip{{else}}Equip{{/if}}">
+              <i class="{{#if (eq item.system.equipped 'true')}}fas fa-check-circle{{else}}far fa-circle{{/if}}"></i>
+            </a>
             <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
           </div>
         </li>
         {{/each}}
       </ol>
+
+      <div class="inventory-footer flexrow">
+        <div class="currency-section flexcol">
+          <h4 class="items-header">Currency</h4>
+          <div class="currency-grid">
+            <div class="currency-item">
+              <label title="{{localize 'THIRDERA.Currency.pp'}}">{{localize 'THIRDERA.Currency.ppAbbr'}}</label>
+              <input type="number" name="system.currency.pp" value="{{system.currency.pp}}" min="0"
+                data-dtype="Number" />
+            </div>
+            <div class="currency-item">
+              <label title="{{localize 'THIRDERA.Currency.gp'}}">{{localize 'THIRDERA.Currency.gpAbbr'}}</label>
+              <input type="number" name="system.currency.gp" value="{{system.currency.gp}}" min="0"
+                data-dtype="Number" />
+            </div>
+            <div class="currency-item">
+              <label title="{{localize 'THIRDERA.Currency.sp'}}">{{localize 'THIRDERA.Currency.spAbbr'}}</label>
+              <input type="number" name="system.currency.sp" value="{{system.currency.sp}}" min="0"
+                data-dtype="Number" />
+            </div>
+            <div class="currency-item">
+              <label title="{{localize 'THIRDERA.Currency.cp'}}">{{localize 'THIRDERA.Currency.cpAbbr'}}</label>
+              <input type="number" name="system.currency.cp" value="{{system.currency.cp}}" min="0"
+                data-dtype="Number" />
+            </div>
+          </div>
+        </div>
+
+        <div class="encumbrance-section flexcol">
+          <h4 class="items-header">{{localize 'THIRDERA.Inventory.Load'}}</h4>
+          <div class="encumbrance-details">
+            <div class="weight-total">
+              <span class="weight-label">{{localize 'THIRDERA.Inventory.TotalWeight'}}:</span>
+              <span class="weight-value">{{inventory.totalWeight}} {{localize 'THIRDERA.Inventory.Lbs'}}</span>
+            </div>
+            <div class="load-status">
+              <span class="load-label">{{localize 'THIRDERA.Inventory.Load'}}:</span>
+              <span class="load-value {{inventory.load}}">{{localize (concat 'THIRDERA.Inventory.' (capitalize
+                inventory.load))}}</span>
+            </div>
+          </div>
+          <div class="encumbrance-bar-container">
+            <div class="encumbrance-bar {{inventory.load}}" style="width: {{encumbrancePercent}}%">
+              <span class="encumbrance-text">{{inventory.totalWeight}} / {{inventory.capacity.heavy}} {{localize
+                'THIRDERA.Inventory.Lbs'}}</span>
+            </div>
+            <div class="encumbrance-marker light" style="left: {{encumbranceMarkers.light}}%"
+              title="Light: {{inventory.capacity.light}}"></div>
+            <div class="encumbrance-marker medium" style="left: {{encumbranceMarkers.medium}}%"
+              title="Medium: {{inventory.capacity.medium}}"></div>
+          </div>
+          <div class="encumbrance-breakdown">
+            <div class="breakdown-row header">
+              <span>{{localize 'THIRDERA.Inventory.Load'}}</span>
+              <span>{{localize 'THIRDERA.Inventory.Weight'}}</span>
+              <span>Calculation</span>
+            </div>
+            {{#each encumbranceBreakdown as |item|}}
+            <div class="breakdown-row">
+              <span class="load-label">{{localize item.label}}</span>
+              <span class="load-value">{{item.value}} {{localize 'THIRDERA.Inventory.Lbs'}}</span>
+              <span class="load-calc">{{item.calculation}}</span>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
     </div>
 
     {{!-- Spells Tab --}}

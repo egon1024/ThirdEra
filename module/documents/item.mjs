@@ -6,6 +6,16 @@ import { getWieldingInfo, getTWFPenalties, getStrMultiplier } from "../data/_dam
  */
 export class ThirdEraItem extends Item {
 
+    /** @override */
+    async _preCreate(data, options, user) {
+        await super._preCreate(data, options, user);
+
+        // Auto-generate a key if not already set (skills, feats, features)
+        if ((data.type === "skill" || data.type === "feat" || data.type === "feature") && !data.system?.key) {
+            this.updateSource({ "system.key": foundry.utils.randomID() });
+        }
+    }
+
     /**
      * Augment the basic item data with additional dynamic data.
      */
@@ -122,12 +132,15 @@ export class ThirdEraItem extends Item {
     }
 
     /**
-     * Prepare Skill specific derived data
+     * Prepare Skill specific derived data.
+     * Note: Basic total only (ability mod + ranks + misc). Class skill status,
+     * max ranks, and armor check penalty are applied later in the actor's
+     * prepareDerivedData, which runs after embedded items are prepared.
      */
     _prepareSkillData(itemData) {
         const systemData = itemData.system;
 
-        // Calculate total skill modifier if on an actor
+        // Calculate basic total skill modifier if on an actor
         if (this.actor) {
             const abilityMod = this.actor.system.abilities[systemData.ability]?.mod || 0;
             const ranks = systemData.ranks || 0;

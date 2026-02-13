@@ -27,7 +27,15 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             changeTab: ThirdEraActorSheet.#onChangeTab,
             deleteActor: ThirdEraActorSheet.#onActorDeleteHeader,
             openRace: ThirdEraActorSheet.#onOpenRace,
-            removeRace: ThirdEraActorSheet.#onRemoveRace
+            removeRace: ThirdEraActorSheet.#onRemoveRace,
+            openClass: ThirdEraActorSheet.#onOpenClass,
+            removeClass: ThirdEraActorSheet.#onRemoveClass,
+            addClassLevel: ThirdEraActorSheet.#onAddClassLevel,
+            removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel,
+            addHpAdjustment: ThirdEraActorSheet.#onAddHpAdjustment,
+            removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment,
+            removeGrantedSkill: ThirdEraActorSheet.#onRemoveGrantedSkill,
+            rollHitDie: ThirdEraActorSheet.#onRollHitDie
         },
         window: {
             controls: [
@@ -79,6 +87,88 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             this._focusedInputName = null;
         }
+
+        // Attach change listeners for level history HP inputs (not form-bound)
+        this.element.querySelectorAll("input[data-level-hp-index]").forEach(input => {
+            input.addEventListener("change", async (event) => {
+                const index = parseInt(event.target.dataset.levelHpIndex);
+                const value = Math.max(0, parseInt(event.target.value) || 0);
+                const history = foundry.utils.deepClone(this.actor.system.levelHistory);
+                if (history[index]) {
+                    history[index].hpRolled = value;
+                    await this.actor.update({ "system.levelHistory": history });
+                }
+            });
+        });
+
+        // Attach change listeners for skill rank inputs (embedded items, not form-bound)
+        this.element.querySelectorAll("input[data-skill-item-id]").forEach(input => {
+            input.addEventListener("change", async (event) => {
+                const itemId = event.target.dataset.skillItemId;
+                const skill = this.actor.items.get(itemId);
+                if (!skill) return;
+                const maxRanks = parseFloat(event.target.dataset.skillMaxRanks) || 999;
+                let value = parseFloat(event.target.value) || 0;
+                value = Math.max(0, Math.min(value, maxRanks));
+                // Round to nearest 0.5
+                value = Math.round(value * 2) / 2;
+                await skill.update({ "system.ranks": value });
+            });
+        });
+
+        // Attach dragstart listeners for hotbar macro support
+        this.element.querySelectorAll("[data-drag-type]").forEach(el => {
+            el.addEventListener("dragstart", (event) => {
+                const dragType = el.dataset.dragType;
+                const itemId = el.closest("[data-item-id]")?.dataset.itemId;
+                const item = this.actor.items.get(itemId);
+                if (!item) return;
+                const dragData = {
+                    type: "ThirdEraRoll",
+                    rollType: dragType,
+                    actorId: this.actor.id,
+                    itemId: itemId,
+                    itemName: item.name,
+                    sceneId: canvas.scene?.id ?? null,
+                    tokenId: this.token?.id ?? null
+                };
+                event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+            });
+        });
+
+        // Attach change listener for header HP input (not form-bound, avoids duplicate name)
+        const headerHpInput = this.element.querySelector("input[data-header-hp]");
+        if (headerHpInput) {
+            headerHpInput.addEventListener("change", async (event) => {
+                const value = Math.max(0, parseInt(event.target.value) || 0);
+                await this.actor.update({ "system.attributes.hp.value": value });
+            });
+        }
+
+        // Context menu on race name
+        new ContextMenu(this.element, ".race-name[data-action='openRace']", [
+            {
+                name: "Remove Race",
+                icon: '<i class="fas fa-trash"></i>',
+                callback: async () => {
+                    const race = this.actor.items.find(i => i.type === "race");
+                    if (race) await race.delete();
+                }
+            }
+        ], { jQuery: false });
+
+        // Attach change listeners for HP adjustment inputs (not form-bound)
+        this.element.querySelectorAll("input[data-hp-adj-index]").forEach(input => {
+            input.addEventListener("change", async (event) => {
+                const index = parseInt(event.target.dataset.hpAdjIndex);
+                const field = event.target.dataset.hpAdjField; // "value" or "label"
+                const adjustments = foundry.utils.deepClone(this.actor.system.attributes.hp.adjustments);
+                if (adjustments[index]) {
+                    adjustments[index][field] = field === "value" ? (parseInt(event.target.value) || 0) : event.target.value;
+                    await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
+                }
+            });
+        });
     }
 
     /** @override */
@@ -99,33 +189,138 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             armorTypes: CONFIG.THIRDERA?.armorTypes || {},
             sizes: CONFIG.THIRDERA?.sizes || {},
             weaponHandedness: CONFIG.THIRDERA?.weaponHandedness || {},
-            weaponHand: CONFIG.THIRDERA?.weaponHand || {}
+            weaponHand: CONFIG.THIRDERA?.weaponHand || {},
+            hitDice: CONFIG.THIRDERA?.hitDice || {},
+            babProgressions: CONFIG.THIRDERA?.babProgressions || {},
+            saveProgressions: CONFIG.THIRDERA?.saveProgressions || {}
         };
 
         // Ensure tabs state exists
-        const tabs = this.tabGroups || { primary: "description" };
+        if (!this.tabGroups.abilities) this.tabGroups.abilities = "scores";
+        const tabs = this.tabGroups;
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
-        // Use effective score (base + racial) for characters; fall back to value for NPCs
         const dexScore = systemData.abilities.dex.effective ?? systemData.abilities.dex.value;
         const uncappedDexMod = Math.floor((dexScore - 10) / 2);
+
+        // Determine why it's capped (armor, load, or both)
+        let capReason = "armor";
+        const loadMaxDex = systemData.loadEffects?.maxDex;
+        if (loadMaxDex !== null && loadMaxDex !== undefined) {
+            // Find the most restrictive armor max dex
+            let armorMaxDex = null;
+            for (const item of actor.items) {
+                if (item.type === "armor" && item.system.equipped === "true" && item.system.armor.type !== "shield") {
+                    const m = item.system.armor.maxDex;
+                    if (m !== null) armorMaxDex = (armorMaxDex === null) ? m : Math.min(armorMaxDex, m);
+                }
+            }
+
+            if (armorMaxDex === null || loadMaxDex < armorMaxDex) {
+                capReason = "load";
+            } else if (loadMaxDex === armorMaxDex) {
+                capReason = "both";
+            }
+        }
+
         const dexCap = {
             isCapped: systemData.abilities.dex.mod < uncappedDexMod,
-            uncappedMod: uncappedDexMod
+            isOverloaded: systemData.loadEffects?.load === "overload",
+            uncappedMod: uncappedDexMod,
+            maxDex: systemData.abilities.dex.armorMaxDex,
+            reason: capReason
         };
 
         // Compute speed reduction display info
-        // speed.value is already the effective (possibly reduced) speed from prepareDerivedData
-        // Recover the base speed from the source data to detect reduction
-        const baseSpeed = actor._source.system.attributes.speed.value;
-        const speedInfo = {
-            isReduced: systemData.attributes.speed.value < baseSpeed,
-            baseSpeed
-        };
+        const speedInfo = systemData.attributes.speed.info || { reduced: false, baseSpeed: systemData.attributes.speed.value, reason: null };
+
+        // Compute per-class level counts from derived data and augment class items
+        const classLevelCounts = systemData.details.classLevels || {};
+        for (const cls of items.classes) {
+            cls.derivedLevels = classLevelCounts[cls.id] || 0;
+            // Attach granted features for this class (for Classes tab display)
+            cls.grantedFeatures = (systemData.grantedFeaturesByClass?.get(cls.id) || [])
+                .map(f => ({
+                    featName: f.featName,
+                    grantLevel: f.grantLevel,
+                    scalingValue: f.scalingValue
+                }));
+        }
+
+        // Filter equipped items for Combat tab
+        const equippedWeapons = items.weapons.filter(w =>
+            w.system.equipped === "primary" || w.system.equipped === "offhand"
+        );
+        const equippedArmor = items.armor.filter(a => a.system.equipped === "true");
+
+        // Compute class summary for header display
+        const classSummary = items.classes
+            .filter(c => c.derivedLevels > 0)
+            .map(c => `${c.name} ${c.derivedLevels}`)
+            .join(" / ");
+        const totalLevel = systemData.details.totalLevel ?? systemData.details.level;
+
+        // Prepare level history display data for Classes tab
+        const hpBreakdown = systemData.attributes.hp.hpBreakdown || [];
+        const levelHistory = (systemData.levelHistory || []).map((entry, i) => {
+            const cls = actor.items.get(entry.classItemId);
+            const bp = hpBreakdown[i];
+            return {
+                index: i,
+                characterLevel: i + 1,
+                className: cls?.name ?? "Unknown",
+                hitDie: cls?.system.hitDie ?? "?",
+                hpRolled: entry.hpRolled,
+                conMod: bp?.conMod ?? 0,
+                subtotal: bp?.subtotal ?? 0
+            };
+        });
 
         // Enrich HTML biography
         const enriched = {
-            biography: await TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
+            biography: await foundry.applications.ux.TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
+        };
+
+        // Compute HP status for header colorization
+        // Compute HP status for header colorization
+        const hpCurrent = systemData.attributes.hp.value;
+        const hpMax = systemData.attributes.hp.max;
+        const hpStatus = hpCurrent >= hpMax ? "hp-full" : (hpCurrent >= hpMax * 0.5 ? "hp-warning" : "hp-danger");
+
+        // Split granted features by type
+        const grantedFeatures = systemData.grantedFeatures || [];
+        const grantedFeats = grantedFeatures.filter(f => f.type === 'feat');
+        const grantedClassFeatures = grantedFeatures.filter(f => f.type !== 'feat');
+
+        // Compute encumbrance display info
+        const inv = systemData.inventory || { totalWeight: 0, capacity: { light: 0, medium: 0, heavy: 1, metadata: { baseMaxLoad: 0, sizeMod: 1 } }, load: "light" };
+        const heavyCap = inv.capacity.heavy || 1;
+        const encumbrancePercent = Math.min((inv.totalWeight / heavyCap) * 100, 100);
+        const encumbranceMarkers = {
+            light: (inv.capacity.light / heavyCap) * 100,
+            medium: (inv.capacity.medium / heavyCap) * 100
+        };
+
+        // Format breakdown display
+        const meta = inv.capacity.metadata || { baseMaxLoad: 0, sizeMod: 1 };
+        const str = systemData.abilities.str.effective;
+        const sizeLabel = systemData.details.size || "Medium";
+        const breakdown = {
+            light: {
+                label: "THIRDERA.Inventory.Light",
+                value: inv.capacity.light,
+                calculation: `1/3 of ${inv.capacity.heavy} lbs.`
+            },
+            medium: {
+                label: "THIRDERA.Inventory.Medium",
+                value: inv.capacity.medium,
+                calculation: `2/3 of ${inv.capacity.heavy} lbs.`
+            },
+            heavy: {
+                label: "THIRDERA.Inventory.Heavy",
+                value: inv.capacity.heavy,
+                calculation: `Base ${meta.baseMaxLoad} lbs. (Str ${str}) × ${meta.sizeMod} (${sizeLabel})`
+            }
         };
 
         return {
@@ -137,9 +332,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             ...config,
             config,
             tabs,
-            enriched,
             dexCap,
             speedInfo,
+            inventory: inv,
+            encumbrancePercent,
+            encumbranceMarkers,
+            encumbranceBreakdown: breakdown,
+            hpStatus,
+            classSummary,
+            totalLevel,
+            equippedWeapons,
+            equippedArmor,
+            levelHistory,
+            skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
+            grantedSkills: systemData.grantedSkills || [],
+            grantedFeatures,
+            grantedFeats,
+            grantedClassFeatures,
             editable: this.isEditable
         };
     }
@@ -155,7 +364,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const equipment = [];
         const spells = [];
         const feats = [];
+        const classFeatures = [];
         const skills = [];
+        const classes = [];
         let race = null;
 
         for (const item of items) {
@@ -165,11 +376,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             else if (item.type === 'equipment') equipment.push(itemData);
             else if (item.type === 'spell') spells.push(itemData);
             else if (item.type === 'feat') feats.push(itemData);
+            else if (item.type === 'feature') classFeatures.push(itemData);
             else if (item.type === 'skill') skills.push(itemData);
             else if (item.type === 'race' && !race) race = itemData;
+            else if (item.type === 'class') classes.push(itemData);
         }
 
-        return { weapons, armor, equipment, spells, feats, skills, race };
+        skills.sort((a, b) => a.name.localeCompare(b.name));
+        classFeatures.sort((a, b) => a.name.localeCompare(b.name));
+        feats.sort((a, b) => a.name.localeCompare(b.name));
+
+        return { weapons, armor, equipment, spells, feats, classFeatures, skills, race, classes };
     }
 
     /**
@@ -184,6 +401,40 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 await existing.delete();
             }
         }
+
+        // If this class already exists on the actor, add a level instead of duplicating
+        if (item.type === "class") {
+            const itemName = item.name;
+            const existing = this.actor.items.find(i => i.type === "class" && i.name === itemName);
+            if (existing) {
+                const history = [...(this.actor.system.levelHistory || [])];
+                history.push({ classItemId: existing.id, hpRolled: 0 });
+                await this.actor.update({ "system.levelHistory": history });
+                return false;
+            }
+        }
+
+        // If a skill is dropped onto the granted-skills zone, add to grantedSkills instead of embedding
+        if (item.type === "skill") {
+            const dropTarget = event.target.closest("[data-drop-zone='granted-skills']");
+            if (dropTarget) {
+                const skillKey = item.system?.key;
+                if (!skillKey) {
+                    ui.notifications.warn(`${item.name} has no skill key set — set one on the skill's Details tab first.`);
+                    return false;
+                }
+                const current = [...(this.actor.system.grantedSkills || [])];
+                if (current.some(e => e.key === skillKey)) {
+                    ui.notifications.info(`${item.name} is already a GM-granted skill for ${this.actor.name}.`);
+                    return false;
+                }
+                current.push({ key: skillKey, name: item.name });
+                current.sort((a, b) => a.name.localeCompare(b.name));
+                await this.actor.update({ "system.grantedSkills": current });
+                return false;
+            }
+        }
+
         const result = await super._onDropItem(event, item);
 
         // When a race is dropped, set the actor's size and speed to match
@@ -194,6 +445,36 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     "system.details.size": raceData.size,
                     "system.attributes.speed.value": raceData.speed
                 });
+            }
+        }
+
+        // When a new class is dropped, add first level to levelHistory and auto-populate skills
+        if (item.type === "class" && result) {
+            const created = Array.isArray(result) ? result[0] : result;
+            if (created?.id) {
+                const history = [...(this.actor.system.levelHistory || [])];
+                history.push({ classItemId: created.id, hpRolled: 0 });
+                await this.actor.update({ "system.levelHistory": history });
+
+                // Auto-populate class skills that the actor doesn't already have
+                const classSkills = created.system?.classSkills || [];
+                const existingSkillKeys = new Set();
+                for (const actorItem of this.actor.items) {
+                    if (actorItem.type === "skill" && actorItem.system.key) {
+                        existingSkillKeys.add(actorItem.system.key);
+                    }
+                }
+                const toCreate = [];
+                for (const entry of classSkills) {
+                    if (existingSkillKeys.has(entry.key)) continue;
+                    const sourceSkill = game.items.find(i => i.type === "skill" && i.system.key === entry.key);
+                    if (sourceSkill) {
+                        toCreate.push(sourceSkill.toObject());
+                    }
+                }
+                if (toCreate.length) {
+                    await this.actor.createEmbeddedDocuments("Item", toCreate);
+                }
             }
         }
 
@@ -320,9 +601,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @this {ThirdEraActorSheet}
      */
     static async #onActorDeleteHeader(event, target) {
-        const confirm = await Dialog.confirm({
-            title: "Delete Actor",
-            content: `<h4>Are you sure you want to delete ${this.actor.name}?</h4>`
+        const confirm = await foundry.applications.api.DialogV2.confirm({
+            window: { title: "Delete Actor" },
+            content: `<h4>Are you sure you want to delete ${this.actor.name}?</h4>`,
+            rejectClose: false,
+            modal: true
         });
         if (confirm) {
             await this.actor.delete();
@@ -343,6 +626,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!item) return;
 
         const equipping = item.system.equipped !== "true";
+
+        // Equipment items: simple toggle, no slot/size logic
+        if (item.type === "equipment") {
+            return await item.update({ "system.equipped": equipping ? "true" : "false" });
+        }
+
         if (!equipping) {
             // Unequipping — just toggle off
             return await item.update({ "system.equipped": "false" });
@@ -520,6 +809,135 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
+     * Handle opening an embedded class item sheet
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenClass(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const cls = this.actor.items.get(itemId);
+        if (cls) {
+            cls.sheet.render({ force: true });
+        }
+    }
+
+    /**
+     * Handle removing an embedded class item
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveClass(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const cls = this.actor.items.get(itemId);
+        if (cls) {
+            // Remove levelHistory entries for this class
+            const history = (this.actor.system.levelHistory || []).filter(e => e.classItemId !== itemId);
+            await this.actor.update({ "system.levelHistory": history });
+            await cls.delete();
+        }
+    }
+
+    /**
+     * Handle adding a level to an existing class
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddClassLevel(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const cls = this.actor.items.get(itemId);
+        if (cls) {
+            const history = [...(this.actor.system.levelHistory || [])];
+            history.push({ classItemId: cls.id, hpRolled: 0 });
+            await this.actor.update({ "system.levelHistory": history });
+        }
+    }
+
+    /**
+     * Handle removing the most recent level of a class (with confirmation)
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveClassLevel(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const cls = this.actor.items.get(itemId);
+        if (!cls) return;
+
+        const classLevels = (this.actor.system.details.classLevels || {})[itemId] || 0;
+        if (classLevels <= 0) return;
+
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+            window: { title: `Remove ${cls.name} Level` },
+            content: `<p>Remove one level of ${cls.name} from ${this.actor.name}? (${classLevels} → ${classLevels - 1})</p>`,
+            rejectClose: false,
+            modal: true
+        });
+        if (!confirmed) return;
+
+        // Remove the last levelHistory entry for this class
+        const history = [...(this.actor.system.levelHistory || [])];
+        const lastIndex = history.findLastIndex(e => e.classItemId === itemId);
+        if (lastIndex >= 0) {
+            history.splice(lastIndex, 1);
+            await this.actor.update({ "system.levelHistory": history });
+        }
+    }
+
+    /**
+     * Handle adding an HP adjustment entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddHpAdjustment(event, target) {
+        const adjustments = [...(this.actor.system.attributes.hp.adjustments || [])];
+        adjustments.push({ value: 0, label: "Misc" });
+        await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
+    }
+
+    /**
+     * Handle removing an HP adjustment entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveHpAdjustment(event, target) {
+        const index = parseInt(target.dataset.adjIndex);
+        const adjustments = [...(this.actor.system.attributes.hp.adjustments || [])];
+        if (index >= 0 && index < adjustments.length) {
+            adjustments.splice(index, 1);
+            await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
+        }
+    }
+
+    /**
+     * Handle rolling a hit die for a level history entry (only when hpRolled is 0)
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRollHitDie(event, target) {
+        const hitDie = target.dataset.hitDie;
+        const index = parseInt(target.dataset.levelIndex);
+        if (!hitDie || isNaN(index)) return;
+
+        const history = foundry.utils.deepClone(this.actor.system.levelHistory);
+        if (!history[index] || history[index].hpRolled !== 0) return;
+
+        const roll = await new Roll(`1${hitDie}`).evaluate();
+        await roll.toMessage({
+            speaker: ChatMessage.implementation.getSpeaker({ actor: this.actor }),
+            flavor: `${this.actor.name} rolls HP for level ${index + 1}`
+        });
+
+        history[index].hpRolled = roll.total;
+        await this.actor.update({ "system.levelHistory": history });
+    }
+
+    /**
      * Handle tab changes
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
@@ -537,9 +955,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         nav.querySelectorAll('.item').forEach(t => t.classList.remove('active'));
         target.classList.add('active');
 
-        // Show the corresponding tab content
+        // Show the corresponding tab/subtab content
         const body = this.element.querySelector('.sheet-body');
-        body.querySelectorAll(`.tab[data-group="${group}"]`).forEach(t => t.classList.remove('active'));
-        body.querySelector(`.tab[data-group="${group}"][data-tab="${tab}"]`)?.classList.add('active');
+        body.querySelectorAll(`.tab[data-group="${group}"], .subtab[data-group="${group}"]`).forEach(t => t.classList.remove('active'));
+        (body.querySelector(`.tab[data-group="${group}"][data-tab="${tab}"]`) ||
+            body.querySelector(`.subtab[data-group="${group}"][data-tab="${tab}"]`))?.classList.add('active');
+    }
+
+    /**
+     * Handle removing a GM-granted skill
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveGrantedSkill(event, target) {
+        const skillKey = target.dataset.skillKey;
+        if (!skillKey) return;
+        const current = (this.actor.system.grantedSkills || []).filter(e => e.key !== skillKey);
+        await this.actor.update({ "system.grantedSkills": current });
     }
 }

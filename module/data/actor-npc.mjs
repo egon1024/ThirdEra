@@ -1,5 +1,6 @@
 const { HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
+import { getCarryingCapacity, getLoadStatus } from "./_encumbrance-helpers.mjs";
 
 /**
  * Data model for D&D 3.5 NPC actors
@@ -95,7 +96,15 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             }),
 
             // Biography/Description
-            biography: new HTMLField({ required: true, blank: true })
+            biography: new HTMLField({ required: true, blank: true }),
+
+            // Currency
+            currency: new SchemaField({
+                pp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Platinum (pp)" }),
+                gp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Gold (gp)" }),
+                sp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Silver (sp)" }),
+                cp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Copper (cp)" })
+            })
         };
     }
 
@@ -105,11 +114,35 @@ export class NPCData extends foundry.abstract.TypeDataModel {
     prepareDerivedData() {
         // Calculate ability modifiers
         for (const [key, ability] of Object.entries(this.abilities)) {
+            ability.effective = ability.value; // NPCs usually don't have racial items
             ability.mod = Math.floor((ability.value - 10) / 2);
         }
 
-        // Apply armor max-Dex cap to Dex modifier before any derived calculations
-        const effectiveMaxDex = getEffectiveMaxDex(this);
+        // Calculate inventory weight and load early so it can affect Dex and Speed
+        let totalWeight = 0;
+        for (const item of this.parent.items) {
+            const weight = item.system.weight || 0;
+            const quantity = item.system.quantity || 1;
+            totalWeight += weight * quantity;
+        }
+
+        // Add currency weight if setting enabled
+        const trackCoinWeight = game.settings.get("thirdera", "currencyWeight");
+        if (trackCoinWeight) {
+            const c = this.currency;
+            const totalCoins = (c.pp || 0) + (c.gp || 0) + (c.sp || 0) + (c.cp || 0);
+            if (totalCoins > 0) {
+                totalWeight += Math.floor(totalCoins / 50);
+            }
+        }
+
+        const capacity = getCarryingCapacity(this.abilities.str.value, this.details.size);
+        const load = getLoadStatus(totalWeight, capacity);
+        const loadEffects = getLoadEffects(load);
+        this.loadEffects = loadEffects;
+
+        // Apply armor AND load max-Dex cap to Dex modifier before any derived calculations
+        const effectiveMaxDex = getEffectiveMaxDex(this, loadEffects.maxDex);
         applyMaxDex(this, effectiveMaxDex);
 
         // Calculate initiative
@@ -146,6 +179,12 @@ export class NPCData extends foundry.abstract.TypeDataModel {
         computeAC(this);
 
         // Apply armor speed reduction (medium/heavy armor)
-        computeSpeed(this);
+        this.attributes.speed.info = computeSpeed(this, this.loadEffects);
+
+        this.inventory = {
+            totalWeight,
+            capacity,
+            load
+        };
     }
 }

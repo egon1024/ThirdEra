@@ -37,11 +37,60 @@
             "spell": "Spell",
             "feat": "Feat",
             "skill": "Skill",
-            "race": "Race"
+            "race": "Race",
+            "class": "Class"
         },
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"
+        },
+        "Skills": {
+            "classSkill": "Class Skill",
+            "crossClassSkill": "Cross-Class Skill",
+            "skillPoints": "Skill Points",
+            "available": "Available",
+            "spent": "Spent",
+            "remaining": "Remaining",
+            "maxRanks": "Max Ranks",
+            "forbidden": "Forbidden",
+            "exclusive": "Exclusive",
+            "excludedByRace": "Excluded by race",
+            "exclusiveRequiresClass": "Exclusive — requires a class that grants this skill",
+            "gmGranted": "GM-Granted"
+        },
+        "Features": {
+            "classFeatures": "Class Features",
+            "scalingTable": "Scaling Table",
+            "grantLevel": "Grant Level",
+            "noFeatures": "No class features assigned"
+        },
+        "Settings": {
+            "CurrencyWeight": {
+                "Name": "Track Currency Weight",
+                "Hint": "If enabled, every 50 coins will add 1 lb to the total weight (D&D 3.5 standard)."
+            }
+        },
+        "Inventory": {
+            "TotalWeight": "Total Weight",
+            "CarryingCapacity": "Carrying Capacity",
+            "Load": "Load",
+            "Light": "Light",
+            "Medium": "Medium",
+            "Heavy": "Heavy",
+            "Overload": "Overload",
+            "Quantity": "Quantity",
+            "Weight": "Weight",
+            "Lbs": "lbs."
+        },
+        "Currency": {
+            "pp": "Platinum (pp)",
+            "gp": "Gold (gp)",
+            "sp": "Silver (sp)",
+            "cp": "Copper (cp)",
+            "ppAbbr": "pp",
+            "gpAbbr": "gp",
+            "spAbbr": "sp",
+            "cpAbbr": "cp"
         }
     },
     "TYPES": {
@@ -52,7 +101,9 @@
             "equipment": "Equipment",
             "feat": "Feat",
             "skill": "Skill",
-            "race": "Race"
+            "race": "Race",
+            "class": "Class",
+            "feature": "Class Feature"
         },
         "Actor": {
             "character": "Character",

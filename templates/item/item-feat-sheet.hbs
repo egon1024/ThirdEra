@@ -16,17 +16,19 @@
 
     <section class="sheet-body">
         {{!-- Description Tab --}}
-        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary" data-tab="description">
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
             <div class="editor-box">
-                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}" value="{{system.description}}"
-                    toggled="false">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
                     {{{enriched.description}}}
                 </prose-mirror>
             </div>
         </div>
 
         {{!-- Details Tab --}}
-        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary" data-tab="details">
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
             <div class="form-group">
                 <label>Feat Type</label>
                 <input type="text" name="system.type" value="{{system.type}}"
@@ -52,6 +54,8 @@
                     {{{enriched.special}}}
                 </prose-mirror>
             </div>
+
+            {{> systems/thirdera/templates/partials/scaling-table.hbs}}
         </div>
     </section>
 </form>

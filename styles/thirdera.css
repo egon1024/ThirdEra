@@ -33,6 +33,16 @@
   /* Status indicators */
   --color-modified: #b8860b;
   --color-equipped: #2d8a4e;
+  --color-hp-full: #c8e6c9;
+  --color-hp-warning: #fff3c4;
+  --color-hp-danger: #f8c4c4;
+  --color-danger: #d61400;
+
+  /* Popups / Dropdowns */
+  --color-popup-bg: #f4e8d3;
+  --color-popup-text: #1a1a1a;
+  --color-popup-border: #c4a882;
+  --color-popup-hover-bg: #e6d5b8;
 
   /* Borders */
   --color-border-input: #c4a882;
@@ -55,12 +65,56 @@
   font-family: var(--font-family);
 }
 
+.thirdera form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .thirdera .window-content {
   height: 100%;
   padding: 5px;
-  overflow-y: scroll;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
   background: var(--color-bg-parchment);
   color: var(--color-text-primary);
+}
+
+
+
+/* Window controls dropdown (three-dot menu) */
+.thirdera .controls-dropdown {
+  background: var(--color-popup-bg);
+  border: 1px solid var(--color-popup-border);
+}
+
+.thirdera .controls-dropdown .header-control>button {
+  color: var(--color-popup-text);
+}
+
+.thirdera .controls-dropdown .header-control>button:hover {
+  background: var(--color-popup-hover-bg);
+  color: var(--color-hover);
+}
+
+/* Context menus (right-click menus) */
+.thirdera #context-menu,
+.thirdera~#context-menu {
+  background: var(--color-popup-bg);
+  border: 1px solid var(--color-popup-border);
+  color: var(--color-popup-text);
+}
+
+.thirdera #context-menu li,
+.thirdera~#context-menu li {
+  color: var(--color-popup-text);
+}
+
+.thirdera #context-menu li:hover,
+.thirdera~#context-menu li:hover {
+  background: var(--color-popup-hover-bg);
+  color: var(--color-hover);
 }
 
 .thirdera h1,
@@ -196,6 +250,35 @@
   display: block;
 }
 
+/* Subtabs (nested tab groups) */
+.thirdera .subtabs {
+  flex: 0;
+  border-bottom: 1px solid var(--color-border-divider);
+  background: transparent;
+  font-size: var(--font-size-label);
+  padding: 0 4px;
+}
+
+.thirdera .subtabs .item {
+  color: var(--color-text-tab-inactive);
+  font-size: var(--font-size-label);
+  padding: 4px 10px;
+}
+
+.thirdera .subtabs .item.active {
+  color: var(--color-text-primary);
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-character-accent);
+}
+
+.thirdera .subtab {
+  display: none;
+}
+
+.thirdera .subtab.active {
+  display: block;
+}
+
 .thirdera .grid {
   display: grid;
   grid-column-gap: 10px;
@@ -210,6 +293,10 @@
 
 .thirdera .grid-4col {
   grid-template-columns: repeat(4, 1fr);
+}
+
+.thirdera .grid-5col {
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .thirdera .resource {
@@ -229,6 +316,52 @@
   width: 100%;
   height: 28px;
   margin-top: 2px;
+}
+
+/* Header HP display */
+.thirdera .header-hp-display {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.thirdera .header-hp-current {
+  width: 42px;
+  height: 28px;
+  text-align: center;
+  font-size: var(--font-size-value);
+  font-weight: bold;
+  padding: 1px 2px;
+}
+
+/* HP status background coloring (header and combat tab) */
+.thirdera input.hp-full {
+  background: var(--color-hp-full);
+}
+
+.thirdera input.hp-warning {
+  background: var(--color-hp-warning);
+}
+
+.thirdera input.hp-danger {
+  background: var(--color-hp-danger);
+}
+
+.thirdera input.hp-full:focus,
+.thirdera input.hp-warning:focus,
+.thirdera input.hp-danger:focus {
+  background: var(--color-bg-input);
+}
+
+.thirdera .header-hp-sep {
+  font-size: var(--font-size-value);
+  color: var(--color-text-muted);
+}
+
+.thirdera .header-hp-max {
+  font-size: var(--font-size-value);
+  font-weight: bold;
 }
 
 /* Dynamic Editor Sizing */
@@ -345,18 +478,11 @@
   font-size: var(--font-size-value);
 }
 
-.thirdera .abilities-grid .ability-mod.dex-capped {
+.thirdera .abilities-grid .ability-mod.dex-capped,
+.thirdera .speed-reduced {
   color: var(--color-modified);
-}
-
-.thirdera .abilities-grid .ability-check {
-  color: var(--color-character-accent);
-}
-
-.thirdera .abilities-grid .ability-check:hover {
-  color: var(--color-hover);
-  text-shadow: 0 0 10px var(--color-hover);
-  cursor: pointer;
+  font-weight: bold;
+  cursor: help;
 }
 
 .thirdera .dex-cap-note {
@@ -369,12 +495,24 @@
 /* Reusable indicator for values modified by external factors */
 .thirdera .value-modified {
   color: var(--color-modified);
+  cursor: help;
 }
 
 .thirdera .modified-note {
   font-size: var(--font-size-note);
   font-weight: normal;
   color: var(--color-modified);
+  cursor: help;
+}
+
+/* Overloaded state (Red) */
+.thirdera .speed-overloaded,
+.thirdera .modified-note.speed-overloaded,
+.thirdera .dex-overloaded,
+.thirdera .ability-mod.dex-overloaded,
+.thirdera .dex-cap-note.dex-overloaded {
+  color: var(--color-danger) !important;
+  font-weight: bold;
   cursor: help;
 }
 
@@ -712,16 +850,17 @@
 }
 
 .thirdera .items-list .item .item-controls {
-  flex: 0;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .thirdera .items-list .item .item-detail {
   font-size: var(--font-size-label);
   color: var(--color-text-muted);
-  margin-right: 10px;
+  white-space: nowrap;
 }
 
 .thirdera .items-list .item .item-controls a {
@@ -785,6 +924,30 @@
   width: 100%;
 }
 
+/* Checkbox groups — labels inline with checkboxes */
+.thirdera .checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.thirdera .checkbox-group label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.thirdera .checkbox-group input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--color-character-accent);
+}
+
 /* Race display in character header */
 .thirdera .race-name {
   cursor: pointer;
@@ -808,17 +971,6 @@
 .thirdera .race-name.race-empty:hover {
   color: var(--color-text-muted);
   text-decoration: none;
-}
-
-.thirdera .race-remove {
-  margin-left: 4px;
-  font-size: var(--font-size-note);
-  color: var(--color-text-faint);
-  cursor: pointer;
-}
-
-.thirdera .race-remove:hover {
-  color: var(--color-hover);
 }
 
 /* Race item sheet — ability adjustments grid */
@@ -846,7 +998,703 @@
   text-align: center;
 }
 
+/* Class display in character header */
+.thirdera .class-summary {
+  font-size: var(--font-size-value);
+  font-weight: bold;
+  color: var(--color-character-accent);
+}
+
+.thirdera .class-summary.class-empty {
+  color: var(--color-text-muted);
+  font-weight: normal;
+  font-style: italic;
+}
+
+.thirdera .level-display {
+  font-size: var(--font-size-value);
+  font-weight: bold;
+}
+
+/* Class list on character sheet */
+.thirdera .class-name-link {
+  cursor: pointer;
+  color: var(--color-character-accent);
+}
+
+.thirdera .class-name-link:hover {
+  color: var(--color-hover);
+  text-decoration: underline;
+}
+
+/* Class level add/remove buttons */
+.thirdera .class-level-add {
+  color: var(--color-character-accent);
+  cursor: pointer;
+}
+
+.thirdera .class-level-add:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .class-level-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .class-level-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+.thirdera .no-items {
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding: 4px 8px;
+}
+
+/* HP Adjustments */
+.thirdera .hp-adjustments-section {
+  margin: 4px 0 10px;
+  padding: 0 10px;
+}
+
+.thirdera .hp-adjustments-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.thirdera .hp-adjustments-title {
+  font-size: var(--font-size-label);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .hp-adj-add {
+  font-size: var(--font-size-note);
+  color: var(--color-character-accent);
+  cursor: pointer;
+}
+
+.thirdera .hp-adj-add:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .hp-adjustments-grid {
+  display: grid;
+  grid-template-columns: 1fr 60px 20px;
+  gap: 4px 8px;
+  align-items: center;
+}
+
+.thirdera .hp-adj-label-input {
+  font-size: var(--font-size-body);
+  padding: 1px 4px;
+}
+
+.thirdera .hp-adj-value-input {
+  width: 50px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+.thirdera .hp-adj-remove {
+  font-size: var(--font-size-note);
+  color: var(--color-text-faint);
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.thirdera .hp-adj-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+/* Level History grid */
+.thirdera .level-history-hp-total {
+  font-size: var(--font-size-body);
+  color: var(--color-text-light);
+}
+
+.thirdera .level-history-grid {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px 60px 50px 50px;
+  gap: 4px 8px;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.thirdera .level-history-col-header {
+  font-weight: bold;
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.thirdera .level-history-cell {
+  font-size: var(--font-size-body);
+  text-align: center;
+}
+
+.thirdera .level-history-level {
+  font-weight: bold;
+}
+
+.thirdera .level-history-class {
+  text-align: left;
+}
+
+.thirdera .level-history-subtotal {
+  font-weight: bold;
+}
+
+.thirdera .level-history-input {
+  width: 50px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+.thirdera .level-history-roll-hp {
+  cursor: pointer;
+  color: var(--color-character-accent);
+  font-weight: bold;
+}
+
+.thirdera .level-history-roll-hp:hover {
+  color: var(--color-hover);
+}
+
+/* Save base value (derived from classes) */
+.thirdera .saves-list .save .save-base {
+  flex: 0 0 60px;
+  margin: 0 10px;
+  text-align: center;
+  font-size: var(--font-size-body);
+}
+
+/* Skill point budget */
+.thirdera .skill-point-budget {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+}
+
+.thirdera .skill-point-budget .sp-label {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .skill-point-budget .sp-remaining {
+  font-weight: bold;
+  color: var(--color-equipped);
+}
+
+.thirdera .skill-point-budget .sp-remaining.sp-zero {
+  color: var(--color-text-muted);
+}
+
+/* Skill ranks input on actor sheet */
+.thirdera .skill-ranks-input {
+  width: 45px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+/* Class skill indicator */
+.thirdera .class-skill-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: var(--color-text-light);
+  background: var(--color-character-accent);
+  border-radius: 2px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* GM-granted skill indicator */
+.thirdera .granted-skill-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: var(--color-text-light);
+  background: var(--color-equipped);
+  border-radius: 2px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* GM-granted skills section on character sheet */
+.thirdera .granted-skills-section {
+  margin-bottom: 8px;
+  padding: 4px 6px;
+  border: 1px dashed var(--color-border-divider);
+  border-radius: 4px;
+}
+
+.thirdera .granted-skills-header {
+  font-size: var(--font-size-label);
+  margin: 0 0 4px 0;
+}
+
+.thirdera .granted-skills-hint {
+  font-weight: normal;
+  font-style: italic;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-note);
+}
+
+/* Cross-class skill visual treatment */
+.thirdera .cross-class-skill-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 16px;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: var(--color-text-muted);
+  background: var(--color-border-divider);
+  border-radius: 2px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.thirdera .skills-list .cross-class-skill h4 {
+  color: var(--color-text-muted);
+}
+
+/* Armor check penalty on skill row */
+.thirdera .skill-acp {
+  font-size: var(--font-size-label);
+  color: var(--color-modified);
+  font-weight: bold;
+}
+
+/* Skill reference lists (class skills on class sheet, excluded skills on race sheet) */
+.thirdera .skill-ref-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .skill-ref-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--color-border-divider);
+  font-size: var(--font-size-body);
+}
+
+.thirdera .skill-ref-name {
+  flex: 1;
+}
+
+.thirdera .skill-ref-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .skill-ref-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+/* Forbidden skill styling on character sheet */
+.thirdera .skills-list .skill-forbidden {
+  opacity: 0.5;
+}
+
+.thirdera .skill-forbidden-indicator {
+  color: var(--color-npc-accent);
+  font-size: var(--font-size-note);
+  margin-left: 4px;
+}
+
+.thirdera .skill-forbidden-label {
+  font-size: var(--font-size-label);
+  color: var(--color-npc-accent);
+  font-style: italic;
+}
+
+/* Draggable roll elements (hotbar macro support) */
+.thirdera [data-drag-type] {
+  cursor: grab;
+}
+
+.thirdera [data-drag-type]:active {
+  cursor: grabbing;
+}
+
 /* Rollable highlighting */
 .rollable:hover {
   cursor: pointer;
+}
+
+/* ---- Class Features ---- */
+
+/* Feature list on class item sheet */
+.thirdera .feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .feature-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--color-border-divider);
+  font-size: var(--font-size-body);
+}
+
+.thirdera .feature-level-badge {
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: var(--color-text-light);
+  background: var(--color-character-accent);
+  border-radius: 2px;
+  padding: 1px 4px;
+  white-space: nowrap;
+}
+
+.thirdera .feature-level-input {
+  width: 40px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+.thirdera .feature-name {
+  flex: 1;
+}
+
+.thirdera .feature-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .feature-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+/* Class-granted features on character sheet (Classes tab) */
+.thirdera .class-features-sublist {
+  list-style: none;
+  padding: 0 0 0 40px;
+  margin: 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .class-granted-features {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 4px;
+}
+
+.thirdera .class-granted-feature {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+}
+
+/* Scaling value display */
+.thirdera .feature-scaling-value {
+  font-size: var(--font-size-label);
+  color: var(--color-character-accent);
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* Source badge on Feats subtab */
+.thirdera .feature-source-badge {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Feats subtab section header */
+.thirdera .feats-section-header {
+  margin: 8px 0 4px;
+  padding: 3px 8px;
+  font-size: var(--font-size-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+/* Granted features list */
+.thirdera .granted-features-list .granted-feature {
+  background: var(--color-bg-input);
+}
+
+/* ---- Scaling Table (Feat sheet) ---- */
+
+.thirdera .scaling-section {
+  margin-top: 12px;
+}
+
+.thirdera .scaling-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thirdera .scaling-header .form-header {
+  margin: 0;
+}
+
+.thirdera .scaling-add {
+  font-size: var(--font-size-note);
+  color: var(--color-character-accent);
+  cursor: pointer;
+}
+
+.thirdera .scaling-add:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .scaling-grid {
+  display: grid;
+  grid-template-columns: 60px 1fr 20px;
+  gap: 4px 8px;
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.thirdera .scaling-col-header {
+  font-weight: bold;
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .scaling-level-input {
+  width: 50px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+.thirdera .scaling-value-input {
+  width: 100%;
+  font-size: var(--font-size-body);
+  padding: 1px 4px;
+}
+
+.thirdera .scaling-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .scaling-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+/* Inventory Footer (Currency & Encumbrance) */
+.thirdera .inventory-footer {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+.thirdera .currency-section {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.thirdera .inventory-footer .items-header {
+  margin-top: 0;
+}
+
+.thirdera .currency-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 5px;
+}
+
+.thirdera .currency-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.thirdera .currency-item label {
+  flex: 0 0 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: var(--font-size-note);
+  text-align: right;
+}
+
+.thirdera .currency-item input {
+  width: 100%;
+  text-align: center;
+}
+
+.thirdera .encumbrance-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.thirdera .encumbrance-details {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+}
+
+.thirdera .weight-label,
+.thirdera .load-label {
+  font-weight: bold;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
+
+.thirdera .weight-value,
+.thirdera .load-value {
+  font-weight: bold;
+  font-size: var(--font-size-value);
+}
+
+.thirdera .load-value.medium {
+  color: #d68100;
+}
+
+.thirdera .load-value.heavy {
+  color: #d64d00;
+}
+
+.thirdera .load-value.overload {
+  color: #d61400;
+}
+
+.thirdera .encumbrance-bar-container {
+  position: relative;
+  height: 20px;
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 3px;
+  margin: 5px 10px;
+  overflow: hidden;
+}
+
+.thirdera .encumbrance-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-equipped);
+  /* Default/Light */
+}
+
+.thirdera .encumbrance-bar.medium {
+  background: var(--color-modified);
+}
+
+.thirdera .encumbrance-bar.heavy {
+  background: var(--color-danger);
+}
+
+.thirdera .encumbrance-bar.overload {
+  background: #900;
+}
+
+.thirdera .encumbrance-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: var(--font-size-note);
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
+  pointer-events: none;
+}
+
+.thirdera .encumbrance-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+}
+
+.thirdera .encumbrance-marker:hover {
+  background: #fff;
+  width: 4px;
+  margin-left: -1px;
+}
+
+/* Encumbrance Breakdown */
+.thirdera .encumbrance-breakdown {
+  margin: 10px 10px 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border-dark);
+  font-size: var(--font-size-note);
+}
+
+.thirdera .breakdown-row {
+  display: grid;
+  grid-template-columns: 80px 80px 1fr;
+  gap: 10px;
+  padding: 2px 0;
+}
+
+.thirdera .breakdown-row.header {
+  font-weight: bold;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-size: calc(var(--font-size-note) - 1px);
+}
+
+.thirdera .breakdown-row .load-label {
+  font-weight: bold;
+}
+
+.thirdera .breakdown-row .load-calc {
+  color: var(--color-text-muted);
+  font-style: italic;
 }

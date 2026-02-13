@@ -1,4 +1,4 @@
-const { HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
+const { HTMLField, NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Race items
@@ -20,6 +20,11 @@ export class RaceData extends foundry.abstract.TypeDataModel {
                 wis: new NumberField({ required: true, integer: true, initial: 0, label: "Wisdom" }),
                 cha: new NumberField({ required: true, integer: true, initial: 0, label: "Charisma" })
             }),
+
+            excludedSkills: new ArrayField(new SchemaField({
+                key: new StringField({ required: true, blank: false, label: "Skill Key" }),
+                name: new StringField({ required: true, blank: false, label: "Skill Name" })
+            }), { label: "Excluded Skills" }),
 
             favoredClass: new StringField({ required: true, blank: true, initial: "", label: "Favored Class" })
         };

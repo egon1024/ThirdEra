@@ -1,4 +1,4 @@
-const { StringField, HTMLField } = foundry.data.fields;
+const { StringField, HTMLField, NumberField, SchemaField, ArrayField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Feat items
@@ -9,10 +9,17 @@ export class FeatData extends foundry.abstract.TypeDataModel {
         return {
             description: new HTMLField({ required: true, blank: true, label: "Description" }),
 
+            key: new StringField({ required: true, blank: true, initial: "", label: "Feat Key" }),
+
             type: new StringField({ required: true, blank: true, initial: "", label: "Feat Type" }), // General, Item Creation, Metamagic, etc.
             prerequisites: new StringField({ required: true, blank: true, initial: "", label: "Prerequisites" }),
             benefit: new HTMLField({ required: true, blank: true, label: "Benefit" }),
-            special: new HTMLField({ required: true, blank: true, label: "Special" })
+            special: new HTMLField({ required: true, blank: true, label: "Special" }),
+
+            scalingTable: new ArrayField(new SchemaField({
+                minLevel: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Min Level" }),
+                value: new StringField({ required: true, blank: true, initial: "", label: "Value" })
+            }), { label: "Scaling Table" })
         };
     }
 }

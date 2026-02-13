@@ -8,15 +8,14 @@
  */
 
 /**
- * Calculate the effective maximum Dex bonus imposed by equipped armor/shields.
- * Should be called early in prepareDerivedData() so dex.mod can be capped before
- * any derived calculations (initiative, reflex, skills, AC, etc.).
+ * Calculate the effective maximum Dex bonus imposed by equipped armor/shields AND load.
  *
- * @param {TypeDataModel} system  The actor's system data.
- * @returns {number|null}  The lowest maxDex across all equipped armor/shields, or null if unlimited.
+ * @param {TypeDataModel} system      The actor's system data.
+ * @param {number|null}   loadMaxDex  Max Dex cap from current encumbrance.
+ * @returns {number|null}  The lowest maxDex across all equipped armor/shields and load, or null if unlimited.
  */
-export function getEffectiveMaxDex(system) {
-    let effectiveMaxDex = null;
+export function getEffectiveMaxDex(system, loadMaxDex = null) {
+    let effectiveMaxDex = loadMaxDex;
 
     for (const item of system.parent.items) {
         if (item.type !== "armor") continue;
@@ -25,7 +24,7 @@ export function getEffectiveMaxDex(system) {
 
         const maxDex = item.system.armor.maxDex;
         if (maxDex !== null) {
-            effectiveMaxDex = effectiveMaxDex === null
+            effectiveMaxDex = (effectiveMaxDex === null)
                 ? maxDex
                 : Math.min(effectiveMaxDex, maxDex);
         }
@@ -44,6 +43,7 @@ export function getEffectiveMaxDex(system) {
  */
 export function applyMaxDex(system, effectiveMaxDex) {
     const dex = system.abilities.dex;
+    dex.armorMaxDex = effectiveMaxDex; // Store for breakdown display
     if (effectiveMaxDex !== null && dex.mod > effectiveMaxDex) {
         dex.mod = effectiveMaxDex;
     }
@@ -107,7 +107,11 @@ export function computeAC(system) {
         breakdown.push({ label: shieldName, value: shieldBonus });
     }
     if (dexMod !== 0) {
-        breakdown.push({ label: "Dex", value: dexMod });
+        // Label could mention capping if armorMaxDex is active
+        const label = system.abilities.dex.armorMaxDex !== null && system.abilities.dex.mod === system.abilities.dex.armorMaxDex
+            ? "Dex (Capped)"
+            : "Dex";
+        breakdown.push({ label, value: dexMod });
     }
     if (sizeMod !== 0) {
         breakdown.push({ label: "Size", value: sizeMod });
@@ -120,18 +124,30 @@ export function computeAC(system) {
 }
 
 /**
- * Compute effective speed based on equipped body armor.
- * SRD: medium/heavy armor reduces speed. Light armor and shields do not.
+ * Compute effective speed based on equipped body armor and load.
+ * SRD: medium/heavy armor AND medium/heavy load reduces speed.
  * Mutates `system.attributes.speed.value` to the effective speed.
  *
- * @param {TypeDataModel} system  The actor's system data.
- * @returns {{ reduced: boolean, baseSpeed: number, armorName: string|null }}
- *          Info for display purposes (passed via _prepareContext).
+ * @param {TypeDataModel} system       The actor's system data.
+ * @param {Object}        loadEffects  Penalties from getLoadEffects().
+ * @returns {{ reduced: boolean, baseSpeed: number, armorName: string|null, reason: string|null }}
+ *          Info for display purposes.
  */
-export function computeSpeed(system) {
+export function computeSpeed(system, loadEffects = null) {
     const baseSpeed = system.attributes.speed.value;
     let armorName = null;
+    let reductionReason = null;
 
+    // First check load-based reduction
+    if (loadEffects && loadEffects.speed30 < 30) {
+        const loadReducedSpeed = baseSpeed >= 30 ? loadEffects.speed30 : loadEffects.speed20;
+        if (loadReducedSpeed < baseSpeed) {
+            system.attributes.speed.value = loadReducedSpeed;
+            reductionReason = "Load";
+        }
+    }
+
+    // Then check armor-based reduction (takes the lower value)
     for (const item of system.parent.items) {
         if (item.type !== "armor") continue;
         if (item.system.equipped !== "true") continue;
@@ -139,24 +155,21 @@ export function computeSpeed(system) {
 
         const armorType = item.system.armor.type;
         if (armorType === "medium" || armorType === "heavy") {
-            // Use the armor's stored speed for the matching base speed
-            let reducedSpeed;
-            if (baseSpeed >= 30) {
-                reducedSpeed = item.system.speed.ft30;
-            } else {
-                reducedSpeed = item.system.speed.ft20;
-            }
-            if (reducedSpeed < baseSpeed) {
-                system.attributes.speed.value = reducedSpeed;
+            let armorReducedSpeed = (baseSpeed >= 30) ? item.system.speed.ft30 : item.system.speed.ft20;
+            if (armorReducedSpeed < system.attributes.speed.value) {
+                system.attributes.speed.value = armorReducedSpeed;
                 armorName = item.name;
+                reductionReason = item.name;
             }
-            break; // only one body armor can be equipped
+            break;
         }
     }
 
     return {
         reduced: system.attributes.speed.value < baseSpeed,
+        overloaded: system.attributes.speed.value === 0,
         baseSpeed,
-        armorName
+        armorName,
+        reason: reductionReason
     };
 }
