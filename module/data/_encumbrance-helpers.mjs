@@ -72,3 +72,19 @@ export function getLoadStatus(weight, thresholds) {
     if (weight <= thresholds.heavy) return "heavy";
     return "overload";
 }
+
+/**
+ * Get the mechanical penalties for a given load status.
+ * @param {string} load  The load status ("light", "medium", "heavy", "overload").
+ * @returns {{maxDex: number|null, acp: number, speed30: number, speed20: number}}
+ */
+export function getLoadEffects(load) {
+    const effects = {
+        light: { maxDex: null, acp: 0, speed30: 30, speed20: 20 },
+        medium: { maxDex: 3, acp: -3, speed30: 20, speed20: 15 },
+        heavy: { maxDex: 1, acp: -6, speed30: 20, speed20: 15 },
+        overload: { maxDex: 0, acp: -10, speed30: 0, speed20: 0 }
+    };
+    const result = effects[load] || effects.light;
+    return { ...result, load: load || "light" };
+}

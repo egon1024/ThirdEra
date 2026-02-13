@@ -69,9 +69,12 @@
                     <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}"
                         data-dtype="Number" placeholder="10" />
                     <span
-                        class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}">{{signedNumber
-                        ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span class="dex-cap-note"
-                            title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by armor">(max)</span>{{/if}}{{/if}}</span>
+                        class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isOverloaded}}dex-overloaded{{else}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}{{/if}}"
+                        {{#if (eq key 'dex' )}}{{#if
+                        @root.dexCap.isCapped}}title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by {{#if (eq @root.dexCap.reason 'both')}}armor and load{{else}}{{@root.dexCap.reason}}{{/if}} (Max Dex: {{#if (eq @root.dexCap.maxDex null)}}Unlimited{{else}}{{@root.dexCap.maxDex}}{{/if}})"
+                        {{/if}}{{/if}}>{{signedNumber
+                        ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span
+                            class="dex-cap-note {{#if @root.dexCap.isOverloaded}}dex-overloaded{{/if}}">(max)</span>{{/if}}{{/if}}</span>
                     <a class="ability-check rollable" data-action="abilityCheck" data-ability="{{key}}">
                         <i class="fas fa-dice-d20"></i>
                     </a>
@@ -93,11 +96,15 @@
                 </div>
                 <div class="stat-block">
                     <label>Speed</label>
-                    <div class="stat-value {{#if speedInfo.isReduced}}value-modified{{/if}}">
-                        <span>{{system.attributes.speed.value}} ft</span>
-                        {{#if speedInfo.isReduced}}
-                        <span class="modified-note"
-                            title="Base speed: {{speedInfo.baseSpeed}} ft — reduced by armor">(reduced)</span>
+                    <div class="stat-value {{#if speedInfo.reduced}}value-modified{{/if}}" {{#if
+                        speedInfo.reduced}}title="{{#if speedInfo.overloaded}}Overloaded! Maximum load exceeded — cannot move.{{else}}Reduced from {{speedInfo.baseSpeed}} ft by {{speedInfo.reason}}{{/if}}"
+                        {{/if}}>
+                        <span
+                            class="{{#if speedInfo.overloaded}}speed-overloaded{{else}}{{#if speedInfo.reduced}}speed-reduced{{/if}}{{/if}}">{{system.attributes.speed.value}}
+                            ft</span>
+                        {{#if speedInfo.reduced}}
+                        <span class="modified-note {{#if speedInfo.overloaded}}speed-overloaded{{/if}}">({{#if
+                            speedInfo.overloaded}}overloaded{{else}}reduced{{/if}})</span>
                         {{/if}}
                     </div>
                 </div>

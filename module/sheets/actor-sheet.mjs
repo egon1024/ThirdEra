@@ -200,22 +200,39 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const tabs = this.tabGroups;
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
-        // Use effective score (base + racial) for characters; fall back to value for NPCs
         const dexScore = systemData.abilities.dex.effective ?? systemData.abilities.dex.value;
         const uncappedDexMod = Math.floor((dexScore - 10) / 2);
+
+        // Determine why it's capped (armor, load, or both)
+        let capReason = "armor";
+        const loadMaxDex = systemData.loadEffects?.maxDex;
+        if (loadMaxDex !== null && loadMaxDex !== undefined) {
+            // Find the most restrictive armor max dex
+            let armorMaxDex = null;
+            for (const item of actor.items) {
+                if (item.type === "armor" && item.system.equipped === "true" && item.system.armor.type !== "shield") {
+                    const m = item.system.armor.maxDex;
+                    if (m !== null) armorMaxDex = (armorMaxDex === null) ? m : Math.min(armorMaxDex, m);
+                }
+            }
+
+            if (armorMaxDex === null || loadMaxDex < armorMaxDex) {
+                capReason = "load";
+            } else if (loadMaxDex === armorMaxDex) {
+                capReason = "both";
+            }
+        }
+
         const dexCap = {
             isCapped: systemData.abilities.dex.mod < uncappedDexMod,
-            uncappedMod: uncappedDexMod
+            isOverloaded: systemData.loadEffects?.load === "overload",
+            uncappedMod: uncappedDexMod,
+            maxDex: systemData.abilities.dex.armorMaxDex,
+            reason: capReason
         };
 
         // Compute speed reduction display info
-        // speed.value is already the effective (possibly reduced) speed from prepareDerivedData
-        // Recover the base speed from the source data to detect reduction
-        const baseSpeed = actor._source.system.attributes.speed.value;
-        const speedInfo = {
-            isReduced: systemData.attributes.speed.value < baseSpeed,
-            baseSpeed
-        };
+        const speedInfo = systemData.attributes.speed.info || { reduced: false, baseSpeed: systemData.attributes.speed.value, reason: null };
 
         // Compute per-class level counts from derived data and augment class items
         const classLevelCounts = systemData.details.classLevels || {};

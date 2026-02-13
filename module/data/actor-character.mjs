@@ -1,6 +1,6 @@
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
-import { getCarryingCapacity, getLoadStatus } from "./_encumbrance-helpers.mjs";
+import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
 
 /**
@@ -149,8 +149,31 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             ability.mod = Math.floor((ability.effective - 10) / 2);
         }
 
-        // Apply armor max-Dex cap to Dex modifier before any derived calculations
-        const effectiveMaxDex = getEffectiveMaxDex(this);
+        // Calculate inventory weight and load early so it can affect Dex, Speed, and Skills
+        let totalWeight = 0;
+        for (const item of this.parent.items) {
+            const weight = item.system.weight || 0;
+            const quantity = item.system.quantity || 1;
+            totalWeight += weight * quantity;
+        }
+
+        // Add currency weight if setting enabled
+        const trackCoinWeight = game.settings.get("thirdera", "currencyWeight");
+        if (trackCoinWeight) {
+            const c = this.currency;
+            const totalCoins = (c.pp || 0) + (c.gp || 0) + (c.sp || 0) + (c.cp || 0);
+            if (totalCoins > 0) {
+                totalWeight += Math.floor(totalCoins / 50);
+            }
+        }
+
+        const capacity = getCarryingCapacity(this.abilities.str.effective, this.details.size);
+        const load = getLoadStatus(totalWeight, capacity);
+        const loadEffects = getLoadEffects(load);
+        this.loadEffects = loadEffects; // Store for Speed and Skills calculation later
+
+        // Apply armor AND load max-Dex cap to Dex modifier before any derived calculations
+        const effectiveMaxDex = getEffectiveMaxDex(this, loadEffects.maxDex);
         applyMaxDex(this, effectiveMaxDex);
 
         // Derive class level counts from levelHistory
@@ -382,16 +405,36 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             sd.forbiddenReason = forbiddenReason;
 
             // Apply armor check penalty to skills flagged for it
-            let armorPenalty = 0;
+            // SRD: "If you are wearing armor and carrying a load, use the worse of the two check penalties"
+            let acpPenalty = 0;
             if (sd.armorCheckPenalty === "true") {
-                armorPenalty = totalArmorCheckPenalty;
+                acpPenalty = Math.min(totalArmorCheckPenalty, loadEffects.acp);
             }
-            sd.armorPenalty = armorPenalty;
+            sd.armorPenalty = acpPenalty;
 
-            // Recalculate total with armor penalty
+            // Recalculate total with armor/load penalty
             const abilityMod = this.abilities[sd.ability]?.mod || 0;
             const misc = sd.modifier?.misc || 0;
-            sd.modifier.total = abilityMod + ranks + misc + armorPenalty;
+            sd.modifier.total = abilityMod + ranks + misc + acpPenalty;
+
+            // Build skill breakdown for tooltips
+            sd.breakdown = [
+                { label: "Ability", value: abilityMod },
+                { label: "Ranks", value: ranks }
+            ];
+            if (misc !== 0) sd.breakdown.push({ label: "Misc", value: misc });
+            if (acpPenalty !== 0) {
+                let label = "Armor ACP";
+                if (loadEffects.acp < totalArmorCheckPenalty) {
+                    label = "Load ACP";
+                } else if (loadEffects.acp === totalArmorCheckPenalty && totalArmorCheckPenalty !== 0) {
+                    label = "Armor & Load ACP";
+                } else if (totalArmorCheckPenalty === 0 && loadEffects.acp !== 0) {
+                    label = "Load ACP";
+                }
+                sd.breakdown.push({ label, value: acpPenalty });
+            }
+            sd.modifier.breakdown_formatted = sd.breakdown.map(b => `${b.label}: ${b.value >= 0 ? "+" : ""}${b.value}`).join("\n");
 
             // Cross-class skills cost 2 points per rank, class skills cost 1
             // Forbidden skills don't count toward spent (shouldn't have ranks)
@@ -445,28 +488,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         computeAC(this);
 
         // Apply armor speed reduction (medium/heavy armor)
-        computeSpeed(this);
-
-        // Calculate inventory weight and load
-        let totalWeight = 0;
-        for (const item of this.parent.items) {
-            const weight = item.system.weight || 0;
-            const quantity = item.system.quantity || 1;
-            totalWeight += weight * quantity;
-        }
-
-        // Add currency weight if setting enabled
-        const trackCoinWeight = game.settings.get("thirdera", "currencyWeight");
-        if (trackCoinWeight) {
-            const c = this.currency;
-            const totalCoins = (c.pp || 0) + (c.gp || 0) + (c.sp || 0) + (c.cp || 0);
-            if (totalCoins > 0) {
-                totalWeight += Math.floor(totalCoins / 50);
-            }
-        }
-
-        const capacity = getCarryingCapacity(this.abilities.str.effective, this.details.size);
-        const load = getLoadStatus(totalWeight, capacity);
+        this.attributes.speed.info = computeSpeed(this, this.loadEffects);
 
         this.inventory = {
             totalWeight,

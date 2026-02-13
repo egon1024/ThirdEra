@@ -478,18 +478,11 @@
   font-size: var(--font-size-value);
 }
 
-.thirdera .abilities-grid .ability-mod.dex-capped {
+.thirdera .abilities-grid .ability-mod.dex-capped,
+.thirdera .speed-reduced {
   color: var(--color-modified);
-}
-
-.thirdera .abilities-grid .ability-check {
-  color: var(--color-character-accent);
-}
-
-.thirdera .abilities-grid .ability-check:hover {
-  color: var(--color-hover);
-  text-shadow: 0 0 10px var(--color-hover);
-  cursor: pointer;
+  font-weight: bold;
+  cursor: help;
 }
 
 .thirdera .dex-cap-note {
@@ -502,12 +495,24 @@
 /* Reusable indicator for values modified by external factors */
 .thirdera .value-modified {
   color: var(--color-modified);
+  cursor: help;
 }
 
 .thirdera .modified-note {
   font-size: var(--font-size-note);
   font-weight: normal;
   color: var(--color-modified);
+  cursor: help;
+}
+
+/* Overloaded state (Red) */
+.thirdera .speed-overloaded,
+.thirdera .modified-note.speed-overloaded,
+.thirdera .dex-overloaded,
+.thirdera .ability-mod.dex-overloaded,
+.thirdera .dex-cap-note.dex-overloaded {
+  color: var(--color-danger) !important;
+  font-weight: bold;
   cursor: help;
 }
 
