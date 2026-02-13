@@ -2,6 +2,13 @@
  * Simple audit log that whispers document changes to GMs via chat.
  */
 export class AuditLog {
+    // Track recent messages to prevent duplicates
+    static _recentMessages = new Map();
+    static _dedupeTimeout = 100; // 100ms window for deduplication
+    
+    // Store old values before updates to track changes accurately
+    static _oldValues = new Map();
+
     /**
      * Initialize the audit log by registering hooks.
      */
@@ -10,6 +17,14 @@ export class AuditLog {
         Hooks.on("createActor", (document, options, userId) => this._onDocumentEvent("Created", document, userId));
         Hooks.on("createItem", (document, options, userId) => this._onDocumentEvent("Created", document, userId));
 
+        // Pre-update hooks to capture old values
+        Hooks.on("preUpdateActor", (document, changes, options, userId) => {
+            this._captureOldValues(document, "Actor");
+        });
+        Hooks.on("preUpdateItem", (document, changes, options, userId) => {
+            this._captureOldValues(document, "Item");
+        });
+
         // Document update hooks
         Hooks.on("updateActor", (document, diff, options, userId) => this._onDocumentEvent("Updated", document, userId, diff));
         Hooks.on("updateItem", (document, diff, options, userId) => this._onDocumentEvent("Updated", document, userId, diff));
@@ -17,6 +32,76 @@ export class AuditLog {
         // Document delete hooks
         Hooks.on("deleteActor", (document, options, userId) => this._onDocumentEvent("Deleted", document, userId));
         Hooks.on("deleteItem", (document, options, userId) => this._onDocumentEvent("Deleted", document, userId));
+    }
+
+    /**
+     * Capture old values from a document before it's updated.
+     * Uses both _source (raw data) and system (prepared data) to get accurate values.
+     * @param {Document} document  The document about to be updated
+     * @param {string} type        The document type ("Actor" or "Item")
+     * @private
+     */
+    static _captureOldValues(document, type) {
+        const key = `${type}-${document.id}`;
+        const oldValues = {};
+        
+        // Capture significant fields we care about
+        // For embedded items, use system data which reflects the actual current state
+        const paths = [
+            // Actor fields
+            "system.details.level",
+            "system.abilities.str.value",
+            "system.abilities.dex.value",
+            "system.abilities.con.value",
+            "system.abilities.int.value",
+            "system.abilities.wis.value",
+            "system.abilities.cha.value",
+            "system.attributes.hp.value",
+            "system.attributes.hp.max",
+            "system.details.alignment",
+            "system.details.deity",
+            "system.currency.pp",
+            "system.currency.gp",
+            "system.currency.sp",
+            "system.currency.cp",
+            // Item fields - general
+            "system.equipped",
+            "system.weight",
+            "system.cost",
+            "system.quantity",
+            // Item fields - armor
+            "system.armor.bonus",
+            "system.armor.maxDex",
+            "system.armor.checkPenalty",
+            "system.armor.spellFailure",
+            // Item fields - weapon
+            "system.damage.dice",
+            "system.damage.type",
+            "system.critical.range",
+            "system.critical.multiplier",
+            "system.range",
+            // Item fields - spell
+            "system.level"
+        ];
+        
+        for (const path of paths) {
+            // Try system first (prepared data, more accurate for embedded items)
+            let value = foundry.utils.getProperty(document.system, path.replace("system.", ""));
+            // Fall back to _source if not found in system
+            if (value === undefined) {
+                value = foundry.utils.getProperty(document._source, path);
+            }
+            if (value !== undefined) {
+                oldValues[path] = value;
+            }
+        }
+        
+        this._oldValues.set(key, oldValues);
+        
+        // Clean up after a delay (in case update hook doesn't fire)
+        setTimeout(() => {
+            this._oldValues.delete(key);
+        }, 5000);
     }
 
     /**
@@ -33,6 +118,12 @@ export class AuditLog {
 
         const user = game.users.get(userId);
         const userName = user?.name || "Unknown User";
+        
+        // Filter GM actions if setting is enabled
+        if (game.settings.get("thirdera", "auditLogFilterGM") && user?.isGM) {
+            return;
+        }
+        
         const type = game.i18n.localize(`DOCUMENT.${document.documentName}`);
         const name = document.name;
 
@@ -53,6 +144,7 @@ export class AuditLog {
         // Add significant field changes for updates
         if (action === "Updated" && diff) {
             const significantFields = this._getSignificantFields(diff, document);
+            // Only add if there are actual changes (filters out "old → old" cases)
             if (significantFields.length > 0) {
                 message += ` (${significantFields.join(", ")})`;
             }
@@ -63,19 +155,80 @@ export class AuditLog {
             message += ` ${game.i18n.format("THIRDERA.AuditLog.OnActor", { name: document.parent.name })}`;
         }
 
+        // Deduplicate: Check if we've sent this exact message recently
+        const messageKey = `${document.id}-${action}-${message}`;
+        const now = Date.now();
+        const recent = this._recentMessages.get(messageKey);
+        
+        if (recent && (now - recent) < this._dedupeTimeout) {
+            // Duplicate message within dedupe window, skip it
+            return;
+        }
+        
+        // Record this message
+        this._recentMessages.set(messageKey, now);
+        
+        // Clean up old entries (older than 1 second)
+        for (const [key, timestamp] of this._recentMessages.entries()) {
+            if (now - timestamp > 1000) {
+                this._recentMessages.delete(key);
+            }
+        }
+
         // Send whisper to GMs
         const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
         if (gmIds.length === 0) return;
 
+        // Format timestamp
+        const timestamp = new Date().toLocaleTimeString(game.i18n.lang || "en", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+        // Get icon and color for action type
+        const actionConfig = this._getActionConfig(action);
+        
         try {
             await ChatMessage.create({
-                content: `<div class="thirdera audit-log"><strong>Audit Log:</strong> ${message}</div>`,
+                content: `<div class="thirdera audit-log audit-log-${action.toLowerCase()}" style="border-left-color: ${actionConfig.color};">
+                    <div class="audit-log-header">
+                        <i class="${actionConfig.icon}"></i>
+                        <strong>Audit Log:</strong>
+                        <span class="audit-log-timestamp">${timestamp}</span>
+                    </div>
+                    <div class="audit-log-message">${message}</div>
+                </div>`,
                 whisper: gmIds,
                 speaker: { alias: game.i18n.localize("THIRDERA.AuditLog.SpeakerAlias") }
             });
         } catch (error) {
             console.error("Third Era | Failed to create audit log message:", error);
         }
+    }
+
+    /**
+     * Get icon and color configuration for an action type.
+     * @param {string} action  The action type (Created, Updated, Deleted)
+     * @returns {Object}       Object with icon and color properties
+     * @private
+     */
+    static _getActionConfig(action) {
+        const configs = {
+            "Created": {
+                icon: "fa-solid fa-plus-circle",
+                color: "#4caf50" // Green
+            },
+            "Updated": {
+                icon: "fa-solid fa-pencil",
+                color: "#ff9800" // Orange
+            },
+            "Deleted": {
+                icon: "fa-solid fa-trash",
+                color: "#f44336" // Red
+            }
+        };
+        return configs[action] || { icon: "fa-solid fa-info-circle", color: "#2196f3" };
     }
 
     /**
@@ -104,6 +257,29 @@ export class AuditLog {
     }
 
     /**
+     * Get the old value of a field before an update.
+     * Uses values captured in preUpdate hook.
+     * @param {Document} document  The document (already updated)
+     * @param {Object} diff        The change diff
+     * @param {string} path        The field path (e.g., "system.currency.pp")
+     * @returns {*}                The old value
+     * @private
+     */
+    static _getOldValue(document, diff, path) {
+        const docType = document instanceof Actor ? "Actor" : "Item";
+        const key = `${docType}-${document.id}`;
+        const oldValues = this._oldValues.get(key);
+        
+        if (oldValues && path in oldValues) {
+            return oldValues[path];
+        }
+        
+        // Fallback: try to get from _source (might already be updated)
+        const currentVal = foundry.utils.getProperty(document._source, path);
+        return currentVal ?? "";
+    }
+
+    /**
      * Get significant field changes for display in audit log.
      * @param {Object} diff        The change diff
      * @param {Document} document The document being updated
@@ -118,67 +294,103 @@ export class AuditLog {
         if (isActor) {
             // Track level changes
             if (foundry.utils.hasProperty(diff, "system.details.level")) {
-                const oldVal = foundry.utils.getProperty(document._source, "system.details.level") ?? "";
                 const newVal = foundry.utils.getProperty(diff, "system.details.level");
-                significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Level", {
-                    oldValue: oldVal,
-                    newValue: newVal
-                }));
-            }
-
-            // Track ability score changes
-            for (const ability of ["str", "dex", "con", "int", "wis", "cha"]) {
-                const path = `system.abilities.${ability}.value`;
-                if (foundry.utils.hasProperty(diff, path)) {
-                    const oldVal = foundry.utils.getProperty(document._source, path) ?? "";
-                    const newVal = foundry.utils.getProperty(diff, path);
-                    const abilityName = game.i18n.localize(`THIRDERA.AbilityScores.${ability}`);
-                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.AbilityScore", {
-                        ability: abilityName,
+                const oldVal = this._getOldValue(document, diff, "system.details.level");
+                // Only show if values actually changed
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Level", {
                         oldValue: oldVal,
                         newValue: newVal
                     }));
                 }
             }
 
+            // Track ability score changes
+            for (const ability of ["str", "dex", "con", "int", "wis", "cha"]) {
+                const path = `system.abilities.${ability}.value`;
+                if (foundry.utils.hasProperty(diff, path)) {
+                    const newVal = foundry.utils.getProperty(diff, path);
+                    const oldVal = this._getOldValue(document, diff, path);
+                    // Only show if values actually changed
+                    if (oldVal !== newVal) {
+                        const abilityName = game.i18n.localize(`THIRDERA.AbilityScores.${ability}`);
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.AbilityScore", {
+                            ability: abilityName,
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+            }
+
             // Track HP changes
             if (foundry.utils.hasProperty(diff, "system.attributes.hp.value")) {
-                const oldVal = foundry.utils.getProperty(document._source, "system.attributes.hp.value") ?? "";
                 const newVal = foundry.utils.getProperty(diff, "system.attributes.hp.value");
-                significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.HP", {
-                    oldValue: oldVal,
-                    newValue: newVal
-                }));
+                const oldVal = this._getOldValue(document, diff, "system.attributes.hp.value");
+                // Only show if values actually changed
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.HP", {
+                        oldValue: oldVal,
+                        newValue: newVal
+                    }));
+                }
             }
 
             // Track Max HP changes
             if (foundry.utils.hasProperty(diff, "system.attributes.hp.max")) {
-                const oldVal = foundry.utils.getProperty(document._source, "system.attributes.hp.max") ?? "";
                 const newVal = foundry.utils.getProperty(diff, "system.attributes.hp.max");
-                significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.MaxHP", {
-                    oldValue: oldVal,
-                    newValue: newVal
-                }));
+                const oldVal = this._getOldValue(document, diff, "system.attributes.hp.max");
+                // Only show if values actually changed
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.MaxHP", {
+                        oldValue: oldVal,
+                        newValue: newVal
+                    }));
+                }
             }
 
             // Track alignment changes
             if (foundry.utils.hasProperty(diff, "system.details.alignment")) {
-                const oldVal = foundry.utils.getProperty(document._source, "system.details.alignment") ?? "";
                 const newVal = foundry.utils.getProperty(diff, "system.details.alignment");
-                significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Alignment", {
-                    oldValue: oldVal || "(empty)",
-                    newValue: newVal || "(empty)"
-                }));
+                const oldVal = this._getOldValue(document, diff, "system.details.alignment");
+                // Only show if values actually changed
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Alignment", {
+                        oldValue: oldVal || "(empty)",
+                        newValue: newVal || "(empty)"
+                    }));
+                }
             }
 
             // Track deity changes
             if (foundry.utils.hasProperty(diff, "system.details.deity")) {
-                const oldVal = foundry.utils.getProperty(document._source, "system.details.deity") ?? "";
                 const newVal = foundry.utils.getProperty(diff, "system.details.deity");
-                significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Deity", {
-                    oldValue: oldVal || "(empty)",
-                    newValue: newVal || "(empty)"
-                }));
+                const oldVal = this._getOldValue(document, diff, "system.details.deity");
+                // Only show if values actually changed
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Deity", {
+                        oldValue: oldVal || "(empty)",
+                        newValue: newVal || "(empty)"
+                    }));
+                }
+            }
+
+            // Track currency changes
+            for (const coinType of ["pp", "gp", "sp", "cp"]) {
+                const path = `system.currency.${coinType}`;
+                if (foundry.utils.hasProperty(diff, path)) {
+                    const newVal = foundry.utils.getProperty(diff, path);
+                    const oldVal = this._getOldValue(document, diff, path);
+                    // Only show if values actually changed
+                    if (oldVal !== newVal) {
+                        const coinLabel = game.i18n.localize(`THIRDERA.Currency.${coinType}Abbr`);
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Currency", {
+                            coinType: coinLabel,
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
             }
         }
 
@@ -187,9 +399,144 @@ export class AuditLog {
             const equippableTypes = ["weapon", "armor", "equipment"];
             if (equippableTypes.includes(document.type)) {
                 if (foundry.utils.hasProperty(diff, "system.equipped")) {
-                    const oldVal = foundry.utils.getProperty(document._source, "system.equipped") ?? "";
                     const newVal = foundry.utils.getProperty(diff, "system.equipped");
-                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Equipped", {
+                    const oldVal = this._getOldValue(document, diff, "system.equipped");
+                    // Only show if values actually changed
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Equipped", {
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+            }
+
+            // Track armor-specific fields
+            if (document.type === "armor") {
+                if (foundry.utils.hasProperty(diff, "system.armor.bonus")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.armor.bonus");
+                    const oldVal = this._getOldValue(document, diff, "system.armor.bonus");
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.ArmorBonus", {
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+                if (foundry.utils.hasProperty(diff, "system.armor.maxDex")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.armor.maxDex");
+                    const oldVal = this._getOldValue(document, diff, "system.armor.maxDex");
+                    if (oldVal !== newVal) {
+                        const oldDisplay = oldVal === null ? "unlimited" : oldVal;
+                        const newDisplay = newVal === null ? "unlimited" : newVal;
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.ArmorMaxDex", {
+                            oldValue: oldDisplay,
+                            newValue: newDisplay
+                        }));
+                    }
+                }
+                if (foundry.utils.hasProperty(diff, "system.armor.checkPenalty")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.armor.checkPenalty");
+                    const oldVal = this._getOldValue(document, diff, "system.armor.checkPenalty");
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.ArmorCheckPenalty", {
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+                if (foundry.utils.hasProperty(diff, "system.armor.spellFailure")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.armor.spellFailure");
+                    const oldVal = this._getOldValue(document, diff, "system.armor.spellFailure");
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.ArmorSpellFailure", {
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+            }
+
+            // Track weapon-specific fields
+            if (document.type === "weapon") {
+                if (foundry.utils.hasProperty(diff, "system.damage.dice")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.damage.dice");
+                    const oldVal = this._getOldValue(document, diff, "system.damage.dice");
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.WeaponDamage", {
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+                if (foundry.utils.hasProperty(diff, "system.damage.type")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.damage.type");
+                    const oldVal = this._getOldValue(document, diff, "system.damage.type");
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.WeaponDamageType", {
+                            oldValue: oldVal || "(empty)",
+                            newValue: newVal || "(empty)"
+                        }));
+                    }
+                }
+                if (foundry.utils.hasProperty(diff, "system.critical.range")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.critical.range");
+                    const oldVal = this._getOldValue(document, diff, "system.critical.range");
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.WeaponCriticalRange", {
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+                if (foundry.utils.hasProperty(diff, "system.critical.multiplier")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.critical.multiplier");
+                    const oldVal = this._getOldValue(document, diff, "system.critical.multiplier");
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.WeaponCriticalMultiplier", {
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+                if (foundry.utils.hasProperty(diff, "system.range")) {
+                    const newVal = foundry.utils.getProperty(diff, "system.range");
+                    const oldVal = this._getOldValue(document, diff, "system.range");
+                    if (oldVal !== newVal) {
+                        significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.WeaponRange", {
+                            oldValue: oldVal,
+                            newValue: newVal
+                        }));
+                    }
+                }
+            }
+
+            // Track general item fields (weight, cost, quantity)
+            if (foundry.utils.hasProperty(diff, "system.weight")) {
+                const newVal = foundry.utils.getProperty(diff, "system.weight");
+                const oldVal = this._getOldValue(document, diff, "system.weight");
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Weight", {
+                        oldValue: oldVal,
+                        newValue: newVal
+                    }));
+                }
+            }
+            if (foundry.utils.hasProperty(diff, "system.cost")) {
+                const newVal = foundry.utils.getProperty(diff, "system.cost");
+                const oldVal = this._getOldValue(document, diff, "system.cost");
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Cost", {
+                        oldValue: oldVal,
+                        newValue: newVal
+                    }));
+                }
+            }
+            if (foundry.utils.hasProperty(diff, "system.quantity")) {
+                const newVal = foundry.utils.getProperty(diff, "system.quantity");
+                const oldVal = this._getOldValue(document, diff, "system.quantity");
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.Quantity", {
                         oldValue: oldVal,
                         newValue: newVal
                     }));
@@ -198,12 +545,15 @@ export class AuditLog {
 
             // Track spell level for spells
             if (document.type === "spell" && foundry.utils.hasProperty(diff, "system.level")) {
-                const oldVal = foundry.utils.getProperty(document._source, "system.level") ?? "";
                 const newVal = foundry.utils.getProperty(diff, "system.level");
-                significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.SpellLevel", {
-                    oldValue: oldVal,
-                    newValue: newVal
-                }));
+                const oldVal = this._getOldValue(document, diff, "system.level");
+                // Only show if values actually changed
+                if (oldVal !== newVal) {
+                    significant.push(game.i18n.format("THIRDERA.AuditLog.FieldChange.SpellLevel", {
+                        oldValue: oldVal,
+                        newValue: newVal
+                    }));
+                }
             }
         }
 

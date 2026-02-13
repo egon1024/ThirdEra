@@ -135,6 +135,15 @@ Hooks.once("init", async function () {
         default: true
     });
 
+    game.settings.register("thirdera", "auditLogFilterGM", {
+        name: "THIRDERA.Settings.AuditLogFilterGM.Name",
+        hint: "THIRDERA.Settings.AuditLogFilterGM.Hint",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     // Register data models
     CONFIG.Actor.dataModels = {
         character: CharacterData,

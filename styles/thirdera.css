@@ -68,9 +68,44 @@
 .thirdera.audit-log {
   font-size: var(--font-size-note);
   color: var(--color-text-secondary);
-  border-left: 2px solid var(--color-character-accent);
-  padding-left: 5px;
-  margin: 2px 0;
+  border-left: 3px solid var(--color-character-accent);
+  padding: 4px 8px;
+  margin: 4px 0;
+  border-radius: 2px;
+}
+
+.thirdera.audit-log .audit-log-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.thirdera.audit-log .audit-log-header i {
+  font-size: var(--font-size-label);
+}
+
+.thirdera.audit-log .audit-log-timestamp {
+  margin-left: auto;
+  font-size: var(--font-size-note);
+  opacity: 0.7;
+  font-weight: normal;
+}
+
+.thirdera.audit-log .audit-log-message {
+  margin-top: 2px;
+}
+
+.thirdera.audit-log.audit-log-created {
+  background-color: rgba(76, 175, 80, 0.05);
+}
+
+.thirdera.audit-log.audit-log-updated {
+  background-color: rgba(255, 152, 0, 0.05);
+}
+
+.thirdera.audit-log.audit-log-deleted {
+  background-color: rgba(244, 67, 54, 0.05);
 }
 
 .thirdera form {

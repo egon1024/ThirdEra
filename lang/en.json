@@ -72,6 +72,10 @@
             "AuditLogEnabled": {
                 "Name": "Enable Audit Log",
                 "Hint": "When enabled, GMs receive whisper notifications in chat when actors or items are created, updated, or deleted."
+            },
+            "AuditLogFilterGM": {
+                "Name": "Filter GM Actions",
+                "Hint": "When enabled, actions performed by GMs will not be logged in the audit log."
             }
         },
         "Inventory": {
@@ -109,8 +113,21 @@
                 "MaxHP": "Max HP: {oldValue} → {newValue}",
                 "Alignment": "alignment: {oldValue} → {newValue}",
                 "Deity": "deity: {oldValue} → {newValue}",
+                "Currency": "{coinType}: {oldValue} → {newValue}",
                 "Equipped": "equipped: {oldValue} → {newValue}",
-                "SpellLevel": "spell level: {oldValue} → {newValue}"
+                "SpellLevel": "spell level: {oldValue} → {newValue}",
+                "ArmorBonus": "AC bonus: {oldValue} → {newValue}",
+                "ArmorMaxDex": "max Dex: {oldValue} → {newValue}",
+                "ArmorCheckPenalty": "ACP: {oldValue} → {newValue}",
+                "ArmorSpellFailure": "spell failure: {oldValue}% → {newValue}%",
+                "WeaponDamage": "damage: {oldValue} → {newValue}",
+                "WeaponDamageType": "damage type: {oldValue} → {newValue}",
+                "WeaponCriticalRange": "crit range: {oldValue} → {newValue}",
+                "WeaponCriticalMultiplier": "crit multiplier: {oldValue}× → {newValue}×",
+                "WeaponRange": "range: {oldValue} → {newValue}",
+                "Weight": "weight: {oldValue} → {newValue}",
+                "Cost": "cost: {oldValue} → {newValue}",
+                "Quantity": "quantity: {oldValue} → {newValue}"
             }
         }
     },
