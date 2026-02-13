@@ -163,6 +163,27 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 callbacks: { drop: this._onDrop.bind(this) }
             }).bind(this.element);
         }
+
+        // Toggle container fields visibility for equipment items
+        if (this.document.type === "equipment") {
+            const containerCheckbox = this.element.querySelector("input[name='system.isContainer']");
+            const containerFields = this.element.querySelector(".container-fields");
+            
+            const toggleContainerFields = () => {
+                const isContainer = containerCheckbox?.checked || false;
+                if (containerFields) {
+                    containerFields.style.display = isContainer ? "" : "none";
+                }
+            };
+            
+            // Set initial state
+            toggleContainerFields();
+            
+            // Update on change
+            if (containerCheckbox) {
+                containerCheckbox.addEventListener("change", toggleContainerFields);
+            }
+        }
     }
 
     /**

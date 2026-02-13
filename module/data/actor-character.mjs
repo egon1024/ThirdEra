@@ -151,10 +151,54 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
         // Calculate inventory weight and load early so it can affect Dex, Speed, and Skills
         let totalWeight = 0;
+        const itemsInContainers = new Set();
+        
+        // First pass: calculate weight of items not in containers, and track container contents
         for (const item of this.parent.items) {
-            const weight = item.system.weight || 0;
-            const quantity = item.system.quantity || 1;
-            totalWeight += weight * quantity;
+            const containerId = item.system.containerId;
+            if (containerId) {
+                itemsInContainers.add(item.id);
+            } else {
+                // Item not in a container - add its weight
+                const weight = item.system.weight || 0;
+                const quantity = item.system.quantity || 1;
+                totalWeight += weight * quantity;
+            }
+        }
+        
+        // Second pass: handle containers and their contents
+        for (const item of this.parent.items) {
+            if (item.type !== "equipment" || !item.system.isContainer) continue;
+            
+            const containerWeight = (item.system.weight || 0) * (item.system.quantity || 1);
+            const weightMode = item.system.weightMode || "full";
+            
+            // Container's own weight always counts
+            totalWeight += containerWeight;
+            
+            // Calculate contents weight based on weight mode
+            if (weightMode === "full") {
+                // Full weight: add all contents
+                for (const contentItem of this.parent.items) {
+                    if (contentItem.system.containerId === item.id) {
+                        const weight = contentItem.system.weight || 0;
+                        const quantity = contentItem.system.quantity || 1;
+                        totalWeight += weight * quantity;
+                    }
+                }
+            } else if (weightMode === "fixed") {
+                // Fixed weight: contents don't add to weight (magical containers like Bag of Holding)
+                // Only container's own weight counts, which we already added
+            } else if (weightMode === "reduced") {
+                // Reduced weight: future-proofing, for now treat as full
+                for (const contentItem of this.parent.items) {
+                    if (contentItem.system.containerId === item.id) {
+                        const weight = contentItem.system.weight || 0;
+                        const quantity = contentItem.system.quantity || 1;
+                        totalWeight += weight * quantity;
+                    }
+                }
+            }
         }
 
         // Add currency weight if setting enabled

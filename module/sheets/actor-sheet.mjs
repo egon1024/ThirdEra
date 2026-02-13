@@ -36,7 +36,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             addHpAdjustment: ThirdEraActorSheet.#onAddHpAdjustment,
             removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment,
             removeGrantedSkill: ThirdEraActorSheet.#onRemoveGrantedSkill,
-            rollHitDie: ThirdEraActorSheet.#onRollHitDie
+            rollHitDie: ThirdEraActorSheet.#onRollHitDie,
+            removeFromContainer: ThirdEraActorSheet.#onRemoveFromContainer
         },
         window: {
             controls: [
@@ -153,7 +154,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
 
         // Context menu on race name
-        new ContextMenu(this.element, ".race-name[data-action='openRace']", [
+        new foundry.applications.ux.ContextMenu.implementation(this.element, ".race-name[data-action='openRace']", [
             {
                 name: "Remove Race",
                 icon: '<i class="fas fa-trash"></i>',
@@ -175,6 +176,53 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
                 }
             });
+        });
+
+        // Handle container toggle clicks
+        this.element.querySelectorAll(".container-toggle").forEach(toggle => {
+            toggle.addEventListener("click", async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const containerId = event.currentTarget.dataset.containerId;
+                const contents = this.element.querySelector(`.container-contents[data-container-id="${containerId}"]`);
+                const toggleIcon = event.currentTarget;
+                
+                // Get current expanded containers
+                const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+                const isExpanded = expandedContainers.includes(containerId);
+                
+                if (isExpanded) {
+                    // Collapse
+                    contents.style.display = "none";
+                    toggleIcon.classList.remove("fa-chevron-down");
+                    toggleIcon.classList.add("fa-chevron-right");
+                    // Remove from expanded list
+                    const updated = expandedContainers.filter(id => id !== containerId);
+                    await this.actor.setFlag("thirdera", "expandedContainers", updated);
+                } else {
+                    // Expand
+                    contents.style.display = "block";
+                    toggleIcon.classList.remove("fa-chevron-right");
+                    toggleIcon.classList.add("fa-chevron-down");
+                    // Add to expanded list
+                    if (!expandedContainers.includes(containerId)) {
+                        expandedContainers.push(containerId);
+                        await this.actor.setFlag("thirdera", "expandedContainers", expandedContainers);
+                    }
+                }
+            });
+        });
+        
+        // Restore container expand/collapse state
+        const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+        expandedContainers.forEach(containerId => {
+            const contents = this.element.querySelector(`.container-contents[data-container-id="${containerId}"]`);
+            const toggleIcon = this.element.querySelector(`.container-toggle[data-container-id="${containerId}"]`);
+            if (contents && toggleIcon) {
+                contents.style.display = "block";
+                toggleIcon.classList.remove("fa-chevron-right");
+                toggleIcon.classList.add("fa-chevron-down");
+            }
         });
     }
 
@@ -376,12 +424,57 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const classes = [];
         let race = null;
 
+        // Separate containers and items in containers
+        const containers = [];
+        const itemsByContainer = new Map(); // containerId -> array of items
+        const itemsNotInContainers = {
+            weapons: [],
+            armor: [],
+            equipment: []
+        };
+
         for (const item of items) {
             const itemData = item;
-            if (item.type === 'weapon') weapons.push(itemData);
-            else if (item.type === 'armor') armor.push(itemData);
-            else if (item.type === 'equipment') equipment.push(itemData);
-            else if (item.type === 'spell') spells.push(itemData);
+            
+            // Check if item is a container
+            if (item.type === 'equipment' && item.system?.isContainer) {
+                containers.push(itemData);
+                // Only initialize if it doesn't exist - don't overwrite if items were already added
+                if (!itemsByContainer.has(item.id)) {
+                    itemsByContainer.set(item.id, []);
+                }
+                continue;
+            }
+            
+            // Check if item is in a container (check for both empty string and truthy values)
+            // Access system data directly - item.system should be the TypeDataModel instance
+            const containerId = item.system?.containerId;
+            
+            // Check if item is in a container
+            if (containerId && typeof containerId === 'string' && containerId.trim() !== "") {
+                if (!itemsByContainer.has(containerId)) {
+                    itemsByContainer.set(containerId, []);
+                }
+                const contentsArray = itemsByContainer.get(containerId);
+                if (!Array.isArray(contentsArray)) {
+                    itemsByContainer.set(containerId, [itemData]);
+                } else {
+                    contentsArray.push(itemData);
+                }
+                continue;
+            }
+            
+            // Item is not in a container - add to appropriate list
+            if (item.type === 'weapon') {
+                weapons.push(itemData);
+                itemsNotInContainers.weapons.push(itemData);
+            } else if (item.type === 'armor') {
+                armor.push(itemData);
+                itemsNotInContainers.armor.push(itemData);
+            } else if (item.type === 'equipment') {
+                equipment.push(itemData);
+                itemsNotInContainers.equipment.push(itemData);
+            } else if (item.type === 'spell') spells.push(itemData);
             else if (item.type === 'feat') feats.push(itemData);
             else if (item.type === 'feature') classFeatures.push(itemData);
             else if (item.type === 'skill') skills.push(itemData);
@@ -389,11 +482,58 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             else if (item.type === 'class') classes.push(itemData);
         }
 
+        // Calculate container contents weight and capacity info
+        for (const container of containers) {
+            const contents = itemsByContainer.get(container.id) || [];
+            
+            let contentsWeight = 0;
+            for (const item of contents) {
+                const weight = item.system.weight || 0;
+                const quantity = item.system.quantity || 1;
+                contentsWeight += weight * quantity;
+            }
+            container.contentsWeight = contentsWeight;
+            container.contents = contents;
+            container.capacityPercent = container.system.containerCapacity > 0 
+                ? Math.min((contentsWeight / container.system.containerCapacity) * 100, 100)
+                : 0;
+            
+            // Calculate effective weight (what counts toward encumbrance)
+            const containerWeight = (container.system.weight || 0) * (container.system.quantity || 1);
+            const weightMode = container.system.weightMode || "full";
+            
+            let effectiveWeight = containerWeight; // Container's own weight always counts
+            if (weightMode === "full") {
+                effectiveWeight += contentsWeight; // Full weight: add all contents
+            } else if (weightMode === "fixed") {
+                // Fixed weight: contents don't add weight (only container weight counts)
+                effectiveWeight = containerWeight;
+            } else if (weightMode === "reduced") {
+                // Reduced weight: for now treat as full (future: apply reduction factor)
+                effectiveWeight += contentsWeight;
+            }
+            
+            container.effectiveWeight = effectiveWeight;
+            container.containerWeight = containerWeight;
+        }
+
         skills.sort((a, b) => a.name.localeCompare(b.name));
         classFeatures.sort((a, b) => a.name.localeCompare(b.name));
         feats.sort((a, b) => a.name.localeCompare(b.name));
 
-        return { weapons, armor, equipment, spells, feats, classFeatures, skills, race, classes };
+        return { 
+            weapons, 
+            armor, 
+            equipment, 
+            spells, 
+            feats, 
+            classFeatures, 
+            skills, 
+            race, 
+            classes,
+            containers,
+            itemsNotInContainers
+        };
     }
 
     /**
@@ -442,6 +582,53 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        // Get the actual item document if we have an ID (for items already in the actor)
+        let actualItem = item;
+        if (item.id && this.actor.items.has(item.id)) {
+            actualItem = this.actor.items.get(item.id);
+        }
+        
+        // Check if the item being dropped is currently in a container
+        const currentContainerId = actualItem?.system?.containerId;
+        
+        // Handle dropping items into containers
+        // Check both the container item itself and the container contents area
+        const containerTarget = event.target.closest("[data-container-id]");
+        if (containerTarget) {
+            const containerId = containerTarget.dataset.containerId;
+            // Make sure we're not trying to drop the container on itself
+            if (item.id && item.id === containerId && this.actor.items.has(item.id)) {
+                // This is the container being dropped on itself, skip
+            } else {
+                return await this._handleContainerDrop(item, containerId, event);
+            }
+        } else if (currentContainerId) {
+            // Item is in a container but being dropped outside of any container
+            // Remove it from the container (drop it into main inventory)
+            await actualItem.update({ "system.containerId": "" });
+            
+            // Re-render to show the updated item organization
+            await this.actor.prepareData();
+            await this.render();
+            
+            // Restore container expand/collapse state
+            const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+            requestAnimationFrame(() => {
+                expandedContainers.forEach(cid => {
+                    const contents = this.element.querySelector(`.container-contents[data-container-id="${cid}"]`);
+                    const toggle = this.element.querySelector(`.container-toggle[data-container-id="${cid}"]`);
+                    if (contents && toggle) {
+                        contents.style.display = "block";
+                        toggle.classList.remove("fa-chevron-right");
+                        toggle.classList.add("fa-chevron-down");
+                    }
+                });
+            });
+            
+            ui.notifications.info(`${actualItem.name} has been removed from container.`);
+            return false;
+        }
+
         const result = await super._onDropItem(event, item);
 
         // When a race is dropped, set the actor's size and speed to match
@@ -486,6 +673,314 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
 
         return result;
+    }
+
+    /**
+     * Handle sorting/dropping embedded items within the same actor
+     * Override to handle container drops
+     * @override
+     */
+    async _onSortItem(event, item) {
+        // Get the actual item document if we have an ID
+        let actualItem = item;
+        if (item.id && this.actor.items.has(item.id)) {
+            actualItem = this.actor.items.get(item.id);
+        }
+        
+        // Check if the item being dropped is currently in a container
+        const currentContainerId = actualItem?.system?.containerId;
+        
+        // Check if dropping onto a container (either the container item or its contents area)
+        let containerTarget = event.target.closest("[data-container-id]");
+        
+        // Also check if dropping on the container item itself (the header row)
+        if (!containerTarget) {
+            const containerItem = event.target.closest(".container-item[data-container-id]");
+            if (containerItem) {
+                containerTarget = containerItem;
+            }
+        }
+        
+        if (containerTarget) {
+            const containerId = containerTarget.dataset.containerId;
+            // Don't handle if it's the container itself being sorted
+            if (item.id !== containerId) {
+                const result = await this._handleContainerDrop(item, containerId, event);
+                if (result === false) {
+                    // Handled by container drop, don't continue with sort
+                    return;
+                }
+            }
+        } else if (currentContainerId) {
+            // Item is in a container but being dropped outside of any container
+            // Remove it from the container (drop it into main inventory)
+            await actualItem.update({ "system.containerId": "" });
+            
+            // Re-render to show the updated item organization
+            await this.actor.prepareData();
+            await this.render();
+            
+            // Restore container expand/collapse state
+            const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+            requestAnimationFrame(() => {
+                expandedContainers.forEach(cid => {
+                    const contents = this.element.querySelector(`.container-contents[data-container-id="${cid}"]`);
+                    const toggle = this.element.querySelector(`.container-toggle[data-container-id="${cid}"]`);
+                    if (contents && toggle) {
+                        contents.style.display = "block";
+                        toggle.classList.remove("fa-chevron-right");
+                        toggle.classList.add("fa-chevron-down");
+                    }
+                });
+            });
+            
+            ui.notifications.info(`${actualItem.name} has been removed from container.`);
+            return;
+        }
+        
+        // Continue with normal sort behavior
+        return super._onSortItem(event, item);
+    }
+
+    /**
+     * Handle dropping an item into a container
+     * @param {Item|Object} item        The item being dropped (may be existing or new)
+     * @param {string} containerId      The ID of the container
+     * @param {DragEvent} event         The drop event
+     * @returns {Promise<boolean>}      False if handled, true/Item if should continue with normal drop
+     */
+    async _handleContainerDrop(item, containerId, event) {
+        const container = this.actor.items.get(containerId);
+        if (!container || container.type !== "equipment" || !container.system.isContainer) {
+            return true; // Not a valid container, continue with normal drop
+        }
+
+        // Get the actual item - it might be an embedded item or a world item
+        let actualItem = item;
+        if (item.id && this.actor.items.has(item.id)) {
+            actualItem = this.actor.items.get(item.id);
+        } else if (typeof item === 'string' || (item.uuid && !item.id)) {
+            // It's a UUID or world item - we'll handle it below
+            actualItem = item;
+        }
+        
+
+        // Prevent dropping container into itself
+        if (actualItem.id === containerId) {
+            ui.notifications.warn("Cannot place a container inside itself.");
+            return false;
+        }
+
+        // Check for circular references - prevent putting container into its own contents
+        const isExistingItem = actualItem?.id && this.actor.items.has(actualItem.id);
+        
+        // Only weapons, armor, and equipment can go into containers
+        if (isExistingItem && !['weapon', 'armor', 'equipment'].includes(actualItem.type)) {
+            ui.notifications.warn(`Only weapons, armor, and equipment can be stored in containers. ${actualItem.name} is a ${actualItem.type}.`);
+            return false;
+        }
+        if (isExistingItem) {
+            const existingItem = this.actor.items.get(item.id);
+            // Check if the item being dropped is a container that contains the target container
+            if (existingItem.type === "equipment" && existingItem.system.isContainer) {
+                const wouldCreateCycle = this._wouldCreateContainerCycle(existingItem.id, containerId);
+                if (wouldCreateCycle) {
+                    ui.notifications.warn("Cannot place container here — this would create a circular reference.");
+                    return false;
+                }
+            }
+        }
+
+        // Calculate current container contents weight
+        const contentsWeight = this._getContainerContentsWeight(containerId);
+        const itemWeight = (actualItem.system?.weight || 0) * (actualItem.system?.quantity || 1);
+        const newTotalWeight = contentsWeight + itemWeight;
+
+        // Check capacity
+        if (newTotalWeight > container.system.containerCapacity && container.system.containerCapacity > 0) {
+            ui.notifications.warn(`Cannot add ${actualItem.name} to ${container.name} — would exceed capacity (${container.system.containerCapacity} lbs).`);
+            return false;
+        }
+
+        // If item is equipped, unequip it with warning
+        let wasEquipped = false;
+        let equipValue = null;
+        if (isExistingItem) {
+            if (actualItem.type === "weapon" && actualItem.system.equipped !== "none") {
+                wasEquipped = true;
+                equipValue = actualItem.system.equipped;
+            } else if ((actualItem.type === "armor" || actualItem.type === "equipment") && actualItem.system.equipped === "true") {
+                wasEquipped = true;
+                equipValue = actualItem.system.equipped;
+            }
+        }
+
+        // Handle new item from sidebar vs existing item
+        if (isExistingItem) {
+            // Existing item - update containerId and unequip if needed
+            const updates = { "system.containerId": containerId };
+            if (wasEquipped) {
+                if (actualItem.type === "weapon") {
+                    updates["system.equipped"] = "none";
+                } else {
+                    updates["system.equipped"] = "false";
+                }
+            }
+            
+            try {
+                await actualItem.update(updates);
+                
+                // Wait a moment for the update to propagate
+                await new Promise(resolve => setTimeout(resolve, 50));
+                
+                // Verify the update by checking the item's system data
+                const verifyItem = this.actor.items.get(actualItem.id);
+                if (!verifyItem || verifyItem.system.containerId !== containerId) {
+                    ui.notifications.error(`Failed to move ${actualItem.name} into ${container.name}.`);
+                    return false;
+                }
+            } catch (error) {
+                ui.notifications.error(`Failed to move ${actualItem.name} into ${container.name}: ${error.message}`);
+                return false;
+            }
+            
+            // Force a full data refresh - this should update the items collection
+            await this.actor.prepareData();
+            
+            // Re-render the actor sheet to show the updated item organization
+            await this.render();
+            
+            // Restore container expand/collapse state after render
+            const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+            requestAnimationFrame(() => {
+                expandedContainers.forEach(cid => {
+                    const contents = this.element.querySelector(`.container-contents[data-container-id="${cid}"]`);
+                    const toggle = this.element.querySelector(`.container-toggle[data-container-id="${cid}"]`);
+                    if (contents && toggle) {
+                        contents.style.display = "block";
+                        toggle.classList.remove("fa-chevron-right");
+                        toggle.classList.add("fa-chevron-down");
+                    }
+                });
+                
+                // If the container wasn't expanded, expand it to show the newly added item
+                if (!expandedContainers.includes(containerId)) {
+                    const containerContents = this.element.querySelector(`.container-contents[data-container-id="${containerId}"]`);
+                    const containerToggle = this.element.querySelector(`.container-toggle[data-container-id="${containerId}"]`);
+                    if (containerContents && containerToggle) {
+                        containerContents.style.display = "block";
+                        containerToggle.classList.remove("fa-chevron-right");
+                        containerToggle.classList.add("fa-chevron-down");
+                        // Save the expanded state
+                        expandedContainers.push(containerId);
+                        this.actor.setFlag("thirdera", "expandedContainers", expandedContainers);
+                    }
+                }
+            });
+            
+            if (wasEquipped) {
+                ui.notifications.warn(`${actualItem.name} has been unequipped and placed in ${container.name}.`);
+            } else {
+                ui.notifications.info(`${actualItem.name} has been placed in ${container.name}.`);
+            }
+        } else {
+            // New item from sidebar - create with containerId set
+            const itemData = actualItem.toObject ? actualItem.toObject() : actualItem;
+            itemData.system = itemData.system || {};
+            itemData.system.containerId = containerId;
+            if (wasEquipped && equipValue) {
+                // Shouldn't happen for new items, but handle it
+                if (itemData.type === "weapon") {
+                    itemData.system.equipped = "none";
+                } else {
+                    itemData.system.equipped = "false";
+                }
+            }
+            const createdItems = await this.actor.createEmbeddedDocuments("Item", [itemData]);
+            
+            // Ensure the new items are processed
+            await this.actor.prepareData();
+            
+            // Re-render the actor sheet to show the new item in the container
+            await this.render();
+            
+            // Restore container expand/collapse state after render
+            const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+            requestAnimationFrame(() => {
+                expandedContainers.forEach(cid => {
+                    const contents = this.element.querySelector(`.container-contents[data-container-id="${cid}"]`);
+                    const toggle = this.element.querySelector(`.container-toggle[data-container-id="${cid}"]`);
+                    if (contents && toggle) {
+                        contents.style.display = "block";
+                        toggle.classList.remove("fa-chevron-right");
+                        toggle.classList.add("fa-chevron-down");
+                    }
+                });
+                
+                // If the container wasn't expanded, expand it to show the newly added item
+                if (!expandedContainers.includes(containerId)) {
+                    const containerContents = this.element.querySelector(`.container-contents[data-container-id="${containerId}"]`);
+                    const containerToggle = this.element.querySelector(`.container-toggle[data-container-id="${containerId}"]`);
+                    if (containerContents && containerToggle) {
+                        containerContents.style.display = "block";
+                        containerToggle.classList.remove("fa-chevron-right");
+                        containerToggle.classList.add("fa-chevron-down");
+                        // Save the expanded state
+                        expandedContainers.push(containerId);
+                        this.actor.setFlag("thirdera", "expandedContainers", expandedContainers);
+                    }
+                }
+            });
+            
+            ui.notifications.info(`${actualItem.name} has been created in ${container.name}.`);
+        }
+
+        return false; // Handled, don't continue with normal drop
+    }
+
+    /**
+     * Check if placing itemId into containerId would create a circular reference
+     * @param {string} itemId          The item being moved (a container)
+     * @param {string} containerId     The target container
+     * @returns {boolean}               True if cycle would be created
+     */
+    _wouldCreateContainerCycle(itemId, containerId) {
+        // Check if containerId is inside itemId (or any of itemId's contents)
+        const checkContainer = (checkId, targetId) => {
+            if (checkId === targetId) return true;
+            const container = this.actor.items.get(checkId);
+            if (!container || container.type !== "equipment" || !container.system.isContainer) return false;
+            
+            // Check all items in this container
+            for (const item of this.actor.items) {
+                if (item.system.containerId === checkId) {
+                    if (item.id === targetId) return true;
+                    if (item.type === "equipment" && item.system.isContainer) {
+                        if (checkContainer(item.id, targetId)) return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        return checkContainer(itemId, containerId);
+    }
+
+    /**
+     * Calculate the total weight of all items in a container
+     * @param {string} containerId      The container's item ID
+     * @returns {number}                Total weight in lbs
+     */
+    _getContainerContentsWeight(containerId) {
+        let total = 0;
+        for (const item of this.actor.items) {
+            if (item.system.containerId === containerId) {
+                const weight = item.system.weight || 0;
+                const quantity = item.system.quantity || 1;
+                total += weight * quantity;
+            }
+        }
+        return total;
     }
 
     /* -------------------------------------------- */
@@ -667,6 +1162,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const item = this.actor.items.get(itemId);
         if (!item) return;
 
+        // Cannot equip items that are in a container
+        if (item.system.containerId) {
+            ui.notifications.warn(`Cannot equip ${item.name} — it is stored in a container. Remove it from the container first.`);
+            return;
+        }
+
         const equipping = item.system.equipped !== "true";
 
         // Equipment items: simple toggle, no slot/size logic
@@ -732,6 +1233,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const itemId = target.closest("[data-item-id]")?.dataset.itemId;
         const item = this.actor.items.get(itemId);
         if (!item) return;
+
+        // Cannot equip items that are in a container
+        if (item.system.containerId) {
+            ui.notifications.warn(`Cannot equip ${item.name} — it is stored in a container. Remove it from the container first.`);
+            return;
+        }
 
         const hand = target.dataset.hand; // "primary" or "offhand"
 
@@ -977,6 +1484,44 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         history[index].hpRolled = roll.total;
         await this.actor.update({ "system.levelHistory": history });
+    }
+
+    /**
+     * Handle removing an item from a container
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveFromContainer(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const item = this.actor.items.get(itemId);
+        if (!item || !item.system.containerId) return;
+
+        // Remember which container was expanded
+        const containerId = item.system.containerId;
+        const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+        const wasExpanded = expandedContainers.includes(containerId);
+
+        await item.update({ "system.containerId": "" });
+        
+        // Re-render to show the updated item organization
+        await this.actor.prepareData();
+        await this.render();
+        
+        // Restore the container's expanded state if it was expanded
+        if (wasExpanded) {
+            requestAnimationFrame(() => {
+                const contents = this.element.querySelector(`.container-contents[data-container-id="${containerId}"]`);
+                const toggleIcon = this.element.querySelector(`.container-toggle[data-container-id="${containerId}"]`);
+                if (contents && toggleIcon) {
+                    contents.style.display = "block";
+                    toggleIcon.classList.remove("fa-chevron-right");
+                    toggleIcon.classList.add("fa-chevron-down");
+                }
+            });
+        }
+        
+        ui.notifications.info(`${item.name} has been removed from container.`);
     }
 
     /**

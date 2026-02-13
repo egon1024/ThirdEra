@@ -42,7 +42,44 @@
                 <label>Weight (lbs)</label>
                 <input type="text" name="system.weight" value="{{system.weight}}" data-dtype="Number" />
             </div>
+            
+            <h3 class="form-header">Container Properties</h3>
+            <div class="checkbox-group">
+                <label class="checkbox">
+                    <input type="checkbox" name="system.isContainer" {{checked system.isContainer}} data-dtype="Boolean" /> Is Container
+                </label>
+            </div>
+            
+            <div class="container-fields" style="{{#unless system.isContainer}}display: none;{{/unless}}">
+                <div class="form-group">
+                    <label>Container Capacity (lbs)</label>
+                    <input type="text" name="system.containerCapacity" value="{{system.containerCapacity}}" data-dtype="Number" 
+                           placeholder="0 = unlimited" />
+                    <p class="notes">Maximum weight this container can hold. Set to 0 for unlimited capacity.</p>
+                </div>
+                <div class="form-group">
+                    <label>Weight Mode</label>
+                    <select name="system.weightMode">
+                        <option value="full" {{#if (eq system.weightMode "full")}}selected{{/if}}>Full Weight</option>
+                        <option value="fixed" {{#if (eq system.weightMode "fixed")}}selected{{/if}}>Fixed Weight (Magical)</option>
+                        <option value="reduced" {{#if (eq system.weightMode "reduced")}}selected{{/if}}>Reduced Weight</option>
+                    </select>
+                    <p class="notes">
+                        <strong>Full Weight:</strong> Contents add their full weight to encumbrance.<br>
+                        <strong>Fixed Weight:</strong> Contents don't add weight (e.g., Bag of Holding).<br>
+                        <strong>Reduced Weight:</strong> Contents add reduced weight (future use).
+                    </p>
+                </div>
+                <div class="checkbox-group">
+                    <label class="checkbox">
+                        <input type="checkbox" data-string-field="system.freeRetrieval" {{checked (eq system.freeRetrieval "true")}} /> Free Retrieval
+                    </label>
+                    <p class="notes">If checked, retrieving items from this container is a free action (e.g., Handy Haversack).</p>
+                </div>
+            </div>
+            
             {{#if isOwned}}
+            <h3 class="form-header">Equipment Status</h3>
             <div class="checkbox-group">
                 <label class="checkbox">
                     <input type="checkbox" data-string-field="system.equipped" {{checked (eq system.equipped "true")}} /> Equipped

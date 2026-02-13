@@ -830,8 +830,9 @@
   align-items: center;
   margin: 15px 0 5px;
   padding: 5px;
-  background: var(--color-character-accent);
-  color: var(--color-text-light);
+  background: #D2B48C;
+  /* Dark tan */
+  color: var(--color-text-primary);
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -842,12 +843,13 @@
 }
 
 .thirdera .items-header .item-create {
-  color: var(--color-text-light);
+  color: var(--color-text-primary);
   cursor: pointer;
 }
 
 .thirdera .items-header .item-create:hover {
-  text-shadow: 0 0 10px var(--color-text-light);
+  color: var(--color-hover);
+  text-shadow: none;
 }
 
 .thirdera .items-list {
@@ -889,7 +891,10 @@
 
 .thirdera .items-list .item h4 {
   margin: 0;
-  font-size: var(--font-size-body);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
 }
 
 .thirdera .items-list .item .item-controls {
@@ -1740,4 +1745,126 @@
 .thirdera .breakdown-row .load-calc {
   color: var(--color-text-muted);
   font-style: italic;
+}
+
+/* Container Styles */
+.thirdera .container-item {
+  background: var(--color-bg-light) !important;
+  border-left: 3px solid var(--color-border-highlight);
+}
+
+.thirdera .container-item .item-name,
+.thirdera .container-item .item-controls,
+.thirdera .container-item h4,
+.thirdera .container-item .item-name h4 {
+  color: var(--color-text) !important;
+}
+
+.thirdera .container-item .item-detail {
+  color: var(--color-text-muted) !important;
+}
+
+.thirdera .container-toggle {
+  cursor: pointer;
+  margin-right: 5px;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.thirdera .container-toggle:hover {
+  color: var(--color-text);
+}
+
+.thirdera .container-capacity {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  font-weight: normal;
+  margin-left: 5px;
+}
+
+.thirdera .container-weight-mode-indicator {
+  display: inline-block;
+  margin-left: 5px;
+  color: var(--color-text-muted);
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+.thirdera .container-weight-mode-indicator:hover {
+  opacity: 1;
+}
+
+.thirdera .container-contents {
+  padding-left: 30px;
+  background: transparent !important;
+  border-left: 2px solid var(--color-border-dark);
+  min-height: 20px;
+  list-style: none;
+  margin: 0;
+}
+
+/* Prevent container-contents from getting item styling */
+.thirdera .items-list > .container-contents {
+  background: transparent !important;
+  border: none;
+  border-left: 2px solid var(--color-border-dark);
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.thirdera .container-contents.droppable {
+  position: relative;
+}
+
+.thirdera .container-contents.droppable::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+/* Ensure container item header stays visible when expanded */
+.thirdera .items-list > .container-item {
+  background: var(--color-bg-light) !important;
+}
+
+.thirdera .items-list > .container-item * {
+  background: transparent !important;
+}
+
+.thirdera .items-list > .container-item .item-name,
+.thirdera .items-list > .container-item .item-controls {
+  background: transparent !important;
+}
+
+.thirdera .container-items {
+  margin: 5px 0;
+}
+
+.thirdera .container-content-item {
+  opacity: 0.9;
+}
+
+.thirdera .container-content-item .item-name {
+  padding-left: 10px;
+}
+
+.thirdera .container-empty {
+  padding: 10px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-style: italic;
+  font-size: var(--font-size-note);
+}
+
+.thirdera .item-remove-container {
+  color: var(--color-text-faint);
+  cursor: pointer;
+}
+
+.thirdera .item-remove-container:hover {
+  color: var(--color-hover);
 }

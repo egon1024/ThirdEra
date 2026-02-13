@@ -90,6 +90,12 @@
             "Weight": "Weight",
             "Lbs": "lbs."
         },
+        "Container": {
+            "Equipped": "Equipped",
+            "InContainer": "In Container",
+            "Remove": "Remove from Container",
+            "Empty": "Empty"
+        },
         "Currency": {
             "pp": "Platinum (pp)",
             "gp": "Gold (gp)",
