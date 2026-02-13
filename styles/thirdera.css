@@ -65,6 +65,14 @@
   font-family: var(--font-family);
 }
 
+.thirdera.audit-log {
+  font-size: var(--font-size-note);
+  color: var(--color-text-secondary);
+  border-left: 2px solid var(--color-character-accent);
+  padding-left: 5px;
+  margin: 2px 0;
+}
+
 .thirdera form {
   height: 100%;
   display: flex;

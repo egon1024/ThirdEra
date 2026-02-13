@@ -68,6 +68,10 @@
             "CurrencyWeight": {
                 "Name": "Track Currency Weight",
                 "Hint": "If enabled, every 50 coins will add 1 lb to the total weight (D&D 3.5 standard)."
+            },
+            "AuditLogEnabled": {
+                "Name": "Enable Audit Log",
+                "Hint": "When enabled, GMs receive whisper notifications in chat when actors or items are created, updated, or deleted."
             }
         },
         "Inventory": {
@@ -91,6 +95,23 @@
             "gpAbbr": "gp",
             "spAbbr": "sp",
             "cpAbbr": "cp"
+        },
+        "AuditLog": {
+            "Created": "{user} created {type} '{name}'",
+            "Updated": "{user} updated {type} '{name}'",
+            "Deleted": "{user} deleted {type} '{name}'",
+            "OnActor": "on actor '{name}'",
+            "SpeakerAlias": "Third Era Audit Log",
+            "FieldChange": {
+                "Level": "level: {oldValue} → {newValue}",
+                "AbilityScore": "{ability}: {oldValue} → {newValue}",
+                "HP": "HP: {oldValue} → {newValue}",
+                "MaxHP": "Max HP: {oldValue} → {newValue}",
+                "Alignment": "alignment: {oldValue} → {newValue}",
+                "Deity": "deity: {oldValue} → {newValue}",
+                "Equipped": "equipped: {oldValue} → {newValue}",
+                "SpellLevel": "spell level: {oldValue} → {newValue}"
+            }
         }
     },
     "TYPES": {

@@ -23,12 +23,16 @@ import { ThirdEraItem } from "./module/documents/item.mjs";
 // Import sheet classes
 import { ThirdEraActorSheet } from "./module/sheets/actor-sheet.mjs";
 import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
+import { AuditLog } from "./module/logic/audit-log.mjs";
 
 /**
  * Initialize the Third Era system
  */
 Hooks.once("init", async function () {
     console.log("Third Era | Initializing Third Era Game System");
+
+    // Initialize logic modules
+    AuditLog.init();
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;
@@ -120,6 +124,15 @@ Hooks.once("init", async function () {
                 actor.render(false);
             }
         }
+    });
+
+    game.settings.register("thirdera", "auditLogEnabled", {
+        name: "THIRDERA.Settings.AuditLogEnabled.Name",
+        hint: "THIRDERA.Settings.AuditLogEnabled.Hint",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true
     });
 
     // Register data models

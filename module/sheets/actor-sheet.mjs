@@ -25,6 +25,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             toggleEquip: ThirdEraActorSheet.#onToggleEquip,
             equipWeaponHand: ThirdEraActorSheet.#onEquipWeaponHand,
             changeTab: ThirdEraActorSheet.#onChangeTab,
+            configureOwnership: ThirdEraActorSheet.#onConfigureOwnership,
             deleteActor: ThirdEraActorSheet.#onActorDeleteHeader,
             openRace: ThirdEraActorSheet.#onOpenRace,
             removeRace: ThirdEraActorSheet.#onRemoveRace,
@@ -39,6 +40,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         },
         window: {
             controls: [
+                {
+                    icon: "fa-solid fa-lock",
+                    label: "OWNERSHIP.Configure",
+                    action: "configureOwnership",
+                    ownership: "OWNER"
+                },
                 {
                     icon: "fa-solid fa-trash",
                     label: "Delete",
@@ -591,6 +598,41 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const item = this.actor.items.get(itemId);
         if (item) {
             return await item.delete();
+        }
+    }
+
+    /**
+     * Handle configuring ownership/permissions for the actor
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onConfigureOwnership(event, target) {
+        event.preventDefault();
+        console.log("Third Era | Configure ownership clicked", {document: this.document, apps: foundry.applications?.apps});
+        try {
+            // Try multiple ways to access DocumentOwnershipConfig
+            let DocumentOwnershipConfig = foundry.applications?.apps?.DocumentOwnershipConfig;
+            if (!DocumentOwnershipConfig && foundry.applications?.apps) {
+                // Try accessing via the apps object directly
+                const apps = foundry.applications.apps;
+                DocumentOwnershipConfig = apps.DocumentOwnershipConfig;
+            }
+            
+            if (!DocumentOwnershipConfig) {
+                console.error("Third Era | DocumentOwnershipConfig not found. Available apps:", Object.keys(foundry.applications?.apps || {}));
+                ui.notifications.error("Unable to open ownership configuration. Please check the console for details.");
+                return;
+            }
+            
+            console.log("Third Era | Opening ownership config for:", this.document.name);
+            const app = new DocumentOwnershipConfig({
+                document: this.document
+            });
+            return await app.render({force: true});
+        } catch (error) {
+            console.error("Third Era | Error opening ownership configuration:", error);
+            ui.notifications.error(`Failed to open ownership configuration: ${error.message}`);
         }
     }
 
