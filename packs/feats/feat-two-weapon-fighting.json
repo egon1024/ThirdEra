@@ -1,0 +1,18 @@
+{
+  "_id": "feat-two-weapon-fighting",
+  "name": "Two-Weapon Fighting",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You can fight with a weapon in each hand. You can make an extra attack each round with the second weapon.</p>",
+    "key": "twoWeaponFighting",
+    "type": "General",
+    "prerequisites": "Dex 15",
+    "benefit": "<p>Your penalties for fighting with two weapons are reduced. The penalty for your primary hand lessens by 2 and the one for your off hand lessens by 6.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

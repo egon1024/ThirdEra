@@ -1,0 +1,22 @@
+{
+  "_id": "skill-bluff",
+  "name": "Bluff",
+  "type": "skill",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>You know how to tell a lie.</p>",
+    "key": "bluff",
+    "ability": "cha",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

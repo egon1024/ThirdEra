@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-pouch",
+  "name": "Pouch, Belt",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A belt pouch is a small leather bag that can be attached to a belt.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 0.5,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 5,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

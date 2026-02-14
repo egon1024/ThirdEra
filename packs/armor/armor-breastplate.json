@@ -1,0 +1,29 @@
+{
+  "_id": "armor-breastplate",
+  "name": "Breastplate",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>A breastplate protects the wearer's torso with a single piece of sculpted metal.</p>",
+    "armor": {
+      "type": "medium",
+      "bonus": 5,
+      "maxDex": 3,
+      "checkPenalty": -4,
+      "spellFailure": 25
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 200,
+    "weight": 30,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

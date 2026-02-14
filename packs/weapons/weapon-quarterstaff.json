@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-quarterstaff",
+  "name": "Quarterstaff",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A quarterstaff is a simple piece of wood, about 5 feet in length.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "bludgeoning"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 0,
+    "weight": 4,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

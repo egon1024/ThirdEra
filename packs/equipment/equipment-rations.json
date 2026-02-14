@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-rations",
+  "name": "Rations, Trail (per day)",
+  "type": "equipment",
+  "img": "icons/svg/tankard.svg",
+  "system": {
+    "description": "<p>Trail rations consist of dry foods suitable for extended travel, including jerky, dried fruit, hardtack, and nuts.</p>",
+    "quantity": 1,
+    "cost": 0.5,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

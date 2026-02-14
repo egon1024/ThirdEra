@@ -1,0 +1,22 @@
+{
+  "_id": "skill-sense-motive",
+  "name": "Sense Motive",
+  "type": "skill",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>You can get a hunch about a social situation or read a person.</p>",
+    "key": "senseMotive",
+    "ability": "wis",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 26
+}

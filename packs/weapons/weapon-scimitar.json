@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-scimitar",
+  "name": "Scimitar",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A scimitar is a curved-bladed sword, usually measuring about 3 feet in length.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 18,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "oneHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 15,
+    "weight": 4,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

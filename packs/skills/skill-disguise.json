@@ -1,0 +1,22 @@
+{
+  "_id": "skill-disguise",
+  "name": "Disguise",
+  "type": "skill",
+  "img": "icons/svg/invisible.svg",
+  "system": {
+    "description": "<p>You are skilled at changing your appearance.</p>",
+    "key": "disguise",
+    "ability": "cha",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

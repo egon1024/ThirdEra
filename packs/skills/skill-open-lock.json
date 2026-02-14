@@ -1,0 +1,22 @@
+{
+  "_id": "skill-open-lock",
+  "name": "Open Lock",
+  "type": "skill",
+  "img": "icons/svg/padlock.svg",
+  "system": {
+    "description": "<p>This skill lets you open locks on doors, chests, and other devices.</p>",
+    "key": "openLock",
+    "ability": "dex",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "true",
+    "armorCheckPenalty": "false",
+    "exclusive": "true"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 21
+}

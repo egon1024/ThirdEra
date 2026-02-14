@@ -1,0 +1,33 @@
+{
+  "_id": "class-barbarian",
+  "name": "Barbarian",
+  "type": "class",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Barbarians are warriors who shun heavy armor and shields in favor of mobility and raw power.</p>",
+    "hitDie": "d12",
+    "babProgression": "good",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "poor"
+    },
+    "skillPointsPerLevel": 4,
+    "classSkills": [
+      {"key": "climb", "name": "Climb"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "handleAnimal", "name": "Handle Animal"},
+      {"key": "intimidate", "name": "Intimidate"},
+      {"key": "jump", "name": "Jump"},
+      {"key": "listen", "name": "Listen"},
+      {"key": "ride", "name": "Ride"},
+      {"key": "survival", "name": "Survival"},
+      {"key": "swim", "name": "Swim"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

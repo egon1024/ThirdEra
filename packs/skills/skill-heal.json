@@ -1,0 +1,22 @@
+{
+  "_id": "skill-heal",
+  "name": "Heal",
+  "type": "skill",
+  "img": "icons/svg/heal.svg",
+  "system": {
+    "description": "<p>You are skilled at tending to wounds and ailments.</p>",
+    "key": "heal",
+    "ability": "wis",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 14
+}

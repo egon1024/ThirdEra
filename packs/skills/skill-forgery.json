@@ -1,0 +1,22 @@
+{
+  "_id": "skill-forgery",
+  "name": "Forgery",
+  "type": "skill",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "description": "<p>You can make fake documents.</p>",
+    "key": "forgery",
+    "ability": "int",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 11
+}

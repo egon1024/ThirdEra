@@ -1,0 +1,18 @@
+{
+  "_id": "feat-toughness",
+  "name": "Toughness",
+  "type": "feat",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>You have enhanced physical stamina.</p>",
+    "key": "toughness",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You gain +3 hit points. For every Hit Die beyond 3, you gain an additional +1 hit point. If you have more than 3 Hit Dice, you gain +1 hit points whenever you gain a Hit Die (such as when you gain a level).</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

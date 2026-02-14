@@ -1,0 +1,18 @@
+{
+  "_id": "feat-spell-focus",
+  "name": "Spell Focus",
+  "type": "feat",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>Choose a school of magic. Any spells you cast of that school are more difficult to resist.</p>",
+    "key": "spellFocus",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>Add +1 to the Difficulty Class for all saving throws against spells from the school of magic you select.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "skill-disable-device",
+  "name": "Disable Device",
+  "type": "skill",
+  "img": "icons/svg/padlock.svg",
+  "system": {
+    "description": "<p>Training in this skill lets you disarm traps and open locks.</p>",
+    "key": "disableDevice",
+    "ability": "int",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "true",
+    "armorCheckPenalty": "false",
+    "exclusive": "true"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

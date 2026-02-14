@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-club",
+  "name": "Club",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A club is essentially a heavy piece of wood or metal, narrower at one end than the other.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "bludgeoning"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "oneHanded",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 0,
+    "weight": 3,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

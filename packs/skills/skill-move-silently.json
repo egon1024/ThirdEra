@@ -1,0 +1,22 @@
+{
+  "_id": "skill-move-silently",
+  "name": "Move Silently",
+  "type": "skill",
+  "img": "icons/svg/walk.svg",
+  "system": {
+    "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+    "key": "moveSilently",
+    "ability": "dex",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "true",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 20
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "skill-speak-language",
+  "name": "Speak Language",
+  "type": "skill",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>Unlike other skills, you don't make Speak Language checks. Instead, you either know a language or you don't. Each point you put in this skill allows you to speak one additional language.</p>",
+    "key": "speakLanguage",
+    "ability": "int",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 28
+}

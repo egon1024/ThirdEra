@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-backpack",
+  "name": "Backpack",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A backpack is a leather pack carried on the back, typically with straps to secure it.</p>",
+    "quantity": 1,
+    "cost": 2,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 60,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

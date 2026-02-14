@@ -1,0 +1,40 @@
+{
+  "_id": "class-monk",
+  "name": "Monk",
+  "type": "class",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Monks are versatile warriors skilled at fighting without weapons or armor.</p>",
+    "hitDie": "d8",
+    "babProgression": "average",
+    "saves": {
+      "fort": "good",
+      "ref": "good",
+      "will": "good"
+    },
+    "skillPointsPerLevel": 4,
+    "classSkills": [
+      {"key": "balance", "name": "Balance"},
+      {"key": "climb", "name": "Climb"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "escapeArtist", "name": "Escape Artist"},
+      {"key": "hide", "name": "Hide"},
+      {"key": "jump", "name": "Jump"},
+      {"key": "knowledge", "name": "Knowledge"},
+      {"key": "listen", "name": "Listen"},
+      {"key": "moveSilently", "name": "Move Silently"},
+      {"key": "perform", "name": "Perform"},
+      {"key": "profession", "name": "Profession"},
+      {"key": "ride", "name": "Ride"},
+      {"key": "senseMotive", "name": "Sense Motive"},
+      {"key": "spot", "name": "Spot"},
+      {"key": "swim", "name": "Swim"},
+      {"key": "tumble", "name": "Tumble"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

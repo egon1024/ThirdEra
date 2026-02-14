@@ -1,0 +1,24 @@
+{
+  "_id": "race-human",
+  "name": "Human",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>Humans are the most adaptable and ambitious people among the common races. Whatever drives them, humans are the innovators, the achievers, and the pioneers of the worlds.</p>",
+    "size": "Medium",
+    "speed": 30,
+    "abilityAdjustments": {
+      "str": 0,
+      "dex": 0,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "excludedSkills": [],
+    "favoredClass": "Any"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

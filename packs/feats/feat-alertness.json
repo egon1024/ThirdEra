@@ -1,0 +1,18 @@
+{
+  "_id": "feat-alertness",
+  "name": "Alertness",
+  "type": "feat",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "description": "<p>You are particularly observant.</p>",
+    "key": "alertness",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

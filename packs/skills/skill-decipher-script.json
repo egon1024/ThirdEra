@@ -1,0 +1,22 @@
+{
+  "_id": "skill-decipher-script",
+  "name": "Decipher Script",
+  "type": "skill",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "description": "<p>You can decipher writing in an unfamiliar language or a message written in an incomplete or archaic form.</p>",
+    "key": "decipherScript",
+    "ability": "int",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "true",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

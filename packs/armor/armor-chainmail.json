@@ -1,0 +1,29 @@
+{
+  "_id": "armor-chainmail",
+  "name": "Chainmail",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Chainmail is made of interlocking metal rings.</p>",
+    "armor": {
+      "type": "medium",
+      "bonus": 5,
+      "maxDex": 2,
+      "checkPenalty": -5,
+      "spellFailure": 30
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 150,
+    "weight": 40,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

@@ -1,0 +1,41 @@
+{
+  "_id": "class-ranger",
+  "name": "Ranger",
+  "type": "class",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>Rangers are skilled stalkers and hunters who make their home in the woods.</p>",
+    "hitDie": "d8",
+    "babProgression": "good",
+    "saves": {
+      "fort": "good",
+      "ref": "good",
+      "will": "poor"
+    },
+    "skillPointsPerLevel": 6,
+    "classSkills": [
+      {"key": "climb", "name": "Climb"},
+      {"key": "concentration", "name": "Concentration"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "handleAnimal", "name": "Handle Animal"},
+      {"key": "heal", "name": "Heal"},
+      {"key": "hide", "name": "Hide"},
+      {"key": "jump", "name": "Jump"},
+      {"key": "knowledge", "name": "Knowledge"},
+      {"key": "listen", "name": "Listen"},
+      {"key": "moveSilently", "name": "Move Silently"},
+      {"key": "profession", "name": "Profession"},
+      {"key": "ride", "name": "Ride"},
+      {"key": "search", "name": "Search"},
+      {"key": "spot", "name": "Spot"},
+      {"key": "survival", "name": "Survival"},
+      {"key": "swim", "name": "Swim"},
+      {"key": "useRope", "name": "Use Rope"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

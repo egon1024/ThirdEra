@@ -24,6 +24,7 @@ import { ThirdEraItem } from "./module/documents/item.mjs";
 import { ThirdEraActorSheet } from "./module/sheets/actor-sheet.mjs";
 import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 import { AuditLog } from "./module/logic/audit-log.mjs";
+import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
 
 /**
  * Initialize the Third Era system
@@ -188,8 +189,11 @@ Hooks.once("init", async function () {
 /**
  * Ready hook
  */
-Hooks.once("ready", function () {
+Hooks.once("ready", async function () {
     console.log("Third Era | System ready");
+    
+    // Load compendiums from JSON files if they're empty
+    await CompendiumLoader.init();
 });
 
 /**

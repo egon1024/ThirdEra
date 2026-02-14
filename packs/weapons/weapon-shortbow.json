@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-shortbow",
+  "name": "Shortbow",
+  "type": "weapon",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>A shortbow is made out of a single piece of wood, about 3 feet in length.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 60,
+    "properties": {
+      "melee": "ranged",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 30,
+    "weight": 2,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

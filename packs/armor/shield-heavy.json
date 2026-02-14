@@ -1,0 +1,29 @@
+{
+  "_id": "shield-heavy",
+  "name": "Heavy Shield",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>A heavy shield is a large shield that you strap to your forearm and grip with your hand.</p>",
+    "armor": {
+      "type": "shield",
+      "bonus": 2,
+      "maxDex": null,
+      "checkPenalty": -2,
+      "spellFailure": 15
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 30,
+      "ft20": 20
+    },
+    "cost": 7,
+    "weight": 10,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 11
+}

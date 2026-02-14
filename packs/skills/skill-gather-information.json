@@ -1,0 +1,22 @@
+{
+  "_id": "skill-gather-information",
+  "name": "Gather Information",
+  "type": "skill",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>You can use this skill to collect rumors about a specific topic or to obtain general information.</p>",
+    "key": "gatherInformation",
+    "ability": "cha",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 12
+}

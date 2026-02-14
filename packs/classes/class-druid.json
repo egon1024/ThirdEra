@@ -1,0 +1,37 @@
+{
+  "_id": "class-druid",
+  "name": "Druid",
+  "type": "class",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>Druids gain their magical power through being at one with nature or through a connection to a powerful nature-related deity.</p>",
+    "hitDie": "d8",
+    "babProgression": "average",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "good"
+    },
+    "skillPointsPerLevel": 4,
+    "classSkills": [
+      {"key": "concentration", "name": "Concentration"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "diplomacy", "name": "Diplomacy"},
+      {"key": "handleAnimal", "name": "Handle Animal"},
+      {"key": "heal", "name": "Heal"},
+      {"key": "knowledge", "name": "Knowledge"},
+      {"key": "listen", "name": "Listen"},
+      {"key": "profession", "name": "Profession"},
+      {"key": "ride", "name": "Ride"},
+      {"key": "spellcraft", "name": "Spellcraft"},
+      {"key": "spot", "name": "Spot"},
+      {"key": "survival", "name": "Survival"},
+      {"key": "swim", "name": "Swim"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

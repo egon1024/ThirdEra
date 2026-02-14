@@ -1,0 +1,24 @@
+{
+  "_id": "race-gnome",
+  "name": "Gnome",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>Gnomes are a small race, known for their eccentric sense of humor, their love of pranks, and their technical expertise.</p>",
+    "size": "Small",
+    "speed": 20,
+    "abilityAdjustments": {
+      "str": -2,
+      "dex": 0,
+      "con": 2,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "excludedSkills": [],
+    "favoredClass": "Bard"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

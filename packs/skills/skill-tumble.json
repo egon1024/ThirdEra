@@ -1,0 +1,22 @@
+{
+  "_id": "skill-tumble",
+  "name": "Tumble",
+  "type": "skill",
+  "img": "icons/svg/jump.svg",
+  "system": {
+    "description": "<p>You can't use this skill if your speed has been reduced by armor, excess equipment, or loot.</p>",
+    "key": "tumble",
+    "ability": "dex",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "true",
+    "armorCheckPenalty": "true",
+    "exclusive": "true"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 33
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "armor-splint-mail",
+  "name": "Splint Mail",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Splint mail is made up of overlapping strips of metal, attached to a backing of leather or cloth.</p>",
+    "armor": {
+      "type": "heavy",
+      "bonus": 6,
+      "maxDex": 0,
+      "checkPenalty": -7,
+      "spellFailure": 40
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 200,
+    "weight": 45,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

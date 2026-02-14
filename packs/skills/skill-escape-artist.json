@@ -1,0 +1,22 @@
+{
+  "_id": "skill-escape-artist",
+  "name": "Escape Artist",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Make an Escape Artist check to slip out of bonds or escape from a grapple.</p>",
+    "key": "escapeArtist",
+    "ability": "dex",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "true",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 10
+}

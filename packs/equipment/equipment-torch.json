@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-torch",
+  "name": "Torch",
+  "type": "equipment",
+  "img": "icons/svg/light.svg",
+  "system": {
+    "description": "<p>A torch is a wooden rod with one end wrapped in a combustible material.</p>",
+    "quantity": 1,
+    "cost": 0.01,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

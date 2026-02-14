@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-holy-symbol",
+  "name": "Holy Symbol, Wooden",
+  "type": "equipment",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>A holy symbol is a representation of a deity or pantheon.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

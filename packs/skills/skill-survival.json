@@ -1,0 +1,22 @@
+{
+  "_id": "skill-survival",
+  "name": "Survival",
+  "type": "skill",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
+    "key": "survival",
+    "ability": "wis",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 31
+}

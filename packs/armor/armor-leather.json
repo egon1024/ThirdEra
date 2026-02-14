@@ -1,0 +1,29 @@
+{
+  "_id": "armor-leather",
+  "name": "Leather Armor",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Leather armor is made from the hide of an animal.</p>",
+    "armor": {
+      "type": "light",
+      "bonus": 2,
+      "maxDex": 6,
+      "checkPenalty": 0,
+      "spellFailure": 10
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 30,
+      "ft20": 20
+    },
+    "cost": 10,
+    "weight": 15,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

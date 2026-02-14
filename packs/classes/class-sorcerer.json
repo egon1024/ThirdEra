@@ -1,0 +1,30 @@
+{
+  "_id": "class-sorcerer",
+  "name": "Sorcerer",
+  "type": "class",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>Sorcerers create magic the way a poet creates poems, with inborn talent honed by practice.</p>",
+    "hitDie": "d4",
+    "babProgression": "poor",
+    "saves": {
+      "fort": "poor",
+      "ref": "poor",
+      "will": "good"
+    },
+    "skillPointsPerLevel": 2,
+    "classSkills": [
+      {"key": "bluff", "name": "Bluff"},
+      {"key": "concentration", "name": "Concentration"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "knowledge", "name": "Knowledge"},
+      {"key": "profession", "name": "Profession"},
+      {"key": "spellcraft", "name": "Spellcraft"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

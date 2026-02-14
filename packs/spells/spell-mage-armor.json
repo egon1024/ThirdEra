@@ -1,0 +1,31 @@
+{
+  "_id": "spell-mage-armor",
+  "name": "Mage Armor",
+  "type": "spell",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>An invisible but tangible field of force surrounds the subject of a mage armor spell, providing a +4 armor bonus to AC.</p>",
+    "level": 1,
+    "school": "Conjuration (Creation) [Force]",
+    "components": {
+      "verbal": "true",
+      "somatic": "true",
+      "material": "true",
+      "focus": "false",
+      "divineFocus": "false",
+      "xp": 0,
+      "materialDescription": "A piece of cured leather"
+    },
+    "castingTime": "1 standard action",
+    "range": "Touch",
+    "target": "Creature touched",
+    "duration": "1 hour/level (D)",
+    "savingThrow": "Will negates (harmless)",
+    "spellResistance": "No",
+    "prepared": 0,
+    "cast": 0
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

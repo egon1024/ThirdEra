@@ -1,0 +1,31 @@
+{
+  "_id": "class-cleric",
+  "name": "Cleric",
+  "type": "class",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>Clerics are intermediaries between the mortal world and the distant planes of the gods.</p>",
+    "hitDie": "d8",
+    "babProgression": "average",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "good"
+    },
+    "skillPointsPerLevel": 2,
+    "classSkills": [
+      {"key": "concentration", "name": "Concentration"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "diplomacy", "name": "Diplomacy"},
+      {"key": "heal", "name": "Heal"},
+      {"key": "knowledge", "name": "Knowledge"},
+      {"key": "profession", "name": "Profession"},
+      {"key": "spellcraft", "name": "Spellcraft"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

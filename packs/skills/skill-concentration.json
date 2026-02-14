@@ -1,0 +1,22 @@
+{
+  "_id": "skill-concentration",
+  "name": "Concentration",
+  "type": "skill",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>Make a Concentration check whenever you might be distracted (by taking damage, by harsh weather, and so on) while engaged in some action that requires your full attention.</p>",
+    "key": "concentration",
+    "ability": "con",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

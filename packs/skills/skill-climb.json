@@ -1,0 +1,22 @@
+{
+  "_id": "skill-climb",
+  "name": "Climb",
+  "type": "skill",
+  "img": "icons/svg/mountain.svg",
+  "system": {
+    "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
+    "key": "climb",
+    "ability": "str",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "true",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

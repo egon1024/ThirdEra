@@ -1,0 +1,22 @@
+{
+  "_id": "skill-hide",
+  "name": "Hide",
+  "type": "skill",
+  "img": "icons/svg/invisible.svg",
+  "system": {
+    "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+    "key": "hide",
+    "ability": "dex",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "true",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 15
+}

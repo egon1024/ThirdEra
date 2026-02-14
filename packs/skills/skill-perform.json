@@ -1,0 +1,22 @@
+{
+  "_id": "skill-perform",
+  "name": "Perform",
+  "type": "skill",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>Like Craft, Knowledge, and Profession, Perform is actually a number of separate skills. You could have several Perform skills, each with its own ranks, each purchased as a separate skill.</p>",
+    "key": "perform",
+    "ability": "cha",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 22
+}

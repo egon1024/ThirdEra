@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-greatsword",
+  "name": "Greatsword",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A greatsword is a large, two-handed blade.</p>",
+    "damage": {
+      "dice": "2d6",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 19,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 50,
+    "weight": 8,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

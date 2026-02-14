@@ -1,0 +1,22 @@
+{
+  "_id": "skill-spot",
+  "name": "Spot",
+  "type": "skill",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+    "key": "spot",
+    "ability": "wis",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 30
+}
