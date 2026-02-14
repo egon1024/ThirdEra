@@ -8,11 +8,21 @@ export class AuditLog {
     
     // Store old values before updates to track changes accurately
     static _oldValues = new Map();
+    
+    // Track if hooks are already registered to prevent duplicates
+    static _hooksRegistered = false;
 
     /**
      * Initialize the audit log by registering hooks.
      */
     static init() {
+        // Prevent duplicate hook registrations
+        if (this._hooksRegistered) {
+            console.warn("Third Era | AuditLog.init() called multiple times, skipping duplicate registration");
+            return;
+        }
+        this._hooksRegistered = true;
+        
         // Document create hooks
         Hooks.on("createActor", (document, options, userId) => this._onDocumentEvent("Created", document, userId));
         Hooks.on("createItem", (document, options, userId) => this._onDocumentEvent("Created", document, userId));
@@ -26,7 +36,57 @@ export class AuditLog {
         });
 
         // Document update hooks
-        Hooks.on("updateActor", (document, diff, options, userId) => this._onDocumentEvent("Updated", document, userId, diff));
+        Hooks.on("updateActor", (document, diff, options, userId) => {
+            // EARLY FILTER: Check for expandedContainers flag BEFORE calling _onDocumentEvent
+            // This prevents any processing if it's just a UI state change
+            if (diff?.flags?.thirdera && "expandedContainers" in diff.flags.thirdera) {
+                // Check if ONLY expandedContainers changed (no other meaningful changes)
+                const diffKeys = Object.keys(diff).filter(k => !k.startsWith("_"));
+                const hasOtherChanges = diffKeys.some(k => k !== "flags");
+                
+                if (!hasOtherChanges) {
+                    // Only flags changed, check if it's only expandedContainers
+                    const flattened = foundry.utils.flattenObject(diff.flags);
+                    const flattenedKeys = Object.keys(flattened);
+                    const nonSystemFlags = flattenedKeys.filter(fk => 
+                        !fk.startsWith("system.") && 
+                        !fk.startsWith("core.") && 
+                        !fk.includes("expandedContainers")
+                    );
+                    
+                    if (nonSystemFlags.length === 0) {
+                        // Only expandedContainers changed, skip entirely
+                        return;
+                    }
+                }
+            }
+            
+            // Also check flattened structure as fallback
+            if (diff?.flags) {
+                const flattened = foundry.utils.flattenObject(diff.flags);
+                const flattenedKeys = Object.keys(flattened);
+                const hasExpandedContainers = flattenedKeys.some(fk => fk.includes("expandedContainers"));
+                
+                if (hasExpandedContainers) {
+                    // Check if ONLY expandedContainers (or system/core flags) changed
+                    const diffKeys = Object.keys(diff).filter(k => !k.startsWith("_"));
+                    const hasOtherChanges = diffKeys.some(k => k !== "flags");
+                    
+                    if (!hasOtherChanges) {
+                        const nonSystemFlags = flattenedKeys.filter(fk => 
+                            !fk.startsWith("system.") && 
+                            !fk.startsWith("core.") && 
+                            !fk.includes("expandedContainers")
+                        );
+                        if (nonSystemFlags.length === 0) {
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            return this._onDocumentEvent("Updated", document, userId, diff);
+        });
         Hooks.on("updateItem", (document, diff, options, userId) => this._onDocumentEvent("Updated", document, userId, diff));
 
         // Document delete hooks
@@ -66,6 +126,7 @@ export class AuditLog {
             "system.currency.cp",
             // Item fields - general
             "system.equipped",
+            "system.containerId",
             "system.weight",
             "system.cost",
             "system.quantity",
@@ -113,6 +174,47 @@ export class AuditLog {
      * @private
      */
     static async _onDocumentEvent(action, document, userId, diff = null) {
+        
+        // EARLY CHECK: If this is an update with only expandedContainers flag change, skip it immediately
+        // This must happen BEFORE any other checks to prevent UI state changes from being logged
+        if (action === "Updated" && diff) {
+            // Check if flags exist and contain expandedContainers
+            if (diff.flags) {
+                const flattened = foundry.utils.flattenObject(diff.flags);
+                const flattenedKeys = Object.keys(flattened);
+                const hasExpandedContainers = flattenedKeys.some(fk => fk.includes("expandedContainers"));
+                
+                if (hasExpandedContainers) {
+                    const nonSystemFlags = flattenedKeys.filter(fk => 
+                        !fk.startsWith("system.") && 
+                        !fk.startsWith("core.") && 
+                        !fk.includes("expandedContainers")
+                    );
+                    // If only expandedContainers (or system/core flags) changed, skip entirely
+                    if (nonSystemFlags.length === 0) {
+                        return;
+                    }
+                }
+            }
+            
+            // Also check if the only meaningful change is flags with expandedContainers
+            const diffKeys = Object.keys(diff).filter(k => !k.startsWith("_"));
+            if (diffKeys.length === 1 && diffKeys[0] === "flags" && diff.flags) {
+                const flattened = foundry.utils.flattenObject(diff.flags);
+                const flattenedKeys = Object.keys(flattened);
+                if (flattenedKeys.some(fk => fk.includes("expandedContainers"))) {
+                    const nonSystemFlags = flattenedKeys.filter(fk => 
+                        !fk.startsWith("system.") && 
+                        !fk.startsWith("core.") && 
+                        !fk.includes("expandedContainers")
+                    );
+                    if (nonSystemFlags.length === 0) {
+                        return;
+                    }
+                }
+            }
+        }
+        
         // Check if audit log is enabled
         if (!game.settings.get("thirdera", "auditLogEnabled")) return;
 
@@ -133,6 +235,23 @@ export class AuditLog {
             if (keys.length === 0) return;
         }
 
+        // SECOND CHECK: Double-check for expandedContainers before building message
+        // This catches any cases that might have slipped through the first check
+        if (action === "Updated" && diff && diff.flags) {
+            const flattened = foundry.utils.flattenObject(diff.flags);
+            const flattenedKeys = Object.keys(flattened);
+            if (flattenedKeys.some(fk => fk.includes("expandedContainers"))) {
+                const nonSystemFlags = flattenedKeys.filter(fk => 
+                    !fk.startsWith("system.") && 
+                    !fk.startsWith("core.") && 
+                    !fk.includes("expandedContainers")
+                );
+                if (nonSystemFlags.length === 0) {
+                    return;
+                }
+            }
+        }
+
         // Build localization key
         const labelKey = `THIRDERA.AuditLog.${action}`;
         let message = game.i18n.format(labelKey, {
@@ -143,10 +262,150 @@ export class AuditLog {
 
         // Add significant field changes for updates
         if (action === "Updated" && diff) {
-            const significantFields = this._getSignificantFields(diff, document);
-            // Only add if there are actual changes (filters out "old → old" cases)
-            if (significantFields.length > 0) {
-                message += ` (${significantFields.join(", ")})`;
+            // FINAL CHECK: Before building the message, check one more time for expandedContainers
+            if (diff.flags) {
+                const flattened = foundry.utils.flattenObject(diff.flags);
+                const flattenedKeys = Object.keys(flattened);
+                if (flattenedKeys.some(fk => fk.includes("expandedContainers"))) {
+                    const nonSystemFlags = flattenedKeys.filter(fk => 
+                        !fk.startsWith("system.") && 
+                        !fk.startsWith("core.") && 
+                        !fk.includes("expandedContainers")
+                    );
+                if (nonSystemFlags.length === 0) {
+                    return;
+                }
+                }
+            }
+            
+            // Check for container operations (containerId changes)
+            if (foundry.utils.hasProperty(diff, "system.containerId") && document.parent instanceof Actor) {
+                const oldContainerId = this._getOldValue(document, diff, "system.containerId");
+                const newContainerId = foundry.utils.getProperty(diff, "system.containerId") || "";
+                
+                // Use the captured old value directly - if it wasn't captured, it will be undefined/null
+                // Don't use document.system.containerId as fallback because document is already updated
+                // Empty string is a valid old value (item wasn't in a container)
+                let actualOldContainerId = oldContainerId;
+                if (actualOldContainerId === undefined || actualOldContainerId === null) {
+                    // Value wasn't captured - this shouldn't happen if preUpdate hook fired
+                    // But if it did, we can't reliably get the old value since document is already updated
+                    actualOldContainerId = "";
+                }
+                
+                // Only process if containerId actually changed
+                if (actualOldContainerId !== newContainerId) {
+                    const actor = document.parent;
+                    let containerMessage = null;
+                    
+                    // Check if equipped status changed
+                    let equippedChanged = false;
+                    let wasEquipped = false;
+                    let isEquipped = false;
+                    
+                    if (document.type === "weapon") {
+                        const oldEquipped = this._getOldValue(document, diff, "system.equipped") || "none";
+                        const newEquipped = foundry.utils.getProperty(diff, "system.equipped");
+                        if (newEquipped !== undefined && oldEquipped !== newEquipped) {
+                            equippedChanged = true;
+                            wasEquipped = oldEquipped !== "none";
+                            isEquipped = newEquipped !== "none";
+                        }
+                    } else if (document.type === "armor" || document.type === "equipment") {
+                        const oldEquipped = this._getOldValue(document, diff, "system.equipped") || "false";
+                        const newEquipped = foundry.utils.getProperty(diff, "system.equipped");
+                        if (newEquipped !== undefined && oldEquipped !== newEquipped) {
+                            equippedChanged = true;
+                            wasEquipped = oldEquipped === "true";
+                            isEquipped = newEquipped === "true";
+                        }
+                    }
+                    
+                    // Item placed in container
+                    if (newContainerId && !actualOldContainerId) {
+                        const container = actor.items.get(newContainerId);
+                        const containerName = container?.name || "container";
+                        if (equippedChanged && wasEquipped && !isEquipped) {
+                            containerMessage = game.i18n.format("THIRDERA.AuditLog.ContainerPlacedUnequipped", {
+                                user: userName,
+                                itemName: document.name,
+                                containerName: containerName
+                            });
+                        } else {
+                            containerMessage = game.i18n.format("THIRDERA.AuditLog.ContainerPlaced", {
+                                user: userName,
+                                itemName: document.name,
+                                containerName: containerName
+                            });
+                        }
+                    }
+                    // Item removed from container
+                    else if (!newContainerId && actualOldContainerId) {
+                        const container = actor.items.get(actualOldContainerId);
+                        const containerName = container?.name || "container";
+                        if (equippedChanged && !wasEquipped && isEquipped) {
+                            containerMessage = game.i18n.format("THIRDERA.AuditLog.ContainerRemovedEquipped", {
+                                user: userName,
+                                itemName: document.name,
+                                containerName: containerName
+                            });
+                        } else {
+                            containerMessage = game.i18n.format("THIRDERA.AuditLog.ContainerRemoved", {
+                                user: userName,
+                                itemName: document.name,
+                                containerName: containerName
+                            });
+                        }
+                    }
+                    // Item moved between containers
+                    else if (newContainerId && actualOldContainerId && newContainerId !== actualOldContainerId) {
+                        const oldContainer = actor.items.get(actualOldContainerId);
+                        const newContainer = actor.items.get(newContainerId);
+                        const oldContainerName = oldContainer?.name || "container";
+                        const newContainerName = newContainer?.name || "container";
+                        if (equippedChanged && wasEquipped && !isEquipped) {
+                            containerMessage = game.i18n.format("THIRDERA.AuditLog.ContainerPlacedUnequipped", {
+                                user: userName,
+                                itemName: document.name,
+                                containerName: newContainerName
+                            }) + ` (moved from ${oldContainerName})`;
+                        } else {
+                            containerMessage = game.i18n.format("THIRDERA.AuditLog.ContainerPlaced", {
+                                user: userName,
+                                itemName: document.name,
+                                containerName: newContainerName
+                            }) + ` (moved from ${oldContainerName})`;
+                        }
+                    }
+                    
+                    if (containerMessage) {
+                        // Replace the standard message with container-specific message
+                        message = containerMessage;
+                        // Skip the standard significant fields processing for container operations
+                        // Actor context will be added in the normal flow below
+                    } else {
+                        // Not a container operation, continue with normal processing
+                        const significantFields = this._getSignificantFields(diff, document);
+                        // Only add if there are actual changes (filters out "old → old" cases)
+                        if (significantFields.length > 0) {
+                            message += ` (${significantFields.join(", ")})`;
+                        }
+                    }
+                } else {
+                    // containerId didn't change, process normally
+                    const significantFields = this._getSignificantFields(diff, document);
+                    // Only add if there are actual changes (filters out "old → old" cases)
+                    if (significantFields.length > 0) {
+                        message += ` (${significantFields.join(", ")})`;
+                    }
+                }
+            } else {
+                // No containerId change, process normally
+                const significantFields = this._getSignificantFields(diff, document);
+                // Only add if there are actual changes (filters out "old → old" cases)
+                if (significantFields.length > 0) {
+                    message += ` (${significantFields.join(", ")})`;
+                }
             }
         }
 
@@ -175,6 +434,41 @@ export class AuditLog {
             }
         }
 
+        // FINAL CHECK: One last check right before sending the message
+        // This is a safety net in case anything slipped through
+        if (action === "Updated" && diff && diff.flags) {
+            const flattened = foundry.utils.flattenObject(diff.flags);
+            const flattenedKeys = Object.keys(flattened);
+            if (flattenedKeys.some(fk => fk.includes("expandedContainers"))) {
+                const nonSystemFlags = flattenedKeys.filter(fk => 
+                    !fk.startsWith("system.") && 
+                    !fk.startsWith("core.") && 
+                    !fk.includes("expandedContainers")
+                );
+                if (nonSystemFlags.length === 0) {
+                    // Only expandedContainers changed, don't send message
+                    return;
+                }
+            }
+        }
+
+        // ABSOLUTE FINAL CHECK: Check the diff one more time right before sending
+        // Sometimes the diff structure can be different at this point
+        if (action === "Updated" && diff && diff.flags) {
+            const flattened = foundry.utils.flattenObject(diff.flags);
+            const flattenedKeys = Object.keys(flattened);
+            if (flattenedKeys.some(fk => fk.includes("expandedContainers"))) {
+                const nonSystemFlags = flattenedKeys.filter(fk => 
+                    !fk.startsWith("system.") && 
+                    !fk.startsWith("core.") && 
+                    !fk.includes("expandedContainers")
+                );
+                if (nonSystemFlags.length === 0) {
+                    return;
+                }
+            }
+        }
+
         // Send whisper to GMs
         const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
         if (gmIds.length === 0) return;
@@ -188,6 +482,24 @@ export class AuditLog {
 
         // Get icon and color for action type
         const actionConfig = this._getActionConfig(action);
+        
+        // FINAL CHECK: One last check right before creating the message
+        // This is a safety net in case anything slipped through
+        if (action === "Updated" && diff && diff.flags) {
+            const flattened = foundry.utils.flattenObject(diff.flags);
+            const flattenedKeys = Object.keys(flattened);
+            if (flattenedKeys.some(fk => fk.includes("expandedContainers"))) {
+                const nonSystemFlags = flattenedKeys.filter(fk => 
+                    !fk.startsWith("system.") && 
+                    !fk.startsWith("core.") && 
+                    !fk.includes("expandedContainers")
+                );
+                if (nonSystemFlags.length === 0) {
+                    console.log("Third Era | Audit Log - BLOCKED at final check before ChatMessage.create");
+                    return;
+                }
+            }
+        }
         
         try {
             await ChatMessage.create({
@@ -244,11 +556,34 @@ export class AuditLog {
             return true;
         });
 
-        // If only flags changed, check if they're system-internal
+        // If only flags changed, check if they're system-internal or UI state
         if (keys.length === 1 && keys[0] === "flags") {
             const flagKeys = Object.keys(foundry.utils.flattenObject(diff.flags || {}));
-            // If all flags are system-internal (system.* or core.*), filter them out
-            if (flagKeys.every(fk => fk.startsWith("system.") || fk.startsWith("core."))) {
+            
+            // Check if only expandedContainers changed (UI state) - exact match
+            if (flagKeys.length === 1 && flagKeys[0] === "thirdera.expandedContainers") {
+                return [];
+            }
+            
+            // Check if any flag contains expandedContainers and all are system/core/UI state
+            const hasExpandedContainers = flagKeys.some(fk => fk.includes("expandedContainers"));
+            if (hasExpandedContainers) {
+                // If all flags are system/core or expandedContainers, filter them out
+                const allSystemOrUI = flagKeys.every(fk => 
+                    fk.startsWith("system.") || 
+                    fk.startsWith("core.") || 
+                    fk.includes("expandedContainers")
+                );
+                if (allSystemOrUI) {
+                    return [];
+                }
+            }
+            
+            // Filter out system-internal flags (system.*, core.*)
+            if (flagKeys.length > 0 && flagKeys.every(fk => 
+                fk.startsWith("system.") || 
+                fk.startsWith("core.")
+            )) {
                 return [];
             }
         }

@@ -28,7 +28,10 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
             weight: new NumberField({ required: true, nullable: false, min: 0, initial: 0, label: "Weight (lbs)" }),
             quantity: new NumberField({ required: true, integer: true, min: 0, initial: 1, label: "Quantity" }),
 
-            equipped: new StringField({ required: true, blank: false, initial: "false", label: "Equipped" })
+            equipped: new StringField({ required: true, blank: false, initial: "false", label: "Equipped" }),
+
+            // Track which container this item is in (if any)
+            containerId: new StringField({ required: true, blank: true, initial: "", label: "Container ID" })
         };
     }
 }
