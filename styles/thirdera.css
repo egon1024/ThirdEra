@@ -15,6 +15,7 @@
   --color-bg-parchment-dark: #e6d5b8;
   --color-bg-input: rgba(255, 255, 255, 0.4);
   --color-bg-dark: #2a2a2a;
+  --color-bg-light: rgba(255, 255, 255, 0.1);
 
   /* Character theme */
   --color-character-accent: #4169E1;
@@ -51,6 +52,7 @@
   --color-border-dark: #000;
   --color-border-editor: #782e22;
   --color-border-profile: #555;
+  --color-border-highlight: #8B4513;
 
   /* Typography */
   --font-family: "Signika", sans-serif;
@@ -1812,6 +1814,25 @@
   padding-bottom: 5px;
 }
 
+/* Remove any borders from items inside container-contents */
+.thirdera .container-contents .item,
+.thirdera .container-contents .container-content-item,
+.thirdera .container-items .item,
+.thirdera .container-items .container-content-item {
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  border: none !important;
+}
+
+/* Only keep bottom border for separation between items */
+.thirdera .container-contents .item,
+.thirdera .container-contents .container-content-item,
+.thirdera .container-items .item,
+.thirdera .container-items .container-content-item {
+  border-bottom: 1px solid var(--color-border-divider) !important;
+}
+
 .thirdera .container-contents.droppable {
   position: relative;
 }
@@ -1846,10 +1867,17 @@
 
 .thirdera .container-content-item {
   opacity: 0.9;
+  border-left: none !important;
+  border: none !important;
 }
 
 .thirdera .container-content-item .item-name {
   padding-left: 10px;
+}
+
+/* Ensure container items don't get any left border */
+.thirdera .container-items .item {
+  border-left: none !important;
 }
 
 .thirdera .container-empty {
@@ -1867,4 +1895,26 @@
 
 .thirdera .item-remove-container:hover {
   color: var(--color-hover);
+}
+
+/* Container capacity visual indicators */
+.thirdera .container-item.container-capacity-ok {
+  border-left: 6px solid var(--color-equipped) !important;
+}
+
+.thirdera .container-item.container-capacity-moderate {
+  border-left: 6px solid var(--color-modified) !important;
+}
+
+.thirdera .container-item.container-capacity-warning {
+  border-left: 8px solid #d68100 !important;
+}
+
+.thirdera .container-item.container-capacity-full {
+  border-left: 8px solid var(--color-danger) !important;
+  background: rgba(214, 20, 0, 0.08) !important;
+}
+
+.thirdera .container-item.container-capacity-unlimited {
+  border-left: 6px solid var(--color-border-divider) !important;
 }

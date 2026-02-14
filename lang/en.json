@@ -112,6 +112,10 @@
             "Deleted": "{user} deleted {type} '{name}'",
             "OnActor": "on actor '{name}'",
             "SpeakerAlias": "Third Era Audit Log",
+            "ContainerPlaced": "{user} placed {itemName} in {containerName}",
+            "ContainerPlacedUnequipped": "{user} placed {itemName} in {containerName} and unequipped it",
+            "ContainerRemoved": "{user} removed {itemName} from {containerName}",
+            "ContainerRemovedEquipped": "{user} removed {itemName} from {containerName} and equipped it",
             "FieldChange": {
                 "Level": "level: {oldValue} → {newValue}",
                 "AbilityScore": "{ability}: {oldValue} → {newValue}",

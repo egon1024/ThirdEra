@@ -689,7 +689,7 @@
 
         {{!-- Containers with their contents --}}
         {{#each containers as |container id|}}
-        <li class="item flexrow container-item draggable" data-item-id="{{container._id}}" data-container-id="{{container._id}}">
+        <li class="item flexrow container-item draggable container-capacity-{{container.capacityStatus}}{{#unless container.capacityStatus}} container-capacity-unlimited{{/unless}}" data-item-id="{{container._id}}" data-container-id="{{container._id}}">
           <div class="item-name">
             <div class="item-image"><img src="{{container.img}}" title="{{container.name}}" width="24" height="24" /></div>
             <h4>

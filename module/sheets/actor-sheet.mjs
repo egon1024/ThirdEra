@@ -515,6 +515,22 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             
             container.effectiveWeight = effectiveWeight;
             container.containerWeight = containerWeight;
+            
+            // Determine capacity status for visual indicator
+            if (container.system.containerCapacity > 0) {
+                const capacityPercent = (contentsWeight / container.system.containerCapacity) * 100;
+                if (capacityPercent >= 100) {
+                    container.capacityStatus = "full";
+                } else if (capacityPercent >= 80) {
+                    container.capacityStatus = "warning";
+                } else if (capacityPercent >= 50) {
+                    container.capacityStatus = "moderate";
+                } else {
+                    container.capacityStatus = "ok";
+                }
+            } else {
+                container.capacityStatus = "unlimited";
+            }
         }
 
         skills.sort((a, b) => a.name.localeCompare(b.name));
@@ -582,6 +598,16 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        // Check if this is a container being transferred from another actor (looting)
+        const sourceActor = item.parent;
+        const isFromAnotherActor = sourceActor && sourceActor.uuid !== this.actor.uuid;
+        const isContainer = item.type === "equipment" && item.system?.isContainer;
+        
+        if (isFromAnotherActor && isContainer) {
+            // Handle container transfer with contents
+            return await this._transferContainerWithContents(item, sourceActor);
+        }
+
         // Get the actual item document if we have an ID (for items already in the actor)
         let actualItem = item;
         if (item.id && this.actor.items.has(item.id)) {
@@ -605,11 +631,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         } else if (currentContainerId) {
             // Item is in a container but being dropped outside of any container
             // Remove it from the container (drop it into main inventory)
+            const container = this.actor.items.get(currentContainerId);
+            const containerName = container?.name || "container";
+            
+            // Check if item becomes equipped when removed (shouldn't happen, but check)
+            const wasEquippedBefore = false; // Items in containers can't be equipped
             await actualItem.update({ "system.containerId": "" });
             
             // Re-render to show the updated item organization
             await this.actor.prepareData();
             await this.render();
+            
+            // Check if item is now equipped (shouldn't happen automatically)
+            const itemAfter = this.actor.items.get(actualItem.id);
+            const isEquippedAfter = itemAfter && (
+                (itemAfter.type === "weapon" && itemAfter.system.equipped !== "none") ||
+                ((itemAfter.type === "armor" || itemAfter.type === "equipment") && itemAfter.system.equipped === "true")
+            );
+            
+            // Only show notification if equipped status changed
+            if (isEquippedAfter && !wasEquippedBefore) {
+                ui.notifications.warn(`${actualItem.name} has been removed from ${containerName} and is now equipped.`);
+            }
             
             // Restore container expand/collapse state
             const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
@@ -625,7 +668,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 });
             });
             
-            ui.notifications.info(`${actualItem.name} has been removed from container.`);
             return false;
         }
 
@@ -714,11 +756,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         } else if (currentContainerId) {
             // Item is in a container but being dropped outside of any container
             // Remove it from the container (drop it into main inventory)
+            const container = this.actor.items.get(currentContainerId);
+            const containerName = container?.name || "container";
+            
+            // Check if item becomes equipped when removed (shouldn't happen, but check)
+            const wasEquippedBefore = false; // Items in containers can't be equipped
             await actualItem.update({ "system.containerId": "" });
             
             // Re-render to show the updated item organization
             await this.actor.prepareData();
             await this.render();
+            
+            // Check if item is now equipped (shouldn't happen automatically)
+            const itemAfter = this.actor.items.get(actualItem.id);
+            const isEquippedAfter = itemAfter && (
+                (itemAfter.type === "weapon" && itemAfter.system.equipped !== "none") ||
+                ((itemAfter.type === "armor" || itemAfter.type === "equipment") && itemAfter.system.equipped === "true")
+            );
+            
+            // Only show notification if equipped status changed
+            if (isEquippedAfter && !wasEquippedBefore) {
+                ui.notifications.warn(`${actualItem.name} has been removed from ${containerName} and is now equipped.`);
+            }
             
             // Restore container expand/collapse state
             const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
@@ -734,7 +793,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 });
             });
             
-            ui.notifications.info(`${actualItem.name} has been removed from container.`);
             return;
         }
         
@@ -880,8 +938,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             
             if (wasEquipped) {
                 ui.notifications.warn(`${actualItem.name} has been unequipped and placed in ${container.name}.`);
-            } else {
-                ui.notifications.info(`${actualItem.name} has been placed in ${container.name}.`);
             }
         } else {
             // New item from sidebar - create with containerId set
@@ -932,7 +988,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
             });
             
-            ui.notifications.info(`${actualItem.name} has been created in ${container.name}.`);
+            // Only show notification if item was equipped (shouldn't happen for new items, but check anyway)
+            if (wasEquipped && equipValue) {
+                ui.notifications.warn(`${actualItem.name} has been unequipped and placed in ${container.name}.`);
+            }
         }
 
         return false; // Handled, don't continue with normal drop
@@ -981,6 +1040,171 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
         return total;
+    }
+
+    /**
+     * Transfer a container and all its contents from one actor to another
+     * @param {Item} containerItem      The container item being transferred
+     * @param {Actor} sourceActor        The source actor (where the container currently is)
+     * @returns {Promise<Item|null>}     The created container item, or null if transfer failed
+     */
+    async _transferContainerWithContents(containerItem, sourceActor) {
+        const oldContainerId = containerItem.id;
+        
+        // Collect all items that belong to this container (including nested containers)
+        // Structure: { itemData, oldId, oldContainerId, isContainer }
+        const contentsToTransfer = [];
+        const idMapping = new Map(); // oldId -> newId
+        
+        // Recursively collect all items in the container and nested containers
+        const collectContents = (containerId) => {
+            for (const item of sourceActor.items) {
+                if (item.system.containerId === containerId) {
+                    const itemData = item.toObject();
+                    const isContainer = item.type === "equipment" && item.system?.isContainer;
+                    contentsToTransfer.push({
+                        itemData,
+                        oldId: item.id,
+                        oldContainerId: containerId,
+                        isContainer
+                    });
+                    
+                    // If this is a nested container, collect its contents too
+                    if (isContainer) {
+                        collectContents(item.id);
+                    }
+                }
+            }
+        };
+        
+        collectContents(oldContainerId);
+        
+        // Check permissions
+        if (!this.actor.isOwner) {
+            ui.notifications.error(`You do not have permission to add items to ${this.actor.name}.`);
+            return null;
+        }
+        
+        // Transfer the container first
+        const containerData = containerItem.toObject();
+        let createdContainer;
+        try {
+            createdContainer = await this.actor.createEmbeddedDocuments("Item", [containerData]);
+            if (!createdContainer || createdContainer.length === 0) {
+                ui.notifications.error(`Failed to transfer container ${containerItem.name}.`);
+                return null;
+            }
+            createdContainer = createdContainer[0];
+            const newContainerId = createdContainer.id;
+            console.log("Third Era | Container transferred:", { containerName: containerItem.name, newContainerId, targetActor: this.actor.name, targetActorType: this.actor.type });
+            
+            // Map old container ID to new container ID
+            idMapping.set(oldContainerId, newContainerId);
+            
+            // Transfer contents in order: process items level by level
+            // First level: items directly in the transferred container
+            // Then process nested containers and their contents
+            const processedIds = new Set();
+            let itemsRemaining = contentsToTransfer.length;
+            
+            while (itemsRemaining > 0) {
+                const itemsToCreate = [];
+                const itemsToMap = [];
+                
+                // Find items whose parent container has already been mapped
+                for (const content of contentsToTransfer) {
+                    if (processedIds.has(content.oldId)) continue;
+                    
+                    const parentNewId = idMapping.get(content.oldContainerId);
+                    if (parentNewId) {
+                        // Update containerId to the new parent ID
+                        content.itemData.system.containerId = parentNewId;
+                        itemsToCreate.push(content.itemData);
+                        itemsToMap.push(content);
+                    }
+                }
+                
+                if (itemsToCreate.length === 0) {
+                    // No more items can be processed (shouldn't happen, but safety check)
+                    console.warn("Third Era | Some items could not be transferred - parent containers may be missing.");
+                    break;
+                }
+                
+                // Create all items at this level
+                try {
+                    const created = await this.actor.createEmbeddedDocuments("Item", itemsToCreate);
+                    console.log("Third Era | Created items:", { count: created.length, itemNames: created.map(i => i.name), targetActor: this.actor.name });
+                    
+                    // Update ID mapping
+                    for (let i = 0; i < created.length; i++) {
+                        const oldId = itemsToMap[i].oldId;
+                        const newId = created[i].id;
+                        idMapping.set(oldId, newId);
+                        processedIds.add(oldId);
+                        itemsRemaining--;
+                    }
+                } catch (err) {
+                    console.error("Third Era | Failed to transfer container contents:", err);
+                    console.error("Third Era | Error details:", { error: err.message, stack: err.stack, itemsToCreate: itemsToCreate.map(i => ({ name: i.name, type: i.type })) });
+                    ui.notifications.warn(`Some items from ${containerItem.name} failed to transfer.`);
+                    // Mark these as processed to avoid infinite loop
+                    for (const item of itemsToMap) {
+                        processedIds.add(item.oldId);
+                        itemsRemaining--;
+                    }
+                }
+            }
+            
+            // Verify items were created
+            const allCreatedItems = this.actor.items.filter(item => {
+                return item.id === newContainerId || contentsToTransfer.some(c => {
+                    const newId = idMapping.get(c.oldId);
+                    return newId && item.id === newId;
+                });
+            });
+            console.log("Third Era | Verification - items on target actor:", {
+                totalItemsOnActor: this.actor.items.size,
+                expectedContainerId: newContainerId,
+                expectedContentsCount: contentsToTransfer.length,
+                foundItems: allCreatedItems.length,
+                foundItemNames: allCreatedItems.map(i => i.name),
+                containerFound: this.actor.items.has(newContainerId)
+            });
+            
+            // Refresh the actor data and re-render
+            await this.actor.prepareData();
+            await this.render();
+            
+            // Delete the container and all its contents from the source actor
+            const itemsToDelete = [oldContainerId];
+            for (const content of contentsToTransfer) {
+                itemsToDelete.push(content.oldId);
+            }
+            
+            try {
+                // Get the actual item documents from the source actor
+                const itemsToDeleteDocs = itemsToDelete
+                    .map(id => sourceActor.items.get(id))
+                    .filter(item => item !== undefined);
+                
+                if (itemsToDeleteDocs.length > 0) {
+                    await sourceActor.deleteEmbeddedDocuments("Item", itemsToDeleteDocs.map(item => item.id));
+                }
+            } catch (err) {
+                console.error("Third Era | Failed to delete items from source actor:", err);
+                ui.notifications.warn(`Container was transferred, but failed to remove it from ${sourceActor.name}. You may need to delete it manually.`);
+            }
+            
+            const contentsCount = contentsToTransfer.length;
+            ui.notifications.info(`Transferred ${containerItem.name}${contentsCount > 0 ? ` and ${contentsCount} item(s)` : ""} from ${sourceActor.name} to ${this.actor.name}.`);
+            
+            return createdContainer;
+            
+        } catch (err) {
+            console.error("Third Era | Failed to transfer container:", err);
+            ui.notifications.error(`Failed to transfer container ${containerItem.name}.`);
+            return null;
+        }
     }
 
     /* -------------------------------------------- */
@@ -1092,6 +1316,15 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const itemId = target.closest("[data-item-id]")?.dataset.itemId;
         const item = this.actor.items.get(itemId);
         if (item) {
+            // If this is a container, move all items inside to main inventory first
+            if (item.type === "equipment" && item.system.isContainer) {
+                const itemsInContainer = this.actor.items.filter(i => i.system.containerId === itemId);
+                if (itemsInContainer.length > 0) {
+                    const updates = itemsInContainer.map(i => ({ _id: i.id, "system.containerId": "" }));
+                    await this.actor.updateEmbeddedDocuments("Item", updates);
+                    ui.notifications.info(`${itemsInContainer.length} item(s) moved to inventory from ${item.name}.`);
+                }
+            }
             return await item.delete();
         }
     }
@@ -1499,14 +1732,30 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Remember which container was expanded
         const containerId = item.system.containerId;
+        const container = this.actor.items.get(containerId);
+        const containerName = container?.name || "container";
         const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
         const wasExpanded = expandedContainers.includes(containerId);
 
+        // Check if item becomes equipped when removed (shouldn't happen, but check)
+        const wasEquippedBefore = false; // Items in containers can't be equipped
         await item.update({ "system.containerId": "" });
         
         // Re-render to show the updated item organization
         await this.actor.prepareData();
         await this.render();
+        
+        // Check if item is now equipped (shouldn't happen automatically)
+        const itemAfter = this.actor.items.get(itemId);
+        const isEquippedAfter = itemAfter && (
+            (itemAfter.type === "weapon" && itemAfter.system.equipped !== "none") ||
+            ((itemAfter.type === "armor" || itemAfter.type === "equipment") && itemAfter.system.equipped === "true")
+        );
+        
+        // Only show notification if equipped status changed
+        if (isEquippedAfter && !wasEquippedBefore) {
+            ui.notifications.warn(`${item.name} has been removed from ${containerName} and is now equipped.`);
+        }
         
         // Restore the container's expanded state if it was expanded
         if (wasExpanded) {
@@ -1520,8 +1769,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
             });
         }
-        
-        ui.notifications.info(`${item.name} has been removed from container.`);
     }
 
     /**
