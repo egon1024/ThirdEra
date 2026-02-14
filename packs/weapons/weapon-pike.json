@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-pike",
+  "name": "Pike",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A pike is a very long spear with a heavy wooden shaft.</p>",
+    "damage": {
+      "dice": "1d8",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "exotic"
+    },
+    "cost": 5,
+    "weight": 12,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

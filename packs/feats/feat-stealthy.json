@@ -1,0 +1,18 @@
+{
+  "_id": "feat-stealthy",
+  "name": "Stealthy",
+  "type": "feat",
+  "img": "icons/svg/invisible.svg",
+  "system": {
+    "description": "<p>You are particularly good at avoiding notice.</p>",
+    "key": "stealthy",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You get a +2 bonus on all Hide checks and Move Silently checks.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-chest",
+  "name": "Chest",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A chest is a wooden container used for storing items. It can be locked.</p>",
+    "quantity": 1,
+    "cost": 2,
+    "weight": 25,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 50,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

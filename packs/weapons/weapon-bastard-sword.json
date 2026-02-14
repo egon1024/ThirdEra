@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-bastard-sword",
+  "name": "Bastard Sword",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A bastard sword is a longsword that can be used one-handed or two-handed.</p>",
+    "damage": {
+      "dice": "1d10",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 19,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "oneHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 35,
+    "weight": 6,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

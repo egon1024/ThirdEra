@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-heavy-mace",
+  "name": "Heavy Mace",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A heavy mace is a larger, more powerful version of the light mace.</p>",
+    "damage": {
+      "dice": "1d8",
+      "type": "bludgeoning"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "oneHanded",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 12,
+    "weight": 8,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

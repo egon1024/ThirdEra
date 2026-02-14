@@ -1,0 +1,18 @@
+{
+  "_id": "feat-improved-trip",
+  "name": "Improved Trip",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You are skilled at sending your opponents to the ground.</p>",
+    "key": "improvedTrip",
+    "type": "General",
+    "prerequisites": "Int 13, Combat Expertise",
+    "benefit": "<p>You do not provoke an attack of opportunity when you attempt to trip an opponent while you are unarmed. You also gain a +4 bonus on your Strength check to trip your opponent.</p><p>If you trip an opponent in melee combat, you immediately get a melee attack against that opponent as if you hadn't used your attack for the trip attempt.</p>",
+    "special": "A fighter may select Improved Trip as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

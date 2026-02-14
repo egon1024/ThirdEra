@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-case-for-wand-or-scroll",
+  "name": "Case, for Wand or Scroll",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A leather or wooden case designed to hold a wand or scroll safely.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 0.5,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 1,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

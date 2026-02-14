@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-ranseur",
+  "name": "Ranseur",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A ranseur is a polearm with a three-pronged head.</p>",
+    "damage": {
+      "dice": "2d4",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "exotic"
+    },
+    "cost": 10,
+    "weight": 12,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

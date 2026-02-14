@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-scholars-outfit",
+  "name": "Scholar's Outfit",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A scholar's outfit is a set of clothes for someone who engages in research. While offering no protection, it has pockets and loops for holding tools, components, and other accoutrements of the academic life.</p>",
+    "quantity": 1,
+    "cost": 5,
+    "weight": 6,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

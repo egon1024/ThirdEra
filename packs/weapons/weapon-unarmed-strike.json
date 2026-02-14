@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-unarmed-strike",
+  "name": "Unarmed Strike",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A Medium character deals 1d3 points of nonlethal damage with an unarmed strike. A Small character deals 1d2 points of nonlethal damage. A monk or any character with the Improved Unarmed Strike feat can deal lethal or nonlethal damage with unarmed strikes, at his option.</p>",
+    "damage": {
+      "dice": "1d3",
+      "type": "nonlethal"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 0,
+    "weight": 0,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

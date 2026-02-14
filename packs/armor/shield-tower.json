@@ -1,0 +1,29 @@
+{
+  "_id": "shield-tower",
+  "name": "Tower Shield",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>A tower shield is nearly as tall as you are and provides even more cover than a heavy shield.</p>",
+    "armor": {
+      "type": "shield",
+      "bonus": 2,
+      "maxDex": 2,
+      "checkPenalty": -10,
+      "spellFailure": 50
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 30,
+    "weight": 45,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 13
+}

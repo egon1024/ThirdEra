@@ -1,0 +1,18 @@
+{
+  "_id": "feat-still-spell",
+  "name": "Still Spell",
+  "type": "feat",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You can cast spells without moving.</p>",
+    "key": "stillSpell",
+    "type": "Metamagic",
+    "prerequisites": "",
+    "benefit": "<p>A stilled spell can be cast with no somatic components. Spells without somatic components are not affected. A stilled spell uses up a spell slot one level higher than the spell's actual level.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

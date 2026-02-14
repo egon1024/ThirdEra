@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-kukri",
+  "name": "Kukri",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A kukri is a curved blade, broader toward the point.</p>",
+    "damage": {
+      "dice": "1d4",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 18,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "exotic"
+    },
+    "cost": 8,
+    "weight": 2,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-dwarven-urgrosh",
+  "name": "Dwarven Urgrosh",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A dwarven urgrosh is a double weapon. You can fight with it as if fighting with two weapons, but if you do, you incur all the normal attack penalties associated with fighting with two weapons, just as if you were using a one-handed weapon and a light weapon. A creature wielding a dwarven urgrosh in one hand can't use it as a double weapon—only one end of the weapon can be used in any given round.</p>",
+    "damage": {
+      "dice": "1d8/1d6",
+      "type": "piercing or slashing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "exotic"
+    },
+    "cost": 50,
+    "weight": 12,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

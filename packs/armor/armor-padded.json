@@ -1,0 +1,29 @@
+{
+  "_id": "armor-padded",
+  "name": "Padded Armor",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Padded armor consists of quilted layers of cloth and batting.</p>",
+    "armor": {
+      "type": "light",
+      "bonus": 1,
+      "maxDex": 8,
+      "checkPenalty": 0,
+      "spellFailure": 5
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 30,
+      "ft20": 20
+    },
+    "cost": 5,
+    "weight": 10,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

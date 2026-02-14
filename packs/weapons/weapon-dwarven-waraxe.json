@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-dwarven-waraxe",
+  "name": "Dwarven Waraxe",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A dwarven waraxe is a one-handed exotic weapon. A Medium character can use a dwarven waraxe two-handed as a martial weapon or one-handed as an exotic weapon.</p>",
+    "damage": {
+      "dice": "1d10",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "oneHanded",
+      "size": "Medium",
+      "proficiency": "exotic"
+    },
+    "cost": 30,
+    "weight": 8,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

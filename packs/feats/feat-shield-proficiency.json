@@ -1,0 +1,18 @@
+{
+  "_id": "feat-shield-proficiency",
+  "name": "Shield Proficiency",
+  "type": "feat",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>You know how to use a shield.</p>",
+    "key": "shieldProficiency",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>When you use a shield (except a tower shield), the shield's armor check penalty only applies to Strength- and Dexterity-based skills.</p>",
+    "special": "Barbarians, bards, clerics, druids, fighters, paladins, rangers, and sorcerers automatically have Shield Proficiency as a bonus feat. They need not select it.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,18 @@
+{
+  "_id": "feat-extra-turning",
+  "name": "Extra Turning",
+  "type": "feat",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>You can turn or rebuke undead more often than normal.</p>",
+    "key": "extraTurning",
+    "type": "General",
+    "prerequisites": "Ability to turn or rebuke undead",
+    "benefit": "<p>Each day, you can turn or rebuke undead four more times than your class would normally allow.</p>",
+    "special": "You can gain Extra Turning multiple times. Its effects stack. Each time you take the feat, you can turn or rebuke undead four additional times per day.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

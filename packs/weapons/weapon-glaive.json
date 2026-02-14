@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-glaive",
+  "name": "Glaive",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A glaive is a polearm with a single-edged blade on the end of a pole.</p>",
+    "damage": {
+      "dice": "1d10",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 8,
+    "weight": 10,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

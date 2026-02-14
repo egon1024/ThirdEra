@@ -1,0 +1,18 @@
+{
+  "_id": "feat-great-cleave",
+  "name": "Great Cleave",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You can strike many adjacent foes with a single swing.</p>",
+    "key": "greatCleave",
+    "type": "Fighter Bonus",
+    "prerequisites": "Cleave, Power Attack, Str 13, base attack bonus +4",
+    "benefit": "<p>As a standard action, you can make a single attack at your full base attack bonus against a foe within reach. If you hit, you deal damage normally and can make an additional attack (using your full base attack bonus) against a foe that is adjacent to the first and also within reach. If you hit that foe, you can continue to make attacks against other adjacent foes so long as you keep hitting. You cannot attack an individual foe more than once per round with this feat. You cannot use this feat if you are wearing heavy armor.</p>",
+    "special": "A fighter may select Great Cleave as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

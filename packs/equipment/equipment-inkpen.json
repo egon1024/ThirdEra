@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-inkpen",
+  "name": "Ink, Pen",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A pen used for writing with ink.</p>",
+    "quantity": 1,
+    "cost": 0.1,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

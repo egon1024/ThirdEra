@@ -1,0 +1,18 @@
+{
+  "_id": "feat-quicken-spell",
+  "name": "Quicken Spell",
+  "type": "feat",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You can cast spells quickly.</p>",
+    "key": "quickenSpell",
+    "type": "Metamagic",
+    "prerequisites": "",
+    "benefit": "<p>Casting a quickened spell is a free action. You can perform another action, even casting another spell, in the same round as you cast a quickened spell. You may cast only one quickened spell per round. A spell whose casting time is more than 1 full round cannot be quickened. A quickened spell uses up a spell slot four levels higher than the spell's actual level. Casting a quickened spell doesn't provoke an attack of opportunity.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

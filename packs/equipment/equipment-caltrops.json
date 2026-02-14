@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-caltrops",
+  "name": "Caltrops",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A caltrop is a four-pronged iron spike crafted so that one prong faces up no matter how the caltrop comes to rest. You scatter caltrops on the ground in the hope that your enemies step on or are injured by them. One 2-pound bag of caltrops covers an area 5 feet square. Each time a creature moves into an area covered with caltrops (or spends a round fighting while standing in such an area), the creature might step on one. Make an attack roll: your base attack bonus + Dexterity modifier against the creature's AC. If the creature is wearing shoes or other footwear, it gets a +2 armor bonus to AC. If the attack succeeds, the creature has stepped on a caltrop and is reduced to one-half normal movement. A second attack roll must be made to see if the caltrop pierces the footwear. If this second roll fails, the caltrop has not pierced the footwear and has no further effect. If the second roll succeeds, the caltrop has pierced the footwear and deals 1 point of damage. The creature's movement is reduced to one-half normal until it receives magical healing or until someone spends 10 minutes tending to the injury and makes a DC 15 Heal check.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

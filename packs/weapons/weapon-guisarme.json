@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-guisarme",
+  "name": "Guisarme",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A guisarme is a polearm with a hook on the end.</p>",
+    "damage": {
+      "dice": "2d4",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 9,
+    "weight": 12,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

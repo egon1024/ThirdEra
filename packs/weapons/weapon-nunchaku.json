@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-nunchaku",
+  "name": "Nunchaku",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Nunchaku are two short sticks connected by a chain or cord.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "bludgeoning"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 2,
+    "weight": 2,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

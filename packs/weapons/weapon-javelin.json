@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-javelin",
+  "name": "Javelin",
+  "type": "weapon",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>A javelin is a light spear designed primarily for throwing.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 30,
+    "properties": {
+      "melee": "ranged",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 1,
+    "weight": 2,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

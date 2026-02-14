@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-spiked-chain",
+  "name": "Spiked Chain",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A spiked chain is about 4 feet in length. You can use the Weapon Finesse feat to apply your Dexterity modifier instead of your Strength modifier to attack rolls with a spiked chain sized for you, even though it isn't a light weapon. You can wrap the chain around a foe and then pull to unbalance him. You can make trip attacks with the spiked chain. If you are tripped during your own trip attempt, you can drop the spiked chain to avoid being tripped.</p>",
+    "damage": {
+      "dice": "2d4",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "oneHanded",
+      "size": "Medium",
+      "proficiency": "exotic"
+    },
+    "cost": 25,
+    "weight": 10,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

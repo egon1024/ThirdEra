@@ -1,0 +1,18 @@
+{
+  "_id": "feat-animal-affinity",
+  "name": "Animal Affinity",
+  "type": "feat",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "description": "<p>You are naturally good with animals.</p>",
+    "key": "animalAffinity",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You get a +2 bonus on all Handle Animal checks and Ride checks.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

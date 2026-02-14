@@ -1,0 +1,18 @@
+{
+  "_id": "feat-blind-fight",
+  "name": "Blind-Fight",
+  "type": "feat",
+  "img": "icons/svg/invisible.svg",
+  "system": {
+    "description": "<p>You are skilled at fighting opponents you cannot clearly see.</p>",
+    "key": "blindFight",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>In melee, every time you miss because of concealment, you can reroll your miss chance percentile roll one time to see if you actually hit.</p><p>An invisible attacker gets no advantages related to hitting you in melee. That is, you don't lose your Dexterity bonus to Armor Class, and the attacker doesn't get the usual +2 bonus to hit you. The invisible attacker's bonuses do still apply for ranged attacks, however.</p><p>You take only half the usual penalty to speed for being unable to see. Darkness and poor visibility in general reduces your speed to three-quarters normal, instead of one-half.</p>",
+    "special": "A fighter may select Blind-Fight as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

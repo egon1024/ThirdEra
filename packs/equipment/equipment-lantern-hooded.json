@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-lantern-hooded",
+  "name": "Lantern, Hooded",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A hooded lantern sheds normal light in a 30-foot radius and increases the light level by one step for an additional 30 feet beyond that area (darkness becomes shadowy, and shadowy becomes normal light). A hooded lantern does not allow you to see in darkness. It burns for 6 hours on a pint of oil. You can carry it in one hand.</p>",
+    "quantity": 1,
+    "cost": 7,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

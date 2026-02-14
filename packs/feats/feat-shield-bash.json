@@ -1,0 +1,18 @@
+{
+  "_id": "feat-shield-bash",
+  "name": "Shield Bash",
+  "type": "feat",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>You can bash an opponent with your shield.</p>",
+    "key": "shieldBash",
+    "type": "Fighter Bonus",
+    "prerequisites": "Shield Proficiency",
+    "benefit": "<p>When you perform a shield bash, you may still apply the shield's shield bonus to your AC.</p>",
+    "special": "A fighter may select Shield Bash as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

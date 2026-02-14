@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-shuriken",
+  "name": "Shuriken",
+  "type": "weapon",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>A shuriken is a small piece of metal with sharpened edges, designed for throwing.</p>",
+    "damage": {
+      "dice": "1d2",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 10,
+    "properties": {
+      "melee": "ranged",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 1,
+    "weight": 0.5,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,18 @@
+{
+  "_id": "feat-improved-sunder",
+  "name": "Improved Sunder",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You are skilled at damaging your opponents' weapons and armor.</p>",
+    "key": "improvedSunder",
+    "type": "General",
+    "prerequisites": "Str 13, Power Attack",
+    "benefit": "<p>When you strike at an opponent's weapon or shield, you do not provoke an attack of opportunity. You also gain a +4 bonus on any attack roll made to attack an object held or carried by another character.</p>",
+    "special": "A fighter may select Improved Sunder as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

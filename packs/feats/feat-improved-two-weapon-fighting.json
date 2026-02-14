@@ -1,0 +1,18 @@
+{
+  "_id": "feat-improved-two-weapon-fighting",
+  "name": "Improved Two-Weapon Fighting",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You are skilled at fighting with two weapons.</p>",
+    "key": "improvedTwoWeaponFighting",
+    "type": "General",
+    "prerequisites": "Dex 17, Two-Weapon Fighting, base attack bonus +6",
+    "benefit": "<p>In addition to the standard single extra attack you get with an off-hand weapon, you get a second attack with it, albeit at a -5 penalty.</p>",
+    "special": "A fighter may select Improved Two-Weapon Fighting as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

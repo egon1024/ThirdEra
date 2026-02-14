@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-flint-and-steel",
+  "name": "Flint and Steel",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Flint and steel is a simple tool for starting fires. Lighting a torch with flint and steel is a full-round action, and lighting any other fire with it takes at least that long.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}
