@@ -27,6 +27,72 @@ import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
 
 /**
+ * Initialize HP auto-increase system
+ * Automatically increases current HP when max HP increases (from leveling, constitution changes, etc.)
+ */
+function initHpAutoIncrease() {
+    // Store old max HP values before updates
+    const oldMaxHpMap = new Map();
+    // Track documents currently being updated by our hook to prevent infinite loops
+    const updatingHp = new Set();
+    
+    // Capture old max HP before update
+    Hooks.on("preUpdateActor", (document, changes, options, userId) => {
+        // Only track character actors
+        if (document.type !== "character") return;
+        
+        // Skip if this is just a current HP update (to avoid infinite loops)
+        const changeKeys = Object.keys(foundry.utils.flattenObject(changes));
+        const isOnlyCurrentHpUpdate = changeKeys.length === 1 && 
+            changeKeys[0] === "system.attributes.hp.value";
+        if (isOnlyCurrentHpUpdate || updatingHp.has(document.id)) return;
+        
+        // Store the current max HP (before prepareDerivedData runs)
+        const currentMaxHp = document.system.attributes.hp.max;
+        oldMaxHpMap.set(document.id, currentMaxHp);
+    });
+    
+    // Adjust current HP after update (prepareDerivedData has run by this point)
+    Hooks.on("updateActor", async (document, changes, options, userId) => {
+        // Only process character actors
+        if (document.type !== "character") return;
+        
+        // Skip if this is just a current HP update (to avoid processing our own updates)
+        const changeKeys = Object.keys(foundry.utils.flattenObject(changes));
+        const isOnlyCurrentHpUpdate = changeKeys.length === 1 && 
+            changeKeys[0] === "system.attributes.hp.value";
+        if (isOnlyCurrentHpUpdate || updatingHp.has(document.id)) return;
+        
+        // Get the old max HP we stored
+        const oldMaxHp = oldMaxHpMap.get(document.id);
+        if (oldMaxHp === undefined) return; // No old value stored, skip
+        
+        // Clean up the stored value
+        oldMaxHpMap.delete(document.id);
+        
+        // Get the new max HP (prepareDerivedData has run, so this is the updated value)
+        const newMaxHp = document.system.attributes.hp.max;
+        
+        // If max HP increased, increase current HP by the same amount
+        if (newMaxHp > oldMaxHp) {
+            const hpIncrease = newMaxHp - oldMaxHp;
+            const currentHp = document.system.attributes.hp.value;
+            const newCurrentHp = Math.min(currentHp + hpIncrease, newMaxHp);
+            
+            // Update current HP if it changed
+            if (newCurrentHp !== currentHp) {
+                updatingHp.add(document.id);
+                try {
+                    await document.update({ "system.attributes.hp.value": newCurrentHp });
+                } finally {
+                    updatingHp.delete(document.id);
+                }
+            }
+        }
+    });
+}
+
+/**
  * Initialize the Third Era system
  */
 Hooks.once("init", async function () {
@@ -34,6 +100,7 @@ Hooks.once("init", async function () {
 
     // Initialize logic modules
     AuditLog.init();
+    initHpAutoIncrease();
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;

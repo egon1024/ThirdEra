@@ -493,6 +493,50 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             remaining: skillPointsAvailable - skillPointsSpent
         };
 
+        // ---- Spellcasting Calculations ----
+        // Calculate caster level, spells per day, and spell DC for each class
+        const spellcastingByClass = [];
+        for (const cls of classes) {
+            const lvl = classLevelCounts[cls.id] || 0;
+            if (lvl <= 0) continue;
+
+            const sc = cls.system.spellcasting;
+            if (!sc || !sc.enabled || sc.casterType === "none") continue;
+
+            // Caster level is the class level for that class
+            const casterLevel = lvl;
+
+            // Get casting ability modifier
+            const castingAbility = sc.castingAbility || "none";
+            const abilityMod = castingAbility !== "none" ? (this.abilities[castingAbility]?.mod || 0) : 0;
+
+            // Calculate spell DC: 10 + spell level + ability modifier
+            // We'll calculate this per spell level when displaying
+            const baseSpellDC = 10 + abilityMod;
+
+            // Get spells per day from the table
+            const spellsPerDay = {};
+            const table = sc.spellsPerDayTable || [];
+            for (let spellLevel = 0; spellLevel <= 9; spellLevel++) {
+                spellsPerDay[spellLevel] = ClassData.getSpellsPerDay(table, lvl, spellLevel);
+            }
+
+            spellcastingByClass.push({
+                classItemId: cls.id,
+                className: cls.name,
+                casterLevel,
+                casterType: sc.casterType,
+                preparationType: sc.preparationType,
+                castingAbility,
+                abilityMod,
+                baseSpellDC,
+                spellsPerDay,
+                hasSpellcasting: true
+            });
+        }
+
+        this.spellcastingByClass = spellcastingByClass;
+
         // Apply HP adjustments (feats, curses, magic items, etc.)
         const hpAdjTotal = this.attributes.hp.adjustments.reduce((sum, adj) => sum + adj.value, 0);
         this.attributes.hp.max = Math.max(1, this.attributes.hp.max + hpAdjTotal);

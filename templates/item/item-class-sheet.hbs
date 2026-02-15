@@ -16,6 +16,8 @@
             data-tab="skills">Skills</a>
         <a class="item {{#if (eq tabs.primary 'features')}}active{{/if}}" data-action="changeTab" data-group="primary"
             data-tab="features">Features</a>
+        <a class="item {{#if (eq tabs.primary 'spellcasting')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="spellcasting">Spellcasting</a>
     </nav>
 
     <section class="sheet-body">
@@ -90,7 +92,56 @@
                     <option value="true" {{#if (eq system.isPrestige "true" )}}selected{{/if}}>Yes</option>
                 </select>
             </div>
+        </div>
 
+        {{!-- Skills Tab --}}
+        <div class="tab skills {{#if (eq tabs.primary 'skills')}}active{{/if}}" data-group="primary" data-tab="skills">
+            <h3 class="form-header">Class Skills</h3>
+            <p class="hint">Drag skill items here to add them as class skills.</p>
+            {{#if system.classSkills.length}}
+            <ol class="skill-ref-list">
+                {{#each system.classSkills as |entry|}}
+                <li class="skill-ref-entry">
+                    <span class="skill-ref-name">{{entry.name}}</span>
+                    <a class="skill-ref-remove" data-action="removeClassSkill" data-skill-key="{{entry.key}}"
+                        title="Remove"><i class="fas fa-times"></i></a>
+                </li>
+                {{/each}}
+            </ol>
+            {{else}}
+            <p class="no-items hint">No class skills assigned</p>
+            {{/if}}
+        </div>
+
+        {{!-- Features Tab --}}
+        <div class="tab features {{#if (eq tabs.primary 'features')}}active{{/if}}" data-group="primary"
+            data-tab="features">
+            <h3 class="form-header">Class Features</h3>
+            <p class="hint">Drag feat items here to assign as class features.</p>
+            {{#if system.features.length}}
+            <ol class="feature-list">
+                {{#each system.features as |entry|}}
+                <li class="feature-entry">
+                    <span class="feature-level-badge">Lvl</span>
+                    <input type="number" name="system.features.{{@index}}.level" value="{{entry.level}}" min="1"
+                        data-dtype="Number" class="feature-level-input" />
+                    <input type="hidden" name="system.features.{{@index}}.featItemId" value="{{entry.featItemId}}" />
+                    <input type="hidden" name="system.features.{{@index}}.featName" value="{{entry.featName}}" />
+                    <input type="hidden" name="system.features.{{@index}}.featKey" value="{{entry.featKey}}" />
+                    <span class="feature-name">{{entry.featName}}</span>
+                    <a class="feature-remove" data-action="removeFeature" data-feature-index="{{@index}}"
+                        title="Remove"><i class="fas fa-times"></i></a>
+                </li>
+                {{/each}}
+            </ol>
+            {{else}}
+            <p class="no-items hint">No class features assigned</p>
+            {{/if}}
+        </div>
+
+        {{!-- Spellcasting Tab --}}
+        <div class="tab spellcasting {{#if (eq tabs.primary 'spellcasting')}}active{{/if}}" data-group="primary"
+            data-tab="spellcasting">
             <h3 class="form-header">Spellcasting</h3>
             <div class="form-group">
                 <label>
@@ -174,51 +225,8 @@
                     </tbody>
                 </table>
             </div>
-            {{/if}}
-        </div>
-
-        {{!-- Skills Tab --}}
-        <div class="tab skills {{#if (eq tabs.primary 'skills')}}active{{/if}}" data-group="primary" data-tab="skills">
-            <h3 class="form-header">Class Skills</h3>
-            <p class="hint">Drag skill items here to add them as class skills.</p>
-            {{#if system.classSkills.length}}
-            <ol class="skill-ref-list">
-                {{#each system.classSkills as |entry|}}
-                <li class="skill-ref-entry">
-                    <span class="skill-ref-name">{{entry.name}}</span>
-                    <a class="skill-ref-remove" data-action="removeClassSkill" data-skill-key="{{entry.key}}"
-                        title="Remove"><i class="fas fa-times"></i></a>
-                </li>
-                {{/each}}
-            </ol>
             {{else}}
-            <p class="no-items hint">No class skills assigned</p>
-            {{/if}}
-        </div>
-
-        {{!-- Features Tab --}}
-        <div class="tab features {{#if (eq tabs.primary 'features')}}active{{/if}}" data-group="primary"
-            data-tab="features">
-            <h3 class="form-header">Class Features</h3>
-            <p class="hint">Drag feat items here to assign as class features.</p>
-            {{#if system.features.length}}
-            <ol class="feature-list">
-                {{#each system.features as |entry|}}
-                <li class="feature-entry">
-                    <span class="feature-level-badge">Lvl</span>
-                    <input type="number" name="system.features.{{@index}}.level" value="{{entry.level}}" min="1"
-                        data-dtype="Number" class="feature-level-input" />
-                    <input type="hidden" name="system.features.{{@index}}.featItemId" value="{{entry.featItemId}}" />
-                    <input type="hidden" name="system.features.{{@index}}.featName" value="{{entry.featName}}" />
-                    <input type="hidden" name="system.features.{{@index}}.featKey" value="{{entry.featKey}}" />
-                    <span class="feature-name">{{entry.featName}}</span>
-                    <a class="feature-remove" data-action="removeFeature" data-feature-index="{{@index}}"
-                        title="Remove"><i class="fas fa-times"></i></a>
-                </li>
-                {{/each}}
-            </ol>
-            {{else}}
-            <p class="no-items hint">No class features assigned</p>
+            <p class="hint">Enable spellcasting above to configure spellcasting options.</p>
             {{/if}}
         </div>
     </section>

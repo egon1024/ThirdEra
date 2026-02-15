@@ -37,7 +37,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment,
             removeGrantedSkill: ThirdEraActorSheet.#onRemoveGrantedSkill,
             rollHitDie: ThirdEraActorSheet.#onRollHitDie,
-            removeFromContainer: ThirdEraActorSheet.#onRemoveFromContainer
+            removeFromContainer: ThirdEraActorSheet.#onRemoveFromContainer,
+            incrementPrepared: ThirdEraActorSheet.#onIncrementPrepared,
+            decrementPrepared: ThirdEraActorSheet.#onDecrementPrepared,
+            incrementCast: ThirdEraActorSheet.#onIncrementCast,
+            decrementCast: ThirdEraActorSheet.#onDecrementCast
         },
         window: {
             controls: [
@@ -347,6 +351,73 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const grantedFeats = grantedFeatures.filter(f => f.type === 'feat');
         const grantedClassFeatures = grantedFeatures.filter(f => f.type !== 'feat');
 
+        // Organize spells by class and spell level
+        const spellcastingByClass = systemData.spellcastingByClass || [];
+        const spellsByClass = new Map();
+        
+        // Initialize spell organization for each spellcasting class
+        for (const sc of spellcastingByClass) {
+            const spellsByLevel = {};
+            const preparedByLevel = {};
+            for (let level = 0; level <= 9; level++) {
+                spellsByLevel[level] = [];
+                preparedByLevel[level] = 0;
+            }
+            spellsByClass.set(sc.classItemId, {
+                ...sc,
+                spellsByLevel,
+                preparedByLevel,
+                totalPrepared: 0,
+                totalCast: 0
+            });
+        }
+        
+        // Assign spells to their classes and levels
+        // For now, we'll assign spells to the first matching class that can cast them
+        // In the future, we might want to allow assigning spells to specific classes
+        for (const spell of items.spells) {
+            const spellLevel = spell.system.level || 0;
+            
+            // Find a spellcasting class that can cast this spell level
+            let assigned = false;
+            for (const sc of spellcastingByClass) {
+                if (sc.spellsPerDay[spellLevel] > 0) {
+                    const classSpells = spellsByClass.get(sc.classItemId);
+                    if (classSpells) {
+                        classSpells.spellsByLevel[spellLevel].push(spell);
+                        const prepared = spell.system.prepared || 0;
+                        classSpells.preparedByLevel[spellLevel] += prepared;
+                        classSpells.totalPrepared += prepared;
+                        classSpells.totalCast += spell.system.cast || 0;
+                        assigned = true;
+                        break;
+                    }
+                }
+            }
+            
+            // If no class matches, add to unassigned spells
+            if (!assigned) {
+                if (!spellsByClass.has("unassigned")) {
+                    spellsByClass.set("unassigned", {
+                        className: "Unassigned",
+                        spellsByLevel: {},
+                        preparedByLevel: {},
+                        totalPrepared: 0,
+                        totalCast: 0,
+                        hasSpellcasting: false
+                    });
+                }
+                const unassigned = spellsByClass.get("unassigned");
+                if (!unassigned.spellsByLevel[spellLevel]) {
+                    unassigned.spellsByLevel[spellLevel] = [];
+                }
+                unassigned.spellsByLevel[spellLevel].push(spell);
+            }
+        }
+        
+        // Convert Map to array for template
+        const organizedSpells = Array.from(spellsByClass.values());
+
         // Compute encumbrance display info
         const inv = systemData.inventory || { totalWeight: 0, capacity: { light: 0, medium: 0, heavy: 1, metadata: { baseMaxLoad: 0, sizeMod: 1 } }, load: "light" };
         const heavyCap = inv.capacity.heavy || 1;
@@ -404,6 +475,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             grantedFeatures,
             grantedFeats,
             grantedClassFeatures,
+            spellcastingByClass,
+            organizedSpells,
             editable: this.isEditable
         };
     }
@@ -2406,5 +2479,65 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!skillKey) return;
         const current = (this.actor.system.grantedSkills || []).filter(e => e.key !== skillKey);
         await this.actor.update({ "system.grantedSkills": current });
+    }
+
+    /**
+     * Handle incrementing prepared spell count
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onIncrementPrepared(event, target) {
+        const itemId = target.dataset.itemId;
+        if (!itemId) return;
+        const item = this.actor.items.get(itemId);
+        if (!item || item.type !== "spell") return;
+        const current = item.system.prepared || 0;
+        await item.update({ "system.prepared": current + 1 });
+    }
+
+    /**
+     * Handle decrementing prepared spell count
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onDecrementPrepared(event, target) {
+        const itemId = target.dataset.itemId;
+        if (!itemId) return;
+        const item = this.actor.items.get(itemId);
+        if (!item || item.type !== "spell") return;
+        const current = item.system.prepared || 0;
+        await item.update({ "system.prepared": Math.max(0, current - 1) });
+    }
+
+    /**
+     * Handle incrementing cast spell count
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onIncrementCast(event, target) {
+        const itemId = target.dataset.itemId;
+        if (!itemId) return;
+        const item = this.actor.items.get(itemId);
+        if (!item || item.type !== "spell") return;
+        const current = item.system.cast || 0;
+        await item.update({ "system.cast": current + 1 });
+    }
+
+    /**
+     * Handle decrementing cast spell count
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onDecrementCast(event, target) {
+        const itemId = target.dataset.itemId;
+        if (!itemId) return;
+        const item = this.actor.items.get(itemId);
+        if (!item || item.type !== "spell") return;
+        const current = item.system.cast || 0;
+        await item.update({ "system.cast": Math.max(0, current - 1) });
     }
 }

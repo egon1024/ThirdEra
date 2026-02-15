@@ -190,14 +190,74 @@
   border: 1px solid var(--color-border-input);
 }
 
-/* Checkboxes should not have input field styling */
+/* Checkboxes styled to match other form widgets */
 .thirdera input[type="checkbox"] {
+  width: 1.2em !important;
+  height: 1.2em !important;
+  min-width: 1.2em !important;
+  min-height: 1.2em !important;
+  max-width: 1.2em !important;
+  max-height: 1.2em !important;
+  background-color: var(--color-bg-input) !important;
+  background: var(--color-bg-input) !important;
+  border: 1px solid var(--color-border-input) !important;
+  border-radius: 3px;
+  cursor: pointer;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  position: relative;
+  margin: 0.2em;
+  padding: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  color: var(--color-text-primary);
+}
+
+/* Override Foundry's ::before pseudo-element that creates the dark box */
+.thirdera input[type="checkbox"]::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Unchecked state - explicitly maintain same styling */
+.thirdera input[type="checkbox"]:not(:checked) {
+  background-color: var(--color-bg-input) !important;
+  background: var(--color-bg-input) !important;
+  border-color: var(--color-border-input) !important;
+}
+
+/* Checkmark styling for checked state */
+.thirdera input[type="checkbox"]:checked {
+  background-color: var(--color-bg-input) !important;
+  background: var(--color-bg-input) !important;
+  border-color: var(--color-border-input) !important;
+}
+
+.thirdera input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-text-primary);
+  font-size: 0.9em;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  display: block;
   width: auto;
   height: auto;
-  background: transparent;
-  border: none;
-  accent-color: var(--color-character-accent);
-  cursor: pointer;
+}
+
+/* Hover state */
+.thirdera input[type="checkbox"]:hover {
+  border-color: var(--color-hover);
+}
+
+/* Focus state */
+.thirdera input[type="checkbox"]:focus {
+  outline: 2px solid var(--color-hover-alt);
+  outline-offset: 2px;
 }
 
 .thirdera .sheet-header {
@@ -1008,7 +1068,7 @@
   margin-bottom: 5px;
 }
 
-.thirdera .form-group input {
+.thirdera .form-group input:not([type="checkbox"]) {
   width: 100%;
 }
 
@@ -1029,12 +1089,7 @@
 }
 
 .thirdera .checkbox-group input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  cursor: pointer;
-  accent-color: var(--color-character-accent);
-  /* Background and border already handled by general checkbox rule above */
+  /* Inherits styling from general checkbox rule above */
 }
 
 /* Race display in character header */
@@ -2026,4 +2081,148 @@
   font-size: var(--font-size-body);
   padding: 2px 4px;
   margin: 0;
+}
+
+/* Spellcasting Tab Styles */
+.thirdera .tab.spells .spellcasting-class {
+  margin-bottom: 20px;
+  border: 1px solid var(--color-border-divider);
+  border-radius: 4px;
+  background: var(--color-bg-parchment);
+}
+
+.thirdera .tab.spells .spellcasting-header {
+  background: var(--color-bg-parchment-dark);
+  padding: 10px 15px;
+  border-bottom: 2px solid var(--color-border-divider);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.thirdera .tab.spells .spellcasting-header h4 {
+  margin: 0;
+  font-size: var(--font-size-value);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.thirdera .tab.spells .spellcasting-info {
+  display: flex;
+  gap: 15px;
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+}
+
+.thirdera .tab.spells .spellcasting-info span {
+  white-space: nowrap;
+}
+
+.thirdera .tab.spells .spell-level-group {
+  margin: 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .tab.spells .spell-level-group:last-child {
+  border-bottom: none;
+}
+
+.thirdera .tab.spells .spell-level-header {
+  background: var(--color-bg-light);
+  padding: 8px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.thirdera .tab.spells .spell-level-header h5 {
+  margin: 0;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.thirdera .tab.spells .spells-per-day {
+  display: flex;
+  gap: 15px;
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+}
+
+.thirdera .tab.spells .spells-per-day strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.thirdera .tab.spells .spells-list {
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .tab.spells .spell-item {
+  padding: 8px 15px;
+}
+
+.thirdera .tab.spells .spell-tracking {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.thirdera .tab.spells .prepared-tracking,
+.thirdera .tab.spells .cast-tracking {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.thirdera .tab.spells .prepared-tracking label,
+.thirdera .tab.spells .cast-tracking label {
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.thirdera .tab.spells .spell-counter-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-input);
+  background: var(--color-bg-input);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: var(--font-size-label);
+  padding: 0;
+  transition: all 0.2s;
+}
+
+.thirdera .tab.spells .spell-counter-btn:hover {
+  background: var(--color-hover-alt);
+  color: var(--color-text-light);
+  border-color: var(--color-hover-alt);
+}
+
+.thirdera .tab.spells .spell-counter-value {
+  min-width: 30px;
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+}
+
+.thirdera .tab.spells .no-spells {
+  padding: 20px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
 }
