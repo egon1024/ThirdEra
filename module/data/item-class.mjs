@@ -81,7 +81,53 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                     required: true, blank: false, initial: "none",
                     choices: () => CONFIG.THIRDERA.castingAbilities,
                     label: "Casting Ability"
-                })
+                }),
+                spellsPerDayTable: new ArrayField(new SchemaField({
+                    classLevel: new NumberField({
+                        required: true, integer: true, min: 1, max: 20,
+                        label: "Class Level"
+                    }),
+                    spellLevel0: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "0th Level"
+                    }),
+                    spellLevel1: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "1st Level"
+                    }),
+                    spellLevel2: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "2nd Level"
+                    }),
+                    spellLevel3: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "3rd Level"
+                    }),
+                    spellLevel4: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "4th Level"
+                    }),
+                    spellLevel5: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "5th Level"
+                    }),
+                    spellLevel6: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "6th Level"
+                    }),
+                    spellLevel7: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "7th Level"
+                    }),
+                    spellLevel8: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "8th Level"
+                    }),
+                    spellLevel9: new NumberField({
+                        required: true, integer: true, min: 0, initial: 0,
+                        label: "9th Level"
+                    })
+                }), { label: "Spells Per Day Table" })
             })
         };
     }
@@ -113,5 +159,24 @@ export class ClassData extends foundry.abstract.TypeDataModel {
             case "poor": return Math.floor(level / 3);
             default: return 0;
         }
+    }
+
+    /**
+     * Get spells per day for a given class level and spell level from the spells per day table.
+     * @param {Array} table            The spellsPerDayTable array
+     * @param {number} classLevel      The class level (1-20)
+     * @param {number} spellLevel      The spell level (0-9)
+     * @returns {number}               Number of spells per day, or 0 if not found
+     */
+    static getSpellsPerDay(table, classLevel, spellLevel) {
+        if (!Array.isArray(table) || classLevel < 1 || classLevel > 20 || spellLevel < 0 || spellLevel > 9) {
+            return 0;
+        }
+
+        const entry = table.find(e => e.classLevel === classLevel);
+        if (!entry) return 0;
+
+        const fieldName = `spellLevel${spellLevel}`;
+        return entry[fieldName] || 0;
     }
 }

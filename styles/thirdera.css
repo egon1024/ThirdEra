@@ -1957,3 +1957,73 @@
 .thirdera .container-item.container-capacity-unlimited {
   border-left: 6px solid var(--color-border-divider) !important;
 }
+
+/* Spells Per Day Table */
+.thirdera .spells-per-day-table-container {
+  margin: 10px 0;
+  overflow-x: auto;
+}
+
+.thirdera .spells-per-day-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-body);
+}
+
+.thirdera .spells-per-day-table thead {
+  background: var(--color-bg-parchment-dark);
+  border-bottom: 2px solid var(--color-border-divider);
+}
+
+.thirdera .spells-per-day-table th {
+  padding: 6px 4px;
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .spells-per-day-table th:first-child {
+  text-align: left;
+  padding-left: 8px;
+}
+
+.thirdera .spells-per-day-table th:last-child {
+  border-right: none;
+}
+
+.thirdera .spells-per-day-table tbody tr {
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .spells-per-day-table tbody tr:hover {
+  background: var(--color-bg-light);
+}
+
+.thirdera .spells-per-day-table .spells-per-day-level {
+  padding: 4px 8px;
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  background: var(--color-bg-parchment-dark);
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .spells-per-day-table td {
+  padding: 2px;
+  text-align: center;
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .spells-per-day-table td:last-child {
+  border-right: none;
+}
+
+.thirdera .spells-per-day-input {
+  width: 40px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 2px 4px;
+  margin: 0;
+}

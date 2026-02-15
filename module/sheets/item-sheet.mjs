@@ -15,6 +15,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             closeOnSubmit: false
         },
         window: {
+            resizable: true,
             controls: [
                 {
                     icon: "fa-solid fa-trash",
@@ -90,6 +91,50 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             special: systemData.special ? await foundry.applications.ux.TextEditor.enrichHTML(systemData.special, { async: true, relativeTo: item }) : ""
         };
 
+        // Prepare spells per day table - ensure we have entries for all 20 levels
+        let spellsPerDayTable = [];
+        if (item.type === "class" && systemData.spellcasting?.spellsPerDayTable) {
+            const existingTable = systemData.spellcasting.spellsPerDayTable;
+            for (let level = 1; level <= 20; level++) {
+                const existingEntry = existingTable.find(e => e.classLevel === level);
+                if (existingEntry) {
+                    spellsPerDayTable.push(existingEntry);
+                } else {
+                    // Create default entry for this level
+                    spellsPerDayTable.push({
+                        classLevel: level,
+                        spellLevel0: 0,
+                        spellLevel1: 0,
+                        spellLevel2: 0,
+                        spellLevel3: 0,
+                        spellLevel4: 0,
+                        spellLevel5: 0,
+                        spellLevel6: 0,
+                        spellLevel7: 0,
+                        spellLevel8: 0,
+                        spellLevel9: 0
+                    });
+                }
+            }
+        } else if (item.type === "class") {
+            // Initialize empty table for all 20 levels
+            for (let level = 1; level <= 20; level++) {
+                spellsPerDayTable.push({
+                    classLevel: level,
+                    spellLevel0: 0,
+                    spellLevel1: 0,
+                    spellLevel2: 0,
+                    spellLevel3: 0,
+                    spellLevel4: 0,
+                    spellLevel5: 0,
+                    spellLevel6: 0,
+                    spellLevel7: 0,
+                    spellLevel8: 0,
+                    spellLevel9: 0
+                });
+            }
+        }
+
         return {
             ...context,
             item,
@@ -98,7 +143,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             enriched,
             tabs: this.tabGroups,
             editable: this.isEditable,
-            isOwned: !!item.parent
+            isOwned: !!item.parent,
+            spellsPerDayTable
         };
     }
 
@@ -120,26 +166,39 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
         // Restore manual scroll position if set (prevents jumping when adding/removing rows)
         if (this._preservedScrollTop !== undefined) {
+            const preservedScroll = this._preservedScrollTop;
+            this._preservedScrollTop = undefined;
             const tab = this.element.querySelector(".sheet-body .tab.active");
-            if (tab) {
-                tab.scrollTop = this._preservedScrollTop;
-                this._preservedScrollTop = undefined;
+            if (tab && preservedScroll > 0) {
+                // Restore immediately
+                tab.scrollTop = preservedScroll;
+                // Also restore after frames to ensure it sticks (DOM updates may reset it)
                 requestAnimationFrame(() => {
-                    if (this._preservedScrollTop !== undefined) return;
-                    if (tab.scrollTop === 0 && this._preservedScrollTop > 0) {
-                        tab.scrollTop = this._preservedScrollTop;
+                    if (tab.scrollTop !== preservedScroll) {
+                        tab.scrollTop = preservedScroll;
                     }
+                    // Second attempt after a short delay
+                    setTimeout(() => {
+                        if (tab.scrollTop !== preservedScroll) {
+                            tab.scrollTop = preservedScroll;
+                        }
+                    }, 10);
                 });
             }
         }
 
         // Restore focus after re-render (preserves tab navigation with submitOnChange)
         if (this._focusedInputName) {
-            const input = this.element.querySelector(`[name="${this._focusedInputName}"]`);
-            if (input) {
-                input.focus();
-            }
+            const inputName = this._focusedInputName;
             this._focusedInputName = null;
+            // Use requestAnimationFrame to ensure DOM is ready
+            requestAnimationFrame(() => {
+                const input = this.element.querySelector(`[name="${inputName}"]`);
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
+            });
         }
 
         // Manual listener for ProseMirror changes
@@ -147,6 +206,111 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         editors.forEach(editor => {
             editor.addEventListener("change", (event) => {
                 this.submit();
+            });
+        });
+
+        // Spells per day table input handlers
+        const spellsPerDayInputs = this.element.querySelectorAll(".spells-per-day-input");
+        spellsPerDayInputs.forEach((input, index) => {
+            // Store original value on focus
+            let originalValue = input.value || "0";
+            
+            input.addEventListener("focus", (event) => {
+                // Select all text when focused
+                event.target.select();
+                // Store the current value as the original
+                originalValue = event.target.value || "0";
+            });
+
+            input.addEventListener("keydown", (event) => {
+                if (event.key === "Tab" || event.key === "Enter") {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    // Get all inputs in the table
+                    const allInputs = Array.from(this.element.querySelectorAll(".spells-per-day-input"));
+                    const currentIndex = allInputs.indexOf(event.target);
+                    
+                    let nextIndex;
+                    if (event.key === "Tab" && event.shiftKey) {
+                        // Shift+Tab: move to previous cell (wrap to previous row if at start)
+                        nextIndex = currentIndex - 1;
+                        if (nextIndex < 0) {
+                            // Wrap to the last cell
+                            nextIndex = allInputs.length - 1;
+                        }
+                    } else if (event.key === "Tab") {
+                        // Tab: move to next cell (wrap to next row if at end)
+                        nextIndex = (currentIndex + 1) % allInputs.length;
+                    } else if (event.key === "Enter") {
+                        // Enter: move down to next row (same column)
+                        // There are 10 columns (spell levels 0-9), so add 10 to go down one row
+                        nextIndex = currentIndex + 10;
+                        // If we've gone past the end, wrap to the beginning of the same column
+                        if (nextIndex >= allInputs.length) {
+                            // Find which column we're in (0-9)
+                            const column = currentIndex % 10;
+                            // Go to the first row of this column
+                            nextIndex = column;
+                        }
+                    }
+                    
+                    // Validate current value before moving
+                    const value = event.target.value;
+                    if (value === "" || isNaN(parseInt(value, 10)) || parseInt(value, 10) < 0) {
+                        const revertValue = originalValue === "" || isNaN(parseInt(originalValue, 10)) ? "0" : originalValue;
+                        event.target.value = revertValue;
+                    }
+                    
+                    // Capture scroll position before triggering change
+                    const tab = this.element.querySelector(".sheet-body .tab.active");
+                    if (tab) {
+                        this._preservedScrollTop = tab.scrollTop;
+                    }
+                    
+                    // Get the next input's name attribute to preserve for focus restoration
+                    const nextInput = allInputs[nextIndex];
+                    if (nextInput && nextInput.name) {
+                        this._focusedInputName = nextInput.name;
+                    }
+                    
+                    // Trigger change event to save the value (will cause re-render)
+                    event.target.dispatchEvent(new Event("change", { bubbles: true }));
+                }
+            });
+
+            input.addEventListener("change", (event) => {
+                // Capture scroll position on change event (before form submission)
+                const tab = this.element.querySelector(".sheet-body .tab.active");
+                if (tab && this._preservedScrollTop === undefined) {
+                    this._preservedScrollTop = tab.scrollTop;
+                }
+            });
+
+            input.addEventListener("blur", (event) => {
+                // Only validate on blur if it wasn't triggered by our keyboard navigation
+                // (keyboard navigation will have already validated and set _focusedInputName)
+                // Check if we're navigating to another spells-per-day input
+                const isNavigating = this._focusedInputName && this._focusedInputName.includes("spellsPerDayTable");
+                
+                if (!isNavigating) {
+                    const value = event.target.value;
+                    
+                    // If empty or not a valid number, revert to original value
+                    if (value === "" || isNaN(parseInt(value, 10)) || parseInt(value, 10) < 0) {
+                        const revertValue = originalValue === "" || isNaN(parseInt(originalValue, 10)) ? "0" : originalValue;
+                        event.target.value = revertValue;
+                        // Capture scroll position before triggering change
+                        const tab = this.element.querySelector(".sheet-body .tab.active");
+                        if (tab) {
+                            this._preservedScrollTop = tab.scrollTop;
+                        }
+                        // Trigger change event to save the reverted value (will cause re-render)
+                        event.target.dispatchEvent(new Event("change", { bubbles: true }));
+                    }
+                    // Clear focused input name if not navigating (will be set by keyboard handler if navigating)
+                    this._focusedInputName = null;
+                }
             });
         });
 
