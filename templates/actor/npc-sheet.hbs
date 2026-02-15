@@ -347,14 +347,13 @@
                                 </h4>
                             </div>
                             <div class="item-controls">
-                                <span class="item-detail">Qty: {{item.system.quantity}}</span>
+                                <span class="item-detail">Qty: {{item.system.quantity}} in {{container.name}}</span>
                                 {{#if (eq item.type 'weapon')}}
                                 <span class="item-detail">{{item.system.damage.effectiveDice}}</span>
                                 {{/if}}
                                 {{#if (eq item.type 'armor')}}
                                 <span class="item-detail">AC +{{item.system.armor.bonus}}</span>
                                 {{/if}}
-                                <span class="item-detail">{{localize 'THIRDERA.Container.InContainer'}}</span>
                                 <a class="item-remove-container" data-action="removeFromContainer" title="{{localize 'THIRDERA.Container.Remove'}}"><i class="fas fa-box-open"></i></a>
                                 <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
                                 <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>

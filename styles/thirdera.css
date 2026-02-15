@@ -54,15 +54,27 @@
   --color-border-profile: #555;
   --color-border-highlight: #8B4513;
 
-  /* Typography */
+  /* Typography - Font Families */
   --font-family: "Signika", sans-serif;
+  --font-family-readable: "Roboto", "Helvetica Neue", Arial, sans-serif;
+
+  /* Typography - Font Sizes */
   --font-size-note: 11px;
   --font-size-label: 12px;
   --font-size-body: 14px;
+  --font-size-item-name: 15px;
   --font-size-value: 16px;
   --font-size-value-lg: 18px;
   --font-size-value-xl: 20px;
   --font-size-heading: 24px;
+
+  /* Typography - Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+
+  /* Typography - Line Heights */
+  --line-height-normal: 1;
+  --line-height-comfortable: 1.5;
 
   font-family: var(--font-family);
 }
@@ -91,7 +103,7 @@
   margin-left: auto;
   font-size: var(--font-size-note);
   opacity: 0.7;
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
 }
 
 .thirdera.audit-log .audit-log-message {
@@ -207,7 +219,7 @@
   padding: 2px 8px;
   border-radius: 3px;
   font-size: var(--font-size-note);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -224,7 +236,7 @@
 
 .thirdera .item-size-label {
   font-size: 0.85em;
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   color: var(--color-text-muted);
 }
 
@@ -259,7 +271,7 @@
   height: 36px;
   margin: 0;
   font-size: var(--font-size-heading);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   border: none;
 }
 
@@ -276,7 +288,7 @@
 
 .thirdera .sheet-tabs .item.active {
   color: var(--color-text-primary);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .thirdera .sheet-body {
@@ -312,7 +324,7 @@
 
 .thirdera .subtabs .item.active {
   color: var(--color-text-primary);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   border-bottom: 2px solid var(--color-character-accent);
 }
 
@@ -352,7 +364,7 @@
 }
 
 .thirdera .resource-label {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-label);
   text-transform: uppercase;
 }
@@ -376,7 +388,7 @@
   height: 28px;
   text-align: center;
   font-size: var(--font-size-value);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   padding: 1px 2px;
 }
 
@@ -406,7 +418,7 @@
 
 .thirdera .header-hp-max {
   font-size: var(--font-size-value);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 /* Dynamic Editor Sizing */
@@ -418,7 +430,7 @@
 
 .thirdera .editor-box label {
   display: block;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 4px;
 }
 
@@ -491,7 +503,7 @@
 }
 
 .thirdera .abilities-grid .abilities-col-header {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-note);
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -500,7 +512,10 @@
 .thirdera .abilities-grid .ability-name {
   justify-self: start;
   margin: 0;
-  font-size: var(--font-size-body);
+  font-size: var(--font-size-item-name);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-comfortable);
+  font-family: var(--font-family-readable);
 }
 
 .thirdera .abilities-grid .ability-base {
@@ -514,25 +529,25 @@
 }
 
 .thirdera .abilities-grid .ability-effective {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-value);
 }
 
 .thirdera .abilities-grid .ability-mod {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-value);
 }
 
 .thirdera .abilities-grid .ability-mod.dex-capped,
 .thirdera .speed-reduced {
   color: var(--color-modified);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   cursor: help;
 }
 
 .thirdera .dex-cap-note {
   font-size: var(--font-size-note);
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   color: var(--color-modified);
   cursor: help;
 }
@@ -545,7 +560,7 @@
 
 .thirdera .modified-note {
   font-size: var(--font-size-note);
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   color: var(--color-modified);
   cursor: help;
 }
@@ -557,7 +572,7 @@
 .thirdera .ability-mod.dex-overloaded,
 .thirdera .dex-cap-note.dex-overloaded {
   color: var(--color-danger) !important;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   cursor: help;
 }
 
@@ -589,7 +604,7 @@
 
 .thirdera .stat-block label {
   display: block;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-label);
   text-transform: uppercase;
   margin-bottom: 5px;
@@ -597,7 +612,7 @@
 
 .thirdera .stat-block .stat-value {
   font-size: var(--font-size-value-lg);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .thirdera .stat-block input {
@@ -626,7 +641,7 @@
 
 .thirdera .ac-total label {
   display: block;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-label);
   text-transform: uppercase;
   margin-bottom: 2px;
@@ -634,7 +649,7 @@
 
 .thirdera .ac-total .ac-value {
   font-size: var(--font-size-value-xl);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .thirdera .ac-breakdown {
@@ -660,7 +675,7 @@
 }
 
 .thirdera .ac-breakdown-value {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-dark);
 }
 
@@ -688,14 +703,14 @@
 }
 
 .thirdera .attack-col-header {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-label);
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
 
 .thirdera .attack-row-label {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-body);
   color: var(--color-text-dark);
   justify-self: end;
@@ -703,13 +718,13 @@
 
 .thirdera .attack-cell {
   font-size: var(--font-size-value);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-dark);
 }
 
 .thirdera .attack-ability-tag {
   font-size: var(--font-size-note);
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   color: var(--color-text-muted);
 }
 
@@ -722,7 +737,7 @@
 
 .thirdera .attack-total {
   font-size: var(--font-size-value-lg);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
 }
 
@@ -752,7 +767,7 @@
   width: 20px;
   height: 20px;
   font-size: var(--font-size-note);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   border: 1px solid var(--color-text-faint);
   border-radius: 2px;
   cursor: pointer;
@@ -798,7 +813,10 @@
 .thirdera .saves-list .save h4 {
   flex: 0 0 120px;
   margin: 0;
-  font-size: var(--font-size-body);
+  font-size: var(--font-size-item-name);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-comfortable);
+  font-family: var(--font-family-readable);
 }
 
 .thirdera .saves-list .save input {
@@ -810,7 +828,7 @@
 .thirdera .saves-list .save .save-total {
   flex: 0 0 40px;
   text-align: center;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-value);
 }
 
@@ -835,7 +853,7 @@
   background: #D2B48C;
   /* Dark tan */
   color: var(--color-text-primary);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
 }
 
@@ -893,10 +911,20 @@
 
 .thirdera .items-list .item h4 {
   margin: 0;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.5;
-  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--font-size-item-name);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-comfortable);
+  font-family: var(--font-family-readable);
+}
+
+/* Apply same font styling to abilities subtabs (skills, feats, features) */
+.thirdera .abilities .items-list .item h4,
+.thirdera .skills-list .item h4,
+.thirdera .granted-features-list .item h4 {
+  font-size: var(--font-size-item-name);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-comfortable);
+  font-family: var(--font-family-readable);
 }
 
 .thirdera .items-list .item .item-controls {
@@ -930,7 +958,7 @@
 
 /* Skill specific */
 .thirdera .items-list .item .skill-total {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   margin-left: 10px;
   margin-right: 10px;
   min-width: 30px;
@@ -966,7 +994,7 @@
 
 .thirdera .form-group label {
   display: block;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 5px;
 }
 
@@ -986,7 +1014,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   cursor: pointer;
 }
 
@@ -1002,7 +1030,7 @@
 .thirdera .race-name {
   cursor: pointer;
   font-size: var(--font-size-value);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-character-accent);
 }
 
@@ -1014,7 +1042,7 @@
 .thirdera .race-name.race-empty {
   cursor: default;
   color: var(--color-text-muted);
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   font-style: italic;
 }
 
@@ -1038,7 +1066,7 @@
 
 .thirdera .ability-adj-entry label {
   font-size: var(--font-size-label);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   margin-bottom: 2px;
 }
@@ -1051,19 +1079,19 @@
 /* Class display in character header */
 .thirdera .class-summary {
   font-size: var(--font-size-value);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-character-accent);
 }
 
 .thirdera .class-summary.class-empty {
   color: var(--color-text-muted);
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   font-style: italic;
 }
 
 .thirdera .level-display {
   font-size: var(--font-size-value);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 /* Class list on character sheet */
@@ -1120,7 +1148,7 @@
 
 .thirdera .hp-adjustments-title {
   font-size: var(--font-size-label);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
@@ -1181,7 +1209,7 @@
 }
 
 .thirdera .level-history-col-header {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-note);
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -1194,7 +1222,7 @@
 }
 
 .thirdera .level-history-level {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .thirdera .level-history-class {
@@ -1202,7 +1230,7 @@
 }
 
 .thirdera .level-history-subtotal {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .thirdera .level-history-input {
@@ -1215,7 +1243,7 @@
 .thirdera .level-history-roll-hp {
   cursor: pointer;
   color: var(--color-character-accent);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .thirdera .level-history-roll-hp:hover {
@@ -1242,13 +1270,13 @@
 }
 
 .thirdera .skill-point-budget .sp-label {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
 
 .thirdera .skill-point-budget .sp-remaining {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-equipped);
 }
 
@@ -1272,7 +1300,7 @@
   width: 16px;
   height: 16px;
   font-size: var(--font-size-note);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-light);
   background: var(--color-character-accent);
   border-radius: 2px;
@@ -1288,7 +1316,7 @@
   width: 16px;
   height: 16px;
   font-size: var(--font-size-note);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-light);
   background: var(--color-equipped);
   border-radius: 2px;
@@ -1310,7 +1338,7 @@
 }
 
 .thirdera .granted-skills-hint {
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   font-style: italic;
   color: var(--color-text-muted);
   font-size: var(--font-size-note);
@@ -1324,7 +1352,7 @@
   width: 20px;
   height: 16px;
   font-size: var(--font-size-note);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-muted);
   background: var(--color-border-divider);
   border-radius: 2px;
@@ -1340,7 +1368,7 @@
 .thirdera .skill-acp {
   font-size: var(--font-size-label);
   color: var(--color-modified);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 /* Skill reference lists (class skills on class sheet, excluded skills on race sheet) */
@@ -1426,7 +1454,7 @@
 
 .thirdera .feature-level-badge {
   font-size: var(--font-size-note);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-light);
   background: var(--color-character-accent);
   border-radius: 2px;
@@ -1484,7 +1512,7 @@
 .thirdera .feature-scaling-value {
   font-size: var(--font-size-label);
   color: var(--color-character-accent);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   margin-left: 4px;
 }
 
@@ -1545,7 +1573,7 @@
 }
 
 .thirdera .scaling-col-header {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-note);
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -1612,7 +1640,7 @@
 
 .thirdera .currency-item label {
   flex: 0 0 20px;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   font-size: var(--font-size-note);
   text-align: right;
@@ -1637,14 +1665,14 @@
 
 .thirdera .weight-label,
 .thirdera .load-label {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-label);
   color: var(--color-text-muted);
 }
 
 .thirdera .weight-value,
 .thirdera .load-value {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-value);
 }
 
@@ -1697,7 +1725,7 @@
   width: 100%;
   text-align: center;
   font-size: var(--font-size-note);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: #fff;
   text-shadow: 1px 1px 1px #000;
   pointer-events: none;
@@ -1734,14 +1762,14 @@
 }
 
 .thirdera .breakdown-row.header {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-muted);
   text-transform: uppercase;
   font-size: calc(var(--font-size-note) - 1px);
 }
 
 .thirdera .breakdown-row .load-label {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .thirdera .breakdown-row .load-calc {
@@ -1780,7 +1808,7 @@
 .thirdera .container-capacity {
   font-size: var(--font-size-note);
   color: var(--color-text-muted);
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   margin-left: 5px;
 }
 
