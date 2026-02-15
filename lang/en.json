@@ -76,6 +76,10 @@
             "AuditLogFilterGM": {
                 "Name": "Filter GM Actions",
                 "Hint": "When enabled, actions performed by GMs will not be logged in the audit log."
+            },
+            "FirstLevelFullHp": {
+                "Name": "First Level Full Hit Points",
+                "Hint": "When enabled, the first level of the first class added to a character automatically grants maximum hit points from the class's hit die (e.g., d8 = 8 HP). The value remains editable in the level history."
             }
         },
         "Inventory": {
@@ -151,7 +155,8 @@
             "skill": "Skill",
             "race": "Race",
             "class": "Class",
-            "feature": "Class Feature"
+            "feature": "Class Feature",
+            "domain": "Domain"
         },
         "Actor": {
             "character": "Character",

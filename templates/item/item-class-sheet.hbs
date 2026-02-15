@@ -225,6 +225,24 @@
                     </tbody>
                 </table>
             </div>
+
+            <h4 class="form-header">Domains</h4>
+            <p class="hint">Drag and drop domain items here to assign them to this class. Clerics typically have 2 domains.</p>
+            {{#if system.spellcasting.domains.length}}
+            <ol class="domains-list">
+                {{#each system.spellcasting.domains as |domain index|}}
+                <li class="domain-entry flexrow">
+                    <div class="domain-name" style="flex: 1;">{{domain.domainName}}</div>
+                    <div class="form-group" style="flex: 0 0 30px; margin: 0 0 0 8px;">
+                        <a class="domain-remove" data-action="removeDomain" data-domain-key="{{domain.domainKey}}"
+                            title="Remove Domain"><i class="fas fa-times"></i></a>
+                    </div>
+                </li>
+                {{/each}}
+            </ol>
+            {{else}}
+            <p class="no-items hint">No domains assigned. Drag domain items here to add them.</p>
+            {{/if}}
             {{else}}
             <p class="hint">Enable spellcasting above to configure spellcasting options.</p>
             {{/if}}

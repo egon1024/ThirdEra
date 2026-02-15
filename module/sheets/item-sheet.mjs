@@ -32,8 +32,11 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             removeClassSkill: ThirdEraItemSheet.#onRemoveClassSkill,
             removeExcludedSkill: ThirdEraItemSheet.#onRemoveExcludedSkill,
             removeFeature: ThirdEraItemSheet.#onRemoveFeature,
+            removeDomain: ThirdEraItemSheet.#onRemoveDomain,
             addScalingRow: ThirdEraItemSheet.#onAddScalingRow,
-            removeScalingRow: ThirdEraItemSheet.#onRemoveScalingRow
+            removeScalingRow: ThirdEraItemSheet.#onRemoveScalingRow,
+            addDomainSpell: ThirdEraItemSheet.#onAddDomainSpell,
+            removeDomainSpell: ThirdEraItemSheet.#onRemoveDomainSpell
         }
     };
 
@@ -363,6 +366,37 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const droppedItem = await Item.implementation.fromDropData(data);
         if (!droppedItem) return;
 
+        // Handle domain drops on class sheets (spellcasting domains)
+        if (droppedItem.type === "domain" && this.document.type === "class") {
+            // Preserve scroll position
+            const tab = this.element.querySelector(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+
+            const domainKey = droppedItem.system?.key;
+            if (!domainKey) {
+                ui.notifications.warn(`${droppedItem.name} has no domain key — save the domain item first to auto-generate one.`);
+                return;
+            }
+
+            // Check if spellcasting is enabled
+            const spellcasting = this.document.system.spellcasting;
+            if (!spellcasting || !spellcasting.enabled) {
+                ui.notifications.warn(`Spellcasting must be enabled for ${this.document.name} before adding domains.`);
+                return;
+            }
+
+            const current = [...(spellcasting.domains || [])];
+            // Check for duplicate
+            if (current.some(e => e.domainKey === domainKey)) {
+                ui.notifications.info(`${droppedItem.name} is already assigned to ${this.document.name}.`);
+                return;
+            }
+            current.push({ domainItemId: droppedItem.id, domainName: droppedItem.name, domainKey });
+            current.sort((a, b) => a.domainName.localeCompare(b.domainName));
+            await this.document.update({ "system.spellcasting.domains": current });
+            return;
+        }
+
         // Handle feat/feature drops on class sheets (class features)
         if ((droppedItem.type === "feat" || droppedItem.type === "feature") && this.document.type === "class") {
             const featKey = droppedItem.system?.key;
@@ -585,6 +619,61 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const current = [...(this.item.system.features || [])];
         current.splice(index, 1);
         await this.item.update({ "system.features": current });
+    }
+
+    /**
+     * Handle removing a domain from a class
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveDomain(event, target) {
+        // Preserve scroll position
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const domainKey = target.dataset.domainKey;
+        if (!domainKey) return;
+        const spellcasting = this.item.system.spellcasting;
+        if (!spellcasting || !spellcasting.domains) return;
+        const current = spellcasting.domains.filter(e => e.domainKey !== domainKey);
+        await this.item.update({ "system.spellcasting.domains": current });
+    }
+
+    /**
+     * Handle adding a domain spell entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onAddDomainSpell(event, target) {
+        // Manual scroll preservation
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const current = [...(this.item.system.spells || [])];
+        // Default to level 1 if empty, otherwise one level higher than the last entry
+        const nextLevel = current.length > 0 ? Math.min(9, current[current.length - 1].level + 1) : 1;
+        current.push({ level: nextLevel, spellName: "" });
+        await this.item.update({ "system.spells": current });
+    }
+
+    /**
+     * Handle removing a domain spell entry
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveDomainSpell(event, target) {
+        // Manual scroll preservation
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const index = parseInt(target.dataset.spellIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.spells || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.spells": current });
     }
 
     /**

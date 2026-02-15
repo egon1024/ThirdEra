@@ -1,0 +1,66 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Domain Name" /></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="details">Details</a>
+    </nav>
+
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+
+        {{!-- Details Tab --}}
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
+            <h3 class="form-header">Domain Spells</h3>
+            <p class="hint">Enter the spells granted by this domain at each spell level (1st through 9th).</p>
+            {{#if system.spells.length}}
+            <ol class="domain-spells-list">
+                {{#each system.spells as |spell index|}}
+                <li class="domain-spell-entry flexrow">
+                    <div class="form-group" style="flex: 0 0 80px; margin: 0 8px 0 0;">
+                        <label>Level</label>
+                        <input type="number" name="system.spells.{{index}}.level" value="{{spell.level}}" min="1" max="9"
+                            data-dtype="Number" class="domain-spell-level-input" />
+                    </div>
+                    <div class="form-group" style="flex: 1; margin: 0;">
+                        <label>Spell Name</label>
+                        <input type="text" name="system.spells.{{index}}.spellName" value="{{spell.spellName}}"
+                            placeholder="Spell Name" />
+                    </div>
+                    <div class="form-group" style="flex: 0 0 30px; margin: 0 0 0 8px;">
+                        <label>&nbsp;</label>
+                        <a class="domain-spell-remove" data-action="removeDomainSpell" data-spell-index="{{index}}"
+                            title="Remove Domain Spell"><i class="fas fa-times"></i></a>
+                    </div>
+                </li>
+                {{/each}}
+            </ol>
+            {{else}}
+            <p class="no-items hint">No domain spells defined. Add spells below.</p>
+            {{/if}}
+            <div class="form-group">
+                <a class="domain-spell-add" data-action="addDomainSpell" title="Add Domain Spell">
+                    <i class="fas fa-plus"></i> Add Domain Spell
+                </a>
+            </div>
+        </div>
+    </section>
+</form>

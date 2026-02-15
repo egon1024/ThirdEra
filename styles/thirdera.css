@@ -2219,10 +2219,76 @@
   color: var(--color-text-primary);
 }
 
+/* Domain Spells Styling */
+.thirdera .tab.spells .domain-spells-group {
+  background: rgba(65, 105, 225, 0.05);
+  border-left: 3px solid var(--color-character-accent);
+}
+
+.thirdera .tab.spells .domain-spells-group .spell-level-header {
+  background: rgba(65, 105, 225, 0.1);
+}
+
+.thirdera .tab.spells .domain-spell-note {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.thirdera .tab.spells .domain-spell-item {
+  background: rgba(65, 105, 225, 0.02);
+}
+
+.thirdera .tab.spells .domain-label {
+  font-size: var(--font-size-label);
+  color: var(--color-character-accent);
+  font-weight: var(--font-weight-normal);
+  margin-left: 5px;
+}
+
 .thirdera .tab.spells .no-spells {
   padding: 20px;
   text-align: center;
   color: var(--color-text-muted);
   font-style: italic;
+}
+
+/* Domain List Styling (Class Sheet) */
+.thirdera .domains-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.thirdera .domain-entry {
+  padding: 8px;
+  margin: 5px 0;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
+  border-radius: 3px;
+  align-items: center;
+}
+
+.thirdera .domain-name {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.thirdera .domain-key {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label);
+}
+
+.thirdera .domain-remove {
+  color: var(--color-danger);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.thirdera .domain-remove:hover {
+  background: var(--color-danger);
+  color: var(--color-text-light);
 }
 }

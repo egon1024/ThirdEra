@@ -15,6 +15,7 @@ import { SkillData } from "./module/data/item-skill.mjs";
 import { RaceData } from "./module/data/item-race.mjs";
 import { ClassData } from "./module/data/item-class.mjs";
 import { FeatureData } from "./module/data/item-feature.mjs";
+import { DomainData } from "./module/data/item-domain.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -228,6 +229,15 @@ Hooks.once("init", async function () {
         default: false
     });
 
+    game.settings.register("thirdera", "firstLevelFullHp", {
+        name: "THIRDERA.Settings.FirstLevelFullHp.Name",
+        hint: "THIRDERA.Settings.FirstLevelFullHp.Hint",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true
+    });
+
     // Register data models
     CONFIG.Actor.dataModels = {
         character: CharacterData,
@@ -243,7 +253,22 @@ Hooks.once("init", async function () {
         feature: FeatureData,
         skill: SkillData,
         race: RaceData,
-        class: ClassData
+        class: ClassData,
+        domain: DomainData
+    };
+
+    // Register item type labels for the creation menu
+    CONFIG.Item.typeLabels = {
+        weapon: "THIRDERA.TYPES.Item.weapon",
+        armor: "THIRDERA.TYPES.Item.armor",
+        equipment: "THIRDERA.TYPES.Item.equipment",
+        spell: "THIRDERA.TYPES.Item.spell",
+        feat: "THIRDERA.TYPES.Item.feat",
+        feature: "THIRDERA.TYPES.Item.feature",
+        skill: "THIRDERA.TYPES.Item.skill",
+        race: "THIRDERA.TYPES.Item.race",
+        class: "THIRDERA.TYPES.Item.class",
+        domain: "THIRDERA.TYPES.Item.domain"
     };
 
     // Register sheet application classes
@@ -395,7 +420,8 @@ function _addSidebarDeleteButton(app, html, type) {
 
     directoryItems.each((index, element) => {
         const li = $(element);
-        const documentId = li.data("documentId");
+        // Get entryId from data attribute (try multiple methods for compatibility)
+        const entryId = element.dataset?.entryId || li.data("entryId") || li.attr("data-entry-id");
 
         // Check if button already exists
         if (li.find(".document-delete").length) return;
@@ -421,7 +447,16 @@ function _addSidebarDeleteButton(app, html, type) {
             event.preventDefault();
             event.stopPropagation();
 
-            const document = app.documents.get(documentId);
+            if (!entryId) return;
+
+            // Get the document from the appropriate collection
+            let document = null;
+            if (type === "Item") {
+                document = game.items.get(entryId);
+            } else if (type === "Actor") {
+                document = game.actors.get(entryId);
+            }
+
             if (document) {
                 const confirmed = await foundry.applications.api.DialogV2.confirm({
                     window: { title: `Delete ${type}: ${document.name}` },

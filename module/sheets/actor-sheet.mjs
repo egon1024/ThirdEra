@@ -359,26 +359,66 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         for (const sc of spellcastingByClass) {
             const spellsByLevel = {};
             const preparedByLevel = {};
+            const domainSpellsByLevel = {}; // Domain spells organized by level
             for (let level = 0; level <= 9; level++) {
                 spellsByLevel[level] = [];
                 preparedByLevel[level] = 0;
+                domainSpellsByLevel[level] = [];
             }
             spellsByClass.set(sc.classItemId, {
                 ...sc,
                 spellsByLevel,
                 preparedByLevel,
+                domainSpellsByLevel,
                 totalPrepared: 0,
                 totalCast: 0
             });
         }
         
+        // Build a map of spell names to domain info for quick lookup
+        // This helps identify which spells are domain spells
+        const domainSpellMap = new Map(); // spellName (lowercase) -> {classItemId, domainName, domainKey, spellLevel}
+        for (const sc of spellcastingByClass) {
+            if (sc.domainSpellsByLevel) {
+                for (let level = 1; level <= 9; level++) {
+                    const domainSpells = sc.domainSpellsByLevel[level] || [];
+                    for (const ds of domainSpells) {
+                        const key = ds.spellName.toLowerCase().trim();
+                        domainSpellMap.set(key, {
+                            classItemId: sc.classItemId,
+                            domainName: ds.domainName,
+                            domainKey: ds.domainKey,
+                            spellLevel: level
+                        });
+                    }
+                }
+            }
+        }
+        
         // Assign spells to their classes and levels
-        // For now, we'll assign spells to the first matching class that can cast them
-        // In the future, we might want to allow assigning spells to specific classes
+        // Domain spells are identified by matching spell names to domain spell lists
         for (const spell of items.spells) {
             const spellLevel = spell.system.level || 0;
+            const spellNameKey = spell.name.toLowerCase().trim();
             
-            // Find a spellcasting class that can cast this spell level
+            // Check if this is a domain spell
+            const domainInfo = domainSpellMap.get(spellNameKey);
+            if (domainInfo && domainInfo.spellLevel === spellLevel) {
+                // This is a domain spell - add to domain spells section
+                const classSpells = spellsByClass.get(domainInfo.classItemId);
+                if (classSpells) {
+                    classSpells.domainSpellsByLevel[spellLevel].push({
+                        ...spell,
+                        domainName: domainInfo.domainName,
+                        domainKey: domainInfo.domainKey
+                    });
+                    // Domain spells don't count toward prepared totals, but we track cast count
+                    classSpells.totalCast += spell.system.cast || 0;
+                }
+                continue;
+            }
+            
+            // Regular spell - find a spellcasting class that can cast this spell level
             let assigned = false;
             for (const sc of spellcastingByClass) {
                 if (sc.spellsPerDay[spellLevel] > 0) {
@@ -402,6 +442,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                         className: "Unassigned",
                         spellsByLevel: {},
                         preparedByLevel: {},
+                        domainSpellsByLevel: {},
                         totalPrepared: 0,
                         totalCast: 0,
                         hasSpellcasting: false
@@ -412,6 +453,44 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     unassigned.spellsByLevel[spellLevel] = [];
                 }
                 unassigned.spellsByLevel[spellLevel].push(spell);
+            }
+        }
+        
+        // Populate domain spells from original definitions (even if spell items don't exist yet)
+        // This ensures domain spell rows appear in the UI even when spells haven't been added to the actor
+        for (const sc of spellcastingByClass) {
+            const classSpells = spellsByClass.get(sc.classItemId);
+            if (classSpells && sc.domainSpellsByLevel) {
+                for (let level = 1; level <= 9; level++) {
+                    const domainSpellDefs = sc.domainSpellsByLevel[level] || [];
+                    // For each domain spell definition, check if we already have a matching spell item
+                    // If not, create a placeholder entry so the row appears in the UI
+                    for (const domainSpellDef of domainSpellDefs) {
+                        // Skip empty spell names
+                        if (!domainSpellDef.spellName || domainSpellDef.spellName.trim() === "") {
+                            continue;
+                        }
+                        // Check if we already have this spell item in domainSpellsByLevel
+                        const spellNameKey = domainSpellDef.spellName.toLowerCase().trim();
+                        const existingSpell = classSpells.domainSpellsByLevel[level].find(
+                            spell => spell.name && spell.name.toLowerCase().trim() === spellNameKey
+                        );
+                        // If no matching spell item exists, create a placeholder entry
+                        if (!existingSpell) {
+                            classSpells.domainSpellsByLevel[level].push({
+                                name: domainSpellDef.spellName,
+                                domainName: domainSpellDef.domainName,
+                                domainKey: domainSpellDef.domainKey,
+                                system: {
+                                    level: level,
+                                    prepared: 0,
+                                    cast: 0
+                                },
+                                _isPlaceholder: true // Flag to indicate this is a placeholder, not a real spell item
+                            });
+                        }
+                    }
+                }
             }
         }
         
@@ -644,7 +723,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const existing = this.actor.items.find(i => i.type === "class" && i.name === itemName);
             if (existing) {
                 const history = [...(this.actor.system.levelHistory || [])];
-                history.push({ classItemId: existing.id, hpRolled: 0 });
+                
+                // Check if this is the first level: levelHistory is empty OR all entries reference classes that no longer exist
+                const existingClassIds = new Set(this.actor.items.filter(i => i.type === "class").map(c => c.id));
+                const hasValidLevels = history.some(entry => existingClassIds.has(entry.classItemId));
+                const isFirstLevel = history.length === 0 || !hasValidLevels;
+                
+                let hpRolled = 0;
+                
+                // If this is the first level and the setting is enabled, set HP to max
+                if (isFirstLevel && game.settings.get("thirdera", "firstLevelFullHp")) {
+                    const hitDie = existing.system.hitDie;
+                    // Parse hit die (e.g., "d8" -> 8, "d10" -> 10)
+                    const dieSize = parseInt(hitDie.substring(1));
+                    if (!isNaN(dieSize)) {
+                        hpRolled = dieSize; // Max value of the die
+                    }
+                }
+                
+                history.push({ classItemId: existing.id, hpRolled });
                 await this.actor.update({ "system.levelHistory": history });
                 return false;
             }
@@ -828,7 +925,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const created = Array.isArray(result) ? result[0] : result;
             if (created?.id) {
                 const history = [...(this.actor.system.levelHistory || [])];
-                history.push({ classItemId: created.id, hpRolled: 0 });
+                
+                // Check if this is the first level: levelHistory is empty OR all entries reference classes that no longer exist
+                const existingClassIds = new Set(this.actor.items.filter(i => i.type === "class").map(c => c.id));
+                const hasValidLevels = history.some(entry => existingClassIds.has(entry.classItemId));
+                const isFirstLevel = history.length === 0 || !hasValidLevels;
+                
+                let hpRolled = 0;
+                
+                // If this is the first level and the setting is enabled, set HP to max
+                if (isFirstLevel && game.settings.get("thirdera", "firstLevelFullHp")) {
+                    const createdClass = this.actor.items.get(created.id);
+                    if (createdClass) {
+                        const hitDie = createdClass.system.hitDie;
+                        // Parse hit die (e.g., "d8" -> 8, "d10" -> 10)
+                        const dieSize = parseInt(hitDie.substring(1));
+                        if (!isNaN(dieSize)) {
+                            hpRolled = dieSize; // Max value of the die
+                        }
+                    }
+                }
+                
+                history.push({ classItemId: created.id, hpRolled });
                 await this.actor.update({ "system.levelHistory": history });
 
                 // Auto-populate class skills that the actor doesn't already have
@@ -2256,7 +2374,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const cls = this.actor.items.get(itemId);
         if (cls) {
             const history = [...(this.actor.system.levelHistory || [])];
-            history.push({ classItemId: cls.id, hpRolled: 0 });
+            
+            // Check if this is the first level: levelHistory is empty OR all entries reference classes that no longer exist
+            const existingClassIds = new Set(this.actor.items.filter(i => i.type === "class").map(c => c.id));
+            const hasValidLevels = history.some(entry => existingClassIds.has(entry.classItemId));
+            const isFirstLevel = history.length === 0 || !hasValidLevels;
+            
+            let hpRolled = 0;
+            
+            // If this is the first level and the setting is enabled, set HP to max
+            if (isFirstLevel && game.settings.get("thirdera", "firstLevelFullHp")) {
+                const hitDie = cls.system.hitDie;
+                // Parse hit die (e.g., "d8" -> 8, "d10" -> 10)
+                const dieSize = parseInt(hitDie.substring(1));
+                if (!isNaN(dieSize)) {
+                    hpRolled = dieSize; // Max value of the die
+                }
+            }
+            
+            history.push({ classItemId: cls.id, hpRolled });
             await this.actor.update({ "system.levelHistory": history });
         }
     }
@@ -2283,12 +2419,27 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         });
         if (!confirmed) return;
 
+        // Store current HP before removal
+        const currentHp = this.actor.system.attributes.hp.value;
+
         // Remove the last levelHistory entry for this class
         const history = [...(this.actor.system.levelHistory || [])];
         const lastIndex = history.findLastIndex(e => e.classItemId === itemId);
         if (lastIndex >= 0) {
             history.splice(lastIndex, 1);
-            await this.actor.update({ "system.levelHistory": history });
+            const updateData = { "system.levelHistory": history };
+            
+            // After removal, prepareDerivedData will recalculate max HP
+            // We need to update first, then check and adjust current HP
+            await this.actor.update(updateData);
+            
+            // Now that prepareDerivedData has run, get the new max HP
+            const newMaxHp = this.actor.system.attributes.hp.max;
+            
+            // If current HP exceeds new max HP, reduce it to max HP
+            if (currentHp > newMaxHp) {
+                await this.actor.update({ "system.attributes.hp.value": newMaxHp });
+            }
         }
     }
 

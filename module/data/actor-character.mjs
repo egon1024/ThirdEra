@@ -521,6 +521,56 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 spellsPerDay[spellLevel] = ClassData.getSpellsPerDay(table, lvl, spellLevel);
             }
 
+            // Resolve domain items and calculate domain spell slots
+            const domains = [];
+            const domainSpellSlots = {}; // spellLevel -> number of domain slots (typically 1 per level if domains exist)
+            const domainSpellsByLevel = {}; // spellLevel -> array of {domainName, domainKey, spellName}
+
+            for (let spellLevel = 0; spellLevel <= 9; spellLevel++) {
+                domainSpellSlots[spellLevel] = 0;
+                domainSpellsByLevel[spellLevel] = [];
+            }
+
+            if (sc.domains && sc.domains.length > 0) {
+                // Clerics typically get 1 domain slot per spell level they can cast
+                // Only grant domain slots for spell levels where the actor has spell slots
+                for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
+                    if (spellsPerDay[spellLevel] > 0) {
+                        domainSpellSlots[spellLevel] = 1;
+                    }
+                }
+
+                // Resolve domain items and collect their spells
+                for (const domainRef of sc.domains) {
+                    try {
+                        const domainItem = game.items.get(domainRef.domainItemId);
+                        if (domainItem && domainItem.type === "domain") {
+                            domains.push({
+                                domainItemId: domainRef.domainItemId,
+                                domainName: domainRef.domainName,
+                                domainKey: domainRef.domainKey
+                            });
+
+                            // Collect spells from this domain
+                            const domainSpells = domainItem.system.spells || [];
+                            for (const domainSpell of domainSpells) {
+                                const sl = domainSpell.level || 1;
+                                if (sl >= 1 && sl <= 9) {
+                                    domainSpellsByLevel[sl].push({
+                                        domainName: domainRef.domainName,
+                                        domainKey: domainRef.domainKey,
+                                        spellName: domainSpell.spellName || ""
+                                    });
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        // Domain item may not exist (deleted); skip it
+                        console.warn(`Domain item ${domainRef.domainItemId} not found for class ${cls.name}`);
+                    }
+                }
+            }
+
             spellcastingByClass.push({
                 classItemId: cls.id,
                 className: cls.name,
@@ -531,6 +581,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 abilityMod,
                 baseSpellDC,
                 spellsPerDay,
+                domains,
+                domainSpellSlots,
+                domainSpellsByLevel,
                 hasSpellcasting: true
             });
         }

@@ -82,6 +82,11 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                     choices: () => CONFIG.THIRDERA.castingAbilities,
                     label: "Casting Ability"
                 }),
+                domains: new ArrayField(new SchemaField({
+                    domainItemId: new StringField({ required: true, blank: false, label: "Domain Item ID" }),
+                    domainName: new StringField({ required: true, blank: false, label: "Domain Name" }),
+                    domainKey: new StringField({ required: true, blank: false, label: "Domain Key" })
+                }), { label: "Domains" }),
                 spellsPerDayTable: new ArrayField(new SchemaField({
                     classLevel: new NumberField({
                         required: true, integer: true, min: 1, max: 20,
