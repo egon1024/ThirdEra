@@ -76,7 +76,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             weaponHandedness: CONFIG.THIRDERA?.weaponHandedness || {},
             hitDice: CONFIG.THIRDERA?.hitDice || {},
             babProgressions: CONFIG.THIRDERA?.babProgressions || {},
-            saveProgressions: CONFIG.THIRDERA?.saveProgressions || {}
+            saveProgressions: CONFIG.THIRDERA?.saveProgressions || {},
+            casterTypes: CONFIG.THIRDERA?.casterTypes || {},
+            preparationTypes: CONFIG.THIRDERA?.preparationTypes || {},
+            castingAbilities: CONFIG.THIRDERA?.castingAbilities || {}
         };
 
         // Enrich HTML description and other fields

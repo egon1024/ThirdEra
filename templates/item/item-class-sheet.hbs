@@ -90,6 +90,41 @@
                     <option value="true" {{#if (eq system.isPrestige "true" )}}selected{{/if}}>Yes</option>
                 </select>
             </div>
+
+            <h3 class="form-header">Spellcasting</h3>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="system.spellcasting.enabled" {{checked system.spellcasting.enabled}}
+                        data-dtype="Boolean" />
+                    Spellcasting Enabled
+                </label>
+            </div>
+            {{#if system.spellcasting.enabled}}
+            <div class="form-group">
+                <label>Caster Type</label>
+                <select name="system.spellcasting.casterType">
+                    {{#each config.casterTypes as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.casterType)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Preparation Type</label>
+                <select name="system.spellcasting.preparationType">
+                    {{#each config.preparationTypes as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.preparationType)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Casting Ability</label>
+                <select name="system.spellcasting.castingAbility">
+                    {{#each config.castingAbilities as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.castingAbility)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            {{/if}}
         </div>
 
         {{!-- Skills Tab --}}

@@ -107,6 +107,22 @@ Hooks.once("init", async function () {
         saveProgressions: {
             good: "Good (+2 + level/2)",
             poor: "Poor (+level/3)"
+        },
+        casterTypes: {
+            none: "None",
+            arcane: "Arcane",
+            divine: "Divine"
+        },
+        preparationTypes: {
+            none: "None",
+            prepared: "Prepared",
+            spontaneous: "Spontaneous"
+        },
+        castingAbilities: {
+            none: "None",
+            int: "Intelligence",
+            wis: "Wisdom",
+            cha: "Charisma"
         }
     };
 

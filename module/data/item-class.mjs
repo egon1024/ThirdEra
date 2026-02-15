@@ -1,4 +1,4 @@
-const { HTMLField, SchemaField, StringField, NumberField, ArrayField } = foundry.data.fields;
+const { HTMLField, SchemaField, StringField, NumberField, ArrayField, BooleanField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Class items
@@ -59,6 +59,29 @@ export class ClassData extends foundry.abstract.TypeDataModel {
             isPrestige: new StringField({
                 required: true, blank: false, initial: "false",
                 label: "Prestige Class"
+            }),
+
+            // Spellcasting configuration
+            spellcasting: new SchemaField({
+                enabled: new BooleanField({
+                    required: true, initial: false,
+                    label: "Spellcasting Enabled"
+                }),
+                casterType: new StringField({
+                    required: true, blank: false, initial: "none",
+                    choices: () => CONFIG.THIRDERA.casterTypes,
+                    label: "Caster Type"
+                }),
+                preparationType: new StringField({
+                    required: true, blank: false, initial: "none",
+                    choices: () => CONFIG.THIRDERA.preparationTypes,
+                    label: "Preparation Type"
+                }),
+                castingAbility: new StringField({
+                    required: true, blank: false, initial: "none",
+                    choices: () => CONFIG.THIRDERA.castingAbilities,
+                    label: "Casting Ability"
+                })
             })
         };
     }

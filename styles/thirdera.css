@@ -190,6 +190,16 @@
   border: 1px solid var(--color-border-input);
 }
 
+/* Checkboxes should not have input field styling */
+.thirdera input[type="checkbox"] {
+  width: auto;
+  height: auto;
+  background: transparent;
+  border: none;
+  accent-color: var(--color-character-accent);
+  cursor: pointer;
+}
+
 .thirdera .sheet-header {
   flex: 0 0 auto;
   display: flex;
@@ -1024,6 +1034,7 @@
   margin: 0;
   cursor: pointer;
   accent-color: var(--color-character-accent);
+  /* Background and border already handled by general checkbox rule above */
 }
 
 /* Race display in character header */
