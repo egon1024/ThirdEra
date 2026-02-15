@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-pitons",
+  "name": "Pitons",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Pitons are spikes used for climbing. When a wall does not offer handholds and footholds, you can make your own. A piton is 1 inch wide and 6 inches long, and it comes with a small loop of cord. You can secure a rope to a piton, and one piton is enough to support a Medium creature's weight.</p>",
+    "quantity": 1,
+    "cost": 0.5,
+    "weight": 0.5,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

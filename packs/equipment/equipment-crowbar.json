@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-crowbar",
+  "name": "Crowbar",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A crowbar is a tool used for prying. It grants a +2 circumstance bonus on Strength checks made to force open a door or chest.</p>",
+    "quantity": 1,
+    "cost": 2,
+    "weight": 5,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

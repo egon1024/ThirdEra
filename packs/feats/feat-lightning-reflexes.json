@@ -1,0 +1,18 @@
+{
+  "_id": "feat-lightning-reflexes",
+  "name": "Lightning Reflexes",
+  "type": "feat",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>You have faster reflexes than normal.</p>",
+    "key": "lightningReflexes",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You get a +2 bonus on all Reflex saving throws.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

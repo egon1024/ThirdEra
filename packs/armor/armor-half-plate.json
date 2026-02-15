@@ -1,0 +1,29 @@
+{
+  "_id": "armor-half-plate",
+  "name": "Half-Plate",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Half-plate armor combines elements of full plate and chainmail.</p>",
+    "armor": {
+      "type": "heavy",
+      "bonus": 7,
+      "maxDex": 0,
+      "checkPenalty": -7,
+      "spellFailure": 40
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 600,
+    "weight": 50,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

@@ -18,7 +18,112 @@
   "styles": [
     "styles/thirdera.css"
   ],
-  "packs": [],
+  "packs": [
+    {
+      "name": "thirdera_races",
+      "label": "Races",
+      "path": "packs/races",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
+      "name": "thirdera_classes",
+      "label": "Classes",
+      "path": "packs/classes",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
+      "name": "thirdera_skills",
+      "label": "Skills",
+      "path": "packs/skills",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
+      "name": "thirdera_feats",
+      "label": "Feats",
+      "path": "packs/feats",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
+      "name": "thirdera_spells",
+      "label": "Spells",
+      "path": "packs/spells",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
+      "name": "thirdera_weapons",
+      "label": "Weapons",
+      "path": "packs/weapons",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
+      "name": "thirdera_armor",
+      "label": "Armor",
+      "path": "packs/armor",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
+      "name": "thirdera_equipment",
+      "label": "Equipment",
+      "path": "packs/equipment",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    }
+  ],
   "languages": [
     {
       "lang": "en",

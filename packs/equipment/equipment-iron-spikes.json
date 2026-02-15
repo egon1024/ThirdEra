@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-iron-spikes",
+  "name": "Spikes, Iron",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Iron spikes are used to secure doors, ropes, or other objects. They can be driven into wood or stone with a hammer.</p>",
+    "quantity": 1,
+    "cost": 0.5,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

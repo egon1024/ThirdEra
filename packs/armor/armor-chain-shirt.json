@@ -1,0 +1,29 @@
+{
+  "_id": "armor-chain-shirt",
+  "name": "Chain Shirt",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>A chain shirt comes with a layer of quilted fabric worn underneath it.</p>",
+    "armor": {
+      "type": "light",
+      "bonus": 4,
+      "maxDex": 4,
+      "checkPenalty": -2,
+      "spellFailure": 20
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 30,
+      "ft20": 20
+    },
+    "cost": 100,
+    "weight": 25,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

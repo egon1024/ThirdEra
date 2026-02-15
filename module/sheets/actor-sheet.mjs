@@ -634,6 +634,42 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const container = this.actor.items.get(currentContainerId);
             const containerName = container?.name || "container";
             
+            // Check if a stackable item exists in main inventory
+            const itemForStacking = actualItem.toObject();
+            itemForStacking.system.containerId = ""; // Will be in main inventory
+            const existingStack = this._findStackableItem(itemForStacking);
+            
+            if (existingStack) {
+                // Stack with existing item in main inventory
+                const currentQuantity = existingStack.system.quantity || 1;
+                const movedQuantity = actualItem.system.quantity || 1;
+                await existingStack.update({ "system.quantity": currentQuantity + movedQuantity });
+                
+                // Delete the item that was moved (it's been merged)
+                await actualItem.delete();
+                
+                // Re-render to show updated quantities
+                await this.actor.prepareData();
+                await this.render();
+                
+                // Restore container expand/collapse state
+                const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+                requestAnimationFrame(() => {
+                    expandedContainers.forEach(cid => {
+                        const contents = this.element.querySelector(`.container-contents[data-container-id="${cid}"]`);
+                        const toggle = this.element.querySelector(`.container-toggle[data-container-id="${cid}"]`);
+                        if (contents && toggle) {
+                            contents.style.display = "block";
+                            toggle.classList.remove("fa-chevron-right");
+                            toggle.classList.add("fa-chevron-down");
+                        }
+                    });
+                });
+                
+                return false; // Handled
+            }
+            
+            // No stackable item found, just remove from container
             // Check if item becomes equipped when removed (shouldn't happen, but check)
             const wasEquippedBefore = false; // Items in containers can't be equipped
             await actualItem.update({ "system.containerId": "" });
@@ -669,6 +705,36 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
             
             return false;
+        }
+
+        // Check for stackable items before creating new item
+        // Only stack weapon, armor, and equipment items
+        if (['weapon', 'armor', 'equipment'].includes(item.type)) {
+            // Get item data for comparison
+            const itemData = item.toObject ? item.toObject() : item;
+            
+            // Check if item is from another actor (looting) - if so, we want to stack it
+            const isFromAnotherActor = item.parent && item.parent.uuid !== this.actor.uuid;
+            
+            // Find existing stackable item
+            const existingItem = this._findStackableItem(itemData);
+            if (existingItem) {
+                // Increment quantity
+                const currentQuantity = existingItem.system.quantity || 1;
+                const droppedQuantity = itemData.system?.quantity || 1;
+                await existingItem.update({ "system.quantity": currentQuantity + droppedQuantity });
+                
+                // If item was from another actor, delete it from source (already merged)
+                if (isFromAnotherActor && item.id && item.parent) {
+                    try {
+                        await item.delete();
+                    } catch (err) {
+                        console.warn("Third Era | Failed to delete source item after stacking:", err);
+                    }
+                }
+                
+                return existingItem;
+            }
         }
 
         const result = await super._onDropItem(event, item);
@@ -875,10 +941,77 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Handle new item from sidebar vs existing item
         if (isExistingItem) {
-            // Existing item - update containerId and unequip if needed
+            // Check if item has quantity > 1 - show quantity dialog for partial moves
+            const quantity = actualItem.system.quantity || 1;
+            let selectedQuantity = quantity;
+            if (quantity > 1) {
+                selectedQuantity = await ThirdEraActorSheet.#showQuantityDialog(actualItem, "moveToContainer");
+                if (selectedQuantity === null) return false; // Cancelled
+            }
+            
+            // If partial quantity selected, split the stack
+            let itemToMove = actualItem;
+            if (selectedQuantity < quantity) {
+                itemToMove = await this._splitItemStack(actualItem, selectedQuantity);
+            }
+            
+            // Check if a stackable item already exists in the container
+            const itemForStacking = itemToMove.toObject();
+            itemForStacking.system.containerId = containerId;
+            if (wasEquipped) {
+                if (itemToMove.type === "weapon") {
+                    itemForStacking.system.equipped = "none";
+                } else {
+                    itemForStacking.system.equipped = "false";
+                }
+            }
+            
+            const existingStack = this._findStackableItem(itemForStacking);
+            if (existingStack) {
+                // Stack with existing item
+                const currentQuantity = existingStack.system.quantity || 1;
+                const movedQuantity = itemToMove.system.quantity || 1;
+                await existingStack.update({ "system.quantity": currentQuantity + movedQuantity });
+                
+                // Delete the item that was moved (it's been merged)
+                await itemToMove.delete();
+                
+                // Re-render to show updated quantities
+                await this.actor.prepareData();
+                await this.render();
+                
+                // Restore container expand/collapse state
+                const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+                requestAnimationFrame(() => {
+                    expandedContainers.forEach(cid => {
+                        const contents = this.element.querySelector(`.container-contents[data-container-id="${cid}"]`);
+                        const toggle = this.element.querySelector(`.container-toggle[data-container-id="${cid}"]`);
+                        if (contents && toggle) {
+                            contents.style.display = "block";
+                            toggle.classList.remove("fa-chevron-right");
+                            toggle.classList.add("fa-chevron-down");
+                        }
+                    });
+                    if (!expandedContainers.includes(containerId)) {
+                        const containerContents = this.element.querySelector(`.container-contents[data-container-id="${containerId}"]`);
+                        const containerToggle = this.element.querySelector(`.container-toggle[data-container-id="${containerId}"]`);
+                        if (containerContents && containerToggle) {
+                            containerContents.style.display = "block";
+                            containerToggle.classList.remove("fa-chevron-right");
+                            containerToggle.classList.add("fa-chevron-down");
+                            expandedContainers.push(containerId);
+                            this.actor.setFlag("thirdera", "expandedContainers", expandedContainers);
+                        }
+                    }
+                });
+                
+                return false; // Handled
+            }
+            
+            // No stackable item found, move item to container normally
             const updates = { "system.containerId": containerId };
             if (wasEquipped) {
-                if (actualItem.type === "weapon") {
+                if (itemToMove.type === "weapon") {
                     updates["system.equipped"] = "none";
                 } else {
                     updates["system.equipped"] = "false";
@@ -886,19 +1019,19 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             
             try {
-                await actualItem.update(updates);
+                await itemToMove.update(updates);
                 
                 // Wait a moment for the update to propagate
                 await new Promise(resolve => setTimeout(resolve, 50));
                 
                 // Verify the update by checking the item's system data
-                const verifyItem = this.actor.items.get(actualItem.id);
+                const verifyItem = this.actor.items.get(itemToMove.id);
                 if (!verifyItem || verifyItem.system.containerId !== containerId) {
-                    ui.notifications.error(`Failed to move ${actualItem.name} into ${container.name}.`);
+                    ui.notifications.error(`Failed to move ${itemToMove.name} into ${container.name}.`);
                     return false;
                 }
             } catch (error) {
-                ui.notifications.error(`Failed to move ${actualItem.name} into ${container.name}: ${error.message}`);
+                ui.notifications.error(`Failed to move ${itemToMove.name} into ${container.name}: ${error.message}`);
                 return false;
             }
             
@@ -937,10 +1070,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
             
             if (wasEquipped) {
-                ui.notifications.warn(`${actualItem.name} has been unequipped and placed in ${container.name}.`);
+                ui.notifications.warn(`${itemToMove.name} has been unequipped and placed in ${container.name}.`);
             }
         } else {
-            // New item from sidebar - create with containerId set
+            // New item from sidebar - check if stackable item exists first
             const itemData = actualItem.toObject ? actualItem.toObject() : actualItem;
             itemData.system = itemData.system || {};
             itemData.system.containerId = containerId;
@@ -952,6 +1085,48 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     itemData.system.equipped = "false";
                 }
             }
+            
+            // Check if a stackable item already exists in the container
+            const existingStack = this._findStackableItem(itemData);
+            if (existingStack) {
+                // Stack with existing item
+                const currentQuantity = existingStack.system.quantity || 1;
+                const droppedQuantity = itemData.system?.quantity || 1;
+                await existingStack.update({ "system.quantity": currentQuantity + droppedQuantity });
+                
+                // Re-render to show updated quantities
+                await this.actor.prepareData();
+                await this.render();
+                
+                // Restore container expand/collapse state
+                const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
+                requestAnimationFrame(() => {
+                    expandedContainers.forEach(cid => {
+                        const contents = this.element.querySelector(`.container-contents[data-container-id="${cid}"]`);
+                        const toggle = this.element.querySelector(`.container-toggle[data-container-id="${cid}"]`);
+                        if (contents && toggle) {
+                            contents.style.display = "block";
+                            toggle.classList.remove("fa-chevron-right");
+                            toggle.classList.add("fa-chevron-down");
+                        }
+                    });
+                    if (!expandedContainers.includes(containerId)) {
+                        const containerContents = this.element.querySelector(`.container-contents[data-container-id="${containerId}"]`);
+                        const containerToggle = this.element.querySelector(`.container-toggle[data-container-id="${containerId}"]`);
+                        if (containerContents && containerToggle) {
+                            containerContents.style.display = "block";
+                            containerToggle.classList.remove("fa-chevron-right");
+                            containerToggle.classList.add("fa-chevron-down");
+                            expandedContainers.push(containerId);
+                            this.actor.setFlag("thirdera", "expandedContainers", expandedContainers);
+                        }
+                    }
+                });
+                
+                return false; // Handled
+            }
+            
+            // No stackable item found, create new item
             const createdItems = await this.actor.createEmbeddedDocuments("Item", [itemData]);
             
             // Ensure the new items are processed
@@ -1040,6 +1215,295 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
         return total;
+    }
+
+    /**
+     * Check if two items can be stacked together
+     * @param {Item|Object} item1       First item
+     * @param {Item|Object} item2       Second item
+     * @returns {boolean}                True if items can stack
+     */
+    _canStackItems(item1, item2) {
+        // Must have same name and type
+        if (item1.name !== item2.name || item1.type !== item2.type) {
+            return false;
+        }
+
+        // Must be in same location (containerId)
+        const container1 = item1.system?.containerId || "";
+        const container2 = item2.system?.containerId || "";
+        if (container1 !== container2) {
+            return false;
+        }
+
+        // Must have same equipped state
+        const equipped1 = item1.system?.equipped || (item1.type === "weapon" ? "none" : "false");
+        const equipped2 = item2.system?.equipped || (item2.type === "weapon" ? "none" : "false");
+        if (equipped1 !== equipped2) {
+            return false;
+        }
+
+        // Containers cannot stack
+        if (item1.type === "equipment" && item1.system?.isContainer) {
+            return false;
+        }
+
+        // Compare type-specific properties
+        if (item1.type === "weapon") {
+            const sys1 = item1.system || {};
+            const sys2 = item2.system || {};
+            if (sys1.damage?.dice !== sys2.damage?.dice ||
+                sys1.damage?.type !== sys2.damage?.type ||
+                sys1.critical?.range !== sys2.critical?.range ||
+                sys1.critical?.multiplier !== sys2.critical?.multiplier ||
+                sys1.range !== sys2.range ||
+                sys1.properties?.melee !== sys2.properties?.melee ||
+                sys1.properties?.handedness !== sys2.properties?.handedness ||
+                sys1.properties?.size !== sys2.properties?.size ||
+                sys1.properties?.proficiency !== sys2.properties?.proficiency) {
+                return false;
+            }
+        } else if (item1.type === "armor") {
+            const sys1 = item1.system || {};
+            const sys2 = item2.system || {};
+            if (sys1.armor?.type !== sys2.armor?.type ||
+                sys1.armor?.bonus !== sys2.armor?.bonus ||
+                sys1.armor?.maxDex !== sys2.armor?.maxDex ||
+                sys1.armor?.checkPenalty !== sys2.armor?.checkPenalty ||
+                sys1.armor?.spellFailure !== sys2.armor?.spellFailure ||
+                sys1.size !== sys2.size) {
+                return false;
+            }
+        } else if (item1.type === "equipment") {
+            const sys1 = item1.system || {};
+            const sys2 = item2.system || {};
+            // Equipment items stack if they have same cost and weight (simple items like rations)
+            // But containers already filtered out above
+            if (sys1.cost !== sys2.cost || sys1.weight !== sys2.weight) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Find an existing stackable item for the given item
+     * @param {Item|Object} item         The item to find a stack for
+     * @returns {Item|null}              The stackable item, or null if none found
+     */
+    _findStackableItem(item) {
+        // Get the item ID, handling both Item documents (item.id) and plain objects (item._id or item.id)
+        const itemId = item.id || item._id;
+        
+        for (const existingItem of this.actor.items) {
+            // Don't match self - compare with both id and _id to handle different object types
+            if (existingItem.id === itemId || existingItem._id === itemId) continue;
+            if (this._canStackItems(item, existingItem)) {
+                return existingItem;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Attempt to stack an unequipped item with existing stackable items
+     * @param {Item} item               The item that was just unequipped
+     * @param {boolean} skipRender      If true, don't re-render (for bulk operations)
+     * @returns {Promise<boolean>}       True if item was merged, false if it remains separate
+     */
+    async _stackAfterUnequip(item, skipRender = false) {
+        // Only attempt stacking if item is now unequipped
+        const equipped = item.system?.equipped || (item.type === "weapon" ? "none" : "false");
+        if (equipped !== "none" && equipped !== "false") {
+            return false; // Still equipped, can't stack
+        }
+
+        // Check if a stackable item exists
+        const itemForStacking = item.toObject();
+        const existingStack = this._findStackableItem(itemForStacking);
+        
+        if (existingStack) {
+            // Stack with existing item
+            const currentQuantity = existingStack.system.quantity || 1;
+            const movedQuantity = item.system.quantity || 1;
+            await existingStack.update({ "system.quantity": currentQuantity + movedQuantity });
+            
+            // Delete the item that was unequipped (it's been merged)
+            await item.delete();
+            
+            // Re-render to show updated quantities (unless skipping for bulk operations)
+            if (!skipRender) {
+                await this.actor.prepareData();
+                await this.render();
+            }
+            
+            return true; // Item was merged
+        }
+        
+        return false; // No stackable item found, item remains separate
+    }
+
+    /**
+     * Split an item stack into two items
+     * @param {Item} item               The item to split
+     * @param {number} quantity          Quantity to split off
+     * @returns {Promise<Item>}          The newly created split item
+     */
+    async _splitItemStack(item, quantity) {
+        const currentQuantity = item.system.quantity || 1;
+        if (quantity >= currentQuantity) {
+            throw new Error(`Cannot split ${quantity} from stack of ${currentQuantity}`);
+        }
+
+        // Create new item with split quantity
+        const itemData = item.toObject();
+        itemData.system.quantity = quantity;
+        
+        // Remove _id so it creates a new item
+        delete itemData._id;
+        delete itemData.id;
+
+        const [newItem] = await this.actor.createEmbeddedDocuments("Item", [itemData]);
+
+        // Reduce original item's quantity
+        const newQuantity = currentQuantity - quantity;
+        if (newQuantity <= 0) {
+            await item.delete();
+        } else {
+            await item.update({ "system.quantity": newQuantity });
+        }
+
+        return newItem;
+    }
+
+    /**
+     * Show a dialog to select quantity for an action on a stacked item
+     * @param {Item} item               The item to perform action on
+     * @param {string} actionType       Type of action ("delete", "equip", "removeFromContainer")
+     * @returns {Promise<number|null>}   Selected quantity, or null if cancelled
+     */
+    static async #showQuantityDialog(item, actionType) {
+        const maxQuantity = item.system.quantity || 1;
+        if (maxQuantity <= 1) {
+            return maxQuantity; // No dialog needed for single items
+        }
+
+        const actionLabels = {
+            delete: "delete",
+            equip: "equip",
+            removeFromContainer: "remove from container",
+            moveToContainer: "move to container"
+        };
+        const actionLabel = actionLabels[actionType] || "use";
+
+        // Create dialog content with quick selection buttons
+        const content = `
+            <div class="quantity-dialog">
+                <p>How many <strong>${item.name}</strong> do you want to ${actionLabel}?</p>
+                <p>You have ${maxQuantity} total.</p>
+                <div class="quantity-quick-buttons" style="display: flex; gap: 5px; margin: 10px 0;">
+                    <button type="button" class="quantity-btn" data-quantity="1">1</button>
+                    <button type="button" class="quantity-btn" data-quantity="${maxQuantity}">All (${maxQuantity})</button>
+                </div>
+                <div style="margin: 10px 0;">
+                    <label>Custom amount:</label>
+                    <input type="number" id="quantity-custom" min="1" max="${maxQuantity}" value="1" style="width: 80px; margin-left: 10px;">
+                </div>
+            </div>
+        `;
+
+        return new Promise((resolve) => {
+            let finalQuantity = 1; // Track the final selected quantity
+            
+            const dialog = new Dialog({
+                title: `Select Quantity - ${item.name}`,
+                content: content,
+                buttons: {
+                    ok: {
+                        icon: '<i class="fas fa-check"></i>',
+                        label: "OK",
+                        callback: (html) => {
+                            // Prioritize finalQuantity (set by button clicks) over input field
+                            // Only read from input if finalQuantity is still the default (1) and user manually typed
+                            const input = html.find("#quantity-custom")[0];
+                            let quantity = finalQuantity; // Start with tracked value
+                            // If finalQuantity is still default (1) and input has a different valid value, use input
+                            // This handles manual typing when no button was clicked
+                            if (finalQuantity === 1 && input && input.value) {
+                                const inputValue = parseInt(input.value);
+                                if (!isNaN(inputValue) && inputValue >= 1 && inputValue !== 1) {
+                                    quantity = inputValue;
+                                }
+                            }
+                            if (quantity < 1 || quantity > maxQuantity) {
+                                ui.notifications.warn(`Quantity must be between 1 and ${maxQuantity}.`);
+                                resolve(null);
+                            } else {
+                                resolve(quantity);
+                            }
+                        }
+                    },
+                    cancel: {
+                        icon: '<i class="fas fa-times"></i>',
+                        label: "Cancel",
+                        callback: () => resolve(null)
+                    }
+                },
+                default: "ok",
+                close: () => resolve(null)
+            });
+
+            dialog.render(true);
+            
+            // Attach handlers after a short delay to ensure DOM is ready
+            // Use both requestAnimationFrame and setTimeout for maximum compatibility
+            const attachHandlers = () => {
+                if (!dialog.element) return;
+                
+                // Find buttons
+                const buttons = dialog.element.find(".quantity-btn");
+                
+                // Handler function
+                const handler = (event) => {
+                    if (!event.currentTarget.classList.contains('quantity-btn')) return;
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const quantity = parseInt(event.currentTarget.dataset.quantity);
+                    finalQuantity = quantity; // Update tracked value
+                    
+                    // Update the input field
+                    const input = dialog.element.find("#quantity-custom");
+                    if (input.length) {
+                        input.val(quantity);
+                        input[0].value = quantity.toString();
+                        input.trigger('change');
+                    }
+                };
+                
+                // Attach using event delegation (works even if buttons aren't ready)
+                dialog.element.on("click", ".quantity-btn", handler);
+                // Also attach directly to buttons if found
+                if (buttons.length) {
+                    buttons.on("click", handler);
+                }
+                
+                // Track manual input changes
+                dialog.element.find("#quantity-custom").on("input change", (event) => {
+                    const value = parseInt(event.target.value);
+                    if (!isNaN(value) && value >= 1 && value <= maxQuantity) {
+                        finalQuantity = value;
+                    }
+                });
+            };
+            
+            // Try multiple approaches to ensure handlers are attached
+            requestAnimationFrame(() => {
+                attachHandlers();
+                // Also try after a short timeout as backup
+                setTimeout(attachHandlers, 50);
+            });
+        });
     }
 
     /**
@@ -1289,6 +1753,16 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             type: type,
             system: {}
         };
+        
+        // Check if a stackable item already exists
+        const existingItem = this._findStackableItem(itemData);
+        if (existingItem) {
+            // Increment quantity instead of creating new item
+            const currentQuantity = existingItem.system.quantity || 1;
+            await existingItem.update({ "system.quantity": currentQuantity + 1 });
+            return existingItem;
+        }
+        
         return await Item.implementation.create(itemData, { parent: this.actor });
     }
 
@@ -1315,16 +1789,35 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     static async #onItemDelete(event, target) {
         const itemId = target.closest("[data-item-id]")?.dataset.itemId;
         const item = this.actor.items.get(itemId);
-        if (item) {
-            // If this is a container, move all items inside to main inventory first
-            if (item.type === "equipment" && item.system.isContainer) {
-                const itemsInContainer = this.actor.items.filter(i => i.system.containerId === itemId);
-                if (itemsInContainer.length > 0) {
-                    const updates = itemsInContainer.map(i => ({ _id: i.id, "system.containerId": "" }));
-                    await this.actor.updateEmbeddedDocuments("Item", updates);
-                    ui.notifications.info(`${itemsInContainer.length} item(s) moved to inventory from ${item.name}.`);
-                }
+        if (!item) return;
+
+        // If this is a container, move all items inside to main inventory first
+        if (item.type === "equipment" && item.system.isContainer) {
+            const itemsInContainer = this.actor.items.filter(i => i.system.containerId === itemId);
+            if (itemsInContainer.length > 0) {
+                const updates = itemsInContainer.map(i => ({ _id: i.id, "system.containerId": "" }));
+                await this.actor.updateEmbeddedDocuments("Item", updates);
+                ui.notifications.info(`${itemsInContainer.length} item(s) moved to inventory from ${item.name}.`);
             }
+            return await item.delete();
+        }
+
+        // Handle stacked items
+        const quantity = item.system.quantity || 1;
+        if (quantity > 1) {
+            const selectedQuantity = await ThirdEraActorSheet.#showQuantityDialog(item, "delete");
+            if (selectedQuantity === null) return; // Cancelled
+
+            if (selectedQuantity >= quantity) {
+                // Delete entire stack
+                return await item.delete();
+            } else {
+                // Reduce quantity
+                const newQuantity = quantity - selectedQuantity;
+                await item.update({ "system.quantity": newQuantity });
+            }
+        } else {
+            // Single item, delete immediately
             return await item.delete();
         }
     }
@@ -1401,31 +1894,51 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             return;
         }
 
+        const quantity = item.system.quantity || 1;
         const equipping = item.system.equipped !== "true";
 
+        // When equipping, automatically split off 1 item from stack if quantity > 1
+        // This allows the equipped item to be managed separately
+        let itemToEquip = item;
+        if (equipping && quantity > 1) {
+            itemToEquip = await this._splitItemStack(item, 1);
+        }
+
         // Equipment items: simple toggle, no slot/size logic
-        if (item.type === "equipment") {
-            return await item.update({ "system.equipped": equipping ? "true" : "false" });
+        if (itemToEquip.type === "equipment") {
+            if (equipping) {
+                await itemToEquip.update({ "system.equipped": "true" });
+            } else {
+                // Unequipping — toggle off and check for stacking
+                await itemToEquip.update({ "system.equipped": "false" });
+                await this._stackAfterUnequip(itemToEquip);
+            }
+            return;
         }
 
         if (!equipping) {
-            // Unequipping — just toggle off
-            return await item.update({ "system.equipped": "false" });
+            // Unequipping — toggle off and check for stacking
+            await itemToEquip.update({ "system.equipped": "false" });
+            await this._stackAfterUnequip(itemToEquip);
+            return;
         }
 
         // Check size compatibility
         const actorSize = this.actor.system.details.size;
-        const armorSize = item.system.size;
+        const armorSize = itemToEquip.system.size;
         if (armorSize !== actorSize) {
-            ui.notifications.warn(`Cannot equip ${item.name} — it is ${armorSize} but ${this.actor.name} is ${actorSize}.`);
+            ui.notifications.warn(`Cannot equip ${itemToEquip.name} — it is ${armorSize} but ${this.actor.name} is ${actorSize}.`);
             return;
         }
 
+        // Equip the item FIRST to prevent it from being found as stackable during unequip
+        await itemToEquip.update({ "system.equipped": "true" });
+
         // Equipping — unequip any other item in the same slot (body armor or shield)
-        const isShield = item.system.armor?.type === "shield";
+        const isShield = itemToEquip.system.armor?.type === "shield";
         const updates = [];
         for (const other of this.actor.items) {
-            if (other.id === item.id) continue;
+            if (other.id === itemToEquip.id) continue;
             if (other.type !== "armor") continue;
             if (other.system.equipped !== "true") continue;
             const otherIsShield = other.system.armor?.type === "shield";
@@ -1451,9 +1964,22 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (updates.length) {
             const unequippedNames = updates.map(u => this.actor.items.get(u._id)?.name).filter(Boolean);
             await this.actor.updateEmbeddedDocuments("Item", updates);
-            ui.notifications.info(`Unequipped ${unequippedNames.join(", ")} to equip ${item.name}.`);
+            
+            // After bulk unequip, check each item for stacking (skip render during loop)
+            // The item being equipped is already equipped, so it won't be found as stackable
+            for (const update of updates) {
+                const unequippedItem = this.actor.items.get(update._id);
+                if (unequippedItem) {
+                    await this._stackAfterUnequip(unequippedItem, true);
+                }
+            }
+            
+            // Re-render once after all stacking operations
+            await this.actor.prepareData();
+            await this.render();
+            
+            ui.notifications.info(`Unequipped ${unequippedNames.join(", ")} to equip ${itemToEquip.name}.`);
         }
-        await item.update({ "system.equipped": "true" });
     }
 
     /**
@@ -1482,7 +2008,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Toggle off if already in this hand
         if (currentEquipped === hand) {
-            return await item.update({ "system.equipped": "none" });
+            await item.update({ "system.equipped": "none" });
+            await this._stackAfterUnequip(item);
+            return;
         }
 
         // Check size compatibility — can this weapon be wielded at all?
@@ -1502,10 +2030,18 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             return;
         }
 
+        // When equipping, automatically split off 1 item from stack if quantity > 1
+        // This allows the equipped item to be managed separately
+        const quantity = item.system.quantity || 1;
+        let itemToEquip = item;
+        if (quantity > 1) {
+            itemToEquip = await this._splitItemStack(item, 1);
+        }
+
         // Block off-hand if current primary weapon is effectively two-handed
         if (hand === "offhand") {
             for (const other of this.actor.items) {
-                if (other.id === item.id || other.type !== "weapon") continue;
+                if (other.id === itemToEquip.id || other.type !== "weapon") continue;
                 let otherEquipped = other.system.equipped;
                 if (otherEquipped === "true") otherEquipped = "primary";
                 else if (otherEquipped === "false") otherEquipped = "none";
@@ -1522,10 +2058,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        // Equip the item FIRST to prevent it from being found as stackable during unequip
+        await itemToEquip.update({ "system.equipped": hand });
+
         // Unequip any other weapon in the same hand slot
         const updates = [];
         for (const other of this.actor.items) {
-            if (other.id === item.id || other.type !== "weapon") continue;
+            if (other.id === itemToEquip.id || other.type !== "weapon") continue;
             let otherEquipped = other.system.equipped;
             if (otherEquipped === "true") otherEquipped = "primary";
             else if (otherEquipped === "false") otherEquipped = "none";
@@ -1548,7 +2087,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         // If equipping a two-handed weapon to primary, also unequip any off-hand weapon
         if (hand === "primary" && wielding.effectiveHandedness === "twoHanded") {
             for (const other of this.actor.items) {
-                if (other.id === item.id || other.type !== "weapon") continue;
+                if (other.id === itemToEquip.id || other.type !== "weapon") continue;
                 let otherEquipped = other.system.equipped;
                 if (otherEquipped === "true") otherEquipped = "primary";
                 else if (otherEquipped === "false") otherEquipped = "none";
@@ -1560,8 +2099,20 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         if (updates.length) {
             await this.actor.updateEmbeddedDocuments("Item", updates);
+            
+            // After bulk unequip, check each item for stacking (skip render during loop)
+            // The item being equipped is already equipped, so it won't be found as stackable
+            for (const update of updates) {
+                const unequippedItem = this.actor.items.get(update._id);
+                if (unequippedItem) {
+                    await this._stackAfterUnequip(unequippedItem, true);
+                }
+            }
+            
+            // Re-render once after all stacking operations
+            await this.actor.prepareData();
+            await this.render();
         }
-        await item.update({ "system.equipped": hand });
     }
 
     /**
@@ -1737,16 +2288,64 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const expandedContainers = this.actor.getFlag("thirdera", "expandedContainers") || [];
         const wasExpanded = expandedContainers.includes(containerId);
 
+        // Handle stacked items
+        const quantity = item.system.quantity || 1;
+        let selectedQuantity = quantity;
+        if (quantity > 1) {
+            selectedQuantity = await ThirdEraActorSheet.#showQuantityDialog(item, "removeFromContainer");
+            if (selectedQuantity === null) return; // Cancelled
+        }
+
+        // If partial quantity selected, split the stack
+        let itemToRemove = item;
+        if (selectedQuantity < quantity) {
+            itemToRemove = await this._splitItemStack(item, selectedQuantity);
+        }
+
+        // Check if a stackable item exists in main inventory (not in any container)
+        const itemForStacking = itemToRemove.toObject();
+        itemForStacking.system.containerId = ""; // Will be in main inventory
+        const existingStack = this._findStackableItem(itemForStacking);
+        
+        if (existingStack) {
+            // Stack with existing item in main inventory
+            const currentQuantity = existingStack.system.quantity || 1;
+            const movedQuantity = itemToRemove.system.quantity || 1;
+            await existingStack.update({ "system.quantity": currentQuantity + movedQuantity });
+            
+            // Delete the item that was moved (it's been merged)
+            await itemToRemove.delete();
+            
+            // Re-render to show updated quantities
+            await this.actor.prepareData();
+            await this.render();
+            
+            // Restore container expand/collapse state
+            if (wasExpanded) {
+                requestAnimationFrame(() => {
+                    const contents = this.element.querySelector(`.container-contents[data-container-id="${containerId}"]`);
+                    const toggleIcon = this.element.querySelector(`.container-toggle[data-container-id="${containerId}"]`);
+                    if (contents && toggleIcon) {
+                        contents.style.display = "block";
+                        toggleIcon.classList.remove("fa-chevron-right");
+                        toggleIcon.classList.add("fa-chevron-down");
+                    }
+                });
+            }
+            return;
+        }
+
+        // No stackable item found, just remove from container
         // Check if item becomes equipped when removed (shouldn't happen, but check)
         const wasEquippedBefore = false; // Items in containers can't be equipped
-        await item.update({ "system.containerId": "" });
+        await itemToRemove.update({ "system.containerId": "" });
         
         // Re-render to show the updated item organization
         await this.actor.prepareData();
         await this.render();
         
         // Check if item is now equipped (shouldn't happen automatically)
-        const itemAfter = this.actor.items.get(itemId);
+        const itemAfter = this.actor.items.get(itemToRemove.id);
         const isEquippedAfter = itemAfter && (
             (itemAfter.type === "weapon" && itemAfter.system.equipped !== "none") ||
             ((itemAfter.type === "armor" || itemAfter.type === "equipment") && itemAfter.system.equipped === "true")
@@ -1754,7 +2353,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         
         // Only show notification if equipped status changed
         if (isEquippedAfter && !wasEquippedBefore) {
-            ui.notifications.warn(`${item.name} has been removed from ${containerName} and is now equipped.`);
+            ui.notifications.warn(`${itemToRemove.name} has been removed from ${containerName} and is now equipped.`);
         }
         
         // Restore the container's expanded state if it was expanded

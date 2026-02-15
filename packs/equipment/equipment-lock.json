@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-lock",
+  "name": "Lock",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>The DC to open a lock with the Open Lock skill depends on the lock's quality: simple (DC 20), average (DC 25), good (DC 30), or superior (DC 40).</p>",
+    "quantity": 1,
+    "cost": 20,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-thunderstone",
+  "name": "Thunderstone",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>You can throw this stone as a ranged attack with a range increment of 20 feet. When it strikes a hard surface (or is struck hard), it creates a deafening bang that is treated as a sonic attack. Each creature within a 10-foot-radius spread must make a DC 15 Fortitude save or be deafened for 1 hour. A deafened creature, in addition to the obvious effects, takes a -4 penalty on initiative and has a 20% chance to miscast and lose any spell with a verbal component that it tries to cast.</p>",
+    "quantity": 1,
+    "cost": 30,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

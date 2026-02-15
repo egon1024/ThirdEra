@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-holy-symbol-silver",
+  "name": "Holy Symbol, Silver",
+  "type": "equipment",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>A silver holy symbol is a representation of a deity or pantheon made from silver.</p>",
+    "quantity": 1,
+    "cost": 25,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

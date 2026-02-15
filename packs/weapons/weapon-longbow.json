@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-longbow",
+  "name": "Longbow",
+  "type": "weapon",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>A longbow is made out of a single piece of carefully selected wood.</p>",
+    "damage": {
+      "dice": "1d8",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 100,
+    "properties": {
+      "melee": "ranged",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 75,
+    "weight": 3,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

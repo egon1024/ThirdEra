@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-shortsword",
+  "name": "Shortsword",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A shortsword is a light, one-handed blade.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 19,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 10,
+    "weight": 2,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

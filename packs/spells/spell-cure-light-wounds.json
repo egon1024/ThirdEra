@@ -1,0 +1,31 @@
+{
+  "_id": "spell-cure-light-wounds",
+  "name": "Cure Light Wounds",
+  "type": "spell",
+  "img": "icons/svg/heal.svg",
+  "system": {
+    "description": "<p>When laying your hand upon a living creature, you channel positive energy that cures 1d8 points of damage +1 point per caster level (maximum +5).</p>",
+    "level": 1,
+    "school": "Conjuration (Healing)",
+    "components": {
+      "verbal": "true",
+      "somatic": "true",
+      "material": "false",
+      "focus": "false",
+      "divineFocus": "true",
+      "xp": 0,
+      "materialDescription": ""
+    },
+    "castingTime": "1 standard action",
+    "range": "Touch",
+    "target": "Creature touched",
+    "duration": "Instantaneous",
+    "savingThrow": "Will half (harmless)",
+    "spellResistance": "Yes (harmless)",
+    "prepared": 0,
+    "cast": 0
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

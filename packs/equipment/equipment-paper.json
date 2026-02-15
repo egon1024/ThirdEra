@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-paper",
+  "name": "Paper (sheet)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A single sheet of paper.</p>",
+    "quantity": 1,
+    "cost": 0.4,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

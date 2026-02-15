@@ -1,0 +1,18 @@
+{
+  "_id": "feat-whirlwind-attack",
+  "name": "Whirlwind Attack",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You can strike at all adjacent opponents with a single attack.</p>",
+    "key": "whirlwindAttack",
+    "type": "General",
+    "prerequisites": "Dex 13, Int 13, Combat Expertise, Dodge, Mobility, Spring Attack, base attack bonus +4",
+    "benefit": "<p>When you use the full attack action, you can give up your regular attacks and instead make one melee attack at your full base attack bonus against each opponent within reach. You must make a separate attack roll against each opponent.</p><p>When you use the Whirlwind Attack feat, you also forfeit any bonus or extra attacks granted by other feats, spells, or abilities.</p>",
+    "special": "A fighter may select Whirlwind Attack as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

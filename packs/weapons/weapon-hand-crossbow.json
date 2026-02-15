@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-hand-crossbow",
+  "name": "Hand Crossbow",
+  "type": "weapon",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>A hand crossbow is a small crossbow that can be used one-handed.</p>",
+    "damage": {
+      "dice": "1d4",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 19,
+      "multiplier": 2
+    },
+    "range": 30,
+    "properties": {
+      "melee": "ranged",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 100,
+    "weight": 2,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

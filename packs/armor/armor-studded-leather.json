@@ -1,0 +1,29 @@
+{
+  "_id": "armor-studded-leather",
+  "name": "Studded Leather",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Studded leather armor is made from tough but flexible leather reinforced with close-set metal rivets or spikes.</p>",
+    "armor": {
+      "type": "light",
+      "bonus": 3,
+      "maxDex": 5,
+      "checkPenalty": -1,
+      "spellFailure": 15
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 30,
+      "ft20": 20
+    },
+    "cost": 25,
+    "weight": 20,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

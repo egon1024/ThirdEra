@@ -1,0 +1,22 @@
+{
+  "_id": "skill-balance",
+  "name": "Balance",
+  "type": "skill",
+  "img": "icons/svg/circle.svg",
+  "system": {
+    "description": "<p>Check: You can walk on a precarious surface. A successful check lets you move at half your speed along the surface for 1 round. A failure by 4 or less means you can't move for 1 round. A failure by 5 or more means you fall.</p>",
+    "key": "balance",
+    "ability": "dex",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "true",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

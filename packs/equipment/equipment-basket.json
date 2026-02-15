@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-basket",
+  "name": "Basket",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A basket is a woven container used for carrying items.</p>",
+    "quantity": 1,
+    "cost": 0.4,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 20,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

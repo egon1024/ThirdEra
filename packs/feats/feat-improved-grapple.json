@@ -1,0 +1,18 @@
+{
+  "_id": "feat-improved-grapple",
+  "name": "Improved Grapple",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You are skilled at grappling opponents.</p>",
+    "key": "improvedGrapple",
+    "type": "General",
+    "prerequisites": "Dex 13, Improved Unarmed Strike",
+    "benefit": "<p>When you grapple an opponent, you do not provoke an attack of opportunity. You also gain a +4 bonus on all grapple checks.</p>",
+    "special": "A fighter may select Improved Grapple as one of his fighter bonus feats. A monk may select Improved Grapple as a bonus feat at 1st level, even if he does not meet the prerequisites.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

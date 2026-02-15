@@ -1,0 +1,24 @@
+{
+  "_id": "race-half-orc",
+  "name": "Half-Orc",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>Half-orcs combine human ambition with orcish might.</p>",
+    "size": "Medium",
+    "speed": 30,
+    "abilityAdjustments": {
+      "str": 2,
+      "dex": 0,
+      "con": 0,
+      "int": -2,
+      "wis": 0,
+      "cha": -2
+    },
+    "excludedSkills": [],
+    "favoredClass": "Barbarian"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

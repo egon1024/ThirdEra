@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-signet-ring",
+  "name": "Signet Ring",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A signet ring is used to seal letters and documents with a personal mark or symbol.</p>",
+    "quantity": 1,
+    "cost": 5,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

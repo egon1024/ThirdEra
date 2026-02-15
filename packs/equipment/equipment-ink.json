@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-ink",
+  "name": "Ink",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Ink is used for writing. This is enough ink for about 50 pages of text.</p>",
+    "quantity": 1,
+    "cost": 8,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

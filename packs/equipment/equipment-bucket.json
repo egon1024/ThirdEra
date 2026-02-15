@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-bucket",
+  "name": "Bucket",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A bucket is a simple container used for carrying liquids or other materials.</p>",
+    "quantity": 1,
+    "cost": 0.05,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 3,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

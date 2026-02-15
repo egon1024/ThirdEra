@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-hammer",
+  "name": "Hammer",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A hammer is a tool used for driving nails or breaking objects.</p>",
+    "quantity": 1,
+    "cost": 0.5,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

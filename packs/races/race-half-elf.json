@@ -1,0 +1,24 @@
+{
+  "_id": "race-half-elf",
+  "name": "Half-Elf",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>Half-elves combine human versatility with elven grace.</p>",
+    "size": "Medium",
+    "speed": 30,
+    "abilityAdjustments": {
+      "str": 0,
+      "dex": 0,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "excludedSkills": [],
+    "favoredClass": "Any"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

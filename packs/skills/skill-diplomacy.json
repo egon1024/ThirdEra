@@ -1,0 +1,22 @@
+{
+  "_id": "skill-diplomacy",
+  "name": "Diplomacy",
+  "type": "skill",
+  "img": "icons/svg/coins.svg",
+  "system": {
+    "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+    "key": "diplomacy",
+    "ability": "cha",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

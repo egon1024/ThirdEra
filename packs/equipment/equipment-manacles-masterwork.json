@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-manacles-masterwork",
+  "name": "Manacles, Masterwork",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Masterwork manacles are of higher quality. The Escape Artist DC increases to 35, and the Strength check DC to break them increases to 28.</p>",
+    "quantity": 1,
+    "cost": 50,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

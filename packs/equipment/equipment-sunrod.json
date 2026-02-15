@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-sunrod",
+  "name": "Sunrod",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>This 1-foot-long, gold-tipped, iron rod glows brightly when struck. It sheds normal light in a 30-foot radius and increases the light level by one step for an additional 30 feet beyond that area (darkness becomes shadowy, and shadowy becomes normal light). A sunrod does not allow you to see in darkness. It glows for 6 hours, after which the gold tip is burned out and worthless.</p>",
+    "quantity": 1,
+    "cost": 2,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

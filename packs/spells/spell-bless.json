@@ -1,0 +1,31 @@
+{
+  "_id": "spell-bless",
+  "name": "Bless",
+  "type": "spell",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>Bless fills your allies with courage. Each ally gains a +1 morale bonus on attack rolls and on saving throws against fear effects.</p>",
+    "level": 1,
+    "school": "Enchantment (Compulsion) [Mind-Affecting]",
+    "components": {
+      "verbal": "true",
+      "somatic": "true",
+      "material": "false",
+      "focus": "false",
+      "divineFocus": "true",
+      "xp": 0,
+      "materialDescription": ""
+    },
+    "castingTime": "1 standard action",
+    "range": "50 ft.",
+    "target": "The caster and all allies within a 50-ft. burst, centered on the caster",
+    "duration": "1 min./level",
+    "savingThrow": "None",
+    "spellResistance": "Yes (harmless)",
+    "prepared": 0,
+    "cast": 0
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

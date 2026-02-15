@@ -1,0 +1,18 @@
+{
+  "_id": "feat-dodge",
+  "name": "Dodge",
+  "type": "feat",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>You are adept at dodging blows.</p>",
+    "key": "dodge",
+    "type": "General",
+    "prerequisites": "Dex 13",
+    "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

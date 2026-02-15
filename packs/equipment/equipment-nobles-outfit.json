@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-nobles-outfit",
+  "name": "Noble's Outfit",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>This set of clothes is designed specifically to be expensive and to show it. Precious metals and gems are worked into the clothing. To fit into the noble crowd, every would-be noble also needs a signet ring (5 gp) and jewelry (worth at least 100 gp).</p>",
+    "quantity": 1,
+    "cost": 75,
+    "weight": 10,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

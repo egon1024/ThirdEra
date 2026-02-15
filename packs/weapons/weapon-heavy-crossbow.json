@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-heavy-crossbow",
+  "name": "Heavy Crossbow",
+  "type": "weapon",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>A heavy crossbow is a simple ranged weapon.</p>",
+    "damage": {
+      "dice": "1d10",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 19,
+      "multiplier": 2
+    },
+    "range": 120,
+    "properties": {
+      "melee": "ranged",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 50,
+    "weight": 8,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

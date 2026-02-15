@@ -1,0 +1,18 @@
+{
+  "_id": "feat-weapon-finesse",
+  "name": "Weapon Finesse",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You are skilled at using light weapons.</p>",
+    "key": "weaponFinesse",
+    "type": "General",
+    "prerequisites": "Base attack bonus +1",
+    "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+    "special": "Natural weapons are considered light weapons.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

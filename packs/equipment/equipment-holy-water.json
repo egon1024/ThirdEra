@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-holy-water",
+  "name": "Holy Water",
+  "type": "equipment",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>Holy water damages undead and evil outsiders almost as if it were acid. A flask of holy water can be thrown as a splash weapon. Treat this attack as a ranged touch attack with a range increment of 10 feet. A flask breaks if thrown against the body of a corporeal creature, but to use it against an incorporeal creature, you must open the flask and pour the water out onto the target. Thus, you can douse an incorporeal creature with holy water as an attack action. Merely touching an incorporeal creature with the flask does not harm it. You can only throw a flask of holy water as a ranged attack. Splashing a flask of holy water on a creature deals 2d4 points of damage to an undead creature or an evil outsider. Each such creature within 5 feet of the point where the flask hits takes 1 point of damage from the splash.</p>",
+    "quantity": 1,
+    "cost": 25,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-scythe",
+  "name": "Scythe",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A scythe is a farming tool adapted for combat, with a curved blade on a long handle.</p>",
+    "damage": {
+      "dice": "2d4",
+      "type": "slashing or piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 4
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 18,
+    "weight": 10,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-morningstar",
+  "name": "Morningstar",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A morningstar is a spiked metal ball affixed to a handle.</p>",
+    "damage": {
+      "dice": "1d8",
+      "type": "bludgeoning and piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "oneHanded",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 8,
+    "weight": 6,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

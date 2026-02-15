@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-lantern-bullseye",
+  "name": "Lantern, Bullseye",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A bullseye lantern provides clear light in a 60-foot cone and shadowy light in a 120-foot cone. It burns for 6 hours on a pint of oil. You can carry it in one hand.</p>",
+    "quantity": 1,
+    "cost": 12,
+    "weight": 3,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-lance",
+  "name": "Lance",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A lance deals double damage when used from the back of a charging mount.</p>",
+    "damage": {
+      "dice": "1d8",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 10,
+    "weight": 10,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

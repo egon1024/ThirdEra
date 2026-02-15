@@ -1,0 +1,24 @@
+{
+  "_id": "race-halfling",
+  "name": "Halfling",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>Halflings are an affable and cheerful people. They cherish the bonds of family and friendship as well as the comforts of hearth and home, harboring few dreams of gold or glory.</p>",
+    "size": "Small",
+    "speed": 20,
+    "abilityAdjustments": {
+      "str": -2,
+      "dex": 2,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "excludedSkills": [],
+    "favoredClass": "Rogue"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

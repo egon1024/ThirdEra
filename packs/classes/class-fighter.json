@@ -1,0 +1,31 @@
+{
+  "_id": "class-fighter",
+  "name": "Fighter",
+  "type": "class",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Fighters can be many things, from soldiers to criminal enforcers. Some see battle as a calling, others fight for coin.</p>",
+    "hitDie": "d10",
+    "babProgression": "good",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "poor"
+    },
+    "skillPointsPerLevel": 2,
+    "classSkills": [
+      {"key": "climb", "name": "Climb"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "handleAnimal", "name": "Handle Animal"},
+      {"key": "intimidate", "name": "Intimidate"},
+      {"key": "jump", "name": "Jump"},
+      {"key": "ride", "name": "Ride"},
+      {"key": "swim", "name": "Swim"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

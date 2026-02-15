@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-greataxe",
+  "name": "Greataxe",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A greataxe is a large, two-handed axe.</p>",
+    "damage": {
+      "dice": "1d12",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "martial"
+    },
+    "cost": 20,
+    "weight": 12,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

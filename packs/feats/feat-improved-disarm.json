@@ -1,0 +1,18 @@
+{
+  "_id": "feat-improved-disarm",
+  "name": "Improved Disarm",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You are skilled at knocking weapons from your opponents' grasp.</p>",
+    "key": "improvedDisarm",
+    "type": "General",
+    "prerequisites": "Int 13, Combat Expertise",
+    "benefit": "<p>You do not provoke an attack of opportunity when you attempt to disarm an opponent, nor does the opponent have a chance to disarm you. You also gain a +4 bonus on the opposed attack roll you make to disarm your opponent.</p>",
+    "special": "A fighter may select Improved Disarm as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

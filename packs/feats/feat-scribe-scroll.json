@@ -1,0 +1,18 @@
+{
+  "_id": "feat-scribe-scroll",
+  "name": "Scribe Scroll",
+  "type": "feat",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "description": "<p>You can create magic scrolls.</p>",
+    "key": "scribeScroll",
+    "type": "Item Creation",
+    "prerequisites": "Caster level 1st",
+    "benefit": "<p>You can create a scroll of any spell that you know. Scribing a scroll takes one day per 1,000 gp in its base price. The base price of a scroll is its spell level × its caster level × 25 gp. To scribe a scroll, you must spend 1/25 of this base price in XP and use up raw materials costing half of this base price.</p><p>Any scroll that stores a spell with a costly material component or an XP cost also carries a commensurate cost. In addition to the costs derived from the base price, you must expend the material component or pay the XP when scribing the scroll.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

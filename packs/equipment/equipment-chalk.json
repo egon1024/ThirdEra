@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-chalk",
+  "name": "Chalk",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Chalk is used for marking surfaces.</p>",
+    "quantity": 1,
+    "cost": 0.01,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

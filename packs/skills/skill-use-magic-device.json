@@ -1,0 +1,22 @@
+{
+  "_id": "skill-use-magic-device",
+  "name": "Use Magic Device",
+  "type": "skill",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You can use this skill to read a scroll or activate a magic item even if you normally couldn't use it.</p>",
+    "key": "useMagicDevice",
+    "ability": "cha",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "true",
+    "armorCheckPenalty": "false",
+    "exclusive": "true"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 34
+}

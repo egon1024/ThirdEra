@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-silk-rope",
+  "name": "Rope, Silk (50 ft.)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Silk rope has 4 hit points and can be burst with a DC 24 Strength check.</p>",
+    "quantity": 1,
+    "cost": 10,
+    "weight": 5,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

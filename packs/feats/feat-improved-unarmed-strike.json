@@ -1,0 +1,18 @@
+{
+  "_id": "feat-improved-unarmed-strike",
+  "name": "Improved Unarmed Strike",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You are skilled at fighting while unarmed.</p>",
+    "key": "improvedUnarmedStrike",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You are considered to be armed even when unarmed—you do not provoke attacks of opportunity when you attack foes while unarmed. Your unarmed strikes can deal lethal or nonlethal damage, at your option.</p>",
+    "special": "A fighter may select Improved Unarmed Strike as one of his fighter bonus feats. A monk automatically gains Improved Unarmed Strike as a bonus feat at 1st level. He need not select it.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

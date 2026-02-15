@@ -1,0 +1,18 @@
+{
+  "_id": "feat-extend-spell",
+  "name": "Extend Spell",
+  "type": "feat",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You can cast spells that last longer than normal.</p>",
+    "key": "extendSpell",
+    "type": "Metamagic",
+    "prerequisites": "",
+    "benefit": "<p>An extended spell lasts twice as long as normal. A spell with a duration of concentration, instantaneous, or permanent is not affected by this feat. An extended spell uses up a spell slot one level higher than the spell's actual level.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

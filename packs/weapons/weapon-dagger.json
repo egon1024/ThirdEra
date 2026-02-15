@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-dagger",
+  "name": "Dagger",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A dagger is a fighting knife. Its blade is usually less than 1 foot long.</p>",
+    "damage": {
+      "dice": "1d4",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 19,
+      "multiplier": 2
+    },
+    "range": 10,
+    "properties": {
+      "melee": "melee",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 2,
+    "weight": 1,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

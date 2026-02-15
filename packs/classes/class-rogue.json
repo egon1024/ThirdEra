@@ -1,0 +1,52 @@
+{
+  "_id": "class-rogue",
+  "name": "Rogue",
+  "type": "class",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Rogues share little in common with each other. Some are stealthy thieves. Others are silver-tongued tricksters.</p>",
+    "hitDie": "d6",
+    "babProgression": "average",
+    "saves": {
+      "fort": "poor",
+      "ref": "good",
+      "will": "poor"
+    },
+    "skillPointsPerLevel": 8,
+    "classSkills": [
+      {"key": "appraise", "name": "Appraise"},
+      {"key": "balance", "name": "Balance"},
+      {"key": "bluff", "name": "Bluff"},
+      {"key": "climb", "name": "Climb"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "decipherScript", "name": "Decipher Script"},
+      {"key": "diplomacy", "name": "Diplomacy"},
+      {"key": "disableDevice", "name": "Disable Device"},
+      {"key": "disguise", "name": "Disguise"},
+      {"key": "escapeArtist", "name": "Escape Artist"},
+      {"key": "forgery", "name": "Forgery"},
+      {"key": "gatherInformation", "name": "Gather Information"},
+      {"key": "hide", "name": "Hide"},
+      {"key": "intimidate", "name": "Intimidate"},
+      {"key": "jump", "name": "Jump"},
+      {"key": "listen", "name": "Listen"},
+      {"key": "moveSilently", "name": "Move Silently"},
+      {"key": "openLock", "name": "Open Lock"},
+      {"key": "perform", "name": "Perform"},
+      {"key": "profession", "name": "Profession"},
+      {"key": "search", "name": "Search"},
+      {"key": "senseMotive", "name": "Sense Motive"},
+      {"key": "sleightOfHand", "name": "Sleight of Hand"},
+      {"key": "spot", "name": "Spot"},
+      {"key": "swim", "name": "Swim"},
+      {"key": "tumble", "name": "Tumble"},
+      {"key": "useMagicDevice", "name": "Use Magic Device"},
+      {"key": "useRope", "name": "Use Rope"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

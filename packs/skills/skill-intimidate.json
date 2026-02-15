@@ -1,0 +1,22 @@
+{
+  "_id": "skill-intimidate",
+  "name": "Intimidate",
+  "type": "skill",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>You can use this skill to frighten opponents or to get them to act in a way that benefits you.</p>",
+    "key": "intimidate",
+    "ability": "cha",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 16
+}

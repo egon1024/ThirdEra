@@ -1,0 +1,18 @@
+{
+  "_id": "feat-heighten-spell",
+  "name": "Heighten Spell",
+  "type": "feat",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You can cast spells as if they were higher level.</p>",
+    "key": "heightenSpell",
+    "type": "Metamagic",
+    "prerequisites": "",
+    "benefit": "<p>A heightened spell has a higher spell level than normal (up to a maximum of 9th level). Unlike other metamagic feats, Heighten Spell actually increases the effective level of the spell that it modifies. All effects dependent on spell level (such as saving throw DCs and ability to penetrate a lesser globe of invulnerability) are calculated according to the heightened level. The heightened spell is as difficult to prepare and cast as a spell of its effective level.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

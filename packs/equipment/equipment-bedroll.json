@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-bedroll",
+  "name": "Bedroll",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A bedroll is a blanket and padding that can be rolled up and tied.</p>",
+    "quantity": 1,
+    "cost": 0.1,
+    "weight": 5,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

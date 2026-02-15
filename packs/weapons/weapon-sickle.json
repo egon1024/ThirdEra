@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-sickle",
+  "name": "Sickle",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A sickle is a curved blade affixed to a handle.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "slashing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 6,
+    "weight": 2,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

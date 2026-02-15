@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-entertainers-outfit",
+  "name": "Entertainer's Outfit",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>This set of flashy—perhaps even gaudy—clothes is for entertaining. While the outfit is whimsical and eye-catching, it is also practical, with no dangling pieces to interfere with the wearer's performance.</p>",
+    "quantity": 1,
+    "cost": 3,
+    "weight": 4,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "skill-spellcraft",
+  "name": "Spellcraft",
+  "type": "skill",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You are skilled at working with magic and can identify spells as they are cast or spells already in place.</p>",
+    "key": "spellcraft",
+    "ability": "int",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "true",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 29
+}

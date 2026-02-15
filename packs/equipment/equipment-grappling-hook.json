@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-grappling-hook",
+  "name": "Grappling Hook",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Throwing a grappling hook requires a ranged touch attack roll. The hook has a range increment of 10 feet.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 4,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

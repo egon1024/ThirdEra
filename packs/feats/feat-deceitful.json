@@ -1,0 +1,18 @@
+{
+  "_id": "feat-deceitful",
+  "name": "Deceitful",
+  "type": "feat",
+  "img": "icons/svg/invisible.svg",
+  "system": {
+    "description": "<p>You are skilled at deceiving others.</p>",
+    "key": "deceitful",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You get a +2 bonus on all Disguise checks and Forgery checks.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

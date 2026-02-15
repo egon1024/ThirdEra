@@ -1,0 +1,29 @@
+{
+  "_id": "armor-bandmail",
+  "name": "Bandmail",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Bandmail is made up of overlapping bands of metal, attached to a backing of leather or cloth.</p>",
+    "armor": {
+      "type": "heavy",
+      "bonus": 6,
+      "maxDex": 1,
+      "checkPenalty": -6,
+      "spellFailure": 35
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 250,
+    "weight": 35,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-peasants-outfit",
+  "name": "Peasant's Outfit",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>A peasant's outfit is a loose shirt and baggy breeches, or a loose shirt and skirt or overdress. Cloth wrappings are used for shoes.</p>",
+    "quantity": 1,
+    "cost": 0.1,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

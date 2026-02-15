@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-courtiers-outfit",
+  "name": "Courtier's Outfit",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>This outfit includes fancy, tailored clothes in whatever fashion happens to be current in the courts of the nobles. Anyone trying to influence nobles or courtiers while wearing street dress will have a hard time. A courtier's outfit lets you blend into the upper echelon of society. You don't look like a courtier, you look like you belong.</p>",
+    "quantity": 1,
+    "cost": 30,
+    "weight": 6,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

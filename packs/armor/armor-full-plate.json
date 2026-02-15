@@ -1,0 +1,29 @@
+{
+  "_id": "armor-full-plate",
+  "name": "Full Plate",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Full plate consists of shaped and fitted metal plates riveted and interlocked to cover the entire body.</p>",
+    "armor": {
+      "type": "heavy",
+      "bonus": 8,
+      "maxDex": 1,
+      "checkPenalty": -6,
+      "spellFailure": 35
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 1500,
+    "weight": 50,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

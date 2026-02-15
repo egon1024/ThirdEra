@@ -1,0 +1,34 @@
+{
+  "_id": "class-paladin",
+  "name": "Paladin",
+  "type": "class",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Paladins take their adventures seriously, and even a mundane mission is, in the heart of the paladin, a personal test—an opportunity to demonstrate bravery, to learn tactics, and to find ways to do good.</p>",
+    "hitDie": "d10",
+    "babProgression": "good",
+    "saves": {
+      "fort": "good",
+      "ref": "poor",
+      "will": "good"
+    },
+    "skillPointsPerLevel": 2,
+    "classSkills": [
+      {"key": "concentration", "name": "Concentration"},
+      {"key": "craft", "name": "Craft"},
+      {"key": "diplomacy", "name": "Diplomacy"},
+      {"key": "handleAnimal", "name": "Handle Animal"},
+      {"key": "heal", "name": "Heal"},
+      {"key": "knowledge", "name": "Knowledge"},
+      {"key": "profession", "name": "Profession"},
+      {"key": "ride", "name": "Ride"},
+      {"key": "senseMotive", "name": "Sense Motive"},
+      {"key": "spellcraft", "name": "Spellcraft"}
+    ],
+    "features": [],
+    "isPrestige": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

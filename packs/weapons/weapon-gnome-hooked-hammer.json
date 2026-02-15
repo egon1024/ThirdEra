@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-gnome-hooked-hammer",
+  "name": "Gnome Hooked Hammer",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>A gnome hooked hammer is a double weapon. You can fight with it as if fighting with two weapons, but if you do, you incur all the normal attack penalties associated with fighting with two weapons, just as if you were using a one-handed weapon and a light weapon. A creature wielding a gnome hooked hammer in one hand can't use it as a double weapon—only one end of the weapon can be used in any given round.</p>",
+    "damage": {
+      "dice": "1d6/1d4",
+      "type": "bludgeoning or piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 3
+    },
+    "range": 0,
+    "properties": {
+      "melee": "melee",
+      "handedness": "twoHanded",
+      "size": "Medium",
+      "proficiency": "exotic"
+    },
+    "cost": 20,
+    "weight": 6,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

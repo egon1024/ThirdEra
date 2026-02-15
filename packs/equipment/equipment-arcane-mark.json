@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-arcane-mark",
+  "name": "Arcane Mark",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>This is a special material component for the arcane mark spell. It allows you to inscribe your personal rune or mark, which is visible to normal sight and also to detect magic. An arcane mark spell cast to write an invisible mark requires a material component worth 1 gp.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

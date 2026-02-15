@@ -1,0 +1,18 @@
+{
+  "_id": "feat-mounted-combat",
+  "name": "Mounted Combat",
+  "type": "feat",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "description": "<p>You are skilled at fighting while mounted.</p>",
+    "key": "mountedCombat",
+    "type": "General",
+    "prerequisites": "Ride 1 rank",
+    "benefit": "<p>Once per round when your mount is hit in combat, you may attempt a Ride check (as a reaction) to negate the hit. The hit is negated if your Ride check result is greater than the attack roll.</p>",
+    "special": "A fighter may select Mounted Combat as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

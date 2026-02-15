@@ -1,0 +1,22 @@
+{
+  "_id": "skill-sleight-of-hand",
+  "name": "Sleight of Hand",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Make a Sleight of Hand check to perform any sort of legerdemain or manual trickery.</p>",
+    "key": "sleightOfHand",
+    "ability": "dex",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "true",
+    "armorCheckPenalty": "true",
+    "exclusive": "true"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 27
+}

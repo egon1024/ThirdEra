@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-vial",
+  "name": "Vial",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A small glass or ceramic container, typically used for potions or other liquids.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 0.1,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

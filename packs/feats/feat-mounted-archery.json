@@ -1,0 +1,18 @@
+{
+  "_id": "feat-mounted-archery",
+  "name": "Mounted Archery",
+  "type": "feat",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>You are skilled at using ranged weapons while mounted.</p>",
+    "key": "mountedArchery",
+    "type": "Fighter Bonus",
+    "prerequisites": "Mounted Combat",
+    "benefit": "<p>The penalty you take when using a ranged weapon while mounted is halved: -2 instead of -4 if your mount is taking a double move, and -4 instead of -8 if your mount is running.</p>",
+    "special": "A fighter may select Mounted Archery as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

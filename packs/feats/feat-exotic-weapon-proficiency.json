@@ -1,0 +1,18 @@
+{
+  "_id": "feat-exotic-weapon-proficiency",
+  "name": "Exotic Weapon Proficiency",
+  "type": "feat",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Choose one type of exotic weapon. You understand how to use that type of exotic weapon in combat.</p>",
+    "key": "exoticWeaponProficiency",
+    "type": "General",
+    "prerequisites": "Base attack bonus +1",
+    "benefit": "<p>You make attack rolls with the selected weapon normally.</p>",
+    "special": "You can gain Exotic Weapon Proficiency multiple times. Each time you take the feat, it applies to a new type of exotic weapon. A fighter may select Exotic Weapon Proficiency as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

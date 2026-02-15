@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-spell-component-pouch",
+  "name": "Spell Component Pouch",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A spell component pouch is a small, watertight leather belt pouch that has compartments to hold all the material components and other special items you need to cast your spells.</p>",
+    "quantity": 1,
+    "cost": 5,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 10,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

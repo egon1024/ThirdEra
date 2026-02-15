@@ -1,0 +1,22 @@
+{
+  "_id": "skill-jump",
+  "name": "Jump",
+  "type": "skill",
+  "img": "icons/svg/jump.svg",
+  "system": {
+    "description": "<p>You can make running or standing jumps.</p>",
+    "key": "jump",
+    "ability": "str",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "true",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 17
+}

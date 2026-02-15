@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-bag-hempen",
+  "name": "Bag, Hempen",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A hempen bag is a cloth bag used for carrying items.</p>",
+    "quantity": 1,
+    "cost": 0.1,
+    "weight": 0.5,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 30,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "armor-hide",
+  "name": "Hide Armor",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Hide armor is prepared from animal skin. The standard suit comes with a fur covering.</p>",
+    "armor": {
+      "type": "medium",
+      "bonus": 3,
+      "maxDex": 4,
+      "checkPenalty": -3,
+      "spellFailure": 20
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 15,
+    "weight": 25,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

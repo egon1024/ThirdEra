@@ -1,0 +1,18 @@
+{
+  "_id": "feat-ride-by-attack",
+  "name": "Ride-By Attack",
+  "type": "feat",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "description": "<p>You are skilled at making mounted attacks while moving.</p>",
+    "key": "rideByAttack",
+    "type": "General",
+    "prerequisites": "Ride 1 rank, Mounted Combat",
+    "benefit": "<p>When you are mounted and use the charge action, you may move and attack as if with a standard charge and then move again (continuing the straight line of the charge). Your total movement for the round can't exceed double your mounted speed. You and your mount do not provoke an attack of opportunity from the opponent that you attack.</p>",
+    "special": "A fighter may select Ride-By Attack as one of his fighter bonus feats.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

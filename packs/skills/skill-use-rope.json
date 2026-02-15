@@ -1,0 +1,22 @@
+{
+  "_id": "skill-use-rope",
+  "name": "Use Rope",
+  "type": "skill",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Most tasks with a rope are relatively simple. The DCs for various tasks utilizing this skill are summarized on the table below.</p>",
+    "key": "useRope",
+    "ability": "dex",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 35
+}

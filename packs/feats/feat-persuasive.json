@@ -1,0 +1,18 @@
+{
+  "_id": "feat-persuasive",
+  "name": "Persuasive",
+  "type": "feat",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>You are skilled at swaying opinions and changing minds.</p>",
+    "key": "persuasive",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You get a +2 bonus on all Diplomacy checks and Intimidate checks.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

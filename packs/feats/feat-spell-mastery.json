@@ -1,0 +1,18 @@
+{
+  "_id": "feat-spell-mastery",
+  "name": "Spell Mastery",
+  "type": "feat",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You have mastered a small group of spells.</p>",
+    "key": "spellMastery",
+    "type": "General",
+    "prerequisites": "1st-level wizard",
+    "benefit": "<p>Each time you take this feat, choose a number of spells equal to your Intelligence modifier that you already know. From that point on, you can prepare these spells without referring to a spellbook.</p>",
+    "special": "You can gain Spell Mastery multiple times. Each time you take the feat, choose additional spells equal to your Intelligence modifier.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

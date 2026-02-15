@@ -1,0 +1,31 @@
+{
+  "_id": "spell-shield",
+  "name": "Shield",
+  "type": "spell",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Shield creates an invisible barrier of force that hovers in front of you. It negates magic missile attacks directed at you. The disk also provides a +4 shield bonus to AC.</p>",
+    "level": 1,
+    "school": "Abjuration [Force]",
+    "components": {
+      "verbal": "true",
+      "somatic": "true",
+      "material": "false",
+      "focus": "false",
+      "divineFocus": "false",
+      "xp": 0,
+      "materialDescription": ""
+    },
+    "castingTime": "1 standard action",
+    "range": "Personal",
+    "target": "You",
+    "duration": "1 min./level (D)",
+    "savingThrow": "None",
+    "spellResistance": "No",
+    "prepared": 0,
+    "cast": 0
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

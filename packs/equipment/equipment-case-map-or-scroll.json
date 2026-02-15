@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-case-map-or-scroll",
+  "name": "Case, Map or Scroll",
+  "type": "equipment",
+  "img": "icons/svg/chest.svg",
+  "system": {
+    "description": "<p>A leather or wooden tube for holding a rolled-up map or scroll.</p>",
+    "quantity": 1,
+    "cost": 1,
+    "weight": 0.5,
+    "equipped": "false",
+    "isContainer": true,
+    "containerCapacity": 1,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

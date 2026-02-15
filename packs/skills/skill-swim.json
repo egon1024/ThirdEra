@@ -1,0 +1,22 @@
+{
+  "_id": "skill-swim",
+  "name": "Swim",
+  "type": "skill",
+  "img": "icons/svg/waterfall.svg",
+  "system": {
+    "description": "<p>Make a Swim check once per round while you are in the water. Success means you may swim at up to one-half your speed (as a full-round action) or at one-quarter your speed (as a move action).</p>",
+    "key": "swim",
+    "ability": "str",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "true",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 32
+}

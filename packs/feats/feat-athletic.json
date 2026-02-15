@@ -1,0 +1,18 @@
+{
+  "_id": "feat-athletic",
+  "name": "Athletic",
+  "type": "feat",
+  "img": "icons/svg/jump.svg",
+  "system": {
+    "description": "<p>You have a natural talent for physical activities.</p>",
+    "key": "athletic",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You get a +2 bonus on all Climb checks and Swim checks.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

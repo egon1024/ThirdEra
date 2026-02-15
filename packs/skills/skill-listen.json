@@ -1,0 +1,22 @@
+{
+  "_id": "skill-listen",
+  "name": "Listen",
+  "type": "skill",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+    "key": "listen",
+    "ability": "wis",
+    "ranks": 0,
+    "modifier": {
+      "misc": 0,
+      "total": 0
+    },
+    "trainedOnly": "false",
+    "armorCheckPenalty": "false",
+    "exclusive": "false"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 19
+}

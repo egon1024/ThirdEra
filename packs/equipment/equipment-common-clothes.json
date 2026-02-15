@@ -1,0 +1,21 @@
+{
+  "_id": "equipment-common-clothes",
+  "name": "Common Clothes",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "description": "<p>Common clothes include a shirt, pants or skirt, undergarments, shoes, and perhaps a cap or hat. Clothes may be woolen, linen, or cotton, depending on the wealth of the wearer.</p>",
+    "quantity": 1,
+    "cost": 0.1,
+    "weight": 2,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

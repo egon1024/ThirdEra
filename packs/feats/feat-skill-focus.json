@@ -1,0 +1,18 @@
+{
+  "_id": "feat-skill-focus",
+  "name": "Skill Focus",
+  "type": "feat",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "description": "<p>Choose a skill. You are particularly capable at that skill.</p>",
+    "key": "skillFocus",
+    "type": "General",
+    "prerequisites": "",
+    "benefit": "<p>You get a +3 bonus on all checks involving the chosen skill.</p>",
+    "special": "You can gain Skill Focus multiple times. Each time you take the feat, it applies to a new skill.",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

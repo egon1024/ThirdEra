@@ -1,0 +1,32 @@
+{
+  "_id": "weapon-dart",
+  "name": "Dart",
+  "type": "weapon",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>A dart is a small, weighted missile.</p>",
+    "damage": {
+      "dice": "1d4",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 20,
+    "properties": {
+      "melee": "ranged",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 5,
+    "weight": 0.5,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

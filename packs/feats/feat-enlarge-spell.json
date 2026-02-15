@@ -1,0 +1,18 @@
+{
+  "_id": "feat-enlarge-spell",
+  "name": "Enlarge Spell",
+  "type": "feat",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You can cast spells farther than normal.</p>",
+    "key": "enlargeSpell",
+    "type": "Metamagic",
+    "prerequisites": "",
+    "benefit": "<p>You can alter a spell with a range of close, medium, or long to increase its range by 100%. An enlarged spell with a range of close has a range of 50 ft. + 5 ft./level, while medium-range spells have a range of 200 ft. + 20 ft./level and long-range spells have a range of 800 ft. + 80 ft./level. An enlarged spell uses up a spell slot one level higher than the spell's actual level. Spells whose ranges are not defined by distance, as well as spells whose ranges are not close, medium, or long, do not benefit from this feat.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

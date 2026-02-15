@@ -1,0 +1,29 @@
+{
+  "_id": "shield-light",
+  "name": "Light Shield",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>A light shield is a small shield strapped to your forearm.</p>",
+    "armor": {
+      "type": "shield",
+      "bonus": 1,
+      "maxDex": null,
+      "checkPenalty": -1,
+      "spellFailure": 5
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 30,
+      "ft20": 20
+    },
+    "cost": 3,
+    "weight": 5,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": ""
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 10
+}

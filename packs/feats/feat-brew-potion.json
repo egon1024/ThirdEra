@@ -1,0 +1,18 @@
+{
+  "_id": "feat-brew-potion",
+  "name": "Brew Potion",
+  "type": "feat",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "description": "<p>You can create magic potions.</p>",
+    "key": "brewPotion",
+    "type": "Item Creation",
+    "prerequisites": "Caster level 3rd",
+    "benefit": "<p>You can create a potion of any 3rd-level or lower spell that you know and that targets a creature or creatures. Brewing a potion takes one day. When you create a potion, you set the caster level, which must be sufficient to cast the spell in question and no higher than your own level. The base price of a potion is its spell level × its caster level × 50 gp. To brew a potion, you must spend 1/25 of this base price in XP and use up raw materials costing half of this base price.</p><p>When you create a potion, you make any choices that you would normally make when casting the spell. Whoever drinks the potion is the target of the spell.</p>",
+    "special": "",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}
