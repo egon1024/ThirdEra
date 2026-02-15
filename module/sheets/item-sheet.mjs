@@ -36,7 +36,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addScalingRow: ThirdEraItemSheet.#onAddScalingRow,
             removeScalingRow: ThirdEraItemSheet.#onRemoveScalingRow,
             addDomainSpell: ThirdEraItemSheet.#onAddDomainSpell,
-            removeDomainSpell: ThirdEraItemSheet.#onRemoveDomainSpell
+            removeDomainSpell: ThirdEraItemSheet.#onRemoveDomainSpell,
+            removeLevelByClass: ThirdEraItemSheet.#onRemoveLevelByClass,
+            removeLevelByDomain: ThirdEraItemSheet.#onRemoveLevelByDomain
         }
     };
 
@@ -83,7 +85,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             saveProgressions: CONFIG.THIRDERA?.saveProgressions || {},
             casterTypes: CONFIG.THIRDERA?.casterTypes || {},
             preparationTypes: CONFIG.THIRDERA?.preparationTypes || {},
-            castingAbilities: CONFIG.THIRDERA?.castingAbilities || {}
+            castingAbilities: CONFIG.THIRDERA?.castingAbilities || {},
+            spellListKeys: CONFIG.THIRDERA?.spellListKeys || {}
         };
 
         // Enrich HTML description and other fields
@@ -326,8 +329,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             });
         });
 
-        // Enable drag-and-drop for class and race item sheets (skill and feat assignment)
-        if (this.document.type === "class" || this.document.type === "race") {
+        // Enable drag-and-drop for class, race, and spell item sheets
+        if (this.document.type === "class" || this.document.type === "race" || this.document.type === "spell") {
             new DragDrop.implementation({
                 permissions: { drop: () => this.isEditable },
                 callbacks: { drop: this._onDrop.bind(this) }
@@ -365,6 +368,64 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (data.type !== "Item") return;
         const droppedItem = await Item.implementation.fromDropData(data);
         if (!droppedItem) return;
+
+        // Handle class and domain drops on spell sheets (level by class / level by domain)
+        if (this.document.type === "spell") {
+            const tab = this.element.querySelector(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+
+            if (droppedItem.type === "class") {
+                const name = droppedItem.name?.toLowerCase() || "";
+                const explicitKey = droppedItem.system?.spellcasting?.spellListKey?.trim();
+                const classKey = explicitKey || (name === "wizard" || name === "sorcerer" ? "sorcererWizard" : name);
+                const className = droppedItem.name;
+
+                const levelInput = await foundry.applications.api.DialogV2.prompt({
+                    window: { title: "Spell Level for Class" },
+                    content: `<form><div class="form-group"><label>At what spell level can ${className} cast ${this.document.name}?</label><input type="number" name="level" value="1" min="0" max="9" autofocus /></div></form>`,
+                    ok: { callback: (e, btn, dlg) => parseInt(btn.form.elements.level.value) || 0 },
+                    rejectClose: false
+                });
+                if (levelInput == null) return;
+
+                const current = [...(this.document.system.levelsByClass || [])];
+                if (current.some(e => e.classKey === classKey)) {
+                    ui.notifications.info(`${className} is already in the spell's class list.`);
+                    return;
+                }
+                current.push({ classKey, className, level: levelInput });
+                current.sort((a, b) => a.className.localeCompare(b.className) || a.level - b.level);
+                await this.document.update({ "system.levelsByClass": current });
+                return;
+            }
+
+            if (droppedItem.type === "domain") {
+                const domainKey = droppedItem.system?.key;
+                if (!domainKey) {
+                    ui.notifications.warn(`${droppedItem.name} has no domain key — save the domain first to auto-generate one.`);
+                    return;
+                }
+                const domainName = droppedItem.name;
+
+                const levelInput = await foundry.applications.api.DialogV2.prompt({
+                    window: { title: "Spell Level for Domain" },
+                    content: `<form><div class="form-group"><label>At what spell level does the ${domainName} domain grant ${this.document.name}?</label><input type="number" name="level" value="1" min="1" max="9" autofocus /></div></form>`,
+                    ok: { callback: (e, btn, dlg) => parseInt(btn.form.elements.level.value) || 1 },
+                    rejectClose: false
+                });
+                if (levelInput == null) return;
+
+                const current = [...(this.document.system.levelsByDomain || [])];
+                if (current.some(e => e.domainKey === domainKey)) {
+                    ui.notifications.info(`${domainName} is already in the spell's domain list.`);
+                    return;
+                }
+                current.push({ domainKey, domainName, level: levelInput });
+                current.sort((a, b) => a.domainName.localeCompare(b.domainName) || a.level - b.level);
+                await this.document.update({ "system.levelsByDomain": current });
+                return;
+            }
+        }
 
         // Handle domain drops on class sheets (spellcasting domains)
         if (droppedItem.type === "domain" && this.document.type === "class") {
@@ -710,5 +771,39 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const current = [...(this.item.system.scalingTable || [])];
         current.splice(index, 1);
         await this.item.update({ "system.scalingTable": current });
+    }
+
+    /**
+     * Handle removing a level-by-class entry from a spell
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveLevelByClass(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const index = parseInt(target.dataset.levelByClassIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.levelsByClass || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.levelsByClass": current });
+    }
+
+    /**
+     * Handle removing a level-by-domain entry from a spell
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveLevelByDomain(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const index = parseInt(target.dataset.levelByDomainIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.levelsByDomain || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.levelsByDomain": current });
     }
 }

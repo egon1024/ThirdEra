@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>Bless fills your allies with courage. Each ally gains a +1 morale bonus on attack rolls and on saving throws against fear effects.</p>",
     "level": 1,
+    "levelsByClass": [{"classKey": "cleric", "level": 1}, {"classKey": "bard", "level": 1}, {"classKey": "paladin", "level": 1}, {"classKey": "ranger", "level": 1}],
     "school": "Enchantment (Compulsion) [Mind-Affecting]",
     "components": {
       "verbal": "true",

@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>Heal enables you to channel positive energy into a creature to wipe away injury and afflictions. It immediately ends any and all of the following adverse conditions affecting the Target: ability damage, blinded, confused, dazed, dazzled, deafened, diseased, exhausted, fatigued, feebleminded, insanity, nauseated, sickened, stunned, and poisoned.</p>",
     "level": 6,
+    "levelsByClass": [{"classKey": "cleric", "level": 6}, {"classKey": "druid", "level": 7}, {"classKey": "paladin", "level": 4}, {"classKey": "ranger", "level": 4}],
     "school": "Conjuration (Healing)",
     "components": {
       "verbal": "true",

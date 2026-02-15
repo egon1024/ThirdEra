@@ -571,9 +571,18 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 }
             }
 
+            // Resolve spell list key: use explicit value, or derive from class name for backwards compatibility
+            let spellListKey = sc.spellListKey?.trim() || "";
+            if (!spellListKey && cls.name) {
+                const name = cls.name.toLowerCase();
+                if (name === "wizard" || name === "sorcerer") spellListKey = "sorcererWizard";
+                else spellListKey = name;
+            }
+
             spellcastingByClass.push({
                 classItemId: cls.id,
                 className: cls.name,
+                spellListKey,
                 casterLevel,
                 casterType: sc.casterType,
                 preparationType: sc.preparationType,

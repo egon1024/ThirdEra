@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>An invisible but tangible field of force surrounds the subject of a mage armor spell, providing a +4 armor bonus to AC.</p>",
     "level": 1,
+    "levelsByClass": [{"classKey": "sorcererWizard", "level": 1}],
     "school": "Conjuration (Creation) [Force]",
     "components": {
       "verbal": "true",

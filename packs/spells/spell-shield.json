@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>Shield creates an invisible barrier of force that hovers in front of you. It negates magic missile attacks directed at you. The disk also provides a +4 shield bonus to AC.</p>",
     "level": 1,
+    "levelsByClass": [{"classKey": "sorcererWizard", "level": 1}],
     "school": "Abjuration [Force]",
     "components": {
       "verbal": "true",

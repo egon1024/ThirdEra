@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>When laying your hand upon a living creature, you channel positive energy that cures 1d8 points of damage +1 point per caster level (maximum +5).</p>",
     "level": 1,
+    "levelsByClass": [{"classKey": "cleric", "level": 1}, {"classKey": "bard", "level": 2}, {"classKey": "druid", "level": 2}, {"classKey": "paladin", "level": 2}, {"classKey": "ranger", "level": 2}],
     "school": "Conjuration (Healing)",
     "components": {
       "verbal": "true",

@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>This spell functions like cure light wounds, except that it cures 2d8 points of damage +1 point per caster level (maximum +10).</p>",
     "level": 2,
+    "levelsByClass": [{"classKey": "cleric", "level": 2}, {"classKey": "bard", "level": 3}, {"classKey": "druid", "level": 3}, {"classKey": "paladin", "level": 3}, {"classKey": "ranger", "level": 3}],
     "school": "Conjuration (Healing)",
     "components": {
       "verbal": "true",

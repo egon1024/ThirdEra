@@ -1,6 +1,11 @@
 # Logs
 logs
 *.log
+
+# LevelDB internal files (Foundry compendium storage)
+packs/*/LOG
+packs/*/LOG.old
+packs/*/*.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

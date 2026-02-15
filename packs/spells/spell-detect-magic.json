@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>You detect magical auras. The amount of information revealed depends on how long you study a particular area or subject.</p>",
     "level": 0,
+    "levelsByClass": [{"classKey": "sorcererWizard", "level": 0}, {"classKey": "bard", "level": 0}, {"classKey": "cleric", "level": 0}, {"classKey": "druid", "level": 0}, {"classKey": "paladin", "level": 1}, {"classKey": "ranger", "level": 1}],
     "school": "Divination",
     "components": {
       "verbal": "true",

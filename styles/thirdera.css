@@ -2291,4 +2291,102 @@
   background: var(--color-danger);
   color: var(--color-text-light);
 }
+
+/* Level by Class / Level by Domain (Spell Sheet) */
+.thirdera .spell-drop-zone {
+  min-height: 36px;
+  padding: 8px;
+  margin: 8px 0;
+  background: var(--color-bg-input);
+  border: 1px dashed var(--color-border-input);
+  border-radius: 3px;
+}
+
+.thirdera .spell-drop-zone.droppable.drag-over {
+  border-color: var(--color-hover-alt);
+  background: rgba(0, 123, 255, 0.05);
+}
+
+.thirdera .spell-drop-zone .drop-zone-hint {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+.thirdera .level-by-class-list,
+.thirdera .level-by-domain-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.thirdera .level-by-class-entry,
+.thirdera .level-by-domain-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+  font-size: var(--font-size-body);
+}
+
+.thirdera .level-by-class-entry:last-child,
+.thirdera .level-by-domain-entry:last-child {
+  border-bottom: none;
+}
+
+.thirdera .level-by-class-name,
+.thirdera .level-by-domain-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.thirdera .level-by-class-header,
+.thirdera .level-by-domain-header {
+  font-size: var(--font-size-note);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  padding: 2px 0 4px;
+  border-bottom: 1px solid var(--color-border-divider);
+  margin-bottom: 4px;
+  gap: 8px;
+}
+
+.thirdera .level-by-class-header .level-by-class-remove,
+.thirdera .level-by-domain-header .level-by-domain-remove {
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.thirdera .level-by-class-level-col,
+.thirdera .level-by-domain-level-col {
+  width: 1.8em;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.thirdera .level-by-class-level-input,
+.thirdera .level-by-domain-level-input {
+  width: 1.8em;
+  min-width: 1.8em;
+  max-width: 1.8em;
+  text-align: center;
+  padding: 1px 0;
+  box-sizing: border-box;
+}
+
+.thirdera .level-by-class-remove,
+.thirdera .level-by-domain-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  font-size: var(--font-size-note);
+  opacity: 0.5;
+}
+
+.thirdera .level-by-class-remove:hover,
+.thirdera .level-by-domain-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
 }

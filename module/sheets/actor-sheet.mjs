@@ -1,4 +1,5 @@
 import { getWieldingInfo } from "../data/_damage-helpers.mjs";
+import { SpellData } from "../data/item-spell.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -398,29 +399,32 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         // Assign spells to their classes and levels
         // Domain spells are identified by matching spell names to domain spell lists
         for (const spell of items.spells) {
-            const spellLevel = spell.system.level || 0;
             const spellNameKey = spell.name.toLowerCase().trim();
-            
-            // Check if this is a domain spell
+            const fallbackSpellLevel = spell.system.level ?? 0;
+
+            // Check if this is a domain spell (use per-class level for matching)
             const domainInfo = domainSpellMap.get(spellNameKey);
-            if (domainInfo && domainInfo.spellLevel === spellLevel) {
-                // This is a domain spell - add to domain spells section
-                const classSpells = spellsByClass.get(domainInfo.classItemId);
-                if (classSpells) {
-                    classSpells.domainSpellsByLevel[spellLevel].push({
-                        ...spell,
-                        domainName: domainInfo.domainName,
-                        domainKey: domainInfo.domainKey
-                    });
-                    // Domain spells don't count toward prepared totals, but we track cast count
-                    classSpells.totalCast += spell.system.cast || 0;
+            if (domainInfo) {
+                const sc = spellcastingByClass.find(s => s.classItemId === domainInfo.classItemId);
+                const spellLevelForClass = sc ? SpellData.getLevelForClass(spell.system, sc.spellListKey) : fallbackSpellLevel;
+                if (spellLevelForClass === domainInfo.spellLevel) {
+                    const classSpells = spellsByClass.get(domainInfo.classItemId);
+                    if (classSpells) {
+                        classSpells.domainSpellsByLevel[domainInfo.spellLevel].push({
+                            ...spell,
+                            domainName: domainInfo.domainName,
+                            domainKey: domainInfo.domainKey
+                        });
+                        classSpells.totalCast += spell.system.cast || 0;
+                    }
+                    continue;
                 }
-                continue;
             }
-            
-            // Regular spell - find a spellcasting class that can cast this spell level
+
+            // Regular spell - assign to the first spellcasting class where the spell's level for that class matches available slots
             let assigned = false;
             for (const sc of spellcastingByClass) {
+                const spellLevel = SpellData.getLevelForClass(spell.system, sc.spellListKey);
                 if (sc.spellsPerDay[spellLevel] > 0) {
                     const classSpells = spellsByClass.get(sc.classItemId);
                     if (classSpells) {
@@ -434,8 +438,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     }
                 }
             }
-            
-            // If no class matches, add to unassigned spells
+
+            // If no class matches, add to unassigned spells (use fallback level for grouping)
             if (!assigned) {
                 if (!spellsByClass.has("unassigned")) {
                     spellsByClass.set("unassigned", {
@@ -449,6 +453,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     });
                 }
                 const unassigned = spellsByClass.get("unassigned");
+                const spellLevel = fallbackSpellLevel;
                 if (!unassigned.spellsByLevel[spellLevel]) {
                     unassigned.spellsByLevel[spellLevel] = [];
                 }

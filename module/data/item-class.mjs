@@ -67,6 +67,11 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                     required: true, initial: false,
                     label: "Spellcasting Enabled"
                 }),
+                /** Key used to look up spell levels in spell.levelsByClass (e.g., sorcererWizard, cleric, druid). Sorcerer and Wizard share "sorcererWizard". */
+                spellListKey: new StringField({
+                    required: true, blank: true, initial: "",
+                    label: "Spell List Key"
+                }),
                 casterType: new StringField({
                     required: true, blank: false, initial: "none",
                     choices: () => CONFIG.THIRDERA.casterTypes,

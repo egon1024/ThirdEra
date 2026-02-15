@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>You release a powerful stroke of electrical energy that deals 1d6 points of electricity damage per caster level (maximum 10d6) to each creature within its area.</p>",
     "level": 3,
+    "levelsByClass": [{"classKey": "sorcererWizard", "level": 3}],
     "school": "Evocation [Electricity]",
     "components": {
       "verbal": "true",

@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>A fireball spell is an explosion of flame that detonates with a low roar and deals 1d6 points of fire damage per caster level (maximum 10d6) to every creature within the area.</p>",
     "level": 3,
+    "levelsByClass": [{"classKey": "sorcererWizard", "level": 3}],
     "school": "Evocation [Fire]",
     "components": {
       "verbal": "true",

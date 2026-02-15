@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>A missile of magical energy darts forth from your fingertip and strikes its target, dealing 1d4+1 points of force damage.</p>",
     "level": 1,
+    "levelsByClass": [{"classKey": "sorcererWizard", "level": 1}],
     "school": "Evocation",
     "components": {
       "verbal": "true",

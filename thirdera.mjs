@@ -191,6 +191,15 @@ Hooks.once("init", async function () {
             int: "Intelligence",
             wis: "Wisdom",
             cha: "Charisma"
+        },
+        /** Spell list keys for looking up per-class spell levels. Sorcerer and Wizard share the same list. */
+        spellListKeys: {
+            sorcererWizard: "Sorcerer/Wizard",
+            bard: "Bard",
+            cleric: "Cleric",
+            druid: "Druid",
+            paladin: "Paladin",
+            ranger: "Ranger"
         }
     };
 

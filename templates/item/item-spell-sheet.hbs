@@ -40,13 +40,68 @@
             data-tab="details">
             <div class="grid grid-2col">
                 <div class="form-group">
-                    <label>Level</label>
-                    <input type="text" name="system.level" value="{{system.level}}" data-dtype="Number" />
+                    <label>Level (fallback)</label>
+                    <input type="number" name="system.level" value="{{system.level}}" min="0" max="9"
+                        data-dtype="Number" title="Used when no class-specific entry exists" />
                 </div>
                 <div class="form-group">
                     <label>School</label>
                     <input type="text" name="system.school" value="{{system.school}}" />
                 </div>
+            </div>
+
+            <h3 class="form-header">Level by Class</h3>
+            <p class="hint">Drag class items here to add them. A spell can be different levels for different classes (e.g., Protection from Energy is 3rd for Cleric, 2nd for Ranger). Supports custom and prestige classes.</p>
+            <div class="spell-drop-zone droppable" data-drop-hint="class">
+                {{#if system.levelsByClass}}
+                <div class="level-by-class-header flexrow">
+                    <span class="level-by-class-name">Class</span>
+                    <span class="level-by-class-level-col">Level</span>
+                    <span class="level-by-class-remove"></span>
+                </div>
+                <ol class="level-by-class-list">
+                    {{#each system.levelsByClass as |entry index|}}
+                    <li class="level-by-class-entry flexrow">
+                        <span class="level-by-class-name">{{entry.className}}</span>
+                        <input type="number" name="system.levelsByClass.{{index}}.level" value="{{entry.level}}"
+                            min="0" max="9" data-dtype="Number" class="level-by-class-level-input" />
+                        <input type="hidden" name="system.levelsByClass.{{index}}.classKey" value="{{entry.classKey}}" />
+                        <input type="hidden" name="system.levelsByClass.{{index}}.className" value="{{entry.className}}" />
+                        <a class="level-by-class-remove" data-action="removeLevelByClass" data-level-by-class-index="{{index}}"
+                            title="Remove"><i class="fas fa-times"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+                {{/if}}
+                <p class="drop-zone-hint">{{#unless system.levelsByClass}}Drop class items here{{/unless}}</p>
+            </div>
+
+            <h3 class="form-header">Level by Domain</h3>
+            <p class="hint">Drag domain items here to add them. Domain spells are granted by domains at a specific level.</p>
+            <div class="spell-drop-zone droppable" data-drop-hint="domain">
+                {{#if system.levelsByDomain}}
+                <div class="level-by-domain-header flexrow">
+                    <span class="level-by-domain-name">Domain</span>
+                    <span class="level-by-domain-level-col">Level</span>
+                    <span class="level-by-domain-remove"></span>
+                </div>
+                <ol class="level-by-domain-list">
+                    {{#each system.levelsByDomain as |entry index|}}
+                    <li class="level-by-domain-entry flexrow">
+                        <span class="level-by-domain-name">{{entry.domainName}}</span>
+                        <input type="number" name="system.levelsByDomain.{{index}}.level" value="{{entry.level}}"
+                            min="1" max="9" data-dtype="Number" class="level-by-domain-level-input" />
+                        <input type="hidden" name="system.levelsByDomain.{{index}}.domainKey" value="{{entry.domainKey}}" />
+                        <input type="hidden" name="system.levelsByDomain.{{index}}.domainName" value="{{entry.domainName}}" />
+                        <a class="level-by-domain-remove" data-action="removeLevelByDomain" data-level-by-domain-index="{{index}}"
+                            title="Remove"><i class="fas fa-times"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+                {{/if}}
+                <p class="drop-zone-hint">{{#unless system.levelsByDomain}}Drop domain items here{{/unless}}</p>
+            </div>
+            <div class="grid grid-2col" style="margin-top: 8px;">
                 <div class="form-group">
                     <label>Casting Time</label>
                     <input type="text" name="system.castingTime" value="{{system.castingTime}}" />
