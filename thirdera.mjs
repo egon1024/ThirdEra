@@ -27,6 +27,7 @@ import { ThirdEraActorSheet } from "./module/sheets/actor-sheet.mjs";
 import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
+import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
 
 /**
  * Initialize HP auto-increase system
@@ -334,6 +335,24 @@ Hooks.once("ready", async function () {
     
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
+    // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
+    await populateCompendiumCache();
+});
+
+/**
+ * When a spell is updated (e.g. levelsByDomain changed), refresh the domain-spells cache and
+ * re-render any open domain sheets so the "Granted spells" list updates immediately.
+ */
+Hooks.on("updateItem", async (document, changes, options, userId) => {
+    if (document.type !== "spell") return;
+    await populateCompendiumCache();
+    const instances = foundry.applications?.instances;
+    if (!instances) return;
+    for (const app of instances.values()) {
+        if (app.document?.type === "domain" && app.rendered) {
+            app.render(true);
+        }
+    }
 });
 
 /**

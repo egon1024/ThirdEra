@@ -2,6 +2,7 @@ const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanFie
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
+import { getSpellsForDomain } from "../logic/domain-spells.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -540,7 +541,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                     }
                 }
 
-                // Resolve domain items and collect their spells
+                // Resolve domain items and collect spells from spell documents' levelsByDomain
                 for (const domainRef of sc.domains) {
                     try {
                         const domainItem = game.items.get(domainRef.domainItemId);
@@ -551,15 +552,15 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                                 domainKey: domainRef.domainKey
                             });
 
-                            // Collect spells from this domain
-                            const domainSpells = domainItem.system.spells || [];
-                            for (const domainSpell of domainSpells) {
-                                const sl = domainSpell.level || 1;
-                                if (sl >= 1 && sl <= 9) {
+                            // Derive spells from getSpellsForDomain (world + compendium cache)
+                            const granted = getSpellsForDomain(domainRef.domainKey);
+                            for (const entry of granted) {
+                                const sl = entry.level;
+                                if (sl >= 1 && sl <= 9 && entry.spellName) {
                                     domainSpellsByLevel[sl].push({
                                         domainName: domainRef.domainName,
                                         domainKey: domainRef.domainKey,
-                                        spellName: domainSpell.spellName || ""
+                                        spellName: entry.spellName
                                     });
                                 }
                             }

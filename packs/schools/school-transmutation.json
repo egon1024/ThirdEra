@@ -5,7 +5,7 @@
   "system": {
     "description": "<p>Transmutation spells change the properties of some creature, thing, or condition.</p>",
     "key": "transmutation",
-    "oppositionSchools": [],
+    "oppositionSchools": [{"schoolKey": "abjuration", "schoolName": "Abjuration"}, {"schoolKey": "necromancy", "schoolName": "Necromancy"}],
     "subschools": [],
     "descriptorTags": []
   },

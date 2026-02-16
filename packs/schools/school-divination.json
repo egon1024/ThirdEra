@@ -5,7 +5,7 @@
   "system": {
     "description": "<p>Divination spells enable you to learn secrets long forgotten, to predict the future, to find hidden things, and to foil deceptive spells.</p>",
     "key": "divination",
-    "oppositionSchools": [],
+    "oppositionSchools": [{"schoolKey": "enchantment", "schoolName": "Enchantment"}],
     "subschools": ["Scrying"],
     "descriptorTags": ["language-dependent"]
   },

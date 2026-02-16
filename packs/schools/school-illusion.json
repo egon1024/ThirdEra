@@ -5,7 +5,7 @@
   "system": {
     "description": "<p>Illusion spells deceive the senses or minds of others. They cause people to see things that are not there, not see things that are there, hear phantom noises, or remember things that never happened. Illusion has five subschools: figment, glamer, pattern, phantasm, and shadow.</p>",
     "key": "illusion",
-    "oppositionSchools": [],
+    "oppositionSchools": [{"schoolKey": "evocation", "schoolName": "Evocation"}, {"schoolKey": "necromancy", "schoolName": "Necromancy"}],
     "subschools": ["Figment", "Glamer", "Pattern", "Phantasm", "Shadow"],
     "descriptorTags": ["darkness", "mind-affecting"]
   },

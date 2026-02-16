@@ -2292,6 +2292,28 @@
   color: var(--color-text-light);
 }
 
+/* Domain sheet: granted spells (read-only list with document links) */
+.thirdera .granted-spells-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+.thirdera .granted-spells-list .domain-spell-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+.thirdera .granted-spells-list .domain-spell-level {
+  flex: 0 0 24px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+}
+.thirdera .granted-spells-list .domain-spell-link {
+  flex: 1;
+}
+
 /* Level by Class / Level by Domain (Spell Sheet) */
 .thirdera .spell-drop-zone {
   min-height: 36px;

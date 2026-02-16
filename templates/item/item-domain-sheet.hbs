@@ -26,41 +26,27 @@
             </div>
         </div>
 
-        {{!-- Details Tab --}}
+        {{!-- Details Tab: Granted spells (read-only, derived from spell levelsByDomain) --}}
         <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
             data-tab="details">
-            <h3 class="form-header">Domain Spells</h3>
-            <p class="hint">Enter the spells granted by this domain at each spell level (1st through 9th).</p>
-            {{#if system.spells.length}}
-            <ol class="domain-spells-list">
-                {{#each system.spells as |spell index|}}
+            <h3 class="form-header">Granted Spells</h3>
+            <p class="hint">Spells granted by this domain are derived from each spell's Level by Domain. To add a spell: drag a spell from the sidebar onto this sheet (you'll be prompted for the level), or open the spell and add this domain under Level by Domain (or drag this domain onto the spell sheet).</p>
+            {{#if grantedSpells.length}}
+            <ol class="domain-spells-list granted-spells-list">
+                {{#each grantedSpells as |entry|}}
                 <li class="domain-spell-entry flexrow">
-                    <div class="form-group" style="flex: 0 0 80px; margin: 0 8px 0 0;">
-                        <label>Level</label>
-                        <input type="number" name="system.spells.{{index}}.level" value="{{spell.level}}" min="1" max="9"
-                            data-dtype="Number" class="domain-spell-level-input" />
-                    </div>
-                    <div class="form-group" style="flex: 1; margin: 0;">
-                        <label>Spell Name</label>
-                        <input type="text" name="system.spells.{{index}}.spellName" value="{{spell.spellName}}"
-                            placeholder="Spell Name" />
-                    </div>
-                    <div class="form-group" style="flex: 0 0 30px; margin: 0 0 0 8px;">
-                        <label>&nbsp;</label>
-                        <a class="domain-spell-remove" data-action="removeDomainSpell" data-spell-index="{{index}}"
-                            title="Remove Domain Spell"><i class="fas fa-times"></i></a>
-                    </div>
+                    <span class="domain-spell-level">{{entry.level}}</span>
+                    {{#if entry.uuid}}
+                    <a class="content-link domain-spell-link" data-link data-uuid="{{entry.uuid}}" data-type="Item">{{entry.spellName}}</a>
+                    {{else}}
+                    <span class="domain-spell-name">{{entry.spellName}}</span>
+                    {{/if}}
                 </li>
                 {{/each}}
             </ol>
             {{else}}
-            <p class="no-items hint">No domain spells defined. Add spells below.</p>
+            <p class="no-items hint">No spells list this domain in Level by Domain. Add this domain to spell items to see them here.</p>
             {{/if}}
-            <div class="form-group">
-                <a class="domain-spell-add" data-action="addDomainSpell" title="Add Domain Spell">
-                    <i class="fas fa-plus"></i> Add Domain Spell
-                </a>
-            </div>
         </div>
     </section>
 </form>

@@ -2,6 +2,8 @@
  * Item sheet for Third Era items using ApplicationV2
  * @extends {foundry.applications.sheets.ItemSheetV2}
  */
+import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
 ) {
@@ -35,8 +37,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             removeDomain: ThirdEraItemSheet.#onRemoveDomain,
             addScalingRow: ThirdEraItemSheet.#onAddScalingRow,
             removeScalingRow: ThirdEraItemSheet.#onRemoveScalingRow,
-            addDomainSpell: ThirdEraItemSheet.#onAddDomainSpell,
-            removeDomainSpell: ThirdEraItemSheet.#onRemoveDomainSpell,
             removeLevelByClass: ThirdEraItemSheet.#onRemoveLevelByClass,
             removeLevelByDomain: ThirdEraItemSheet.#onRemoveLevelByDomain,
             clearSchool: ThirdEraItemSheet.#onClearSchool,
@@ -211,6 +211,12 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
         }
 
+        // Domain: granted spells derived from spell documents' levelsByDomain (read-only on sheet)
+        let grantedSpells = [];
+        if (item.type === "domain" && systemData.key) {
+            grantedSpells = getSpellsForDomain(systemData.key);
+        }
+
         return {
             ...context,
             item,
@@ -226,7 +232,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             schoolDescriptorOptionsForAdd,
             hasSchoolSubschoolOptions: schoolSubschoolOptions.length > 0,
             hasSchoolDescriptorOptionsForAdd: schoolDescriptorOptionsForAdd.length > 0,
-            hasSchoolDescriptorsSection: schoolDescriptorOptions.length > 0 || (systemData.schoolDescriptors ?? []).length > 0
+            hasSchoolDescriptorsSection: schoolDescriptorOptions.length > 0 || (systemData.schoolDescriptors ?? []).length > 0,
+            grantedSpells
         };
     }
 
@@ -405,8 +412,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             });
         });
 
-        // Enable drag-and-drop for class, race, spell, and school item sheets
-        if (this.document.type === "class" || this.document.type === "race" || this.document.type === "spell" || this.document.type === "school") {
+        // Enable drag-and-drop for class, race, spell, school, and domain item sheets
+        if (this.document.type === "class" || this.document.type === "race" || this.document.type === "spell" || this.document.type === "school" || this.document.type === "domain") {
             new DragDrop.implementation({
                 permissions: { drop: () => this.isEditable },
                 callbacks: { drop: this._onDrop.bind(this) }
@@ -462,8 +469,13 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      */
     async _onDrop(event) {
         const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
-        if (data.type !== "Item") return;
-        const droppedItem = await Item.implementation.fromDropData(data);
+        let droppedItem = null;
+        if (data.type === "Item") {
+            droppedItem = await Item.implementation.fromDropData(data);
+        } else if (data.uuid) {
+            const doc = await foundry.utils.fromUuid(data.uuid);
+            if (doc?.documentName === "Item") droppedItem = doc;
+        }
         if (!droppedItem) return;
 
         // Handle school drops on spell or school sheets
@@ -587,6 +599,38 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             current.push({ domainItemId: droppedItem.id, domainName: droppedItem.name, domainKey });
             current.sort((a, b) => a.domainName.localeCompare(b.domainName));
             await this.document.update({ "system.spellcasting.domains": current });
+            return;
+        }
+
+        // Handle spell drops on domain sheets (inverse of domain-on-spell: add this domain to the spell's levelsByDomain)
+        if (this.document.type === "domain" && droppedItem.type === "spell") {
+            const tab = this.element.querySelector(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+
+            const domainKey = this.document.system?.key?.trim();
+            if (!domainKey) {
+                ui.notifications.warn(`${this.document.name} has no domain key — save the domain first.`);
+                return;
+            }
+            const domainName = this.document.name;
+
+            const levelInput = await foundry.applications.api.DialogV2.prompt({
+                window: { title: "Spell Level for Domain" },
+                content: `<form><div class="form-group"><label>At what spell level does the ${domainName} domain grant ${droppedItem.name}?</label><input type="number" name="level" value="1" min="1" max="9" autofocus /></div></form>`,
+                ok: { callback: (e, btn, dlg) => parseInt(btn.form.elements.level.value, 10) || 1 },
+                rejectClose: false
+            });
+            if (levelInput == null) return;
+
+            const current = [...(droppedItem.system.levelsByDomain || [])];
+            if (current.some(e => (e.domainKey || "").trim().toLowerCase() === domainKey.toLowerCase())) {
+                ui.notifications.info(`${domainName} is already in ${droppedItem.name}'s domain list.`);
+                return;
+            }
+            current.push({ domainKey, domainName, level: Math.max(1, Math.min(9, levelInput)) });
+            current.sort((a, b) => (a.domainName || "").localeCompare(b.domainName || "") || a.level - b.level);
+            await droppedItem.update({ "system.levelsByDomain": current });
+            ui.notifications.info(`${droppedItem.name} added to ${domainName} domain at level ${levelInput}.`);
             return;
         }
 
@@ -846,42 +890,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (!spellcasting || !spellcasting.domains) return;
         const current = spellcasting.domains.filter(e => e.domainKey !== domainKey);
         await this.item.update({ "system.spellcasting.domains": current });
-    }
-
-    /**
-     * Handle adding a domain spell entry
-     * @param {PointerEvent} event   The originating click event
-     * @param {HTMLElement} target   The clicked element
-     * @this {ThirdEraItemSheet}
-     */
-    static async #onAddDomainSpell(event, target) {
-        // Manual scroll preservation
-        const tab = target.closest(".tab");
-        if (tab) this._preservedScrollTop = tab.scrollTop;
-
-        const current = [...(this.item.system.spells || [])];
-        // Default to level 1 if empty, otherwise one level higher than the last entry
-        const nextLevel = current.length > 0 ? Math.min(9, current[current.length - 1].level + 1) : 1;
-        current.push({ level: nextLevel, spellName: "" });
-        await this.item.update({ "system.spells": current });
-    }
-
-    /**
-     * Handle removing a domain spell entry
-     * @param {PointerEvent} event   The originating click event
-     * @param {HTMLElement} target   The clicked element
-     * @this {ThirdEraItemSheet}
-     */
-    static async #onRemoveDomainSpell(event, target) {
-        // Manual scroll preservation
-        const tab = target.closest(".tab");
-        if (tab) this._preservedScrollTop = tab.scrollTop;
-
-        const index = parseInt(target.dataset.spellIndex);
-        if (isNaN(index)) return;
-        const current = [...(this.item.system.spells || [])];
-        current.splice(index, 1);
-        await this.item.update({ "system.spells": current });
     }
 
     /**

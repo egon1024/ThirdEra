@@ -5,7 +5,7 @@
   "system": {
     "description": "<p>Evocation spells manipulate energy or tap an unseen source of power to produce a desired end. In effect, they create something out of nothing. Many of these spells produce spectacular effects, and evocation spells can deal large amounts of damage.</p>",
     "key": "evocation",
-    "oppositionSchools": [],
+    "oppositionSchools": [{"schoolKey": "abjuration", "schoolName": "Abjuration"}, {"schoolKey": "conjuration", "schoolName": "Conjuration"}],
     "subschools": [],
     "descriptorTags": ["acid", "cold", "electricity", "fire", "force", "light", "sonic"]
   },

@@ -39,6 +39,24 @@ jobs:
           fi
           echo "JSON validation passed"
 
+      - name: Validate pack JSON files
+        run: |
+          echo "Validating pack JSON files..."
+          errors=0
+          for f in $(find packs -name '*.json' 2>/dev/null | sort); do
+            if node -e "const fs=require('fs'); JSON.parse(fs.readFileSync(process.argv[1],'utf8'));" "$f"; then
+              echo "  ✓ $f"
+            else
+              echo "  ✗ $f — invalid JSON"
+              errors=$((errors + 1))
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "Pack JSON validation failed with $errors error(s)"
+            exit 1
+          fi
+          echo "Pack JSON validation passed"
+
       - name: Validate JavaScript modules
         run: |
           echo "Validating JavaScript modules..."
