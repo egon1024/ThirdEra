@@ -246,7 +246,17 @@ export class CompendiumLoader {
             "spell-shout-greater.json", "spell-spellstaff.json", "spell-stone-tell.json", "spell-summon-monster-vi.json",
             "spell-summon-natures-ally-vi.json", "spell-sympathetic-vibration.json", "spell-symbol-of-fear.json",
             "spell-symbol-of-persuasion.json", "spell-transport-via-plants.json", "spell-undeath-to-death.json",
-            "spell-veil.json", "spell-wall-of-iron.json", "spell-wind-walk.json", "spell-word-of-recall.json"
+            "spell-veil.json", "spell-wall-of-iron.json", "spell-wind-walk.json", "spell-word-of-recall.json",
+            "spell-animate-plants.json", "spell-arcane-sight-greater.json", "spell-blasphemy.json", "spell-changestaff.json",
+            "spell-control-weather.json", "spell-creeping-doom.json", "spell-cure-serious-wounds-mass.json", "spell-delayed-blast-fireball.json",
+            "spell-destruction.json", "spell-dictum.json", "spell-ethereal-jaunt.json", "spell-fire-storm.json",
+            "spell-forcecage.json", "spell-grasping-hand.json", "spell-hold-person-mass.json", "spell-holy-word.json",
+            "spell-inflict-serious-wounds-mass.json", "spell-instant-summons.json", "spell-insanity.json", "spell-mages-magnificent-mansion.json",
+            "spell-mages-sword.json", "spell-phase-door.json", "spell-power-word-blind.json", "spell-refuge.json",
+            "spell-regenerate.json", "spell-restoration-greater.json", "spell-resurrection.json", "spell-sequester.json",
+            "spell-spell-turning.json", "spell-summon-monster-vii.json", "spell-summon-natures-ally-vii.json", "spell-sunbeam.json",
+            "spell-symbol-of-stunning.json", "spell-symbol-of-weakness.json", "spell-teleport-greater.json", "spell-teleport-object.json",
+            "spell-transmute-metal-to-wood.json", "spell-vision.json", "spell-word-of-chaos.json"
         ]
     };
 
