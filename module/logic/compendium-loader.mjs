@@ -231,7 +231,22 @@ export class CompendiumLoader {
             "spell-symbol-of-pain.json", "spell-symbol-of-sleep.json", "spell-telekinesis.json", "spell-telepathic-bond.json",
             "spell-teleport.json", "spell-transmute-mud-to-rock.json", "spell-transmute-rock-to-mud.json", "spell-tree-stride.json",
             "spell-true-seeing.json", "spell-unhallow.json", "spell-wall-of-force.json", "spell-wall-of-stone.json",
-            "spell-wall-of-thorns.json", "spell-waves-of-fatigue.json", "spell-command-greater.json"
+            "spell-wall-of-thorns.json", "spell-waves-of-fatigue.json", "spell-command-greater.json",
+            "spell-acid-fog.json", "spell-analyze-dweomer.json", "spell-animate-objects.json", "spell-antilife-shell.json",
+            "spell-antimagic-field.json", "spell-banishment.json", "spell-bears-endurance-mass.json", "spell-blade-barrier.json",
+            "spell-bulls-strength-mass.json", "spell-cats-grace-mass.json", "spell-chain-lightning.json", "spell-charm-monster-mass.json",
+            "spell-contingency.json", "spell-create-undead.json", "spell-cure-moderate-wounds-mass.json", "spell-eagles-splendor-mass.json",
+            "spell-eyebite.json", "spell-find-the-path.json", "spell-fire-seeds.json", "spell-forceful-hand.json",
+            "spell-forbiddance.json", "spell-foxs-cunning-mass.json", "spell-freezing-sphere.json", "spell-geas-quest.json",
+            "spell-glyph-of-warding-greater.json", "spell-globe-of-invulnerability.json", "spell-guards-and-wards.json",
+            "spell-harm.json", "spell-heroes-feast.json", "spell-inflict-moderate-wounds-mass.json", "spell-ironwood.json",
+            "spell-irresistible-dance.json", "spell-liveoak.json", "spell-move-earth.json", "spell-owls-wisdom-mass.json",
+            "spell-permanent-image.json", "spell-planar-ally.json", "spell-planar-binding.json", "spell-programmed-image.json",
+            "spell-project-image.json", "spell-repel-wood.json", "spell-repulsion.json", "spell-scrying-greater.json",
+            "spell-shout-greater.json", "spell-spellstaff.json", "spell-stone-tell.json", "spell-summon-monster-vi.json",
+            "spell-summon-natures-ally-vi.json", "spell-sympathetic-vibration.json", "spell-symbol-of-fear.json",
+            "spell-symbol-of-persuasion.json", "spell-transport-via-plants.json", "spell-undeath-to-death.json",
+            "spell-veil.json", "spell-wall-of-iron.json", "spell-wind-walk.json", "spell-word-of-recall.json"
         ]
     };
 
