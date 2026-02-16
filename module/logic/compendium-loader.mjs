@@ -266,6 +266,7 @@ export class CompendiumLoader {
             "spell-protection-from-spells.json", "spell-prying-eyes-greater.json", "spell-repel-metal-or-stone.json",
             "spell-reverse-gravity.json", "spell-screen.json", "spell-summon-monster-viii.json", "spell-summon-natures-ally-viii.json",
             "spell-sunburst.json", "spell-symbol-of-death.json", "spell-trap-the-soul.json", "spell-unholy-aura.json", "spell-whirlwind.json",
+            "spell-cloak-of-chaos.json", "spell-iron-body.json", "spell-moment-of-prescience.json", "spell-shield-of-law.json",
             "spell-antipathy.json", "spell-astral-projection.json", "spell-crushing-hand.json", "spell-dominate-monster.json",
             "spell-energy-drain.json", "spell-elemental-swarm.json", "spell-etherealness.json", "spell-foresight.json",
             "spell-freedom.json", "spell-gate.json", "spell-heal-mass.json", "spell-hold-monster-mass.json", "spell-implosion.json",
@@ -273,7 +274,7 @@ export class CompendiumLoader {
             "spell-power-word-kill.json", "spell-prismatic-sphere.json", "spell-shapechange.json", "spell-shambler.json",
             "spell-soul-bind.json", "spell-storm-of-vengeance.json", "spell-summon-monster-ix.json", "spell-summon-natures-ally-ix.json",
             "spell-sympathy.json", "spell-teleportation-circle.json", "spell-time-stop.json", "spell-true-resurrection.json",
-            "spell-weird.json", "spell-wish.json"
+            "spell-wail-of-the-banshee.json", "spell-weird.json", "spell-wish.json"
         ]
     };
 
