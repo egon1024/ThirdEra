@@ -214,7 +214,24 @@ export class CompendiumLoader {
             "spell-restoration.json", "spell-rusting-grasp.json", "spell-secure-shelter.json", "spell-sending.json",
             "spell-shadow-conjuration.json", "spell-shout.json", "spell-solid-fog.json", "spell-spell-immunity.json",
             "spell-spike-stones.json", "spell-stoneskin.json", "spell-summon-monster-iv.json", "spell-summon-natures-ally-iv.json",
-            "spell-wall-of-fire.json", "spell-wall-of-ice.json", "spell-zone-of-silence.json"
+            "spell-wall-of-fire.json", "spell-wall-of-ice.json", "spell-zone-of-silence.json",
+            "spell-animal-growth.json", "spell-atonement.json", "spell-awaken.json", "spell-baleful-polymorph.json",
+            "spell-call-lightning-storm.json", "spell-cloudkill.json", "spell-commune.json", "spell-commune-with-nature.json",
+            "spell-cone-of-cold.json", "spell-contact-other-plane.json", "spell-control-winds.json", "spell-cure-light-wounds-mass.json",
+            "spell-dispel-chaos.json", "spell-dispel-evil.json", "spell-dispel-good.json", "spell-dispel-law.json",
+            "spell-dispel-magic-greater.json", "spell-disrupting-weapon.json", "spell-dream.json", "spell-false-vision.json",
+            "spell-feeblemind.json", "spell-grant-spell-resistance.json", "spell-hallow.json", "spell-heroism-greater.json",
+            "spell-inflict-light-wounds-mass.json", "spell-insect-plague.json", "spell-interposing-hand.json",
+            "spell-major-creation.json", "spell-mark-of-justice.json", "spell-mages-faithful-hound.json", "spell-mages-private-sanctum.json",
+            "spell-mind-fog.json", "spell-mirage-arcana.json", "spell-mislead.json", "spell-nightmare.json",
+            "spell-passwall.json", "spell-persistent-image.json", "spell-plane-shift.json", "spell-planar-binding-lesser.json",
+            "spell-prying-eyes.json", "spell-raise-dead.json", "spell-righteous-might.json", "spell-secret-chest.json",
+            "spell-seeming.json", "spell-shadow-evocation.json", "spell-shadow-walk.json", "spell-slay-living.json",
+            "spell-song-of-discord.json", "spell-suggestion-mass.json", "spell-summon-monster-v.json", "spell-summon-natures-ally-v.json",
+            "spell-symbol-of-pain.json", "spell-symbol-of-sleep.json", "spell-telekinesis.json", "spell-telepathic-bond.json",
+            "spell-teleport.json", "spell-transmute-mud-to-rock.json", "spell-transmute-rock-to-mud.json", "spell-tree-stride.json",
+            "spell-true-seeing.json", "spell-unhallow.json", "spell-wall-of-force.json", "spell-wall-of-stone.json",
+            "spell-wall-of-thorns.json", "spell-waves-of-fatigue.json", "spell-command-greater.json"
         ]
     };
 
