@@ -2,6 +2,7 @@
  * Compendium Loader
  * Loads JSON files from packs/ directories into Foundry compendiums
  */
+import { parseSpellFields, applyParsedSpellFields } from "./spell-description-parser.mjs";
 
 export class CompendiumLoader {
     /**
@@ -131,52 +132,74 @@ export class CompendiumLoader {
         ],
         "thirdera.thirdera_spells": [
             "spell-acid-arrow.json", "spell-acid-splash.json", "spell-aid.json", "spell-alarm.json",
-            "spell-align-weapon.json", "spell-alter-self.json", "spell-animal-messenger.json", "spell-animate-rope.json",
-            "spell-arcane-lock.json", "spell-arcane-mark.json", "spell-augury.json", "spell-bane.json",
-            "spell-barkskin.json", "spell-bears-endurance.json", "spell-bless.json", "spell-bless-water.json",
-            "spell-bless-weapon.json", "spell-blindness-deafness.json", "spell-blur.json", "spell-bulls-strength.json",
-            "spell-burning-hands.json", "spell-calm-animals.json", "spell-calm-emotions.json", "spell-cause-fear.json",
-            "spell-cats-grace.json", "spell-charm-animal.json", "spell-charm-person.json", "spell-chill-touch.json",
-            "spell-color-spray.json", "spell-command.json", "spell-command-undead.json", "spell-comprehend-languages.json",
-            "spell-confusion-lesser.json", "spell-consecrate.json", "spell-continual-flame.json", "spell-create-water.json",
-            "spell-cure-light-wounds.json", "spell-cure-moderate-wounds.json", "spell-curse-water.json", "spell-dancing-lights.json",
-            "spell-darkness.json", "spell-darkvision.json", "spell-daze.json", "spell-daze-monster.json",
-            "spell-death-knell.json", "spell-deathwatch.json", "spell-delay-poison.json", "spell-desecrate.json",
+            "spell-align-weapon.json", "spell-alter-self.json", "spell-animal-messenger.json", "spell-animate-dead.json",
+            "spell-animate-rope.json", "spell-arcane-lock.json", "spell-arcane-mark.json", "spell-arcane-sight.json",
+            "spell-augury.json", "spell-bane.json", "spell-barkskin.json", "spell-bears-endurance.json",
+            "spell-bestow-curse.json", "spell-bless.json", "spell-bless-water.json", "spell-bless-weapon.json",
+            "spell-blindness-deafness.json", "spell-blink.json", "spell-blur.json", "spell-bulls-strength.json",
+            "spell-burning-hands.json", "spell-call-lightning.json", "spell-calm-animals.json", "spell-calm-emotions.json",
+            "spell-cats-grace.json", "spell-cause-fear.json", "spell-charm-animal.json", "spell-charm-monster.json",
+            "spell-charm-person.json", "spell-chill-touch.json", "spell-clairaudience-clairvoyance.json", "spell-color-spray.json",
+            "spell-command.json", "spell-command-plants.json", "spell-command-undead.json", "spell-comprehend-languages.json",
+            "spell-confusion.json", "spell-confusion-lesser.json", "spell-consecrate.json", "spell-contagion.json",
+            "spell-continual-flame.json", "spell-create-food-and-water.json", "spell-create-water.json", "spell-crushing-despair.json",
+            "spell-cure-light-wounds.json", "spell-cure-moderate-wounds.json", "spell-cure-serious-wounds.json", "spell-curse-water.json",
+            "spell-dancing-lights.json", "spell-darkness.json", "spell-darkvision.json", "spell-daylight.json",
+            "spell-daze.json", "spell-daze-monster.json", "spell-death-knell.json", "spell-deathwatch.json",
+            "spell-deeper-darkness.json", "spell-deep-slumber.json", "spell-delay-poison.json", "spell-desecrate.json",
             "spell-detect-animals-or-plants.json", "spell-detect-chaos.json", "spell-detect-evil.json", "spell-detect-good.json",
             "spell-detect-law.json", "spell-detect-magic.json", "spell-detect-poison.json", "spell-detect-secret-doors.json",
-            "spell-detect-snares-and-pits.json", "spell-detect-thoughts.json", "spell-detect-undead.json", "spell-disguise-self.json",
-            "spell-disrupt-undead.json", "spell-divine-favor.json", "spell-doom.json", "spell-eagles-splendor.json",
-            "spell-endure-elements.json", "spell-enlarge-person.json", "spell-entangle.json", "spell-enthrall.json",
-            "spell-entropic-shield.json", "spell-erase.json", "spell-expeditious-retreat.json", "spell-faerie-fire.json",
-            "spell-false-life.json", "spell-feather-fall.json", "spell-find-traps.json", "spell-fireball.json",
-            "spell-flaming-sphere.json", "spell-flare.json", "spell-floating-disk.json", "spell-fog-cloud.json",
-            "spell-foxs-cunning.json", "spell-gentle-repose.json", "spell-ghost-sound.json", "spell-ghoul-touch.json",
-            "spell-glitterdust.json", "spell-goodberry.json", "spell-grease.json", "spell-gust-of-wind.json",
-            "spell-heal.json", "spell-heat-metal.json", "spell-hide-from-animals.json", "spell-hide-from-undead.json",
-            "spell-hideous-laughter.json", "spell-hold-person.json", "spell-hold-portal.json", "spell-hypnotic-pattern.json",
-            "spell-hypnotism.json", "spell-identify.json", "spell-inflict-light-wounds.json", "spell-inflict-moderate-wounds.json",
-            "spell-invisibility.json", "spell-jump.json", "spell-knock.json", "spell-levitate.json",
+            "spell-detect-snares-and-pits.json", "spell-detect-thoughts.json", "spell-detect-undead.json", "spell-diminish-plants.json",
+            "spell-discern-lies.json", "spell-disguise-self.json", "spell-dispel-magic.json", "spell-displacement.json",
+            "spell-disrupt-undead.json", "spell-divine-favor.json", "spell-dominate-animal.json", "spell-doom.json",
+            "spell-eagles-splendor.json", "spell-endure-elements.json", "spell-enlarge-person.json", "spell-entangle.json",
+            "spell-enthrall.json", "spell-entropic-shield.json", "spell-erase.json", "spell-expeditious-retreat.json",
+            "spell-explosive-runes.json", "spell-faerie-fire.json", "spell-false-life.json", "spell-fear.json",
+            "spell-feather-fall.json", "spell-find-traps.json", "spell-fireball.json", "spell-flame-arrow.json",
+            "spell-flaming-sphere.json", "spell-flare.json", "spell-floating-disk.json", "spell-fly.json",
+            "spell-fog-cloud.json", "spell-foxs-cunning.json", "spell-gaseous-form.json", "spell-geas-lesser.json",
+            "spell-gentle-repose.json", "spell-ghost-sound.json", "spell-ghoul-touch.json", "spell-glibness.json",
+            "spell-glitterdust.json", "spell-glyph-of-warding.json", "spell-goodberry.json", "spell-good-hope.json",
+            "spell-grease.json", "spell-gust-of-wind.json", "spell-halt-undead.json", "spell-haste.json",
+            "spell-heal.json", "spell-heal-mount.json", "spell-heat-metal.json", "spell-helping-hand.json",
+            "spell-heroism.json", "spell-hide-from-animals.json", "spell-hide-from-undead.json", "spell-hideous-laughter.json", "spell-hold-animal.json",
+            "spell-hold-person.json", "spell-hold-portal.json", "spell-hypnotic-pattern.json", "spell-hypnotism.json",
+            "spell-identify.json", "spell-illusory-script.json", "spell-inflict-light-wounds.json", "spell-inflict-moderate-wounds.json",
+            "spell-inflict-serious-wounds.json", "spell-invisibility.json", "spell-invisibility-purge.json", "spell-invisibility-sphere.json",
+            "spell-jump.json", "spell-keen-edge.json", "spell-knock.json", "spell-levitate.json",
             "spell-light.json", "spell-lightning-bolt.json", "spell-locate-object.json", "spell-longstrider.json",
-            "spell-mage-armor.json", "spell-mage-hand.json", "spell-magic-aura.json", "spell-magic-fang.json",
-            "spell-magic-missile.json", "spell-magic-mouth.json", "spell-magic-stone.json", "spell-magic-weapon.json",
-            "spell-make-whole.json", "spell-mending.json", "spell-message.json", "spell-minor-image.json",
-            "spell-mirror-image.json", "spell-misdirection.json", "spell-mount.json", "spell-obscure-object.json",
+            "spell-mage-armor.json", "spell-mage-hand.json", "spell-magic-aura.json", "spell-magic-circle-against-chaos.json",
+            "spell-magic-circle-against-evil.json", "spell-magic-circle-against-good.json", "spell-magic-circle-against-law.json",
+            "spell-magic-fang-greater.json", "spell-magic-fang.json", "spell-magic-missile.json", "spell-magic-mouth.json",
+            "spell-magic-stone.json", "spell-magic-vestment.json", "spell-magic-weapon-greater.json", "spell-magic-weapon.json",
+            "spell-major-image.json", "spell-make-whole.json", "spell-meld-into-stone.json", "spell-mending.json",
+            "spell-message.json", "spell-minor-image.json", "spell-mirror-image.json", "spell-misdirection.json",
+            "spell-mount.json", "spell-neutralize-poison.json", "spell-nondetection.json", "spell-obscure-object.json",
             "spell-obscuring-mist.json", "spell-open-close.json", "spell-owls-wisdom.json", "spell-pass-without-trace.json",
-            "spell-phantom-trap.json", "spell-prestidigitation.json", "spell-produce-flame.json", "spell-protection-from-arrows.json",
-            "spell-protection-from-chaos.json", "spell-protection-from-evil.json", "spell-protection-from-good.json",
-            "spell-protection-from-law.json", "spell-pyrotechnics.json", "spell-ray-of-enfeeblement.json", "spell-ray-of-frost.json",
-            "spell-read-magic.json", "spell-reduce-person.json", "spell-remove-fear.json", "spell-remove-paralysis.json",
-            "spell-resistance.json", "spell-resist-energy.json", "spell-restoration-lesser.json", "spell-rope-trick.json",
-            "spell-sanctuary.json", "spell-scare.json", "spell-scorching-ray.json", "spell-see-invisibility.json",
-            "spell-shatter.json", "spell-shield.json", "spell-shield-of-faith.json", "spell-shield-other.json",
-            "spell-shillelagh.json", "spell-shocking-grasp.json", "spell-silence.json", "spell-silent-image.json",
-            "spell-sleep.json", "spell-soften-earth-and-stone.json", "spell-sound-burst.json", "spell-speak-with-animals.json",
-            "spell-spectral-hand.json", "spell-spider-climb.json", "spell-spike-growth.json", "spell-spiritual-weapon.json",
-            "spell-status.json", "spell-summon-monster-i.json", "spell-summon-monster-ii.json", "spell-summon-natures-ally-i.json",
-            "spell-summon-natures-ally-ii.json", "spell-summon-swarm.json", "spell-touch-of-fatigue.json", "spell-touch-of-idiocy.json",
-            "spell-true-strike.json", "spell-undetectable-alignment.json", "spell-unseen-servant.json", "spell-ventriloquism.json",
-            "spell-virtue.json", "spell-web.json", "spell-whispering-wind.json", "spell-wind-wall.json",
-            "spell-zone-of-truth.json"
+            "spell-phantom-steed.json", "spell-phantom-trap.json", "spell-plant-growth.json", "spell-poison.json",
+            "spell-prayer.json", "spell-prestidigitation.json", "spell-produce-flame.json", "spell-protection-from-arrows.json",
+            "spell-protection-from-chaos.json", "spell-protection-from-energy.json", "spell-protection-from-evil.json",
+            "spell-protection-from-good.json", "spell-protection-from-law.json", "spell-pyrotechnics.json",
+            "spell-quench.json", "spell-rage.json", "spell-ray-of-enfeeblement.json", "spell-ray-of-exhaustion.json",
+            "spell-ray-of-frost.json", "spell-read-magic.json", "spell-reduce-animal.json", "spell-reduce-person.json",
+            "spell-remove-blindness-deafness.json", "spell-remove-curse.json", "spell-remove-disease.json", "spell-remove-fear.json",
+            "spell-remove-paralysis.json", "spell-repel-vermin.json", "spell-resistance.json", "spell-resist-energy.json",
+            "spell-restoration-lesser.json", "spell-rope-trick.json", "spell-sanctuary.json", "spell-scare.json",
+            "spell-scorching-ray.json", "spell-scrying.json", "spell-sculpt-sound.json", "spell-searing-light.json",
+            "spell-secret-page.json", "spell-see-invisibility.json", "spell-sepia-snake-sigil.json", "spell-shatter.json",
+            "spell-shield.json", "spell-shield-of-faith.json", "spell-shield-other.json", "spell-shillelagh.json",
+            "spell-shocking-grasp.json", "spell-shrink-item.json", "spell-silence.json", "spell-silent-image.json",
+            "spell-sleep.json", "spell-sleet-storm.json", "spell-slow.json", "spell-snare.json",
+            "spell-soften-earth-and-stone.json", "spell-sound-burst.json", "spell-speak-with-animals.json", "spell-speak-with-dead.json",
+            "spell-speak-with-plants.json", "spell-spectral-hand.json", "spell-spider-climb.json", "spell-spike-growth.json",
+            "spell-spiritual-weapon.json", "spell-status.json", "spell-stinking-cloud.json", "spell-stone-shape.json",
+            "spell-suggestion.json", "spell-summon-monster-i.json", "spell-summon-monster-ii.json", "spell-summon-monster-iii.json",
+            "spell-summon-natures-ally-i.json", "spell-summon-natures-ally-ii.json", "spell-summon-natures-ally-iii.json",
+            "spell-summon-swarm.json", "spell-tiny-hut.json", "spell-tongues.json", "spell-touch-of-fatigue.json",
+            "spell-touch-of-idiocy.json", "spell-tree-shape.json", "spell-true-strike.json", "spell-undetectable-alignment.json",
+            "spell-unseen-servant.json", "spell-vampiric-touch.json", "spell-ventriloquism.json", "spell-virtue.json",
+            "spell-water-breathing.json", "spell-water-walk.json", "spell-web.json", "spell-whispering-wind.json",
+            "spell-wind-wall.json", "spell-zone-of-truth.json"
         ]
     };
 
@@ -257,6 +280,22 @@ export class CompendiumLoader {
                 // Foundry requires 16-character alphanumeric IDs, but our JSON files have IDs like "race-dwarf"
                 if (jsonData._id && !jsonData._id.match(/^[a-zA-Z0-9]{16}$/)) {
                     delete jsonData._id;
+                }
+                
+                // Spells: populate Range, Target, Duration, Saving Throw from description when blank or "See text"
+                if (jsonData.type === "spell" && jsonData.system) {
+                    const current = {
+                        range: jsonData.system.range,
+                        target: jsonData.system.target,
+                        duration: jsonData.system.duration,
+                        savingThrow: jsonData.system.savingThrow
+                    };
+                    const parsed = parseSpellFields(
+                        jsonData.system.description || "",
+                        jsonData.name,
+                        current
+                    );
+                    applyParsedSpellFields(jsonData.system, parsed);
                 }
                 
                 documents.push(jsonData);
