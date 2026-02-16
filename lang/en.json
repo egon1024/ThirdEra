@@ -38,7 +38,10 @@
             "feat": "Feat",
             "skill": "Skill",
             "race": "Race",
-            "class": "Class"
+            "class": "Class",
+            "feature": "Class Feature",
+            "domain": "Domain",
+            "school": "School of Magic"
         },
         "ActorTypes": {
             "character": "Character",
@@ -156,7 +159,8 @@
             "race": "Race",
             "class": "Class",
             "feature": "Class Feature",
-            "domain": "Domain"
+            "domain": "Domain",
+            "school": "School of Magic"
         },
         "Actor": {
             "character": "Character",

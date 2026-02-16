@@ -1,0 +1,12 @@
+{
+  "name": "Transmutation",
+  "type": "school",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Transmutation spells change the properties of some creature, thing, or condition.</p>",
+    "key": "transmutation"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

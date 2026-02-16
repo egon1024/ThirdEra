@@ -1,0 +1,12 @@
+{
+  "name": "Enchantment",
+  "type": "school",
+  "img": "icons/svg/light.svg",
+  "system": {
+    "description": "<p>Enchantment spells affect the minds of others, influencing or controlling their behavior. All enchantments are mind-affecting spells.</p>",
+    "key": "enchantment"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

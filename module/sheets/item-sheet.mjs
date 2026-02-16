@@ -38,7 +38,15 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addDomainSpell: ThirdEraItemSheet.#onAddDomainSpell,
             removeDomainSpell: ThirdEraItemSheet.#onRemoveDomainSpell,
             removeLevelByClass: ThirdEraItemSheet.#onRemoveLevelByClass,
-            removeLevelByDomain: ThirdEraItemSheet.#onRemoveLevelByDomain
+            removeLevelByDomain: ThirdEraItemSheet.#onRemoveLevelByDomain,
+            clearSchool: ThirdEraItemSheet.#onClearSchool,
+            addSchoolDescriptor: ThirdEraItemSheet.#onAddSchoolDescriptor,
+            removeSchoolDescriptor: ThirdEraItemSheet.#onRemoveSchoolDescriptor,
+            removeOppositionSchool: ThirdEraItemSheet.#onRemoveOppositionSchool,
+            addSubschool: ThirdEraItemSheet.#onAddSubschool,
+            removeSubschool: ThirdEraItemSheet.#onRemoveSubschool,
+            addDescriptorTag: ThirdEraItemSheet.#onAddDescriptorTag,
+            removeDescriptorTag: ThirdEraItemSheet.#onRemoveDescriptorTag
         }
     };
 
@@ -62,7 +70,28 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         // Dynamically set the template based on item type
         parts.sheet.template = `systems/thirdera/templates/item/item-${this.document.type}-sheet.hbs`;
         parts.sheet.scrollable = [".sheet-body .tab"];
+        // Wire form so change/submit on inputs and selects (e.g. spell subschool) trigger document update
+        parts.sheet.forms = { "form": this.options.form };
         return parts;
+    }
+
+    /** @override */
+    _attachPartListeners(partId, htmlElement, options) {
+        super._attachPartListeners(partId, htmlElement, options);
+        // Sync subschool select to document on every render (fixes value disappearing after panel refresh).
+        // Use this.element: for root parts Foundry moves htmlElement's children into the prior DOM node,
+        // so htmlElement is detached and has no children; the live form is this.element.
+        if (partId === "sheet" && this.document?.type === "spell") {
+            const formInDom = this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form");
+            const sel = formInDom?.querySelector?.('select[name="system.schoolSubschool"]');
+            const docVal = this.document.system?.schoolSubschool ?? "";
+            if (sel) sel.value = docVal;
+        }
+    }
+
+    /** @override */
+    _onChangeForm(formConfig, event) {
+        return super._onChangeForm(formConfig, event);
     }
 
     /** @override */
@@ -141,6 +170,43 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
         }
 
+        // For spells with a school: look up the school to populate subschool and descriptor options
+        let schoolSubschoolOptions = [];
+        let schoolDescriptorOptions = [];
+        let schoolDescriptorOptionsForAdd = [];
+        if (item.type === "spell" && systemData.schoolKey) {
+            const school = await ThirdEraItemSheet.#findSchoolByKey(systemData.schoolKey);
+            if (school) {
+                const subschools = school.system?.subschools ?? [];
+                const descriptorTags = school.system?.descriptorTags ?? [];
+                schoolSubschoolOptions = [...new Set(subschools)].filter(Boolean).sort();
+                schoolDescriptorOptions = [...new Set(descriptorTags)].filter(Boolean).sort();
+                // Include current values if not in school list (preserves legacy/custom)
+                const currentSub = systemData.schoolSubschool?.trim();
+                if (currentSub && !schoolSubschoolOptions.includes(currentSub)) {
+                    schoolSubschoolOptions.push(currentSub);
+                    schoolSubschoolOptions.sort();
+                }
+                const currentDescs = systemData.schoolDescriptors ?? [];
+                for (const d of currentDescs) {
+                    const t = d?.trim();
+                    if (t && !schoolDescriptorOptions.includes(t)) {
+                        schoolDescriptorOptions.push(t);
+                    }
+                }
+                schoolDescriptorOptions.sort();
+                // Options available to add (exclude already selected)
+                const selected = new Set(currentDescs.map((d) => d?.trim()).filter(Boolean));
+                schoolDescriptorOptionsForAdd = schoolDescriptorOptions.filter((opt) => !selected.has(opt));
+            }
+            // Always include current subschool so the select is rendered and can show it (e.g. when school item not found)
+            const currentSub = systemData.schoolSubschool?.trim();
+            if (currentSub && !schoolSubschoolOptions.includes(currentSub)) {
+                schoolSubschoolOptions.push(currentSub);
+                schoolSubschoolOptions.sort();
+            }
+        }
+
         return {
             ...context,
             item,
@@ -150,7 +216,13 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             tabs: this.tabGroups,
             editable: this.isEditable,
             isOwned: !!item.parent,
-            spellsPerDayTable
+            spellsPerDayTable,
+            schoolSubschoolOptions,
+            schoolDescriptorOptions,
+            schoolDescriptorOptionsForAdd,
+            hasSchoolSubschoolOptions: schoolSubschoolOptions.length > 0,
+            hasSchoolDescriptorOptionsForAdd: schoolDescriptorOptionsForAdd.length > 0,
+            hasSchoolDescriptorsSection: schoolDescriptorOptions.length > 0 || (systemData.schoolDescriptors ?? []).length > 0
         };
     }
 
@@ -329,12 +401,33 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             });
         });
 
-        // Enable drag-and-drop for class, race, and spell item sheets
-        if (this.document.type === "class" || this.document.type === "race" || this.document.type === "spell") {
+        // Enable drag-and-drop for class, race, spell, and school item sheets
+        if (this.document.type === "class" || this.document.type === "race" || this.document.type === "spell" || this.document.type === "school") {
             new DragDrop.implementation({
                 permissions: { drop: () => this.isEditable },
                 callbacks: { drop: this._onDrop.bind(this) }
             }).bind(this.element);
+        }
+
+        // Spell: applying a selection from the "Add descriptor" dropdown adds the descriptor (no need to click +)
+        if (this.document.type === "spell") {
+            const descriptorAddSelect = this.element.querySelector(".school-descriptor-add-select");
+            if (descriptorAddSelect) {
+                descriptorAddSelect.addEventListener("change", async (event) => {
+                    event.stopPropagation(); // prevent form change handler from submitting and overwriting descriptors
+                    const value = event.target.value?.trim();
+                    if (!value) return;
+                    const current = [...(this.document.system.schoolDescriptors ?? [])];
+                    if (current.includes(value)) {
+                        event.target.value = "";
+                        return;
+                    }
+                    current.push(value);
+                    current.sort();
+                    await this.document.update({ "system.schoolDescriptors": current });
+                    event.target.value = "";
+                });
+            }
         }
 
         // Toggle container fields visibility for equipment items
@@ -368,6 +461,41 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (data.type !== "Item") return;
         const droppedItem = await Item.implementation.fromDropData(data);
         if (!droppedItem) return;
+
+        // Handle school drops on spell or school sheets
+        if (droppedItem.type === "school" && (this.document.type === "spell" || this.document.type === "school")) {
+            const tab = this.element.querySelector(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+
+            if (this.document.type === "spell") {
+                const schoolKey = droppedItem.system?.key?.trim() || droppedItem.name.toLowerCase().replace(/\s+/g, "");
+                const schoolName = droppedItem.name;
+                await this.document.update({
+                    "system.schoolKey": schoolKey,
+                    "system.schoolName": schoolName,
+                    "system.schoolSubschool": "",
+                    "system.schoolDescriptors": []
+                });
+                return;
+            }
+            if (this.document.type === "school") {
+                if (droppedItem.id === this.document.id) {
+                    ui.notifications.info("A school cannot be its own opposition school.");
+                    return;
+                }
+                const schoolKey = droppedItem.system?.key?.trim() || droppedItem.name.toLowerCase().replace(/\s+/g, "");
+                const schoolName = droppedItem.name;
+                const current = [...(this.document.system.oppositionSchools || [])];
+                if (current.some(e => e.schoolKey === schoolKey)) {
+                    ui.notifications.info(`${schoolName} is already in the opposition schools list.`);
+                    return;
+                }
+                current.push({ schoolKey, schoolName });
+                current.sort((a, b) => a.schoolName.localeCompare(b.schoolName));
+                await this.document.update({ "system.oppositionSchools": current });
+                return;
+            }
+        }
 
         // Handle class and domain drops on spell sheets (level by class / level by domain)
         if (this.document.type === "spell") {
@@ -569,6 +697,21 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
 
         return data;
+    }
+
+    /** @override */
+    async _processSubmitData(event, form, submitData, options = {}) {
+        await super._processSubmitData(event, form, submitData, options);
+        // After a macrotask, force the subschool select to show the document value (wins over any stale re-render)
+        if (this.rendered && this.document?.type === "spell") {
+            const doc = this.document;
+            const value = doc.system?.schoolSubschool ?? "";
+            setTimeout(() => {
+                if (!this.rendered || this.document !== doc) return;
+                const sel = this.element?.querySelector('select[name="system.schoolSubschool"]');
+                if (sel) sel.value = value;
+            }, 0);
+        }
     }
 
     /* -------------------------------------------- */
@@ -805,5 +948,137 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const current = [...(this.item.system.levelsByDomain || [])];
         current.splice(index, 1);
         await this.item.update({ "system.levelsByDomain": current });
+    }
+
+    /**
+     * Find a school item by its system key. Searches world items first, then thirdera_schools compendium.
+     * @param {string} schoolKey   The school's system key (e.g. "evocation", "conjuration")
+     * @returns {Promise<Item|null>} The school Item document, or null if not found
+     */
+    static async #findSchoolByKey(schoolKey) {
+        if (!schoolKey || typeof schoolKey !== "string") return null;
+        const key = schoolKey.trim().toLowerCase();
+        if (!key) return null;
+
+        // Search world items first
+        const worldSchool = game.items?.find(
+            (i) => i.type === "school" && (i.system?.key?.trim().toLowerCase() === key || i.name?.toLowerCase().replace(/\s+/g, "") === key)
+        );
+        if (worldSchool) return worldSchool;
+
+        // Search thirdera_schools compendium
+        const pack = game.packs?.get("thirdera.thirdera_schools");
+        if (!pack) return null;
+        const docs = await pack.getDocuments();
+        return docs.find(
+            (d) => d.type === "school" && (d.system?.key?.trim().toLowerCase() === key || d.name?.toLowerCase().replace(/\s+/g, "") === key)
+        ) ?? null;
+    }
+
+    /**
+     * Clear the spell's school assignment
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onClearSchool(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        await this.item.update({
+            "system.schoolKey": "",
+            "system.schoolName": "",
+            "system.schoolSubschool": "",
+            "system.schoolDescriptors": []
+        });
+    }
+
+    /**
+     * Add a descriptor to the spell's schoolDescriptors.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onAddSchoolDescriptor(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const select = this.element.querySelector(".school-descriptor-add-select");
+        const value = select?.value?.trim();
+        if (!value) return;
+        const current = [...(this.item.system.schoolDescriptors ?? [])];
+        if (current.includes(value)) return;
+        current.push(value);
+        current.sort();
+        await this.item.update({ "system.schoolDescriptors": current });
+        if (select) select.value = "";
+    }
+
+    /**
+     * Remove a descriptor from the spell's schoolDescriptors.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveSchoolDescriptor(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const index = parseInt(target.dataset.descriptorIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.schoolDescriptors ?? [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.schoolDescriptors": current });
+    }
+
+    static async #onRemoveOppositionSchool(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const index = parseInt(target.dataset.oppositionIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.oppositionSchools || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.oppositionSchools": current });
+    }
+
+    static async #onAddSubschool(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const current = [...(this.item.system.subschools || [])];
+        current.push("");
+        await this.item.update({ "system.subschools": current });
+    }
+
+    static async #onRemoveSubschool(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const index = parseInt(target.dataset.subschoolIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.subschools || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.subschools": current });
+    }
+
+    static async #onAddDescriptorTag(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const current = [...(this.item.system.descriptorTags || [])];
+        current.push("");
+        await this.item.update({ "system.descriptorTags": current });
+    }
+
+    static async #onRemoveDescriptorTag(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+
+        const index = parseInt(target.dataset.descriptorIndex);
+        if (isNaN(index)) return;
+        const current = [...(this.item.system.descriptorTags || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.descriptorTags": current });
     }
 }

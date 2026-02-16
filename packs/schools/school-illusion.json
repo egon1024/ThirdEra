@@ -1,0 +1,12 @@
+{
+  "name": "Illusion",
+  "type": "school",
+  "img": "icons/svg/mask.svg",
+  "system": {
+    "description": "<p>Illusion spells deceive the senses or minds of others. They cause people to see things that are not there, not see things that are there, hear phantom noises, or remember things that never happened.</p>",
+    "key": "illusion"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

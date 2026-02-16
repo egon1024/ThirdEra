@@ -25,7 +25,15 @@ export class SpellData extends foundry.abstract.TypeDataModel {
                 domainName: new StringField({ required: true, blank: true, label: "Domain Name (display)" }),
                 level: new NumberField({ required: true, integer: true, min: 1, max: 9, label: "Spell Level" })
             }), { initial: [], label: "Level by Domain" }),
-            school: new StringField({ required: true, blank: true, initial: "", label: "School of Magic" }),
+
+            /** School key referencing a School item. Used for specialization, prohibited schools, etc. */
+            schoolKey: new StringField({ required: true, blank: true, initial: "", label: "School Key" }),
+            /** Display name for the school (stored when school item is assigned). */
+            schoolName: new StringField({ required: true, blank: true, initial: "", label: "School Name (display)" }),
+            /** Optional subschool, e.g. "(Healing)" for Conjuration (Healing), "Figment" for Illusion. */
+            schoolSubschool: new StringField({ required: true, blank: true, initial: "", label: "School Subschool" }),
+            /** Descriptor tags, e.g. [Fire], [Mind-Affecting]. Multiple allowed. */
+            schoolDescriptors: new ArrayField(new StringField({ required: true, blank: true, label: "Descriptor" }), { initial: [], label: "School Descriptors" }),
 
             components: new SchemaField({
                 verbal: new StringField({ required: true, blank: false, initial: "false", label: "Verbal" }),
@@ -63,7 +71,88 @@ export class SpellData extends foundry.abstract.TypeDataModel {
                 }
             }
         }
+        // Backfill schoolName from CONFIG when schoolKey exists but schoolName is empty
+        if (source.schoolKey && !source.schoolName) {
+            const schools = CONFIG.THIRDERA?.schools || {};
+            source.schoolName = schools[source.schoolKey] ?? source.schoolKey;
+        }
+        // Migrate legacy school string to schoolKey / schoolSubschool / schoolDescriptors
+        if (source.school && typeof source.school === "string" && !source.schoolKey) {
+            const parsed = SpellData.#parseLegacySchoolString(source.school);
+            source.schoolKey = parsed.schoolKey;
+            source.schoolName = parsed.schoolName;
+            source.schoolSubschool = parsed.schoolSubschool;
+            source.schoolDescriptors = parsed.schoolDescriptors;
+            delete source.school;
+        }
+        // Migrate legacy schoolDescriptor to schoolSubschool / schoolDescriptors
+        if (source.schoolDescriptor !== undefined && source.schoolDescriptor !== null) {
+            const parsed = SpellData.#parseLegacyDescriptorString(String(source.schoolDescriptor).trim());
+            if (!source.schoolSubschool) source.schoolSubschool = parsed.schoolSubschool;
+            if (!source.schoolDescriptors?.length && parsed.schoolDescriptors?.length) {
+                source.schoolDescriptors = parsed.schoolDescriptors;
+            }
+            delete source.schoolDescriptor;
+        }
         return super.migrateData(source);
+    }
+
+    /**
+     * Parse a legacy school string like "Evocation [Fire]" or "Conjuration (Healing) [Good]".
+     * @param {string} s
+     * @returns {{ schoolKey: string, schoolName: string, schoolSubschool: string, schoolDescriptors: string[] }}
+     */
+    static #parseLegacySchoolString(s) {
+        const result = { schoolKey: "", schoolName: "", schoolSubschool: "", schoolDescriptors: [] };
+        const trimmed = s.trim();
+        if (!trimmed) return result;
+        // Extract subschool (parentheses) and descriptors (brackets)
+        const subMatch = trimmed.match(/\(([^)]+)\)/g);
+        const descMatch = trimmed.match(/\[([^\]]+)\]/g);
+        let base = trimmed;
+        if (subMatch) base = base.replace(subMatch.join(" "), "").trim();
+        if (descMatch) base = base.replace(descMatch.map((m) => m).join(" "), "").trim();
+        base = base.replace(/\s+/g, " ").trim();
+        result.schoolKey = base.toLowerCase().replace(/\s+/g, "");
+        result.schoolName = base;
+        if (subMatch?.length) result.schoolSubschool = subMatch[0]; // e.g. "(Healing)"
+        if (descMatch?.length) result.schoolDescriptors = descMatch; // e.g. ["[Fire]", "[Good]"]
+        return result;
+    }
+
+    /**
+     * Parse a legacy schoolDescriptor string into subschool and descriptors.
+     * @param {string} s
+     * @returns {{ schoolSubschool: string, schoolDescriptors: string[] }}
+     */
+    static #parseLegacyDescriptorString(s) {
+        const result = { schoolSubschool: "", schoolDescriptors: [] };
+        if (!s) return result;
+        const subMatch = s.match(/\(([^)]+)\)/g);
+        const descMatch = s.match(/\[([^\]]+)\]/g);
+        if (subMatch?.length) result.schoolSubschool = subMatch[0];
+        if (descMatch?.length) result.schoolDescriptors = descMatch;
+        // If no brackets/parens, treat as single descriptor (legacy free-text)
+        if (!result.schoolSubschool && !result.schoolDescriptors.length && s) {
+            result.schoolDescriptors = [s];
+        }
+        return result;
+    }
+
+    /**
+     * Format the full school display string (e.g. "Evocation (Creation) [Fire] [Mind-Affecting]").
+     * @param {object} system  Spell system data
+     * @returns {string}
+     */
+    static formatSchoolDisplay(system) {
+        if (!system?.schoolName) return "";
+        let out = system.schoolName;
+        if (system.schoolSubschool?.trim()) out += ` ${system.schoolSubschool}`;
+        const descs = system.schoolDescriptors ?? [];
+        for (const d of descs) {
+            if (d?.trim()) out += ` ${d}`;
+        }
+        return out.trim();
     }
 
     /**

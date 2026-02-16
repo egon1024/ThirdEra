@@ -16,6 +16,7 @@ import { RaceData } from "./module/data/item-race.mjs";
 import { ClassData } from "./module/data/item-class.mjs";
 import { FeatureData } from "./module/data/item-feature.mjs";
 import { DomainData } from "./module/data/item-domain.mjs";
+import { SchoolData } from "./module/data/item-school.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -200,6 +201,17 @@ Hooks.once("init", async function () {
             druid: "Druid",
             paladin: "Paladin",
             ranger: "Ranger"
+        },
+        /** SRD schools of magic (fallback when school items not loaded). */
+        schools: {
+            abjuration: "Abjuration",
+            conjuration: "Conjuration",
+            divination: "Divination",
+            enchantment: "Enchantment",
+            evocation: "Evocation",
+            illusion: "Illusion",
+            necromancy: "Necromancy",
+            transmutation: "Transmutation"
         }
     };
 
@@ -263,7 +275,8 @@ Hooks.once("init", async function () {
         skill: SkillData,
         race: RaceData,
         class: ClassData,
-        domain: DomainData
+        domain: DomainData,
+        school: SchoolData
     };
 
     // Register item type labels for the creation menu
@@ -277,7 +290,8 @@ Hooks.once("init", async function () {
         skill: "THIRDERA.TYPES.Item.skill",
         race: "THIRDERA.TYPES.Item.race",
         class: "THIRDERA.TYPES.Item.class",
-        domain: "THIRDERA.TYPES.Item.domain"
+        domain: "THIRDERA.TYPES.Item.domain",
+        school: "THIRDERA.TYPES.Item.school"
     };
 
     // Register sheet application classes

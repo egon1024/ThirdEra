@@ -116,6 +116,11 @@ export class CompendiumLoader {
             "equipment-tindertwig.json", "equipment-torch.json", "equipment-trail-rations.json",
             "equipment-travelers-outfit.json", "equipment-vial.json", "equipment-waterskin.json"
         ],
+        "thirdera.thirdera_schools": [
+            "school-abjuration.json", "school-conjuration.json", "school-divination.json",
+            "school-enchantment.json", "school-evocation.json", "school-illusion.json",
+            "school-necromancy.json", "school-transmutation.json"
+        ],
         "thirdera.thirdera_spells": [
             "spell-magic-missile.json", "spell-cure-light-wounds.json", "spell-fireball.json",
             "spell-lightning-bolt.json", "spell-cure-moderate-wounds.json", "spell-shield.json",

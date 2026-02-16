@@ -2389,4 +2389,164 @@
   color: var(--color-hover);
   opacity: 1;
 }
+
+/* Spell School Drop Zone */
+.thirdera .spell-school-drop {
+  min-height: 28px;
+  padding: 6px 8px;
+  background: var(--color-bg-input);
+  border: 1px dashed var(--color-border-input);
+  border-radius: 3px;
+}
+
+.thirdera .spell-school-assigned {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thirdera .spell-school-name {
+  flex: 1;
+}
+
+.thirdera .spell-school-clear {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.thirdera .spell-school-clear:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+.thirdera .spell-school-section .spell-subschool-row,
+.thirdera .spell-school-section .spell-descriptors-row {
+  margin-top: 6px;
+}
+
+.thirdera .spell-descriptors-list {
+  margin-bottom: 6px;
+}
+
+.thirdera .spell-descriptor-value {
+  flex: 1;
+  font-size: var(--font-size-body);
+}
+
+.thirdera .spell-descriptor-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.thirdera .spell-descriptor-add .school-descriptor-add-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.thirdera .spell-descriptor-add-btn {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.thirdera .spell-descriptor-add-btn:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+/* School sheet: Opposition Schools, Subschools, Descriptor Tags */
+.thirdera .school-drop-zone {
+  min-height: 36px;
+  padding: 8px;
+  margin: 8px 0;
+  background: var(--color-bg-input);
+  border: 1px dashed var(--color-border-input);
+  border-radius: 3px;
+}
+
+.thirdera .opposition-school-header {
+  font-size: var(--font-size-note);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  padding: 2px 0 4px;
+  border-bottom: 1px solid var(--color-border-divider);
+  margin-bottom: 4px;
+}
+
+.thirdera .opposition-school-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.thirdera .opposition-school-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .opposition-school-entry:last-child {
+  border-bottom: none;
+}
+
+.thirdera .opposition-school-name {
+  flex: 1;
+}
+
+.thirdera .opposition-school-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.thirdera .opposition-school-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+.thirdera .string-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.thirdera .string-list-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .string-list-entry input {
+  flex: 1;
+  min-width: 0;
+}
+
+.thirdera .string-list-remove {
+  color: var(--color-text-faint);
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.thirdera .string-list-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+.thirdera .string-list-add {
+  display: inline-block;
+  font-size: var(--font-size-label);
+  color: var(--color-hover-alt);
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.thirdera .string-list-add:hover {
+  text-decoration: underline;
+}
 }

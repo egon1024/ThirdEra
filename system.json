@@ -122,6 +122,19 @@
         "TRUSTED": "OBSERVER",
         "PLAYER": "OBSERVER"
       }
+    },
+    {
+      "name": "thirdera_schools",
+      "label": "Schools of Magic",
+      "path": "packs/schools",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
     }
   ],
   "languages": [
@@ -154,7 +167,8 @@
       "race": {},
       "class": {},
       "feature": {},
-      "domain": {}
+      "domain": {},
+      "school": {}
     }
   },
   "socket": false,

@@ -1,0 +1,12 @@
+{
+  "name": "Conjuration",
+  "type": "school",
+  "img": "icons/svg/portal.svg",
+  "system": {
+    "description": "<p>Conjurations bring manifestations of objects, creatures, or some form of energy to you. They include summoning, calling, healing, teleportation, and creation. Creatures you conjure usually, but not always, obey your commands.</p>",
+    "key": "conjuration"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

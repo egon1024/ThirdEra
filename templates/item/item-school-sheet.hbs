@@ -1,0 +1,87 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="School Name" /></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="details">Details</a>
+    </nav>
+
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
+            {{> systems/thirdera/templates/partials/editor-box.hbs
+            label="Description"
+            name="system.description"
+            value=system.description
+            enrichedContent=enriched.description
+            documentUuid=item.uuid
+            }}
+        </div>
+
+        {{!-- Details Tab --}}
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
+            <h3 class="form-header">Opposition Schools</h3>
+            <p class="hint">Drag school items here to add opposition schools. When a wizard specializes in this school, these are typically the schools they must give up.</p>
+            <div class="school-drop-zone droppable" data-drop-hint="opposition-school">
+                {{#if system.oppositionSchools}}
+                <div class="opposition-school-header flexrow">
+                    <span class="opposition-school-name">School</span>
+                    <span class="opposition-school-remove"></span>
+                </div>
+                <ol class="opposition-school-list">
+                    {{#each system.oppositionSchools as |entry index|}}
+                    <li class="opposition-school-entry flexrow">
+                        <span class="opposition-school-name">{{entry.schoolName}}</span>
+                        <input type="hidden" name="system.oppositionSchools.{{index}}.schoolKey" value="{{entry.schoolKey}}" />
+                        <input type="hidden" name="system.oppositionSchools.{{index}}.schoolName" value="{{entry.schoolName}}" />
+                        <a class="opposition-school-remove" data-action="removeOppositionSchool" data-opposition-index="{{index}}"
+                            title="Remove"><i class="fas fa-times"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+                {{/if}}
+                <p class="drop-zone-hint">{{#unless system.oppositionSchools}}Drop school items here{{/unless}}</p>
+            </div>
+
+            <h3 class="form-header">Subschools</h3>
+            <p class="hint">Subschools within this school (e.g., Figment, Glamer for Illusion; Creation, Healing for Conjuration).</p>
+            {{#if system.subschools}}
+            <ol class="string-list subschools-list">
+                {{#each system.subschools as |value index|}}
+                <li class="string-list-entry flexrow">
+                    <input type="text" name="system.subschools.{{index}}" value="{{value}}" placeholder="Subschool name" />
+                    <a class="string-list-remove" data-action="removeSubschool" data-subschool-index="{{index}}"
+                        title="Remove"><i class="fas fa-times"></i></a>
+                </li>
+                {{/each}}
+            </ol>
+            {{/if}}
+            <a class="string-list-add" data-action="addSubschool" title="Add Subschool"><i class="fas fa-plus"></i> Add Subschool</a>
+
+            <h3 class="form-header">Descriptor Tags</h3>
+            <p class="hint">Descriptor tags commonly associated with spells of this school (e.g., Fire, Cold, Mind-Affecting).</p>
+            {{#if system.descriptorTags}}
+            <ol class="string-list descriptor-tags-list">
+                {{#each system.descriptorTags as |value index|}}
+                <li class="string-list-entry flexrow">
+                    <input type="text" name="system.descriptorTags.{{index}}" value="{{value}}" placeholder="Descriptor" />
+                    <a class="string-list-remove" data-action="removeDescriptorTag" data-descriptor-index="{{index}}"
+                        title="Remove"><i class="fas fa-times"></i></a>
+                </li>
+                {{/each}}
+            </ol>
+            {{/if}}
+            <a class="string-list-add" data-action="addDescriptorTag" title="Add Descriptor Tag"><i class="fas fa-plus"></i> Add Descriptor Tag</a>
+        </div>
+    </section>
+</form>
