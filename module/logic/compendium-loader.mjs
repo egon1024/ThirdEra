@@ -256,7 +256,24 @@ export class CompendiumLoader {
             "spell-regenerate.json", "spell-restoration-greater.json", "spell-resurrection.json", "spell-sequester.json",
             "spell-spell-turning.json", "spell-summon-monster-vii.json", "spell-summon-natures-ally-vii.json", "spell-sunbeam.json",
             "spell-symbol-of-stunning.json", "spell-symbol-of-weakness.json", "spell-teleport-greater.json", "spell-teleport-object.json",
-            "spell-transmute-metal-to-wood.json", "spell-vision.json", "spell-word-of-chaos.json"
+            "spell-transmute-metal-to-wood.json", "spell-vision.json", "spell-word-of-chaos.json",
+            "spell-animal-shapes.json", "spell-binding.json", "spell-clenched-fist.json", "spell-clone.json",
+            "spell-control-plants.json", "spell-create-greater-undead.json", "spell-cure-critical-wounds-mass.json",
+            "spell-demand.json", "spell-dimensional-lock.json", "spell-discern-location.json", "spell-earthquake.json",
+            "spell-finger-of-death.json", "spell-holy-aura.json", "spell-horrid-wilting.json", "spell-incendiary-cloud.json",
+            "spell-inflict-critical-wounds-mass.json", "spell-maze.json", "spell-mind-blank.json", "spell-planar-ally-greater.json",
+            "spell-polar-ray.json", "spell-polymorph-any-object.json", "spell-power-word-stun.json", "spell-prismatic-wall.json",
+            "spell-protection-from-spells.json", "spell-prying-eyes-greater.json", "spell-repel-metal-or-stone.json",
+            "spell-reverse-gravity.json", "spell-screen.json", "spell-summon-monster-viii.json", "spell-summon-natures-ally-viii.json",
+            "spell-sunburst.json", "spell-symbol-of-death.json", "spell-trap-the-soul.json", "spell-unholy-aura.json", "spell-whirlwind.json",
+            "spell-antipathy.json", "spell-astral-projection.json", "spell-crushing-hand.json", "spell-dominate-monster.json",
+            "spell-energy-drain.json", "spell-elemental-swarm.json", "spell-etherealness.json", "spell-foresight.json",
+            "spell-freedom.json", "spell-gate.json", "spell-heal-mass.json", "spell-hold-monster-mass.json", "spell-implosion.json",
+            "spell-imprisonment.json", "spell-mages-disjunction.json", "spell-meteor-swarm.json", "spell-miracle.json",
+            "spell-power-word-kill.json", "spell-prismatic-sphere.json", "spell-shapechange.json", "spell-shambler.json",
+            "spell-soul-bind.json", "spell-storm-of-vengeance.json", "spell-summon-monster-ix.json", "spell-summon-natures-ally-ix.json",
+            "spell-sympathy.json", "spell-teleportation-circle.json", "spell-time-stop.json", "spell-true-resurrection.json",
+            "spell-weird.json", "spell-wish.json"
         ]
     };
 
