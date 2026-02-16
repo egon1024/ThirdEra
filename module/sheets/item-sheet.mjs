@@ -117,6 +117,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             saveProgressions: CONFIG.THIRDERA?.saveProgressions || {},
             casterTypes: CONFIG.THIRDERA?.casterTypes || {},
             preparationTypes: CONFIG.THIRDERA?.preparationTypes || {},
+            spellListAccessTypes: CONFIG.THIRDERA?.spellListAccessTypes || {},
             castingAbilities: CONFIG.THIRDERA?.castingAbilities || {},
             spellListKeys: CONFIG.THIRDERA?.spellListKeys || {},
             spellResistanceChoices: CONFIG.THIRDERA?.spellResistanceChoices || {}

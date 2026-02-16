@@ -82,6 +82,12 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                     choices: () => CONFIG.THIRDERA.preparationTypes,
                     label: "Preparation Type"
                 }),
+                /** Full list = automatic access to entire class spell list (e.g. cleric, druid). Learned = must learn spells individually via spellbook or spells known (e.g. wizard, sorcerer, bard). */
+                spellListAccess: new StringField({
+                    required: true, blank: false, initial: "none",
+                    choices: () => CONFIG.THIRDERA.spellListAccessTypes,
+                    label: "Spell List Access"
+                }),
                 castingAbility: new StringField({
                     required: true, blank: false, initial: "none",
                     choices: () => CONFIG.THIRDERA.castingAbilities,

@@ -178,6 +178,15 @@
                 </select>
             </div>
             <div class="form-group">
+                <label>Spell List Access</label>
+                <select name="system.spellcasting.spellListAccess">
+                    {{#each config.spellListAccessTypes as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.spellListAccess)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+                <p class="hint">Full list: access to all spells (cleric, druid, paladin, ranger). Learned: must learn spells via spellbook or spells known (wizard, sorcerer, bard).</p>
+            </div>
+            <div class="form-group">
                 <label>Casting Ability</label>
                 <select name="system.spellcasting.castingAbility">
                     {{#each config.castingAbilities as |label key|}}

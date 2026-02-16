@@ -587,6 +587,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 casterLevel,
                 casterType: sc.casterType,
                 preparationType: sc.preparationType,
+                spellListAccess: sc.spellListAccess || "none",
                 castingAbility,
                 abilityMod,
                 baseSpellDC,

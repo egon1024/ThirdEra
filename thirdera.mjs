@@ -188,6 +188,11 @@ Hooks.once("init", async function () {
             prepared: "Prepared",
             spontaneous: "Spontaneous"
         },
+        spellListAccessTypes: {
+            none: "None",
+            full: "Full list (all spells at level)",
+            learned: "Learned (spellbook or spells known)"
+        },
         castingAbilities: {
             none: "None",
             int: "Intelligence",

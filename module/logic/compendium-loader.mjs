@@ -199,7 +199,22 @@ export class CompendiumLoader {
             "spell-touch-of-idiocy.json", "spell-tree-shape.json", "spell-true-strike.json", "spell-undetectable-alignment.json",
             "spell-unseen-servant.json", "spell-vampiric-touch.json", "spell-ventriloquism.json", "spell-virtue.json",
             "spell-water-breathing.json", "spell-water-walk.json", "spell-web.json", "spell-whispering-wind.json",
-            "spell-wind-wall.json", "spell-zone-of-truth.json"
+            "spell-wind-wall.json", "spell-zone-of-truth.json",
+            "spell-air-walk.json", "spell-antiplant-shell.json", "spell-arcane-eye.json", "spell-black-tentacles.json",
+            "spell-blight.json", "spell-break-enchantment.json", "spell-control-water.json", "spell-cure-critical-wounds.json",
+            "spell-death-ward.json", "spell-detect-scrying.json", "spell-dimensional-anchor.json", "spell-dimension-door.json",
+            "spell-dismissal.json", "spell-divination.json", "spell-divine-power.json", "spell-dominate-person.json",
+            "spell-enlarge-person-mass.json", "spell-enervation.json", "spell-fire-shield.json", "spell-fire-trap.json",
+            "spell-flame-strike.json", "spell-freedom-of-movement.json", "spell-giant-vermin.json", "spell-globe-of-invulnerability-lesser.json",
+            "spell-hallucinatory-terrain.json", "spell-hold-monster.json", "spell-ice-storm.json", "spell-illusory-wall.json",
+            "spell-imbue-with-spell-ability.json", "spell-inflict-critical-wounds.json", "spell-invisibility-greater.json",
+            "spell-legend-lore.json", "spell-locate-creature.json", "spell-minor-creation.json", "spell-mnemonic-enhancer.json",
+            "spell-modify-memory.json", "spell-phantasmal-killer.json", "spell-planar-ally-lesser.json", "spell-polymorph.json",
+            "spell-rainbow-pattern.json", "spell-reduce-person-mass.json", "spell-reincarnate.json", "spell-resilient-sphere.json",
+            "spell-restoration.json", "spell-rusting-grasp.json", "spell-secure-shelter.json", "spell-sending.json",
+            "spell-shadow-conjuration.json", "spell-shout.json", "spell-solid-fog.json", "spell-spell-immunity.json",
+            "spell-spike-stones.json", "spell-stoneskin.json", "spell-summon-monster-iv.json", "spell-summon-natures-ally-iv.json",
+            "spell-wall-of-fire.json", "spell-wall-of-ice.json", "spell-zone-of-silence.json"
         ]
     };
 
