@@ -1,0 +1,23 @@
+{
+  "name": "Sun",
+  "type": "domain",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "description": "<p><strong>Granted Power:</strong> Once per day, you can perform a greater turning against undead in place of a regular turning. The greater turning is like a normal turning except that the undead creatures that would be turned are destroyed instead.</p>",
+    "key": "sun",
+    "spells": [
+      {"level": 1, "spellName": "Endure Elements"},
+      {"level": 2, "spellName": "Heat Metal"},
+      {"level": 3, "spellName": "Searing Light"},
+      {"level": 4, "spellName": "Fire Shield"},
+      {"level": 5, "spellName": "Flame Strike"},
+      {"level": 6, "spellName": "Fire Seeds"},
+      {"level": 7, "spellName": "Sunbeam"},
+      {"level": 8, "spellName": "Sunburst"},
+      {"level": 9, "spellName": "Prismatic Sphere"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 17
+}

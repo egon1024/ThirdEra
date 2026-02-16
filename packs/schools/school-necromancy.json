@@ -4,7 +4,10 @@
   "img": "icons/svg/skull.svg",
   "system": {
     "description": "<p>Necromancy spells manipulate the power of death, unlife, and the life force. Spells involving undead creatures make up a large part of this school.</p>",
-    "key": "necromancy"
+    "key": "necromancy",
+    "oppositionSchools": [],
+    "subschools": [],
+    "descriptorTags": ["death", "evil", "fear"]
   },
   "flags": {},
   "folder": null,

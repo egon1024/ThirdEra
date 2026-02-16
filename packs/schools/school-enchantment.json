@@ -3,8 +3,11 @@
   "type": "school",
   "img": "icons/svg/light.svg",
   "system": {
-    "description": "<p>Enchantment spells affect the minds of others, influencing or controlling their behavior. All enchantments are mind-affecting spells.</p>",
-    "key": "enchantment"
+    "description": "<p>Enchantment spells affect the minds of others, influencing or controlling their behavior. All enchantments are mind-affecting spells. Two types of enchantment spells grant influence over a subject: charm and compulsion.</p>",
+    "key": "enchantment",
+    "oppositionSchools": [],
+    "subschools": ["Charm", "Compulsion"],
+    "descriptorTags": ["chaotic", "evil", "good", "language-dependent", "lawful", "mind-affecting"]
   },
   "flags": {},
   "folder": null,

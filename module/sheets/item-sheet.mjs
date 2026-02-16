@@ -83,9 +83,12 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         // so htmlElement is detached and has no children; the live form is this.element.
         if (partId === "sheet" && this.document?.type === "spell") {
             const formInDom = this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form");
-            const sel = formInDom?.querySelector?.('select[name="system.schoolSubschool"]');
-            const docVal = this.document.system?.schoolSubschool ?? "";
-            if (sel) sel.value = docVal;
+            const subschoolSel = formInDom?.querySelector?.('select[name="system.schoolSubschool"]');
+            const docSubschool = this.document.system?.schoolSubschool ?? "";
+            if (subschoolSel) subschoolSel.value = docSubschool;
+            const srSel = formInDom?.querySelector?.('select[name="system.spellResistance"]');
+            const docSr = this.document.system?.spellResistance ?? "";
+            if (srSel) srSel.value = docSr;
         }
     }
 
@@ -115,7 +118,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             casterTypes: CONFIG.THIRDERA?.casterTypes || {},
             preparationTypes: CONFIG.THIRDERA?.preparationTypes || {},
             castingAbilities: CONFIG.THIRDERA?.castingAbilities || {},
-            spellListKeys: CONFIG.THIRDERA?.spellListKeys || {}
+            spellListKeys: CONFIG.THIRDERA?.spellListKeys || {},
+            spellResistanceChoices: CONFIG.THIRDERA?.spellResistanceChoices || {}
         };
 
         // Enrich HTML description and other fields

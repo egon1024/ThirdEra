@@ -1,10 +1,13 @@
 {
   "name": "Illusion",
   "type": "school",
-  "img": "icons/svg/mask.svg",
+  "img": "icons/svg/invisible.svg",
   "system": {
-    "description": "<p>Illusion spells deceive the senses or minds of others. They cause people to see things that are not there, not see things that are there, hear phantom noises, or remember things that never happened.</p>",
-    "key": "illusion"
+    "description": "<p>Illusion spells deceive the senses or minds of others. They cause people to see things that are not there, not see things that are there, hear phantom noises, or remember things that never happened. Illusion has five subschools: figment, glamer, pattern, phantasm, and shadow.</p>",
+    "key": "illusion",
+    "oppositionSchools": [],
+    "subschools": ["Figment", "Glamer", "Pattern", "Phantasm", "Shadow"],
+    "descriptorTags": ["darkness", "mind-affecting"]
   },
   "flags": {},
   "folder": null,

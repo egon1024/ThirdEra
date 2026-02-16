@@ -4,7 +4,10 @@
   "img": "icons/svg/shield.svg",
   "system": {
     "description": "<p>Abjurations are protective spells. They create physical or magical barriers, negate magical or physical abilities, harm trespassers, or even banish the subject of the spell to another plane of existence.</p>",
-    "key": "abjuration"
+    "key": "abjuration",
+    "oppositionSchools": [],
+    "subschools": [],
+    "descriptorTags": ["force", "lawful"]
   },
   "flags": {},
   "folder": null,

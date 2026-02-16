@@ -1,0 +1,23 @@
+{
+  "name": "Knowledge",
+  "type": "domain",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "description": "<p><strong>Granted Power:</strong> Add all Knowledge skills to your list of cleric class skills. You cast divination spells at +1 caster level.</p>",
+    "key": "knowledge",
+    "spells": [
+      {"level": 1, "spellName": "Detect Secret Doors"},
+      {"level": 2, "spellName": "Detect Thoughts"},
+      {"level": 3, "spellName": "Clairaudience/Clairvoyance"},
+      {"level": 4, "spellName": "Divination"},
+      {"level": 5, "spellName": "True Seeing"},
+      {"level": 6, "spellName": "Find the Path"},
+      {"level": 7, "spellName": "Legend Lore"},
+      {"level": 8, "spellName": "Discern Location"},
+      {"level": 9, "spellName": "Foresight"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 10
+}

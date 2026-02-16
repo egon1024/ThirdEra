@@ -175,7 +175,11 @@
                 </div>
                 <div class="form-group">
                     <label>Spell Resistance</label>
-                    <input type="text" name="system.spellResistance" value="{{system.spellResistance}}" />
+                    <select name="system.spellResistance">
+                        {{#each config.spellResistanceChoices as |label key|}}
+                        <option value="{{key}}" {{#if (eq ../system.spellResistance key)}}selected{{/if}}>{{label}}</option>
+                        {{/each}}
+                    </select>
                 </div>
             </div>
 

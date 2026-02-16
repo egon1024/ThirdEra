@@ -1,0 +1,23 @@
+{
+  "name": "Water",
+  "type": "domain",
+  "img": "icons/svg/waterfall.svg",
+  "system": {
+    "description": "<p><strong>Granted Power:</strong> Turn or destroy fire creatures as a good cleric turns undead. Rebuke, command, or bolster water creatures as an evil cleric rebukes undead. Use these abilities a total number of times per day equal to 3 + your Charisma modifier.</p>",
+    "key": "water",
+    "spells": [
+      {"level": 1, "spellName": "Obscuring Mist"},
+      {"level": 2, "spellName": "Create Water"},
+      {"level": 3, "spellName": "Water Walk"},
+      {"level": 4, "spellName": "Control Water"},
+      {"level": 5, "spellName": "Ice Storm"},
+      {"level": 6, "spellName": "Cone of Cold"},
+      {"level": 7, "spellName": "Acid Fog"},
+      {"level": 8, "spellName": "Horrid Wilting"},
+      {"level": 9, "spellName": "Elemental Swarm"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 21
+}

@@ -121,6 +121,14 @@ export class CompendiumLoader {
             "school-enchantment.json", "school-evocation.json", "school-illusion.json",
             "school-necromancy.json", "school-transmutation.json"
         ],
+        "thirdera.thirdera_domains": [
+            "domain-air.json", "domain-animal.json", "domain-chaos.json", "domain-death.json",
+            "domain-destruction.json", "domain-earth.json", "domain-evil.json", "domain-fire.json",
+            "domain-good.json", "domain-healing.json", "domain-knowledge.json", "domain-law.json",
+            "domain-luck.json", "domain-magic.json", "domain-plant.json", "domain-protection.json",
+            "domain-strength.json", "domain-sun.json", "domain-travel.json", "domain-trickery.json",
+            "domain-war.json", "domain-water.json"
+        ],
         "thirdera.thirdera_spells": [
             "spell-magic-missile.json", "spell-cure-light-wounds.json", "spell-fireball.json",
             "spell-lightning-bolt.json", "spell-cure-moderate-wounds.json", "spell-shield.json",

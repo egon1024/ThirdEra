@@ -22,7 +22,7 @@
     "target": "Up to five creatures, no two of which can be more than 15 ft. apart",
     "duration": "Instantaneous",
     "savingThrow": "None",
-    "spellResistance": "Yes",
+    "spellResistance": "yes",
     "prepared": 0,
     "cast": 0
   },

@@ -3,8 +3,11 @@
   "type": "school",
   "img": "icons/svg/portal.svg",
   "system": {
-    "description": "<p>Conjurations bring manifestations of objects, creatures, or some form of energy to you. They include summoning, calling, healing, teleportation, and creation. Creatures you conjure usually, but not always, obey your commands.</p>",
-    "key": "conjuration"
+    "description": "<p>Conjurations bring manifestations of objects, creatures, or some form of energy to you. Each conjuration spell belongs to one of five subschools: summoning, calling, healing, teleportation, and creation. Creatures you conjure usually, but not always, obey your commands.</p>",
+    "key": "conjuration",
+    "oppositionSchools": [],
+    "subschools": ["Calling", "Creation", "Healing", "Summoning", "Teleportation"],
+    "descriptorTags": ["acid", "air", "chaotic", "cold", "earth", "electricity", "evil", "fire", "good", "lawful", "water"]
   },
   "flags": {},
   "folder": null,

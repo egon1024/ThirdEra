@@ -1,0 +1,23 @@
+{
+  "name": "Plant",
+  "type": "domain",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p><strong>Granted Powers:</strong> Rebuke or command plant creatures as an evil cleric rebukes or commands undead. Use this ability a total number of times per day equal to 3 + your Charisma modifier. Add Knowledge (nature) to your list of cleric class skills.</p>",
+    "key": "plant",
+    "spells": [
+      {"level": 1, "spellName": "Entangle"},
+      {"level": 2, "spellName": "Barkskin"},
+      {"level": 3, "spellName": "Plant Growth"},
+      {"level": 4, "spellName": "Command Plants"},
+      {"level": 5, "spellName": "Wall of Thorns"},
+      {"level": 6, "spellName": "Repel Wood"},
+      {"level": 7, "spellName": "Animate Plants"},
+      {"level": 8, "spellName": "Control Plants"},
+      {"level": 9, "spellName": "Shambler"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 14
+}

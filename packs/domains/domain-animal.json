@@ -1,0 +1,23 @@
+{
+  "name": "Animal",
+  "type": "domain",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "description": "<p><strong>Granted Powers:</strong> You can use speak with animals once per day as a spell-like ability. Add Knowledge (nature) to your list of cleric class skills.</p>",
+    "key": "animal",
+    "spells": [
+      {"level": 1, "spellName": "Calm Animals"},
+      {"level": 2, "spellName": "Hold Animal"},
+      {"level": 3, "spellName": "Dominate Animal"},
+      {"level": 4, "spellName": "Summon Nature's Ally IV"},
+      {"level": 5, "spellName": "Commune with Nature"},
+      {"level": 6, "spellName": "Antilife Shell"},
+      {"level": 7, "spellName": "Animal Shapes"},
+      {"level": 8, "spellName": "Summon Nature's Ally VIII"},
+      {"level": 9, "spellName": "Shapechange"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

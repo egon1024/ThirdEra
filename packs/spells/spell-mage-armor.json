@@ -22,7 +22,7 @@
     "target": "Creature touched",
     "duration": "1 hour/level (D)",
     "savingThrow": "Will negates (harmless)",
-    "spellResistance": "No",
+    "spellResistance": "no",
     "prepared": 0,
     "cast": 0
   },

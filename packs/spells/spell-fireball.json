@@ -22,7 +22,7 @@
     "target": "20-ft.-radius spread",
     "duration": "Instantaneous",
     "savingThrow": "Reflex half",
-    "spellResistance": "Yes",
+    "spellResistance": "yes",
     "prepared": 0,
     "cast": 0
   },

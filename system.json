@@ -135,6 +135,19 @@
         "TRUSTED": "OBSERVER",
         "PLAYER": "OBSERVER"
       }
+    },
+    {
+      "name": "thirdera_domains",
+      "label": "Domains",
+      "path": "packs/domains",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
     }
   ],
   "languages": [

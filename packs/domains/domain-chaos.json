@@ -1,0 +1,23 @@
+{
+  "name": "Chaos",
+  "type": "domain",
+  "img": "icons/svg/explosion.svg",
+  "system": {
+    "description": "<p><strong>Granted Power:</strong> You cast chaos spells at +1 caster level.</p>",
+    "key": "chaos",
+    "spells": [
+      {"level": 1, "spellName": "Protection from Law"},
+      {"level": 2, "spellName": "Shatter"},
+      {"level": 3, "spellName": "Magic Circle against Law"},
+      {"level": 4, "spellName": "Chaos Hammer"},
+      {"level": 5, "spellName": "Dispel Law"},
+      {"level": 6, "spellName": "Animate Objects"},
+      {"level": 7, "spellName": "Word of Chaos"},
+      {"level": 8, "spellName": "Cloak of Chaos"},
+      {"level": 9, "spellName": "Summon Monster IX"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

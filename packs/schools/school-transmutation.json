@@ -4,7 +4,10 @@
   "img": "icons/svg/sword.svg",
   "system": {
     "description": "<p>Transmutation spells change the properties of some creature, thing, or condition.</p>",
-    "key": "transmutation"
+    "key": "transmutation",
+    "oppositionSchools": [],
+    "subschools": [],
+    "descriptorTags": []
   },
   "flags": {},
   "folder": null,

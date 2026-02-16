@@ -1,0 +1,23 @@
+{
+  "name": "Good",
+  "type": "domain",
+  "img": "icons/svg/light.svg",
+  "system": {
+    "description": "<p><strong>Granted Power:</strong> You cast good spells at +1 caster level.</p>",
+    "key": "good",
+    "spells": [
+      {"level": 1, "spellName": "Protection from Evil"},
+      {"level": 2, "spellName": "Aid"},
+      {"level": 3, "spellName": "Magic Circle against Evil"},
+      {"level": 4, "spellName": "Holy Smite"},
+      {"level": 5, "spellName": "Dispel Evil"},
+      {"level": 6, "spellName": "Blade Barrier"},
+      {"level": 7, "spellName": "Holy Word"},
+      {"level": 8, "spellName": "Holy Aura"},
+      {"level": 9, "spellName": "Summon Monster IX"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

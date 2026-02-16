@@ -50,7 +50,13 @@ export class SpellData extends foundry.abstract.TypeDataModel {
             target: new StringField({ required: true, blank: true, initial: "", label: "Target/Area/Effect" }),
             duration: new StringField({ required: true, blank: true, initial: "", label: "Duration" }),
             savingThrow: new StringField({ required: true, blank: true, initial: "", label: "Saving Throw" }),
-            spellResistance: new StringField({ required: true, blank: true, initial: "", label: "Spell Resistance" }),
+            spellResistance: new StringField({
+                required: true,
+                blank: true,
+                initial: "",
+                choices: () => CONFIG.THIRDERA?.spellResistanceChoices ?? {},
+                label: "Spell Resistance"
+            }),
 
             prepared: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Times Prepared" }),
             cast: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Times Cast" })
@@ -93,6 +99,20 @@ export class SpellData extends foundry.abstract.TypeDataModel {
                 source.schoolDescriptors = parsed.schoolDescriptors;
             }
             delete source.schoolDescriptor;
+        }
+        // Migrate legacy spellResistance text to machine-readable keys
+        if (source.spellResistance !== undefined && source.spellResistance !== null) {
+            const v = String(source.spellResistance).trim();
+            const validKeys = ["", "yes", "no", "yes-harmless", "no-object", "see-text"];
+            if (!validKeys.includes(v)) {
+                const lower = v.toLowerCase();
+                if (lower === "yes") source.spellResistance = "yes";
+                else if (lower === "no") source.spellResistance = "no";
+                else if (lower === "yes (harmless)") source.spellResistance = "yes-harmless";
+                else if (lower === "no (object)") source.spellResistance = "no-object";
+                else if (lower === "see text" || lower === "see text.") source.spellResistance = "see-text";
+                else source.spellResistance = "see-text"; // Unknown legacy → fallback
+            }
         }
         return super.migrateData(source);
     }

@@ -22,7 +22,7 @@
     "target": "The caster and all allies within a 50-ft. burst, centered on the caster",
     "duration": "1 min./level",
     "savingThrow": "None",
-    "spellResistance": "Yes (harmless)",
+    "spellResistance": "yes-harmless",
     "prepared": 0,
     "cast": 0
   },

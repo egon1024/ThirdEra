@@ -22,7 +22,7 @@
     "target": "You",
     "duration": "1 min./level (D)",
     "savingThrow": "None",
-    "spellResistance": "No",
+    "spellResistance": "no",
     "prepared": 0,
     "cast": 0
   },

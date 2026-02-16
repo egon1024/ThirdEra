@@ -202,6 +202,15 @@ Hooks.once("init", async function () {
             paladin: "Paladin",
             ranger: "Ranger"
         },
+        /** Spell Resistance choices for spells. Keys are machine-readable for future automation. */
+        spellResistanceChoices: {
+            "": "—",
+            yes: "Yes",
+            no: "No",
+            "yes-harmless": "Yes (harmless)",
+            "no-object": "No (object)",
+            "see-text": "See text"
+        },
         /** SRD schools of magic (fallback when school items not loaded). */
         schools: {
             abjuration: "Abjuration",

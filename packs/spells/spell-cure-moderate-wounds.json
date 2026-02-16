@@ -22,7 +22,7 @@
     "target": "Creature touched",
     "duration": "Instantaneous",
     "savingThrow": "Will half (harmless)",
-    "spellResistance": "Yes (harmless)",
+    "spellResistance": "yes-harmless",
     "prepared": 0,
     "cast": 0
   },

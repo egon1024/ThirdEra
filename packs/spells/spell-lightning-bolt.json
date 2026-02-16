@@ -22,7 +22,7 @@
     "target": "120-ft. line",
     "duration": "Instantaneous",
     "savingThrow": "Reflex half",
-    "spellResistance": "Yes",
+    "spellResistance": "yes",
     "prepared": 0,
     "cast": 0
   },

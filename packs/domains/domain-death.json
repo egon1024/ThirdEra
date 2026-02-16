@@ -1,0 +1,23 @@
+{
+  "name": "Death",
+  "type": "domain",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "description": "<p><strong>Granted Power:</strong> You may use a death touch once per day. Your death touch is a supernatural ability that produces a death effect. You must succeed on a melee touch attack against a living creature. When you touch, roll 1d6 per cleric level you possess. If the total at least equals the creature's current hit points, it dies (no save).</p>",
+    "key": "death",
+    "spells": [
+      {"level": 1, "spellName": "Cause Fear"},
+      {"level": 2, "spellName": "Death Knell"},
+      {"level": 3, "spellName": "Animate Dead"},
+      {"level": 4, "spellName": "Death Ward"},
+      {"level": 5, "spellName": "Slay Living"},
+      {"level": 6, "spellName": "Create Undead"},
+      {"level": 7, "spellName": "Destruction"},
+      {"level": 8, "spellName": "Create Greater Undead"},
+      {"level": 9, "spellName": "Wail of the Banshee"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

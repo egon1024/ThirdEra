@@ -1,0 +1,23 @@
+{
+  "name": "Luck",
+  "type": "domain",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "description": "<p><strong>Granted Power:</strong> You gain the power of good fortune, which is usable once per day. This extraordinary ability allows you to reroll one roll that you have just made before the game master declares whether the roll results in success or failure. You must take the result of the reroll, even if it's worse than the original roll.</p>",
+    "key": "luck",
+    "spells": [
+      {"level": 1, "spellName": "Entropic Shield"},
+      {"level": 2, "spellName": "Aid"},
+      {"level": 3, "spellName": "Protection from Energy"},
+      {"level": 4, "spellName": "Freedom of Movement"},
+      {"level": 5, "spellName": "Break Enchantment"},
+      {"level": 6, "spellName": "Mislead"},
+      {"level": 7, "spellName": "Spell Turning"},
+      {"level": 8, "spellName": "Moment of Prescience"},
+      {"level": 9, "spellName": "Miracle"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 12
+}
