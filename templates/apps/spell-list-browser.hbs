@@ -1,0 +1,65 @@
+<form class="spell-list-browser-form flexcol" autocomplete="off">
+    <div class="form-group">
+        <label for="spell-list-class-select">{{localize "THIRDERA.SpellListBrowser.ClassLabel"}}</label>
+        <select name="selectedClass" id="spell-list-class-select">
+            <option value="">{{localize "THIRDERA.SpellListBrowser.NoClassSelected"}}</option>
+            {{#each classes as |cls|}}
+            <option value="{{cls.uuid}}" {{#if ../selectedClass}}{{#if (eq cls.uuid ../selectedClass.uuid)}}selected{{/if}}{{/if}}>{{cls.name}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    {{#if selectedClass}}
+    <div class="form-group spell-search-group">
+        <label for="spell-list-search">{{localize "THIRDERA.SpellListBrowser.SearchPlaceholder"}}</label>
+        <input type="text" name="search" id="spell-list-search" placeholder="{{localize "THIRDERA.SpellListBrowser.SearchPlaceholder"}}" value="{{searchTerm}}" autocomplete="off" />
+    </div>
+    {{/if}}
+
+    <div class="spell-list-body">
+        {{#if selectedClass}}
+            {{#if hasSpells}}
+                {{#each spellsByLevel as |levelData|}}
+                <div class="spell-level-group">
+                    <div class="spell-level-header">
+                        <h5>{{#if (eq levelData.level 0)}}{{localize "THIRDERA.SpellListBrowser.Level0"}}{{else}}{{ordinal levelData.level}} {{localize "THIRDERA.SpellListBrowser.Level"}}{{/if}}</h5>
+                    </div>
+                    {{#if levelData.isArcane}}
+                        {{#each (spellSchoolGroups levelData.spells levelData.isArcane) as |group|}}
+                        <div class="spell-school-group">
+                            <div class="spell-school-name" role="heading" aria-level="2">{{group.schoolName}}</div>
+                            <ol class="items-list spells-list">
+                                {{#each group.spells as |entry|}}
+                                <li class="item flexrow spell-item" data-spell-uuid="{{entry.uuid}}" data-spell-name="{{entry.name}}" draggable="true">
+                                    <div class="item-name">
+                                        {{#if entry.img}}<div class="item-image"><img src="{{entry.img}}" alt="" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{entry.name}}"></i></div>{{/if}}
+                                        <h4><a class="content-link" data-link data-uuid="{{entry.uuid}}" data-type="Item">{{entry.name}}</a></h4>
+                                    </div>
+                                </li>
+                                {{/each}}
+                            </ol>
+                        </div>
+                        {{/each}}
+                    {{else}}
+                        <ol class="items-list spells-list">
+                            {{#each levelData.spells as |entry|}}
+                            <li class="item flexrow spell-item" data-spell-uuid="{{entry.uuid}}" data-spell-name="{{entry.name}}" draggable="true">
+                                <div class="item-name">
+                                    {{#if entry.img}}<div class="item-image"><img src="{{entry.img}}" alt="" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{entry.name}}"></i></div>{{/if}}
+                                    <h4><a class="content-link" data-link data-uuid="{{entry.uuid}}" data-type="Item">{{entry.name}}</a></h4>
+                                </div>
+                            </li>
+                            {{/each}}
+                        </ol>
+                    {{/if}}
+                </div>
+                {{/each}}
+                <p class="hint spell-search-no-results spell-search-hidden">{{localize "THIRDERA.SpellListBrowser.SearchNoResults"}}</p>
+            {{else}}
+                <p class="hint">{{localize "THIRDERA.SpellListBrowser.NoSpells"}}</p>
+            {{/if}}
+        {{else}}
+            <p class="hint">{{localize "THIRDERA.SpellListBrowser.SelectClass"}}</p>
+        {{/if}}
+    </div>
+</form>
