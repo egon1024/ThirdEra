@@ -194,6 +194,14 @@
                     {{/each}}
                 </select>
             </div>
+            <div class="form-group">
+                <label>Domains Apply</label>
+                <select name="system.spellcasting.supportsDomains">
+                    <option value="false" {{#if (eq system.spellcasting.supportsDomains "false")}}selected{{/if}}>No</option>
+                    <option value="true" {{#if (eq system.spellcasting.supportsDomains "true")}}selected{{/if}}>Yes</option>
+                </select>
+                <p class="hint">When Yes, the character sheet shows domain add/remove and domain spells for this class (e.g. Cleric).</p>
+            </div>
 
             <h4 class="form-header">Spells Per Day</h4>
             <p class="hint">Enter the number of spells per day for each class level and spell level.</p>
@@ -245,6 +253,48 @@
                 </table>
             </div>
 
+            {{#if (eq system.spellcasting.preparationType "spontaneous")}}
+            <h4 class="form-header">Spells Known</h4>
+            <p class="hint">Optional. For spontaneous casters (e.g. Sorcerer, Bard), enter the maximum number of spells known per class level and spell level. Leave 0 for no limit.</p>
+            <div class="spells-known-table-container">
+                <table class="spells-known-table">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>0</th>
+                            <th>1st</th>
+                            <th>2nd</th>
+                            <th>3rd</th>
+                            <th>4th</th>
+                            <th>5th</th>
+                            <th>6th</th>
+                            <th>7th</th>
+                            <th>8th</th>
+                            <th>9th</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each spellsKnownTable as |entry index|}}
+                        <tr>
+                            <td class="spells-known-level">{{entry.classLevel}}</td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel0" value="{{entry.spellLevel0}}" min="0" data-dtype="Number" class="spells-known-input" /><input type="hidden" name="system.spellcasting.spellsKnownTable.{{index}}.classLevel" value="{{entry.classLevel}}" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel1" value="{{entry.spellLevel1}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel2" value="{{entry.spellLevel2}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel3" value="{{entry.spellLevel3}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel4" value="{{entry.spellLevel4}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel5" value="{{entry.spellLevel5}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel6" value="{{entry.spellLevel6}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel7" value="{{entry.spellLevel7}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel8" value="{{entry.spellLevel8}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel9" value="{{entry.spellLevel9}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{/if}}
+
+            {{#if (eq system.spellcasting.supportsDomains "true")}}
             <h4 class="form-header">Domains</h4>
             <p class="hint">Drag and drop domain items here to assign them to this class. Clerics typically have 2 domains.</p>
             {{#if system.spellcasting.domains.length}}
@@ -261,6 +311,7 @@
             </ol>
             {{else}}
             <p class="no-items hint">No domains assigned. Drag domain items here to add them.</p>
+            {{/if}}
             {{/if}}
             {{else}}
             <p class="hint">Enable spellcasting above to configure spellcasting options.</p>

@@ -1,4 +1,4 @@
-const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
+const { HTMLField, NumberField, ObjectField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
@@ -134,7 +134,10 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 gp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Gold (gp)" }),
                 sp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Silver (sp)" }),
                 cp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Copper (cp)" })
-            })
+            }),
+
+            // Spell shortlist for full-list prepared casters (cleric, druid): classItemId -> spell item IDs to show in "Ready to cast"
+            spellShortlistByClass: new ObjectField({ initial: {}, label: "Spell Shortlist by Class" })
         };
     }
 
@@ -522,52 +525,48 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 spellsPerDay[spellLevel] = ClassData.getSpellsPerDay(table, lvl, spellLevel);
             }
 
-            // Resolve domain items and calculate domain spell slots
+            // Resolve domain items and calculate domain spell slots (only when this class supports domains, e.g. Cleric)
+            const supportsDomains = sc.supportsDomains === "true";
             const domains = [];
-            const domainSpellSlots = {}; // spellLevel -> number of domain slots (typically 1 per level if domains exist)
-            const domainSpellsByLevel = {}; // spellLevel -> array of {domainName, domainKey, spellName}
+            const domainSpellSlots = {};
+            const domainSpellsByLevel = {};
 
             for (let spellLevel = 0; spellLevel <= 9; spellLevel++) {
                 domainSpellSlots[spellLevel] = 0;
                 domainSpellsByLevel[spellLevel] = [];
             }
 
-            if (sc.domains && sc.domains.length > 0) {
-                // Clerics typically get 1 domain slot per spell level they can cast
-                // Only grant domain slots for spell levels where the actor has spell slots
+            if (supportsDomains && sc.domains && sc.domains.length > 0) {
                 for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
                     if (spellsPerDay[spellLevel] > 0) {
                         domainSpellSlots[spellLevel] = 1;
                     }
                 }
 
-                // Resolve domain items and collect spells from spell documents' levelsByDomain
                 for (const domainRef of sc.domains) {
+                    const domainKey = (domainRef.domainKey || "").trim();
+                    const domainName = (domainRef.domainName || "").trim() || domainKey;
+                    if (!domainKey) continue;
                     try {
-                        const domainItem = game.items.get(domainRef.domainItemId);
-                        if (domainItem && domainItem.type === "domain") {
-                            domains.push({
-                                domainItemId: domainRef.domainItemId,
-                                domainName: domainRef.domainName,
-                                domainKey: domainRef.domainKey
-                            });
+                        domains.push({
+                            domainItemId: domainRef.domainItemId || "",
+                            domainName,
+                            domainKey
+                        });
 
-                            // Derive spells from getSpellsForDomain (world + compendium cache)
-                            const granted = getSpellsForDomain(domainRef.domainKey);
-                            for (const entry of granted) {
-                                const sl = entry.level;
-                                if (sl >= 1 && sl <= 9 && entry.spellName) {
-                                    domainSpellsByLevel[sl].push({
-                                        domainName: domainRef.domainName,
-                                        domainKey: domainRef.domainKey,
-                                        spellName: entry.spellName
-                                    });
-                                }
+                        const granted = getSpellsForDomain(domainKey);
+                        for (const entry of granted) {
+                            const sl = entry.level;
+                            if (sl >= 1 && sl <= 9 && entry.spellName) {
+                                domainSpellsByLevel[sl].push({
+                                    domainName,
+                                    domainKey,
+                                    spellName: entry.spellName
+                                });
                             }
                         }
                     } catch (e) {
-                        // Domain item may not exist (deleted); skip it
-                        console.warn(`Domain item ${domainRef.domainItemId} not found for class ${cls.name}`);
+                        console.warn(`Domain ${domainName || domainRef.domainItemId} failed for class ${cls.name}:`, e);
                     }
                 }
             }
@@ -588,6 +587,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 casterType: sc.casterType,
                 preparationType: sc.preparationType,
                 spellListAccess: sc.spellListAccess || "none",
+                supportsDomains,
                 castingAbility,
                 abilityMod,
                 baseSpellDC,

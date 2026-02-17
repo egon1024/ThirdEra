@@ -406,6 +406,52 @@
   display: block;
 }
 
+/* Spells tab: sub-tab bar (Known / Ready to cast) */
+.thirdera .spells-subtabs {
+  flex: 0;
+  border-bottom: 1px solid var(--color-border-divider);
+  background: transparent;
+  font-size: var(--font-size-label);
+  padding: 0 4px;
+  margin-bottom: 8px;
+}
+
+.thirdera .spells-subtabs .item {
+  color: var(--color-text-tab-inactive);
+  font-size: var(--font-size-label);
+  padding: 4px 10px;
+}
+
+.thirdera .spells-subtabs .item.active {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--color-character-accent);
+}
+
+.thirdera .add-to-ready-btn,
+.thirdera .remove-from-ready-btn {
+  font-size: var(--font-size-note);
+  padding: 2px 8px;
+  color: var(--color-character-accent);
+  background: transparent;
+  border: 1px solid var(--color-border-divider);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.thirdera .add-to-ready-btn:hover,
+.thirdera .remove-from-ready-btn:hover {
+  background: var(--color-hover);
+  color: var(--color-text-primary);
+}
+
+.thirdera .spell-ready-hint {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
 .thirdera .grid {
   display: grid;
   grid-column-gap: 10px;
@@ -2083,12 +2129,148 @@
   margin: 0;
 }
 
+/* Spells Known Table (spontaneous casters) */
+.thirdera .spells-known-table-container {
+  margin: 10px 0;
+  overflow-x: auto;
+}
+
+.thirdera .spells-known-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-body);
+}
+
+.thirdera .spells-known-table thead {
+  background: var(--color-bg-parchment-dark);
+  border-bottom: 2px solid var(--color-border-divider);
+}
+
+.thirdera .spells-known-table th {
+  padding: 6px 4px;
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .spells-known-table th:first-child {
+  text-align: left;
+  padding-left: 8px;
+}
+
+.thirdera .spells-known-table th:last-child {
+  border-right: none;
+}
+
+.thirdera .spells-known-table tbody tr {
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .spells-known-table tbody tr:hover {
+  background: var(--color-bg-light);
+}
+
+.thirdera .spells-known-table .spells-known-level {
+  padding: 4px 8px;
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  background: var(--color-bg-parchment-dark);
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .spells-known-table td {
+  padding: 2px;
+  text-align: center;
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .spells-known-table td:last-child {
+  border-right: none;
+}
+
+.thirdera .spells-known-input {
+  width: 40px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 2px 4px;
+  margin: 0;
+}
+
 /* Spellcasting Tab Styles */
 .thirdera .tab.spells .spellcasting-class {
   margin-bottom: 20px;
   border: 1px solid var(--color-border-divider);
   border-radius: 4px;
   background: var(--color-bg-parchment);
+}
+
+.thirdera .tab.spells .domains-section {
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--color-border-divider);
+  background: var(--color-bg-light);
+}
+
+.thirdera .tab.spells .domains-section-title {
+  margin: 0 0 8px 0;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+}
+
+.thirdera .tab.spells .domains-drop-zone {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px dashed var(--color-border-divider);
+  border-radius: 4px;
+  background: var(--color-bg-parchment);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-note);
+  text-align: center;
+}
+
+.thirdera .tab.spells .domains-drop-zone:hover {
+  border-color: var(--color-character-accent);
+  color: var(--color-text-secondary);
+}
+
+.thirdera .tab.spells .domains-drop-hint {
+  display: block;
+}
+
+.thirdera .tab.spells .domains-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.thirdera .tab.spells .domains-list .domain-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  margin: 4px 0;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
+  border-radius: 3px;
+  font-size: var(--font-size-body);
+}
+
+.thirdera .tab.spells .domains-list .domain-name {
+  flex: 1;
+}
+
+.thirdera .tab.spells .domains-list .domain-remove {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  color: var(--color-text-muted);
+}
+
+.thirdera .tab.spells .domains-list .domain-remove:hover {
+  color: var(--color-text-primary);
 }
 
 .thirdera .tab.spells .spellcasting-header {
@@ -2127,6 +2309,16 @@
 
 .thirdera .tab.spells .spell-level-group:last-child {
   border-bottom: none;
+}
+
+.thirdera .tab.spells .spell-level-group.spell-level-over-limit .spell-level-header {
+  border-left: 3px solid var(--color-modified);
+}
+
+.thirdera .tab.spells .spell-known-over-limit {
+  color: var(--color-modified);
+  font-size: var(--font-size-note);
+  font-weight: var(--font-weight-bold);
 }
 
 .thirdera .tab.spells .spell-level-header {
@@ -2219,10 +2411,38 @@
   color: var(--color-text-primary);
 }
 
-/* Domain Spells Styling */
+/* Domain Spells Styling — clear visual separation from main spell list */
+.thirdera .tab.spells .domain-spells-divider {
+  margin: 1.25rem 0 0;
+  padding-top: 1rem;
+  border-top: 2px solid var(--color-border-divider);
+  clear: both;
+}
+
 .thirdera .tab.spells .domain-spells-group {
-  background: rgba(65, 105, 225, 0.05);
-  border-left: 3px solid var(--color-character-accent);
+  background: rgba(65, 105, 225, 0.06);
+  border-left: 4px solid var(--color-character-accent);
+  margin-top: 0;
+  padding-left: 8px;
+  border-radius: 0 4px 4px 0;
+}
+
+.thirdera .tab.spells .domain-spells-group .domain-spells-header {
+  background: rgba(65, 105, 225, 0.12);
+  padding: 0.4rem 0.5rem;
+}
+
+.thirdera .tab.spells .domain-spells-group .domain-spells-title {
+  margin: 0 0 0.2rem;
+  font-size: var(--font-size-value);
+  color: var(--color-character-accent);
+}
+
+.thirdera .tab.spells .domain-spells-group .domain-spells-subheading {
+  margin: 0 0 0.35rem;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  font-style: italic;
 }
 
 .thirdera .tab.spells .domain-spells-group .spell-level-header {
@@ -2235,6 +2455,23 @@
   font-style: italic;
 }
 
+/* Prepared/Cast explanation */
+.thirdera .tab.spells .spell-tracking-hint {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin-left: 6px;
+}
+
+.thirdera .tab.spells .spell-tracking-hint i {
+  margin-right: 2px;
+}
+
+.thirdera .tab.spells .spell-label-hint {
+  font-size: 0.85em;
+  color: var(--color-text-muted);
+  cursor: help;
+}
+
 .thirdera .tab.spells .domain-spell-item {
   background: rgba(65, 105, 225, 0.02);
 }
@@ -2244,6 +2481,26 @@
   color: var(--color-character-accent);
   font-weight: var(--font-weight-normal);
   margin-left: 5px;
+}
+
+.thirdera .tab.spells .placeholder-spell .placeholder-note {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  margin-right: 8px;
+}
+
+.thirdera .tab.spells .add-placeholder-spell {
+  padding: 2px 8px;
+  font-size: var(--font-size-label);
+  background: var(--color-character-accent);
+  color: var(--color-bg-parchment);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.thirdera .tab.spells .add-placeholder-spell:hover {
+  filter: brightness(1.1);
 }
 
 .thirdera .tab.spells .no-spells {

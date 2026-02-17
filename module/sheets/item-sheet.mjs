@@ -175,6 +175,32 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
         }
 
+        // Prepare spells known table (spontaneous casters) - same shape as spells per day, entries for levels 1-20
+        let spellsKnownTable = [];
+        if (item.type === "class" && systemData.spellcasting?.preparationType === "spontaneous") {
+            const existingTable = systemData.spellcasting.spellsKnownTable ?? [];
+            for (let level = 1; level <= 20; level++) {
+                const existingEntry = existingTable.find(e => e.classLevel === level);
+                if (existingEntry) {
+                    spellsKnownTable.push(existingEntry);
+                } else {
+                    spellsKnownTable.push({
+                        classLevel: level,
+                        spellLevel0: 0,
+                        spellLevel1: 0,
+                        spellLevel2: 0,
+                        spellLevel3: 0,
+                        spellLevel4: 0,
+                        spellLevel5: 0,
+                        spellLevel6: 0,
+                        spellLevel7: 0,
+                        spellLevel8: 0,
+                        spellLevel9: 0
+                    });
+                }
+            }
+        }
+
         // For spells with a school: look up the school to populate subschool and descriptor options
         let schoolSubschoolOptions = [];
         let schoolDescriptorOptions = [];
@@ -228,6 +254,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             editable: this.isEditable,
             isOwned: !!item.parent,
             spellsPerDayTable,
+            spellsKnownTable,
             schoolSubschoolOptions,
             schoolDescriptorOptions,
             schoolDescriptorOptionsForAdd,
@@ -381,7 +408,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 // Only validate on blur if it wasn't triggered by our keyboard navigation
                 // (keyboard navigation will have already validated and set _focusedInputName)
                 // Check if we're navigating to another spells-per-day input
-                const isNavigating = this._focusedInputName && this._focusedInputName.includes("spellsPerDayTable");
+                const isNavigating = this._focusedInputName && (this._focusedInputName.includes("spellsPerDayTable") || this._focusedInputName.includes("spellsKnownTable"));
                 
                 if (!isNavigating) {
                     const value = event.target.value;
@@ -469,6 +496,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {DragEvent} event
      */
     async _onDrop(event) {
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:entry',message:'_onDrop called',data:{documentType:this.document?.type,hasDataTransfer:!!(event?.dataTransfer)},timestamp:Date.now(),hypothesisId:'H1-H3'})}).catch(()=>{});
+        // #endregion
         const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
         let droppedItem = null;
         if (data.type === "Item") {
@@ -477,6 +507,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             const doc = await foundry.utils.fromUuid(data.uuid);
             if (doc?.documentName === "Item") droppedItem = doc;
         }
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:afterResolve',message:'drop data and resolved item',data:{dataType:data?.type,dataUuid:!!data?.uuid,dataKeys:data?Object.keys(data):[],droppedItemSet:!!droppedItem,droppedItemType:droppedItem?.type,documentType:this.document?.type},timestamp:Date.now(),hypothesisId:'H2-H5'})}).catch(()=>{});
+        // #endregion
         if (!droppedItem) return;
 
         // Handle school drops on spell or school sheets
@@ -573,6 +606,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
 
         // Handle domain drops on class sheets (spellcasting domains)
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:beforeDomainClassCheck',message:'branch check',data:{droppedType:droppedItem?.type,docType:this.document?.type,willEnterDomainClass:droppedItem?.type==='domain'&&this.document?.type==='class'},timestamp:Date.now(),hypothesisId:'H4'})}).catch(()=>{});
+        // #endregion
         if (droppedItem.type === "domain" && this.document.type === "class") {
             // Preserve scroll position
             const tab = this.element.querySelector(".sheet-body .tab.active");
@@ -600,6 +636,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             current.push({ domainItemId: droppedItem.id, domainName: droppedItem.name, domainKey });
             current.sort((a, b) => a.domainName.localeCompare(b.domainName));
             await this.document.update({ "system.spellcasting.domains": current });
+            // #region agent log
+            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:domainClassUpdateDone',message:'domain added to class',data:{classId:this.document?.id,domainKey},timestamp:Date.now(),hypothesisId:'H5'})}).catch(()=>{});
+            // #endregion
             return;
         }
 

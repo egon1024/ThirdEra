@@ -93,6 +93,12 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                     choices: () => CONFIG.THIRDERA.castingAbilities,
                     label: "Casting Ability"
                 }),
+                /** When true, this class supports domains (e.g. Cleric). Character sheet shows domain add/remove and domain spells. Third-party classes can set this. */
+                supportsDomains: new StringField({
+                    required: true, blank: false, initial: "false",
+                    choices: () => ({ true: "Yes", false: "No" }),
+                    label: "Domains Apply"
+                }),
                 domains: new ArrayField(new SchemaField({
                     domainItemId: new StringField({ required: true, blank: false, label: "Domain Item ID" }),
                     domainName: new StringField({ required: true, blank: false, label: "Domain Name" }),
@@ -143,7 +149,24 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                         required: true, integer: true, min: 0, initial: 0,
                         label: "9th Level"
                     })
-                }), { label: "Spells Per Day Table" })
+                }), { label: "Spells Per Day Table" }),
+                /** Optional. For spontaneous casters (e.g. Sorcerer, Bard): max spells known per class level and spell level. Same shape as spellsPerDayTable. When empty, no limit is enforced. */
+                spellsKnownTable: new ArrayField(new SchemaField({
+                    classLevel: new NumberField({
+                        required: true, integer: true, min: 1, max: 20,
+                        label: "Class Level"
+                    }),
+                    spellLevel0: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "0th Level" }),
+                    spellLevel1: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "1st Level" }),
+                    spellLevel2: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "2nd Level" }),
+                    spellLevel3: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "3rd Level" }),
+                    spellLevel4: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "4th Level" }),
+                    spellLevel5: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "5th Level" }),
+                    spellLevel6: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "6th Level" }),
+                    spellLevel7: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "7th Level" }),
+                    spellLevel8: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "8th Level" }),
+                    spellLevel9: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "9th Level" })
+                }), { initial: [], label: "Spells Known Table" })
             })
         };
     }
@@ -192,6 +215,24 @@ export class ClassData extends foundry.abstract.TypeDataModel {
         const entry = table.find(e => e.classLevel === classLevel);
         if (!entry) return 0;
 
+        const fieldName = `spellLevel${spellLevel}`;
+        return entry[fieldName] || 0;
+    }
+
+    /**
+     * Get spells known (max) for a given class level and spell level from the spells known table.
+     * Used for spontaneous casters (e.g. Sorcerer, Bard). Returns 0 if no table or no entry (no limit displayed).
+     * @param {Array} table            The spellsKnownTable array
+     * @param {number} classLevel      The class level (1-20)
+     * @param {number} spellLevel      The spell level (0-9)
+     * @returns {number}               Max spells known for that level, or 0 if not found / no limit
+     */
+    static getSpellsKnown(table, classLevel, spellLevel) {
+        if (!Array.isArray(table) || table.length === 0 || classLevel < 1 || classLevel > 20 || spellLevel < 0 || spellLevel > 9) {
+            return 0;
+        }
+        const entry = table.find(e => e.classLevel === classLevel);
+        if (!entry) return 0;
         const fieldName = `spellLevel${spellLevel}`;
         return entry[fieldName] || 0;
     }

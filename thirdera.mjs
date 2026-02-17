@@ -434,6 +434,15 @@ function registerHandlebarsHelpers() {
         return a === b;
     });
 
+    Handlebars.registerHelper("gt", function (a, b) {
+        return Number(a) > Number(b);
+    });
+
+    Handlebars.registerHelper("or", function (...args) {
+        const options = args.pop();
+        return args.some(Boolean);
+    });
+
     // Concatenate strings
     Handlebars.registerHelper("concat", function (...args) {
         args.pop(); // Remove Handlebars options object
@@ -443,6 +452,17 @@ function registerHandlebarsHelpers() {
     Handlebars.registerHelper("capitalize", function (str) {
         if (!str) return "";
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    });
+
+    // Ordinal for spell level labels: 1 -> "1st", 2 -> "2nd", 3 -> "3rd", 4 -> "4th", etc. Accepts string or number.
+    Handlebars.registerHelper("ordinal", function (n) {
+        const i = parseInt(n, 10);
+        if (Number.isNaN(i) || i === 0) return String(n);
+        const j = i % 10, k = i % 100;
+        if (j === 1 && k !== 11) return i + "st";
+        if (j === 2 && k !== 12) return i + "nd";
+        if (j === 3 && k !== 13) return i + "rd";
+        return i + "th";
     });
 
 }
