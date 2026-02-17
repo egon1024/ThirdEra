@@ -9,6 +9,13 @@
         </select>
     </div>
 
+    {{#if selectedClass}}
+    <div class="form-group spell-search-group">
+        <label for="spell-list-search">{{localize "THIRDERA.SpellListBrowser.SearchPlaceholder"}}</label>
+        <input type="text" name="search" id="spell-list-search" placeholder="{{localize "THIRDERA.SpellListBrowser.SearchPlaceholder"}}" value="{{searchTerm}}" autocomplete="off" />
+    </div>
+    {{/if}}
+
     <div class="spell-list-body">
         {{#if selectedClass}}
             {{#if hasSpells}}
@@ -23,7 +30,7 @@
                             <div class="spell-school-name" role="heading" aria-level="2">{{group.schoolName}}</div>
                             <ol class="items-list spells-list">
                                 {{#each group.spells as |entry|}}
-                                <li class="item flexrow spell-item" data-spell-uuid="{{entry.uuid}}" draggable="true">
+                                <li class="item flexrow spell-item" data-spell-uuid="{{entry.uuid}}" data-spell-name="{{entry.name}}" draggable="true">
                                     <div class="item-name">
                                         {{#if entry.img}}<div class="item-image"><img src="{{entry.img}}" alt="" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{entry.name}}"></i></div>{{/if}}
                                         <h4><a class="content-link" data-link data-uuid="{{entry.uuid}}" data-type="Item">{{entry.name}}</a></h4>
@@ -36,7 +43,7 @@
                     {{else}}
                         <ol class="items-list spells-list">
                             {{#each levelData.spells as |entry|}}
-                            <li class="item flexrow spell-item" data-spell-uuid="{{entry.uuid}}" draggable="true">
+                            <li class="item flexrow spell-item" data-spell-uuid="{{entry.uuid}}" data-spell-name="{{entry.name}}" draggable="true">
                                 <div class="item-name">
                                     {{#if entry.img}}<div class="item-image"><img src="{{entry.img}}" alt="" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{entry.name}}"></i></div>{{/if}}
                                     <h4><a class="content-link" data-link data-uuid="{{entry.uuid}}" data-type="Item">{{entry.name}}</a></h4>
@@ -47,6 +54,7 @@
                     {{/if}}
                 </div>
                 {{/each}}
+                <p class="hint spell-search-no-results spell-search-hidden">{{localize "THIRDERA.SpellListBrowser.SearchNoResults"}}</p>
             {{else}}
                 <p class="hint">{{localize "THIRDERA.SpellListBrowser.NoSpells"}}</p>
             {{/if}}

@@ -2863,6 +2863,23 @@
   border: 1px solid var(--color-border-input);
 }
 
+.thirdera.spell-list-browser .spell-search-group {
+  flex: 0 0 auto;
+}
+
+.thirdera.spell-list-browser .spell-search-group input {
+  width: 100%;
+  font-size: var(--font-size-body);
+  background: var(--color-bg-input);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-input);
+  padding: 6px 10px;
+}
+
+.thirdera.spell-list-browser .spell-search-hidden {
+  display: none !important;
+}
+
 .thirdera.spell-list-browser .spell-list-body {
   flex: 1;
   min-height: 0;
@@ -2876,12 +2893,17 @@
 }
 
 .thirdera.spell-list-browser .spell-level-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   font-size: var(--font-size-value);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-secondary);
   padding: 4px 0;
-  border-bottom: 1px solid var(--color-border-divider);
   margin-bottom: 8px;
+  border-bottom: 1px solid var(--color-border-divider);
+  background: var(--color-bg-parchment) !important;
+  box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.12);
 }
 
 .thirdera.spell-list-browser .spell-school-group {

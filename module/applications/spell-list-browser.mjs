@@ -37,6 +37,9 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
     /** Currently selected class (from class selector). */
     selectedClass = null;
 
+    /** Search/filter term for spells. */
+    searchTerm = "";
+
     /** @override */
     async _prepareContext(options) {
         const classes = await getAllClasses();
@@ -121,6 +124,7 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
             selectedClass,
             spellsByLevel,
             isArcane,
+            searchTerm: this.searchTerm ?? "",
             hasSpells: spellsByLevel.length > 0
         };
     }
@@ -145,6 +149,75 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
                 // #endregion
                 await this.render(true);
             });
+        }
+
+        const searchInput = root?.querySelector?.('input[name="search"]');
+        if (searchInput) {
+            const fuzzyMatch = (text, query) => {
+                if (!text || !query) return true;
+                const s = text.toLowerCase();
+                let idx = 0;
+                for (const c of query) {
+                    const pos = s.indexOf(c, idx);
+                    if (pos < 0) return false;
+                    idx = pos + 1;
+                }
+                return true;
+            };
+            const levenshtein = (a, b) => {
+                if (!a.length) return b.length;
+                if (!b.length) return a.length;
+                const matrix = [];
+                for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+                for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+                for (let i = 1; i <= b.length; i++) {
+                    for (let j = 1; j <= a.length; j++) {
+                        matrix[i][j] =
+                            b[i - 1] === a[j - 1]
+                                ? matrix[i - 1][j - 1]
+                                : 1 + Math.min(matrix[i - 1][j - 1], matrix[i][j - 1], matrix[i - 1][j]);
+                    }
+                }
+                return matrix[b.length][a.length];
+            };
+            const spellMatches = (name, query) => {
+                if (!query) return true;
+                if (fuzzyMatch(name, query)) return true;
+                const q = query.toLowerCase();
+                const maxEdits = q.length <= 4 ? 1 : q.length <= 7 ? 2 : 3;
+                const words = (name || "").toLowerCase().split(/\s+/).filter(Boolean);
+                for (const word of words) {
+                    if (Math.abs(word.length - q.length) > maxEdits) continue;
+                    if (levenshtein(q, word) <= maxEdits) return true;
+                }
+                return false;
+            };
+            const noResultsEl = root?.querySelector?.(".spell-search-no-results");
+            const HIDDEN_CLASS = "spell-search-hidden";
+            searchInput.addEventListener("input", () => {
+                this.searchTerm = searchInput.value ?? "";
+                const query = (this.searchTerm || "").trim().toLowerCase().replace(/\s+/g, " ") || "";
+                const spellItems = root?.querySelectorAll?.(".spell-item[data-spell-name]") ?? [];
+                let visibleCount = 0;
+                for (const el of spellItems) {
+                    const name = el.dataset.spellName ?? "";
+                    const show = !query || spellMatches(name, query);
+                    el.classList.toggle(HIDDEN_CLASS, !show);
+                    if (show) visibleCount++;
+                }
+                for (const group of root?.querySelectorAll?.(".spell-school-group") ?? []) {
+                    const anyVisible = group.querySelector(`.spell-item:not(.${HIDDEN_CLASS})`);
+                    group.classList.toggle(HIDDEN_CLASS, !anyVisible);
+                }
+                for (const levelGroup of root?.querySelectorAll?.(".spell-level-group") ?? []) {
+                    const anyVisible = levelGroup.querySelector(`.spell-item:not(.${HIDDEN_CLASS})`);
+                    levelGroup.classList.toggle(HIDDEN_CLASS, !anyVisible);
+                }
+                if (noResultsEl) {
+                    noResultsEl.classList.toggle(HIDDEN_CLASS, !(query && visibleCount === 0));
+                }
+            });
+            if (searchInput.value?.trim()) searchInput.dispatchEvent(new Event("input", { bubbles: true }));
         }
 
         // #region agent log
