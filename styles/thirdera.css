@@ -2828,4 +2828,139 @@
 .thirdera .string-list-add:hover {
   text-decoration: underline;
 }
+
+/* Spell List Browser — match actor sheet parchment styling; force over Foundry app defaults */
+.thirdera.spell-list-browser,
+.thirdera.spell-list-browser .window-content,
+.thirdera.spell-list-browser .spell-list-browser-form {
+  background: var(--color-bg-parchment) !important;
+  color: var(--color-text-primary);
+}
+
+.thirdera.spell-list-browser .spell-list-browser-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.thirdera.spell-list-browser .form-group {
+  flex: 0 0 auto;
+}
+
+.thirdera.spell-list-browser .form-group label {
+  display: block;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 4px;
+}
+
+.thirdera.spell-list-browser .form-group select {
+  width: 100%;
+  font-size: var(--font-size-body);
+  background: var(--color-bg-input);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-input);
+}
+
+.thirdera.spell-list-browser .spell-list-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--color-bg-parchment) !important;
+  color: var(--color-text-primary);
+}
+
+.thirdera.spell-list-browser .spell-level-group {
+  margin-bottom: 16px;
+}
+
+.thirdera.spell-list-browser .spell-level-header {
+  font-size: var(--font-size-value);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+  margin-bottom: 8px;
+}
+
+.thirdera.spell-list-browser .spell-school-group {
+  margin-bottom: 12px;
+}
+
+.thirdera.spell-list-browser .spell-school-group .spell-school-name {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  margin: 12px 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-border-divider);
+  display: block;
+}
+
+.thirdera.spell-list-browser .spell-school-indicator {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  font-weight: normal;
+}
+
+/* Spell list uses items-list structure to match actor sheet styling */
+.thirdera.spell-list-browser .spells-list {
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera.spell-list-browser .spell-item {
+  padding: 8px 15px;
+  cursor: grab;
+  background: var(--color-bg-parchment-dark) !important;
+  color: var(--color-text-primary);
+}
+
+.thirdera.spell-list-browser .spell-item:hover {
+  background: var(--color-bg-parchment-dark);
+  color: var(--color-hover-alt);
+}
+
+.thirdera.spell-list-browser .spell-item:hover h4 {
+  color: var(--color-hover-alt);
+}
+
+/* Icons dark for visibility on light background (color for i, filter for img) */
+.thirdera.spell-list-browser .spell-item .item-image,
+.thirdera.spell-list-browser .spell-item .item-image i {
+  color: var(--color-text-primary);
+}
+
+.thirdera.spell-list-browser .spell-item .item-image img {
+  filter: brightness(0);
+}
+
+/* Spell name/link: no dark box, no border — override Foundry content-link */
+.thirdera.spell-list-browser .spell-item .item-name,
+.thirdera.spell-list-browser .spell-item .item-name a,
+.thirdera.spell-list-browser .spell-item h4,
+.thirdera.spell-list-browser .spell-item .content-link {
+  background: transparent !important;
+  border: none !important;
+  color: var(--color-text-primary);
+}
+
+.thirdera.spell-list-browser .spell-item .content-link:hover {
+  color: var(--color-hover-alt);
+  background: transparent !important;
+  border: none !important;
+}
+
+}
+
+/* Spell List button in Items directory header — dark icon on light background (outside .thirdera) */
+.spell-list-browser-btn,
+.spell-list-browser-btn i {
+  color: var(--color-text-primary, #1a1a1a) !important;
+}
+
+.spell-list-browser-btn:hover,
+.spell-list-browser-btn:hover i {
+  color: var(--color-hover-alt, #333366) !important;
 }

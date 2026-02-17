@@ -326,7 +326,8 @@ Hooks.once("init", async function () {
     // Register Handlebars partials
     await foundry.applications.handlebars.loadTemplates([
         "systems/thirdera/templates/partials/editor-box.hbs",
-        "systems/thirdera/templates/partials/scaling-table.hbs"
+        "systems/thirdera/templates/partials/scaling-table.hbs",
+        "systems/thirdera/templates/apps/spell-list-browser.hbs"
     ]);
 
     console.log("Third Era | System initialized");
@@ -465,6 +466,20 @@ function registerHandlebarsHelpers() {
         return i + "th";
     });
 
+    // Group arcane spells by school for sub-headers. Returns [{ schoolName, spells }, ...] or empty array.
+    // Used in Spell List Browser for arcane casters.
+    Handlebars.registerHelper("spellSchoolGroups", function (spells, isArcane) {
+        if (!isArcane || !Array.isArray(spells)) return [];
+        const bySchool = new Map();
+        for (const s of spells) {
+            const school = (s.schoolName || "(No school)").trim() || "(No school)";
+            if (!bySchool.has(school)) bySchool.set(school, []);
+            bySchool.get(school).push(s);
+        }
+        const schools = [...bySchool.keys()].sort((a, b) => a.localeCompare(b));
+        return schools.map((school) => ({ schoolName: school, spells: bySchool.get(school) }));
+    });
+
 }
 
 /* -------------------------------------------- */
@@ -479,10 +494,11 @@ Hooks.on("renderActorDirectory", (app, html, data) => {
 });
 
 /**
- * Add Delete button to Item Directory
+ * Add Delete button and Spell List button to Item Directory
  */
 Hooks.on("renderItemDirectory", (app, html, data) => {
     _addSidebarDeleteButton(app, html, "Item");
+    _addSpellListButton(html);
 });
 
 /**
@@ -550,4 +566,26 @@ function _addSidebarDeleteButton(app, html, type) {
         // Insert before the standard creation/edit controls if they exist, or just append
         li.append(deleteBtn);
     });
+}
+
+/**
+ * Add Spell List button to Item Directory header.
+ * @param {HTMLElement|jQuery} html - The rendered directory HTML
+ */
+function _addSpellListButton(html) {
+    const el = html?.jquery ? html[0] : html;
+    const headerActions = el?.querySelector?.(".header-actions");
+    if (!headerActions) return;
+    if (headerActions.querySelector?.(".spell-list-browser-btn")) return;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "spell-list-browser-btn create-entry";
+    btn.innerHTML = '<i class="fa-solid fa-book-sparkles" inert></i><span data-i18n="THIRDERA.SpellListBrowser.Button">Spell List</span>';
+    btn.title = game.i18n.localize("THIRDERA.SpellListBrowser.Button");
+    btn.addEventListener("click", async () => {
+        const { SpellListBrowser } = await import("./module/applications/spell-list-browser.mjs");
+        new SpellListBrowser().render(true);
+    });
+    headerActions.appendChild(btn);
 }

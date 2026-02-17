@@ -85,6 +85,16 @@
                 "Hint": "When enabled, the first level of the first class added to a character automatically grants maximum hit points from the class's hit die (e.g., d8 = 8 HP). The value remains editable in the level history."
             }
         },
+        "SpellListBrowser": {
+            "Title": "Spell List Browser",
+            "Button": "Spell List",
+            "ClassLabel": "Class",
+            "NoClassSelected": "Select a class",
+            "SelectClass": "Select a class above to view its spell list.",
+            "NoSpells": "No spells found for this class. Spells are added to a class list when you set Level by Class on each spell item.",
+            "Level0": "0-Level (Cantrips/Orisons)",
+            "Level": "Level"
+        },
         "Spells": {
             "SpellsPerDay": "Spells/Day",
             "Prepared": "Prepared",
