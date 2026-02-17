@@ -456,8 +456,7 @@
   color: var(--color-bg-parchment);
 }
 
-.thirdera .add-to-ready-btn,
-.thirdera .remove-from-ready-btn {
+.thirdera .add-to-ready-btn {
   font-size: var(--font-size-note);
   padding: 2px 8px;
   color: var(--color-character-accent);
@@ -467,8 +466,7 @@
   cursor: pointer;
 }
 
-.thirdera .add-to-ready-btn:hover,
-.thirdera .remove-from-ready-btn:hover {
+.thirdera .add-to-ready-btn:hover {
   background: var(--color-hover);
   color: var(--color-text-primary);
 }
