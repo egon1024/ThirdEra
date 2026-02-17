@@ -117,6 +117,8 @@
             "ReadyToCastTab": "Ready to cast",
             "AddToReady": "Add to ready",
             "RemoveFromReady": "Remove from ready",
+            "ToggleReady": "Include in Ready to cast (toggle to add or remove)",
+            "InReady": "In ready",
             "AddToCharacter": "Add to character",
             "PlaceholderHint": "Domain spell not yet on your character. Click Add to import it.",
             "NoSpellsKnown": "No spells known for this level yet.",
@@ -126,7 +128,8 @@
             "DecreasePrepared": "Decrease Prepared",
             "IncreasePrepared": "Increase Prepared",
             "DecreaseCast": "Decrease Cast",
-            "IncreaseCast": "Increase Cast"
+            "IncreaseCast": "Increase Cast",
+            "ViewSpell": "View spell"
         },
         "Inventory": {
             "TotalWeight": "Total Weight",

@@ -48,7 +48,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             removeDomain: ThirdEraActorSheet.#onRemoveDomain,
             addPlaceholderSpell: ThirdEraActorSheet.#onAddPlaceholderSpell,
             addToShortlist: ThirdEraActorSheet.#onAddToShortlist,
-            removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist
+            removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist,
+            toggleShortlist: ThirdEraActorSheet.#onToggleShortlist
         },
         window: {
             controls: [
@@ -595,6 +596,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Ready to cast: filter by shortlist (full-list prepared), prepared>0 (wizard), or same (spontaneous)
         const spellShortlistByClass = systemData.spellShortlistByClass || {};
+        // Mark each spell in Known with inShortlist for full-list prepared casters (for toggle UI)
+        for (const classData of knownSpellsByClass) {
+            if (classData.spellListAccess !== "full" || classData.preparationType !== "prepared") continue;
+            const shortlistIds = new Set(spellShortlistByClass[classData.classItemId] || []);
+            for (const levelKey of Object.keys(classData.spellsByLevel || {})) {
+                const spells = classData.spellsByLevel[levelKey] || [];
+                for (const spell of spells) {
+                    if (spell.id) spell.inShortlist = shortlistIds.has(spell.id);
+                }
+            }
+            for (const levelKey of Object.keys(classData.domainSpellsByLevel || {})) {
+                const spells = classData.domainSpellsByLevel[levelKey] || [];
+                for (const spell of spells) {
+                    if (spell.id) spell.inShortlist = shortlistIds.has(spell.id);
+                }
+            }
+        }
         const readyToCastByClass = organizedSpells.map((classData) => {
             if (!classData.hasSpellcasting) return { ...classData, spellsByLevel: classData.spellsByLevel };
             const shortlistIds = new Set(spellShortlistByClass[classData.classItemId] || []);
@@ -3301,6 +3319,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!itemId || !classItemId) return;
         const item = this.actor.items.get(itemId);
         if (!item || item.type !== "spell") return;
+        const sheetBody = this.element?.querySelector(".sheet-body");
+        const scrollTop = sheetBody?.scrollTop ?? 0;
         const shortlist = { ...(this.actor.system.spellShortlistByClass || {}) };
         const list = Array.isArray(shortlist[classItemId]) ? [...shortlist[classItemId]] : [];
         if (list.includes(itemId)) return;
@@ -3309,6 +3329,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         await this.actor.update({ "system.spellShortlistByClass": shortlist });
         await this.actor.prepareData();
         await this.render();
+        this.element?.querySelector(".sheet-body")?.scrollTo({ top: scrollTop });
     }
 
     /**
@@ -3320,11 +3341,41 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const itemId = target.closest("[data-item-id]")?.dataset?.itemId || target.dataset?.itemId;
         const classItemId = target.dataset?.classItemId?.trim();
         if (!itemId || !classItemId) return;
+        const sheetBody = this.element?.querySelector(".sheet-body");
+        const scrollTop = sheetBody?.scrollTop ?? 0;
         const shortlist = { ...(this.actor.system.spellShortlistByClass || {}) };
         const list = Array.isArray(shortlist[classItemId]) ? shortlist[classItemId].filter((id) => id !== itemId) : [];
         shortlist[classItemId] = list;
         await this.actor.update({ "system.spellShortlistByClass": shortlist });
         await this.actor.prepareData();
         await this.render();
+        this.element?.querySelector(".sheet-body")?.scrollTo({ top: scrollTop });
+    }
+
+    /**
+     * Toggle a spell in the shortlist for a full-list prepared caster (add if absent, remove if present).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target   Element with data-action="toggleShortlist" data-item-id, data-class-item-id
+     */
+    static async #onToggleShortlist(event, target) {
+        event.preventDefault();
+        const itemId = target.closest("[data-item-id]")?.dataset?.itemId || target.dataset?.itemId;
+        const classItemId = target.dataset?.classItemId?.trim();
+        if (!itemId || !classItemId) return;
+        const sheetBody = this.element?.querySelector(".sheet-body");
+        const scrollTop = sheetBody?.scrollTop ?? 0;
+        const shortlist = { ...(this.actor.system.spellShortlistByClass || {}) };
+        const list = Array.isArray(shortlist[classItemId]) ? [...shortlist[classItemId]] : [];
+        const inList = list.includes(itemId);
+        if (inList) {
+            shortlist[classItemId] = list.filter((id) => id !== itemId);
+        } else {
+            list.push(itemId);
+            shortlist[classItemId] = list;
+        }
+        await this.actor.update({ "system.spellShortlistByClass": shortlist });
+        await this.actor.prepareData();
+        await this.render();
+        this.element?.querySelector(".sheet-body")?.scrollTo({ top: scrollTop });
     }
 }
