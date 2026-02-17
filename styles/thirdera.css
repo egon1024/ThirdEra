@@ -2381,6 +2381,31 @@
   padding: 0;
 }
 
+.thirdera .tab.spells .spell-search-group {
+  margin-bottom: 8px;
+}
+
+.thirdera .tab.spells .spell-search-group label {
+  display: block;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+
+.thirdera .tab.spells .spell-search-group input {
+  width: 100%;
+  max-width: 280px;
+  font-size: var(--font-size-body);
+  background: var(--color-bg-input);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-input);
+  padding: 6px 10px;
+}
+
+.thirdera .tab.spells .spell-search-no-results {
+  margin-top: 8px;
+}
+
 .thirdera .tab.spells .spell-item {
   padding: 8px 15px;
 }
@@ -2918,6 +2943,7 @@
   padding: 6px 10px;
 }
 
+.thirdera .spell-search-hidden,
 .thirdera.spell-list-browser .spell-search-hidden {
   display: none !important;
 }

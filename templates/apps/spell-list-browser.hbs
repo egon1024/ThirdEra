@@ -10,9 +10,8 @@
     </div>
 
     {{#if selectedClass}}
-    <div class="form-group spell-search-group">
-        <label for="spell-list-search">{{localize "THIRDERA.SpellListBrowser.SearchPlaceholder"}}</label>
-        <input type="text" name="search" id="spell-list-search" placeholder="{{localize "THIRDERA.SpellListBrowser.SearchPlaceholder"}}" value="{{searchTerm}}" autocomplete="off" />
+    <div class="form-group">
+        {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-list-search" inputName="search" placeholderKey="THIRDERA.SpellListBrowser.SearchPlaceholder" noResultsKey="THIRDERA.SpellListBrowser.SearchNoResults" value=searchTerm}}
     </div>
     {{/if}}
 
@@ -54,7 +53,6 @@
                     {{/if}}
                 </div>
                 {{/each}}
-                <p class="hint spell-search-no-results spell-search-hidden">{{localize "THIRDERA.SpellListBrowser.SearchNoResults"}}</p>
             {{else}}
                 <p class="hint">{{localize "THIRDERA.SpellListBrowser.NoSpells"}}</p>
             {{/if}}

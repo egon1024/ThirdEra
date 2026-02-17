@@ -2,6 +2,7 @@ import { getWieldingInfo } from "../data/_damage-helpers.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { SpellData } from "../data/item-spell.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -52,6 +53,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             toggleShortlist: ThirdEraActorSheet.#onToggleShortlist
         },
         window: {
+            resizable: true,
             controls: [
                 {
                     icon: "fa-solid fa-lock",
@@ -236,6 +238,40 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 toggleIcon.classList.add("fa-chevron-down");
             }
         });
+
+        // Known spells tab: filter by search (shared logic with Spell List Browser)
+        const knownPanel = this.element?.querySelector?.(".spells-known");
+        const spellSearchInput = knownPanel?.querySelector?.('input[name="spellKnownSearch"]');
+        if (spellSearchInput && knownPanel) {
+            const noResultsEl = knownPanel.querySelector(".spell-search-no-results");
+            spellSearchInput.addEventListener("input", () => {
+                const query = normalizeQuery(spellSearchInput.value ?? "");
+                const spellItems = knownPanel.querySelectorAll(".spell-item[data-spell-name]");
+                let visibleCount = 0;
+                for (const el of spellItems) {
+                    const name = el.dataset.spellName ?? "";
+                    const show = !query || spellMatches(name, query);
+                    el.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !show);
+                    if (show) visibleCount++;
+                }
+                for (const group of knownPanel.querySelectorAll(".spell-level-group")) {
+                    const anyVisible = group.querySelector(`.spell-item:not(.${SPELL_SEARCH_HIDDEN_CLASS})`);
+                    group.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !anyVisible);
+                }
+                for (const group of knownPanel.querySelectorAll(".domain-spells-group")) {
+                    const anyVisible = group.querySelector(`.spell-item:not(.${SPELL_SEARCH_HIDDEN_CLASS})`);
+                    group.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !anyVisible);
+                }
+                for (const spellcastingClass of knownPanel.querySelectorAll(".spellcasting-class")) {
+                    const levelOrDomainGroups = spellcastingClass.querySelectorAll(".spell-level-group, .domain-spells-group");
+                    const anyGroupVisible = levelOrDomainGroups.length === 0 || [...levelOrDomainGroups].some((g) => !g.classList.contains(SPELL_SEARCH_HIDDEN_CLASS));
+                    spellcastingClass.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !anyGroupVisible);
+                }
+                if (noResultsEl) {
+                    noResultsEl.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !(query && visibleCount === 0));
+                }
+            });
+        }
     }
 
     /** @override */

@@ -327,6 +327,7 @@ Hooks.once("init", async function () {
     await foundry.applications.handlebars.loadTemplates([
         "systems/thirdera/templates/partials/editor-box.hbs",
         "systems/thirdera/templates/partials/scaling-table.hbs",
+        "systems/thirdera/templates/partials/spell-search.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs"
     ]);
 

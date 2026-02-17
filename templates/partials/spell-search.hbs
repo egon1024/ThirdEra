@@ -1,0 +1,21 @@
+{{!--
+  Reusable spell search UI: label, text input, and "no results" message.
+
+  Parameters:
+  - inputId: (string) id and for attribute (e.g. "spell-list-search", "spell-known-search")
+  - inputName: (string) name attribute for the input (e.g. "search", "spellKnownSearch")
+  - placeholderKey: (string) localization key for placeholder/label (e.g. "THIRDERA.Spells.SearchPlaceholder")
+  - noResultsKey: (string) localization key for no-results message (e.g. "THIRDERA.Spells.SearchNoResults")
+  - value: (string, optional) initial value for the input (e.g. searchTerm)
+
+  Usage (character sheet):
+  {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-known-search" inputName="spellKnownSearch" placeholderKey="THIRDERA.Spells.SearchPlaceholder" noResultsKey="THIRDERA.Spells.SearchNoResults"}}
+
+  Usage (Spell List Browser):
+  {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-list-search" inputName="search" placeholderKey="THIRDERA.SpellListBrowser.SearchPlaceholder" noResultsKey="THIRDERA.SpellListBrowser.SearchNoResults" value=searchTerm}}
+--}}
+<div class="spell-search-group">
+    <label for="{{inputId}}">{{localize placeholderKey}}</label>
+    <input type="text" id="{{inputId}}" name="{{inputName}}" placeholder="{{localize placeholderKey}}" value="{{value}}" autocomplete="off" />
+</div>
+<p class="hint spell-search-no-results spell-search-hidden">{{localize noResultsKey}}</p>

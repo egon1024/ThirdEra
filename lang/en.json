@@ -129,7 +129,9 @@
             "IncreasePrepared": "Increase Prepared",
             "DecreaseCast": "Decrease Cast",
             "IncreaseCast": "Increase Cast",
-            "ViewSpell": "View spell"
+            "ViewSpell": "View spell",
+            "SearchPlaceholder": "Search spells…",
+            "SearchNoResults": "No spells match your search."
         },
         "Inventory": {
             "TotalWeight": "Total Weight",
