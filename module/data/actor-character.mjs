@@ -1,7 +1,8 @@
-const { HTMLField, NumberField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
+const { HTMLField, NumberField, ObjectField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
+import { getSpellsForDomain } from "../logic/domain-spells.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -133,7 +134,10 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 gp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Gold (gp)" }),
                 sp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Silver (sp)" }),
                 cp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Copper (cp)" })
-            })
+            }),
+
+            // Spell shortlist for full-list prepared casters (cleric, druid): classItemId -> spell item IDs to show in "Ready to cast"
+            spellShortlistByClass: new ObjectField({ initial: {}, label: "Spell Shortlist by Class" })
         };
     }
 
@@ -492,6 +496,110 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             spent: skillPointsSpent,
             remaining: skillPointsAvailable - skillPointsSpent
         };
+
+        // ---- Spellcasting Calculations ----
+        // Calculate caster level, spells per day, and spell DC for each class
+        const spellcastingByClass = [];
+        for (const cls of classes) {
+            const lvl = classLevelCounts[cls.id] || 0;
+            if (lvl <= 0) continue;
+
+            const sc = cls.system.spellcasting;
+            if (!sc || !sc.enabled || sc.casterType === "none") continue;
+
+            // Caster level is the class level for that class
+            const casterLevel = lvl;
+
+            // Get casting ability modifier
+            const castingAbility = sc.castingAbility || "none";
+            const abilityMod = castingAbility !== "none" ? (this.abilities[castingAbility]?.mod || 0) : 0;
+
+            // Calculate spell DC: 10 + spell level + ability modifier
+            // We'll calculate this per spell level when displaying
+            const baseSpellDC = 10 + abilityMod;
+
+            // Get spells per day from the table
+            const spellsPerDay = {};
+            const table = sc.spellsPerDayTable || [];
+            for (let spellLevel = 0; spellLevel <= 9; spellLevel++) {
+                spellsPerDay[spellLevel] = ClassData.getSpellsPerDay(table, lvl, spellLevel);
+            }
+
+            // Resolve domain items and calculate domain spell slots (only when this class supports domains, e.g. Cleric)
+            const supportsDomains = sc.supportsDomains === "true";
+            const domains = [];
+            const domainSpellSlots = {};
+            const domainSpellsByLevel = {};
+
+            for (let spellLevel = 0; spellLevel <= 9; spellLevel++) {
+                domainSpellSlots[spellLevel] = 0;
+                domainSpellsByLevel[spellLevel] = [];
+            }
+
+            if (supportsDomains && sc.domains && sc.domains.length > 0) {
+                for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
+                    if (spellsPerDay[spellLevel] > 0) {
+                        domainSpellSlots[spellLevel] = 1;
+                    }
+                }
+
+                for (const domainRef of sc.domains) {
+                    const domainKey = (domainRef.domainKey || "").trim();
+                    const domainName = (domainRef.domainName || "").trim() || domainKey;
+                    if (!domainKey) continue;
+                    try {
+                        domains.push({
+                            domainItemId: domainRef.domainItemId || "",
+                            domainName,
+                            domainKey
+                        });
+
+                        const granted = getSpellsForDomain(domainKey);
+                        for (const entry of granted) {
+                            const sl = entry.level;
+                            if (sl >= 1 && sl <= 9 && entry.spellName) {
+                                domainSpellsByLevel[sl].push({
+                                    domainName,
+                                    domainKey,
+                                    spellName: entry.spellName
+                                });
+                            }
+                        }
+                    } catch (e) {
+                        console.warn(`Domain ${domainName || domainRef.domainItemId} failed for class ${cls.name}:`, e);
+                    }
+                }
+            }
+
+            // Resolve spell list key: use explicit value, or derive from class name for backwards compatibility
+            let spellListKey = sc.spellListKey?.trim() || "";
+            if (!spellListKey && cls.name) {
+                const name = cls.name.toLowerCase();
+                if (name === "wizard" || name === "sorcerer") spellListKey = "sorcererWizard";
+                else spellListKey = name;
+            }
+
+            spellcastingByClass.push({
+                classItemId: cls.id,
+                className: cls.name,
+                spellListKey,
+                casterLevel,
+                casterType: sc.casterType,
+                preparationType: sc.preparationType,
+                spellListAccess: sc.spellListAccess || "none",
+                supportsDomains,
+                castingAbility,
+                abilityMod,
+                baseSpellDC,
+                spellsPerDay,
+                domains,
+                domainSpellSlots,
+                domainSpellsByLevel,
+                hasSpellcasting: true
+            });
+        }
+
+        this.spellcastingByClass = spellcastingByClass;
 
         // Apply HP adjustments (feats, curses, magic items, etc.)
         const hpAdjTotal = this.attributes.hp.adjustments.reduce((sum, adj) => sum + adj.value, 0);

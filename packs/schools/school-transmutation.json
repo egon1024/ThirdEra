@@ -1,0 +1,15 @@
+{
+  "name": "Transmutation",
+  "type": "school",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Transmutation spells change the properties of some creature, thing, or condition.</p>",
+    "key": "transmutation",
+    "oppositionSchools": [{"schoolKey": "abjuration", "schoolName": "Abjuration"}, {"schoolKey": "necromancy", "schoolName": "Necromancy"}],
+    "subschools": [],
+    "descriptorTags": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

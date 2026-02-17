@@ -40,13 +40,119 @@
             data-tab="details">
             <div class="grid grid-2col">
                 <div class="form-group">
-                    <label>Level</label>
-                    <input type="text" name="system.level" value="{{system.level}}" data-dtype="Number" />
+                    <label>Level (fallback)</label>
+                    <input type="number" name="system.level" value="{{system.level}}" min="0" max="9"
+                        data-dtype="Number" title="Used when no class-specific entry exists" />
                 </div>
-                <div class="form-group">
+                <div class="form-group spell-school-section">
                     <label>School</label>
-                    <input type="text" name="system.school" value="{{system.school}}" />
+                    <div class="spell-school-drop droppable" data-drop-hint="school">
+                        {{#if system.schoolKey}}
+                        <div class="spell-school-assigned flexrow">
+                            <span class="spell-school-name">{{system.schoolName}}</span>
+                            <input type="hidden" name="system.schoolKey" value="{{system.schoolKey}}" />
+                            <input type="hidden" name="system.schoolName" value="{{system.schoolName}}" />
+                            <a class="spell-school-clear" data-action="clearSchool" title="Clear school"><i class="fas fa-times"></i></a>
+                        </div>
+                        {{else}}
+                        <p class="drop-zone-hint">Drop school item here</p>
+                        {{/if}}
+                    </div>
+                    {{#if system.schoolKey}}
+                    {{#if hasSchoolSubschoolOptions}}
+                    <div class="form-group spell-subschool-row">
+                        <label>Subschool (optional)</label>
+                        <select name="system.schoolSubschool" title="Subschool within this school">
+                            <option value="">—</option>
+                            {{#each schoolSubschoolOptions as |opt|}}
+                            <option value="{{opt}}" {{#if (eq system.schoolSubschool opt)}}selected{{/if}}>{{opt}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    {{/if}}
+                    {{#if hasSchoolDescriptorsSection}}
+                    <div class="form-group spell-descriptors-row">
+                        <label>Descriptors (optional)</label>
+                        {{#if system.schoolDescriptors}}
+                        <ol class="string-list spell-descriptors-list">
+                            {{#each system.schoolDescriptors as |value index|}}
+                            <li class="string-list-entry flexrow">
+                                <span class="spell-descriptor-value">{{value}}</span>
+                                <a class="string-list-remove" data-action="removeSchoolDescriptor" data-descriptor-index="{{index}}"
+                                    title="Remove"><i class="fas fa-times"></i></a>
+                            </li>
+                            {{/each}}
+                        </ol>
+                        {{/if}}
+                        {{#if hasSchoolDescriptorOptionsForAdd}}
+                        <div class="spell-descriptor-add flexrow">
+                            <select class="school-descriptor-add-select" title="Add descriptor">
+                                <option value="">—</option>
+                                {{#each schoolDescriptorOptionsForAdd as |opt|}}
+                                <option value="{{opt}}">{{opt}}</option>
+                                {{/each}}
+                            </select>
+                            <a class="spell-descriptor-add-btn" data-action="addSchoolDescriptor" title="Add"><i class="fas fa-plus"></i></a>
+                        </div>
+                        {{/if}}
+                    </div>
+                    {{/if}}
+                    {{/if}}
                 </div>
+            </div>
+
+            <h3 class="form-header">Level by Class</h3>
+            <p class="hint">Drag class items here to add them. A spell can be different levels for different classes (e.g., Protection from Energy is 3rd for Cleric, 2nd for Ranger). Supports custom and prestige classes.</p>
+            <div class="spell-drop-zone droppable" data-drop-hint="class">
+                {{#if system.levelsByClass}}
+                <div class="level-by-class-header flexrow">
+                    <span class="level-by-class-name">Class</span>
+                    <span class="level-by-class-level-col">Level</span>
+                    <span class="level-by-class-remove"></span>
+                </div>
+                <ol class="level-by-class-list">
+                    {{#each system.levelsByClass as |entry index|}}
+                    <li class="level-by-class-entry flexrow">
+                        <span class="level-by-class-name">{{entry.className}}</span>
+                        <input type="number" name="system.levelsByClass.{{index}}.level" value="{{entry.level}}"
+                            min="0" max="9" data-dtype="Number" class="level-by-class-level-input" />
+                        <input type="hidden" name="system.levelsByClass.{{index}}.classKey" value="{{entry.classKey}}" />
+                        <input type="hidden" name="system.levelsByClass.{{index}}.className" value="{{entry.className}}" />
+                        <a class="level-by-class-remove" data-action="removeLevelByClass" data-level-by-class-index="{{index}}"
+                            title="Remove"><i class="fas fa-times"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+                {{/if}}
+                <p class="drop-zone-hint">{{#unless system.levelsByClass}}Drop class items here{{/unless}}</p>
+            </div>
+
+            <h3 class="form-header">Level by Domain</h3>
+            <p class="hint">Drag domain items here to add them. Domain spells are granted by domains at a specific level.</p>
+            <div class="spell-drop-zone droppable" data-drop-hint="domain">
+                {{#if system.levelsByDomain}}
+                <div class="level-by-domain-header flexrow">
+                    <span class="level-by-domain-name">Domain</span>
+                    <span class="level-by-domain-level-col">Level</span>
+                    <span class="level-by-domain-remove"></span>
+                </div>
+                <ol class="level-by-domain-list">
+                    {{#each system.levelsByDomain as |entry index|}}
+                    <li class="level-by-domain-entry flexrow">
+                        <span class="level-by-domain-name">{{entry.domainName}}</span>
+                        <input type="number" name="system.levelsByDomain.{{index}}.level" value="{{entry.level}}"
+                            min="1" max="9" data-dtype="Number" class="level-by-domain-level-input" />
+                        <input type="hidden" name="system.levelsByDomain.{{index}}.domainKey" value="{{entry.domainKey}}" />
+                        <input type="hidden" name="system.levelsByDomain.{{index}}.domainName" value="{{entry.domainName}}" />
+                        <a class="level-by-domain-remove" data-action="removeLevelByDomain" data-level-by-domain-index="{{index}}"
+                            title="Remove"><i class="fas fa-times"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+                {{/if}}
+                <p class="drop-zone-hint">{{#unless system.levelsByDomain}}Drop domain items here{{/unless}}</p>
+            </div>
+            <div class="grid grid-2col" style="margin-top: 8px;">
                 <div class="form-group">
                     <label>Casting Time</label>
                     <input type="text" name="system.castingTime" value="{{system.castingTime}}" />
@@ -69,7 +175,11 @@
                 </div>
                 <div class="form-group">
                     <label>Spell Resistance</label>
-                    <input type="text" name="system.spellResistance" value="{{system.spellResistance}}" />
+                    <select name="system.spellResistance">
+                        {{#each config.spellResistanceChoices as |label key|}}
+                        <option value="{{key}}" {{#if (eq ../system.spellResistance key)}}selected{{/if}}>{{label}}</option>
+                        {{/each}}
+                    </select>
                 </div>
             </div>
 

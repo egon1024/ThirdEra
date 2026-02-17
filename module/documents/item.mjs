@@ -10,8 +10,8 @@ export class ThirdEraItem extends Item {
     async _preCreate(data, options, user) {
         await super._preCreate(data, options, user);
 
-        // Auto-generate a key if not already set (skills, feats, features)
-        if ((data.type === "skill" || data.type === "feat" || data.type === "feature") && !data.system?.key) {
+        // Auto-generate a key if not already set (skills, feats, features, domains)
+        if ((data.type === "skill" || data.type === "feat" || data.type === "feature" || data.type === "domain" || data.type === "school") && !data.system?.key) {
             this.updateSource({ "system.key": foundry.utils.randomID() });
         }
     }

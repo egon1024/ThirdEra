@@ -12,7 +12,13 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
       - name: Create release
+        id: create_release
         uses: actions/github-script@v7
         with:
           script: |
@@ -88,3 +94,33 @@ jobs:
             });
 
             core.info(`Release created: ${release.html_url}`);
+            
+            // Output the release ID for the next step
+            core.setOutput('release_id', release.id);
+
+      - name: Upload system.json as release asset
+        uses: actions/github-script@v7
+        env:
+          RELEASE_ID: ${{ steps.create_release.outputs.release_id }}
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read the system.json file
+            const systemJsonPath = path.join(process.cwd(), 'system.json');
+            const systemJsonContent = fs.readFileSync(systemJsonPath, 'utf8');
+            
+            // Upload as release asset
+            await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: process.env.RELEASE_ID,
+              name: 'system.json',
+              data: systemJsonContent,
+              headers: {
+                'content-type': 'application/json'
+              }
+            });
+            
+            core.info('system.json uploaded as release asset');

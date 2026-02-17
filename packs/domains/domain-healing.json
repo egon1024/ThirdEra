@@ -1,0 +1,1 @@
+{"name": "Healing", "type": "domain", "img": "icons/svg/heal.svg", "system": {"description": "<p><strong>Granted Power:</strong> You cast healing spells at +1 caster level.</p>", "key": "healing"}, "flags": {}, "folder": null, "sort": 9}

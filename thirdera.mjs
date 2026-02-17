@@ -15,6 +15,8 @@ import { SkillData } from "./module/data/item-skill.mjs";
 import { RaceData } from "./module/data/item-race.mjs";
 import { ClassData } from "./module/data/item-class.mjs";
 import { FeatureData } from "./module/data/item-feature.mjs";
+import { DomainData } from "./module/data/item-domain.mjs";
+import { SchoolData } from "./module/data/item-school.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -25,6 +27,73 @@ import { ThirdEraActorSheet } from "./module/sheets/actor-sheet.mjs";
 import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
+import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
+
+/**
+ * Initialize HP auto-increase system
+ * Automatically increases current HP when max HP increases (from leveling, constitution changes, etc.)
+ */
+function initHpAutoIncrease() {
+    // Store old max HP values before updates
+    const oldMaxHpMap = new Map();
+    // Track documents currently being updated by our hook to prevent infinite loops
+    const updatingHp = new Set();
+    
+    // Capture old max HP before update
+    Hooks.on("preUpdateActor", (document, changes, options, userId) => {
+        // Only track character actors
+        if (document.type !== "character") return;
+        
+        // Skip if this is just a current HP update (to avoid infinite loops)
+        const changeKeys = Object.keys(foundry.utils.flattenObject(changes));
+        const isOnlyCurrentHpUpdate = changeKeys.length === 1 && 
+            changeKeys[0] === "system.attributes.hp.value";
+        if (isOnlyCurrentHpUpdate || updatingHp.has(document.id)) return;
+        
+        // Store the current max HP (before prepareDerivedData runs)
+        const currentMaxHp = document.system.attributes.hp.max;
+        oldMaxHpMap.set(document.id, currentMaxHp);
+    });
+    
+    // Adjust current HP after update (prepareDerivedData has run by this point)
+    Hooks.on("updateActor", async (document, changes, options, userId) => {
+        // Only process character actors
+        if (document.type !== "character") return;
+        
+        // Skip if this is just a current HP update (to avoid processing our own updates)
+        const changeKeys = Object.keys(foundry.utils.flattenObject(changes));
+        const isOnlyCurrentHpUpdate = changeKeys.length === 1 && 
+            changeKeys[0] === "system.attributes.hp.value";
+        if (isOnlyCurrentHpUpdate || updatingHp.has(document.id)) return;
+        
+        // Get the old max HP we stored
+        const oldMaxHp = oldMaxHpMap.get(document.id);
+        if (oldMaxHp === undefined) return; // No old value stored, skip
+        
+        // Clean up the stored value
+        oldMaxHpMap.delete(document.id);
+        
+        // Get the new max HP (prepareDerivedData has run, so this is the updated value)
+        const newMaxHp = document.system.attributes.hp.max;
+        
+        // If max HP increased, increase current HP by the same amount
+        if (newMaxHp > oldMaxHp) {
+            const hpIncrease = newMaxHp - oldMaxHp;
+            const currentHp = document.system.attributes.hp.value;
+            const newCurrentHp = Math.min(currentHp + hpIncrease, newMaxHp);
+            
+            // Update current HP if it changed
+            if (newCurrentHp !== currentHp) {
+                updatingHp.add(document.id);
+                try {
+                    await document.update({ "system.attributes.hp.value": newCurrentHp });
+                } finally {
+                    updatingHp.delete(document.id);
+                }
+            }
+        }
+    });
+}
 
 /**
  * Initialize the Third Era system
@@ -34,6 +103,7 @@ Hooks.once("init", async function () {
 
     // Initialize logic modules
     AuditLog.init();
+    initHpAutoIncrease();
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;
@@ -107,6 +177,56 @@ Hooks.once("init", async function () {
         saveProgressions: {
             good: "Good (+2 + level/2)",
             poor: "Poor (+level/3)"
+        },
+        casterTypes: {
+            none: "None",
+            arcane: "Arcane",
+            divine: "Divine"
+        },
+        preparationTypes: {
+            none: "None",
+            prepared: "Prepared",
+            spontaneous: "Spontaneous"
+        },
+        spellListAccessTypes: {
+            none: "None",
+            full: "Full list (all spells at level)",
+            learned: "Learned (spellbook or spells known)"
+        },
+        castingAbilities: {
+            none: "None",
+            int: "Intelligence",
+            wis: "Wisdom",
+            cha: "Charisma"
+        },
+        /** Spell list keys for looking up per-class spell levels. Sorcerer and Wizard share the same list. */
+        spellListKeys: {
+            sorcererWizard: "Sorcerer/Wizard",
+            bard: "Bard",
+            cleric: "Cleric",
+            druid: "Druid",
+            paladin: "Paladin",
+            ranger: "Ranger"
+        },
+        /** Spell Resistance choices for spells. Keys are machine-readable for future automation. */
+        spellResistanceChoices: {
+            "": "—",
+            yes: "Yes",
+            no: "No",
+            "yes-harmless": "Yes (harmless)",
+            "no-object": "No (object)",
+            "see-text": "See text"
+        },
+        /** SRD schools of magic (fallback when school items not loaded). */
+        schools: {
+            abjuration: "Abjuration",
+            conjuration: "Conjuration",
+            divination: "Divination",
+            enchantment: "Enchantment",
+            evocation: "Evocation",
+            illusion: "Illusion",
+            necromancy: "Necromancy",
+            transmutation: "Transmutation"
         }
     };
 
@@ -145,6 +265,15 @@ Hooks.once("init", async function () {
         default: false
     });
 
+    game.settings.register("thirdera", "firstLevelFullHp", {
+        name: "THIRDERA.Settings.FirstLevelFullHp.Name",
+        hint: "THIRDERA.Settings.FirstLevelFullHp.Hint",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true
+    });
+
     // Register data models
     CONFIG.Actor.dataModels = {
         character: CharacterData,
@@ -160,7 +289,24 @@ Hooks.once("init", async function () {
         feature: FeatureData,
         skill: SkillData,
         race: RaceData,
-        class: ClassData
+        class: ClassData,
+        domain: DomainData,
+        school: SchoolData
+    };
+
+    // Register item type labels for the creation menu
+    CONFIG.Item.typeLabels = {
+        weapon: "THIRDERA.TYPES.Item.weapon",
+        armor: "THIRDERA.TYPES.Item.armor",
+        equipment: "THIRDERA.TYPES.Item.equipment",
+        spell: "THIRDERA.TYPES.Item.spell",
+        feat: "THIRDERA.TYPES.Item.feat",
+        feature: "THIRDERA.TYPES.Item.feature",
+        skill: "THIRDERA.TYPES.Item.skill",
+        race: "THIRDERA.TYPES.Item.race",
+        class: "THIRDERA.TYPES.Item.class",
+        domain: "THIRDERA.TYPES.Item.domain",
+        school: "THIRDERA.TYPES.Item.school"
     };
 
     // Register sheet application classes
@@ -194,6 +340,24 @@ Hooks.once("ready", async function () {
     
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
+    // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
+    await populateCompendiumCache();
+});
+
+/**
+ * When a spell is updated (e.g. levelsByDomain changed), refresh the domain-spells cache and
+ * re-render any open domain sheets so the "Granted spells" list updates immediately.
+ */
+Hooks.on("updateItem", async (document, changes, options, userId) => {
+    if (document.type !== "spell") return;
+    await populateCompendiumCache();
+    const instances = foundry.applications?.instances;
+    if (!instances) return;
+    for (const app of instances.values()) {
+        if (app.document?.type === "domain" && app.rendered) {
+            app.render(true);
+        }
+    }
 });
 
 /**
@@ -270,6 +434,15 @@ function registerHandlebarsHelpers() {
         return a === b;
     });
 
+    Handlebars.registerHelper("gt", function (a, b) {
+        return Number(a) > Number(b);
+    });
+
+    Handlebars.registerHelper("or", function (...args) {
+        const options = args.pop();
+        return args.some(Boolean);
+    });
+
     // Concatenate strings
     Handlebars.registerHelper("concat", function (...args) {
         args.pop(); // Remove Handlebars options object
@@ -279,6 +452,17 @@ function registerHandlebarsHelpers() {
     Handlebars.registerHelper("capitalize", function (str) {
         if (!str) return "";
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    });
+
+    // Ordinal for spell level labels: 1 -> "1st", 2 -> "2nd", 3 -> "3rd", 4 -> "4th", etc. Accepts string or number.
+    Handlebars.registerHelper("ordinal", function (n) {
+        const i = parseInt(n, 10);
+        if (Number.isNaN(i) || i === 0) return String(n);
+        const j = i % 10, k = i % 100;
+        if (j === 1 && k !== 11) return i + "st";
+        if (j === 2 && k !== 12) return i + "nd";
+        if (j === 3 && k !== 13) return i + "rd";
+        return i + "th";
     });
 
 }
@@ -312,7 +496,8 @@ function _addSidebarDeleteButton(app, html, type) {
 
     directoryItems.each((index, element) => {
         const li = $(element);
-        const documentId = li.data("documentId");
+        // Get entryId from data attribute (try multiple methods for compatibility)
+        const entryId = element.dataset?.entryId || li.data("entryId") || li.attr("data-entry-id");
 
         // Check if button already exists
         if (li.find(".document-delete").length) return;
@@ -338,7 +523,16 @@ function _addSidebarDeleteButton(app, html, type) {
             event.preventDefault();
             event.stopPropagation();
 
-            const document = app.documents.get(documentId);
+            if (!entryId) return;
+
+            // Get the document from the appropriate collection
+            let document = null;
+            if (type === "Item") {
+                document = game.items.get(entryId);
+            } else if (type === "Actor") {
+                document = game.actors.get(entryId);
+            }
+
             if (document) {
                 const confirmed = await foundry.applications.api.DialogV2.confirm({
                     window: { title: `Delete ${type}: ${document.name}` },

@@ -16,6 +16,8 @@
             data-tab="skills">Skills</a>
         <a class="item {{#if (eq tabs.primary 'features')}}active{{/if}}" data-action="changeTab" data-group="primary"
             data-tab="features">Features</a>
+        <a class="item {{#if (eq tabs.primary 'spellcasting')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="spellcasting">Spellcasting</a>
     </nav>
 
     <section class="sheet-body">
@@ -134,6 +136,185 @@
             </ol>
             {{else}}
             <p class="no-items hint">No class features assigned</p>
+            {{/if}}
+        </div>
+
+        {{!-- Spellcasting Tab --}}
+        <div class="tab spellcasting {{#if (eq tabs.primary 'spellcasting')}}active{{/if}}" data-group="primary"
+            data-tab="spellcasting">
+            <h3 class="form-header">Spellcasting</h3>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="system.spellcasting.enabled" {{checked system.spellcasting.enabled}}
+                        data-dtype="Boolean" />
+                    Spellcasting Enabled
+                </label>
+            </div>
+            {{#if system.spellcasting.enabled}}
+            <div class="form-group">
+                <label>Spell List Key</label>
+                <select name="system.spellcasting.spellListKey">
+                    <option value="">—</option>
+                    {{#each config.spellListKeys as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.spellListKey)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+                <p class="hint">Used to look up spell levels from spell items. Sorcerer and Wizard share "Sorcerer/Wizard".</p>
+            </div>
+            <div class="form-group">
+                <label>Caster Type</label>
+                <select name="system.spellcasting.casterType">
+                    {{#each config.casterTypes as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.casterType)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Preparation Type</label>
+                <select name="system.spellcasting.preparationType">
+                    {{#each config.preparationTypes as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.preparationType)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Spell List Access</label>
+                <select name="system.spellcasting.spellListAccess">
+                    {{#each config.spellListAccessTypes as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.spellListAccess)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+                <p class="hint">Full list: access to all spells (cleric, druid, paladin, ranger). Learned: must learn spells via spellbook or spells known (wizard, sorcerer, bard).</p>
+            </div>
+            <div class="form-group">
+                <label>Casting Ability</label>
+                <select name="system.spellcasting.castingAbility">
+                    {{#each config.castingAbilities as |label key|}}
+                    <option value="{{key}}" {{#if (eq key ../system.spellcasting.castingAbility)}}selected{{/if}}>{{label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Domains Apply</label>
+                <select name="system.spellcasting.supportsDomains">
+                    <option value="false" {{#if (eq system.spellcasting.supportsDomains "false")}}selected{{/if}}>No</option>
+                    <option value="true" {{#if (eq system.spellcasting.supportsDomains "true")}}selected{{/if}}>Yes</option>
+                </select>
+                <p class="hint">When Yes, the character sheet shows domain add/remove and domain spells for this class (e.g. Cleric).</p>
+            </div>
+
+            <h4 class="form-header">Spells Per Day</h4>
+            <p class="hint">Enter the number of spells per day for each class level and spell level.</p>
+            <div class="spells-per-day-table-container">
+                <table class="spells-per-day-table">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>0</th>
+                            <th>1st</th>
+                            <th>2nd</th>
+                            <th>3rd</th>
+                            <th>4th</th>
+                            <th>5th</th>
+                            <th>6th</th>
+                            <th>7th</th>
+                            <th>8th</th>
+                            <th>9th</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each spellsPerDayTable as |entry index|}}
+                        <tr>
+                            <td class="spells-per-day-level">{{entry.classLevel}}</td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel0" 
+                                value="{{entry.spellLevel0}}" min="0" data-dtype="Number" class="spells-per-day-input" />
+                                <input type="hidden" name="system.spellcasting.spellsPerDayTable.{{index}}.classLevel" value="{{entry.classLevel}}" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel1" 
+                                value="{{entry.spellLevel1}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel2" 
+                                value="{{entry.spellLevel2}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel3" 
+                                value="{{entry.spellLevel3}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel4" 
+                                value="{{entry.spellLevel4}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel5" 
+                                value="{{entry.spellLevel5}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel6" 
+                                value="{{entry.spellLevel6}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel7" 
+                                value="{{entry.spellLevel7}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel8" 
+                                value="{{entry.spellLevel8}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsPerDayTable.{{index}}.spellLevel9" 
+                                value="{{entry.spellLevel9}}" min="0" data-dtype="Number" class="spells-per-day-input" /></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+            {{#if (eq system.spellcasting.preparationType "spontaneous")}}
+            <h4 class="form-header">Spells Known</h4>
+            <p class="hint">Optional. For spontaneous casters (e.g. Sorcerer, Bard), enter the maximum number of spells known per class level and spell level. Leave 0 for no limit.</p>
+            <div class="spells-known-table-container">
+                <table class="spells-known-table">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>0</th>
+                            <th>1st</th>
+                            <th>2nd</th>
+                            <th>3rd</th>
+                            <th>4th</th>
+                            <th>5th</th>
+                            <th>6th</th>
+                            <th>7th</th>
+                            <th>8th</th>
+                            <th>9th</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each spellsKnownTable as |entry index|}}
+                        <tr>
+                            <td class="spells-known-level">{{entry.classLevel}}</td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel0" value="{{entry.spellLevel0}}" min="0" data-dtype="Number" class="spells-known-input" /><input type="hidden" name="system.spellcasting.spellsKnownTable.{{index}}.classLevel" value="{{entry.classLevel}}" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel1" value="{{entry.spellLevel1}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel2" value="{{entry.spellLevel2}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel3" value="{{entry.spellLevel3}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel4" value="{{entry.spellLevel4}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel5" value="{{entry.spellLevel5}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel6" value="{{entry.spellLevel6}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel7" value="{{entry.spellLevel7}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel8" value="{{entry.spellLevel8}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                            <td><input type="number" name="system.spellcasting.spellsKnownTable.{{index}}.spellLevel9" value="{{entry.spellLevel9}}" min="0" data-dtype="Number" class="spells-known-input" /></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{/if}}
+
+            {{#if (eq system.spellcasting.supportsDomains "true")}}
+            <h4 class="form-header">Domains</h4>
+            <p class="hint">Drag and drop domain items here to assign them to this class. Clerics typically have 2 domains.</p>
+            {{#if system.spellcasting.domains.length}}
+            <ol class="domains-list">
+                {{#each system.spellcasting.domains as |domain index|}}
+                <li class="domain-entry flexrow">
+                    <div class="domain-name" style="flex: 1;">{{domain.domainName}}</div>
+                    <div class="form-group" style="flex: 0 0 30px; margin: 0 0 0 8px;">
+                        <a class="domain-remove" data-action="removeDomain" data-domain-key="{{domain.domainKey}}"
+                            title="Remove Domain"><i class="fas fa-times"></i></a>
+                    </div>
+                </li>
+                {{/each}}
+            </ol>
+            {{else}}
+            <p class="no-items hint">No domains assigned. Drag domain items here to add them.</p>
+            {{/if}}
+            {{/if}}
+            {{else}}
+            <p class="hint">Enable spellcasting above to configure spellcasting options.</p>
             {{/if}}
         </div>
     </section>

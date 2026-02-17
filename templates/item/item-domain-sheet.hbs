@@ -1,0 +1,52 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Domain Name" /></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">Description</a>
+        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="details">Details</a>
+    </nav>
+
+    <section class="sheet-body">
+        {{!-- Description Tab --}}
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+
+        {{!-- Details Tab: Granted spells (read-only, derived from spell levelsByDomain) --}}
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
+            <h3 class="form-header">Granted Spells</h3>
+            <p class="hint">Spells granted by this domain are derived from each spell's Level by Domain. To add a spell: drag a spell from the sidebar onto this sheet (you'll be prompted for the level), or open the spell and add this domain under Level by Domain (or drag this domain onto the spell sheet).</p>
+            {{#if grantedSpells.length}}
+            <ol class="domain-spells-list granted-spells-list">
+                {{#each grantedSpells as |entry|}}
+                <li class="domain-spell-entry flexrow">
+                    <span class="domain-spell-level">{{entry.level}}</span>
+                    {{#if entry.uuid}}
+                    <a class="content-link domain-spell-link" data-link data-uuid="{{entry.uuid}}" data-type="Item">{{entry.spellName}}</a>
+                    {{else}}
+                    <span class="domain-spell-name">{{entry.spellName}}</span>
+                    {{/if}}
+                </li>
+                {{/each}}
+            </ol>
+            {{else}}
+            <p class="no-items hint">No spells list this domain in Level by Domain. Add this domain to spell items to see them here.</p>
+            {{/if}}
+        </div>
+    </section>
+</form>
