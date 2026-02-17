@@ -54,6 +54,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         },
         window: {
             resizable: true,
+            minimizable: true,
             controls: [
                 {
                     icon: "fa-solid fa-lock",

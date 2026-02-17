@@ -18,6 +18,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         },
         window: {
             resizable: true,
+            minimizable: true,
             controls: [
                 {
                     icon: "fa-solid fa-trash",
