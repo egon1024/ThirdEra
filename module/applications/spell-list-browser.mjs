@@ -1,9 +1,11 @@
 /**
- * Spell List Browser: view all spells available to a character class.
- * Allows selecting a class, viewing spells by level (and school for arcane casters),
+ * Spell List Browser: view all spells available to a character class or domain.
+ * Allows selecting a class or domain, viewing spells by level (and school for arcane class),
  * clicking to open spell sheets, and dragging spells to actors or domains.
  */
 import { getAllClasses, getSpellsForClass } from "../logic/class-spell-list.mjs";
+import { getAllDomains, getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 
 export class SpellListBrowser extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.api.ApplicationV2
@@ -34,34 +36,29 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
         }
     };
 
-    /** Currently selected class (from class selector). */
-    selectedClass = null;
+    /** Currently selected source: { type: "class", uuid, name, spellListKey, casterType } or { type: "domain", uuid, name, domainKey }. */
+    selectedSource = null;
 
     /** Search/filter term for spells. */
     searchTerm = "";
 
     /** @override */
     async _prepareContext(options) {
-        const classes = await getAllClasses();
+        const [classes, domains] = await Promise.all([getAllClasses(), getAllDomains()]);
         this._cachedClasses = classes;
-        const selectedClass = this.selectedClass ?? null;
-        // #region agent log
-        fetch("http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:"spell-list-browser.mjs:_prepareContext",message:"selectedClass resolve",data:{thisSelectedClass:!!this.selectedClass,thisSelectedClassUuid:this.selectedClass?.uuid,resolvedUuid:selectedClass?.uuid,resolvedName:selectedClass?.name,classesFirstUuid:classes[0]?.uuid},timestamp:Date.now(),hypothesisId:"H8"})}).catch(()=>{});
-        // #endregion
+        this._cachedDomains = domains;
+
+        const selectedSource = this.selectedSource ?? (this.selectedClass ? { type: "class", ...this.selectedClass } : null);
 
         let spellsByLevel = [];
         let isArcane = false;
 
-        if (selectedClass?.spellListKey) {
-            const rawSpells = await getSpellsForClass(selectedClass.spellListKey);
-            const casterType = (selectedClass.casterType || "").toLowerCase();
-            const spellListKey = (selectedClass.spellListKey || "").toLowerCase();
-            // Infer arcane from casterType or from spell list key (Bard, Sorcerer, Wizard use arcane lists)
+        if (selectedSource?.type === "class" && selectedSource?.spellListKey) {
+            const rawSpells = await getSpellsForClass(selectedSource.spellListKey);
+            const casterType = (selectedSource.casterType || "").toLowerCase();
+            const spellListKey = (selectedSource.spellListKey || "").toLowerCase();
             const arcaneKeys = ["sorcererwizard", "bard"];
             isArcane = casterType === "arcane" || arcaneKeys.includes(spellListKey);
-            // #region agent log
-            fetch("http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:"spell-list-browser.mjs:_prepareContext",message:"spell prep",data:{selectedClassName:selectedClass?.name,selectedClassUuid:selectedClass?.uuid,spellListKey:selectedClass?.spellListKey,rawSpellsLen:rawSpells?.length,isArcane,firstLevelEntries:rawSpells?.length?([...new Map(rawSpells.map((e)=>[e.level,e])).entries()].slice(0,3)):[]},timestamp:Date.now(),hypothesisId:"H6"})}).catch(()=>{});
-            // #endregion
 
             // Group by level, then by school (arcane) or flat (divine)
             const byLevel = new Map();
@@ -113,15 +110,48 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
                     spellsByLevel.push({ level, spells, isArcane: false });
                 }
             }
+        } else if (selectedSource?.type === "domain" && selectedSource?.domainKey) {
+            const granted = getSpellsForDomain(selectedSource.domainKey);
+            if (granted.length > 0) {
+                const uniqueUuids = [...new Set(granted.map((g) => g.uuid).filter(Boolean))];
+                const spellDocs = await Promise.all(uniqueUuids.map((uuid) => foundry.utils.fromUuid(uuid).catch(() => null)));
+                const spellMap = new Map();
+                for (const doc of spellDocs) {
+                    if (doc?.uuid) spellMap.set(doc.uuid, doc);
+                }
+
+                const byLevel = new Map();
+                for (const entry of granted) {
+                    const level = entry.level;
+                    if (level < 1 || level > 9) continue;
+                    if (!byLevel.has(level)) byLevel.set(level, []);
+                    const spell = spellMap.get(entry.uuid) ?? null;
+                    byLevel.get(level).push({
+                        spell,
+                        uuid: entry.uuid,
+                        name: spell?.name ?? entry.spellName ?? "",
+                        img: spell?.img ?? ""
+                    });
+                }
+
+                for (let level = 1; level <= 9; level++) {
+                    const entries = byLevel.get(level) || [];
+                    if (entries.length === 0) continue;
+                    entries.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+                    spellsByLevel.push({ level, spells: entries, isArcane: false });
+                }
+            }
         }
 
-        // #region agent log
-        const firstGroup = spellsByLevel[0];
-        fetch("http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:"spell-list-browser.mjs:_prepareContext",message:"context return",data:{selectedClassUuid:selectedClass?.uuid,selectedClassName:selectedClass?.name,isArcane,spellsByLevelLen:spellsByLevel.length,hasSpells:spellsByLevel.length>0,firstLevelSpellsLen:firstGroup?.spells?.length,firstSpellHasSchoolName:!!firstGroup?.spells?.[0]?.schoolName},timestamp:Date.now(),hypothesisId:"H7"})}).catch(()=>{});
-        // #endregion
+        const selectedValue = selectedSource ? `${selectedSource.type}:${selectedSource.uuid}` : "";
+        const classesWithValue = classes.map((c) => ({ ...c, optionValue: `class:${c.uuid}` }));
+        const domainsWithValue = domains.map((d) => ({ ...d, optionValue: `domain:${d.uuid}` }));
+
         return {
-            classes,
-            selectedClass,
+            classes: classesWithValue,
+            domains: domainsWithValue,
+            selectedSource,
+            selectedValue,
             spellsByLevel,
             isArcane,
             searchTerm: this.searchTerm ?? "",
@@ -137,84 +167,55 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
         // Query the live DOM: when root was true, content was in .window-content; without root, form is in DOM
         const content = this.element?.querySelector?.(".window-content") ?? this.element;
         const root = content ?? this.element;
-        const select = root?.querySelector?.('select[name="selectedClass"]');
+        const select = root?.querySelector?.('select[name="selectedSource"]');
         if (select) {
             select.addEventListener("change", async (event) => {
-                const uuid = event.target.value;
+                const value = event.target.value;
+                if (!value) {
+                    this.selectedSource = null;
+                    await this.render(true);
+                    return;
+                }
+                const colon = value.indexOf(":");
+                const type = colon >= 0 ? value.slice(0, colon) : "class";
+                const uuid = colon >= 0 ? value.slice(colon + 1) : value;
                 const classes = this._cachedClasses ?? [];
-                const found = uuid ? classes.find((c) => c.uuid === uuid) ?? null : null;
-                this.selectedClass = found;
-                // #region agent log
-                fetch("http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:"spell-list-browser.mjs:change",message:"select change",data:{uuid,uuidLen:uuid?.length,found:!!found,foundUuid:found?.uuid,classesUuids:classes.slice(0,3).map((c)=>c.uuid)},timestamp:Date.now(),hypothesisId:"H9"})}).catch(()=>{});
-                // #endregion
+                const domains = this._cachedDomains ?? [];
+                if (type === "domain") {
+                    const found = domains.find((d) => d.uuid === uuid) ?? null;
+                    this.selectedSource = found ? { type: "domain", ...found } : null;
+                } else {
+                    const found = classes.find((c) => c.uuid === uuid) ?? null;
+                    this.selectedSource = found ? { type: "class", ...found } : null;
+                }
                 await this.render(true);
             });
         }
 
         const searchInput = root?.querySelector?.('input[name="search"]');
         if (searchInput) {
-            const fuzzyMatch = (text, query) => {
-                if (!text || !query) return true;
-                const s = text.toLowerCase();
-                let idx = 0;
-                for (const c of query) {
-                    const pos = s.indexOf(c, idx);
-                    if (pos < 0) return false;
-                    idx = pos + 1;
-                }
-                return true;
-            };
-            const levenshtein = (a, b) => {
-                if (!a.length) return b.length;
-                if (!b.length) return a.length;
-                const matrix = [];
-                for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-                for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-                for (let i = 1; i <= b.length; i++) {
-                    for (let j = 1; j <= a.length; j++) {
-                        matrix[i][j] =
-                            b[i - 1] === a[j - 1]
-                                ? matrix[i - 1][j - 1]
-                                : 1 + Math.min(matrix[i - 1][j - 1], matrix[i][j - 1], matrix[i - 1][j]);
-                    }
-                }
-                return matrix[b.length][a.length];
-            };
-            const spellMatches = (name, query) => {
-                if (!query) return true;
-                if (fuzzyMatch(name, query)) return true;
-                const q = query.toLowerCase();
-                const maxEdits = q.length <= 4 ? 1 : q.length <= 7 ? 2 : 3;
-                const words = (name || "").toLowerCase().split(/\s+/).filter(Boolean);
-                for (const word of words) {
-                    if (Math.abs(word.length - q.length) > maxEdits) continue;
-                    if (levenshtein(q, word) <= maxEdits) return true;
-                }
-                return false;
-            };
             const noResultsEl = root?.querySelector?.(".spell-search-no-results");
-            const HIDDEN_CLASS = "spell-search-hidden";
             searchInput.addEventListener("input", () => {
                 this.searchTerm = searchInput.value ?? "";
-                const query = (this.searchTerm || "").trim().toLowerCase().replace(/\s+/g, " ") || "";
+                const query = normalizeQuery(this.searchTerm);
                 const spellItems = root?.querySelectorAll?.(".spell-item[data-spell-name]") ?? [];
                 let visibleCount = 0;
                 for (const el of spellItems) {
                     const name = el.dataset.spellName ?? "";
                     const show = !query || spellMatches(name, query);
-                    el.classList.toggle(HIDDEN_CLASS, !show);
+                    el.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !show);
                     if (show) visibleCount++;
                 }
                 for (const group of root?.querySelectorAll?.(".spell-school-group") ?? []) {
-                    const anyVisible = group.querySelector(`.spell-item:not(.${HIDDEN_CLASS})`);
-                    group.classList.toggle(HIDDEN_CLASS, !anyVisible);
+                    const anyVisible = group.querySelector(`.spell-item:not(.${SPELL_SEARCH_HIDDEN_CLASS})`);
+                    group.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !anyVisible);
                 }
                 for (const levelGroup of root?.querySelectorAll?.(".spell-level-group") ?? []) {
-                    const anyVisible = levelGroup.querySelector(`.spell-item:not(.${HIDDEN_CLASS})`);
-                    levelGroup.classList.toggle(HIDDEN_CLASS, !anyVisible);
+                    const anyVisible = levelGroup.querySelector(`.spell-item:not(.${SPELL_SEARCH_HIDDEN_CLASS})`);
+                    levelGroup.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !anyVisible);
                 }
                 if (noResultsEl) {
-                    noResultsEl.classList.toggle(HIDDEN_CLASS, !(query && visibleCount === 0));
+                    noResultsEl.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !(query && visibleCount === 0));
                 }
             });
             if (searchInput.value?.trim()) searchInput.dispatchEvent(new Event("input", { bubbles: true }));
@@ -230,7 +231,7 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
             const schoolGroups=root?.querySelectorAll?.(".spell-school-group")??[];
             const iconEl=root?.querySelector?.(".spell-item .item-image i, .spell-item .item-image img");
             const iconColor=iconEl?getComputedStyle(iconEl).color:"N/A";
-            fetch("http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:"spell-list-browser.mjs:_attachPartListeners",message:"DOM/CSS check",data:{appElFound:!!appEl,windowClasses:appEl?.className,hasThirdera,bodyBg,spellItemCount:spellItems.length,schoolGroupCount:schoolGroups.length,iconColor,iconTag:iconEl?.tagName,selectValue:root?.querySelector?.("select[name=selectedClass]")?.value},timestamp:Date.now(),hypothesisId:"H1"})}).catch(()=>{});
+            fetch("http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:"spell-list-browser.mjs:_attachPartListeners",message:"DOM/CSS check",data:{appElFound:!!appEl,windowClasses:appEl?.className,hasThirdera,bodyBg,spellItemCount:spellItems.length,schoolGroupCount:schoolGroups.length,iconColor,iconTag:iconEl?.tagName,selectValue:root?.querySelector?.("select[name=selectedSource]")?.value},timestamp:Date.now(),hypothesisId:"H1"})}).catch(()=>{});
         },100);
         // #endregion
 
@@ -265,16 +266,30 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
     static async #onChangeClass(event) {
         event.preventDefault();
         const form = event.target?.closest?.("form");
-        const select = form?.querySelector?.('select[name="selectedClass"]');
+        const select = form?.querySelector?.('select[name="selectedSource"]');
         if (!select) return;
         const app = [...(foundry.applications?.instances?.values() ?? [])].find(
             (a) => a.constructor?.name === "SpellListBrowser"
         );
-        if (app) {
-            const uuid = select.value;
-            const classes = app._cachedClasses ?? [];
-            app.selectedClass = classes.find((c) => c.uuid === uuid) ?? null;
+        if (!app) return;
+        const value = select.value;
+        if (!value) {
+            app.selectedSource = null;
             await app.render(true);
+            return;
         }
+        const colon = value.indexOf(":");
+        const type = colon >= 0 ? value.slice(0, colon) : "class";
+        const uuid = colon >= 0 ? value.slice(colon + 1) : value;
+        const classes = app._cachedClasses ?? [];
+        const domains = app._cachedDomains ?? [];
+        if (type === "domain") {
+            const found = domains.find((d) => d.uuid === uuid) ?? null;
+            app.selectedSource = found ? { type: "domain", ...found } : null;
+        } else {
+            const found = classes.find((c) => c.uuid === uuid) ?? null;
+            app.selectedSource = found ? { type: "class", ...found } : null;
+        }
+        await app.render(true);
     }
 }

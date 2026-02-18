@@ -1,7 +1,8 @@
 import { getWieldingInfo } from "../data/_damage-helpers.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { SpellData } from "../data/item-spell.mjs";
-import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { addDomainSpellsToActor, getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -48,9 +49,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             removeDomain: ThirdEraActorSheet.#onRemoveDomain,
             addPlaceholderSpell: ThirdEraActorSheet.#onAddPlaceholderSpell,
             addToShortlist: ThirdEraActorSheet.#onAddToShortlist,
-            removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist
+            removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist,
+            toggleShortlist: ThirdEraActorSheet.#onToggleShortlist
         },
         window: {
+            resizable: true,
+            minimizable: true,
             controls: [
                 {
                     icon: "fa-solid fa-lock",
@@ -235,6 +239,40 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 toggleIcon.classList.add("fa-chevron-down");
             }
         });
+
+        // Known spells tab: filter by search (shared logic with Spell List Browser)
+        const knownPanel = this.element?.querySelector?.(".spells-known");
+        const spellSearchInput = knownPanel?.querySelector?.('input[name="spellKnownSearch"]');
+        if (spellSearchInput && knownPanel) {
+            const noResultsEl = knownPanel.querySelector(".spell-search-no-results");
+            spellSearchInput.addEventListener("input", () => {
+                const query = normalizeQuery(spellSearchInput.value ?? "");
+                const spellItems = knownPanel.querySelectorAll(".spell-item[data-spell-name]");
+                let visibleCount = 0;
+                for (const el of spellItems) {
+                    const name = el.dataset.spellName ?? "";
+                    const show = !query || spellMatches(name, query);
+                    el.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !show);
+                    if (show) visibleCount++;
+                }
+                for (const group of knownPanel.querySelectorAll(".spell-level-group")) {
+                    const anyVisible = group.querySelector(`.spell-item:not(.${SPELL_SEARCH_HIDDEN_CLASS})`);
+                    group.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !anyVisible);
+                }
+                for (const group of knownPanel.querySelectorAll(".domain-spells-group")) {
+                    const anyVisible = group.querySelector(`.spell-item:not(.${SPELL_SEARCH_HIDDEN_CLASS})`);
+                    group.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !anyVisible);
+                }
+                for (const spellcastingClass of knownPanel.querySelectorAll(".spellcasting-class")) {
+                    const levelOrDomainGroups = spellcastingClass.querySelectorAll(".spell-level-group, .domain-spells-group");
+                    const anyGroupVisible = levelOrDomainGroups.length === 0 || [...levelOrDomainGroups].some((g) => !g.classList.contains(SPELL_SEARCH_HIDDEN_CLASS));
+                    spellcastingClass.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !anyGroupVisible);
+                }
+                if (noResultsEl) {
+                    noResultsEl.classList.toggle(SPELL_SEARCH_HIDDEN_CLASS, !(query && visibleCount === 0));
+                }
+            });
+        }
     }
 
     /** @override */
@@ -422,14 +460,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     const levelKey = String(domainInfo.spellLevel);
                     const slotsAtLevel = sc?.spellsPerDay?.[domainInfo.spellLevel] ?? sc?.spellsPerDay?.[levelKey] ?? 0;
                     if (classSpells && slotsAtLevel > 0) {
+                        const spellWithDomain = { ...spell, domainName: domainInfo.domainName, domainKey: domainInfo.domainKey };
                         // Add to domain section (always-prepared slot)
-                        classSpells.domainSpellsByLevel[levelKey].push({
-                            ...spell,
-                            domainName: domainInfo.domainName,
-                            domainKey: domainInfo.domainKey
-                        });
-                        // Also add to main list (spellsByLevel) so it appears under "1st Level" etc. under Cleric
-                        classSpells.spellsByLevel[levelKey].push(spell);
+                        classSpells.domainSpellsByLevel[levelKey].push(spellWithDomain);
+                        // Also add to main list (spellsByLevel) so it appears under "1st Level" etc.; include domain info so template can show domain label
+                        classSpells.spellsByLevel[levelKey].push(spellWithDomain);
                         const prepared = spell.system.prepared || 0;
                         classSpells.preparedByLevel[levelKey] += prepared;
                         classSpells.totalPrepared += prepared;
@@ -439,9 +474,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
             }
 
-            // If not yet assigned, regular spell - assign to the first spellcasting class where the spell's level matches available slots
+            // If not yet assigned, regular spell - assign only to a spellcasting class that explicitly has this spell on its list (levelsByClass)
             if (!assigned) {
                 for (const sc of spellcastingByClass) {
+                    if (!SpellData.hasLevelForClass(spell.system, sc.spellListKey)) continue;
                     const spellLevel = SpellData.getLevelForClass(spell.system, sc.spellListKey);
                     const levelKey = String(spellLevel);
                     const slots = sc.spellsPerDay?.[spellLevel] ?? sc.spellsPerDay?.[levelKey] ?? 0;
@@ -460,28 +496,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
             }
 
-            // If no class matches, add to unassigned spells (use fallback level for grouping)
-            if (!assigned) {
-                if (!spellsByClass.has("unassigned")) {
-                    const unassignedByLevel = {};
-                    for (let l = 0; l <= 9; l++) unassignedByLevel[String(l)] = [];
-                    spellsByClass.set("unassigned", {
-                        className: "Unassigned",
-                        spellsByLevel: unassignedByLevel,
-                        preparedByLevel: {},
-                        domainSpellsByLevel: {},
-                        totalPrepared: 0,
-                        totalCast: 0,
-                        hasSpellcasting: false
-                    });
-                }
-                const unassigned = spellsByClass.get("unassigned");
-                const levelKey = String(fallbackSpellLevel);
-                if (!unassigned.spellsByLevel[levelKey]) {
-                    unassigned.spellsByLevel[levelKey] = [];
-                }
-                unassigned.spellsByLevel[levelKey].push(spell);
-            }
+            // Spells that don't match any class (no domain, not on any class list) are not shown in the Spells tab.
+            // They remain on the actor but are omitted from Known/Ready so we don't show an "Unassigned" section.
         }
         
         // Populate domain spells from original definitions (even if spell items don't exist yet)
@@ -585,6 +601,44 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             classSpells.spellsKnownMax = spellsKnownMax;
             classSpells.spellsKnownOverLimit = spellsKnownOverLimit;
         }
+
+        // Sort all spell lists alphabetically by spell name
+        const spellNameSort = (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
+        for (const classSpells of spellsByClass.values()) {
+            if (!classSpells.hasSpellcasting) continue;
+            for (const levelKey of Object.keys(classSpells.spellsByLevel || {})) {
+                const arr = classSpells.spellsByLevel[levelKey];
+                if (Array.isArray(arr)) arr.sort(spellNameSort);
+            }
+            for (const levelKey of Object.keys(classSpells.domainSpellsByLevel || {})) {
+                const arr = classSpells.domainSpellsByLevel[levelKey];
+                if (Array.isArray(arr)) arr.sort(spellNameSort);
+            }
+        }
+
+        // For arcane casters only: build spellsByLevelBySchool (group by school within each level)
+        for (const classSpells of spellsByClass.values()) {
+            if (!classSpells.hasSpellcasting || (classSpells.casterType || "").toLowerCase() !== "arcane") continue;
+            const byLevelBySchool = {};
+            for (let level = 0; level <= 9; level++) {
+                const levelKey = String(level);
+                const spells = classSpells.spellsByLevel?.[levelKey] || [];
+                const bySchool = new Map(); // schoolName -> spell[]
+                for (const spell of spells) {
+                    const schoolName = (spell.system?.schoolName || spell.system?.schoolKey || "").trim() || (game.i18n?.localize?.("THIRDERA.Spells.NoSchool") || "No school");
+                    if (!bySchool.has(schoolName)) bySchool.set(schoolName, []);
+                    bySchool.get(schoolName).push(spell);
+                }
+                const groups = [];
+                for (const [schoolName, list] of bySchool) {
+                    list.sort(spellNameSort);
+                    groups.push({ schoolName, spells: list });
+                }
+                groups.sort((a, b) => (a.schoolName || "").localeCompare(b.schoolName || "", undefined, { sensitivity: "base" }));
+                byLevelBySchool[levelKey] = groups;
+            }
+            classSpells.spellsByLevelBySchool = byLevelBySchool;
+        }
         
         // Convert Map to array for template
         const organizedSpells = Array.from(spellsByClass.values());
@@ -595,6 +649,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Ready to cast: filter by shortlist (full-list prepared), prepared>0 (wizard), or same (spontaneous)
         const spellShortlistByClass = systemData.spellShortlistByClass || {};
+        // Mark each spell in Known with inShortlist for full-list prepared casters (for toggle UI)
+        for (const classData of knownSpellsByClass) {
+            if (classData.spellListAccess !== "full" || classData.preparationType !== "prepared") continue;
+            const shortlistIds = new Set(spellShortlistByClass[classData.classItemId] || []);
+            for (const levelKey of Object.keys(classData.spellsByLevel || {})) {
+                const spells = classData.spellsByLevel[levelKey] || [];
+                for (const spell of spells) {
+                    if (spell.id) spell.inShortlist = shortlistIds.has(spell.id);
+                }
+            }
+            for (const levelKey of Object.keys(classData.domainSpellsByLevel || {})) {
+                const spells = classData.domainSpellsByLevel[levelKey] || [];
+                for (const spell of spells) {
+                    if (spell.id) spell.inShortlist = shortlistIds.has(spell.id);
+                }
+            }
+        }
         const readyToCastByClass = organizedSpells.map((classData) => {
             if (!classData.hasSpellcasting) return { ...classData, spellsByLevel: classData.spellsByLevel };
             const shortlistIds = new Set(spellShortlistByClass[classData.classItemId] || []);
@@ -614,7 +685,29 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
                 spellsByLevel[levelKey] = ready;
             }
-            return { ...classData, spellsByLevel };
+            const result = { ...classData, spellsByLevel };
+            if ((classData.casterType || "").toLowerCase() === "arcane") {
+                const byLevelBySchool = {};
+                for (let level = 0; level <= 9; level++) {
+                    const levelKey = String(level);
+                    const spells = spellsByLevel[levelKey] || [];
+                    const bySchool = new Map();
+                    for (const spell of spells) {
+                        const schoolName = (spell.system?.schoolName || spell.system?.schoolKey || "").trim() || (game.i18n?.localize?.("THIRDERA.Spells.NoSchool") || "No school");
+                        if (!bySchool.has(schoolName)) bySchool.set(schoolName, []);
+                        bySchool.get(schoolName).push(spell);
+                    }
+                    const groups = [];
+                    for (const [schoolName, list] of bySchool) {
+                        list.sort(spellNameSort);
+                        groups.push({ schoolName, spells: list });
+                    }
+                    groups.sort((a, b) => (a.schoolName || "").localeCompare(b.schoolName || "", undefined, { sensitivity: "base" }));
+                    byLevelBySchool[levelKey] = groups;
+                }
+                result.spellsByLevelBySchool = byLevelBySchool;
+            }
+            return result;
         });
 
         // Compute encumbrance display info
@@ -648,12 +741,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         };
 
+        // Enrich classes with domain info for the Classes tab (supportsDomains, domains from spellcastingByClass)
+        const classesWithDomains = items.classes.map((cls) => {
+            const sc = spellcastingByClass.find((s) => s.classItemId === cls.id);
+            return {
+                ...cls,
+                id: cls.id,
+                _id: cls._id ?? cls.id,
+                supportsDomains: sc ? (sc.supportsDomains === true || sc.supportsDomains === "true") : false,
+                domains: sc?.domains ?? []
+            };
+        });
+
         return {
             ...context,
             actor,
             system: systemData,
             items: actor.items,
             ...items,
+            classes: classesWithDomains,
             ...config,
             config,
             tabs,
@@ -833,10 +939,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @override
      */
     async _onDropItem(event, item) {
-        // #region agent log
-        if (item?.type === "domain") fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onDropItem',message:'domain dropped on actor sheet',data:{itemType:item?.type,actorId:this.actor?.id},timestamp:Date.now(),hypothesisId:'H3'})}).catch(()=>{});
-        // #endregion
-
         // Domain dropped on character: add to spellcasting class (character chooses domains)
         if (item.type === "domain") {
             const domainKey = item.system?.key?.trim();
@@ -873,50 +975,18 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 domainKey
             });
             current.sort((a, b) => (a.domainName || "").localeCompare(b.domainName || ""));
-            // #region agent log
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:domainUpdate:before',message:'domain update',data:{classId:targetClass.id,className:targetClass.name,newLength:current.length},timestamp:Date.now(),hypothesisId:'domain-ui'})}).catch(()=>{});
-            // #endregion
             await targetClass.update({ "system.spellcasting.domains": current });
 
             // Auto-add domain spells the character has achieved (levels they have domain slots for)
-            const classLevel = (this.actor.system.levelHistory || []).filter(
-                e => e.classItemId === targetClass.id
-            ).length;
-            const table = targetClass.system.spellsPerDayTable || [];
-            const granted = getSpellsForDomain(domainKey);
-            const existingSpellNames = new Set(
-                this.actor.items.filter(i => i.type === "spell").map(s => s.name.toLowerCase().trim())
-            );
-            const toCreate = [];
-            for (const entry of granted) {
-                const spellLevel = entry.level;
-                if (spellLevel < 1 || spellLevel > 9) continue;
-                const slotsAtLevel = ClassData.getSpellsPerDay(table, classLevel, spellLevel);
-                if (slotsAtLevel <= 0) continue; // Character hasn't achieved this spell level yet
-                if (existingSpellNames.has((entry.spellName || "").toLowerCase().trim())) continue;
-                if (!entry.uuid) continue;
-                try {
-                    const spellDoc = await foundry.utils.fromUuid(entry.uuid);
-                    if (spellDoc && spellDoc.type === "spell") {
-                        const clone = spellDoc.toObject();
-                        delete clone._id;
-                        toCreate.push(clone);
-                        existingSpellNames.add((entry.spellName || "").toLowerCase().trim());
-                    }
-                } catch (_) { /* spell from compendium may be unavailable */ }
-            }
-            if (toCreate.length > 0) {
-                await this.actor.createEmbeddedDocuments("Item", toCreate);
-            }
+            const spellsAdded = await addDomainSpellsToActor(this.actor, targetClass, domainKey);
 
             // Refresh actor derived data and re-render so Domains section shows the new domain and spells
             await this.actor.prepareData();
             await this.render();
-            // #region agent log
-            const afterClass = this.actor.items.get(targetClass.id);
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:domainUpdate:after',message:'after update and render',data:{classId:targetClass.id,domainsLength:afterClass?.system?.spellcasting?.domains?.length},timestamp:Date.now(),hypothesisId:'domain-ui'})}).catch(()=>{});
-            // #endregion
-            ui.notifications.info(`${item.name} added to ${targetClass.name}.`);
+            const msg = spellsAdded > 0
+                ? `${item.name} added to ${targetClass.name}; ${spellsAdded} domain spell(s) added to character.`
+                : `${item.name} added to ${targetClass.name}.`;
+            ui.notifications.info(msg);
             return false; // Handled; do not embed the domain item on the actor
         }
 
@@ -929,6 +999,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // If this class already exists on the actor, add a level instead of duplicating
         if (item.type === "class") {
+            event.preventDefault?.();
+            event.stopPropagation?.();
             const itemName = item.name;
             const existing = this.actor.items.find(i => i.type === "class" && i.name === itemName);
             if (existing) {
@@ -954,11 +1026,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 history.push({ classItemId: existing.id, hpRolled });
                 await this.actor.update({ "system.levelHistory": history });
 
-                // If this is a full-list caster and the character has no spells yet, auto-add class spell list (backfill for existing clerics)
+                // Only auto-add class spell list for full-list casters (e.g. cleric, druid). Never for learned casters (wizard, sorcerer, bard).
                 const levelCountForClass = history.filter(e => e.classItemId === existing.id).length;
                 const sc = existing.system?.spellcasting;
                 const classScEnabled = sc?.enabled === true || sc?.enabled === "true";
-                if (levelCountForClass >= 1 && classScEnabled && sc?.spellListAccess === "full") {
+                const isFullListCaster = sc?.spellListAccess === "full";
+                if (levelCountForClass >= 1 && classScEnabled && isFullListCaster) {
                     const actorSpellCount = this.actor.items.filter(i => i.type === "spell").length;
                     if (actorSpellCount === 0) {
                         await this._addClassSpellListForFullListCaster(existing, levelCountForClass);
@@ -967,46 +1040,53 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 return false;
             }
 
-            // New class: create only the class document (strip any embedded items so compendium/default create doesn't add spells).
-            const data = foundry.utils.duplicate(item.toObject());
-            delete data.items;
-            delete data.effects;
-            if (data.system && typeof data.system === "object") delete data.system.items;
-            if (!this.actor.items.has(item.id)) delete data._id;
-            const createdDocs = await this.actor.createEmbeddedDocuments("Item", [data]);
-            const created = createdDocs?.[0] ?? null;
-            if (created?.id) {
-                const history = [...(this.actor.system.levelHistory || [])];
-                const existingClassIds = new Set(this.actor.items.filter(i => i.type === "class").map(c => c.id));
+            // New class: defer create to next tick so it runs outside the drop context. When create
+            // runs inside the drop handler, Foundry expands compendium and adds all embedded spells
+            // (61 for Wizard) regardless of payload; deferring prevents that.
+            const actor = this.actor;
+            const systemData = foundry.utils.duplicate(item.system ?? {});
+            const classImg = item.img ?? "";
+            setTimeout(async () => {
+                // Use a temporary name so server does not match compendium "Wizard" and expand with spells
+                const initialData = { name: `\u200B${itemName}`, type: "class", img: classImg, system: {} };
+                const createdDocs = await actor.createEmbeddedDocuments("Item", [initialData]);
+                const created = createdDocs?.[0] ?? null;
+                if (!created?.id) return;
+                await created.update({ name: itemName, system: systemData }, { diff: false });
+                const createdClass = actor.items.get(created.id);
+                const sc = createdClass?.system?.spellcasting;
+                if (sc?.spellListAccess === "learned") {
+                    const spellListKey = (sc.spellListKey || "").trim() || (itemName === "Wizard" || itemName === "Sorcerer" ? "sorcererWizard" : itemName.toLowerCase());
+                    const toRemove = actor.items.filter(
+                        (i) => i.type === "spell" && SpellData.hasLevelForClass(i.system, spellListKey)
+                    ).map((i) => i.id);
+                    if (toRemove.length) await actor.deleteEmbeddedDocuments("Item", toRemove);
+                }
+                const history = [...(actor.system.levelHistory || [])];
+                const existingClassIds = new Set(actor.items.filter(i => i.type === "class").map(c => c.id));
                 const hasValidLevels = history.some(entry => existingClassIds.has(entry.classItemId));
                 const isFirstLevel = history.length === 0 || !hasValidLevels;
                 let hpRolled = 0;
-                if (isFirstLevel && game.settings.get("thirdera", "firstLevelFullHp")) {
-                    const createdClass = this.actor.items.get(created.id);
-                    if (createdClass) {
-                        const dieSize = parseInt(createdClass.system.hitDie?.substring(1));
-                        if (!isNaN(dieSize)) hpRolled = dieSize;
-                    }
+                if (isFirstLevel && game.settings.get("thirdera", "firstLevelFullHp") && createdClass) {
+                    const dieSize = parseInt(createdClass.system.hitDie?.substring(1));
+                    if (!isNaN(dieSize)) hpRolled = dieSize;
                 }
                 history.push({ classItemId: created.id, hpRolled });
-                await this.actor.update({ "system.levelHistory": history });
-
-                const classSkills = created.system?.classSkills || [];
-                const existingSkillKeys = new Set(this.actor.items.filter(i => i.type === "skill" && i.system.key).map(s => s.system.key));
+                await actor.update({ "system.levelHistory": history });
+                const classSkills = systemData?.classSkills || [];
+                const existingSkillKeys = new Set(actor.items.filter(i => i.type === "skill" && i.system.key).map(s => s.system.key));
                 const toCreate = [];
                 for (const entry of classSkills) {
                     if (existingSkillKeys.has(entry.key)) continue;
                     const sourceSkill = game.items.find(i => i.type === "skill" && i.system.key === entry.key);
                     if (sourceSkill) toCreate.push(sourceSkill.toObject());
                 }
-                if (toCreate.length) await this.actor.createEmbeddedDocuments("Item", toCreate);
-
-                const createdClass = this.actor.items.get(created.id);
-                const sc = createdClass?.system?.spellcasting;
-                const isFullList = sc?.spellListAccess === "full";
-                if (createdClass && isFullList) await this._addClassSpellListForFullListCaster(createdClass, 1);
-            }
-            return created;
+                if (toCreate.length) await actor.createEmbeddedDocuments("Item", toCreate);
+                const isFullListCaster = sc?.spellListAccess === "full";
+                if (createdClass && isFullListCaster) await this._addClassSpellListForFullListCaster(createdClass, 1);
+                await this.render();
+            }, 0);
+            return false;
         }
 
         // If a skill is dropped onto the granted-skills zone, add to grantedSkills instead of embedding
@@ -1276,8 +1356,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const otherClasses = actor.items.filter((i) => i.type === "class" && i.id !== classItem.id);
         const toRemove = new Set();
 
-        // Regular spells: at levels where this class has 0 slots after drop; only if no other class has slots for this spell
+        // Regular spells: only consider spells that are on this class's list; remove at levels where this class has 0 slots after drop, and no other class has this spell on its list with slots
         for (const spell of actor.items.filter((i) => i.type === "spell")) {
+            if (!SpellData.hasLevelForClass(spell.system, spellListKey)) continue;
             const spellLevel = SpellData.getLevelForClass(spell.system, spellListKey);
             if (ClassData.getSpellsPerDay(table, newClassLevel, spellLevel) > 0) continue;
             const otherHasSlots = otherClasses.some((other) => {
@@ -1285,6 +1366,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 if (!oSc?.enabled && oSc?.enabled !== "true") return false;
                 const oTable = oSc.spellsPerDayTable || [];
                 const oKey = ThirdEraActorSheet._getSpellListKey(other);
+                if (!SpellData.hasLevelForClass(spell.system, oKey)) return false;
                 const oLevel = classLevelCounts[other.id] || 0;
                 if (oLevel <= 0) return false;
                 const sl = SpellData.getLevelForClass(spell.system, oKey);
@@ -1320,14 +1402,16 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const otherClasses = actor.items.filter((i) => i.type === "class" && i.id !== classItem.id);
         const toRemove = new Set();
 
-        // After removal this class has 0 levels -> 0 slots at every level
+        // After removal this class has 0 levels -> 0 slots at every level; only consider spells that were on this class's list
         for (const spell of actor.items.filter((i) => i.type === "spell")) {
+            if (!SpellData.hasLevelForClass(spell.system, spellListKey)) continue;
             const spellLevel = SpellData.getLevelForClass(spell.system, spellListKey);
             const otherHasSlots = otherClasses.some((other) => {
                 const oSc = other.system?.spellcasting;
                 if (!oSc?.enabled && oSc?.enabled !== "true") return false;
                 const oTable = oSc.spellsPerDayTable || [];
                 const oKey = ThirdEraActorSheet._getSpellListKey(other);
+                if (!SpellData.hasLevelForClass(spell.system, oKey)) return false;
                 const oLevel = classLevelCounts[other.id] || 0;
                 if (oLevel <= 0) return false;
                 const sl = SpellData.getLevelForClass(spell.system, oKey);
@@ -1352,6 +1436,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     /**
      * For a full-list spellcasting class (cleric, druid, etc.), add all class spells from the compendium
      * at levels the character has slots for. No-op if not enabled/full-list or pack unavailable.
+     * Learned casters (wizard, sorcerer, bard) must add spells manually via spellbook or spell list browser.
      * @param {Item} classItem - The class item (must have spellcasting with spellListAccess "full")
      * @param {number} classLevel - Character's level in this class (used to determine which spell levels have slots)
      */
@@ -1373,6 +1458,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const toCreate = [];
             for (const doc of docs) {
                 if (doc.type !== "spell") continue;
+                if (!SpellData.hasLevelForClass(doc.system, spellListKey)) continue;
                 const spellLevel = SpellData.getLevelForClass(doc.system, spellListKey);
                 if (spellLevel < 0 || spellLevel > 9) continue;
                 if (ClassData.getSpellsPerDay(table, classLevel, spellLevel) <= 0) continue;
@@ -1417,6 +1503,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const byLevel = new Map(); // spellLevel -> sorted array of spell docs for this list
             for (const doc of docs) {
                 if (doc.type !== "spell") continue;
+                if (!SpellData.hasLevelForClass(doc.system, spellListKey)) continue;
                 const spellLevel = SpellData.getLevelForClass(doc.system, spellListKey);
                 if (spellLevel < 0 || spellLevel > 9) continue;
                 if (!byLevel.has(spellLevel)) byLevel.set(spellLevel, []);
@@ -1428,7 +1515,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 const need = ClassData.getSpellsKnown(table, classLevel, level);
                 if (need <= 0) continue;
                 const currentAtLevel = actorSpells.filter(
-                    (s) => SpellData.getLevelForClass(s.system, spellListKey) === level
+                    (s) => SpellData.hasLevelForClass(s.system, spellListKey) && SpellData.getLevelForClass(s.system, spellListKey) === level
                 ).length;
                 const toAdd = Math.max(0, need - currentAtLevel);
                 levelStats.push({ level, need, currentAtLevel, toAdd });
@@ -3221,17 +3308,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   Element with data-class-item-id and data-domain-key
      */
     static async #onRemoveDomain(event, target) {
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onRemoveDomain',message:'removeDomain clicked',data:{targetTag:target?.tagName,targetAction:target?.dataset?.action,hasClosest:!!target?.closest?.('[data-action=removeDomain]')},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-        // #endregion
         const actionEl = target.closest("[data-action='removeDomain']") || target;
         const classItemId = actionEl.dataset?.classItemId
             || target.closest("[data-class-item-id]")?.dataset?.classItemId;
         const domainKey = actionEl.dataset?.domainKey
             || target.closest("[data-domain-key]")?.dataset?.domainKey;
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onRemoveDomain',message:'parsed ids',data:{classItemId,domainKey},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-        // #endregion
         if (!classItemId || !domainKey) return;
         const classItem = this.actor.items.get(classItemId);
         if (!classItem || classItem.type !== "class" || !classItem.system?.spellcasting?.domains) return;
@@ -3239,9 +3320,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const filtered = current.filter(
             d => (d.domainKey || "").trim().toLowerCase() !== domainKey.trim().toLowerCase()
         );
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onRemoveDomain',message:'filter result',data:{currentLen:current.length,filteredLen:filtered.length,willUpdate:filtered.length<current.length},timestamp:Date.now(),hypothesisId:'H3'})}).catch(()=>{});
-        // #endregion
         if (filtered.length === current.length) return;
         await classItem.update({ "system.spellcasting.domains": filtered });
         await this.actor.prepareData();
@@ -3301,6 +3379,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!itemId || !classItemId) return;
         const item = this.actor.items.get(itemId);
         if (!item || item.type !== "spell") return;
+        const sheetBody = this.element?.querySelector(".sheet-body");
+        const scrollTop = sheetBody?.scrollTop ?? 0;
         const shortlist = { ...(this.actor.system.spellShortlistByClass || {}) };
         const list = Array.isArray(shortlist[classItemId]) ? [...shortlist[classItemId]] : [];
         if (list.includes(itemId)) return;
@@ -3309,6 +3389,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         await this.actor.update({ "system.spellShortlistByClass": shortlist });
         await this.actor.prepareData();
         await this.render();
+        this.element?.querySelector(".sheet-body")?.scrollTo({ top: scrollTop });
     }
 
     /**
@@ -3320,11 +3401,41 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const itemId = target.closest("[data-item-id]")?.dataset?.itemId || target.dataset?.itemId;
         const classItemId = target.dataset?.classItemId?.trim();
         if (!itemId || !classItemId) return;
+        const sheetBody = this.element?.querySelector(".sheet-body");
+        const scrollTop = sheetBody?.scrollTop ?? 0;
         const shortlist = { ...(this.actor.system.spellShortlistByClass || {}) };
         const list = Array.isArray(shortlist[classItemId]) ? shortlist[classItemId].filter((id) => id !== itemId) : [];
         shortlist[classItemId] = list;
         await this.actor.update({ "system.spellShortlistByClass": shortlist });
         await this.actor.prepareData();
         await this.render();
+        this.element?.querySelector(".sheet-body")?.scrollTo({ top: scrollTop });
+    }
+
+    /**
+     * Toggle a spell in the shortlist for a full-list prepared caster (add if absent, remove if present).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target   Element with data-action="toggleShortlist" data-item-id, data-class-item-id
+     */
+    static async #onToggleShortlist(event, target) {
+        event.preventDefault();
+        const itemId = target.closest("[data-item-id]")?.dataset?.itemId || target.dataset?.itemId;
+        const classItemId = target.dataset?.classItemId?.trim();
+        if (!itemId || !classItemId) return;
+        const sheetBody = this.element?.querySelector(".sheet-body");
+        const scrollTop = sheetBody?.scrollTop ?? 0;
+        const shortlist = { ...(this.actor.system.spellShortlistByClass || {}) };
+        const list = Array.isArray(shortlist[classItemId]) ? [...shortlist[classItemId]] : [];
+        const inList = list.includes(itemId);
+        if (inList) {
+            shortlist[classItemId] = list.filter((id) => id !== itemId);
+        } else {
+            list.push(itemId);
+            shortlist[classItemId] = list;
+        }
+        await this.actor.update({ "system.spellShortlistByClass": shortlist });
+        await this.actor.prepareData();
+        await this.render();
+        this.element?.querySelector(".sheet-body")?.scrollTo({ top: scrollTop });
     }
 }

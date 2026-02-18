@@ -3,6 +3,8 @@
  * Single source of truth is the spell item; domain items do not store a spell list.
  */
 
+import { ClassData } from "../data/item-class.mjs";
+
 /** @type {Map<string, Array<{ level: number, spellName: string, uuid: string }>>} */
 let _cacheByDomainKey = null;
 
@@ -106,4 +108,95 @@ export function getSpellsForDomain(domainKey) {
     const list = [...byKey.values()];
     list.sort((a, b) => a.level - b.level || (a.spellName || "").localeCompare(b.spellName || ""));
     return list;
+}
+
+/**
+ * Get all domain items from world and all Item compendium packs.
+ * @returns {Promise<Array<{ uuid: string, name: string, domainKey: string }>>}
+ */
+export async function getAllDomains() {
+    if (typeof game === "undefined" || !game.items || !game.packs) return [];
+
+    const seen = new Map(); // domainKey (normalized) -> entry (prefer world)
+
+    // World items
+    for (const item of game.items) {
+        if (item.type !== "domain") continue;
+        const domainKey = (item.system?.key || "").trim();
+        const name = (item.name || "").trim() || "Unnamed Domain";
+        const key = normalizeDomainKey(domainKey) || name.toLowerCase();
+        if (!seen.has(key)) {
+            seen.set(key, { uuid: item.uuid, name, domainKey: domainKey || name });
+        }
+    }
+
+    // Item compendium packs
+    for (const pack of game.packs.values()) {
+        if (pack.documentName !== "Item") continue;
+        try {
+            const docs = await pack.getDocuments({ type: "domain" });
+            for (const doc of docs) {
+                if (doc.type !== "domain") continue;
+                const domainKey = (doc.system?.key || "").trim();
+                const name = (doc.name || "").trim() || "Unnamed Domain";
+                const key = normalizeDomainKey(domainKey) || name.toLowerCase();
+                if (!seen.has(key)) {
+                    seen.set(key, { uuid: doc.uuid, name, domainKey: domainKey || name });
+                }
+            }
+        } catch (err) {
+            console.warn(`Third Era | Error loading domains from pack ${pack.collection}:`, err);
+        }
+    }
+
+    const list = [...seen.values()];
+    list.sort((a, b) => a.name.localeCompare(b.name));
+    return list;
+}
+
+/**
+ * Add domain spell items to an actor for a given class and domain. Only adds spells at levels
+ * the character has achieved (has spell slots for). Skips spells the actor already has.
+ * Call this when a domain is added to a character (e.g. drop on character sheet or on class item owned by actor).
+ * @param {Actor} actor - The actor to add spell items to
+ * @param {Item} classItem - The class item (with spellcasting.domains and spellsPerDayTable)
+ * @param {string} domainKey - The domain key (e.g. "war", "healing")
+ * @returns {Promise<number>} - Number of spell items created
+ */
+export async function addDomainSpellsToActor(actor, classItem, domainKey) {
+    const key = (domainKey || "").trim();
+    if (!key || !actor?.items || !classItem) return 0;
+
+    const classLevel = (actor.system?.levelHistory || []).filter(
+        e => e.classItemId === classItem.id
+    ).length;
+    if (classLevel < 1) return 0;
+
+    const table = classItem.system?.spellcasting?.spellsPerDayTable || [];
+    const granted = getSpellsForDomain(key);
+    const existingSpellNames = new Set(
+        actor.items.filter(i => i.type === "spell").map(s => s.name.toLowerCase().trim())
+    );
+    const toCreate = [];
+    for (const entry of granted) {
+        const spellLevel = entry.level;
+        if (spellLevel < 1 || spellLevel > 9) continue;
+        const slotsAtLevel = ClassData.getSpellsPerDay(table, classLevel, spellLevel);
+        if (slotsAtLevel <= 0) continue;
+        if (existingSpellNames.has((entry.spellName || "").toLowerCase().trim())) continue;
+        if (!entry.uuid) continue;
+        try {
+            const spellDoc = await foundry.utils.fromUuid(entry.uuid);
+            if (spellDoc && spellDoc.type === "spell") {
+                const clone = spellDoc.toObject();
+                delete clone._id;
+                toCreate.push(clone);
+                existingSpellNames.add((entry.spellName || "").toLowerCase().trim());
+            }
+        } catch (_) { /* spell from compendium may be unavailable */ }
+    }
+    if (toCreate.length > 0) {
+        await actor.createEmbeddedDocuments("Item", toCreate);
+    }
+    return toCreate.length;
 }

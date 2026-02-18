@@ -176,7 +176,34 @@ export class SpellData extends foundry.abstract.TypeDataModel {
     }
 
     /**
+     * Normalize spell list key for comparison (trim + lowercase).
+     * @param {string} key
+     * @returns {string}
+     */
+    static normalizeSpellListKey(key) {
+        return (key ?? "").trim().toLowerCase();
+    }
+
+    /**
+     * Return true only if the spell explicitly lists this class in levelsByClass.
+     * Use this to decide if a spell is on a class's list before assigning or showing it for that class.
+     * @param {object} spellData     Spell system data (system property of spell item)
+     * @param {string} spellListKey  Class spell list key (e.g., sorcererWizard, cleric)
+     * @returns {boolean}
+     */
+    static hasLevelForClass(spellData, spellListKey) {
+        if (!spellData) return false;
+        const levelsByClass = spellData.levelsByClass || [];
+        const want = SpellData.normalizeSpellListKey(spellListKey);
+        if (!want) return false;
+        return levelsByClass.some(
+            e => SpellData.normalizeSpellListKey(e?.classKey) === want
+        );
+    }
+
+    /**
      * Get the spell level for a given spell list key.
+     * Uses case-insensitive match on classKey. Returns fallback level only when no explicit entry exists.
      * @param {object} spellData     Spell system data (system property of spell item)
      * @param {string} spellListKey  Class spell list key (e.g., sorcererWizard, cleric)
      * @returns {number}             Spell level (0-9), or fallback level if no matching entry
@@ -184,7 +211,10 @@ export class SpellData extends foundry.abstract.TypeDataModel {
     static getLevelForClass(spellData, spellListKey) {
         if (!spellData) return 0;
         const levelsByClass = spellData.levelsByClass || [];
-        const entry = levelsByClass.find(e => e.classKey === spellListKey);
+        const want = SpellData.normalizeSpellListKey(spellListKey);
+        const entry = levelsByClass.find(
+            e => SpellData.normalizeSpellListKey(e?.classKey) === want
+        );
         if (entry != null) return entry.level;
         return spellData.level ?? 0;
     }

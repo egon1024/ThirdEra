@@ -1,23 +1,29 @@
 <form class="spell-list-browser-form flexcol" autocomplete="off">
     <div class="form-group">
-        <label for="spell-list-class-select">{{localize "THIRDERA.SpellListBrowser.ClassLabel"}}</label>
-        <select name="selectedClass" id="spell-list-class-select">
+        <label for="spell-list-source-select">{{localize "THIRDERA.SpellListBrowser.ClassLabel"}}</label>
+        <select name="selectedSource" id="spell-list-source-select">
             <option value="">{{localize "THIRDERA.SpellListBrowser.NoClassSelected"}}</option>
-            {{#each classes as |cls|}}
-            <option value="{{cls.uuid}}" {{#if ../selectedClass}}{{#if (eq cls.uuid ../selectedClass.uuid)}}selected{{/if}}{{/if}}>{{cls.name}}</option>
-            {{/each}}
+            <optgroup label="{{localize "THIRDERA.SpellListBrowser.ClassesOptgroup"}}">
+                {{#each classes as |cls|}}
+                <option value="{{cls.optionValue}}" {{#if (eq cls.optionValue ../selectedValue)}}selected{{/if}}>{{cls.name}}</option>
+                {{/each}}
+            </optgroup>
+            <optgroup label="{{localize "THIRDERA.SpellListBrowser.DomainsOptgroup"}}">
+                {{#each domains as |dom|}}
+                <option value="{{dom.optionValue}}" {{#if (eq dom.optionValue ../selectedValue)}}selected{{/if}}>{{dom.name}}</option>
+                {{/each}}
+            </optgroup>
         </select>
     </div>
 
-    {{#if selectedClass}}
-    <div class="form-group spell-search-group">
-        <label for="spell-list-search">{{localize "THIRDERA.SpellListBrowser.SearchPlaceholder"}}</label>
-        <input type="text" name="search" id="spell-list-search" placeholder="{{localize "THIRDERA.SpellListBrowser.SearchPlaceholder"}}" value="{{searchTerm}}" autocomplete="off" />
+    {{#if selectedSource}}
+    <div class="form-group">
+        {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-list-search" inputName="search" placeholderKey="THIRDERA.SpellListBrowser.SearchPlaceholder" noResultsKey="THIRDERA.SpellListBrowser.SearchNoResults" value=searchTerm}}
     </div>
     {{/if}}
 
     <div class="spell-list-body">
-        {{#if selectedClass}}
+        {{#if selectedSource}}
             {{#if hasSpells}}
                 {{#each spellsByLevel as |levelData|}}
                 <div class="spell-level-group">
@@ -54,7 +60,6 @@
                     {{/if}}
                 </div>
                 {{/each}}
-                <p class="hint spell-search-no-results spell-search-hidden">{{localize "THIRDERA.SpellListBrowser.SearchNoResults"}}</p>
             {{else}}
                 <p class="hint">{{localize "THIRDERA.SpellListBrowser.NoSpells"}}</p>
             {{/if}}

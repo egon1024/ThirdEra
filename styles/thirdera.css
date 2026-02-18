@@ -428,8 +428,35 @@
   border-bottom: 2px solid var(--color-character-accent);
 }
 
-.thirdera .add-to-ready-btn,
-.thirdera .remove-from-ready-btn {
+/* Toggle button for adding/removing spell from Ready to cast */
+.thirdera .shortlist-toggle-btn {
+  font-size: var(--font-size-body);
+  padding: 3px 10px;
+  color: var(--color-character-accent);
+  background: transparent;
+  border: 1px solid var(--color-border-divider);
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.thirdera .shortlist-toggle-btn:hover {
+  background: var(--color-hover);
+  color: var(--color-text-primary);
+}
+
+.thirdera .shortlist-toggle-btn.active {
+  background: var(--color-character-accent);
+  color: var(--color-bg-parchment);
+  border-color: var(--color-character-accent);
+}
+
+.thirdera .shortlist-toggle-btn.active:hover {
+  filter: brightness(1.1);
+  color: var(--color-bg-parchment);
+}
+
+.thirdera .add-to-ready-btn {
   font-size: var(--font-size-note);
   padding: 2px 8px;
   color: var(--color-character-accent);
@@ -439,8 +466,7 @@
   cursor: pointer;
 }
 
-.thirdera .add-to-ready-btn:hover,
-.thirdera .remove-from-ready-btn:hover {
+.thirdera .add-to-ready-btn:hover {
   background: var(--color-hover);
   color: var(--color-text-primary);
 }
@@ -1605,6 +1631,69 @@
   border-bottom: 1px solid var(--color-border-divider);
 }
 
+.thirdera .class-domains-sublist {
+  list-style: none;
+  padding: 0 0 0 40px;
+  margin: 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .tab.classes .domains-section {
+  padding: 10px 15px;
+  margin-bottom: 0;
+  background: var(--color-bg-light);
+}
+
+.thirdera .tab.classes .domains-section-title {
+  margin: 0 0 8px 0;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.thirdera .tab.classes .domains-drop-zone {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px dashed var(--color-border-divider);
+  border-radius: 3px;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.thirdera .tab.classes .domains-drop-zone:hover {
+  border-color: var(--color-character-accent);
+  color: var(--color-text-secondary);
+}
+
+.thirdera .tab.classes .domains-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.thirdera .tab.classes .domains-list .domain-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  font-size: var(--font-size-body);
+}
+
+.thirdera .tab.classes .domains-list .domain-name {
+  flex: 1;
+}
+
+.thirdera .tab.classes .domains-list .domain-remove {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  color: var(--color-text-muted);
+}
+
+.thirdera .tab.classes .domains-list .domain-remove:hover {
+  color: var(--color-text-primary);
+}
+
 .thirdera .class-granted-features {
   list-style: none;
   margin: 0;
@@ -2322,13 +2411,18 @@
 }
 
 .thirdera .tab.spells .spell-level-header {
-  background: var(--color-bg-light);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-bg-parchment) !important;
   padding: 8px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  border-bottom: 1px solid var(--color-border-divider);
+  box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.12);
 }
 
 .thirdera .tab.spells .spell-level-header h5 {
@@ -2350,13 +2444,78 @@
   font-weight: var(--font-weight-bold);
 }
 
+.thirdera .tab.spells .spell-school-header {
+  margin: 6px 0 2px 0;
+  padding: 4px 15px 0 15px;
+}
+
+.thirdera .tab.spells .spell-school-title {
+  margin: 0;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .thirdera .tab.spells .spells-list {
   margin: 0;
   padding: 0;
 }
 
+.thirdera .tab.spells .spell-search-group {
+  margin-bottom: 8px;
+}
+
+.thirdera .tab.spells .spell-search-group label {
+  display: block;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+
+.thirdera .tab.spells .spell-search-group input {
+  width: 100%;
+  max-width: 280px;
+  font-size: var(--font-size-body);
+  background: var(--color-bg-input);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-input);
+  padding: 6px 10px;
+}
+
+.thirdera .tab.spells .spell-search-no-results {
+  margin-top: 8px;
+}
+
 .thirdera .tab.spells .spell-item {
   padding: 8px 15px;
+}
+
+/* Spell icons black for visibility on light background (match Spell List app) */
+.thirdera .tab.spells .spell-item .item-image,
+.thirdera .tab.spells .spell-item .item-image i {
+  color: var(--color-text-primary);
+}
+
+.thirdera .tab.spells .spell-item .item-image img {
+  filter: brightness(0);
+}
+
+.thirdera .tab.spells .spell-name-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+}
+
+.thirdera .tab.spells .spell-name-link:hover {
+  text-decoration: underline;
+  color: var(--color-character-accent);
 }
 
 .thirdera .tab.spells .spell-tracking {
@@ -2876,6 +3035,7 @@
   padding: 6px 10px;
 }
 
+.thirdera .spell-search-hidden,
 .thirdera.spell-list-browser .spell-search-hidden {
   display: none !important;
 }
