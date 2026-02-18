@@ -111,6 +111,50 @@ export function getSpellsForDomain(domainKey) {
 }
 
 /**
+ * Get all domain items from world and all Item compendium packs.
+ * @returns {Promise<Array<{ uuid: string, name: string, domainKey: string }>>}
+ */
+export async function getAllDomains() {
+    if (typeof game === "undefined" || !game.items || !game.packs) return [];
+
+    const seen = new Map(); // domainKey (normalized) -> entry (prefer world)
+
+    // World items
+    for (const item of game.items) {
+        if (item.type !== "domain") continue;
+        const domainKey = (item.system?.key || "").trim();
+        const name = (item.name || "").trim() || "Unnamed Domain";
+        const key = normalizeDomainKey(domainKey) || name.toLowerCase();
+        if (!seen.has(key)) {
+            seen.set(key, { uuid: item.uuid, name, domainKey: domainKey || name });
+        }
+    }
+
+    // Item compendium packs
+    for (const pack of game.packs.values()) {
+        if (pack.documentName !== "Item") continue;
+        try {
+            const docs = await pack.getDocuments({ type: "domain" });
+            for (const doc of docs) {
+                if (doc.type !== "domain") continue;
+                const domainKey = (doc.system?.key || "").trim();
+                const name = (doc.name || "").trim() || "Unnamed Domain";
+                const key = normalizeDomainKey(domainKey) || name.toLowerCase();
+                if (!seen.has(key)) {
+                    seen.set(key, { uuid: doc.uuid, name, domainKey: domainKey || name });
+                }
+            }
+        } catch (err) {
+            console.warn(`Third Era | Error loading domains from pack ${pack.collection}:`, err);
+        }
+    }
+
+    const list = [...seen.values()];
+    list.sort((a, b) => a.name.localeCompare(b.name));
+    return list;
+}
+
+/**
  * Add domain spell items to an actor for a given class and domain. Only adds spells at levels
  * the character has achieved (has spell slots for). Skips spells the actor already has.
  * Call this when a domain is added to a character (e.g. drop on character sheet or on class item owned by actor).

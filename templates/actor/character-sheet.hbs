@@ -898,6 +898,14 @@
                                           {{#if spell.inShortlist}}{{localize "THIRDERA.Spells.InReady"}}{{else}}{{localize "THIRDERA.Spells.AddToReady"}}{{/if}}
                                         </button>
                                         {{/if}}
+                                        {{#if (and (eq classData.preparationType "prepared") (eq classData.spellListAccess "learned"))}}
+                                        <div class="prepared-tracking" title="{{localize 'THIRDERA.Spells.PreparedHint'}}">
+                                          <label>{{localize "THIRDERA.Spells.Prepared"}}:</label>
+                                          <button class="spell-counter-btn" data-action="decrementPrepared" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.DecreasePrepared'}}"><i class="fas fa-minus"></i></button>
+                                          <span class="spell-counter-value">{{spell.system.prepared}}</span>
+                                          <button class="spell-counter-btn" data-action="incrementPrepared" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.IncreasePrepared'}}"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                        {{/if}}
                                       </div>
                                       <div class="item-controls">
                                         <a class="item-edit" data-action="editItem" title="Edit Spell"><i class="fas fa-edit"></i></a>
@@ -934,6 +942,14 @@
                                   {{#if spell.inShortlist}}{{localize "THIRDERA.Spells.InReady"}}{{else}}{{localize "THIRDERA.Spells.AddToReady"}}{{/if}}
                                 </button>
                                 {{/if}}
+                                {{#if (and (eq classData.preparationType "prepared") (eq classData.spellListAccess "learned"))}}
+                                <div class="prepared-tracking" title="{{localize 'THIRDERA.Spells.PreparedHint'}}">
+                                  <label>{{localize "THIRDERA.Spells.Prepared"}}:</label>
+                                  <button class="spell-counter-btn" data-action="decrementPrepared" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.DecreasePrepared'}}"><i class="fas fa-minus"></i></button>
+                                  <span class="spell-counter-value">{{spell.system.prepared}}</span>
+                                  <button class="spell-counter-btn" data-action="incrementPrepared" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.IncreasePrepared'}}"><i class="fas fa-plus"></i></button>
+                                </div>
+                                {{/if}}
                               </div>
                               <div class="item-controls">
                                 <a class="item-edit" data-action="editItem" title="Edit Spell"><i class="fas fa-edit"></i></a>
@@ -965,8 +981,8 @@
                               <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span></a>{{/if}}</h4>
                             </div>
                             {{#if spell._isPlaceholder}}
-                              <div class="spell-tracking"><button type="button" class="add-placeholder-spell" data-action="addPlaceholderSpell" data-spell-name="{{spell.name}}" data-domain-key="{{spell.domainKey}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.Spells.AddToCharacter"}}</button></div>
-                              <div class="item-controls"><span class="placeholder-spell-indicator"><i class="fas fa-info-circle"></i></span></div>
+                              <div class="spell-tracking"></div>
+                              <div class="item-controls"><span class="placeholder-spell-indicator" title="{{localize 'THIRDERA.Spells.PlaceholderHint'}}"><i class="fas fa-info-circle"></i></span></div>
                             {{else}}
                               <div class="spell-tracking">{{#if (and (eq classData.spellListAccess "full") (eq classData.preparationType "prepared"))}}<button type="button" class="shortlist-toggle-btn{{#if spell.inShortlist}} active{{/if}}" data-action="toggleShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.ToggleReady'}}" aria-pressed="{{spell.inShortlist}}">{{#if spell.inShortlist}}{{localize "THIRDERA.Spells.InReady"}}{{else}}{{localize "THIRDERA.Spells.AddToReady"}}{{/if}}</button>{{/if}}</div>
                               <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a><a class="item-delete" data-action="deleteItem"><i class="fas fa-trash"></i></a></div>
@@ -1132,7 +1148,7 @@
                               <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}} <span class="domain-label">({{spell.domainName}})</span></a>{{/if}}</h4>
                             </div>
                             {{#if spell._isPlaceholder}}
-                              <div class="spell-tracking"><button type="button" class="add-placeholder-spell" data-action="addPlaceholderSpell" data-spell-name="{{spell.name}}" data-domain-key="{{spell.domainKey}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.Spells.AddToCharacter"}}</button></div>
+                              <div class="spell-tracking"></div>
                               <div class="item-controls"></div>
                             {{else}}
                               <div class="spell-tracking">
