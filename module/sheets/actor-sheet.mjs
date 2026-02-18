@@ -47,7 +47,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             addPlaceholderSpell: ThirdEraActorSheet.#onAddPlaceholderSpell,
             addToShortlist: ThirdEraActorSheet.#onAddToShortlist,
             removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist,
-            toggleShortlist: ThirdEraActorSheet.#onToggleShortlist
+            toggleShortlist: ThirdEraActorSheet.#onToggleShortlist,
+            resetSpellUsage: ThirdEraActorSheet.#onResetSpellUsage
         },
         window: {
             resizable: true,
@@ -107,6 +108,22 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             this._focusedInputName = null;
         }
+        // Restore scroll position after Cast/delete in Spells tab (prevents jumping to top).
+        // Defer with double rAF so the scrollable container has been laid out before we set scrollTop.
+        if (this._preservedSpellScrollTop != null) {
+            const scrollTop = this._preservedSpellScrollTop;
+            this._preservedSpellScrollTop = null;
+            const element = this.element;
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    const afterContainer = element?.querySelector(".tab.spells.active .spells-tab-content")
+                        ?? element?.querySelector(".sheet-body .tab.active");
+                    const sheetBody = element?.querySelector(".sheet-body");
+                    if (afterContainer) afterContainer.scrollTop = scrollTop;
+                    else if (sheetBody) sheetBody.scrollTo({ top: scrollTop });
+                });
+            });
+        }
 
         // Attach change listeners for level history HP inputs (not form-bound)
         this.element.querySelectorAll("input[data-level-hp-index]").forEach(input => {
@@ -140,7 +157,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         this.element.querySelectorAll("[data-drag-type]").forEach(el => {
             el.addEventListener("dragstart", (event) => {
                 const dragType = el.dataset.dragType;
-                const itemId = el.closest("[data-item-id]")?.dataset.itemId;
+                const row = el.closest("[data-item-id]");
+                const itemId = row?.dataset?.itemId;
                 const item = this.actor.items.get(itemId);
                 if (!item) return;
                 const dragData = {
@@ -152,6 +170,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     sceneId: canvas.scene?.id ?? null,
                     tokenId: this.token?.id ?? null
                 };
+                if (dragType === "spellCast") {
+                    const classItemId = row?.dataset?.classItemId;
+                    const spellLevel = row?.dataset?.spellLevel;
+                    if (classItemId != null && spellLevel != null) {
+                        dragData.classItemId = classItemId;
+                        dragData.spellLevel = spellLevel;
+                    }
+                }
                 event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
             });
         });
@@ -482,6 +508,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        // Spells that don't match any class or domain go into "Manually added" (shown in a separate section).
+        const manuallyAddedSpellList = [];
+
         // Assign spells to their classes and levels
         // Domain spells are identified by matching spell names to domain spell lists
         for (const spell of items.spells) {
@@ -545,9 +574,22 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
             }
 
-            // Spells that don't match any class (no domain, not on any class list) are not shown in the Spells tab.
-            // They remain on the actor but are omitted from Known/Ready so we don't show an "Unassigned" section.
+            if (!assigned) manuallyAddedSpellList.push(spell);
         }
+
+        // Build manuallyAddedSpells: grouped by level for display (same structure as class spellsByLevel)
+        const manuallyAddedSpellsByLevel = {};
+        for (let level = 0; level <= 9; level++) manuallyAddedSpellsByLevel[String(level)] = [];
+        for (const spell of manuallyAddedSpellList) {
+            const level = spell.system?.level ?? 0;
+            const levelKey = String(Math.min(9, Math.max(0, level)));
+            manuallyAddedSpellsByLevel[levelKey].push(spell);
+        }
+        const manualSpellSort = (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
+        for (const levelKey of Object.keys(manuallyAddedSpellsByLevel)) {
+            manuallyAddedSpellsByLevel[levelKey].sort(manualSpellSort);
+        }
+        const hasManuallyAddedSpells = manuallyAddedSpellList.length > 0;
         
         // Populate domain spells from original definitions (even if spell items don't exist yet)
         // This ensures domain spell rows appear in the UI even when spells haven't been added to the actor.
@@ -839,6 +881,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             knownSpellsByClass,
             readyToCastByClass,
             hasAnySpellcasting,
+            manuallyAddedSpellsByLevel,
+            hasManuallyAddedSpells,
             editable: this.isEditable
         };
     }
@@ -993,6 +1037,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @override
      */
     async _onDropItem(event, item) {
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onDropItem:entry',message:'drop received',data:{itemType:item?.type,uuidPrefix:(item?.uuid||"").slice(0,35)},timestamp:Date.now(),hypothesisId:'H3,H4'})}).catch(()=>{});
+        // #endregion
         // Domain dropped on character: add to spellcasting class (character chooses domains)
         if (item.type === "domain") {
             const domainKey = item.system?.key?.trim();
@@ -1164,6 +1211,34 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        // If dropping a spell, don't add a duplicate if the character already has it (from a class or at all)
+        if (item.type === "spell") {
+            const nameKey = (item.name || "").toLowerCase().trim();
+            const existingSpell = this.actor.items.find(
+                (i) => i.type === "spell" && (i.name || "").toLowerCase().trim() === nameKey
+            );
+            if (existingSpell) {
+                const spellcastingByClass = this.actor.system?.spellcastingByClass || [];
+                for (const sc of spellcastingByClass) {
+                    if (SpellData.hasLevelForClass(existingSpell.system, sc.spellListKey)) {
+                        const classItem = this.actor.items.get(sc.classItemId);
+                        const className = classItem?.name ?? "class";
+                        ui.notifications.info(
+                            game.i18n.format("THIRDERA.Spells.AlreadyKnowsFromClass", {
+                                spell: item.name,
+                                class: className
+                            })
+                        );
+                        return false;
+                    }
+                }
+                ui.notifications.info(
+                    game.i18n.format("THIRDERA.Spells.AlreadyHasSpell", { spell: item.name })
+                );
+                return false;
+            }
+        }
+
         // Check if this is a container being transferred from another actor (looting)
         const sourceActor = item.parent;
         const isFromAnotherActor = sourceActor && sourceActor.uuid !== this.actor.uuid;
@@ -1303,7 +1378,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        // #region agent log
+        if (item?.type === "spell") fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onDropItem:beforeSuper',message:'calling super._onDropItem for spell',data:{},timestamp:Date.now(),hypothesisId:'H4'})}).catch(()=>{});
+        // #endregion
         const result = await super._onDropItem(event, item);
+        // #region agent log
+        if (item?.type === "spell") fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onDropItem:afterSuper',message:'super._onDropItem result',data:{hasResult:!!result,resultId:result?.id},timestamp:Date.now(),hypothesisId:'H4'})}).catch(()=>{});
+        // #endregion
+        if (result) {
+            await this.actor.prepareData();
+            await this.render();
+        }
 
         // When a race is dropped, set the actor's size and speed to match
         if (item.type === "race" && result) {
@@ -2557,24 +2642,43 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @this {ThirdEraActorSheet}
      */
     static async #onItemCreate(event, target) {
-        const type = target.dataset.type;
-        const name = `New ${type.capitalize()}`;
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onItemCreate:entry',message:'createItem invoked',data:{type:target?.dataset?.type},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+        // #endregion
+        const type = target?.dataset?.type ?? "";
+        const name = type ? `New ${(typeof type.capitalize === "function" ? type.capitalize() : (type.charAt(0).toUpperCase() + (type.slice(1) || "").toLowerCase()))}` : "New Item";
         const itemData = {
             name: name,
-            type: type,
+            type: type || "equipment",
             system: {}
         };
-        
-        // Check if a stackable item already exists
-        const existingItem = this._findStackableItem(itemData);
+
+        // Only try to stack weapon, armor, and equipment; spells and other types always create new
+        const stackableTypes = ["weapon", "armor", "equipment"];
+        const existingItem = stackableTypes.includes(type) ? this._findStackableItem(itemData) : null;
         if (existingItem) {
             // Increment quantity instead of creating new item
             const currentQuantity = existingItem.system.quantity || 1;
             await existingItem.update({ "system.quantity": currentQuantity + 1 });
             return existingItem;
         }
-        
-        return await Item.implementation.create(itemData, { parent: this.actor });
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onItemCreate:beforeCreate',message:'calling Item.implementation.create',data:{type},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+        // #endregion
+        try {
+            const result = await Item.implementation.create(itemData, { parent: this.actor });
+            // #region agent log
+            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onItemCreate:afterCreate',message:'create done',data:{resultId:result?.id},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+            // #endregion
+            if (result) await this.actor.prepareData();
+            if (result) await this.render();
+            return result;
+        } catch (err) {
+            // #region agent log
+            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onItemCreate:error',message:'create threw',data:{errMessage:err?.message,errName:err?.name},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+            // #endregion
+            throw err;
+        }
     }
 
     /**
@@ -2601,6 +2705,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const itemId = target.closest("[data-item-id]")?.dataset.itemId;
         const item = this.actor.items.get(itemId);
         if (!item) return;
+
+        // Preserve scroll position when deleting from Spells tab so the view doesn't jump to top
+        if (item.type === "spell") {
+            const scrollContainer = this.element?.querySelector(".tab.spells.active .spells-tab-content")
+                ?? this.element?.querySelector(".sheet-body .tab.active");
+            this._preservedSpellScrollTop = scrollContainer?.scrollTop ?? this.element?.querySelector(".sheet-body")?.scrollTop ?? 0;
+        }
 
         // When deleting a spell, remove its id from all class shortlists (Ready to cast) first
         if (item.type === "spell") {
@@ -3304,25 +3415,40 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @this {ThirdEraActorSheet}
      */
     static async #onCastSpell(event, target) {
-        // #region agent log
         const row = target.closest("[data-item-id][data-class-item-id]");
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onCastSpell:entry',message:'Cast click handler',data:{targetTag:target?.tagName,targetAction:target?.dataset?.action,targetItemId:target?.dataset?.itemId,targetClassItemId:target?.dataset?.classItemId,targetSpellLevel:target?.dataset?.spellLevel,rowFound:!!row,rowItemId:row?.dataset?.itemId,rowClassItemId:row?.dataset?.classItemId,rowSpellLevel:row?.dataset?.spellLevel},timestamp:Date.now(),hypothesisId:'H-A,H-B,H-E'})}).catch(()=>{});
-        // #endregion
         const itemId = row?.dataset?.itemId ?? target.dataset?.itemId;
         const classItemId = row?.dataset?.classItemId ?? target.dataset?.classItemId;
         const spellLevel = row?.dataset?.spellLevel ?? target.dataset?.spellLevel;
-        if (!itemId || !classItemId) {
-            // #region agent log
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onCastSpell:earlyReturn',message:'Missing itemId or classItemId',data:{itemId,classItemId,spellLevel},timestamp:Date.now(),hypothesisId:'H-B'})}).catch(()=>{});
-            // #endregion
-            return;
-        }
+        if (!itemId || !classItemId) return;
         const item = this.actor.items.get(itemId);
         if (!item || item.type !== "spell") return;
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onCastSpell:beforeCast',message:'Calling actor.castSpell',data:{itemId,classItemId,spellLevel,itemType:item?.type},timestamp:Date.now(),hypothesisId:'H-C'})}).catch(()=>{});
-        // #endregion
+        // Preserve scroll position so Ready to cast panel doesn't jump to top after re-render
+        const scrollContainer = this.element?.querySelector(".tab.spells.active .spells-tab-content")
+            ?? this.element?.querySelector(".sheet-body .tab.active");
+        this._preservedSpellScrollTop = scrollContainer?.scrollTop ?? this.element?.querySelector(".sheet-body")?.scrollTop ?? 0;
         await this.actor.castSpell(item, { classItemId, spellLevel });
+    }
+
+    /**
+     * Reset all spell cast counts to 0 for this character (e.g. after rest, prayer, meditation, or study).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target   Element with data-action="resetSpellUsage"
+     */
+    static async #onResetSpellUsage(event, target) {
+        const toReset = this.actor.items.filter(
+            i => i.type === "spell" && (i.system?.cast ?? 0) !== 0
+        );
+        if (toReset.length === 0) {
+            ui.notifications.info(game.i18n.localize("THIRDERA.Spells.ResetCastCountsNoChange"));
+            return;
+        }
+        for (const item of toReset) {
+            await item.update({ "system.cast": 0 });
+        }
+        await this.render();
+        ui.notifications.info(
+            game.i18n.format("THIRDERA.Spells.ResetCastCountsDone", { count: toReset.length })
+        );
     }
 
     /**

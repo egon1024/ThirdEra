@@ -155,9 +155,6 @@ export class ThirdEraActor extends Actor {
      * @returns {Promise<boolean>}   True if cast was applied and message posted
      */
     async castSpell(spellItem, { classItemId, spellLevel }) {
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor.mjs:castSpell:entry',message:'castSpell called',data:{classItemId,spellLevel,spellName:spellItem?.name,hasSpell:!!spellItem,spellType:spellItem?.type,actorType:this?.type},timestamp:Date.now(),hypothesisId:'H-C'})}).catch(()=>{});
-        // #endregion
         if (!spellItem || spellItem.type !== "spell") return false;
         if (this.type !== "character") return false;
 
@@ -166,20 +163,10 @@ export class ThirdEraActor extends Actor {
         if (!Array.isArray(spellcastingByClass)) return false;
 
         const classData = spellcastingByClass.find(c => c.classItemId === classItemId);
-        if (!classData) {
-            // #region agent log
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor.mjs:castSpell:noClassData',message:'classData not found',data:{classItemId,classIds:spellcastingByClass?.map(c=>c.classItemId)},timestamp:Date.now(),hypothesisId:'H-C'})}).catch(()=>{});
-            // #endregion
-            return false;
-        }
+        if (!classData) return false;
 
         const level = typeof spellLevel === "string" ? parseInt(spellLevel, 10) : spellLevel;
-        if (Number.isNaN(level) || level < 0 || level > 9) {
-            // #region agent log
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor.mjs:castSpell:badLevel',message:'level NaN or out of range',data:{spellLevel,level},timestamp:Date.now(),hypothesisId:'H-C'})}).catch(()=>{});
-            // #endregion
-            return false;
-        }
+        if (Number.isNaN(level) || level < 0 || level > 9) return false;
 
         // Optional slot check: warn if no slot available, do not block
         const preparationType = classData.preparationType;
@@ -236,9 +223,6 @@ export class ThirdEraActor extends Actor {
             content
         });
 
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor.mjs:castSpell:success',message:'castSpell completed',data:{spellName},timestamp:Date.now(),hypothesisId:'H-D'})}).catch(()=>{});
-        // #endregion
         return true;
     }
 }

@@ -845,7 +845,6 @@
       <div class="spells-tab-bar">
         <div class="items-header">
           <h3 class="items-header">Spells</h3>
-          <a class="item-create" data-action="createItem" data-type="spell"><i class="fas fa-plus"></i> Add Spell</a>
         </div>
         {{#if hasAnySpellcasting}}
           <nav class="spells-subtabs tabs" data-group="spells">
@@ -860,6 +859,38 @@
         {{!-- Known / Available panel: roster only, no prepared/cast; Add to ready for full-list --}}
         <div class="subtab spells-known {{#if (eq tabs.spells 'known')}}active{{/if}}" data-group="spells" data-tab="known">
           {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-known-search" inputName="spellKnownSearch" placeholderKey="THIRDERA.Spells.SearchPlaceholder" noResultsKey="THIRDERA.Spells.SearchNoResults"}}
+          {{!-- Manually added spells first: not on any class list or domain; e.g. dropped without class assignment --}}
+          {{#if hasManuallyAddedSpells}}
+            <div class="spellcasting-class manually-added-spells">
+              <div class="spellcasting-header">
+                <h4>{{localize "THIRDERA.Spells.ManuallyAddedHeading"}}</h4>
+                <p class="spell-section-hint">{{localize "THIRDERA.Spells.ManuallyAddedHint"}}</p>
+              </div>
+              {{#each manuallyAddedSpellsByLevel as |spells spellLevel|}}
+                {{#if spells.length}}
+                  <div class="spell-level-group">
+                    <div class="spell-level-header">
+                      <h5>{{#if (eq spellLevel "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal spellLevel}} Level{{/if}}</h5>
+                    </div>
+                    <ol class="items-list spells-list">
+                      {{#each spells as |spell|}}
+                      <li class="item flexrow spell-item" data-item-id="{{spell.id}}" data-spell-name="{{spell.name}}">
+                        <div class="item-name">
+                          {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
+                          <h4><a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
+                        </div>
+                        <div class="item-controls">
+                          <a class="item-edit" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}"><i class="fas fa-edit"></i></a>
+                          <a class="item-delete" data-action="deleteItem" title="Delete Spell"><i class="fas fa-trash"></i></a>
+                        </div>
+                      </li>
+                      {{/each}}
+                    </ol>
+                  </div>
+                {{/if}}
+              {{/each}}
+            </div>
+          {{/if}}
           {{#each knownSpellsByClass as |classData|}}
             {{#if classData.hasSpellcasting}}
               <div class="spellcasting-class">
@@ -885,10 +916,10 @@
                                 <div class="spell-school-header"><h6 class="spell-school-title">{{schoolGroup.schoolName}}</h6></div>
                                 <ol class="items-list spells-list">
                                   {{#each schoolGroup.spells as |spell|}}
-                                  <li class="item flexrow spell-item{{#if spell.domainName}} domain-spell-item{{/if}}{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}">
+                                  <li class="item flexrow spell-item{{#if spell.domainName}} domain-spell-item{{/if}}{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}" data-spell-level="{{spellLevel}}">
                                     <div class="item-name">
                                       {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
-                                      <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>{{#if spell.domainName}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{/if}}{{/if}}</h4>
+                                      <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" {{#unless spell._isPlaceholder}}draggable="true" data-drag-type="spellCast"{{/unless}} title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>{{#if spell.domainName}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{/if}}{{/if}}</h4>
                                     </div>
                                     {{#if spell._isPlaceholder}}
                                       <div class="spell-tracking">
@@ -927,10 +958,10 @@
                       {{#if spells.length}}
                         <ol class="items-list spells-list">
                           {{#each spells as |spell|}}
-                          <li class="item flexrow spell-item{{#if spell.domainName}} domain-spell-item{{/if}}{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}">
+                          <li class="item flexrow spell-item{{#if spell.domainName}} domain-spell-item{{/if}}{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}" data-spell-level="{{spellLevel}}">
                             <div class="item-name">
                               {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
-                              <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>{{#if spell.domainName}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{/if}}{{/if}}</h4>
+                              <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" {{#unless spell._isPlaceholder}}draggable="true" data-drag-type="spellCast"{{/unless}} title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>{{#if spell.domainName}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{/if}}{{/if}}</h4>
                             </div>
                             {{#if spell._isPlaceholder}}
                               <div class="spell-tracking">
@@ -975,10 +1006,10 @@
                         </div>
                         <ol class="items-list spells-list domain-spells-list">
                           {{#each domainSpells as |spell|}}
-                          <li class="item flexrow spell-item domain-spell-item{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}">
+                          <li class="item flexrow spell-item domain-spell-item{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}" data-spell-level="{{spellLevel}}">
                             <div class="item-name">
                               {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
-                              <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span></a>{{/if}}</h4>
+                              <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" {{#unless spell._isPlaceholder}}draggable="true" data-drag-type="spellCast"{{/unless}} title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span></a>{{/if}}</h4>
                             </div>
                             {{#if spell._isPlaceholder}}
                               <div class="spell-tracking"></div>
@@ -1010,6 +1041,12 @@
 
         {{!-- Ready to cast panel: shortlist (full-list) or prepared>0 (wizard) or same (spontaneous); prepared/cast only for prepared casters --}}
         <div class="subtab spells-ready {{#if (eq tabs.spells 'ready')}}active{{/if}}" data-group="spells" data-tab="ready">
+          {{#if hasAnySpellcasting}}
+          <div class="spell-rest-reset">
+            <span class="reset-spell-usage-label">{{localize "THIRDERA.Spells.ResetCastCounts"}}</span>
+            <button type="button" class="reset-spell-usage-btn" data-action="resetSpellUsage" title="{{localize 'THIRDERA.Spells.ResetCastCountsHint'}}" aria-label="{{localize 'THIRDERA.Spells.ResetCastCounts'}}"><i class="fas fa-moon" aria-hidden="true"></i></button>
+          </div>
+          {{/if}}
           {{#each readyToCastByClass as |classData|}}
             {{#if classData.hasSpellcasting}}
               <div class="spellcasting-class">
@@ -1050,7 +1087,7 @@
                                   <li class="item flexrow spell-item" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}">
                                     <div class="item-name">
                                       {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
-                                      <h4><a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
+                                      <h4><a class="spell-name-link" data-action="editItem" draggable="true" data-drag-type="spellCast" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
                                     </div>
                                     {{#if (eq classData.preparationType "prepared")}}
                                       <div class="spell-tracking">
@@ -1093,7 +1130,7 @@
                           <li class="item flexrow spell-item" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}">
                             <div class="item-name">
                               {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
-                              <h4><a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
+                              <h4><a class="spell-name-link" data-action="editItem" draggable="true" data-drag-type="spellCast" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
                             </div>
                             {{#if (eq classData.preparationType "prepared")}}
                               <div class="spell-tracking">
@@ -1143,7 +1180,7 @@
                           <li class="item flexrow spell-item domain-spell-item{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}">
                             <div class="item-name">
                               {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
-                              <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}} <span class="domain-label">({{spell.domainName}})</span></a>{{/if}}</h4>
+                              <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" {{#unless spell._isPlaceholder}}draggable="true" data-drag-type="spellCast"{{/unless}} title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}} <span class="domain-label">({{spell.domainName}})</span></a>{{/if}}</h4>
                             </div>
                             {{#if spell._isPlaceholder}}
                               <div class="spell-tracking"></div>

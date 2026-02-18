@@ -510,6 +510,36 @@
   margin-bottom: 0;
 }
 
+.thirdera .spell-rest-reset {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.thirdera .reset-spell-usage-label {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.thirdera .reset-spell-usage-btn {
+  padding: 2px 6px;
+  min-width: unset;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border-tab);
+  border-radius: 3px;
+}
+
+.thirdera .reset-spell-usage-btn:hover {
+  color: var(--color-text-primary);
+  background: var(--color-hover);
+  border-color: var(--color-border-divider);
+}
+
 .thirdera .grid {
   display: grid;
   grid-column-gap: 10px;
