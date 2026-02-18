@@ -131,7 +131,8 @@
             "IncreaseCast": "Increase Cast",
             "ViewSpell": "View spell",
             "SearchPlaceholder": "Search spells…",
-            "SearchNoResults": "No spells match your search."
+            "SearchNoResults": "No spells match your search.",
+            "NoSchool": "No school"
         },
         "Inventory": {
             "TotalWeight": "Total Weight",

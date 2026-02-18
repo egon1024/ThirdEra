@@ -2411,13 +2411,18 @@
 }
 
 .thirdera .tab.spells .spell-level-header {
-  background: var(--color-bg-light);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-bg-parchment) !important;
   padding: 8px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  border-bottom: 1px solid var(--color-border-divider);
+  box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.12);
 }
 
 .thirdera .tab.spells .spell-level-header h5 {
@@ -2437,6 +2442,20 @@
 .thirdera .tab.spells .spells-per-day strong {
   color: var(--color-text-primary);
   font-weight: var(--font-weight-bold);
+}
+
+.thirdera .tab.spells .spell-school-header {
+  margin: 6px 0 2px 0;
+  padding: 4px 15px 0 15px;
+}
+
+.thirdera .tab.spells .spell-school-title {
+  margin: 0;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .thirdera .tab.spells .spells-list {
@@ -2471,6 +2490,16 @@
 
 .thirdera .tab.spells .spell-item {
   padding: 8px 15px;
+}
+
+/* Spell icons black for visibility on light background (match Spell List app) */
+.thirdera .tab.spells .spell-item .item-image,
+.thirdera .tab.spells .spell-item .item-image i {
+  color: var(--color-text-primary);
+}
+
+.thirdera .tab.spells .spell-item .item-image img {
+  filter: brightness(0);
 }
 
 .thirdera .tab.spells .spell-name-link {

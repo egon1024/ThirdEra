@@ -2,7 +2,7 @@
  * Item sheet for Third Era items using ApplicationV2
  * @extends {foundry.applications.sheets.ItemSheetV2}
  */
-import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { addDomainSpellsToActor, getSpellsForDomain } from "../logic/domain-spells.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -637,6 +637,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             current.push({ domainItemId: droppedItem.id, domainName: droppedItem.name, domainKey });
             current.sort((a, b) => a.domainName.localeCompare(b.domainName));
             await this.document.update({ "system.spellcasting.domains": current });
+
+            // If this class is owned by an actor, auto-add domain spells to the character
+            const owner = this.document.actor;
+            if (owner) {
+                const added = await addDomainSpellsToActor(owner, this.document, domainKey);
+                if (added > 0) {
+                    ui.notifications.info(`${droppedItem.name}: ${added} domain spell(s) added to ${owner.name}.`);
+                }
+            }
+
             // #region agent log
             fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:domainClassUpdateDone',message:'domain added to class',data:{classId:this.document?.id,domainKey},timestamp:Date.now(),hypothesisId:'H5'})}).catch(()=>{});
             // #endregion

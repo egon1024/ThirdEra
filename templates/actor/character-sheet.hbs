@@ -873,13 +873,54 @@
                       <div class="spell-level-header">
                         <h5>{{#if (eq spellLevel "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal spellLevel}} Level{{/if}}</h5>
                       </div>
+                      {{#if (and (eq classData.casterType "arcane") classData.spellsByLevelBySchool)}}
+                        {{#with (lookup classData.spellsByLevelBySchool spellLevel) as |schoolGroups|}}
+                          {{#if schoolGroups.length}}
+                            {{#each schoolGroups as |schoolGroup|}}
+                              {{#if schoolGroup.spells.length}}
+                                <div class="spell-school-header"><h6 class="spell-school-title">{{schoolGroup.schoolName}}</h6></div>
+                                <ol class="items-list spells-list">
+                                  {{#each schoolGroup.spells as |spell|}}
+                                  <li class="item flexrow spell-item{{#if spell.domainName}} domain-spell-item{{/if}}{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}">
+                                    <div class="item-name">
+                                      {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
+                                      <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>{{#if spell.domainName}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{/if}}{{/if}}</h4>
+                                    </div>
+                                    {{#if spell._isPlaceholder}}
+                                      <div class="spell-tracking">
+                                        <button type="button" class="add-placeholder-spell" data-action="addPlaceholderSpell" data-spell-name="{{spell.name}}" data-domain-key="{{spell.domainKey}}" title="{{localize 'THIRDERA.Spells.AddToCharacter'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.Spells.AddToCharacter"}}</button>
+                                      </div>
+                                      <div class="item-controls"><span class="placeholder-spell-indicator" title="{{localize 'THIRDERA.Spells.PlaceholderHint'}}"><i class="fas fa-info-circle"></i></span></div>
+                                    {{else}}
+                                      <div class="spell-tracking">
+                                        {{#if (and (eq classData.spellListAccess "full") (eq classData.preparationType "prepared"))}}
+                                        <button type="button" class="shortlist-toggle-btn{{#if spell.inShortlist}} active{{/if}}" data-action="toggleShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.ToggleReady'}}" aria-pressed="{{spell.inShortlist}}">
+                                          {{#if spell.inShortlist}}{{localize "THIRDERA.Spells.InReady"}}{{else}}{{localize "THIRDERA.Spells.AddToReady"}}{{/if}}
+                                        </button>
+                                        {{/if}}
+                                      </div>
+                                      <div class="item-controls">
+                                        <a class="item-edit" data-action="editItem" title="Edit Spell"><i class="fas fa-edit"></i></a>
+                                        <a class="item-delete" data-action="deleteItem" title="Delete Spell"><i class="fas fa-trash"></i></a>
+                                      </div>
+                                    {{/if}}
+                                  </li>
+                                  {{/each}}
+                                </ol>
+                              {{/if}}
+                            {{/each}}
+                          {{else}}
+                            <div class="spells-empty-message"><p class="hint">{{localize "THIRDERA.Spells.NoSpellsKnown"}}</p></div>
+                          {{/if}}
+                        {{/with}}
+                      {{else}}
                       {{#if spells.length}}
                         <ol class="items-list spells-list">
                           {{#each spells as |spell|}}
-                          <li class="item flexrow spell-item{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}">
+                          <li class="item flexrow spell-item{{#if spell.domainName}} domain-spell-item{{/if}}{{#if spell._isPlaceholder}} placeholder-spell{{/if}}" {{#if spell.id}}data-item-id="{{spell.id}}"{{/if}} data-class-item-id="{{classData.classItemId}}" data-spell-name="{{spell.name}}">
                             <div class="item-name">
                               {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
-                              <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>{{/if}}</h4>
+                              <h4>{{#if spell._isPlaceholder}}{{spell.name}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{else}}<a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>{{#if spell.domainName}} <span class="domain-label" title="Granted by {{spell.domainName}} domain">({{spell.domainName}})</span>{{/if}}{{/if}}</h4>
                             </div>
                             {{#if spell._isPlaceholder}}
                               <div class="spell-tracking">
@@ -904,6 +945,7 @@
                         </ol>
                       {{else}}
                         <div class="spells-empty-message"><p class="hint">{{localize "THIRDERA.Spells.NoSpellsKnown"}}</p></div>
+                      {{/if}}
                       {{/if}}
                     </div>
                   {{/if}}
@@ -981,6 +1023,55 @@
                           {{/if}}
                         </div>
                       </div>
+                      {{#if (and (eq classData.casterType "arcane") classData.spellsByLevelBySchool)}}
+                        {{#with (lookup classData.spellsByLevelBySchool spellLevel) as |schoolGroups|}}
+                          {{#if schoolGroups.length}}
+                            {{#each schoolGroups as |schoolGroup|}}
+                              {{#if schoolGroup.spells.length}}
+                                <div class="spell-school-header"><h6 class="spell-school-title">{{schoolGroup.schoolName}}</h6></div>
+                                <ol class="items-list spells-list">
+                                  {{#each schoolGroup.spells as |spell|}}
+                                  <li class="item flexrow spell-item" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}">
+                                    <div class="item-name">
+                                      {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
+                                      <h4><a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
+                                    </div>
+                                    {{#if (eq classData.preparationType "prepared")}}
+                                      <div class="spell-tracking">
+                                        <div class="prepared-tracking" title="{{localize 'THIRDERA.Spells.PreparedHint'}}">
+                                          <label>{{localize "THIRDERA.Spells.Prepared"}}:</label>
+                                          <button class="spell-counter-btn" data-action="decrementPrepared" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.DecreasePrepared'}}"><i class="fas fa-minus"></i></button>
+                                          <span class="spell-counter-value">{{spell.system.prepared}}</span>
+                                          <button class="spell-counter-btn" data-action="incrementPrepared" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.IncreasePrepared'}}"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                        <div class="cast-tracking" title="{{localize 'THIRDERA.Spells.CastHint'}}">
+                                          <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
+                                          <button class="spell-counter-btn" data-action="decrementCast" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.DecreaseCast'}}"><i class="fas fa-minus"></i></button>
+                                          <span class="spell-counter-value">{{spell.system.cast}}</span>
+                                          <button class="spell-counter-btn" data-action="incrementCast" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.IncreaseCast'}}"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                      </div>
+                                      {{#if (eq classData.spellListAccess "full")}}
+                                      <div class="item-controls"><a class="item-delete" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-trash"></i></a></div>
+                                      {{else}}
+                                      <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a><a class="item-delete" data-action="deleteItem"><i class="fas fa-trash"></i></a></div>
+                                      {{/if}}
+                                    {{else}}
+                                      <div class="spell-tracking"></div>
+                                      <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a><a class="item-delete" data-action="deleteItem"><i class="fas fa-trash"></i></a></div>
+                                    {{/if}}
+                                  </li>
+                                  {{/each}}
+                                </ol>
+                              {{/if}}
+                            {{/each}}
+                          {{else}}
+                            <div class="spells-empty-message">
+                              <p class="hint">{{#if (and (eq classData.spellListAccess "full") (eq classData.preparationType "prepared"))}}{{localize "THIRDERA.Spells.ReadyEmptyShortlist"}}{{else}}{{localize "THIRDERA.Spells.NoSpellsKnown"}}{{/if}}</p>
+                            </div>
+                          {{/if}}
+                        {{/with}}
+                      {{else}}
                       {{#if spells.length}}
                         <ol class="items-list spells-list">
                           {{#each spells as |spell|}}
@@ -1020,6 +1111,7 @@
                         <div class="spells-empty-message">
                           <p class="hint">{{#if (and (eq classData.spellListAccess "full") (eq classData.preparationType "prepared"))}}{{localize "THIRDERA.Spells.ReadyEmptyShortlist"}}{{else}}{{localize "THIRDERA.Spells.NoSpellsKnown"}}{{/if}}</p>
                         </div>
+                      {{/if}}
                       {{/if}}
                     </div>
                   {{/if}}
