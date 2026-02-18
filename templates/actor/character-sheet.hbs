@@ -545,6 +545,26 @@
           </ul>
         </li>
         {{/if}}
+        {{#if cls.supportsDomains}}
+        <li class="class-domains-sublist">
+          <div class="domains-section" data-class-item-id="{{cls.id}}">
+            <h5 class="domains-section-title">{{localize "THIRDERA.Spells.Domains"}}</h5>
+            <div class="domains-drop-zone" data-drop-zone="domains" data-class-item-id="{{cls.id}}" title="{{localize "THIRDERA.Spells.DragDomainHint"}}">
+              <span class="domains-drop-hint">{{localize "THIRDERA.Spells.DragDomainHint"}}</span>
+            </div>
+            {{#if cls.domains.length}}
+            <ul class="domains-list">
+              {{#each cls.domains as |domain|}}
+              <li class="domain-entry flexrow" data-class-item-id="{{../cls.id}}" data-domain-key="{{domain.domainKey}}">
+                <span class="domain-name">{{domain.domainName}}</span>
+                <a class="domain-remove" data-action="removeDomain" data-class-item-id="{{../cls.id}}" data-domain-key="{{domain.domainKey}}" title="{{localize "THIRDERA.Spells.RemoveDomain"}}"><i class="fas fa-times"></i></a>
+              </li>
+              {{/each}}
+            </ul>
+            {{/if}}
+          </div>
+        </li>
+        {{/if}}
         {{/each}}
       </ol>
       {{else}}
@@ -847,24 +867,6 @@
                     <span class="spell-dc">Spell DC: {{classData.baseSpellDC}} + spell level</span>
                   </div>
                 </div>
-                {{#if classData.supportsDomains}}
-                <div class="domains-section" data-class-item-id="{{classData.classItemId}}">
-                  <h5 class="domains-section-title">{{localize "THIRDERA.Spells.Domains"}}</h5>
-                  <div class="domains-drop-zone" data-drop-zone="domains" data-class-item-id="{{classData.classItemId}}" title="{{localize "THIRDERA.Spells.DragDomainHint"}}">
-                    <span class="domains-drop-hint">{{localize "THIRDERA.Spells.DragDomainHint"}}</span>
-                  </div>
-                  {{#if classData.domains.length}}
-                  <ul class="domains-list">
-                    {{#each classData.domains as |domain|}}
-                    <li class="domain-entry flexrow" data-class-item-id="{{../classData.classItemId}}" data-domain-key="{{domain.domainKey}}">
-                      <span class="domain-name">{{domain.domainName}}</span>
-                      <a class="domain-remove" data-action="removeDomain" data-class-item-id="{{../classData.classItemId}}" data-domain-key="{{domain.domainKey}}" title="{{localize "THIRDERA.Spells.RemoveDomain"}}"><i class="fas fa-times"></i></a>
-                    </li>
-                    {{/each}}
-                  </ul>
-                  {{/if}}
-                </div>
-                {{/if}}
                 {{#each classData.spellsByLevel as |spells spellLevel|}}
                   {{#if (or spells.length (gt (lookup classData.spellsPerDay spellLevel) 0))}}
                     <div class="spell-level-group">

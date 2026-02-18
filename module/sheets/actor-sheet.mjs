@@ -703,12 +703,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         };
 
+        // Enrich classes with domain info for the Classes tab (supportsDomains, domains from spellcastingByClass)
+        const classesWithDomains = items.classes.map((cls) => {
+            const sc = spellcastingByClass.find((s) => s.classItemId === cls.id);
+            return {
+                ...cls,
+                id: cls.id,
+                _id: cls._id ?? cls.id,
+                supportsDomains: sc ? (sc.supportsDomains === true || sc.supportsDomains === "true") : false,
+                domains: sc?.domains ?? []
+            };
+        });
+
         return {
             ...context,
             actor,
             system: systemData,
             items: actor.items,
             ...items,
+            classes: classesWithDomains,
             ...config,
             config,
             tabs,
