@@ -344,6 +344,15 @@ Hooks.once("ready", async function () {
     await CompendiumLoader.init();
     // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
     await populateCompendiumCache();
+    // Re-render open actor sheets so Ready to cast domain spells show on initial load (they depend on the cache)
+    const instances = foundry.applications?.instances;
+    if (instances) {
+        for (const app of instances.values()) {
+            if (app.document?.type === "Actor" && app.document?.system === "thirdera" && app.rendered) {
+                app.render(true);
+            }
+        }
+    }
 });
 
 /**

@@ -127,14 +127,16 @@
             "DragFromKnownHint": "Drag spells from the Known tab (or click Add to ready there) to track them here.",
             "ReadyEmptyShortlist": "Add spells from the Known tab to track prepared and cast counts here.",
             "NoSpellcastingClasses": "No spellcasting classes found. Add a class with spellcasting enabled to track spells.",
-            "DecreasePrepared": "Decrease Prepared",
-            "IncreasePrepared": "Increase Prepared",
-            "DecreaseCast": "Decrease Cast",
-            "IncreaseCast": "Increase Cast",
             "ViewSpell": "View spell",
             "SearchPlaceholder": "Search spells…",
             "SearchNoResults": "No spells match your search.",
-            "NoSchool": "No school"
+            "NoSchool": "No school",
+            "CastSpell": "Cast",
+            "CastMessageCastsVerb": "casts",
+            "SaveDCBreakdown": "Save DC: 10 (base) + {spellLevel} (spell level) + {abilityMod} ({abilityName}) = {total}",
+            "SpellResistanceLine": "Spell resistance: {value}",
+            "NoSlotsRemaining": "No spell slots remaining for this level ({spell}). Cast was still recorded.",
+            "NoPreparedCastRemaining": "No prepared cast remaining for {spell}. Cast was still recorded."
         },
         "Inventory": {
             "TotalWeight": "Total Weight",

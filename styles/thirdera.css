@@ -377,6 +377,38 @@
   display: block;
 }
 
+/* Spells tab: header + sub-tabs in a fixed bar, only panel content scrolls */
+.thirdera .sheet-body .tab.spells {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.thirdera .sheet-body .tab.spells.active {
+  display: flex;
+}
+
+.thirdera .spells-tab-bar {
+  flex: 0 0 auto;
+  background: var(--color-bg-parchment);
+  border-bottom: 1px solid var(--color-border-divider);
+  margin: 0 -10px;
+  padding: 0 10px 0 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.thirdera .spells-tab-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0 -10px;
+  padding: 0 10px;
+}
+
 /* Subtabs (nested tab groups) */
 .thirdera .subtabs {
   flex: 0;
@@ -2540,34 +2572,34 @@
   white-space: nowrap;
 }
 
-.thirdera .tab.spells .spell-counter-btn {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--color-border-input);
-  background: var(--color-bg-input);
-  color: var(--color-text-primary);
-  cursor: pointer;
-  border-radius: 3px;
-  font-size: var(--font-size-label);
-  padding: 0;
-  transition: all 0.2s;
-}
-
-.thirdera .tab.spells .spell-counter-btn:hover {
-  background: var(--color-hover-alt);
-  color: var(--color-text-light);
-  border-color: var(--color-hover-alt);
-}
-
-.thirdera .tab.spells .spell-counter-value {
-  min-width: 30px;
+.thirdera .tab.spells .spell-tracking-input {
+  width: 38px;
   text-align: center;
-  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+
+.thirdera .tab.spells .cast-spell-btn {
+  font-size: var(--font-size-label);
+  padding: 4px 10px;
+  margin-left: 4px;
+  background: var(--color-character-accent);
+  color: var(--color-text-light);
+  border: 1px solid var(--color-character-accent);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.thirdera .tab.spells .cast-spell-btn:hover {
+  background: var(--color-hover-alt);
+  border-color: var(--color-hover-alt);
+  color: var(--color-text-light);
 }
 
 /* Domain Spells Styling — clear visual separation from main spell list */
@@ -3145,4 +3177,21 @@
 .spell-list-browser-btn:hover,
 .spell-list-browser-btn:hover i {
   color: var(--color-hover-alt, #333366) !important;
+}
+
+/* Cast spell chat message (may appear in chat log outside .thirdera) */
+.thirdera.cast-message {
+  font-size: var(--font-size-body, 14px);
+  color: var(--color-text-primary, #1a1a1a);
+  margin: 0.25em 0;
+}
+
+.thirdera.cast-message p {
+  margin: 0.25em 0;
+}
+
+.thirdera .cast-dc-breakdown {
+  font-size: var(--font-size-body, 14px);
+  color: var(--color-text-primary, #1a1a1a);
+  margin: 0.35em 0;
 }

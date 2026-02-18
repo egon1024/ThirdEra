@@ -144,4 +144,101 @@ export class ThirdEraActor extends Actor {
 
         return roll;
     }
+
+    /**
+     * Cast a spell: increment cast count and post a chat message with Save DC breakdown and spell resistance.
+     * Used by the sheet Cast button and (Phase 2) by hotbar macros.
+     * @param {Item} spellItem       The spell item to cast (must be type "spell" on this actor)
+     * @param {Object} options
+     * @param {string} options.classItemId  The class item ID (from spellcastingByClass) for DC and slot context
+     * @param {number|string} options.spellLevel  Spell level 0-9 for this class
+     * @returns {Promise<boolean>}   True if cast was applied and message posted
+     */
+    async castSpell(spellItem, { classItemId, spellLevel }) {
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor.mjs:castSpell:entry',message:'castSpell called',data:{classItemId,spellLevel,spellName:spellItem?.name,hasSpell:!!spellItem,spellType:spellItem?.type,actorType:this?.type},timestamp:Date.now(),hypothesisId:'H-C'})}).catch(()=>{});
+        // #endregion
+        if (!spellItem || spellItem.type !== "spell") return false;
+        if (this.type !== "character") return false;
+
+        const systemData = this.system;
+        const spellcastingByClass = systemData.spellcastingByClass;
+        if (!Array.isArray(spellcastingByClass)) return false;
+
+        const classData = spellcastingByClass.find(c => c.classItemId === classItemId);
+        if (!classData) {
+            // #region agent log
+            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor.mjs:castSpell:noClassData',message:'classData not found',data:{classItemId,classIds:spellcastingByClass?.map(c=>c.classItemId)},timestamp:Date.now(),hypothesisId:'H-C'})}).catch(()=>{});
+            // #endregion
+            return false;
+        }
+
+        const level = typeof spellLevel === "string" ? parseInt(spellLevel, 10) : spellLevel;
+        if (Number.isNaN(level) || level < 0 || level > 9) {
+            // #region agent log
+            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor.mjs:castSpell:badLevel',message:'level NaN or out of range',data:{spellLevel,level},timestamp:Date.now(),hypothesisId:'H-C'})}).catch(()=>{});
+            // #endregion
+            return false;
+        }
+
+        // Optional slot check: warn if no slot available, do not block
+        const preparationType = classData.preparationType;
+        const spellsPerDay = classData.spellsPerDay || {};
+        const slotsAtLevel = spellsPerDay[level] ?? spellsPerDay[String(level)] ?? 0;
+
+        if (preparationType === "spontaneous") {
+            const { SpellData } = await import("../data/item-spell.mjs");
+            const spellListKey = classData.spellListKey;
+            let castSum = 0;
+            for (const item of this.items) {
+                if (item.type !== "spell") continue;
+                const itemLevel = SpellData.getLevelForClass(item.system, spellListKey);
+                if (itemLevel === level) castSum += (item.system.cast ?? 0);
+            }
+            const remaining = Math.max(0, slotsAtLevel - castSum);
+            if (remaining <= 0) {
+                ui.notifications.warn(game.i18n.format("THIRDERA.Spells.NoSlotsRemaining", { spell: spellItem.name }));
+            }
+        } else if (preparationType === "prepared") {
+            const prepared = spellItem.system.prepared ?? 0;
+            const cast = spellItem.system.cast ?? 0;
+            if (prepared <= 0 || cast >= prepared) {
+                ui.notifications.warn(game.i18n.format("THIRDERA.Spells.NoPreparedCastRemaining", { spell: spellItem.name }));
+            }
+        }
+
+        const currentCast = spellItem.system.cast ?? 0;
+        await spellItem.update({ "system.cast": currentCast + 1 });
+
+        const abilityMod = classData.abilityMod ?? 0;
+        const abilityName = CONFIG.THIRDERA?.AbilityScores?.[classData.castingAbility] ?? classData.castingAbility ?? "";
+        const totalDC = 10 + level + abilityMod;
+        const abilityModSigned = abilityMod >= 0 ? `+${abilityMod}` : String(abilityMod);
+        const srKey = spellItem.system.spellResistance ?? "";
+        const srLabel = (CONFIG.THIRDERA?.spellResistanceChoices?.[srKey] ?? srKey) || "-";
+
+        const actorName = this.name;
+        const spellName = spellItem.name;
+        const castsLabel = game.i18n.localize("THIRDERA.Spells.CastMessageCastsVerb");
+        const dcPayload = { spellLevel: level, abilityMod: abilityModSigned, abilityName, total: totalDC };
+        const srPayload = { value: srLabel };
+        const dcLine = game.i18n.format("THIRDERA.Spells.SaveDCBreakdown", dcPayload);
+        const srLine = game.i18n.format("THIRDERA.Spells.SpellResistanceLine", srPayload);
+
+        const content = `<div class="thirdera cast-message">
+  <p><strong>${actorName}</strong> ${castsLabel} <strong>${spellName}</strong>.</p>
+  <div class="cast-dc-breakdown">${dcLine}</div>
+  <p>${srLine}</p>
+</div>`;
+
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            content
+        });
+
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor.mjs:castSpell:success',message:'castSpell completed',data:{spellName},timestamp:Date.now(),hypothesisId:'H-D'})}).catch(()=>{});
+        // #endregion
+        return true;
+    }
 }
