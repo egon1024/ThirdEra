@@ -569,6 +569,12 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                         console.warn(`Domain ${domainName || domainRef.domainItemId} failed for class ${cls.name}:`, e);
                     }
                 }
+                // Ensure at least 1 domain slot per level that has domain spells (in case spellsPerDay table omits or is 0)
+                for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
+                    if ((domainSpellsByLevel[spellLevel] || []).length > 0) {
+                        domainSpellSlots[spellLevel] = Math.max(domainSpellSlots[spellLevel] || 0, 1);
+                    }
+                }
             }
 
             // Resolve spell list key: use explicit value, or derive from class name for backwards compatibility

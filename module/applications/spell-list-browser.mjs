@@ -221,20 +221,6 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
             if (searchInput.value?.trim()) searchInput.dispatchEvent(new Event("input", { bubbles: true }));
         }
 
-        // #region agent log
-        setTimeout(()=>{
-            const appEl=this.element?.closest?.(".window-app")??this.element;
-            const hasThirdera=!!(appEl?.classList?.contains?.("thirdera")||root?.closest?.(".thirdera"));
-            const bodyEl=root?.querySelector?.(".spell-list-body");
-            const bodyBg=bodyEl?getComputedStyle(bodyEl).backgroundColor:"N/A";
-            const spellItems=root?.querySelectorAll?.(".spell-item")??[];
-            const schoolGroups=root?.querySelectorAll?.(".spell-school-group")??[];
-            const iconEl=root?.querySelector?.(".spell-item .item-image i, .spell-item .item-image img");
-            const iconColor=iconEl?getComputedStyle(iconEl).color:"N/A";
-            fetch("http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:"spell-list-browser.mjs:_attachPartListeners",message:"DOM/CSS check",data:{appElFound:!!appEl,windowClasses:appEl?.className,hasThirdera,bodyBg,spellItemCount:spellItems.length,schoolGroupCount:schoolGroups.length,iconColor,iconTag:iconEl?.tagName,selectValue:root?.querySelector?.("select[name=selectedSource]")?.value},timestamp:Date.now(),hypothesisId:"H1"})}).catch(()=>{});
-        },100);
-        // #endregion
-
         // Drag handlers for spell entries
         root?.querySelectorAll?.("[data-spell-uuid]").forEach((el) => {
             el.setAttribute("draggable", "true");
@@ -251,8 +237,9 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
         if (!uuid) return;
         try {
             const doc = await foundry.utils.fromUuid(uuid);
-            if (doc?.toDragData) {
-                event.dataTransfer.setData("text/plain", JSON.stringify(doc.toDragData()));
+            const dragData = doc?.toDragData?.();
+            if (dragData) {
+                event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
             }
         } catch (_) {
             // Ignore

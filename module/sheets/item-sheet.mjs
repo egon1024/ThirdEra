@@ -497,9 +497,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {DragEvent} event
      */
     async _onDrop(event) {
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:entry',message:'_onDrop called',data:{documentType:this.document?.type,hasDataTransfer:!!(event?.dataTransfer)},timestamp:Date.now(),hypothesisId:'H1-H3'})}).catch(()=>{});
-        // #endregion
         const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
         let droppedItem = null;
         if (data.type === "Item") {
@@ -508,9 +505,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             const doc = await foundry.utils.fromUuid(data.uuid);
             if (doc?.documentName === "Item") droppedItem = doc;
         }
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:afterResolve',message:'drop data and resolved item',data:{dataType:data?.type,dataUuid:!!data?.uuid,dataKeys:data?Object.keys(data):[],droppedItemSet:!!droppedItem,droppedItemType:droppedItem?.type,documentType:this.document?.type},timestamp:Date.now(),hypothesisId:'H2-H5'})}).catch(()=>{});
-        // #endregion
         if (!droppedItem) return;
 
         // Handle school drops on spell or school sheets
@@ -607,9 +601,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
 
         // Handle domain drops on class sheets (spellcasting domains)
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:beforeDomainClassCheck',message:'branch check',data:{droppedType:droppedItem?.type,docType:this.document?.type,willEnterDomainClass:droppedItem?.type==='domain'&&this.document?.type==='class'},timestamp:Date.now(),hypothesisId:'H4'})}).catch(()=>{});
-        // #endregion
         if (droppedItem.type === "domain" && this.document.type === "class") {
             // Preserve scroll position
             const tab = this.element.querySelector(".sheet-body .tab.active");
@@ -647,9 +638,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 }
             }
 
-            // #region agent log
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'item-sheet.mjs:_onDrop:domainClassUpdateDone',message:'domain added to class',data:{classId:this.document?.id,domainKey},timestamp:Date.now(),hypothesisId:'H5'})}).catch(()=>{});
-            // #endregion
             return;
         }
 

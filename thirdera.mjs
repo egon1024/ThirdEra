@@ -344,6 +344,15 @@ Hooks.once("ready", async function () {
     await CompendiumLoader.init();
     // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
     await populateCompendiumCache();
+    // Re-render open actor sheets so Ready to cast domain spells show on initial load (they depend on the cache)
+    const instances = foundry.applications?.instances;
+    if (instances) {
+        for (const app of instances.values()) {
+            if (app.document?.type === "Actor" && app.document?.system === "thirdera" && app.rendered) {
+                app.render(true);
+            }
+        }
+    }
 });
 
 /**
@@ -377,18 +386,37 @@ Hooks.on("hotbarDrop", (bar, data, slot) => {
  * @param {number} slot   The hotbar slot
  */
 async function createThirdEraMacro(data, slot) {
-    const { rollType, actorId, itemId, itemName, sceneId, tokenId } = data;
+    const { rollType, actorId, itemId, itemName, sceneId, tokenId, classItemId, spellLevel } = data;
 
     // Build the macro label and icon
     const labels = {
         weaponAttack: { name: `Attack: ${itemName}`, icon: "icons/skills/melee/blade-tip-orange.webp" },
         weaponDamage: { name: `Damage: ${itemName}`, icon: "icons/skills/melee/strike-blade-orange.webp" },
-        skillCheck: { name: `Skill: ${itemName}`, icon: "icons/skills/targeting/crosshair-bars-yellow.webp" }
+        skillCheck: { name: `Skill: ${itemName}`, icon: "icons/skills/targeting/crosshair-bars-yellow.webp" },
+        spellCast: { name: `Cast: ${itemName}`, icon: "icons/svg/book.svg" }
     };
     const label = labels[rollType] || { name: itemName, icon: "icons/svg/dice-target.svg" };
 
     // Build the macro script — resolves actor from token or world at runtime
-    const command = `// Third Era ${rollType} macro
+    let command;
+    if (rollType === "spellCast") {
+        const cid = (classItemId || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+        const sl = (spellLevel ?? "").toString().replace(/"/g, '\\"');
+        command = `// Third Era spell cast macro
+const speaker = ChatMessage.implementation.getSpeaker();
+let actor;
+if (speaker.token) {
+    const scene = game.scenes.get(speaker.scene);
+    const token = scene?.tokens.get(speaker.token);
+    actor = token?.actor;
+}
+actor ??= game.actors.get("${actorId}");
+if (!actor) return ui.notifications.warn("No actor found for this macro.");
+const item = actor.items.get("${itemId}") ?? actor.items.find(i => i.name === "${itemName.replace(/"/g, '\\"')}");
+if (!item || item.type !== "spell") return ui.notifications.warn("${itemName.replace(/"/g, '\\"')} not found on " + actor.name);
+await actor.castSpell(item, { classItemId: "${cid}", spellLevel: "${sl}" });`;
+    } else {
+        command = `// Third Era ${rollType} macro
 const speaker = ChatMessage.implementation.getSpeaker();
 let actor;
 if (speaker.token) {
@@ -401,6 +429,7 @@ if (!actor) return ui.notifications.warn("No actor found for this macro.");
 const item = actor.items.get("${itemId}") ?? actor.items.find(i => i.name === "${itemName.replace(/"/g, '\\"')}");
 if (!item) return ui.notifications.warn("${itemName.replace(/"/g, '\\"')} not found on " + actor.name);
 ${rollType === "weaponAttack" ? "item.rollAttack();" : rollType === "weaponDamage" ? "item.rollDamage();" : `actor.rollSkillCheck("${itemName.replace(/"/g, '\\"')}");`}`;
+    }
 
     // Check for an existing macro with the same name
     let macro = game.macros.find(m => m.name === label.name && m.command === command);

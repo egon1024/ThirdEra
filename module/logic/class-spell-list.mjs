@@ -145,8 +145,5 @@ export async function getSpellsForClass(spellListKey) {
 
     const list = [...seen.values()];
     list.sort((a, b) => a.level - b.level || (a.spell.name || "").localeCompare(b.spell.name || ""));
-    // #region agent log
-    fetch("http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:"class-spell-list.mjs:getSpellsForClass",message:"getSpellsForClass result",data:{spellListKey:key,count:list.length,sampleNames:list.slice(0,3).map((e)=>e.spell?.name)},timestamp:Date.now(),hypothesisId:"H5"})}).catch(()=>{});
-    // #endregion
     return list;
 }
