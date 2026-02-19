@@ -1,7 +1,7 @@
 import { getWieldingInfo } from "../data/_damage-helpers.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { SpellData } from "../data/item-spell.mjs";
-import { addDomainSpellsToActor, getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 
 /**
@@ -48,7 +48,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             addToShortlist: ThirdEraActorSheet.#onAddToShortlist,
             removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist,
             toggleShortlist: ThirdEraActorSheet.#onToggleShortlist,
-            resetSpellUsage: ThirdEraActorSheet.#onResetSpellUsage
+            resetSpellUsage: ThirdEraActorSheet.#onResetSpellUsage,
+            resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts
         },
         window: {
             resizable: true,
@@ -463,6 +464,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         
         // Build a map of spell names to domain info for quick lookup
         // This helps identify which spells are domain spells
+        // Ensure domain-spells compendium cache is populated so fallback (when model has no domainSpellsByLevel) can use getSpellsForDomain
+        if (spellcastingByClass.some(sc => sc.domains?.length)) {
+            await populateCompendiumCache();
+        }
         const domainSpellMap = new Map(); // spellName (lowercase) -> {classItemId, domainName, domainKey, spellLevel}
         for (const sc of spellcastingByClass) {
             if (sc.domainSpellsByLevel) {
@@ -543,10 +548,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                         classSpells.domainSpellsByLevel[levelKey].push(spellWithDomain);
                         // Also add to main list (spellsByLevel) so it appears under "1st Level" etc.; include domain info so template can show domain label
                         classSpells.spellsByLevel[levelKey].push(spellWithDomain);
-                        const prepared = spell.system.prepared || 0;
-                        classSpells.preparedByLevel[levelKey] += prepared;
-                        classSpells.totalPrepared += prepared;
-                        classSpells.totalCast += spell.system.cast || 0;
+                        // Do not add domain spell prepared/cast to preparedByLevel or totals — domain spells use domain slots only, not regular slots
                         assigned = true;
                     }
                 }
@@ -668,10 +670,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             for (let level = 0; level <= 9; level++) {
                 const levelKey = String(level);
                 const spells = classSpells.spellsByLevel[levelKey] || classSpells.spellsByLevel[level] || [];
-                const castSum = spells.reduce((sum, s) => sum + (s.system?.cast ?? 0), 0);
+                // Only count non-domain spells for regular slot used/remaining; domain spells use domain slots only
+                const castSum = spells.reduce((sum, s) => (s.domainName ? sum : sum + (s.system?.cast ?? 0)), 0);
+                const preparedSum = spells.reduce((sum, s) => (s.domainName ? sum : sum + (s.system?.prepared ?? 0)), 0);
                 castByLevel[levelKey] = castSum;
                 const slots = classSpells.spellsPerDay?.[level] ?? classSpells.spellsPerDay?.[levelKey] ?? 0;
                 remainingByLevel[levelKey] = Math.max(0, slots - castSum);
+                // Prepared X/Y per level: only non-domain spells (domain spells are always prepared and use domain slot)
+                classSpells.preparedByLevel[levelKey] = preparedSum;
                 spellsKnownCurrent[levelKey] = spells.length;
                 if (classSpells.preparationType === "spontaneous") {
                     const classItem = actor.items.get(classItemId);
@@ -883,7 +889,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             hasAnySpellcasting,
             manuallyAddedSpellsByLevel,
             hasManuallyAddedSpells,
-            editable: this.isEditable
+            editable: this.isEditable,
+            // Labels for reset-prepared button (with fallback if lang key not loaded, e.g. cached lang)
+            resetPreparedCountsLabel: game.i18n.has("THIRDERA.Spells.ResetPreparedCounts")
+                ? game.i18n.localize("THIRDERA.Spells.ResetPreparedCounts")
+                : "Reset prepared",
+            resetPreparedCountsHint: game.i18n.has("THIRDERA.Spells.ResetPreparedCountsHint")
+                ? game.i18n.localize("THIRDERA.Spells.ResetPreparedCountsHint")
+                : "Set all spell prepared counts to 0 (e.g. after rest, before preparing spells again)."
         };
     }
 
@@ -1037,9 +1050,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @override
      */
     async _onDropItem(event, item) {
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onDropItem:entry',message:'drop received',data:{itemType:item?.type,uuidPrefix:(item?.uuid||"").slice(0,35)},timestamp:Date.now(),hypothesisId:'H3,H4'})}).catch(()=>{});
-        // #endregion
         // Domain dropped on character: add to spellcasting class (character chooses domains)
         if (item.type === "domain") {
             const domainKey = item.system?.key?.trim();
@@ -1378,13 +1388,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
-        // #region agent log
-        if (item?.type === "spell") fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onDropItem:beforeSuper',message:'calling super._onDropItem for spell',data:{},timestamp:Date.now(),hypothesisId:'H4'})}).catch(()=>{});
-        // #endregion
         const result = await super._onDropItem(event, item);
-        // #region agent log
-        if (item?.type === "spell") fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onDropItem:afterSuper',message:'super._onDropItem result',data:{hasResult:!!result,resultId:result?.id},timestamp:Date.now(),hypothesisId:'H4'})}).catch(()=>{});
-        // #endregion
         if (result) {
             await this.actor.prepareData();
             await this.render();
@@ -1401,7 +1405,51 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        if (item.type === "spell" && result) {
+            const overLimit = ThirdEraActorSheet._getSpellsKnownOverLimit(this.actor);
+            if (overLimit.length > 0) {
+                const first = overLimit[0];
+                ui.notifications.warn(
+                    game.i18n.format("THIRDERA.Spells.KnownOverLimitWarn", {
+                        class: first.className,
+                        level: first.spellLevel
+                    })
+                );
+            }
+        }
+
         return result;
+    }
+
+    /**
+     * Return spontaneous caster classes/levels where spells known exceed the class table limit.
+     * @param {Actor} actor - Character actor (after prepareData)
+     * @returns {{ className: string, spellLevel: number }[]}
+     */
+    static _getSpellsKnownOverLimit(actor) {
+        const out = [];
+        const spellcastingByClass = actor.system?.spellcastingByClass || [];
+        for (const sc of spellcastingByClass) {
+            if (sc.preparationType !== "spontaneous") continue;
+            const classItem = actor.items.get(sc.classItemId);
+            const table = classItem?.system?.spellcasting?.spellsKnownTable;
+            if (!Array.isArray(table) || table.length === 0) continue;
+            const spellListKey = sc.spellListKey;
+            const casterLevel = sc.casterLevel ?? 0;
+            for (let level = 0; level <= 9; level++) {
+                const spellsAtLevel = actor.items.filter(
+                    (i) => i.type === "spell"
+                        && SpellData.hasLevelForClass(i.system, spellListKey)
+                        && SpellData.getLevelForClass(i.system, spellListKey) === level
+                );
+                const current = spellsAtLevel.length;
+                const max = ClassData.getSpellsKnown(table, casterLevel, level);
+                if (max > 0 && current > max) {
+                    out.push({ className: sc.className || "class", spellLevel: level });
+                }
+            }
+        }
+        return out;
     }
 
     /**
@@ -2642,9 +2690,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @this {ThirdEraActorSheet}
      */
     static async #onItemCreate(event, target) {
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onItemCreate:entry',message:'createItem invoked',data:{type:target?.dataset?.type},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-        // #endregion
         const type = target?.dataset?.type ?? "";
         const name = type ? `New ${(typeof type.capitalize === "function" ? type.capitalize() : (type.charAt(0).toUpperCase() + (type.slice(1) || "").toLowerCase()))}` : "New Item";
         const itemData = {
@@ -2662,21 +2707,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             await existingItem.update({ "system.quantity": currentQuantity + 1 });
             return existingItem;
         }
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onItemCreate:beforeCreate',message:'calling Item.implementation.create',data:{type},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-        // #endregion
         try {
             const result = await Item.implementation.create(itemData, { parent: this.actor });
-            // #region agent log
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onItemCreate:afterCreate',message:'create done',data:{resultId:result?.id},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-            // #endregion
             if (result) await this.actor.prepareData();
             if (result) await this.render();
             return result;
         } catch (err) {
-            // #region agent log
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:#onItemCreate:error',message:'create threw',data:{errMessage:err?.message,errName:err?.name},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-            // #endregion
             throw err;
         }
     }
@@ -3448,6 +3484,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         await this.render();
         ui.notifications.info(
             game.i18n.format("THIRDERA.Spells.ResetCastCountsDone", { count: toReset.length })
+        );
+    }
+
+    /**
+     * Reset all spell prepared counts to 0 for this character (e.g. after rest, before preparing anew).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target   Element with data-action="resetPreparedCounts"
+     */
+    static async #onResetPreparedCounts(event, target) {
+        const toReset = this.actor.items.filter(
+            i => i.type === "spell" && (i.system?.prepared ?? 0) !== 0
+        );
+        if (toReset.length === 0) {
+            ui.notifications.info(game.i18n.localize("THIRDERA.Spells.ResetPreparedCountsNoChange"));
+            return;
+        }
+        for (const item of toReset) {
+            await item.update({ "system.prepared": 0 });
+        }
+        await this.render();
+        ui.notifications.info(
+            game.i18n.format("THIRDERA.Spells.ResetPreparedCountsDone", { count: toReset.length })
         );
     }
 

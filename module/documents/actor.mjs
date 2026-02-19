@@ -168,17 +168,38 @@ export class ThirdEraActor extends Actor {
         const level = typeof spellLevel === "string" ? parseInt(spellLevel, 10) : spellLevel;
         if (Number.isNaN(level) || level < 0 || level > 9) return false;
 
+        // Domain spells: identified by name match to class's domain spell list at this level. They use domain slots only (1 per level), not regular slots/prepared.
+        const domainSpellsAtLevel = classData.domainSpellsByLevel?.[level] ?? classData.domainSpellsByLevel?.[String(level)] ?? [];
+        const domainSpellNamesAtLevel = new Set(
+            domainSpellsAtLevel.map((e) => (e.spellName || "").toLowerCase().trim()).filter(Boolean)
+        );
+        const isDomainSpell = domainSpellNamesAtLevel.has((spellItem.name || "").toLowerCase().trim());
+
         // Optional slot check: warn if no slot available, do not block
         const preparationType = classData.preparationType;
         const spellsPerDay = classData.spellsPerDay || {};
         const slotsAtLevel = spellsPerDay[level] ?? spellsPerDay[String(level)] ?? 0;
+        const domainSlotsAtLevel = classData.domainSpellSlots?.[level] ?? classData.domainSpellSlots?.[String(level)] ?? 0;
 
-        if (preparationType === "spontaneous") {
+        if (isDomainSpell) {
+            // Domain spells use domain slots only (typically 1 per level). Do not count against regular prepared/spontaneous slots.
+            let domainCastSum = 0;
+            for (const item of this.items) {
+                if (item.type !== "spell") continue;
+                if (!domainSpellNamesAtLevel.has((item.name || "").toLowerCase().trim())) continue;
+                domainCastSum += (item.system.cast ?? 0);
+            }
+            const domainRemaining = Math.max(0, domainSlotsAtLevel - domainCastSum);
+            if (domainRemaining <= 0) {
+                ui.notifications.warn(game.i18n.format("THIRDERA.Spells.NoSlotsRemaining", { spell: spellItem.name }));
+            }
+        } else if (preparationType === "spontaneous") {
             const { SpellData } = await import("../data/item-spell.mjs");
             const spellListKey = classData.spellListKey;
             let castSum = 0;
             for (const item of this.items) {
                 if (item.type !== "spell") continue;
+                if (domainSpellNamesAtLevel.has((item.name || "").toLowerCase().trim())) continue; // exclude domain spells from regular slot count
                 const itemLevel = SpellData.getLevelForClass(item.system, spellListKey);
                 if (itemLevel === level) castSum += (item.system.cast ?? 0);
             }

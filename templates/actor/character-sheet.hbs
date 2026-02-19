@@ -555,9 +555,9 @@
             {{#if cls.domains.length}}
             <ul class="domains-list">
               {{#each cls.domains as |domain|}}
-              <li class="domain-entry flexrow" data-class-item-id="{{../cls.id}}" data-domain-key="{{domain.domainKey}}">
+              <li class="domain-entry flexrow" data-class-item-id="{{../id}}" data-domain-key="{{domain.domainKey}}">
                 <span class="domain-name">{{domain.domainName}}</span>
-                <a class="domain-remove" data-action="removeDomain" data-class-item-id="{{../cls.id}}" data-domain-key="{{domain.domainKey}}" title="{{localize "THIRDERA.Spells.RemoveDomain"}}"><i class="fas fa-times"></i></a>
+                <a class="domain-remove" data-action="removeDomain" data-class-item-id="{{../id}}" data-domain-key="{{domain.domainKey}}" title="{{localize "THIRDERA.Spells.RemoveDomain"}}"><i class="fas fa-times"></i></a>
               </li>
               {{/each}}
             </ul>
@@ -1045,6 +1045,8 @@
           <div class="spell-rest-reset">
             <span class="reset-spell-usage-label">{{localize "THIRDERA.Spells.ResetCastCounts"}}</span>
             <button type="button" class="reset-spell-usage-btn" data-action="resetSpellUsage" title="{{localize 'THIRDERA.Spells.ResetCastCountsHint'}}" aria-label="{{localize 'THIRDERA.Spells.ResetCastCounts'}}"><i class="fas fa-moon" aria-hidden="true"></i></button>
+            <span class="reset-spell-usage-label">{{resetPreparedCountsLabel}}</span>
+            <button type="button" class="reset-spell-usage-btn" data-action="resetPreparedCounts" title="{{resetPreparedCountsHint}}" aria-label="{{resetPreparedCountsLabel}}"><i class="fas fa-scroll" aria-hidden="true"></i></button>
           </div>
           {{/if}}
           {{#each readyToCastByClass as |classData|}}

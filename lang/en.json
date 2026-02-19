@@ -110,6 +110,7 @@
             "Remaining": "Remaining",
             "Known": "Known",
             "KnownOverLimit": "(over limit)",
+            "KnownOverLimitWarn": "This character's {class} spells known for level {level} is over the class limit. Consider removing a spell or adjusting the class table.",
             "Domains": "Domains",
             "DomainSpellsHeading": "Domain spells",
             "DomainSpellsSubheading": "Always prepared; do not count against your normal slots",
@@ -144,7 +145,11 @@
             "ResetCastCounts": "Reset cast counts (rest)",
             "ResetCastCountsHint": "Set all spell cast counts to 0 for this character (e.g. after a full rest, prayer, or study).",
             "ResetCastCountsNoChange": "No spell cast counts to reset.",
-            "ResetCastCountsDone": "Reset cast counts for {count} spell(s)."
+            "ResetCastCountsDone": "Reset cast counts for {count} spell(s).",
+            "ResetPreparedCounts": "Reset prepared",
+            "ResetPreparedCountsHint": "Set all spell prepared counts to 0 (e.g. after rest, before preparing spells again).",
+            "ResetPreparedCountsNoChange": "No spell prepared counts to reset.",
+            "ResetPreparedCountsDone": "Reset prepared counts for {count} spell(s)."
         },
         "Inventory": {
             "TotalWeight": "Total Weight",
