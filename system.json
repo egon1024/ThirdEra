@@ -148,6 +148,19 @@
         "TRUSTED": "OBSERVER",
         "PLAYER": "OBSERVER"
       }
+    },
+    {
+      "name": "thirdera_conditions",
+      "label": "Conditions",
+      "path": "packs/conditions",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
     }
   ],
   "languages": [
@@ -181,7 +194,8 @@
       "class": {},
       "feature": {},
       "domain": {},
-      "school": {}
+      "school": {},
+      "condition": {}
     }
   },
   "socket": false,

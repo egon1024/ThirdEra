@@ -49,7 +49,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist,
             toggleShortlist: ThirdEraActorSheet.#onToggleShortlist,
             resetSpellUsage: ThirdEraActorSheet.#onResetSpellUsage,
-            resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts
+            resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts,
+            addCondition: ThirdEraActorSheet.#onAddCondition,
+            removeCondition: ThirdEraActorSheet.#onRemoveCondition,
+            openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor
         },
         window: {
             resizable: true,
@@ -102,6 +105,48 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
+        // #region agent log
+        requestAnimationFrame(() => {
+            const el = this.element;
+            if (!el) return;
+            const hasThirdera = !!el.closest('.thirdera');
+            const root = el.closest('form') || el;
+            const hasThirderaOnRoot = root?.classList?.contains('thirdera');
+            const inactiveList = el.querySelectorAll('prose-mirror.inactive');
+            let btnDisplay = null, btnRight = null, pmPaddingRight = null, scrollParentOverflow = null;
+            if (inactiveList.length) {
+                const pm = inactiveList[0];
+                const btn = pm.querySelector('button.toggle');
+                if (btn) {
+                    const s = getComputedStyle(btn);
+                    btnDisplay = s.display;
+                    btnRight = s.right;
+                    pmPaddingRight = getComputedStyle(pm).paddingRight;
+                    let p = pm.parentElement;
+                    while (p && p !== el) {
+                        const o = getComputedStyle(p).overflow;
+                        if (o && o !== 'visible') { scrollParentOverflow = { tag: p.tagName, class: p.className?.slice?.(0, 80), overflow: o }; break; }
+                        p = p.parentElement;
+                    }
+                }
+            }
+            const activeTab = el.querySelector('.tab.active[data-group="primary"]');
+            const activeTabId = activeTab?.getAttribute?.('data-tab') ?? null;
+            let tabPaddingRight = null, pmOverflow = null, pmScroll = null, btnRect = null, tabRect = null;
+            if (activeTab) {
+                tabPaddingRight = getComputedStyle(activeTab).paddingRight;
+                tabRect = activeTab.getBoundingClientRect();
+            }
+            if (inactiveList.length) {
+                const pm = inactiveList[0];
+                pmOverflow = getComputedStyle(pm).overflow;
+                pmScroll = pm.scrollHeight > pm.clientHeight ? { scrollHeight: pm.scrollHeight, clientHeight: pm.clientHeight } : null;
+                const btn = pm.querySelector('button.toggle');
+                if (btn) btnRect = { right: btn.getBoundingClientRect().right, width: btn.getBoundingClientRect().width };
+            }
+            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onRender',message:'prose-mirror DOM and styles',data:{hasThirdera,hasThirderaOnRoot,activeTabId,inactiveCount:inactiveList.length,btnDisplay,btnRight,pmPaddingRight,scrollParentOverflow,tabPaddingRight,pmOverflow,pmScroll,btnRect,tabRect:tabRect?{right:tabRect.right,width:tabRect.width}:null},timestamp:Date.now(),hypothesisId:'H2',runId:'post-fix'})}).catch(()=>{});
+        });
+        // #endregion
         if (this._focusedInputName) {
             const input = this.element.querySelector(`[name="${this._focusedInputName}"]`);
             if (input) {
@@ -338,10 +383,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             saveProgressions: CONFIG.THIRDERA?.saveProgressions || {}
         };
 
-        // Ensure tabs state exists
+        // Ensure tabs state exists (TABS.primary has no initial in Foundry, so default to description)
         if (!this.tabGroups.abilities) this.tabGroups.abilities = "scores";
         if (!this.tabGroups.spells) this.tabGroups.spells = "known";
+        if (!this.tabGroups.primary) this.tabGroups.primary = "description";
         const tabs = this.tabGroups;
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_prepareContext',message:'actor sheet tabs',data:{primary:tabs.primary,abilities:tabs.abilities,spells:tabs.spells},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+        // #endregion
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
         const dexScore = systemData.abilities.dex.effective ?? systemData.abilities.dex.value;
@@ -435,6 +484,24 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const grantedFeatures = systemData.grantedFeatures || [];
         const grantedFeats = grantedFeatures.filter(f => f.type === 'feat');
         const grantedClassFeatures = grantedFeatures.filter(f => f.type !== 'feat');
+
+        // Conditions: choices from compendium, active from effects whose statuses match condition items
+        const conditionIds = CONFIG.THIRDERA?.conditionStatusIds ?? new Set();
+        const activeConditions = actor.effects
+            .filter(e => e.statuses && [...e.statuses].some(s => conditionIds.has(s)))
+            .map(e => ({ id: e.id, name: e.name, img: e.img }));
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_prepareContext',message:'conditions context',data:{conditionStatusIdsSize:conditionIds?.size??'missing',effectsCount:actor.effects?.size??0,activeConditionsCount:activeConditions?.length??0,actorId:actor?.id},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+        // #endregion
+        let conditionChoices = [];
+        const conditionsPack = game.packs.get("thirdera.thirdera_conditions");
+        if (conditionsPack) {
+            const conditionItems = await conditionsPack.getDocuments();
+            conditionChoices = conditionItems
+                .filter(i => i.type === "condition" && i.system?.conditionId)
+                .map(i => ({ conditionId: String(i.system.conditionId).trim().toLowerCase(), name: i.name }));
+            conditionChoices.sort((a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" }));
+        }
 
         // Organize spells by class and spell level
         const spellcastingByClass = systemData.spellcastingByClass || [];
@@ -876,6 +943,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             totalLevel,
             equippedWeapons,
             equippedArmor,
+            activeConditions,
+            conditionChoices,
             levelHistory,
             skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
             grantedSkills: systemData.grantedSkills || [],
@@ -3301,6 +3370,62 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             adjustments.splice(index, 1);
             await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
         }
+    }
+
+    /**
+     * Handle adding a condition from the Combat tab dropdown.
+     * Always creates a new effect so the same condition can be applied multiple times (e.g. multiple Ability Drained).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddCondition(event, target) {
+        const sheetEl = target.closest(".thirdera.actor");
+        const select = sheetEl?.querySelector(".condition-add-select");
+        const conditionId = select?.value?.trim().toLowerCase();
+        if (!conditionId) return;
+        const status = CONFIG.statusEffects.find(e => e.id === conditionId);
+        if (!status) return;
+        const name = (typeof status.name === "string" && status.name.startsWith("EFFECT."))
+            ? game.i18n.localize(status.name) : (status.name || conditionId);
+        const effectData = {
+            name,
+            img: status.img || "icons/svg/aura.svg",
+            statuses: [conditionId]
+        };
+        await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+    }
+
+    /**
+     * Handle removing a condition (delete the ActiveEffect).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element with data-effect-id
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveCondition(event, target) {
+        const effectId = target.closest("[data-effect-id]")?.dataset?.effectId;
+        if (!effectId) return;
+        await this.actor.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }
+
+    /**
+     * Open the biography prose-mirror in edit mode (external Edit button; built-in toggle is hidden).
+     * Toggles .description-editing on the wrapper so CSS can hide the view div and show the editor.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenDescriptionEditor(event, target) {
+        const box = this.element?.querySelector?.(".description-editor-box");
+        const pm = box?.querySelector?.("prose-mirror[name='system.biography']");
+        if (!box || !pm) return;
+        box.classList.add("description-editing");
+        const onClose = () => {
+            box.classList.remove("description-editing");
+            pm.removeEventListener("close", onClose);
+        };
+        pm.addEventListener("close", onClose, { once: true });
+        if (typeof pm.open !== "undefined") pm.open = true;
     }
 
     /**

@@ -47,7 +47,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addSubschool: ThirdEraItemSheet.#onAddSubschool,
             removeSubschool: ThirdEraItemSheet.#onRemoveSubschool,
             addDescriptorTag: ThirdEraItemSheet.#onAddDescriptorTag,
-            removeDescriptorTag: ThirdEraItemSheet.#onRemoveDescriptorTag
+            removeDescriptorTag: ThirdEraItemSheet.#onRemoveDescriptorTag,
+            openConditionDescription: ThirdEraItemSheet.#onOpenConditionDescription,
+            openEditorBox: ThirdEraItemSheet.#onOpenEditorBox
         }
     };
 
@@ -929,6 +931,30 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (!spellcasting || !spellcasting.domains) return;
         const current = spellcasting.domains.filter(e => e.domainKey !== domainKey);
         await this.item.update({ "system.spellcasting.domains": current });
+    }
+
+    /**
+     * Open the condition description prose-mirror in edit mode (external Edit button; built-in toggle is hidden).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static #onOpenConditionDescription(event, target) {
+        const pm = this.element?.querySelector?.(".condition-editor-box prose-mirror[name='system.description']");
+        if (pm && typeof pm.open !== "undefined") pm.open = true;
+    }
+
+    /**
+     * Open a prose-mirror in this sheet by field name (used by editor-box partial and any header Edit button).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element (must have data-field="system.description" etc.)
+     * @this {ThirdEraItemSheet}
+     */
+    static #onOpenEditorBox(event, target) {
+        const field = target.dataset?.field;
+        if (!field) return;
+        const pm = this.element?.querySelector?.(`prose-mirror[name="${field}"]`);
+        if (pm && typeof pm.open !== "undefined") pm.open = true;
     }
 
     /**

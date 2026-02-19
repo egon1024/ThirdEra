@@ -1,0 +1,12 @@
+{
+  "name": "Invisible",
+  "type": "condition",
+  "img": "icons/svg/invisible.svg",
+  "system": {
+    "conditionId": "invisible",
+    "description": "<p>Visually undetectable. An invisible creature gains a +2 bonus on attack rolls against sighted opponents, and ignores its opponents' Dexterity bonuses to AC (if any).</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

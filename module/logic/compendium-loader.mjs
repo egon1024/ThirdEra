@@ -274,7 +274,22 @@ export class CompendiumLoader {
             "spell-power-word-kill.json", "spell-prismatic-sphere.json", "spell-shapechange.json", "spell-shambler.json",
             "spell-soul-bind.json", "spell-storm-of-vengeance.json", "spell-summon-monster-ix.json", "spell-summon-natures-ally-ix.json",
             "spell-sympathy.json", "spell-teleportation-circle.json", "spell-time-stop.json", "spell-true-resurrection.json",
-            "spell-wail-of-the-banshee.json", "spell-weird.json", "spell-wish.json"
+            "spell-wail-of-the-banshee.json",             "spell-weird.json", "spell-wish.json"
+        ],
+        "thirdera.thirdera_conditions": [
+            "condition-ability-damaged.json", "condition-ability-drained.json", "condition-blinded.json",
+            "condition-blown-away.json", "condition-checked.json", "condition-confused.json",
+            "condition-cowering.json", "condition-dazed.json", "condition-dazzled.json",
+            "condition-dead.json", "condition-deafened.json", "condition-disabled.json",
+            "condition-dying.json", "condition-energy-drained.json", "condition-entangled.json",
+            "condition-exhausted.json", "condition-fascinated.json", "condition-fatigued.json",
+            "condition-flat-footed.json", "condition-frightened.json", "condition-grappling.json",
+            "condition-helpless.json", "condition-incorporeal.json", "condition-invisible.json",
+            "condition-knocked-down.json", "condition-nauseated.json", "condition-panicked.json",
+            "condition-paralyzed.json", "condition-petrified.json", "condition-pinned.json",
+            "condition-prone.json", "condition-shaken.json", "condition-sickened.json",
+            "condition-stable.json", "condition-staggered.json", "condition-stunned.json",
+            "condition-turned.json", "condition-unconscious.json"
         ]
     };
 

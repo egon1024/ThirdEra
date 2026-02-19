@@ -1,0 +1,12 @@
+{
+  "name": "Pinned",
+  "type": "condition",
+  "img": "icons/svg/net.svg",
+  "system": {
+    "conditionId": "pinned",
+    "description": "<p>Held immobile (but not helpless) in a grapple.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Shaken",
+  "type": "condition",
+  "img": "icons/svg/terror.svg",
+  "system": {
+    "conditionId": "shaken",
+    "description": "<p>A shaken character takes a -2 penalty on attack rolls, saving throws, skill checks, and ability checks. Shaken is a less severe state of fear than frightened or panicked.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

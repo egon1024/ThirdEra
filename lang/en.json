@@ -1,5 +1,7 @@
 {
     "THIRDERA": {
+        "Description": "Description",
+        "Edit": "Edit",
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",
             "Item": "Third Era Item Sheet"
@@ -41,7 +43,8 @@
             "class": "Class",
             "feature": "Class Feature",
             "domain": "Domain",
-            "school": "School of Magic"
+            "school": "School of Magic",
+            "condition": "Condition"
         },
         "ActorTypes": {
             "character": "Character",
@@ -227,7 +230,8 @@
             "class": "Class",
             "feature": "Class Feature",
             "domain": "Domain",
-            "school": "School of Magic"
+            "school": "School of Magic",
+            "condition": "Condition"
         },
         "Actor": {
             "character": "Character",

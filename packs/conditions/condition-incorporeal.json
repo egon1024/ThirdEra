@@ -1,0 +1,12 @@
+{
+  "name": "Incorporeal",
+  "type": "condition",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "conditionId": "incorporeal",
+    "description": "<p>Having no physical body. Incorporeal creatures are immune to all nonmagical attack forms. They can be harmed only by other incorporeal creatures, +1 or better magic weapons, spells, spell-like effects, or supernatural effects.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

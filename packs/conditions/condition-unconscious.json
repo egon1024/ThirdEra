@@ -1,0 +1,12 @@
+{
+  "name": "Unconscious",
+  "type": "condition",
+  "img": "icons/svg/unconscious.svg",
+  "system": {
+    "conditionId": "unconscious",
+    "description": "<p>Knocked out and helpless. Unconsciousness can result from having current hit points between -1 and -9, or from nonlethal damage in excess of current hit points.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

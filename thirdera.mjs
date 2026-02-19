@@ -17,6 +17,7 @@ import { ClassData } from "./module/data/item-class.mjs";
 import { FeatureData } from "./module/data/item-feature.mjs";
 import { DomainData } from "./module/data/item-domain.mjs";
 import { SchoolData } from "./module/data/item-school.mjs";
+import { ConditionData } from "./module/data/item-condition.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -227,7 +228,9 @@ Hooks.once("init", async function () {
             illusion: "Illusion",
             necromancy: "Necromancy",
             transmutation: "Transmutation"
-        }
+        },
+        /** Set of status IDs from condition items; populated in ready. Used to identify condition effects on actors. */
+        conditionStatusIds: new Set()
     };
 
     // Register World Settings
@@ -291,7 +294,8 @@ Hooks.once("init", async function () {
         race: RaceData,
         class: ClassData,
         domain: DomainData,
-        school: SchoolData
+        school: SchoolData,
+        condition: ConditionData
     };
 
     // Register item type labels for the creation menu
@@ -306,7 +310,8 @@ Hooks.once("init", async function () {
         race: "THIRDERA.TYPES.Item.race",
         class: "THIRDERA.TYPES.Item.class",
         domain: "THIRDERA.TYPES.Item.domain",
-        school: "THIRDERA.TYPES.Item.school"
+        school: "THIRDERA.TYPES.Item.school",
+        condition: "THIRDERA.TYPES.Item.condition"
     };
 
     // Register sheet application classes
@@ -335,24 +340,69 @@ Hooks.once("init", async function () {
 });
 
 /**
+ * Build CONFIG.statusEffects from condition items (compendium) so Token HUD and
+ * Actor.toggleStatusEffect(conditionId) work. Also sets CONFIG.THIRDERA.conditionStatusIds.
+ */
+async function buildConditionStatusEffects() {
+    // #region agent log
+    fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'thirdera.mjs:buildConditionStatusEffects',message:'buildConditionStatusEffects start',data:{packExists:!!game.packs.get("thirdera.thirdera_conditions")},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+    // #endregion
+    const conditionIds = [];
+    const pack = game.packs.get("thirdera.thirdera_conditions");
+    if (pack) {
+        const docs = await pack.getDocuments();
+        for (const item of docs) {
+            if (item.type !== "condition" || !item.system?.conditionId) continue;
+            const id = String(item.system.conditionId).trim().toLowerCase();
+            if (!id) continue;
+            CONFIG.statusEffects.push({
+                id,
+                name: item.name,
+                img: item.img || "icons/svg/aura.svg"
+            });
+            conditionIds.push(id);
+        }
+    }
+    CONFIG.THIRDERA.conditionStatusIds = new Set(conditionIds);
+    // #region agent log
+    fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'thirdera.mjs:buildConditionStatusEffects',message:'buildConditionStatusEffects done',data:{conditionIdsCount:conditionIds.length},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+    // #endregion
+}
+
+/**
  * Ready hook
  */
 Hooks.once("ready", async function () {
+    // #region agent log
+    fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'thirdera.mjs:ready',message:'ready hook start',data:{},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
+    // #endregion
     console.log("Third Era | System ready");
     
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
+    // Build CONFIG.statusEffects from condition items so Token HUD and toggleStatusEffect work
+    await buildConditionStatusEffects();
     // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
     await populateCompendiumCache();
-    // Re-render open actor sheets so Ready to cast domain spells show on initial load (they depend on the cache)
-    const instances = foundry.applications?.instances;
-    if (instances) {
+    // Re-render actor sheets so conditions and Ready to cast show on initial load.
+    // Include sheets that are not yet rendered (no app.rendered check) so restored windows get correct data.
+    function reRenderActorSheets() {
+        const instances = foundry.applications?.instances;
+        if (!instances) return;
+        let count = 0;
         for (const app of instances.values()) {
-            if (app.document?.type === "Actor" && app.document?.system === "thirdera" && app.rendered) {
+            if (app.document?.type === "Actor" && app.document?.system === "thirdera") {
                 app.render(true);
+                count++;
             }
         }
+        // #region agent log
+        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'thirdera.mjs:reRenderActorSheets',message:'reRenderActorSheets',data:{actorSheetsRendered:count},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
+        // #endregion
     }
+    reRenderActorSheets();
+    // Staggered re-renders so sheets that register or finish restoring after ready are caught
+    [0, 100, 300].forEach((delay) => setTimeout(reRenderActorSheets, delay));
 });
 
 /**

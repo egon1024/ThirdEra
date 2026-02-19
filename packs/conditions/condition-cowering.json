@@ -1,0 +1,12 @@
+{
+  "name": "Cowering",
+  "type": "condition",
+  "img": "icons/svg/terror.svg",
+  "system": {
+    "conditionId": "cowering",
+    "description": "<p>The character is frozen in fear and can take no actions. A cowering character takes a -2 penalty to Armor Class and loses her Dexterity bonus (if any).</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

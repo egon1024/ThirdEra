@@ -1,0 +1,12 @@
+{
+  "name": "Dazzled",
+  "type": "condition",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "conditionId": "dazzled",
+    "description": "<p>The creature is unable to see well because of overstimulation of the eyes. A dazzled creature takes a -1 penalty on attack rolls, Search checks, and Spot checks.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}
