@@ -2742,6 +2742,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const item = this.actor.items.get(itemId);
         if (!item) return;
 
+        // Block deletion of domain spells and full-list class spells (e.g. cleric/druid class list)
+        if (item.type === "spell") {
+            const spellcastingByClass = this.actor.system?.spellcastingByClass || [];
+            const spellNameLower = (item.name || "").trim().toLowerCase();
+            for (const sc of spellcastingByClass) {
+                // Domain spell: spell name appears in any class's domain spell list
+                const domainSpellsByLevel = sc.domainSpellsByLevel || {};
+                for (const levelKey of Object.keys(domainSpellsByLevel)) {
+                    const list = domainSpellsByLevel[levelKey] || [];
+                    if (list.some((e) => ((e.spellName || "").trim().toLowerCase() === spellNameLower))) {
+                        ui.notifications.warn(game.i18n.localize("THIRDERA.Spells.CannotDeleteClassOrDomainSpell"));
+                        return;
+                    }
+                }
+                // Full-list class spell: spell is on this class's list (e.g. cleric) — do not allow delete from Known/Available
+                if (sc.spellListAccess === "full" && SpellData.hasLevelForClass(item.system, sc.spellListKey)) {
+                    ui.notifications.warn(game.i18n.localize("THIRDERA.Spells.CannotDeleteClassOrDomainSpell"));
+                    return;
+                }
+            }
+        }
+
         // Preserve scroll position when deleting from Spells tab so the view doesn't jump to top
         if (item.type === "spell") {
             const scrollContainer = this.element?.querySelector(".tab.spells.active .spells-tab-content")

@@ -1,3 +1,5 @@
+import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+
 /**
  * Extended Actor document class for Third Era
  * @extends {Actor}
@@ -169,11 +171,33 @@ export class ThirdEraActor extends Actor {
         if (Number.isNaN(level) || level < 0 || level > 9) return false;
 
         // Domain spells: identified by name match to class's domain spell list at this level. They use domain slots only (1 per level), not regular slots/prepared.
-        const domainSpellsAtLevel = classData.domainSpellsByLevel?.[level] ?? classData.domainSpellsByLevel?.[String(level)] ?? [];
-        const domainSpellNamesAtLevel = new Set(
+        let domainSpellsAtLevel = classData.domainSpellsByLevel?.[level] ?? classData.domainSpellsByLevel?.[String(level)] ?? [];
+        let domainSpellNamesAtLevel = new Set(
             domainSpellsAtLevel.map((e) => (e.spellName || "").toLowerCase().trim()).filter(Boolean)
         );
-        const isDomainSpell = domainSpellNamesAtLevel.has((spellItem.name || "").toLowerCase().trim());
+        let isDomainSpell = domainSpellNamesAtLevel.has((spellItem.name || "").toLowerCase().trim());
+
+        // Fallback: when derived data had no domain spell list (e.g. prepared on server without getSpellsForDomain), resolve client-side so the first cast uses domain logic instead of prepared.
+        if (!isDomainSpell && classData.domains?.length && typeof getSpellsForDomain === "function") {
+            const spellNameLower = (spellItem.name || "").trim().toLowerCase();
+            const fallbackNames = new Set();
+            for (const dom of classData.domains) {
+                const domainKey = (dom.domainKey || "").trim();
+                if (!domainKey) continue;
+                try {
+                    const granted = getSpellsForDomain(domainKey);
+                    for (const entry of granted) {
+                        if (entry.level === level && (entry.spellName || "").trim()) {
+                            fallbackNames.add((entry.spellName || "").trim().toLowerCase());
+                        }
+                    }
+                } catch (_) { /* ignore */ }
+            }
+            if (fallbackNames.has(spellNameLower)) {
+                isDomainSpell = true;
+                domainSpellNamesAtLevel = fallbackNames;
+            }
+        }
 
         // Optional slot check: warn if no slot available, do not block
         const preparationType = classData.preparationType;
@@ -189,8 +213,9 @@ export class ThirdEraActor extends Actor {
                 if (!domainSpellNamesAtLevel.has((item.name || "").toLowerCase().trim())) continue;
                 domainCastSum += (item.system.cast ?? 0);
             }
-            const domainRemaining = Math.max(0, domainSlotsAtLevel - domainCastSum);
-            if (domainRemaining <= 0) {
+            // Only warn when they would exceed (not when using the last slot). Avoid warning when domainSlotsAtLevel is 0 (data fallback should grant 1).
+            const wouldExceed = domainSlotsAtLevel > 0 && domainCastSum >= domainSlotsAtLevel;
+            if (wouldExceed) {
                 ui.notifications.warn(game.i18n.format("THIRDERA.Spells.NoSlotsRemaining", { spell: spellItem.name }));
             }
         } else if (preparationType === "spontaneous") {

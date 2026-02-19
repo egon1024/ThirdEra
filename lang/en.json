@@ -149,7 +149,8 @@
             "ResetPreparedCounts": "Reset prepared",
             "ResetPreparedCountsHint": "Set all spell prepared counts to 0 (e.g. after rest, before preparing spells again).",
             "ResetPreparedCountsNoChange": "No spell prepared counts to reset.",
-            "ResetPreparedCountsDone": "Reset prepared counts for {count} spell(s)."
+            "ResetPreparedCountsDone": "Reset prepared counts for {count} spell(s).",
+            "CannotDeleteClassOrDomainSpell": "Cannot remove this spell: it is a domain spell or on your class spell list. Remove the domain or the class first if you want to remove the spell."
         },
         "Inventory": {
             "TotalWeight": "Total Weight",
