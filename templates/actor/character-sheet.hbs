@@ -3,49 +3,53 @@
   <header class="sheet-header sheet-header--character">
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
-      <div class="charname-row">
-        <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Character Name" /></h1>
-        <span class="actor-type-badge badge--character">PC</span>
-      </div>
-      <div class="resources grid grid-5col">
-        <div class="resource flex-group-center">
-          <label class="resource-label">Race</label>
-          {{#if race}}
-          <span class="race-name" data-action="openRace">{{race.name}}</span>
-          {{else}}
-          <span class="race-name race-empty">None</span>
-          {{/if}}
+      <div class="header-fields-main">
+        <div class="charname-row">
+          <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Character Name" /></h1>
+          <span class="actor-type-badge badge--character">PC</span>
         </div>
-        <div class="resource flex-group-center">
-          <label class="resource-label">Class</label>
-          {{#if classSummary}}
-          <span class="class-summary">{{classSummary}}</span>
-          {{else}}
-          <span class="class-summary class-empty">None</span>
-          {{/if}}
-        </div>
-        <div class="resource flex-group-center">
-          <label class="resource-label">Level</label>
-          <span class="level-display">{{totalLevel}}</span>
-        </div>
-        <div class="resource flex-group-center">
-          <label for="system.details.size" class="resource-label">Size</label>
-          <select name="system.details.size">
-            {{#each config.sizes as |label key|}}
-            <option value="{{key}}" {{#if (eq key ../system.details.size)}}selected{{/if}}>{{label}}</option>
-            {{/each}}
-          </select>
-        </div>
-        <div class="resource flex-group-center header-hp">
-          <label class="resource-label">HP</label>
-          <div class="header-hp-display">
-            <input type="number" data-header-hp value="{{system.attributes.hp.value}}"
-              class="header-hp-current {{hpStatus}}" min="0" />
-            <span class="header-hp-sep">/</span>
-            <span class="header-hp-max">{{system.attributes.hp.max}}</span>
+        <div class="resources grid grid-4col">
+          <div class="resource flex-group-center">
+            <label class="resource-label">Race</label>
+            {{#if race}}
+            <span class="race-name" data-action="openRace">{{race.name}}</span>
+            {{else}}
+            <span class="race-name race-empty">None</span>
+            {{/if}}
+          </div>
+          <div class="resource flex-group-center">
+            <label class="resource-label">Class</label>
+            {{#if classSummary}}
+            <span class="class-summary">{{classSummary}}</span>
+            {{else}}
+            <span class="class-summary class-empty">None</span>
+            {{/if}}
+          </div>
+          <div class="resource flex-group-center">
+            <label class="resource-label">Level</label>
+            <span class="level-display">{{totalLevel}}</span>
+          </div>
+          <div class="resource flex-group-center header-hp">
+            <label class="resource-label">HP</label>
+            <div class="header-hp-display">
+              <input type="number" data-header-hp value="{{system.attributes.hp.value}}"
+                class="header-hp-current {{hpStatus}}" min="0" />
+              <span class="header-hp-sep">/</span>
+              <span class="header-hp-max">{{system.attributes.hp.max}}</span>
+            </div>
           </div>
         </div>
       </div>
+      {{#if xpHeaderTotalLabel}}
+      <div class="header-xp">
+        <label class="resource-label">{{localize 'THIRDERA.Experience'}}</label>
+        <div class="xp-progress-track">
+          <div class="xp-progress-fill" style="width: {{xpProgressPercent}}%;"></div>
+        </div>
+        <span class="header-xp-label">{{xpHeaderLevelLabel}}</span>
+        <span class="header-xp-label">{{xpHeaderTotalLabel}}</span>
+      </div>
+      {{/if}}
     </div>
   </header>
 
@@ -54,7 +58,7 @@
     <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab" data-group="primary"
       data-tab="description">Description</a>
     <a class="item {{#if (eq tabs.primary 'abilities')}}active{{/if}}" data-action="changeTab" data-group="primary"
-      data-tab="abilities">Abilities</a>
+      data-tab="abilities">{{localize 'THIRDERA.Attributes'}}</a>
     <a class="item {{#if (eq tabs.primary 'combat')}}active{{/if}}" data-action="changeTab" data-group="primary"
       data-tab="combat">Combat</a>
     <a class="item {{#if (eq tabs.primary 'classes')}}active{{/if}}" data-action="changeTab" data-group="primary"
@@ -68,7 +72,7 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
 
-    {{!-- Description Tab: view div when inactive (no big box), prose-mirror when editing --}}
+    {{!-- Description Tab: biography only --}}
     <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary" data-tab="description">
       <div class="description-editor-box editor-box">
         <div class="editor-box-header flexrow">
@@ -85,7 +89,7 @@
       </div>
     </div>
 
-    {{!-- Abilities Tab --}}
+    {{!-- Attributes Tab (formerly Abilities) --}}
     <div class="tab abilities {{#if (eq tabs.primary 'abilities')}}active{{/if}}" data-group="primary"
       data-tab="abilities">
 
@@ -93,6 +97,8 @@
       <nav class="subtabs tabs" data-group="abilities">
         <a class="item {{#if (eq tabs.abilities 'scores')}}active{{/if}}" data-action="changeTab" data-group="abilities"
           data-tab="scores">Scores & Saves</a>
+        <a class="item {{#if (eq tabs.abilities 'details')}}active{{/if}}" data-action="changeTab" data-group="abilities"
+          data-tab="details">{{localize 'THIRDERA.TabDetails'}}</a>
         <a class="item {{#if (eq tabs.abilities 'skills')}}active{{/if}}" data-action="changeTab" data-group="abilities"
           data-tab="skills">Skills</a>
         <a class="item {{#if (eq tabs.abilities 'feats')}}active{{/if}}" data-action="changeTab" data-group="abilities"
@@ -100,6 +106,26 @@
         <a class="item {{#if (eq tabs.abilities 'features')}}active{{/if}}" data-action="changeTab"
           data-group="abilities" data-tab="features">Class Features</a>
       </nav>
+
+      {{!-- Details Subtab: Size, XP --}}
+      <div class="subtab details-subtab {{#if (eq tabs.abilities 'details')}}active{{/if}}" data-group="abilities" data-tab="details">
+        <div class="details-fields">
+          <div class="details-field flexrow">
+            <label for="system.details.size" class="details-label">{{localize 'THIRDERA.Size'}}</label>
+            <select name="system.details.size" class="details-input description-size-select">
+              {{#each config.sizes as |label key|}}
+              <option value="{{key}}" {{#if (eq key ../system.details.size)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="details-field flexrow">
+            <label class="details-label">{{localize 'THIRDERA.CurrentXP'}}</label>
+            <input type="number" name="system.experience.value" value="{{system.experience.value}}" data-dtype="Number" min="0" class="details-input experience-current" />
+            <span class="details-label details-label-inline">{{localize 'THIRDERA.NextLevelAt'}}</span>
+            <span class="experience-next">{{experienceNextLevelAtFormatted}}</span>
+          </div>
+        </div>
+      </div>
 
       {{!-- Scores & Saves Subtab --}}
       <div class="subtab {{#if (eq tabs.abilities 'scores')}}active{{/if}}" data-group="abilities" data-tab="scores">

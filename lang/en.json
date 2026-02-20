@@ -2,6 +2,14 @@
     "THIRDERA": {
         "Description": "Description",
         "Edit": "Edit",
+        "Experience": "Experience",
+        "CurrentXP": "Current XP",
+        "NextLevelAt": "Next level at",
+        "XPHeaderTotal": "Total",
+        "XPHeaderThisLevel": "This level",
+        "Size": "Size",
+        "Attributes": "Attributes",
+        "TabDetails": "Details",
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",
             "Item": "Third Era Item Sheet"
