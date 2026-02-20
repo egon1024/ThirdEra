@@ -4,6 +4,7 @@ import { SpellData } from "../data/item-spell.mjs";
 import { getDerivedFrom } from "../logic/derived-conditions.mjs";
 import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
+import { getXpForLevel, getNextLevelXp } from "../logic/xp-table.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -408,6 +409,34 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             .map(c => `${c.name} ${c.derivedLevels}`)
             .join(" / ");
         const totalLevel = systemData.details.totalLevel ?? systemData.details.level;
+
+        // XP "next level at" for character sheet (SRD + Epic); computed in sheet to avoid data model mutation
+        const experienceNextLevelAt = actor.type === "character"
+            ? getNextLevelXp(totalLevel ?? 1)
+            : null;
+        const experienceNextLevelAtFormatted = experienceNextLevelAt != null
+            ? experienceNextLevelAt.toLocaleString()
+            : "";
+
+        // XP progress for header bar (character only): current-level band, labeled lines
+        let xpProgressFraction = 0;
+        let xpProgressPercent = 0;
+        let xpHeaderTotalLabel = "";
+        let xpHeaderLevelLabel = "";
+        if (actor.type === "character" && experienceNextLevelAt != null) {
+            const currentLevelAt = getXpForLevel(totalLevel ?? 1);
+            const currentXP = systemData.experience?.value ?? 0;
+            const xpIntoLevel = Math.max(0, currentXP - currentLevelAt);
+            const xpNeededForLevel = Math.max(1, experienceNextLevelAt - currentLevelAt);
+            xpProgressFraction = Math.min(1, xpIntoLevel / xpNeededForLevel);
+            xpProgressPercent = Math.round(xpProgressFraction * 100);
+            const totalPart = `${(currentXP).toLocaleString()} / ${(experienceNextLevelAt).toLocaleString()}`;
+            const levelPart = `${(xpIntoLevel).toLocaleString()} / ${(xpNeededForLevel).toLocaleString()}`;
+            const totalLabel = game.i18n.localize("THIRDERA.XPHeaderTotal");
+            const levelLabel = game.i18n.localize("THIRDERA.XPHeaderThisLevel");
+            xpHeaderTotalLabel = `${totalLabel}: ${totalPart}`;
+            xpHeaderLevelLabel = `${levelLabel}: ${levelPart}`;
+        }
 
         // Prepare level history display data for Classes tab
         const hpBreakdown = systemData.attributes.hp.hpBreakdown || [];
@@ -916,6 +945,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             activeConditions,
             conditionChoices,
             levelHistory,
+            experienceNextLevelAtFormatted,
+            xpProgressFraction,
+            xpProgressPercent,
+            xpHeaderTotalLabel,
+            xpHeaderLevelLabel,
             skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
             grantedSkills: systemData.grantedSkills || [],
             grantedFeatures,

@@ -331,6 +331,74 @@
 
 .thirdera .sheet-header .header-fields {
   flex: 1;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  min-width: 0;
+}
+
+.thirdera .sheet-header .header-fields-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* XP progress block (character header, top right) */
+.thirdera .sheet-header--character .header-xp {
+  flex-shrink: 0;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.thirdera .header-xp .resource-label {
+  font-size: var(--font-size-note);
+  margin: 0;
+}
+
+.thirdera .header-xp .xp-progress-track {
+  height: 8px;
+  background: var(--color-bg-parchment-dark);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-divider);
+}
+
+.thirdera .header-xp .xp-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--color-character-accent), var(--color-character-border));
+  transition: width 0.2s ease;
+}
+
+.thirdera .header-xp .header-xp-label {
+  font-size: var(--font-size-note);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.thirdera .header-xp .header-xp-label + .header-xp-label {
+  margin-top: 2px;
+}
+
+/* Description tab: Size (label + dropdown) above Experience */
+.thirdera .description-details {
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.thirdera .description-details .description-size-label {
+  flex: 0 0 auto;
+  margin: 0;
+}
+.thirdera .description-details .description-size-select {
+  width: auto;
+  min-width: 10ch;
+  max-width: 20ch;
+  flex: 0 0 auto;
 }
 
 .thirdera .sheet-header h1.charname {
@@ -629,6 +697,56 @@
 }
 
 /* Dynamic Editor Sizing */
+/* Experience row on Description tab */
+.thirdera .experience-row {
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.thirdera .experience-row .experience-current {
+  width: 6ch;
+  flex-shrink: 0;
+}
+.thirdera .experience-row .experience-next {
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+}
+
+/* Attributes > Details subtab: aligned label/control rows */
+.thirdera .details-subtab .details-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+}
+.thirdera .details-subtab .details-field {
+  align-items: center;
+  gap: 10px;
+}
+.thirdera .details-subtab .details-label {
+  flex: 0 0 auto;
+  min-width: 11ch;
+  margin: 0;
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+}
+.thirdera .details-subtab .details-label-inline {
+  min-width: 0;
+  margin-left: 4px;
+}
+.thirdera .details-subtab .details-input {
+  width: auto;
+  min-width: 10ch;
+}
+.thirdera .details-subtab .details-input.experience-current {
+  width: 8ch;
+  min-width: 8ch;
+}
+.thirdera .details-subtab .experience-next {
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+}
+
 .thirdera .editor-box {
   display: block;
   width: 100%;
