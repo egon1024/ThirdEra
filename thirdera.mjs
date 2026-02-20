@@ -29,6 +29,12 @@ import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
+import {
+    syncDerivedFlatFootedCondition,
+    syncDerivedHpCondition,
+    syncFlatFootedForCombat,
+    removeDerivedFlatFooted
+} from "./module/logic/derived-conditions.mjs";
 
 /**
  * Initialize HP auto-increase system
@@ -347,12 +353,16 @@ Hooks.once("init", async function () {
 async function buildConditionStatusEffects() {
     const conditionIds = [];
     const seenIds = new Set();
+    /** @type {Map<string, import("./module/documents/item.mjs").ThirdEraItem>} */
+    const conditionItemsById = new Map();
 
     function addConditionItem(item) {
         if (item.type !== "condition") return;
         const rawId = item.system?.conditionId?.trim();
         const id = (rawId ? String(rawId).toLowerCase() : (item.id || "")).trim();
-        if (!id || seenIds.has(id)) return;
+        if (!id) return;
+        conditionItemsById.set(id, item);
+        if (seenIds.has(id)) return;
         seenIds.add(id);
         CONFIG.statusEffects.push({
             id,
@@ -370,6 +380,7 @@ async function buildConditionStatusEffects() {
     for (const item of game.items?.contents ?? []) addConditionItem(item);
 
     CONFIG.THIRDERA.conditionStatusIds = new Set(conditionIds);
+    CONFIG.THIRDERA.conditionItemsById = conditionItemsById;
 }
 
 /**
@@ -384,6 +395,11 @@ Hooks.once("ready", async function () {
     await buildConditionStatusEffects();
     // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
     await populateCompendiumCache();
+    // Sync HP-derived and combat-derived conditions so actors load with correct state
+    for (const actor of (game.actors?.contents ?? [])) {
+        if (actor.system?.attributes?.hp) await syncDerivedHpCondition(actor);
+    }
+    await syncFlatFootedForCombat();
     // Re-render actor sheets so conditions and Ready to cast show on initial load.
     // Include sheets that are not yet rendered (no app.rendered check) so restored windows get correct data.
     function reRenderActorSheets() {
@@ -400,6 +416,36 @@ Hooks.once("ready", async function () {
     reRenderActorSheets();
     // Staggered re-renders so sheets that register or finish restoring after ready are caught
     [0, 100, 300].forEach((delay) => setTimeout(reRenderActorSheets, delay));
+});
+
+/**
+ * Sync HP-derived conditions (dead, dying, disabled, stable) when actor HP or stable flag changes.
+ */
+Hooks.on("updateActor", async (document, changes, options, userId) => {
+    const flat = foundry.utils.flattenObject(changes);
+    if ("system.attributes.hp.value" in flat || "system.attributes.hp.stable" in flat) {
+        await syncDerivedHpCondition(document);
+    }
+});
+
+/**
+ * Sync flat-footed from combat when combat turn or combatants change.
+ */
+Hooks.on("updateCombat", async (combat, changes, options, userId) => {
+    const flat = foundry.utils.flattenObject(changes);
+    if ("turn" in flat || "combatants" in flat || "round" in flat) {
+        await syncFlatFootedForCombat();
+    }
+});
+
+/**
+ * Remove combat-derived flat-footed from all actors when combat ends.
+ */
+Hooks.on("deleteCombat", async (combat, options, userId) => {
+    for (const c of (combat.combatants ?? [])) {
+        const actor = c.actor ?? game.actors.get(c.actorId);
+        if (actor) await removeDerivedFlatFooted(actor);
+    }
 });
 
 /**

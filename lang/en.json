@@ -46,6 +46,23 @@
             "school": "School of Magic",
             "condition": "Condition"
         },
+        "ConditionEffects": "Mechanical effects",
+        "ConditionEffectsHint": "Optional modifiers when this condition is active (e.g. AC -2, half speed).",
+        "ConditionEffectKey": "Effect",
+        "ConditionEffectValue": "Value",
+        "AddEffect": "Add effect",
+        "Remove": "Remove",
+        "ConditionChangeKeys": {
+            "ac": "AC modifier",
+            "acLoseDex": "Lose Dex to AC",
+            "speedMultiplier": "Speed multiplier (0.5=half)",
+            "saveFort": "Fortitude save",
+            "saveRef": "Reflex save",
+            "saveWill": "Will save",
+            "attack": "Attack (melee and ranged)",
+            "attackMelee": "Melee attack",
+            "attackRanged": "Ranged attack"
+        },
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"

@@ -1,6 +1,7 @@
 import { getWieldingInfo } from "../data/_damage-helpers.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { SpellData } from "../data/item-spell.mjs";
+import { getDerivedFrom } from "../logic/derived-conditions.mjs";
 import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 
@@ -461,7 +462,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
         const activeConditions = actor.effects
             .filter(e => e.statuses && [...e.statuses].some(s => conditionIds.has(s)))
-            .map(e => ({ id: e.id, name: e.name, img: e.img }));
+            .map(e => ({ id: e.id, name: e.name, img: e.img, derivedFrom: getDerivedFrom(e) }));
         const choiceMap = new Map();
         for (const i of allConditionItems) {
             const rawId = i.system?.conditionId?.trim();

@@ -264,7 +264,7 @@ export class ThirdEraItem extends Item {
 
         const roll = await new Roll(`1d20 + ${attackBonus}`).roll();
 
-        // Build flavor text with hand label and penalty breakdown
+        // Build flavor text with hand label and penalty breakdown (TWF, size, conditions)
         const handLabels = { primary: "Primary", offhand: "Off-Hand" };
         const handLabel = handLabels[weaponData.equipped] || "";
         let flavor = `${this.name} Attack`;
@@ -273,6 +273,17 @@ export class ThirdEraItem extends Item {
         const penalties = [];
         if (twfPenalty) penalties.push(`${twfPenalty} TWF`);
         if (sizePenalty) penalties.push(`${sizePenalty} size`);
+        // Add condition modifiers from attack breakdown (entries that are not BAB/STR/DEX/Size)
+        const baseLabels = new Set(["BAB", "STR", "DEX", "Size"]);
+        const breakdown = (weaponData.properties.melee === "melee")
+            ? (actorData.combat.meleeAttack.breakdown || [])
+            : (actorData.combat.rangedAttack.breakdown || []);
+        for (const entry of breakdown) {
+            if (entry.label && !baseLabels.has(entry.label)) {
+                const signed = (entry.value >= 0 ? "+" : "") + entry.value;
+                penalties.push(`${entry.label} ${signed}`);
+            }
+        }
         if (penalties.length) flavor += ` [${penalties.join(", ")}]`;
 
         roll.toMessage({

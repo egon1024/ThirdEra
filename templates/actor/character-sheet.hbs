@@ -334,6 +334,16 @@
             {{/if}}
           </div>
         </div>
+        {{#if system.attributes.hp.dyingStableVisible}}
+        <div class="stat-block hp-stable-block">
+          <label class="checkbox-label">
+            <input type="checkbox" name="system.attributes.hp.stable" {{checked system.attributes.hp.stable}}
+              data-dtype="Boolean" />
+            Stable
+          </label>
+          <span class="stat-hint">(when dying, −1 to −9 HP)</span>
+        </div>
+        {{/if}}
         <div class="stat-block">
           <label>Speed</label>
           <div class="stat-value {{#if speedInfo.reduced}}value-modified{{/if}}" {{#if
@@ -406,7 +416,7 @@
           <span class="attack-cell">{{signedNumber system.combat.sizeMod}}</span>
           <input type="text" name="system.combat.meleeAttack.misc" value="{{system.combat.meleeAttack.misc}}"
             data-dtype="Number" class="attack-input" />
-          <span class="attack-total">{{signedNumber system.combat.meleeAttack.total}}</span>
+          <span class="attack-total" title="{{#each system.combat.meleeAttack.breakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber system.combat.meleeAttack.total}}</span>
 
           <span class="attack-row-label">Ranged</span>
           <span class="attack-cell">{{signedNumber system.combat.bab}}</span>
@@ -415,7 +425,7 @@
           <span class="attack-cell">{{signedNumber system.combat.sizeMod}}</span>
           <input type="text" name="system.combat.rangedAttack.misc" value="{{system.combat.rangedAttack.misc}}"
             data-dtype="Number" class="attack-input" />
-          <span class="attack-total">{{signedNumber system.combat.rangedAttack.total}}</span>
+          <span class="attack-total" title="{{#each system.combat.rangedAttack.breakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber system.combat.rangedAttack.total}}</span>
         </div>
       </div>
 
@@ -473,8 +483,8 @@
           {{#each activeConditions as |cond|}}
           <li class="condition flexrow" data-effect-id="{{cond.id}}">
             <img src="{{cond.img}}" alt="" width="24" height="24" class="condition-icon" />
-            <span class="condition-name">{{cond.name}}</span>
-            <a class="condition-remove" data-action="removeCondition" data-effect-id="{{cond.id}}" title="Remove condition"><i class="fas fa-trash"></i></a>
+            <span class="condition-name">{{cond.name}}{{#if cond.derivedFrom}} <span class="condition-derived" title="Derived from {{cond.derivedFrom}}">({{cond.derivedFrom}})</span>{{/if}}</span>
+            {{#unless cond.derivedFrom}}<a class="condition-remove" data-action="removeCondition" data-effect-id="{{cond.id}}" title="Remove condition"><i class="fas fa-trash"></i></a>{{/unless}}
           </li>
           {{/each}}
         </ul>

@@ -55,13 +55,17 @@ export function applyMaxDex(system, effectiveMaxDex) {
  * Mutates `system.attributes.ac` in place (value, touch, flatFooted, breakdown).
  *
  * @param {TypeDataModel} system  The actor's system data (CharacterData or NPCData).
+ * @param {{ ac: number, acBreakdown: Array<{label: string, value: number}>, loseDexToAc: boolean }} [conditionModifiers]  Optional condition modifiers (from getActiveConditionModifiers).
  */
-export function computeAC(system) {
+export function computeAC(system, conditionModifiers = null) {
     const ac = system.attributes.ac;
-    const dexMod = system.abilities.dex.mod;
+    const loseDexToAc = conditionModifiers?.loseDexToAc ?? false;
+    const rawDexMod = system.abilities.dex.mod;
+    const dexMod = loseDexToAc ? Math.min(rawDexMod, 0) : rawDexMod;
     const sizeName = system.details.size;
     const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[sizeName] ?? 0;
     const misc = ac.misc ?? 0;
+    const conditionAc = conditionModifiers?.ac ?? 0;
 
     // Gather equipped armor items (bonuses only; maxDex already applied to dex.mod)
     let armorBonus = 0;
@@ -92,10 +96,10 @@ export function computeAC(system) {
     // Flat-footed: lose positive dex bonus (negative dex still applies)
     const flatFootedDex = Math.min(dexMod, 0);
 
-    // Calculate totals
-    ac.value = 10 + armorBonus + shieldBonus + dexMod + sizeMod + misc;
-    ac.touch = 10 + dexMod + sizeMod + misc;
-    ac.flatFooted = 10 + armorBonus + shieldBonus + flatFootedDex + sizeMod + misc;
+    // Calculate totals (include condition modifier)
+    ac.value = 10 + armorBonus + shieldBonus + dexMod + sizeMod + misc + conditionAc;
+    ac.touch = 10 + dexMod + sizeMod + misc + conditionAc;
+    ac.flatFooted = 10 + armorBonus + shieldBonus + flatFootedDex + sizeMod + misc + conditionAc;
 
     // Build breakdown for display (modifiers only; base 10 shown separately in template)
     const breakdown = [];
@@ -106,11 +110,11 @@ export function computeAC(system) {
     if (shieldBonus !== 0) {
         breakdown.push({ label: shieldName, value: shieldBonus });
     }
-    if (dexMod !== 0) {
-        // Label could mention capping if armorMaxDex is active
-        const label = system.abilities.dex.armorMaxDex !== null && system.abilities.dex.mod === system.abilities.dex.armorMaxDex
-            ? "Dex (Capped)"
-            : "Dex";
+    if (dexMod !== 0 || (loseDexToAc && rawDexMod > 0)) {
+        let label = "Dex";
+        if (loseDexToAc && rawDexMod > 0) label = "Dex (lost)";
+        else if (loseDexToAc) label = "Dex (lost)";
+        else if (system.abilities.dex.armorMaxDex !== null && system.abilities.dex.mod === system.abilities.dex.armorMaxDex) label = "Dex (Capped)";
         breakdown.push({ label, value: dexMod });
     }
     if (sizeMod !== 0) {
@@ -119,24 +123,31 @@ export function computeAC(system) {
     if (misc !== 0) {
         breakdown.push({ label: "Misc", value: misc });
     }
+    if (conditionModifiers?.acBreakdown?.length) {
+        for (const entry of conditionModifiers.acBreakdown) {
+            breakdown.push({ label: entry.label, value: entry.value });
+        }
+    }
 
     ac.breakdown = breakdown;
 }
 
 /**
- * Compute effective speed based on equipped body armor and load.
+ * Compute effective speed based on equipped body armor, load, and optional condition multiplier.
  * SRD: medium/heavy armor AND medium/heavy load reduces speed.
  * Mutates `system.attributes.speed.value` to the effective speed.
  *
  * @param {TypeDataModel} system       The actor's system data.
  * @param {Object}        loadEffects  Penalties from getLoadEffects().
- * @returns {{ reduced: boolean, baseSpeed: number, armorName: string|null, reason: string|null }}
+ * @param {number}        [conditionSpeedMultiplier]  Optional multiplier from conditions (e.g. 0.5 for half speed). Default 1.
+ * @returns {{ reduced: boolean, baseSpeed: number, armorName: string|null, reason: string|null, conditionSpeedReason: string|null }}
  *          Info for display purposes.
  */
-export function computeSpeed(system, loadEffects = null) {
+export function computeSpeed(system, loadEffects = null, conditionSpeedMultiplier = 1) {
     const baseSpeed = system.attributes.speed.value;
     let armorName = null;
     let reductionReason = null;
+    let conditionSpeedReason = null;
 
     // First check load-based reduction
     if (loadEffects && loadEffects.speed30 < 30) {
@@ -165,11 +176,19 @@ export function computeSpeed(system, loadEffects = null) {
         }
     }
 
+    // Apply condition speed multiplier (e.g. half speed from Blinded)
+    if (conditionSpeedMultiplier > 0 && conditionSpeedMultiplier < 1) {
+        const before = system.attributes.speed.value;
+        system.attributes.speed.value = Math.max(0, Math.floor(system.attributes.speed.value * conditionSpeedMultiplier));
+        if (system.attributes.speed.value < before) conditionSpeedReason = "Condition";
+    }
+
     return {
         reduced: system.attributes.speed.value < baseSpeed,
         overloaded: system.attributes.speed.value === 0,
         baseSpeed,
         armorName,
-        reason: reductionReason
+        reason: reductionReason,
+        conditionSpeedReason
     };
 }

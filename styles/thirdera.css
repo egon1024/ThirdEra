@@ -1657,6 +1657,22 @@
   color: var(--color-text-muted);
 }
 
+.thirdera .conditions-list .condition-derived {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  font-weight: normal;
+}
+
+.thirdera .hp-stable-block {
+  align-items: center;
+}
+
+.thirdera .hp-stable-block .stat-hint {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin-left: 4px;
+}
+
 /* Level History grid */
 .thirdera .level-history-hp-total {
   font-size: var(--font-size-body);
