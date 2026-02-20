@@ -340,42 +340,42 @@ Hooks.once("init", async function () {
 });
 
 /**
- * Build CONFIG.statusEffects from condition items (compendium) so Token HUD and
+ * Build CONFIG.statusEffects from condition items (compendium + world) so Token HUD and
  * Actor.toggleStatusEffect(conditionId) work. Also sets CONFIG.THIRDERA.conditionStatusIds.
+ * World condition items are included so custom conditions appear in the dropdown and support drag-drop.
  */
 async function buildConditionStatusEffects() {
-    // #region agent log
-    fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'thirdera.mjs:buildConditionStatusEffects',message:'buildConditionStatusEffects start',data:{packExists:!!game.packs.get("thirdera.thirdera_conditions")},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-    // #endregion
     const conditionIds = [];
+    const seenIds = new Set();
+
+    function addConditionItem(item) {
+        if (item.type !== "condition") return;
+        const rawId = item.system?.conditionId?.trim();
+        const id = (rawId ? String(rawId).toLowerCase() : (item.id || "")).trim();
+        if (!id || seenIds.has(id)) return;
+        seenIds.add(id);
+        CONFIG.statusEffects.push({
+            id,
+            name: item.name,
+            img: item.img || "icons/svg/aura.svg"
+        });
+        conditionIds.push(id);
+    }
+
     const pack = game.packs.get("thirdera.thirdera_conditions");
     if (pack) {
         const docs = await pack.getDocuments();
-        for (const item of docs) {
-            if (item.type !== "condition" || !item.system?.conditionId) continue;
-            const id = String(item.system.conditionId).trim().toLowerCase();
-            if (!id) continue;
-            CONFIG.statusEffects.push({
-                id,
-                name: item.name,
-                img: item.img || "icons/svg/aura.svg"
-            });
-            conditionIds.push(id);
-        }
+        for (const item of docs) addConditionItem(item);
     }
+    for (const item of game.items?.contents ?? []) addConditionItem(item);
+
     CONFIG.THIRDERA.conditionStatusIds = new Set(conditionIds);
-    // #region agent log
-    fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'thirdera.mjs:buildConditionStatusEffects',message:'buildConditionStatusEffects done',data:{conditionIdsCount:conditionIds.length},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-    // #endregion
 }
 
 /**
  * Ready hook
  */
 Hooks.once("ready", async function () {
-    // #region agent log
-    fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'thirdera.mjs:ready',message:'ready hook start',data:{},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-    // #endregion
     console.log("Third Era | System ready");
     
     // Load compendiums from JSON files if they're empty
@@ -391,14 +391,11 @@ Hooks.once("ready", async function () {
         if (!instances) return;
         let count = 0;
         for (const app of instances.values()) {
-            if (app.document?.type === "Actor" && app.document?.system === "thirdera") {
+            if (app.document?.documentName === "Actor" && game.system?.id === "thirdera") {
                 app.render(true);
                 count++;
             }
         }
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'thirdera.mjs:reRenderActorSheets',message:'reRenderActorSheets',data:{actorSheetsRendered:count},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-        // #endregion
     }
     reRenderActorSheets();
     // Staggered re-renders so sheets that register or finish restoring after ready are caught

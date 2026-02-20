@@ -105,48 +105,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
-        // #region agent log
-        requestAnimationFrame(() => {
-            const el = this.element;
-            if (!el) return;
-            const hasThirdera = !!el.closest('.thirdera');
-            const root = el.closest('form') || el;
-            const hasThirderaOnRoot = root?.classList?.contains('thirdera');
-            const inactiveList = el.querySelectorAll('prose-mirror.inactive');
-            let btnDisplay = null, btnRight = null, pmPaddingRight = null, scrollParentOverflow = null;
-            if (inactiveList.length) {
-                const pm = inactiveList[0];
-                const btn = pm.querySelector('button.toggle');
-                if (btn) {
-                    const s = getComputedStyle(btn);
-                    btnDisplay = s.display;
-                    btnRight = s.right;
-                    pmPaddingRight = getComputedStyle(pm).paddingRight;
-                    let p = pm.parentElement;
-                    while (p && p !== el) {
-                        const o = getComputedStyle(p).overflow;
-                        if (o && o !== 'visible') { scrollParentOverflow = { tag: p.tagName, class: p.className?.slice?.(0, 80), overflow: o }; break; }
-                        p = p.parentElement;
-                    }
-                }
-            }
-            const activeTab = el.querySelector('.tab.active[data-group="primary"]');
-            const activeTabId = activeTab?.getAttribute?.('data-tab') ?? null;
-            let tabPaddingRight = null, pmOverflow = null, pmScroll = null, btnRect = null, tabRect = null;
-            if (activeTab) {
-                tabPaddingRight = getComputedStyle(activeTab).paddingRight;
-                tabRect = activeTab.getBoundingClientRect();
-            }
-            if (inactiveList.length) {
-                const pm = inactiveList[0];
-                pmOverflow = getComputedStyle(pm).overflow;
-                pmScroll = pm.scrollHeight > pm.clientHeight ? { scrollHeight: pm.scrollHeight, clientHeight: pm.clientHeight } : null;
-                const btn = pm.querySelector('button.toggle');
-                if (btn) btnRect = { right: btn.getBoundingClientRect().right, width: btn.getBoundingClientRect().width };
-            }
-            fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_onRender',message:'prose-mirror DOM and styles',data:{hasThirdera,hasThirderaOnRoot,activeTabId,inactiveCount:inactiveList.length,btnDisplay,btnRight,pmPaddingRight,scrollParentOverflow,tabPaddingRight,pmOverflow,pmScroll,btnRect,tabRect:tabRect?{right:tabRect.right,width:tabRect.width}:null},timestamp:Date.now(),hypothesisId:'H2',runId:'post-fix'})}).catch(()=>{});
-        });
-        // #endregion
         if (this._focusedInputName) {
             const input = this.element.querySelector(`[name="${this._focusedInputName}"]`);
             if (input) {
@@ -388,9 +346,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!this.tabGroups.spells) this.tabGroups.spells = "known";
         if (!this.tabGroups.primary) this.tabGroups.primary = "description";
         const tabs = this.tabGroups;
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_prepareContext',message:'actor sheet tabs',data:{primary:tabs.primary,abilities:tabs.abilities,spells:tabs.spells},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-        // #endregion
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
         const dexScore = systemData.abilities.dex.effective ?? systemData.abilities.dex.value;
@@ -485,23 +440,37 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const grantedFeats = grantedFeatures.filter(f => f.type === 'feat');
         const grantedClassFeatures = grantedFeatures.filter(f => f.type !== 'feat');
 
-        // Conditions: choices from compendium, active from effects whose statuses match condition items
-        const conditionIds = CONFIG.THIRDERA?.conditionStatusIds ?? new Set();
+        // Conditions: choices from compendium + world items, active from effects whose statuses match condition items.
+        // Fetch condition items first so we can derive conditionIds when CONFIG isn't ready yet (e.g. before "ready" hook).
+        const conditionsPack = game.packs.get("thirdera.thirdera_conditions");
+        const conditionItemsFromPack = conditionsPack
+            ? await conditionsPack.getDocuments()
+            : [];
+        const conditionItemsFromWorld = (game.items?.contents ?? []).filter(i => i.type === "condition");
+        const allConditionItems = [...conditionItemsFromPack, ...conditionItemsFromWorld];
+        let conditionIds = CONFIG.THIRDERA?.conditionStatusIds;
+        if (!conditionIds?.size) {
+            const ids = new Set();
+            for (const i of allConditionItems) {
+                if (i.type !== "condition") continue;
+                const rawId = i.system?.conditionId?.trim();
+                const id = (rawId ? String(rawId).toLowerCase() : (i.id || "")).trim();
+                if (id) ids.add(id);
+            }
+            conditionIds = ids;
+        }
         const activeConditions = actor.effects
             .filter(e => e.statuses && [...e.statuses].some(s => conditionIds.has(s)))
             .map(e => ({ id: e.id, name: e.name, img: e.img }));
-        // #region agent log
-        fetch('http://127.0.0.1:7244/ingest/3e68fb46-28cf-4993-8150-24eb15233806',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'actor-sheet.mjs:_prepareContext',message:'conditions context',data:{conditionStatusIdsSize:conditionIds?.size??'missing',effectsCount:actor.effects?.size??0,activeConditionsCount:activeConditions?.length??0,actorId:actor?.id},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-        // #endregion
-        let conditionChoices = [];
-        const conditionsPack = game.packs.get("thirdera.thirdera_conditions");
-        if (conditionsPack) {
-            const conditionItems = await conditionsPack.getDocuments();
-            conditionChoices = conditionItems
-                .filter(i => i.type === "condition" && i.system?.conditionId)
-                .map(i => ({ conditionId: String(i.system.conditionId).trim().toLowerCase(), name: i.name }));
-            conditionChoices.sort((a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" }));
+        const choiceMap = new Map();
+        for (const i of allConditionItems) {
+            const rawId = i.system?.conditionId?.trim();
+            const conditionId = rawId ? String(rawId).toLowerCase() : (i.id || "");
+            if (conditionId && !choiceMap.has(conditionId)) choiceMap.set(conditionId, { conditionId, name: i.name });
         }
+        const conditionChoices = [...choiceMap.values()].sort(
+            (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" })
+        );
 
         // Organize spells by class and spell level
         const spellcastingByClass = systemData.spellcastingByClass || [];
@@ -1119,6 +1088,46 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @override
      */
     async _onDropItem(event, item) {
+        // Condition dropped: apply as ActiveEffect (status), do not embed the item.
+        // Create on the world actor so the condition persists when reopening from the Actors tab
+        // (when the sheet is for a token, this.actor is the token's actor and effects there live only on the token).
+        if (item.type === "condition") {
+            event.preventDefault?.();
+            event.stopPropagation?.();
+            const rawId = item.system?.conditionId?.trim();
+            const conditionId = (rawId ? String(rawId).toLowerCase() : (item.id || "")).trim();
+            if (!conditionId) {
+                ui.notifications.warn(`${item.name} has no Condition ID — set one on the item or save it.`);
+                return false;
+            }
+            let status = CONFIG.statusEffects?.find(e => e.id === conditionId);
+            if (!status) {
+                status = { id: conditionId, name: item.name, img: item.img || "icons/svg/aura.svg" };
+                CONFIG.statusEffects.push(status);
+                if (CONFIG.THIRDERA?.conditionStatusIds) CONFIG.THIRDERA.conditionStatusIds.add(conditionId);
+            }
+            const effectData = {
+                name: status.name || item.name,
+                img: status.img || "icons/svg/aura.svg",
+                statuses: [conditionId]
+            };
+            const targetActor = this.actor.isToken
+                ? (game.actors.get(this.actor.id) ?? this.actor)
+                : this.actor;
+            try {
+                await targetActor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+                if (targetActor !== this.actor) {
+                    await this.actor.prepareData?.();
+                    await this.render();
+                }
+            } catch (err) {
+                console.error("Third Era | Failed to apply condition from drop:", err);
+                ui.notifications.error("Third Era | Failed to apply condition. See console.");
+                return false;
+            }
+            return false;
+        }
+
         // Domain dropped on character: add to spellcasting class (character chooses domains)
         if (item.type === "domain") {
             const domainKey = item.system?.key?.trim();
@@ -3375,6 +3384,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     /**
      * Handle adding a condition from the Combat tab dropdown.
      * Always creates a new effect so the same condition can be applied multiple times (e.g. multiple Ability Drained).
+     * Uses the world actor when the sheet is for a token so the condition persists when reopening from the Actors tab.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
@@ -3384,7 +3394,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const select = sheetEl?.querySelector(".condition-add-select");
         const conditionId = select?.value?.trim().toLowerCase();
         if (!conditionId) return;
-        const status = CONFIG.statusEffects.find(e => e.id === conditionId);
+        let status = CONFIG.statusEffects.find(e => e.id === conditionId);
+        if (!status) {
+            const conditionItem = (game.items?.contents ?? []).find(
+                i => i.type === "condition" && (i.id === conditionId || String(i.system?.conditionId ?? "").trim().toLowerCase() === conditionId)
+            );
+            if (conditionItem) {
+                status = { id: conditionId, name: conditionItem.name, img: conditionItem.img || "icons/svg/aura.svg" };
+                CONFIG.statusEffects.push(status);
+                if (CONFIG.THIRDERA?.conditionStatusIds) CONFIG.THIRDERA.conditionStatusIds.add(conditionId);
+            }
+        }
         if (!status) return;
         const name = (typeof status.name === "string" && status.name.startsWith("EFFECT."))
             ? game.i18n.localize(status.name) : (status.name || conditionId);
@@ -3393,7 +3413,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             img: status.img || "icons/svg/aura.svg",
             statuses: [conditionId]
         };
-        await this.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+        const targetActor = this.actor.isToken
+            ? (game.actors.get(this.actor.id) ?? this.actor)
+            : this.actor;
+        await targetActor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+        if (targetActor !== this.actor) {
+            await this.actor.prepareData?.();
+            await this.render();
+        }
     }
 
     /**
