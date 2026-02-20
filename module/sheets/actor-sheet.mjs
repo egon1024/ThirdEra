@@ -54,7 +54,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts,
             addCondition: ThirdEraActorSheet.#onAddCondition,
             removeCondition: ThirdEraActorSheet.#onRemoveCondition,
-            openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor
+            openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor,
+            configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
+            editImage: ThirdEraActorSheet.#onEditImage,
+            editTokenImage: ThirdEraActorSheet.#onEditTokenImage
         },
         window: {
             resizable: true,
@@ -64,6 +67,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     icon: "fa-solid fa-lock",
                     label: "OWNERSHIP.Configure",
                     action: "configureOwnership",
+                    ownership: "OWNER"
+                },
+                {
+                    icon: "fa-solid fa-circle-user",
+                    label: "TOKEN.TitlePrototype",
+                    action: "configurePrototypeToken",
                     ownership: "OWNER"
                 },
                 {
@@ -95,6 +104,16 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             parts.sheet.template = "systems/thirdera/templates/actor/character-sheet.hbs";
         }
         return parts;
+    }
+
+    /** @override */
+    _getHeaderControls() {
+        const controls = super._getHeaderControls();
+        // Show prototype token control only for world actors (not when sheet is opened from a token)
+        if ( !this.isEditable || this.actor.isToken ) {
+            controls.findSplice(c => c.action === "configurePrototypeToken");
+        }
+        return controls;
     }
 
     /** @override */
@@ -963,6 +982,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             manuallyAddedSpellsByLevel,
             hasManuallyAddedSpells,
             editable: this.isEditable,
+            // Token image for header (only when sheet is for world actor, not a token)
+            showTokenImage: !actor.isToken,
+            tokenImg: actor.prototypeToken?.texture?.src || actor.img || "icons/svg/mystery-man.svg",
             // Labels for reset-prepared button (with fallback if lang key not loaded, e.g. cached lang)
             resetPreparedCountsLabel: game.i18n.has("THIRDERA.Spells.ResetPreparedCounts")
                 ? game.i18n.localize("THIRDERA.Spells.ResetPreparedCounts")
@@ -2984,6 +3006,79 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
     }
 
+    /**
+     * Open Prototype Token Configuration for the actor's default token.
+     * @param {PointerEvent} event
+     */
+    static #onConfigurePrototypeToken(event) {
+        new CONFIG.Token.prototypeSheetClass({
+            prototype: this.actor.prototypeToken,
+            position: {
+                left: Math.max(this.position.left - 560 - 10, 10),
+                top: this.position.top
+            }
+        }).render({ force: true });
+    }
+
+    /**
+     * Open file picker to change an image (portrait). Requires target to be an IMG with data-edit.
+     * @param {PointerEvent} _event
+     * @param {HTMLImageElement} target
+     */
+    static async #onEditImage(_event, target) {
+        if (target.nodeName !== "IMG") return;
+        const attr = target.dataset.edit;
+        if (!attr) return;
+        const current = foundry.utils.getProperty(this.document._source, attr);
+        const defaultArtwork = this.document.constructor.getDefaultArtwork?.(this.document._source) ?? {};
+        const defaultImage = foundry.utils.getProperty(defaultArtwork, attr);
+        const FilePicker = foundry.applications?.apps?.FilePicker ?? globalThis.FilePicker;
+        if (!FilePicker?.implementation) return;
+        const fp = new FilePicker.implementation({
+            current,
+            type: "image",
+            redirectToRoot: defaultImage ? [defaultImage] : [],
+            callback: path => {
+                target.src = path;
+                if (this.options.form?.submitOnChange) {
+                    this.form?.dispatchEvent(new Event("submit", { cancelable: true }));
+                }
+            },
+            position: {
+                top: this.position.top + 40,
+                left: this.position.left + 10
+            }
+        });
+        await fp.browse();
+    }
+
+    /**
+     * Open file picker to set the actor's prototype token image (token on map).
+     * @param {PointerEvent} _event
+     * @param {HTMLImageElement} target
+     */
+    static async #onEditTokenImage(_event, target) {
+        if (target.nodeName !== "IMG") return;
+        const current = this.actor.prototypeToken?.texture?.src || this.actor.img || "";
+        const FilePicker = foundry.applications?.apps?.FilePicker ?? globalThis.FilePicker;
+        if (!FilePicker?.implementation) return;
+        const fp = new FilePicker.implementation({
+            current,
+            type: "image",
+            redirectToRoot: [],
+            callback: async path => {
+                target.src = path;
+                const proto = this.actor.prototypeToken?.toObject?.() ?? {};
+                const texture = foundry.utils.mergeObject(proto.texture ?? {}, { src: path });
+                await this.actor.update({ prototypeToken: foundry.utils.mergeObject(proto, { texture }) });
+            },
+            position: {
+                top: this.position.top + 40,
+                left: this.position.left + 10
+            }
+        });
+        await fp.browse();
+    }
 
     /**
      * Handle toggling an item's equipped state

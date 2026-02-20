@@ -313,12 +313,37 @@
   color: var(--color-text-muted);
 }
 
+/* Header image blocks: Portrait and Token side by side */
+.thirdera .sheet-header-images {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 0 0 auto;
+  margin-right: 10px;
+}
+
+.thirdera .sheet-header-image-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.thirdera .sheet-header-image-label {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  font-weight: normal;
+  margin: 0;
+}
+
 .thirdera .sheet-header .profile-img {
   flex: 0 0 100px;
   height: 100px;
-  margin-right: 10px;
+  margin-right: 0;
   background: var(--color-bg-dark);
   border: 3px solid var(--color-border-profile);
+  cursor: pointer;
 }
 
 .thirdera .sheet-header--character .profile-img {
