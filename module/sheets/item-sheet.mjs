@@ -51,7 +51,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             openConditionDescription: ThirdEraItemSheet.#onOpenConditionDescription,
             openEditorBox: ThirdEraItemSheet.#onOpenEditorBox,
             addConditionChange: ThirdEraItemSheet.#onAddConditionChange,
-            removeConditionChange: ThirdEraItemSheet.#onRemoveConditionChange
+            removeConditionChange: ThirdEraItemSheet.#onRemoveConditionChange,
+            editImage: ThirdEraItemSheet.#onEditImage
         }
     };
 
@@ -1207,5 +1208,37 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const current = [...(this.item.system.descriptorTags || [])];
         current.splice(index, 1);
         await this.item.update({ "system.descriptorTags": current });
+    }
+
+    /**
+     * Open file picker to change item image. Requires target to be an IMG with data-edit.
+     * @param {PointerEvent} _event
+     * @param {HTMLImageElement} target
+     */
+    static async #onEditImage(_event, target) {
+        if (target.nodeName !== "IMG") return;
+        const attr = target.dataset.edit;
+        if (!attr) return;
+        const current = foundry.utils.getProperty(this.document._source, attr);
+        const defaultArtwork = this.document.constructor.getDefaultArtwork?.(this.document._source) ?? {};
+        const defaultImage = foundry.utils.getProperty(defaultArtwork, attr);
+        const FilePicker = foundry.applications?.apps?.FilePicker ?? globalThis.FilePicker;
+        if (!FilePicker?.implementation) return;
+        const fp = new FilePicker.implementation({
+            current,
+            type: "image",
+            redirectToRoot: defaultImage ? [defaultImage] : [],
+            callback: path => {
+                target.src = path;
+                if (this.options.form?.submitOnChange) {
+                    this.form?.dispatchEvent(new Event("submit", { cancelable: true }));
+                }
+            },
+            position: {
+                top: this.position.top + 40,
+                left: this.position.left + 10
+            }
+        });
+        await fp.browse();
     }
 }

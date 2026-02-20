@@ -1,8 +1,19 @@
 <form class="{{cssClass}} flexcol" autocomplete="off">
-    {{!-- Sheet Header --}}
-    <header class="sheet-header sheet-header--npc">
-        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
-        <div class="header-fields">
+  {{!-- Sheet Header --}}
+  <header class="sheet-header sheet-header--npc">
+    <div class="sheet-header-images">
+      <div class="sheet-header-image-block" title="{{localize 'THIRDERA.PortraitHint'}}">
+        <label class="sheet-header-image-label">{{localize 'THIRDERA.Portrait'}}</label>
+        <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" title="{{actor.name}}" height="100" width="100" />
+      </div>
+      {{#if showTokenImage}}
+      <div class="sheet-header-image-block" title="{{localize 'THIRDERA.TokenImageHint'}}">
+        <label class="sheet-header-image-label">{{localize 'THIRDERA.TokenImage'}}</label>
+        <img class="profile-img token-img" src="{{tokenImg}}" data-action="editTokenImage" height="100" width="100" alt="" />
+      </div>
+      {{/if}}
+    </div>
+    <div class="header-fields">
             <div class="charname-row">
                 <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="NPC Name" />
                 </h1>
