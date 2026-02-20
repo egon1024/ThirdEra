@@ -47,7 +47,11 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addSubschool: ThirdEraItemSheet.#onAddSubschool,
             removeSubschool: ThirdEraItemSheet.#onRemoveSubschool,
             addDescriptorTag: ThirdEraItemSheet.#onAddDescriptorTag,
-            removeDescriptorTag: ThirdEraItemSheet.#onRemoveDescriptorTag
+            removeDescriptorTag: ThirdEraItemSheet.#onRemoveDescriptorTag,
+            openConditionDescription: ThirdEraItemSheet.#onOpenConditionDescription,
+            openEditorBox: ThirdEraItemSheet.#onOpenEditorBox,
+            addConditionChange: ThirdEraItemSheet.#onAddConditionChange,
+            removeConditionChange: ThirdEraItemSheet.#onRemoveConditionChange
         }
     };
 
@@ -262,7 +266,25 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             hasSchoolSubschoolOptions: schoolSubschoolOptions.length > 0,
             hasSchoolDescriptorOptionsForAdd: schoolDescriptorOptionsForAdd.length > 0,
             hasSchoolDescriptorsSection: schoolDescriptorOptions.length > 0 || (systemData.schoolDescriptors ?? []).length > 0,
-            grantedSpells
+            grantedSpells,
+            ...(item.type === "condition" ? { conditionChangeKeys: ThirdEraItemSheet.#getConditionChangeKeyOptions() } : {})
+        };
+    }
+
+    /** Condition effect key options for the condition sheet dropdown (key -> localized label). */
+    static #getConditionChangeKeyOptions() {
+        const t = (key) => game.i18n.localize(`THIRDERA.ConditionChangeKeys.${key}`);
+        return {
+            "": "—",
+            ac: t("ac"),
+            acLoseDex: t("acLoseDex"),
+            speedMultiplier: t("speedMultiplier"),
+            saveFort: t("saveFort"),
+            saveRef: t("saveRef"),
+            saveWill: t("saveWill"),
+            attack: t("attack"),
+            attackMelee: t("attackMelee"),
+            attackRanged: t("attackRanged")
         };
     }
 
@@ -929,6 +951,60 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (!spellcasting || !spellcasting.domains) return;
         const current = spellcasting.domains.filter(e => e.domainKey !== domainKey);
         await this.item.update({ "system.spellcasting.domains": current });
+    }
+
+    /**
+     * Open the condition description prose-mirror in edit mode (external Edit button; built-in toggle is hidden).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static #onOpenConditionDescription(event, target) {
+        const pm = this.element?.querySelector?.(".condition-editor-box prose-mirror[name='system.description']");
+        if (pm && typeof pm.open !== "undefined") pm.open = true;
+    }
+
+    /**
+     * Add a blank mechanical effect row to a condition item.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onAddConditionChange(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const current = [...(this.item.system.changes || [])];
+        current.push({ key: "", value: 0 });
+        await this.item.update({ "system.changes": current });
+    }
+
+    /**
+     * Remove a mechanical effect row from a condition item.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element (must have data-index)
+     * @this {ThirdEraItemSheet}
+     */
+    static async #onRemoveConditionChange(event, target) {
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const index = parseInt(target.dataset.index, 10);
+        if (Number.isNaN(index)) return;
+        const current = [...(this.item.system.changes || [])];
+        current.splice(index, 1);
+        await this.item.update({ "system.changes": current });
+    }
+
+    /**
+     * Open a prose-mirror in this sheet by field name (used by editor-box partial and any header Edit button).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element (must have data-field="system.description" etc.)
+     * @this {ThirdEraItemSheet}
+     */
+    static #onOpenEditorBox(event, target) {
+        const field = target.dataset?.field;
+        if (!field) return;
+        const pm = this.element?.querySelector?.(`prose-mirror[name="${field}"]`);
+        if (pm && typeof pm.open !== "undefined") pm.open = true;
     }
 
     /**

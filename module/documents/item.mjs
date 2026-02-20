@@ -1,6 +1,23 @@
 import { getWieldingInfo, getTWFPenalties, getStrMultiplier } from "../data/_damage-helpers.mjs";
 
 /**
+ * Slugify a string for use as conditionId (lowercase, spaces/special to hyphens).
+ * @param {string} name
+ * @returns {string} Non-empty slug, or empty string if name yields no slug
+ */
+function slugifyConditionId(name) {
+    if (typeof name !== "string") return "";
+    const slug = name
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+    return slug;
+}
+
+/**
  * Extended Item document class for Third Era
  * @extends {Item}
  */
@@ -13,6 +30,33 @@ export class ThirdEraItem extends Item {
         // Auto-generate a key if not already set (skills, feats, features, domains)
         if ((data.type === "skill" || data.type === "feat" || data.type === "feature" || data.type === "domain" || data.type === "school") && !data.system?.key) {
             this.updateSource({ "system.key": foundry.utils.randomID() });
+        }
+
+        // Auto-generate conditionId for condition items (schema allows blank; we fill before persist)
+        if (data.type === "condition") {
+            const raw = data.system?.conditionId;
+            if (raw === undefined || raw === null || String(raw).trim() === "") {
+                const slug = slugifyConditionId(data.name);
+                const conditionId = slug || `condition-${foundry.utils.randomID().slice(0, 8)}`;
+                this.updateSource({ "system.conditionId": conditionId });
+                // Mutate the create payload so the server receives the generated id
+                if (!data.system) data.system = {};
+                data.system.conditionId = conditionId;
+            }
+        }
+    }
+
+    /** @override */
+    _preUpdate(changes, options, user) {
+        super._preUpdate(changes, options, user);
+
+        // If conditionId is being set to blank, fill from name or random
+        if (this.type === "condition" && changes.system?.conditionId !== undefined) {
+            const v = changes.system.conditionId;
+            if (v === "" || (typeof v === "string" && !v.trim())) {
+                const slug = slugifyConditionId(this.name);
+                changes.system.conditionId = slug || `condition-${foundry.utils.randomID().slice(0, 8)}`;
+            }
         }
     }
 
@@ -220,7 +264,7 @@ export class ThirdEraItem extends Item {
 
         const roll = await new Roll(`1d20 + ${attackBonus}`).roll();
 
-        // Build flavor text with hand label and penalty breakdown
+        // Build flavor text with hand label and penalty breakdown (TWF, size, conditions)
         const handLabels = { primary: "Primary", offhand: "Off-Hand" };
         const handLabel = handLabels[weaponData.equipped] || "";
         let flavor = `${this.name} Attack`;
@@ -229,6 +273,17 @@ export class ThirdEraItem extends Item {
         const penalties = [];
         if (twfPenalty) penalties.push(`${twfPenalty} TWF`);
         if (sizePenalty) penalties.push(`${sizePenalty} size`);
+        // Add condition modifiers from attack breakdown (entries that are not BAB/STR/DEX/Size)
+        const baseLabels = new Set(["BAB", "STR", "DEX", "Size"]);
+        const breakdown = (weaponData.properties.melee === "melee")
+            ? (actorData.combat.meleeAttack.breakdown || [])
+            : (actorData.combat.rangedAttack.breakdown || []);
+        for (const entry of breakdown) {
+            if (entry.label && !baseLabels.has(entry.label)) {
+                const signed = (entry.value >= 0 ? "+" : "") + entry.value;
+                penalties.push(`${entry.label} ${signed}`);
+            }
+        }
         if (penalties.length) flavor += ` [${penalties.join(", ")}]`;
 
         roll.toMessage({

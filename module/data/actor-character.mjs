@@ -1,8 +1,9 @@
-const { HTMLField, NumberField, ObjectField, SchemaField, StringField, ArrayField, BooleanField } = foundry.data.fields;
+const { ArrayField, BooleanField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { getConditionItemsMapSync, getActiveConditionModifiers } from "../logic/condition-helpers.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -55,9 +56,10 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             // Hit Points
             attributes: new SchemaField({
                 hp: new SchemaField({
-                    value: new NumberField({ required: true, integer: true, min: 0, initial: 1, label: "Current HP" }),
+                    value: new NumberField({ required: true, integer: true, min: -999, initial: 1, label: "Current HP" }),
                     max: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Maximum HP" }),
                     temp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Temporary HP" }),
+                    stable: new BooleanField({ required: true, initial: false, label: "Stabilized (when dying)" }),
                     adjustments: new ArrayField(new SchemaField({
                         value: new NumberField({ required: true, integer: true, initial: 0, label: "Adjustment" }),
                         label: new StringField({ required: true, blank: false, initial: "Misc", label: "Reason" })
@@ -623,30 +625,50 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[this.details.size] ?? 0;
         this.combat.sizeMod = sizeMod;
 
+        // Condition modifiers (Phase 2): aggregate from active effects
+        const conditionMap = getConditionItemsMapSync();
+        const conditionMods = getActiveConditionModifiers(this.parent, conditionMap);
+
+        // Apply condition modifiers to saves (total + breakdown)
+        this.saves.fort.total += conditionMods.saves.fort;
+        this.saves.ref.total += conditionMods.saves.ref;
+        this.saves.will.total += conditionMods.saves.will;
+        for (const save of ["fort", "ref", "will"]) {
+            if (conditionMods.saveBreakdown[save].length) {
+                this.saves[save].breakdown = [...(this.saves[save].breakdown || []), ...conditionMods.saveBreakdown[save]];
+            }
+        }
+
         // Calculate grapple (BAB + STR mod + size modifier)
         // TODO: Add size modifier calculation
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;
 
-        // Calculate melee and ranged attack bonuses
-        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + sizeMod + this.combat.meleeAttack.misc;
+        // Calculate melee and ranged attack bonuses (include condition modifiers)
+        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + sizeMod + this.combat.meleeAttack.misc + conditionMods.attackMelee;
         this.combat.meleeAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
             { label: "STR", value: this.abilities.str.mod },
-            { label: "Size", value: sizeMod }
+            { label: "Size", value: sizeMod },
+            ...(conditionMods.attackMeleeBreakdown || [])
         ];
 
-        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + sizeMod + this.combat.rangedAttack.misc;
+        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + sizeMod + this.combat.rangedAttack.misc + conditionMods.attackRanged;
         this.combat.rangedAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
             { label: "DEX", value: this.abilities.dex.mod },
-            { label: "Size", value: sizeMod }
+            { label: "Size", value: sizeMod },
+            ...(conditionMods.attackRangedBreakdown || [])
         ];
 
-        // Calculate AC values from equipped armor, dex, size, and misc
-        computeAC(this);
+        // Calculate AC values from equipped armor, dex, size, misc, and conditions
+        computeAC(this, conditionMods);
 
-        // Apply armor speed reduction (medium/heavy armor)
-        this.attributes.speed.info = computeSpeed(this, this.loadEffects);
+        // Apply armor speed reduction and condition speed multiplier (e.g. half speed)
+        this.attributes.speed.info = computeSpeed(this, this.loadEffects, conditionMods.speedMultiplier);
+
+        // Show Stable checkbox when HP is in dying range (−9 to −1)
+        const hpVal = Number(this.attributes.hp.value);
+        this.attributes.hp.dyingStableVisible = (hpVal >= -9 && hpVal <= -1);
 
         this.inventory = {
             totalWeight,

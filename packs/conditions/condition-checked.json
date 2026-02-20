@@ -1,0 +1,12 @@
+{
+  "name": "Checked",
+  "type": "condition",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "conditionId": "checked",
+    "description": "<p>Prevented from achieving forward motion by an applied force, such as wind. Checked creatures on the ground merely stop. Checked flying creatures move back a distance specified in the description of the effect.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

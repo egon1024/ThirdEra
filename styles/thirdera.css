@@ -31,6 +31,9 @@
   --color-hover: #FFA500;
   --color-hover-alt: #007bff;
 
+  /* Icons on light background (e.g. condition list) */
+  --color-condition-icon: var(--color-text-primary);
+
   /* Status indicators */
   --color-modified: #b8860b;
   --color-equipped: #2d8a4e;
@@ -370,7 +373,7 @@
   display: none;
   height: 100%;
   overflow-y: auto;
-  padding: 10px;
+  padding: 10px 2rem 10px 10px; /* extra right padding so scrollbar does not overlap prose-mirror edit button */
 }
 
 .thirdera .sheet-body .tab.active {
@@ -383,7 +386,7 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  padding: 10px;
+  padding: 10px 2rem 10px 10px;
 }
 
 .thirdera .sheet-body .tab.spells.active {
@@ -638,6 +641,108 @@
   margin-bottom: 4px;
 }
 
+/* Actor description: external Edit button above the editor; hide built-in toggle to avoid scrollbar overlap */
+.thirdera .description-editor-box.editor-box {
+  display: block;
+}
+
+.thirdera .description-editor-box .editor-box-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.thirdera .editor-box .editor-box-header label {
+  margin-bottom: 0;
+}
+
+/* Compact edit button for editor-box headers (actor description, condition, etc.) — prevents full-width stretch */
+.thirdera .editor-box-edit-btn {
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  flex-basis: auto !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem !important;
+  min-width: 1.75rem !important;
+  max-width: 1.75rem !important;
+  height: 1.75rem !important;
+  min-height: 1.75rem !important;
+  max-height: 1.75rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: var(--color-text-primary);
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
+  border-radius: 4px;
+  cursor: pointer;
+  box-sizing: border-box !important;
+}
+
+.thirdera .editor-box-edit-btn:hover {
+  background: var(--color-bg-parchment-dark);
+  border-color: var(--color-border-highlight);
+}
+
+.thirdera .description-editor-box .description-edit-btn {
+  /* Inherits .editor-box-edit-btn; keep class for any description-specific overrides */
+}
+
+/* Hide built-in prose-mirror toggle when we provide an external Edit button (description, condition, editor-box partial) */
+.thirdera .editor-box:has(.editor-box-header) prose-mirror.inactive button.toggle {
+  display: none !important;
+}
+
+.thirdera .condition-editor-box .editor-box-header,
+.thirdera .editor-box .editor-box-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+/* Inactive description: hide prose-mirror (avoids Foundry’s 150px min-height box); show compact .description-view */
+/* Hide biography editor when not editing (two selectors in case .thirdera is elsewhere) */
+.thirdera .description-editor-box:not(.description-editing) prose-mirror[name="system.biography"],
+.tab[data-tab="description"] .description-editor-box:not(.description-editing) prose-mirror[name="system.biography"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.thirdera .description-editor-box .description-view {
+  display: block;
+  min-height: 0;
+  padding: 2px 0;
+  border: none;
+  background: transparent;
+}
+
+/* When editing (class set by openDescriptionEditor), hide view and show prose-mirror */
+.thirdera .description-editor-box.description-editing .description-view {
+  display: none !important;
+}
+
+.thirdera .description-editor-box.description-editing prose-mirror[name="system.biography"] {
+  display: flex !important;
+  visibility: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
 .thirdera prose-mirror {
   display: block;
   width: 100%;
@@ -694,6 +799,65 @@
 .thirdera prose-mirror.active .cm-editor {
   background: transparent !important;
   min-height: var(--editor-min-height, 10em) !important;
+}
+
+/* ProseMirror (toggled editors): Foundry’s default puts the scrollbar on prose-mirror.inactive and hides the
+   toggle until hover, so the button is often cut off and hard to see. Fix globally for all Third Era sheets. */
+.thirdera prose-mirror.inactive {
+  padding-right: 3.5rem !important;
+}
+
+.thirdera prose-mirror.inactive button.toggle {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  top: 4px !important;
+  right: 2rem !important;
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  min-width: 1.75rem !important;
+  min-height: 1.75rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: var(--color-text-primary) !important;
+  background: var(--color-bg-input) !important;
+  border: 1px solid var(--color-border-input) !important;
+  border-radius: 4px !important;
+}
+
+.thirdera prose-mirror.inactive button.toggle:hover {
+  background: var(--color-bg-parchment-dark) !important;
+  border-color: var(--color-border-highlight) !important;
+}
+
+.thirdera prose-mirror.inactive button.toggle i {
+  color: inherit !important;
+}
+
+/* ProseMirror WYSIWYG toolbar: light background and dark text for readability (override Foundry dark toolbar) */
+.thirdera prose-mirror menu {
+  background: var(--color-bg-parchment-dark) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-input) !important;
+}
+
+.thirdera prose-mirror menu button,
+.thirdera prose-mirror menu .pm-dropdown > span,
+.thirdera prose-mirror menu button i,
+.thirdera prose-mirror menu .pm-dropdown i.fa-chevron-down {
+  color: var(--color-text-primary) !important;
+}
+
+.thirdera prose-mirror menu button:hover,
+.thirdera prose-mirror menu button.active,
+.thirdera prose-mirror menu .pm-dropdown:hover {
+  background: var(--color-bg-parchment) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.thirdera prose-mirror menu button.source-code-action {
+  background: var(--color-bg-input) !important;
+  color: var(--color-text-primary) !important;
 }
 
 /* Abilities Grid */
@@ -1392,6 +1556,121 @@
 .thirdera .hp-adj-remove:hover {
   color: var(--color-hover);
   opacity: 1;
+}
+
+/* Conditions (Combat tab) */
+.thirdera .conditions-section {
+  margin: 10px 0;
+  padding: 0 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.thirdera .conditions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.thirdera .conditions-title {
+  margin: 0;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .conditions-add {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.thirdera .condition-add-select {
+  font-size: var(--font-size-label);
+  min-width: 140px;
+}
+
+.thirdera .condition-add-btn {
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.thirdera .condition-add-btn:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .conditions-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Full-width row: icon (min width) | name (left-aligned, fills middle) | trash (far right) */
+.thirdera .conditions-list .condition {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.thirdera .conditions-list .condition-icon {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  margin: 0 8px 0 0;
+  /* Black for visibility on light background; semantic ref --color-condition-icon */
+  filter: brightness(0);
+}
+
+.thirdera .conditions-list .condition-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--font-size-body);
+  text-align: left;
+  margin: 0 8px 0 0;
+}
+
+.thirdera .conditions-list .condition-remove {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--color-text-faint);
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.thirdera .condition-remove:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
+.thirdera .conditions-empty {
+  margin: 6px 0 0;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+}
+
+.thirdera .conditions-list .condition-derived {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  font-weight: normal;
+}
+
+.thirdera .hp-stable-block {
+  align-items: center;
+}
+
+.thirdera .hp-stable-block .stat-hint {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin-left: 4px;
 }
 
 /* Level History grid */

@@ -17,6 +17,7 @@ import { ClassData } from "./module/data/item-class.mjs";
 import { FeatureData } from "./module/data/item-feature.mjs";
 import { DomainData } from "./module/data/item-domain.mjs";
 import { SchoolData } from "./module/data/item-school.mjs";
+import { ConditionData } from "./module/data/item-condition.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -28,6 +29,12 @@ import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
+import {
+    syncDerivedFlatFootedCondition,
+    syncDerivedHpCondition,
+    syncFlatFootedForCombat,
+    removeDerivedFlatFooted
+} from "./module/logic/derived-conditions.mjs";
 
 /**
  * Initialize HP auto-increase system
@@ -227,7 +234,9 @@ Hooks.once("init", async function () {
             illusion: "Illusion",
             necromancy: "Necromancy",
             transmutation: "Transmutation"
-        }
+        },
+        /** Set of status IDs from condition items; populated in ready. Used to identify condition effects on actors. */
+        conditionStatusIds: new Set()
     };
 
     // Register World Settings
@@ -291,7 +300,8 @@ Hooks.once("init", async function () {
         race: RaceData,
         class: ClassData,
         domain: DomainData,
-        school: SchoolData
+        school: SchoolData,
+        condition: ConditionData
     };
 
     // Register item type labels for the creation menu
@@ -306,7 +316,8 @@ Hooks.once("init", async function () {
         race: "THIRDERA.TYPES.Item.race",
         class: "THIRDERA.TYPES.Item.class",
         domain: "THIRDERA.TYPES.Item.domain",
-        school: "THIRDERA.TYPES.Item.school"
+        school: "THIRDERA.TYPES.Item.school",
+        condition: "THIRDERA.TYPES.Item.condition"
     };
 
     // Register sheet application classes
@@ -335,6 +346,44 @@ Hooks.once("init", async function () {
 });
 
 /**
+ * Build CONFIG.statusEffects from condition items (compendium + world) so Token HUD and
+ * Actor.toggleStatusEffect(conditionId) work. Also sets CONFIG.THIRDERA.conditionStatusIds.
+ * World condition items are included so custom conditions appear in the dropdown and support drag-drop.
+ */
+async function buildConditionStatusEffects() {
+    const conditionIds = [];
+    const seenIds = new Set();
+    /** @type {Map<string, import("./module/documents/item.mjs").ThirdEraItem>} */
+    const conditionItemsById = new Map();
+
+    function addConditionItem(item) {
+        if (item.type !== "condition") return;
+        const rawId = item.system?.conditionId?.trim();
+        const id = (rawId ? String(rawId).toLowerCase() : (item.id || "")).trim();
+        if (!id) return;
+        conditionItemsById.set(id, item);
+        if (seenIds.has(id)) return;
+        seenIds.add(id);
+        CONFIG.statusEffects.push({
+            id,
+            name: item.name,
+            img: item.img || "icons/svg/aura.svg"
+        });
+        conditionIds.push(id);
+    }
+
+    const pack = game.packs.get("thirdera.thirdera_conditions");
+    if (pack) {
+        const docs = await pack.getDocuments();
+        for (const item of docs) addConditionItem(item);
+    }
+    for (const item of game.items?.contents ?? []) addConditionItem(item);
+
+    CONFIG.THIRDERA.conditionStatusIds = new Set(conditionIds);
+    CONFIG.THIRDERA.conditionItemsById = conditionItemsById;
+}
+
+/**
  * Ready hook
  */
 Hooks.once("ready", async function () {
@@ -342,16 +391,60 @@ Hooks.once("ready", async function () {
     
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
+    // Build CONFIG.statusEffects from condition items so Token HUD and toggleStatusEffect work
+    await buildConditionStatusEffects();
     // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
     await populateCompendiumCache();
-    // Re-render open actor sheets so Ready to cast domain spells show on initial load (they depend on the cache)
-    const instances = foundry.applications?.instances;
-    if (instances) {
+    // Sync HP-derived and combat-derived conditions so actors load with correct state
+    for (const actor of (game.actors?.contents ?? [])) {
+        if (actor.system?.attributes?.hp) await syncDerivedHpCondition(actor);
+    }
+    await syncFlatFootedForCombat();
+    // Re-render actor sheets so conditions and Ready to cast show on initial load.
+    // Include sheets that are not yet rendered (no app.rendered check) so restored windows get correct data.
+    function reRenderActorSheets() {
+        const instances = foundry.applications?.instances;
+        if (!instances) return;
+        let count = 0;
         for (const app of instances.values()) {
-            if (app.document?.type === "Actor" && app.document?.system === "thirdera" && app.rendered) {
+            if (app.document?.documentName === "Actor" && game.system?.id === "thirdera") {
                 app.render(true);
+                count++;
             }
         }
+    }
+    reRenderActorSheets();
+    // Staggered re-renders so sheets that register or finish restoring after ready are caught
+    [0, 100, 300].forEach((delay) => setTimeout(reRenderActorSheets, delay));
+});
+
+/**
+ * Sync HP-derived conditions (dead, dying, disabled, stable) when actor HP or stable flag changes.
+ */
+Hooks.on("updateActor", async (document, changes, options, userId) => {
+    const flat = foundry.utils.flattenObject(changes);
+    if ("system.attributes.hp.value" in flat || "system.attributes.hp.stable" in flat) {
+        await syncDerivedHpCondition(document);
+    }
+});
+
+/**
+ * Sync flat-footed from combat when combat turn or combatants change.
+ */
+Hooks.on("updateCombat", async (combat, changes, options, userId) => {
+    const flat = foundry.utils.flattenObject(changes);
+    if ("turn" in flat || "combatants" in flat || "round" in flat) {
+        await syncFlatFootedForCombat();
+    }
+});
+
+/**
+ * Remove combat-derived flat-footed from all actors when combat ends.
+ */
+Hooks.on("deleteCombat", async (combat, options, userId) => {
+    for (const c of (combat.combatants ?? [])) {
+        const actor = c.actor ?? game.actors.get(c.actorId);
+        if (actor) await removeDerivedFlatFooted(actor);
     }
 });
 

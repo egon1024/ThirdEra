@@ -1,0 +1,12 @@
+{
+  "name": "Sickened",
+  "type": "condition",
+  "img": "icons/svg/biohazard.svg",
+  "system": {
+    "conditionId": "sickened",
+    "description": "<p>The character takes a -2 penalty on all attack rolls, weapon damage rolls, saving throws, skill checks, and ability checks.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

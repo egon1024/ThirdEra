@@ -1,0 +1,12 @@
+{
+  "name": "Exhausted",
+  "type": "condition",
+  "img": "icons/svg/leg.svg",
+  "system": {
+    "conditionId": "exhausted",
+    "description": "<p>An exhausted character moves at half speed and takes a -6 penalty to Strength and Dexterity. After 1 hour of complete rest, an exhausted character becomes fatigued. A fatigued character becomes exhausted by doing something else that would normally cause fatigue.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

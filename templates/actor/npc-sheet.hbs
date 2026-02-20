@@ -94,6 +94,16 @@
                             data-dtype="Number" />
                     </div>
                 </div>
+                {{#if system.attributes.hp.dyingStableVisible}}
+                <div class="stat-block hp-stable-block">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="system.attributes.hp.stable" {{checked system.attributes.hp.stable}}
+                            data-dtype="Boolean" />
+                        Stable
+                    </label>
+                    <span class="stat-hint">(when dying, −1 to −9 HP)</span>
+                </div>
+                {{/if}}
                 <div class="stat-block">
                     <label>Speed</label>
                     <div class="stat-value {{#if speedInfo.reduced}}value-modified{{/if}}" {{#if
@@ -139,7 +149,7 @@
                     <span class="attack-cell">{{signedNumber system.combat.sizeMod}}</span>
                     <input type="text" name="system.combat.meleeAttack.misc" value="{{system.combat.meleeAttack.misc}}"
                         data-dtype="Number" class="attack-input" />
-                    <span class="attack-total">{{signedNumber system.combat.meleeAttack.total}}</span>
+                    <span class="attack-total" title="{{#each system.combat.meleeAttack.breakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber system.combat.meleeAttack.total}}</span>
 
                     <span class="attack-row-label">Ranged</span>
                     <span class="attack-cell">{{signedNumber system.combat.bab}}</span>
@@ -148,7 +158,7 @@
                     <span class="attack-cell">{{signedNumber system.combat.sizeMod}}</span>
                     <input type="text" name="system.combat.rangedAttack.misc"
                         value="{{system.combat.rangedAttack.misc}}" data-dtype="Number" class="attack-input" />
-                    <span class="attack-total">{{signedNumber system.combat.rangedAttack.total}}</span>
+                    <span class="attack-total" title="{{#each system.combat.rangedAttack.breakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber system.combat.rangedAttack.total}}</span>
                 </div>
             </div>
 
@@ -185,6 +195,35 @@
                             data-dtype="Number" class="ac-misc-input" />
                     </li>
                 </ul>
+            </div>
+
+            {{!-- Conditions --}}
+            <div class="conditions-section">
+                <div class="conditions-header">
+                    <h3 class="conditions-title">Conditions</h3>
+                    <div class="conditions-add">
+                        <select class="condition-add-select" aria-label="Add condition">
+                            <option value="">— Add condition —</option>
+                            {{#each conditionChoices as |choice|}}
+                            <option value="{{choice.conditionId}}">{{choice.name}}</option>
+                            {{/each}}
+                        </select>
+                        <a class="condition-add-btn" data-action="addCondition" title="Add selected condition"><i class="fas fa-plus"></i></a>
+                    </div>
+                </div>
+                {{#if activeConditions.length}}
+                <ul class="conditions-list">
+                    {{#each activeConditions as |cond|}}
+                    <li class="condition flexrow" data-effect-id="{{cond.id}}">
+                        <img src="{{cond.img}}" alt="" width="24" height="24" class="condition-icon" />
+                        <span class="condition-name">{{cond.name}}{{#if cond.derivedFrom}} <span class="condition-derived" title="Derived from {{cond.derivedFrom}}">({{cond.derivedFrom}})</span>{{/if}}</span>
+                        {{#unless cond.derivedFrom}}<a class="condition-remove" data-action="removeCondition" data-effect-id="{{cond.id}}" title="Remove condition"><i class="fas fa-trash"></i></a>{{/unless}}
+                    </li>
+                    {{/each}}
+                </ul>
+                {{else}}
+                <p class="conditions-empty">No conditions</p>
+                {{/if}}
             </div>
 
             {{!-- Saving Throws --}}

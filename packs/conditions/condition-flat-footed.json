@@ -1,0 +1,15 @@
+{
+  "name": "Flat-Footed",
+  "type": "condition",
+  "img": "icons/svg/falling.svg",
+  "system": {
+    "conditionId": "flat-footed",
+    "description": "<p>A character who has not yet acted during a combat is flat-footed, not yet reacting normally to the situation. A flat-footed character loses his Dexterity bonus to AC (if any) and cannot make attacks of opportunity.</p>",
+    "changes": [
+      {"key": "acLoseDex", "value": "1"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

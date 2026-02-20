@@ -1,6 +1,7 @@
 import { getWieldingInfo } from "../data/_damage-helpers.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { SpellData } from "../data/item-spell.mjs";
+import { getDerivedFrom } from "../logic/derived-conditions.mjs";
 import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 
@@ -49,7 +50,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist,
             toggleShortlist: ThirdEraActorSheet.#onToggleShortlist,
             resetSpellUsage: ThirdEraActorSheet.#onResetSpellUsage,
-            resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts
+            resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts,
+            addCondition: ThirdEraActorSheet.#onAddCondition,
+            removeCondition: ThirdEraActorSheet.#onRemoveCondition,
+            openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor
         },
         window: {
             resizable: true,
@@ -338,9 +342,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             saveProgressions: CONFIG.THIRDERA?.saveProgressions || {}
         };
 
-        // Ensure tabs state exists
+        // Ensure tabs state exists (TABS.primary has no initial in Foundry, so default to description)
         if (!this.tabGroups.abilities) this.tabGroups.abilities = "scores";
         if (!this.tabGroups.spells) this.tabGroups.spells = "known";
+        if (!this.tabGroups.primary) this.tabGroups.primary = "description";
         const tabs = this.tabGroups;
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
@@ -435,6 +440,38 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const grantedFeatures = systemData.grantedFeatures || [];
         const grantedFeats = grantedFeatures.filter(f => f.type === 'feat');
         const grantedClassFeatures = grantedFeatures.filter(f => f.type !== 'feat');
+
+        // Conditions: choices from compendium + world items, active from effects whose statuses match condition items.
+        // Fetch condition items first so we can derive conditionIds when CONFIG isn't ready yet (e.g. before "ready" hook).
+        const conditionsPack = game.packs.get("thirdera.thirdera_conditions");
+        const conditionItemsFromPack = conditionsPack
+            ? await conditionsPack.getDocuments()
+            : [];
+        const conditionItemsFromWorld = (game.items?.contents ?? []).filter(i => i.type === "condition");
+        const allConditionItems = [...conditionItemsFromPack, ...conditionItemsFromWorld];
+        let conditionIds = CONFIG.THIRDERA?.conditionStatusIds;
+        if (!conditionIds?.size) {
+            const ids = new Set();
+            for (const i of allConditionItems) {
+                if (i.type !== "condition") continue;
+                const rawId = i.system?.conditionId?.trim();
+                const id = (rawId ? String(rawId).toLowerCase() : (i.id || "")).trim();
+                if (id) ids.add(id);
+            }
+            conditionIds = ids;
+        }
+        const activeConditions = actor.effects
+            .filter(e => e.statuses && [...e.statuses].some(s => conditionIds.has(s)))
+            .map(e => ({ id: e.id, name: e.name, img: e.img, derivedFrom: getDerivedFrom(e) }));
+        const choiceMap = new Map();
+        for (const i of allConditionItems) {
+            const rawId = i.system?.conditionId?.trim();
+            const conditionId = rawId ? String(rawId).toLowerCase() : (i.id || "");
+            if (conditionId && !choiceMap.has(conditionId)) choiceMap.set(conditionId, { conditionId, name: i.name });
+        }
+        const conditionChoices = [...choiceMap.values()].sort(
+            (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" })
+        );
 
         // Organize spells by class and spell level
         const spellcastingByClass = systemData.spellcastingByClass || [];
@@ -876,6 +913,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             totalLevel,
             equippedWeapons,
             equippedArmor,
+            activeConditions,
+            conditionChoices,
             levelHistory,
             skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
             grantedSkills: systemData.grantedSkills || [],
@@ -1050,6 +1089,46 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @override
      */
     async _onDropItem(event, item) {
+        // Condition dropped: apply as ActiveEffect (status), do not embed the item.
+        // Create on the world actor so the condition persists when reopening from the Actors tab
+        // (when the sheet is for a token, this.actor is the token's actor and effects there live only on the token).
+        if (item.type === "condition") {
+            event.preventDefault?.();
+            event.stopPropagation?.();
+            const rawId = item.system?.conditionId?.trim();
+            const conditionId = (rawId ? String(rawId).toLowerCase() : (item.id || "")).trim();
+            if (!conditionId) {
+                ui.notifications.warn(`${item.name} has no Condition ID — set one on the item or save it.`);
+                return false;
+            }
+            let status = CONFIG.statusEffects?.find(e => e.id === conditionId);
+            if (!status) {
+                status = { id: conditionId, name: item.name, img: item.img || "icons/svg/aura.svg" };
+                CONFIG.statusEffects.push(status);
+                if (CONFIG.THIRDERA?.conditionStatusIds) CONFIG.THIRDERA.conditionStatusIds.add(conditionId);
+            }
+            const effectData = {
+                name: status.name || item.name,
+                img: status.img || "icons/svg/aura.svg",
+                statuses: [conditionId]
+            };
+            const targetActor = this.actor.isToken
+                ? (game.actors.get(this.actor.id) ?? this.actor)
+                : this.actor;
+            try {
+                await targetActor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+                if (targetActor !== this.actor) {
+                    await this.actor.prepareData?.();
+                    await this.render();
+                }
+            } catch (err) {
+                console.error("Third Era | Failed to apply condition from drop:", err);
+                ui.notifications.error("Third Era | Failed to apply condition. See console.");
+                return false;
+            }
+            return false;
+        }
+
         // Domain dropped on character: add to spellcasting class (character chooses domains)
         if (item.type === "domain") {
             const domainKey = item.system?.key?.trim();
@@ -3301,6 +3380,80 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             adjustments.splice(index, 1);
             await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
         }
+    }
+
+    /**
+     * Handle adding a condition from the Combat tab dropdown.
+     * Always creates a new effect so the same condition can be applied multiple times (e.g. multiple Ability Drained).
+     * Uses the world actor when the sheet is for a token so the condition persists when reopening from the Actors tab.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddCondition(event, target) {
+        const sheetEl = target.closest(".thirdera.actor");
+        const select = sheetEl?.querySelector(".condition-add-select");
+        const conditionId = select?.value?.trim().toLowerCase();
+        if (!conditionId) return;
+        let status = CONFIG.statusEffects.find(e => e.id === conditionId);
+        if (!status) {
+            const conditionItem = (game.items?.contents ?? []).find(
+                i => i.type === "condition" && (i.id === conditionId || String(i.system?.conditionId ?? "").trim().toLowerCase() === conditionId)
+            );
+            if (conditionItem) {
+                status = { id: conditionId, name: conditionItem.name, img: conditionItem.img || "icons/svg/aura.svg" };
+                CONFIG.statusEffects.push(status);
+                if (CONFIG.THIRDERA?.conditionStatusIds) CONFIG.THIRDERA.conditionStatusIds.add(conditionId);
+            }
+        }
+        if (!status) return;
+        const name = (typeof status.name === "string" && status.name.startsWith("EFFECT."))
+            ? game.i18n.localize(status.name) : (status.name || conditionId);
+        const effectData = {
+            name,
+            img: status.img || "icons/svg/aura.svg",
+            statuses: [conditionId]
+        };
+        const targetActor = this.actor.isToken
+            ? (game.actors.get(this.actor.id) ?? this.actor)
+            : this.actor;
+        await targetActor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+        if (targetActor !== this.actor) {
+            await this.actor.prepareData?.();
+            await this.render();
+        }
+    }
+
+    /**
+     * Handle removing a condition (delete the ActiveEffect).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element with data-effect-id
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveCondition(event, target) {
+        const effectId = target.closest("[data-effect-id]")?.dataset?.effectId;
+        if (!effectId) return;
+        await this.actor.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }
+
+    /**
+     * Open the biography prose-mirror in edit mode (external Edit button; built-in toggle is hidden).
+     * Toggles .description-editing on the wrapper so CSS can hide the view div and show the editor.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenDescriptionEditor(event, target) {
+        const box = this.element?.querySelector?.(".description-editor-box");
+        const pm = box?.querySelector?.("prose-mirror[name='system.biography']");
+        if (!box || !pm) return;
+        box.classList.add("description-editing");
+        const onClose = () => {
+            box.classList.remove("description-editing");
+            pm.removeEventListener("close", onClose);
+        };
+        pm.addEventListener("close", onClose, { once: true });
+        if (typeof pm.open !== "undefined") pm.open = true;
     }
 
     /**

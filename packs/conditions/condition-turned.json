@@ -1,0 +1,12 @@
+{
+  "name": "Turned",
+  "type": "condition",
+  "img": "icons/svg/holy-shield.svg",
+  "system": {
+    "conditionId": "turned",
+    "description": "<p>Affected by a turn undead attempt. Turned undead flee for 10 rounds (1 minute) by the best and fastest means available to them. If they cannot flee, they cower.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

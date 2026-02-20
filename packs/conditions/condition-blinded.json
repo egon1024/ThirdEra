@@ -1,0 +1,17 @@
+{
+  "name": "Blinded",
+  "type": "condition",
+  "img": "icons/svg/blind.svg",
+  "system": {
+    "conditionId": "blinded",
+    "changes": [
+      { "key": "ac", "value": -2 },
+      { "key": "acLoseDex", "value": 1 },
+      { "key": "speedMultiplier", "value": 0.5 }
+    ],
+    "description": "<p>The character cannot see. He takes a -2 penalty to Armor Class, loses his Dexterity bonus to AC (if any), moves at half speed, and takes a -4 penalty on Search checks and on most Strength- and Dexterity-based skill checks. All checks and activities that rely on vision (such as reading and Spot checks) automatically fail. All opponents are considered to have total concealment (50% miss chance) to the blinded character. Characters who remain blinded for a long time grow accustomed to these drawbacks and can overcome some of them.</p>"
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,0 +1,58 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Item Name" /></h1>
+        </div>
+    </header>
+
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="description">{{localize 'THIRDERA.Description'}}</a>
+        <a class="item" data-tab="effects">{{localize 'THIRDERA.ConditionEffects'}}</a>
+    </nav>
+
+    <section class="sheet-body">
+        <div class="tab active" data-group="primary" data-tab="description">
+            <div class="condition-editor-box editor-box">
+                <div class="editor-box-header flexrow">
+                    <label>{{localize 'THIRDERA.Description'}}</label>
+                    <button type="button" class="editor-box-edit-btn" data-action="openConditionDescription" title="{{localize 'THIRDERA.Edit'}}">
+                        <i class="fas fa-pen-to-square"></i>
+                    </button>
+                </div>
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="true">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+        <div class="tab" data-group="primary" data-tab="effects">
+            <div class="condition-effects">
+                <p class="note">{{localize 'THIRDERA.ConditionEffectsHint'}}</p>
+                <table class="condition-changes">
+                    <thead>
+                        <tr>
+                            <th>{{localize 'THIRDERA.ConditionEffectKey'}}</th>
+                            <th>{{localize 'THIRDERA.ConditionEffectValue'}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each system.changes as |change idx|}}
+                        <tr data-change-index="{{idx}}">
+                            <td>
+                                <select name="system.changes.{{idx}}.key">
+                                    {{selectOptions conditionChangeKeys selected=change.key}}
+                                </select>
+                            </td>
+                            <td><input type="number" name="system.changes.{{idx}}.value" value="{{change.value}}" data-dtype="Number" /></td>
+                            <td><button type="button" class="remove-change" data-action="removeConditionChange" data-index="{{idx}}" title="{{localize 'THIRDERA.Remove'}}"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                <button type="button" class="add-condition-change" data-action="addConditionChange"><i class="fas fa-plus"></i> {{localize 'THIRDERA.AddEffect'}}</button>
+            </div>
+        </div>
+    </section>
+</form>

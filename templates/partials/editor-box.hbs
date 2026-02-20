@@ -20,8 +20,13 @@ minHeight="15em"
 }}
 --}}
 <div class="editor-box">
-    <label>{{label}}</label>
-    <prose-mirror name="{{name}}" data-document-u-u-i-d="{{documentUuid}}" value="{{value}}" toggled="false"
+    <div class="editor-box-header flexrow">
+        <label>{{label}}</label>
+        <button type="button" class="editor-box-edit-btn" data-action="openEditorBox" data-field="{{name}}" title="{{localize 'THIRDERA.Edit'}}">
+            <i class="fas fa-pen-to-square"></i>
+        </button>
+    </div>
+    <prose-mirror name="{{name}}" data-document-u-u-i-d="{{documentUuid}}" value="{{value}}" toggled="true"
         style="--editor-min-height: {{#if minHeight}}{{minHeight}}{{else}}10em{{/if}};">
         {{{enrichedContent}}}
     </prose-mirror>
