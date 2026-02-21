@@ -33,9 +33,9 @@
     <div class="form-group level-up-new-class-picker">
       <label for="level-up-new-class-select">{{localize "THIRDERA.LevelUpWizard.SelectClassToAdd"}}</label>
       <select id="level-up-new-class-select" name="newClassUuid">
-        <option value="">{{localize "THIRDERA.LevelUpWizard.SelectClassPlaceholder"}}</option>
+        <option value="" {{#unless selectedNewClassUuid}}selected{{/unless}}>{{localize "THIRDERA.LevelUpWizard.SelectClassPlaceholder"}}</option>
         {{#each availableClasses as |opt|}}
-        <option value="{{opt.uuid}}">{{opt.name}} ({{opt.packName}})</option>
+        <option value="{{opt.uuid}}" {{#if (eq opt.uuid selectedNewClassUuid)}}selected{{/if}}>{{opt.name}} ({{opt.packName}})</option>
         {{/each}}
       </select>
     </div>

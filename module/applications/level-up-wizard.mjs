@@ -55,6 +55,9 @@ export class LevelUpWizard extends foundry.applications.api.HandlebarsApplicatio
     /** Available class documents for picker (world + compendiums). { uuid, name, packName } */
     availableClasses = [];
 
+    /** When in add-new-class mode, the UUID selected in the dropdown (so it persists across re-renders). */
+    selectedNewClassUuid = "";
+
     constructor(actor, options = {}) {
         super(options);
         this.actor = actor;
@@ -115,7 +118,8 @@ export class LevelUpWizard extends foundry.applications.api.HandlebarsApplicatio
                 hasClasses,
                 addNewClassMode: this.addNewClassMode,
                 availableClasses,
-                selectedClassValue: this.selectedClassItemId || ""
+                selectedClassValue: this.selectedClassItemId || "",
+                selectedNewClassUuid: this.selectedNewClassUuid || ""
             };
         }
 
@@ -180,6 +184,7 @@ export class LevelUpWizard extends foundry.applications.api.HandlebarsApplicatio
                     if (value === "add-new") {
                         this.addNewClassMode = true;
                         this.selectedClassItemId = null;
+                        this.selectedNewClassUuid = "";
                     } else if (value) {
                         this.addNewClassMode = false;
                         this.selectedClassItemId = value;
@@ -192,7 +197,9 @@ export class LevelUpWizard extends foundry.applications.api.HandlebarsApplicatio
         const newClassSelect = root?.querySelector?.('select[name="newClassUuid"]');
         if (newClassSelect) {
             newClassSelect.addEventListener("change", () => {
-                this.render(true);
+                this.selectedNewClassUuid = newClassSelect.value?.trim() ?? "";
+                // Do not re-render: the select already shows the new value; re-rendering
+                // replaced the DOM and caused the dropdown to jump back to the placeholder.
             });
         }
     }
@@ -320,7 +327,7 @@ export class LevelUpWizard extends foundry.applications.api.HandlebarsApplicatio
         if (!el) return null;
         const appId = el.dataset?.appid;
         if (!appId) return null;
-        const app = foundry.applications.apps.get(appId);
+        const app = foundry.applications.instances.get(appId);
         return app instanceof LevelUpWizard ? app : null;
     }
 
