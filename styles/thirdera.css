@@ -1383,6 +1383,150 @@
   text-shadow: none;
 }
 
+.thirdera .classes-header .level-up-button {
+  margin-right: 0.5em;
+  color: var(--color-character-accent);
+  cursor: pointer;
+}
+
+.thirdera .classes-header .level-up-button:hover {
+  color: var(--color-hover);
+}
+
+/* Level-up wizard — force left alignment (Foundry may center .window-content content) */
+.application.thirdera.level-up-wizard .window-content,
+.thirdera.level-up-wizard .window-content {
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+.thirdera.level-up-wizard .level-up-wizard-form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  padding: 0.5em;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  width: 100% !important;
+  max-width: 100% !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+}
+
+/* Force every direct child of the form to align left (overrides any parent center) */
+.thirdera.level-up-wizard .level-up-wizard-form > * {
+  align-self: flex-start !important;
+  text-align: left !important;
+}
+
+.thirdera.level-up-wizard .level-up-wizard-header {
+  margin-bottom: 0.75em;
+  text-align: left;
+}
+
+.thirdera.level-up-wizard .level-up-wizard-title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text-primary);
+  text-align: left;
+}
+
+.thirdera.level-up-wizard .level-up-wizard-body {
+  margin-bottom: 0.75em;
+  align-self: stretch;
+  text-align: left;
+}
+
+.thirdera.level-up-wizard .level-up-wizard-hint {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin: 0 0 0.35em 0;
+}
+
+/* Compact radio list: no box, single-line labels */
+.thirdera.level-up-wizard .level-up-class-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: flex-start;
+}
+
+/* Custom class options (no native radio — avoids browser/Foundry styling issues) */
+.thirdera.level-up-wizard .level-up-class-option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* left-align content; overrides Foundry/button center */
+  gap: 0.5em;
+  cursor: pointer;
+  line-height: 1.2;
+  padding: 0.2em 0;
+  white-space: nowrap;
+  min-height: 1.5em;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+}
+
+.thirdera.level-up-wizard .level-up-class-option:hover {
+  color: var(--color-hover);
+}
+
+.thirdera.level-up-wizard .level-up-option-label {
+  white-space: nowrap;
+  line-height: 1.5em;
+}
+
+/* Dot: empty circle by default, filled when selected */
+.thirdera.level-up-wizard .level-up-option-dot {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  border: 2px solid var(--color-border-divider);
+  border-radius: 50%;
+  background: var(--color-bg-parchment, #fff);
+}
+
+.thirdera.level-up-wizard .level-up-class-option.selected .level-up-option-dot {
+  background: var(--color-character-accent, currentColor);
+  border-color: var(--color-character-accent, currentColor);
+}
+
+.thirdera.level-up-wizard .level-up-new-class-picker {
+  margin-top: 0.75em;
+}
+
+.thirdera.level-up-wizard .level-up-wizard-hp-info {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 0.75em;
+  font-size: var(--font-size-body);
+}
+
+.thirdera.level-up-wizard .level-up-hp-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.thirdera.level-up-wizard .level-up-hp-controls input[type="number"] {
+  width: 4em;
+}
+
+.thirdera.level-up-wizard .level-up-wizard-footer {
+  justify-content: flex-end;
+  gap: 0.5em;
+  margin-top: 0.75em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--color-border-divider);
+}
+
 .thirdera .items-list {
   list-style: none;
   margin: 0;

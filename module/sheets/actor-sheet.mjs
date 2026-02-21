@@ -1,6 +1,7 @@
 import { getWieldingInfo } from "../data/_damage-helpers.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { SpellData } from "../data/item-spell.mjs";
+import { LevelUpWizard } from "../applications/level-up-wizard.mjs";
 import { getDerivedFrom } from "../logic/derived-conditions.mjs";
 import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
@@ -38,6 +39,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             openClass: ThirdEraActorSheet.#onOpenClass,
             removeClass: ThirdEraActorSheet.#onRemoveClass,
             addClassLevel: ThirdEraActorSheet.#onAddClassLevel,
+            openLevelUpWizard: ThirdEraActorSheet.#onOpenLevelUpWizard,
             removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel,
             addHpAdjustment: ThirdEraActorSheet.#onAddHpAdjustment,
             removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment,
@@ -1759,10 +1761,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * For a full-list spellcasting class (cleric, druid, etc.), add all class spells from the compendium
      * at levels the character has slots for. No-op if not enabled/full-list or pack unavailable.
      * Learned casters (wizard, sorcerer, bard) must add spells manually via spellbook or spell list browser.
+     * Static version for use from LevelUpWizard (no sheet instance).
+     * @param {Actor} actor - Character actor
      * @param {Item} classItem - The class item (must have spellcasting with spellListAccess "full")
      * @param {number} classLevel - Character's level in this class (used to determine which spell levels have slots)
      */
-    async _addClassSpellListForFullListCaster(classItem, classLevel) {
+    static async addClassSpellListForFullListCaster(actor, classItem, classLevel) {
         const sc = classItem?.system?.spellcasting;
         const enabled = sc?.enabled === true || sc?.enabled === "true";
         if (!sc || !enabled || sc.spellListAccess !== "full") return;
@@ -1771,7 +1775,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!spellListKey) return;
         const table = sc.spellsPerDayTable || [];
         const existingNames = new Set(
-            this.actor.items.filter(i => i.type === "spell").map(s => s.name.toLowerCase().trim())
+            actor.items.filter(i => i.type === "spell").map(s => s.name.toLowerCase().trim())
         );
         const pack = game.packs?.get("thirdera.thirdera_spells");
         if (!pack) return;
@@ -1791,11 +1795,20 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 existingNames.add((doc.name || "").toLowerCase().trim());
             }
             if (toCreate.length > 0) {
-                await this.actor.createEmbeddedDocuments("Item", toCreate);
+                await actor.createEmbeddedDocuments("Item", toCreate);
             }
         } catch (err) {
             console.warn("Third Era | Failed to auto-add class spells:", err);
         }
+    }
+
+    /**
+     * Instance wrapper for addClassSpellListForFullListCaster (used by sheet drop handler).
+     * @param {Item} classItem - The class item (must have spellcasting with spellListAccess "full")
+     * @param {number} classLevel - Character's level in this class
+     */
+    async _addClassSpellListForFullListCaster(classItem, classLevel) {
+        return ThirdEraActorSheet.addClassSpellListForFullListCaster(this.actor, classItem, classLevel);
     }
 
     /**
@@ -3390,6 +3403,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             delete shortlist[itemId];
             await this.actor.update({ "system.spellShortlistByClass": shortlist });
         }
+    }
+
+    /**
+     * Open the Level-up wizard (guided level-up flow).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenLevelUpWizard(event, target) {
+        if (this.actor.type !== "character") return;
+        new LevelUpWizard(this.actor).render(true);
     }
 
     /**
