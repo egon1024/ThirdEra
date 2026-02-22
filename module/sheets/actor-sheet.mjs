@@ -1,7 +1,7 @@
 import { getWieldingInfo } from "../data/_damage-helpers.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { SpellData } from "../data/item-spell.mjs";
-import { LevelUpWizard } from "../applications/level-up-wizard.mjs";
+import { LevelUpFlow } from "../applications/level-up-flow.mjs";
 import { getDerivedFrom } from "../logic/derived-conditions.mjs";
 import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
@@ -39,7 +39,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             openClass: ThirdEraActorSheet.#onOpenClass,
             removeClass: ThirdEraActorSheet.#onRemoveClass,
             addClassLevel: ThirdEraActorSheet.#onAddClassLevel,
-            openLevelUpWizard: ThirdEraActorSheet.#onOpenLevelUpWizard,
+            openLevelUpFlow: ThirdEraActorSheet.#onOpenLevelUpFlow,
             removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel,
             addHpAdjustment: ThirdEraActorSheet.#onAddHpAdjustment,
             removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment,
@@ -1761,7 +1761,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * For a full-list spellcasting class (cleric, druid, etc.), add all class spells from the compendium
      * at levels the character has slots for. No-op if not enabled/full-list or pack unavailable.
      * Learned casters (wizard, sorcerer, bard) must add spells manually via spellbook or spell list browser.
-     * Static version for use from LevelUpWizard (no sheet instance).
+     * Static version for use from LevelUpFlow (no sheet instance).
      * @param {Actor} actor - Character actor
      * @param {Item} classItem - The class item (must have spellcasting with spellListAccess "full")
      * @param {number} classLevel - Character's level in this class (used to determine which spell levels have slots)
@@ -3411,9 +3411,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static #onOpenLevelUpWizard(event, target) {
+    static #onOpenLevelUpFlow(event, target) {
         if (this.actor.type !== "character") return;
-        new LevelUpWizard(this.actor).render(true);
+        new LevelUpFlow(this.actor).render(true);
     }
 
     /**

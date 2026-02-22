@@ -56,11 +56,11 @@
 
             <h3 class="form-header">Excluded Skills</h3>
             <p class="hint">Drag skill items here to mark them as forbidden for this race.</p>
-            {{#if system.excludedSkills.length}}
+            {{#if excludedSkillsForDisplay.length}}
             <ol class="skill-ref-list">
-                {{#each system.excludedSkills as |entry|}}
+                {{#each excludedSkillsForDisplay as |entry|}}
                 <li class="skill-ref-entry">
-                    <span class="skill-ref-name">{{entry.name}}</span>
+                    <span class="skill-ref-name">{{entry.displayName}}</span>
                     <a class="skill-ref-remove" data-action="removeExcludedSkill" data-skill-key="{{entry.key}}" title="Remove"><i class="fas fa-times"></i></a>
                 </li>
                 {{/each}}

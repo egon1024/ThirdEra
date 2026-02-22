@@ -250,6 +250,26 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             grantedSpells = getSpellsForDomain(systemData.key);
         }
 
+        // Class/race skill lists: resolve key → display name so we store only key
+        let classSkillsForDisplay = [];
+        let excludedSkillsForDisplay = [];
+        if (item.type === "class" && systemData.classSkills?.length) {
+            classSkillsForDisplay = systemData.classSkills
+                .map((e) => ({
+                    key: e.key,
+                    displayName: e.name?.trim() || ThirdEraItemSheet.#getSkillDisplayName(e.key) || e.key
+                }))
+                .sort((a, b) => a.displayName.localeCompare(b.displayName));
+        }
+        if (item.type === "race" && systemData.excludedSkills?.length) {
+            excludedSkillsForDisplay = systemData.excludedSkills
+                .map((e) => ({
+                    key: e.key,
+                    displayName: e.name?.trim() || ThirdEraItemSheet.#getSkillDisplayName(e.key) || e.key
+                }))
+                .sort((a, b) => a.displayName.localeCompare(b.displayName));
+        }
+
         return {
             ...context,
             item,
@@ -268,8 +288,24 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             hasSchoolDescriptorOptionsForAdd: schoolDescriptorOptionsForAdd.length > 0,
             hasSchoolDescriptorsSection: schoolDescriptorOptions.length > 0 || (systemData.schoolDescriptors ?? []).length > 0,
             grantedSpells,
+            classSkillsForDisplay,
+            excludedSkillsForDisplay,
             ...(item.type === "condition" ? { conditionChangeKeys: ThirdEraItemSheet.#getConditionChangeKeyOptions() } : {})
         };
+    }
+
+    /**
+     * Resolve a skill key to a display name from world items (sync). Used for class/race skill lists.
+     * @param {string} key   Skill system.key
+     * @returns {string}    Skill name or key if not found
+     */
+    static #getSkillDisplayName(key) {
+        if (!key || !game.items?.size) return key ?? "";
+        const k = String(key).toLowerCase();
+        const skill = game.items.find(
+            (i) => i.type === "skill" && (i.system?.key ?? "").toLowerCase() === k
+        );
+        return skill?.name ?? key;
     }
 
     /** Condition effect key options for the condition sheet dropdown (key -> localized label). */
@@ -742,8 +778,12 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 ui.notifications.info(`${droppedItem.name} is already a class skill for ${this.document.name}.`);
                 return;
             }
-            current.push({ key: skillKey, name: droppedItem.name });
-            current.sort((a, b) => a.name.localeCompare(b.name));
+            current.push({ key: skillKey });
+            current.sort((a, b) => {
+                const na = ThirdEraItemSheet.#getSkillDisplayName(a.key) || a.key;
+                const nb = ThirdEraItemSheet.#getSkillDisplayName(b.key) || b.key;
+                return na.localeCompare(nb);
+            });
             await this.document.update({ "system.classSkills": current });
         } else if (this.document.type === "race") {
             const current = [...(this.document.system.excludedSkills || [])];
@@ -751,8 +791,12 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 ui.notifications.info(`${droppedItem.name} is already excluded by ${this.document.name}.`);
                 return;
             }
-            current.push({ key: skillKey, name: droppedItem.name });
-            current.sort((a, b) => a.name.localeCompare(b.name));
+            current.push({ key: skillKey });
+            current.sort((a, b) => {
+                const na = ThirdEraItemSheet.#getSkillDisplayName(a.key) || a.key;
+                const nb = ThirdEraItemSheet.#getSkillDisplayName(b.key) || b.key;
+                return na.localeCompare(nb);
+            });
             await this.document.update({ "system.excludedSkills": current });
         }
     }

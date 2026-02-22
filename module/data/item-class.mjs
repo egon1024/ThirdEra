@@ -46,7 +46,7 @@ export class ClassData extends foundry.abstract.TypeDataModel {
 
             classSkills: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: false, label: "Skill Key" }),
-                name: new StringField({ required: true, blank: false, label: "Skill Name" })
+                name: new StringField({ required: false, blank: true, label: "Skill Name" })
             }), { label: "Class Skills" }),
 
             features: new ArrayField(new SchemaField({

@@ -15,7 +15,7 @@
     "skillPointsPerLevel": 2,
     "classSkills": [
       {"key": "climb", "name": "Climb"},
-      {"key": "craft", "name": "Craft"},
+      {"key": "craft-alchemy", "name": "Craft (Alchemy)"}, {"key": "craft-armorsmithing", "name": "Craft (Armorsmithing)"}, {"key": "craft-bowmaking", "name": "Craft (Bowmaking)"}, {"key": "craft-weaponsmithing", "name": "Craft (Weaponsmithing)"}, {"key": "craft-trapmaking", "name": "Craft (Trapsmithing)"},
       {"key": "handleAnimal", "name": "Handle Animal"},
       {"key": "intimidate", "name": "Intimidate"},
       {"key": "jump", "name": "Jump"},
