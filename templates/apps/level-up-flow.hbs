@@ -138,13 +138,48 @@
   </div>
   {{/if}}
 
+  {{#if (eq step "spells")}}
+  <div class="level-up-flow-body">
+    {{#if isFullListCaster}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SpellcastersFullListMessage"}}</p>
+    {{/if}}
+    {{#if isLearnedCaster}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SpellcastersLearnedHint"}}</p>
+    {{#if spellsKnownSummary}}
+    <p class="level-up-flow-spells-known">{{spellsKnownSummary}}</p>
+    {{/if}}
+    <div class="form-group">
+      <button type="button" class="level-up-open-spell-list" data-action="openSpellList" title="{{localize "THIRDERA.LevelUp.OpenSpellListTitle"}}">
+        <i class="fas fa-book-sparkles"></i> {{localize "THIRDERA.LevelUp.OpenSpellList"}}
+      </button>
+    </div>
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SpellcastersLearnedNextHint"}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  {{#if (eq step "features")}}
+  <div class="level-up-flow-body">
+    <p class="level-up-flow-features-intro">{{localize "THIRDERA.LevelUp.NewFeaturesIntro" name=className level=newClassLevel}}</p>
+    {{#if featuresAtLevel.length}}
+    <ul class="level-up-flow-features-list">
+      {{#each featuresAtLevel as |f|}}
+      <li>{{f.featName}}</li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.NewFeaturesNone"}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
   <footer class="level-up-flow-footer flexrow">
     {{#unless (eq step "class")}}
     <button type="button" data-action="back"><i class="fas fa-arrow-left"></i> {{localize "THIRDERA.LevelUp.Back"}}</button>
     {{/unless}}
     <button type="button" data-action="cancel">{{localize "THIRDERA.LevelUp.Cancel"}}</button>
     <button type="button" data-action="next">
-      {{#if (eq step "feat")}}{{localize "THIRDERA.LevelUp.Finish"}}{{else}}{{localize "THIRDERA.LevelUp.Next"}}{{/if}}
+      {{#if isLastStep}}{{localize "THIRDERA.LevelUp.Finish"}}{{else}}{{localize "THIRDERA.LevelUp.Next"}}{{/if}}
     </button>
   </footer>
 </form>

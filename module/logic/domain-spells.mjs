@@ -177,7 +177,7 @@ export async function addDomainSpellsToActor(actor, classItem, domainKey) {
     const existingSpellNames = new Set(
         actor.items.filter(i => i.type === "spell").map(s => s.name.toLowerCase().trim())
     );
-    const toCreate = [];
+    const docsToAdd = [];
     for (const entry of granted) {
         const spellLevel = entry.level;
         if (spellLevel < 1 || spellLevel > 9) continue;
@@ -188,15 +188,14 @@ export async function addDomainSpellsToActor(actor, classItem, domainKey) {
         try {
             const spellDoc = await foundry.utils.fromUuid(entry.uuid);
             if (spellDoc && spellDoc.type === "spell") {
-                const clone = spellDoc.toObject();
-                delete clone._id;
-                toCreate.push(clone);
+                docsToAdd.push(spellDoc);
                 existingSpellNames.add((entry.spellName || "").toLowerCase().trim());
             }
         } catch (_) { /* spell from compendium may be unavailable */ }
     }
-    if (toCreate.length > 0) {
-        await actor.createEmbeddedDocuments("Item", toCreate);
+    if (docsToAdd.length > 0) {
+        const created = await actor.addSpells(docsToAdd);
+        return created.length;
     }
-    return toCreate.length;
+    return 0;
 }

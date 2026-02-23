@@ -1280,10 +1280,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 const classScEnabled = sc?.enabled === true || sc?.enabled === "true";
                 const isFullListCaster = sc?.spellListAccess === "full";
                 if (levelCountForClass >= 1 && classScEnabled && isFullListCaster) {
-                    const actorSpellCount = this.actor.items.filter(i => i.type === "spell").length;
-                    if (actorSpellCount === 0) {
-                        await this._addClassSpellListForFullListCaster(existing, levelCountForClass);
-                    }
+                    await this._addClassSpellListForFullListCaster(existing, levelCountForClass);
                 }
                 return false;
             }
@@ -1522,6 +1519,26 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
                 
                 return existingItem;
+            }
+        }
+
+        // If dropping a spell, add via actor API so source UUID is set; then skip parent drop.
+        if (item.type === "spell") {
+            const added = await this.actor.addSpell(item);
+            if (added) {
+                await this.actor.prepareData();
+                await this.render(true);
+                const overLimit = ThirdEraActorSheet._getSpellsKnownOverLimit(this.actor);
+                if (overLimit.length > 0) {
+                    const first = overLimit[0];
+                    ui.notifications.warn(
+                        game.i18n.format("THIRDERA.Spells.KnownOverLimitWarn", {
+                            class: first.className,
+                            level: first.spellLevel
+                        })
+                    );
+                }
+                return false;
             }
         }
 
@@ -1781,7 +1798,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!pack) return;
         try {
             const docs = await pack.getDocuments();
-            const toCreate = [];
+            const docsToAdd = [];
             for (const doc of docs) {
                 if (doc.type !== "spell") continue;
                 if (!SpellData.hasLevelForClass(doc.system, spellListKey)) continue;
@@ -1789,13 +1806,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 if (spellLevel < 0 || spellLevel > 9) continue;
                 if (ClassData.getSpellsPerDay(table, classLevel, spellLevel) <= 0) continue;
                 if (existingNames.has((doc.name || "").toLowerCase().trim())) continue;
-                const clone = doc.toObject();
-                delete clone._id;
-                toCreate.push(clone);
+                docsToAdd.push(doc);
                 existingNames.add((doc.name || "").toLowerCase().trim());
             }
-            if (toCreate.length > 0) {
-                await actor.createEmbeddedDocuments("Item", toCreate);
+            if (docsToAdd.length > 0) {
+                await actor.addSpells(docsToAdd);
             }
         } catch (err) {
             console.warn("Third Era | Failed to auto-add class spells:", err);
@@ -1846,6 +1861,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             const actorSpells = this.actor.items.filter(i => i.type === "spell");
             const levelStats = [];
+            const docsToAdd = [];
             for (let level = 0; level <= 9; level++) {
                 const need = ClassData.getSpellsKnown(table, classLevel, level);
                 if (need <= 0) continue;
@@ -1856,19 +1872,16 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 levelStats.push({ level, need, currentAtLevel, toAdd });
                 if (toAdd === 0) continue;
                 const candidates = (byLevel.get(level) || []).slice().sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-                const toCreate = [];
                 for (const doc of candidates) {
-                    if (toCreate.length >= toAdd) break;
+                    if (docsToAdd.length >= toAdd) break;
                     const nameKey = (doc.name || "").toLowerCase().trim();
                     if (existingNames.has(nameKey)) continue;
-                    const clone = doc.toObject();
-                    delete clone._id;
-                    toCreate.push(clone);
+                    docsToAdd.push(doc);
                     existingNames.add(nameKey);
                 }
-                if (toCreate.length > 0) {
-                    await this.actor.createEmbeddedDocuments("Item", toCreate);
-                }
+            }
+            if (docsToAdd.length > 0) {
+                await this.actor.addSpells(docsToAdd);
             }
         } catch (err) {
             console.warn("Third Era | Failed to auto-add spells known for spontaneous caster:", err);
@@ -3890,9 +3903,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         try {
             const spellDoc = await foundry.utils.fromUuid(entry.uuid);
             if (spellDoc && spellDoc.type === "spell") {
-                const clone = spellDoc.toObject();
-                delete clone._id;
-                await this.actor.createEmbeddedDocuments("Item", [clone]);
+                await this.actor.addSpell(spellDoc);
                 await this.actor.prepareData();
                 await this.render();
                 ui.notifications.info(`Added ${spellName} to your character.`);

@@ -3843,6 +3843,21 @@
   color: var(--color-hover-alt);
 }
 
+.thirdera.spell-list-browser .spell-item--already-known {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.thirdera.spell-list-browser .spell-item--already-known:hover {
+  background: transparent;
+}
+
+.thirdera.spell-list-browser .spell-item--already-known .spell-item-already-known-label {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  min-width: 5em;
+}
+
 /* Icons dark for visibility on light background (color for i, filter for img) */
 .thirdera.spell-list-browser .spell-item .item-image,
 .thirdera.spell-list-browser .spell-item .item-image i {

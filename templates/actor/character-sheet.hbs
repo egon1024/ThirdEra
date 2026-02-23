@@ -945,7 +945,7 @@
         {{!-- Known / Available panel: roster only, no prepared/cast; Add to ready for full-list --}}
         <div class="subtab spells-known {{#if (eq tabs.spells 'known')}}active{{/if}}" data-group="spells" data-tab="known">
           {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-known-search" inputName="spellKnownSearch" placeholderKey="THIRDERA.Spells.SearchPlaceholder" noResultsKey="THIRDERA.Spells.SearchNoResults"}}
-          {{!-- Manually added spells first: not on any class list or domain; e.g. dropped without class assignment --}}
+          {{!-- Manually added spells: not on any class list or domain; e.g. dropped without class assignment --}}
           {{#if hasManuallyAddedSpells}}
             <div class="spellcasting-class manually-added-spells">
               <div class="spellcasting-header">
@@ -1298,9 +1298,46 @@
           <p class="spell-ready-hint">{{localize "THIRDERA.Spells.DragFromKnownHint"}}</p>
         </div>
       {{else}}
-        <div class="no-spells">
-          <p>{{localize "THIRDERA.Spells.NoSpellcastingClasses"}}</p>
-        </div>
+        {{#if hasManuallyAddedSpells}}
+          {{!-- No spellcasting classes but actor has manually added spells: show them with a hint --}}
+          <div class="subtab spells-known active" data-group="spells" data-tab="known">
+            <p class="spell-section-hint no-spellcasting-hint">{{localize "THIRDERA.Spells.NoSpellcastingClassesWithSpellsHint"}}</p>
+            {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-known-search-no-class" inputName="spellKnownSearch" placeholderKey="THIRDERA.Spells.SearchPlaceholder" noResultsKey="THIRDERA.Spells.SearchNoResults"}}
+            <div class="spellcasting-class manually-added-spells">
+              <div class="spellcasting-header">
+                <h4>{{localize "THIRDERA.Spells.ManuallyAddedHeading"}}</h4>
+                <p class="spell-section-hint">{{localize "THIRDERA.Spells.ManuallyAddedHint"}}</p>
+              </div>
+              {{#each manuallyAddedSpellsByLevel as |spells spellLevel|}}
+                {{#if spells.length}}
+                  <div class="spell-level-group">
+                    <div class="spell-level-header">
+                      <h5>{{#if (eq spellLevel "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal spellLevel}} Level{{/if}}</h5>
+                    </div>
+                    <ol class="items-list spells-list">
+                      {{#each spells as |spell|}}
+                      <li class="item flexrow spell-item" data-item-id="{{spell.id}}" data-spell-name="{{spell.name}}">
+                        <div class="item-name">
+                          {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
+                          <h4><a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
+                        </div>
+                        <div class="item-controls">
+                          <a class="item-edit" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}"><i class="fas fa-edit"></i></a>
+                          <a class="item-delete" data-action="deleteItem" title="Delete Spell"><i class="fas fa-trash"></i></a>
+                        </div>
+                      </li>
+                      {{/each}}
+                    </ol>
+                  </div>
+                {{/if}}
+              {{/each}}
+            </div>
+          </div>
+        {{else}}
+          <div class="no-spells">
+            <p>{{localize "THIRDERA.Spells.NoSpellcastingClasses"}}</p>
+          </div>
+        {{/if}}
       {{/if}}
       </div>
     </div>

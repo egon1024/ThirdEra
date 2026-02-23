@@ -1,17 +1,44 @@
 /**
- * Level-up flow: guided steps for adding a character level (choose class, HP, skill points, feat, then commit).
- * Step 1: Choose class (existing or add new), then HP roll/input.
- * Step 2: Assign skill points for this level, then choose feat if gained this level; commit levelHistory, skill ranks, and feat.
+ * Level-up flow: guided steps for adding a character level (choose class, HP, skill points, feat, spellcasters, features, then commit).
+ * Steps: class → hp → skills → [feat if gained] → [spells if caster] → features → commit.
  */
 import { ThirdEraActorSheet } from "../sheets/actor-sheet.mjs";
 import { SpellData } from "../data/item-spell.mjs";
-
-const STEPS = ["class", "hp", "skills", "feat"];
+import { ClassData } from "../data/item-class.mjs";
 
 /** Character levels that grant a general feat (3.5 SRD). */
 const GENERAL_FEAT_LEVELS = new Set([1, 3, 6, 9, 12, 15, 18]);
 /** Fighter class levels that grant a bonus feat (3.5 SRD). */
 const FIGHTER_BONUS_FEAT_LEVELS = new Set([1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]);
+
+/**
+ * Compute the ordered list of step ids that will be shown for this flow.
+ * Used for "Step N of M" and for Next/Back transitions.
+ * @param {LevelUpFlow} flow
+ * @returns {string[]}
+ */
+function getStepSequence(flow) {
+    const steps = ["class", "hp", "skills"];
+    if (!flow?.actor?.system || !flow.selectedClassItemId) {
+        steps.push("feat", "spells", "features");
+        return steps;
+    }
+    const levelHistory = flow.actor.system.levelHistory || [];
+    const totalLevelAfter = levelHistory.length + 1;
+    const cls = flow.actor.items.get(flow.selectedClassItemId);
+    const levelsInClass = levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+    const className = cls?.name ?? "";
+    const gainsGeneralFeat = GENERAL_FEAT_LEVELS.has(totalLevelAfter);
+    const isFighter = className.toLowerCase() === "fighter";
+    const gainsFighterBonus = isFighter && FIGHTER_BONUS_FEAT_LEVELS.has(levelsInClass);
+    if (gainsGeneralFeat || gainsFighterBonus) steps.push("feat");
+    const sc = cls?.system?.spellcasting;
+    if (sc?.enabled && (sc.spellListAccess === "full" || sc.spellListAccess === "learned")) {
+        steps.push("spells");
+    }
+    steps.push("features");
+    return steps;
+}
 
 export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.api.ApplicationV2
@@ -32,7 +59,8 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             cancel: LevelUpFlow.#onCancel,
             selectClass: LevelUpFlow.#onSelectClass,
             addNewClass: LevelUpFlow.#onAddNewClass,
-            rollHp: LevelUpFlow.#onRollHp
+            rollHp: LevelUpFlow.#onRollHp,
+            openSpellList: LevelUpFlow.#onOpenSpellList
         }
     };
 
@@ -77,11 +105,13 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
 
     /** @override */
     async _prepareContext(options) {
-        const stepIndex = STEPS.indexOf(this.step);
+        const sequence = getStepSequence(this);
+        const stepIndex = sequence.indexOf(this.step);
         const stepLabel = game.i18n.format("THIRDERA.LevelUp.StepNOfM", {
-            n: stepIndex + 1,
-            m: STEPS.length
+            n: stepIndex >= 0 ? stepIndex + 1 : 1,
+            m: sequence.length
         });
+        const isLastStep = stepIndex >= 0 && stepIndex === sequence.length - 1;
 
         if (this.step === "class") {
             const classes = (this.actor.items.filter(i => i.type === "class") || []).map((cls) => {
@@ -126,6 +156,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 step: this.step,
                 stepLabel,
                 stepTitle: game.i18n.localize("THIRDERA.LevelUp.StepChooseClass"),
+                isLastStep,
                 classes,
                 hasClasses,
                 addNewClassMode: this.addNewClassMode,
@@ -152,6 +183,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 step: this.step,
                 stepLabel,
                 stepTitle: game.i18n.localize("THIRDERA.LevelUp.StepHitPoints"),
+                isLastStep,
                 className,
                 hitDie,
                 hpRolled: this.hpRolled,
@@ -162,15 +194,25 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
 
         if (this.step === "skills") {
             const ctx = await LevelUpFlow.#buildSkillsStepContext(this);
-            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, ...ctx };
+            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, ...ctx };
         }
 
         if (this.step === "feat") {
             const ctx = await LevelUpFlow.#buildFeatStepContext(this);
-            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, ...ctx };
+            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, ...ctx };
         }
 
-        return { appId: this.id, step: this.step, stepLabel, stepTitle: "" };
+        if (this.step === "spells") {
+            const ctx = await LevelUpFlow.#buildSpellsStepContext(this);
+            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, ...ctx };
+        }
+
+        if (this.step === "features") {
+            const ctx = await LevelUpFlow.#buildFeaturesStepContext(this);
+            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, ...ctx };
+        }
+
+        return { appId: this.id, step: this.step, stepLabel, stepTitle: "", isLastStep: false };
     }
 
     /**
@@ -435,6 +477,81 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         };
     }
 
+    /**
+     * Build context for the spellcasters step: full-list message or learned (open Spell List).
+     * @param {LevelUpFlow} flow
+     * @returns {Promise<Object>}
+     */
+    static async #buildSpellsStepContext(flow) {
+        const actor = flow.actor;
+        const cls = actor.items.get(flow.selectedClassItemId);
+        const levelHistory = actor.system.levelHistory || [];
+        const newClassLevel = levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+        const sc = cls?.system?.spellcasting ?? {};
+        const isFullListCaster = sc.enabled && sc.spellListAccess === "full";
+        const isLearnedCaster = sc.enabled && sc.spellListAccess === "learned";
+        const className = cls?.name ?? "";
+        const spellListKey = (sc.spellListKey || "").trim()
+            || (className.toLowerCase() === "wizard" || className.toLowerCase() === "sorcerer" ? "sorcererWizard" : className.toLowerCase());
+
+        let spellsKnownSummary = "";
+        if (isLearnedCaster && cls?.system?.spellcasting?.spellsKnownTable) {
+            const table = cls.system.spellcasting.spellsKnownTable;
+            const levelLabels = ["0-level", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
+            const parts = [];
+            for (let sl = 0; sl <= 9; sl++) {
+                const max = ClassData.getSpellsKnown(table, newClassLevel, sl);
+                if (max > 0) parts.push(`${levelLabels[sl]}: ${max}`);
+            }
+            if (parts.length) spellsKnownSummary = parts.join("; ");
+        }
+
+        return {
+            stepTitle: game.i18n.localize("THIRDERA.LevelUp.StepSpellcasters"),
+            isFullListCaster,
+            isLearnedCaster,
+            className,
+            newClassLevel,
+            spellListKey,
+            spellsKnownSummary
+        };
+    }
+
+    /**
+     * Build context for the features step: class features gained at the new class level.
+     * @param {LevelUpFlow} flow
+     * @returns {Promise<Object>}
+     */
+    static async #buildFeaturesStepContext(flow) {
+        const actor = flow.actor;
+        const cls = actor.items.get(flow.selectedClassItemId);
+        const levelHistory = actor.system.levelHistory || [];
+        const newClassLevel = levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+        const className = cls?.name ?? "";
+        const featuresAtLevel = [];
+        for (const feature of cls?.system?.features ?? []) {
+            if (feature.level === newClassLevel) {
+                let displayName = feature.featName || "";
+                if (!displayName && feature.featItemId) {
+                    const featItem = game.items.get(feature.featItemId);
+                    if (featItem) displayName = featItem.name ?? "";
+                }
+                if (!displayName) displayName = feature.featKey || game.i18n.localize("THIRDERA.LevelUp.FeatureUnknown");
+                featuresAtLevel.push({
+                    featName: displayName,
+                    featKey: feature.featKey,
+                    featItemId: feature.featItemId
+                });
+            }
+        }
+        return {
+            stepTitle: game.i18n.localize("THIRDERA.LevelUp.StepNewFeatures"),
+            className,
+            newClassLevel,
+            featuresAtLevel
+        };
+    }
+
     /** @override */
     _attachPartListeners(partId, htmlElement, options) {
         super._attachPartListeners(partId, htmlElement, options);
@@ -488,6 +605,18 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         const pointsInputs = root?.querySelectorAll?.('input[name="pointsToSpend"]');
         if (pointsInputs?.length) {
             const skillsListEl = root?.querySelector?.(".level-up-flow-skills-list");
+            /** When user clicks a skill input (mousedown), we record its index so after change→render we focus that input instead of nextIndex. Do not reset here: render() re-invokes activateListeners and would wipe the value before our rAF runs. */
+            if (this._skillInputClickedIndex === undefined) this._skillInputClickedIndex = -1;
+            if (skillsListEl) {
+                skillsListEl.addEventListener("mousedown", (e) => {
+                    const t = e.target;
+                    if (t?.name === "pointsToSpend" && t?.dataset?.skillId) {
+                        const listInputs = skillsListEl.querySelectorAll?.('input[name="pointsToSpend"]') ?? [];
+                        const idx = Array.from(listInputs).indexOf(t);
+                        if (idx >= 0) this._skillInputClickedIndex = idx;
+                    }
+                });
+            }
             const syncPending = async (ev) => {
                 const triggerInput = ev?.target?.name === "pointsToSpend" ? ev.target : null;
                 let nextIndex = 0;
@@ -507,9 +636,16 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                     const list = this.element?.querySelector?.(".level-up-flow-skills-list");
                     if (list) list.scrollTop = scrollTop;
                     const inputs = this.element?.querySelectorAll?.('input[name="pointsToSpend"]');
-                    if (inputs?.length && nextIndex < inputs.length) {
-                        inputs[nextIndex].focus();
-                        inputs[nextIndex].select();
+                    const clickedIndex = this._skillInputClickedIndex;
+                    this._skillInputClickedIndex = -1;
+                    if (inputs?.length) {
+                        if (clickedIndex >= 0 && clickedIndex < inputs.length) {
+                            inputs[clickedIndex].focus();
+                            inputs[clickedIndex].select();
+                        } else if (nextIndex < inputs.length) {
+                            inputs[nextIndex].focus();
+                            inputs[nextIndex].select();
+                        }
                     }
                 });
             };
@@ -599,14 +735,19 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 ui.notifications.warn(game.i18n.localize("THIRDERA.LevelUp.SkillPointsOverBudget"));
                 return;
             }
-            const ctxFeat = await LevelUpFlow.#buildFeatStepContext(flow);
-            if (ctxFeat.gainsFeat) {
+            const sequence = getStepSequence(flow);
+            const skillsIdx = sequence.indexOf("skills");
+            const nextStep = skillsIdx >= 0 && skillsIdx < sequence.length - 1 ? sequence[skillsIdx + 1] : "features";
+            if (nextStep === "feat") {
                 flow.step = "feat";
                 flow.selectedFeatUuid = "";
-                await flow.render(true);
+            } else if (nextStep === "spells") {
+                flow.step = "spells";
             } else {
                 await LevelUpFlow.#commitLevelUp(flow);
+                return;
             }
+            await flow.render(true);
             return;
         }
 
@@ -614,6 +755,25 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const select = flow.element?.querySelector?.('select[name="featUuid"]');
             const uuid = select?.value?.trim() ?? flow.selectedFeatUuid;
             if (uuid) flow.selectedFeatUuid = uuid;
+            const sequence = getStepSequence(flow);
+            const featIdx = sequence.indexOf("feat");
+            const nextStep = featIdx >= 0 && featIdx < sequence.length - 1 ? sequence[featIdx + 1] : "features";
+            if (nextStep === "spells") {
+                flow.step = "spells";
+                await flow.render(true);
+            } else {
+                await LevelUpFlow.#commitLevelUp(flow);
+            }
+            return;
+        }
+
+        if (flow.step === "spells") {
+            flow.step = "features";
+            await flow.render(true);
+            return;
+        }
+
+        if (flow.step === "features") {
             await LevelUpFlow.#commitLevelUp(flow);
         }
     }
@@ -702,6 +862,17 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             }
         }
 
+        // Ensure full-list caster has class spells when this is their first level (covers existing class selected in flow or class created earlier without spells)
+        const levelsInSelectedClass = (flow.actor.system.levelHistory || []).filter((e) => e.classItemId === flow.selectedClassItemId).length;
+        if (cls && levelsInSelectedClass === 1) {
+            const sc = cls.system?.spellcasting;
+            const enabled = sc?.enabled === true || sc?.enabled === "true";
+            const isFullListCaster = enabled && sc?.spellListAccess === "full";
+            if (isFullListCaster) {
+                await ThirdEraActorSheet.addClassSpellListForFullListCaster(flow.actor, cls, 1);
+            }
+        }
+
         flow.close();
         if (flow.actor.sheet?.rendered) await flow.actor.sheet.render(true);
         ui.notifications.info(game.i18n.format("THIRDERA.LevelUp.LevelAdded", { name: flow.actor.name }));
@@ -710,18 +881,13 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     static #onBack(event, target) {
         const flow = LevelUpFlow.#getFlowFromTarget(target);
         if (!flow) return;
-        if (flow.step === "hp") {
-            flow.step = "class";
-            flow.hpRolled = 0;
-            flow.render(true);
-        } else if (flow.step === "skills") {
-            flow.step = "hp";
-            flow.render(true);
-        } else if (flow.step === "feat") {
-            flow.step = "skills";
-            flow.selectedFeatUuid = "";
-            flow.render(true);
-        }
+        const sequence = getStepSequence(flow);
+        const idx = sequence.indexOf(flow.step);
+        if (idx <= 0) return;
+        const prevStep = sequence[idx - 1];
+        flow.step = prevStep;
+        if (prevStep === "feat") flow.selectedFeatUuid = "";
+        flow.render(true);
     }
 
     static #onCancel(event, target) {
@@ -765,6 +931,27 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         const input = flow.element?.querySelector?.('input[name="hpRolled"]');
         if (input) input.value = roll.total;
         await flow.render(true);
+    }
+
+    /**
+     * Open the Spell List browser for adding spells known (learned casters). Pre-selects the class's spell list.
+     * @param {Event} event
+     * @param {HTMLElement} target
+     */
+    static async #onOpenSpellList(event, target) {
+        const flow = LevelUpFlow.#getFlowFromTarget(target);
+        if (!flow?.actor) return;
+        const cls = flow.actor.items.get(flow.selectedClassItemId);
+        const sc = cls?.system?.spellcasting;
+        const spellListKey = (sc?.spellListKey || "").trim()
+            || ((cls?.name || "").toLowerCase() === "wizard" || (cls?.name || "").toLowerCase() === "sorcerer" ? "sorcererWizard" : (cls?.name || "").toLowerCase());
+        const { SpellListBrowser } = await import("./spell-list-browser.mjs");
+        new SpellListBrowser({
+            actor: flow.actor,
+            addToActorMode: true,
+            spellListKey,
+            newClassLevel: (flow.actor.system.levelHistory || []).filter((e) => e.classItemId === flow.selectedClassItemId).length + 1
+        }).render(true);
     }
 
     static #getFlowFromTarget(target) {
