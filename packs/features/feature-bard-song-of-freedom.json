@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdSongFreedom01",
+  "name": "Song of Freedom",
+  "type": "feature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>At 12th level with 15+ ranks in Perform, create an effect equivalent to break enchantment (caster level = bard level) on one target within 30 ft. Requires 1 minute of uninterrupted concentration and music. Cannot use on yourself.</p>",
+    "key": "bardSongOfFreedom",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

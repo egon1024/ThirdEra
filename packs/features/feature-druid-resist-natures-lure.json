@@ -1,0 +1,14 @@
+{
+  "_id": "cfDrResistNat01",
+  "name": "Resist Nature's Lure",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>+4 bonus on saving throws against the spell-like abilities of fey.</p>",
+    "key": "druidResistNaturesLure",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

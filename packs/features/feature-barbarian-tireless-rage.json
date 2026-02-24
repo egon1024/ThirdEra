@@ -1,0 +1,14 @@
+{
+  "_id": "cfBrTirelessRg01",
+  "name": "Tireless Rage",
+  "type": "feature",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "description": "<p>The barbarian no longer becomes fatigued at the end of his rage.</p>",
+    "key": "barbarianTirelessRage",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

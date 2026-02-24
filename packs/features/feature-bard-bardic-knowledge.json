@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdBardicKnow01",
+  "name": "Bardic Knowledge",
+  "type": "feature",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "description": "<p>Special check (bard level + Int modifier; +2 if 5+ ranks in Knowledge (history)) to know information about local notables, legendary items, or noteworthy places. Cannot take 10 or take 20.</p>",
+    "key": "bardBardicKnowledge",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

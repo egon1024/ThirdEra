@@ -1,0 +1,19 @@
+{
+  "_id": "cfBdInspCourage01",
+  "name": "Inspire Courage",
+  "type": "feature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>With 3+ ranks in Perform, allies who hear you gain +1 morale on saves vs. charm/fear and on attack and weapon damage. Lasts while they hear you sing and 5 rounds after. Improves to +2 at 8th, +3 at 14th, +4 at 20th.</p>",
+    "key": "bardInspireCourage",
+    "scalingTable": [
+      {"minLevel": 1, "value": "+1"},
+      {"minLevel": 8, "value": "+2"},
+      {"minLevel": 14, "value": "+3"},
+      {"minLevel": 20, "value": "+4"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

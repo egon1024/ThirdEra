@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlDivineHlth01",
+  "name": "Divine Health",
+  "type": "feature",
+  "img": "icons/svg/heal.svg",
+  "system": {
+    "description": "<p>Immunity to all diseases, including supernatural and magical diseases.</p>",
+    "key": "paladinDivineHealth",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

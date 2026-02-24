@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkUnarmedStr01",
+  "name": "Unarmed Strike",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Gain Improved Unarmed Strike as a bonus feat. May attack with either fist, elbows, knees, feet; no off-hand penalty; full Str to damage. Can deal lethal or nonlethal. Unarmed strike is both manufactured and natural weapon for spells/effects. Damage scales by level (see class table).</p>",
+    "key": "monkUnarmedStrike",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

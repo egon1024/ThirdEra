@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdFascinate001",
+  "name": "Fascinate",
+  "type": "feature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "description": "<p>With 3+ ranks in Perform, cause one or more creatures within 90 ft. to become fascinated (Will save). For every three levels beyond 1st, target one additional creature. Fascinated creatures take -4 on reactive skill checks. Lasts 1 round per bard level while you concentrate.</p>",
+    "key": "bardFascinate",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

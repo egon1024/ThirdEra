@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlRemoveDise01",
+  "name": "Remove Disease",
+  "type": "feature",
+  "img": "icons/svg/heal.svg",
+  "system": {
+    "description": "<p>Produce a remove disease effect, as the spell, once per week. One additional use per week for every three levels after 6th (2/week at 9th, 3 at 12th, etc.).</p>",
+    "key": "paladinRemoveDisease",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

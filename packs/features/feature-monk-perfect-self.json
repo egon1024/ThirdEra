@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkPerfectSelf01",
+  "name": "Perfect Self",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Treated as outsider instead of humanoid for spells and effects. Damage reduction 10/magic. Can still be raised from the dead as your previous type.</p>",
+    "key": "monkPerfectSelf",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 18
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkFlurryBlows01",
+  "name": "Flurry of Blows",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>When unarmored, make one extra attack at highest BAB with -2 penalty on all attacks that round (full attack only). Penalty -1 at 5th, 0 at 9th. At 11th gain a second extra attack (greater flurry). Only with unarmed strikes or special monk weapons (kama, nunchaku, quarterstaff, sai, shuriken, siangham).</p>",
+    "key": "monkFlurryOfBlows",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

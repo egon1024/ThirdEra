@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlDetectEvil01",
+  "name": "Detect Evil",
+  "type": "feature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "description": "<p>Use detect evil at will, as the spell.</p>",
+    "key": "paladinDetectEvil",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

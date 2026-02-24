@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkAbundantSt01",
+  "name": "Abundant Step",
+  "type": "feature",
+  "img": "icons/svg/teleport.svg",
+  "system": {
+    "description": "<p>Use dimension door once per day (caster level = half monk level, rounded down).</p>",
+    "key": "monkAbundantStep",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 13
+}

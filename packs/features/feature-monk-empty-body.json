@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkEmptyBody01",
+  "name": "Empty Body",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Become ethereal for 1 round per monk level per day (as etherealness). Can use in multiple increments.</p>",
+    "key": "monkEmptyBody",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 17
+}

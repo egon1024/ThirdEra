@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdInspHeroic01",
+  "name": "Inspire Heroics",
+  "type": "feature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>At 15th level with 18+ ranks in Perform, willing ally within 30 ft. gains +4 morale on saves and +4 dodge to AC after hearing you sing for a full round. For every three levels beyond 15th, target one additional creature. Lasts while they hear you and up to 5 rounds after.</p>",
+    "key": "bardInspireHeroics",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

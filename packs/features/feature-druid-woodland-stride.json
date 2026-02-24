@@ -1,0 +1,14 @@
+{
+  "_id": "cfDrWoodlandSt01",
+  "name": "Woodland Stride",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>Move through natural undergrowth (thorns, briars, overgrown areas) at normal speed without damage or impairment. Magically manipulated undergrowth still affects you.</p>",
+    "key": "druidWoodlandStride",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

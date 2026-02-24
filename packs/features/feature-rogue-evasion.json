@@ -1,0 +1,14 @@
+{
+  "_id": "cfRoEvasion0000",
+  "name": "Evasion",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>On a successful Reflex save against an attack that allows half damage on a save, take no damage instead. Light armor or no armor only. Helpless rogues do not gain this benefit.</p>",
+    "key": "rogueEvasion",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

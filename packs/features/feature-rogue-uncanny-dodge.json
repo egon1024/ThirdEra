@@ -1,0 +1,14 @@
+{
+  "_id": "cfRoUncannyDod01",
+  "name": "Uncanny Dodge",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Retain Dexterity bonus to AC when flat-footed or struck by an invisible attacker. Still lose Dex bonus if immobilized. If you already have uncanny dodge from another class, you gain improved uncanny dodge instead.</p>",
+    "key": "rogueUncannyDodge",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

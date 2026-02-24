@@ -1,0 +1,14 @@
+{
+  "_id": "cfDrWildEmpathy01",
+  "name": "Wild Empathy",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Improve an animal's attitude like a Diplomacy check. Roll 1d20 + druid level + Cha modifier. Druid and animal must be within 30 ft. Generally takes 1 minute. -4 to influence magical beasts with Int 1–2.</p>",
+    "key": "druidWildEmpathy",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdCountersng01",
+  "name": "Countersong",
+  "type": "feature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>With 3+ ranks in Perform, use music to counter sonic or language-dependent magical effects. Each round make a Perform check; allies within 30 ft. may use that result in place of their save. Lasts 10 rounds.</p>",
+    "key": "bardCountersong",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

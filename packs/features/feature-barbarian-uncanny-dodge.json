@@ -1,0 +1,14 @@
+{
+  "_id": "cfBrUncannyDod01",
+  "name": "Uncanny Dodge",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Retain Dexterity bonus to AC when flat-footed or struck by an invisible attacker. Still lose Dex bonus if immobilized.</p>",
+    "key": "barbarianUncannyDodge",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

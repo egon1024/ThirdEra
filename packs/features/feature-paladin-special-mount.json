@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlSpecialMnt01",
+  "name": "Special Mount",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Call an intelligent, loyal steed (usually heavy warhorse for Medium, warpony for Small) from the celestial realms once per day. Full-round action; remains 2 hours per level; may dismiss as free action. Same creature each time; appears in full health. If it dies, cannot summon another for 30 days or until you gain a paladin level (-1 attack and damage during that time).</p>",
+    "key": "paladinSpecialMount",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

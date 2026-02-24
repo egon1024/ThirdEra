@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlAuraCourage01",
+  "name": "Aura of Courage",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Immune to fear (magical or otherwise). Each ally within 10 feet gains +4 morale bonus on saves against fear effects. Functions while you are conscious.</p>",
+    "key": "paladinAuraOfCourage",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

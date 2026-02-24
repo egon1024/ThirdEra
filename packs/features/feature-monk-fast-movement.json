@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkFastMove001",
+  "name": "Fast Movement",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Enhancement bonus to speed when unarmored and unencumbered: +10 ft. at 3rd, +20 at 6th, +30 at 9th, +40 at 12th, +50 at 15th, +60 at 18th. Lost in armor or medium/heavy load.</p>",
+    "key": "monkFastMovement",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

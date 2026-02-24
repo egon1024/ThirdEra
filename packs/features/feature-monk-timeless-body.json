@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkTimelessBd01",
+  "name": "Timeless Body",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>No ability score penalties for aging; cannot be magically aged. Existing penalties remain. Bonuses still accrue; you still die of old age when your time is up.</p>",
+    "key": "monkTimelessBody",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 16
+}

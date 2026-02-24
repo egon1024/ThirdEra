@@ -1,0 +1,14 @@
+{
+  "_id": "cfClAura000000",
+  "name": "Aura",
+  "type": "feature",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>A cleric of a chaotic, evil, good, or lawful deity has a powerful aura corresponding to the deity's alignment (see detect evil spell). Clerics who choose the Chaos, Evil, Good, or Law domain without worshipping a deity have a similarly powerful aura.</p>",
+    "key": "clericAura",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

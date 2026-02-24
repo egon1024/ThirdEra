@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgCombatStyle01",
+  "name": "Combat Style",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>At 2nd level choose archery (treated as having Rapid Shot) or two-weapon combat (treated as having Two-Weapon Fighting). At 6th: Manyshot or Improved Two-Weapon Fighting. At 11th: Improved Precise Shot or Greater Two-Weapon Fighting. Benefits only in light or no armor.</p>",
+    "key": "rangerCombatStyle",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

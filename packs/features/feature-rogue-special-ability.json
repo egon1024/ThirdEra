@@ -1,0 +1,14 @@
+{
+  "_id": "cfRoSpecialAb01",
+  "name": "Special Ability",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>At 10th, 13th, 16th, and 19th level, choose one: Crippling Strike, Defensive Roll, Improved Evasion, Opportunist, Skill Mastery, Slippery Mind, or a bonus feat.</p>",
+    "key": "rogueSpecialAbility",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkImpEvasion01",
+  "name": "Improved Evasion",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>On Reflex save for half damage: success = no damage; failure = half damage. Light armor or no armor only. Helpless monks do not gain this benefit.</p>",
+    "key": "monkImprovedEvasion",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 11
+}

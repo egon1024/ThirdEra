@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkEvasion0001",
+  "name": "Evasion",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>On successful Reflex save against an attack that allows half damage on a save, take no damage. Light armor or no armor only. Helpless monks do not gain this benefit.</p>",
+    "key": "monkEvasion",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

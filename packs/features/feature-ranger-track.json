@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgTrack000001",
+  "name": "Track",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Gain Track as a bonus feat.</p>",
+    "key": "rangerTrack",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

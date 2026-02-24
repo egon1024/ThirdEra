@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkSlowFall001",
+  "name": "Slow Fall",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Within arm's reach of a wall, reduce effective fall distance: 20 ft. at 4th, +10 ft. per level, any distance at 20th.</p>",
+    "key": "monkSlowFall",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

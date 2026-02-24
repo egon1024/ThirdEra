@@ -1,0 +1,18 @@
+{
+  "_id": "cfMkKiStrike001",
+  "name": "Ki Strike",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Unarmed attacks count as magic for DR at 4th level; lawful for DR at 10th; adamantine for DR and hardness at 16th.</p>",
+    "key": "monkKiStrike",
+    "scalingTable": [
+      {"minLevel": 4, "value": "Magic"},
+      {"minLevel": 10, "value": "Lawful"},
+      {"minLevel": 16, "value": "Adamantine"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

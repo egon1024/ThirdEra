@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkDiamondBd01",
+  "name": "Diamond Body",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>Immunity to all poisons.</p>",
+    "key": "monkDiamondBody",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 12
+}

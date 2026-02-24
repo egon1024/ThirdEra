@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgCamouflage01",
+  "name": "Camouflage",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Use Hide in any sort of natural terrain, even without cover or concealment.</p>",
+    "key": "rangerCamouflage",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

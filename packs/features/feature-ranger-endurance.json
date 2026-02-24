@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgEndurance001",
+  "name": "Endurance",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>Gain Endurance as a bonus feat at 3rd level.</p>",
+    "key": "rangerEndurance",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

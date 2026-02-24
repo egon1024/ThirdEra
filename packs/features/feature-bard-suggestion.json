@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdSuggestion0001",
+  "name": "Suggestion",
+  "type": "feature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "description": "<p>At 6th level with 9+ ranks in Perform, make a suggestion (as the spell) to a creature you have already fascinated. Does not break concentration on fascinate. Will save negates (DC 10 + ½ bard level + Cha modifier).</p>",
+    "key": "bardSuggestion",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

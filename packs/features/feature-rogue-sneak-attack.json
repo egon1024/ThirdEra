@@ -1,0 +1,25 @@
+{
+  "_id": "cfRoSneakAttack01",
+  "name": "Sneak Attack",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Extra damage when target is denied Dex to AC or when you flank. Ranged only within 30 ft. No extra damage vs. creatures immune to critical hits or without vital anatomy (undead, constructs, oozes, plants, incorporeal). With sap or unarmed strike can deal nonlethal.</p>",
+    "key": "rogueSneakAttack",
+    "scalingTable": [
+      {"minLevel": 1, "value": "+1d6"},
+      {"minLevel": 3, "value": "+2d6"},
+      {"minLevel": 5, "value": "+3d6"},
+      {"minLevel": 7, "value": "+4d6"},
+      {"minLevel": 9, "value": "+5d6"},
+      {"minLevel": 11, "value": "+6d6"},
+      {"minLevel": 13, "value": "+7d6"},
+      {"minLevel": 15, "value": "+8d6"},
+      {"minLevel": 17, "value": "+9d6"},
+      {"minLevel": 19, "value": "+10d6"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

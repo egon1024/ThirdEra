@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgSwiftTrack01",
+  "name": "Swift Tracker",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Move at normal speed while tracking without the normal -5 penalty. Only -10 (instead of -20) when moving at up to twice normal speed while tracking.</p>",
+    "key": "rangerSwiftTracker",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

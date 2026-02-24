@@ -4,7 +4,7 @@
   "type": "class",
   "img": "icons/svg/sword.svg",
   "system": {
-    "description": "<p>Fighters can be many things, from soldiers to criminal enforcers. Some see battle as a calling, others fight for coin.</p>",
+    "description": "<p>Fighters are dedicated warriors, proficient with all simple and martial weapons and all armor and shields. Their focus is combat, and they gain more bonus feats than any other class.</p><h3>Alignment</h3><p>Any.</p><h3>Key Class Features</h3><ul><li><strong>Weapon and Armor Proficiency:</strong> All simple and martial weapons; all armor (heavy, medium, light) and shields (including tower shields).</li><li><strong>Bonus Feats:</strong> At 1st level and every two levels thereafter (2nd, 4th, 6th, 8th, 10th, 12th, 14th, 16th, 18th, 20th), the fighter gains a bonus feat. These must be drawn from the list of fighter bonus feats (combat-oriented feats). The fighter must still meet all prerequisites.</li></ul>",
     "hitDie": "d10",
     "babProgression": "good",
     "saves": {
@@ -22,7 +22,7 @@
       {"key": "ride", "name": "Ride"},
       {"key": "swim", "name": "Swim"}
     ],
-    "features": [],
+    "features": [{"level":1,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":2,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":4,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":6,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":8,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":10,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":12,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":14,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":16,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":18,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"},{"level":20,"featItemId":"cfFgBonusFeat01","featName":"Bonus Feat","featKey":"fighterBonusFeat"}],
     "isPrestige": "false"
   },
   "flags": {},

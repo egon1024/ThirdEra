@@ -1,0 +1,20 @@
+{
+  "_id": "cfRgFavoredEn01",
+  "name": "Favored Enemy",
+  "type": "feature",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "description": "<p>At 1st level choose a creature type (from SRD table; humanoid/outsider require subtype). +2 on Bluff, Listen, Sense Motive, Spot, Survival against that type and on weapon damage. At 5th, 10th, 15th, 20th: add another favored enemy and increase one existing bonus by 2. Bonuses do not stack if a creature fits multiple categories.</p>",
+    "key": "rangerFavoredEnemy",
+    "scalingTable": [
+      {"minLevel": 1, "value": "1st type (+2)"},
+      {"minLevel": 5, "value": "2nd type, one +4"},
+      {"minLevel": 10, "value": "3rd type, one +6"},
+      {"minLevel": 15, "value": "4th type, one +8"},
+      {"minLevel": 20, "value": "5th type, one +10"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

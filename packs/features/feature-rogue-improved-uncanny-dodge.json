@@ -1,0 +1,14 @@
+{
+  "_id": "cfRoImpUncanny01",
+  "name": "Improved Uncanny Dodge",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Cannot be flanked. Denies another rogue the ability to sneak attack you by flanking unless the attacker has at least four more rogue levels than you. If you have uncanny dodge from a second class, levels stack to determine the minimum rogue level required to flank you.</p>",
+    "key": "rogueImprovedUncannyDodge",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

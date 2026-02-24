@@ -72,6 +72,19 @@
       }
     },
     {
+      "name": "thirdera_features",
+      "label": "Class Features",
+      "path": "packs/features",
+      "type": "Item",
+      "system": "thirdera",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
       "name": "thirdera_spells",
       "label": "Spells",
       "path": "packs/spells",

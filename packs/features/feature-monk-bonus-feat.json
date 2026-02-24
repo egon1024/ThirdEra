@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkBonusFeat01",
+  "name": "Bonus Feat",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>At 1st: Improved Grapple or Stunning Fist. At 2nd: Combat Reflexes or Deflect Arrows. At 6th: Improved Disarm or Improved Trip. Need not have normal prerequisites.</p>",
+    "key": "monkBonusFeat",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

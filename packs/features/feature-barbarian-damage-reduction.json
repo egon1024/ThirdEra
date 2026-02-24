@@ -1,0 +1,20 @@
+{
+  "_id": "cfBrDmgReduct001",
+  "name": "Damage Reduction",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Subtract 1 from the damage the barbarian takes from weapons or natural attacks. Damage reduction can reduce damage to 0 but not below 0.</p>",
+    "key": "barbarianDamageReduction",
+    "scalingTable": [
+      {"minLevel": 7, "value": "1/—"},
+      {"minLevel": 10, "value": "2/—"},
+      {"minLevel": 13, "value": "3/—"},
+      {"minLevel": 16, "value": "4/—"},
+      {"minLevel": 19, "value": "5/—"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

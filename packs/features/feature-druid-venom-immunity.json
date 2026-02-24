@@ -1,0 +1,14 @@
+{
+  "_id": "cfDrVenomImmun01",
+  "name": "Venom Immunity",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>Immunity to all poisons.</p>",
+    "key": "druidVenomImmunity",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

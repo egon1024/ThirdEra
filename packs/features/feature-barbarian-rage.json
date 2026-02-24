@@ -1,0 +1,23 @@
+{
+  "_id": "cfBrRage000000",
+  "name": "Rage",
+  "type": "feature",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "description": "<p>In a rage, a barbarian temporarily gains +4 Str, +4 Con, and +2 morale on Will saves, but takes -2 AC. Duration: 3 + Con modifier rounds. At the end, the barbarian is fatigued (unless 17th level). Uses per day: 1 at 1st, +1 at 4th and every four levels (max 6 at 20th).</p>",
+    "key": "barbarianRage",
+    "scalingTable": [
+      {"minLevel": 1, "value": "1/day"},
+      {"minLevel": 4, "value": "2/day"},
+      {"minLevel": 8, "value": "3/day"},
+      {"minLevel": 11, "value": "Greater rage (+6 Str/Con, +3 Will)"},
+      {"minLevel": 12, "value": "4/day"},
+      {"minLevel": 16, "value": "5/day"},
+      {"minLevel": 17, "value": "Tireless rage"},
+      {"minLevel": 20, "value": "6/day, Mighty rage (+8 Str/Con, +4 Will)"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

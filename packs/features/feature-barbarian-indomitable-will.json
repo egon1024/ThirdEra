@@ -1,0 +1,14 @@
+{
+  "_id": "cfBrIndomWill001",
+  "name": "Indomitable Will",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>While in a rage, gain a +4 bonus on Will saves to resist enchantment spells. This stacks with the morale bonus on Will saves from rage.</p>",
+    "key": "barbarianIndomitableWill",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

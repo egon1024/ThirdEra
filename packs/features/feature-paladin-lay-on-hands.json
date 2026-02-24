@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlLayOnHands01",
+  "name": "Lay on Hands",
+  "type": "feature",
+  "img": "icons/svg/heal.svg",
+  "system": {
+    "description": "<p>With Cha 12+, heal wounds (your own or others) by touch. Total hp per day = paladin level × Cha bonus. Can divide among recipients. Alternatively, use as damage vs. undead with a successful melee touch attack. Standard action.</p>",
+    "key": "paladinLayOnHands",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlDivineGra01",
+  "name": "Divine Grace",
+  "type": "feature",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>Add your Charisma bonus (if any) to all saving throws.</p>",
+    "key": "paladinDivineGrace",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 3
+}

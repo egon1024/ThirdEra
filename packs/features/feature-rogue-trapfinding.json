@@ -1,0 +1,14 @@
+{
+  "_id": "cfRoTrapfinding01",
+  "name": "Trapfinding",
+  "type": "feature",
+  "img": "icons/svg/trap.svg",
+  "system": {
+    "description": "<p>Only rogues can use Search to find traps with DC &gt; 20. Only rogues can use Disable Device to disarm magic traps. Beating a trap's DC by 10+ lets you study and bypass it without disarming.</p>",
+    "key": "rogueTrapfinding",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

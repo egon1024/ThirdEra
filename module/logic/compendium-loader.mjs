@@ -74,6 +74,35 @@ export class CompendiumLoader {
             "feat-weapon-finesse.json", "feat-weapon-focus.json", "feat-weapon-specialization.json",
             "feat-whirlwind-attack.json", "feat-widen-spell.json"
         ],
+        "thirdera.thirdera_features": [
+            "feature-barbarian-fast-movement.json", "feature-barbarian-rage.json", "feature-barbarian-illiteracy.json",
+            "feature-barbarian-uncanny-dodge.json", "feature-barbarian-trap-sense.json", "feature-barbarian-improved-uncanny-dodge.json",
+            "feature-barbarian-damage-reduction.json", "feature-barbarian-greater-rage.json", "feature-barbarian-indomitable-will.json",
+            "feature-barbarian-tireless-rage.json", "feature-barbarian-mighty-rage.json",
+            "feature-bard-bardic-music.json", "feature-bard-bardic-knowledge.json", "feature-bard-countersong.json", "feature-bard-fascinate.json",
+            "feature-bard-inspire-courage.json", "feature-bard-inspire-competence.json", "feature-bard-suggestion.json",
+            "feature-bard-inspire-greatness.json", "feature-bard-song-of-freedom.json", "feature-bard-inspire-heroics.json", "feature-bard-mass-suggestion.json",
+            "feature-cleric-aura.json", "feature-cleric-turn-rebuke-undead.json",
+            "feature-druid-animal-companion.json", "feature-druid-nature-sense.json", "feature-druid-wild-empathy.json", "feature-druid-woodland-stride.json",
+            "feature-druid-trackless-step.json", "feature-druid-resist-natures-lure.json", "feature-druid-wild-shape.json", "feature-druid-venom-immunity.json",
+            "feature-druid-thousand-faces.json", "feature-druid-timeless-body.json",
+            "feature-fighter-bonus-feat.json",
+            "feature-monk-unarmed-strike.json", "feature-monk-flurry-of-blows.json", "feature-monk-ac-bonus.json", "feature-monk-bonus-feat.json",
+            "feature-monk-evasion.json", "feature-monk-fast-movement.json", "feature-monk-still-mind.json", "feature-monk-ki-strike.json",
+            "feature-monk-slow-fall.json", "feature-monk-purity-of-body.json", "feature-monk-wholeness-of-body.json", "feature-monk-improved-evasion.json",
+            "feature-monk-diamond-body.json", "feature-monk-abundant-step.json", "feature-monk-diamond-soul.json", "feature-monk-quivering-palm.json",
+            "feature-monk-timeless-body.json", "feature-monk-tongue-sun-moon.json", "feature-monk-empty-body.json", "feature-monk-perfect-self.json",
+            "feature-paladin-aura-good.json", "feature-paladin-detect-evil.json", "feature-paladin-smite-evil.json", "feature-paladin-divine-grace.json",
+            "feature-paladin-lay-on-hands.json", "feature-paladin-aura-courage.json", "feature-paladin-divine-health.json", "feature-paladin-turn-undead.json",
+            "feature-paladin-special-mount.json", "feature-paladin-remove-disease.json",
+            "feature-ranger-favored-enemy.json", "feature-ranger-track.json", "feature-ranger-wild-empathy.json", "feature-ranger-combat-style.json",
+            "feature-ranger-endurance.json", "feature-ranger-animal-companion.json", "feature-ranger-woodland-stride.json", "feature-ranger-swift-tracker.json",
+            "feature-ranger-evasion.json", "feature-ranger-camouflage.json", "feature-ranger-hide-in-plain-sight.json",
+            "feature-rogue-sneak-attack.json", "feature-rogue-trapfinding.json", "feature-rogue-evasion.json", "feature-rogue-trap-sense.json",
+            "feature-rogue-uncanny-dodge.json", "feature-rogue-improved-uncanny-dodge.json", "feature-rogue-special-ability.json",
+            "feature-sorcerer-familiar.json",
+            "feature-wizard-scribe-scroll.json", "feature-wizard-familiar.json", "feature-wizard-bonus-feat.json"
+        ],
         "thirdera.thirdera_weapons": [
             "weapon-bastard-sword.json", "weapon-battleaxe.json", "weapon-bolas.json",
             "weapon-club.json", "weapon-composite-longbow.json", "weapon-composite-shortbow.json",
@@ -375,7 +404,6 @@ export class CompendiumLoader {
                     continue;
                 }
                 const jsonData = await response.json();
-                
                 // Remove invalid _id - Foundry will generate a valid one
                 // Foundry requires 16-character alphanumeric IDs, but our JSON files have IDs like "race-dwarf"
                 if (jsonData._id && !jsonData._id.match(/^[a-zA-Z0-9]{16}$/)) {
@@ -428,14 +456,15 @@ export class CompendiumLoader {
             for (const docData of documents) {
                 const existing = existingByName.get(docData.name);
                 if (existing) {
-                    // Update existing document
-                    toUpdate.push({_id: existing.id, ...docData});
+                    // Update existing document: use existing.id so the client can find the document.
+                    // Do not spread docData._id — JSON _ids can differ from the collection's ids and cause "id does not exist".
+                    const { _id: _omit, ...rest } = docData;
+                    toUpdate.push({ _id: existing.id, ...rest });
                 } else {
                     // Create new document
                     toCreate.push(docData);
                 }
             }
-            
             // Update existing documents
             if (toUpdate.length > 0) {
                 await DocumentClass.implementation.updateDocuments(toUpdate, {pack: pack.collection});

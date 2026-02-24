@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkWholeness01",
+  "name": "Wholeness of Body",
+  "type": "feature",
+  "img": "icons/svg/heal.svg",
+  "system": {
+    "description": "<p>Heal your own wounds: total hp per day equal to twice your monk level, spread over multiple uses.</p>",
+    "key": "monkWholenessOfBody",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 10
+}
