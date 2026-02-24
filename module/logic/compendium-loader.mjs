@@ -1,8 +1,28 @@
 /**
  * Compendium Loader
- * Loads JSON files from packs/ directories into Foundry compendiums
+ * Loads JSON files from packs/ directories into Foundry compendiums.
+ * Matching is by stable key (system.key, or conditionId for conditions, or name fallback).
  */
 import { parseSpellFields, applyParsedSpellFields } from "./spell-description-parser.mjs";
+
+/**
+ * Returns a stable key for matching compendium documents (incoming JSON or existing).
+ * Used so renames in JSON update the same document instead of creating duplicates.
+ * @param {Object} doc - Document or docData with type, system, and optionally name
+ * @returns {string|undefined} - Key for matching, or undefined if none available
+ */
+function getStableKey(doc) {
+    if (doc.type === "condition" && doc.system?.conditionId != null) {
+        return doc.system.conditionId;
+    }
+    if (doc.system?.key != null && doc.system.key !== "") {
+        return doc.system.key;
+    }
+    if (doc.name != null && doc.name !== "") {
+        return doc.name;
+    }
+    return undefined;
+}
 
 export class CompendiumLoader {
     /**
@@ -446,15 +466,26 @@ export class CompendiumLoader {
                 return;
             }
             
-            // Get existing documents from the compendium to check for updates
+            // Get existing documents from the compendium; match by stable key (not name)
             const existingDocs = await pack.getDocuments();
-            const existingByName = new Map(existingDocs.map(doc => [doc.name, doc]));
-            
+            const existingByKey = new Map();
+            for (const doc of existingDocs) {
+                const key = getStableKey(doc);
+                if (key != null) {
+                    existingByKey.set(key, doc);
+                }
+            }
+
             const toCreate = [];
             const toUpdate = [];
-            
+
             for (const docData of documents) {
-                const existing = existingByName.get(docData.name);
+                const key = getStableKey(docData);
+                if (key == null || key === "") {
+                    console.warn(`Third Era | Skipping document with no stable key (name/key/conditionId) in ${pack.collection}:`, docData.name ?? docData.system?.key ?? "(unknown)");
+                    continue;
+                }
+                const existing = existingByKey.get(key);
                 if (existing) {
                     // Update existing document: use existing.id so the client can find the document.
                     // Do not spread docData._id — JSON _ids can differ from the collection's ids and cause "id does not exist".
