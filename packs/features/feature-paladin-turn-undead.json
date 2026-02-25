@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlTurnUndead01",
+  "name": "Turn Undead",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Turn undead as a cleric of three levels lower. Uses per day: 3 + Cha modifier.</p>",
+    "key": "paladinTurnUndead",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

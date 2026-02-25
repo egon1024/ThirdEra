@@ -1,0 +1,14 @@
+{
+  "_id": "cfPlAuraGood001",
+  "name": "Aura of Good",
+  "type": "feature",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "description": "<p>The power of your aura of good (see detect good spell) is equal to your paladin level.</p>",
+    "key": "paladinAuraOfGood",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

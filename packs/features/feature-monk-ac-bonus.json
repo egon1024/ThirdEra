@@ -1,0 +1,20 @@
+{
+  "_id": "cfMkACBonus0001",
+  "name": "AC Bonus",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>When unarmored and unencumbered, add Wisdom bonus to AC. +1 at 5th level and every five levels thereafter (+2 at 10th, +3 at 15th, +4 at 20th). Applies against touch attacks and when flat-footed. Lost when immobilized, armored, carrying a shield, or medium/heavy load.</p>",
+    "key": "monkACBonus",
+    "scalingTable": [
+      {"minLevel": 1, "value": "Wis to AC"},
+      {"minLevel": 5, "value": "+1"},
+      {"minLevel": 10, "value": "+2"},
+      {"minLevel": 15, "value": "+3"},
+      {"minLevel": 20, "value": "+4"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

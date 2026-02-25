@@ -1,0 +1,14 @@
+{
+  "_id": "cfBrMightyRage01",
+  "name": "Mighty Rage",
+  "type": "feature",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "description": "<p>When raging, bonuses to Strength and Constitution increase to +8 each, and morale bonus on Will saves increases to +4. AC penalty remains -2.</p>",
+    "key": "barbarianMightyRage",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 10
+}

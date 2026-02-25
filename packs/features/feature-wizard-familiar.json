@@ -1,0 +1,14 @@
+{
+  "_id": "cfWzFamiliar001",
+  "name": "Familiar (Wizard)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Obtain a familiar in the same manner as a sorcerer (24 hours, 100 gp). Same rules for death, dismissal, and replacement.</p>",
+    "key": "wizardFamiliar",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

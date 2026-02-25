@@ -1,8 +1,28 @@
 /**
  * Compendium Loader
- * Loads JSON files from packs/ directories into Foundry compendiums
+ * Loads JSON files from packs/ directories into Foundry compendiums.
+ * Matching is by stable key (system.key, or conditionId for conditions, or name fallback).
  */
 import { parseSpellFields, applyParsedSpellFields } from "./spell-description-parser.mjs";
+
+/**
+ * Returns a stable key for matching compendium documents (incoming JSON or existing).
+ * Used so renames in JSON update the same document instead of creating duplicates.
+ * @param {Object} doc - Document or docData with type, system, and optionally name
+ * @returns {string|undefined} - Key for matching, or undefined if none available
+ */
+function getStableKey(doc) {
+    if (doc.type === "condition" && doc.system?.conditionId != null) {
+        return doc.system.conditionId;
+    }
+    if (doc.system?.key != null && doc.system.key !== "") {
+        return doc.system.key;
+    }
+    if (doc.name != null && doc.name !== "") {
+        return doc.name;
+    }
+    return undefined;
+}
 
 export class CompendiumLoader {
     /**
@@ -21,14 +41,24 @@ export class CompendiumLoader {
         ],
         "thirdera.thirdera_skills": [
             "skill-appraise.json", "skill-balance.json", "skill-bluff.json",
-            "skill-climb.json", "skill-concentration.json", "skill-craft.json",
+            "skill-climb.json", "skill-concentration.json",
+            "skill-craft-alchemy.json", "skill-craft-armorsmithing.json", "skill-craft-bowmaking.json",
+            "skill-craft-trapmaking.json", "skill-craft-weaponsmithing.json",
             "skill-decipher-script.json", "skill-diplomacy.json", "skill-disable-device.json",
             "skill-disguise.json", "skill-escape-artist.json", "skill-forgery.json",
             "skill-gather-information.json", "skill-handle-animal.json", "skill-heal.json",
             "skill-hide.json", "skill-intimidate.json", "skill-jump.json",
-            "skill-knowledge.json", "skill-listen.json", "skill-move-silently.json",
-            "skill-open-lock.json", "skill-perform.json", "skill-profession.json",
-            "skill-ride.json", "skill-search.json", "skill-sense-motive.json",
+            "skill-knowledge-arcana.json", "skill-knowledge-architecture-and-engineering.json",
+            "skill-knowledge-dungeoneering.json", "skill-knowledge-geography.json",
+            "skill-knowledge-history.json", "skill-knowledge-local.json", "skill-knowledge-nature.json",
+            "skill-knowledge-nobility-and-royalty.json", "skill-knowledge-religion.json",
+            "skill-knowledge-the-planes.json",
+            "skill-listen.json", "skill-move-silently.json", "skill-open-lock.json",
+            "skill-perform-act.json", "skill-perform-comedy.json", "skill-perform-dance.json",
+            "skill-perform-keyboard-instruments.json", "skill-perform-oratory.json",
+            "skill-perform-percussion-instruments.json", "skill-perform-sing.json",
+            "skill-perform-string-instruments.json", "skill-perform-wind-instruments.json",
+            "skill-profession.json", "skill-ride.json", "skill-search.json", "skill-sense-motive.json",
             "skill-sleight-of-hand.json", "skill-speak-language.json", "skill-spellcraft.json",
             "skill-spot.json", "skill-survival.json", "skill-swim.json",
             "skill-tumble.json", "skill-use-magic-device.json", "skill-use-rope.json"
@@ -63,6 +93,35 @@ export class CompendiumLoader {
             "feat-trample.json", "feat-two-weapon-defense.json", "feat-two-weapon-fighting.json",
             "feat-weapon-finesse.json", "feat-weapon-focus.json", "feat-weapon-specialization.json",
             "feat-whirlwind-attack.json", "feat-widen-spell.json"
+        ],
+        "thirdera.thirdera_features": [
+            "feature-barbarian-fast-movement.json", "feature-barbarian-rage.json", "feature-barbarian-illiteracy.json",
+            "feature-barbarian-uncanny-dodge.json", "feature-barbarian-trap-sense.json", "feature-barbarian-improved-uncanny-dodge.json",
+            "feature-barbarian-damage-reduction.json", "feature-barbarian-greater-rage.json", "feature-barbarian-indomitable-will.json",
+            "feature-barbarian-tireless-rage.json", "feature-barbarian-mighty-rage.json",
+            "feature-bard-bardic-music.json", "feature-bard-bardic-knowledge.json", "feature-bard-countersong.json", "feature-bard-fascinate.json",
+            "feature-bard-inspire-courage.json", "feature-bard-inspire-competence.json", "feature-bard-suggestion.json",
+            "feature-bard-inspire-greatness.json", "feature-bard-song-of-freedom.json", "feature-bard-inspire-heroics.json", "feature-bard-mass-suggestion.json",
+            "feature-cleric-aura.json", "feature-cleric-turn-rebuke-undead.json",
+            "feature-druid-animal-companion.json", "feature-druid-nature-sense.json", "feature-druid-wild-empathy.json", "feature-druid-woodland-stride.json",
+            "feature-druid-trackless-step.json", "feature-druid-resist-natures-lure.json", "feature-druid-wild-shape.json", "feature-druid-venom-immunity.json",
+            "feature-druid-thousand-faces.json", "feature-druid-timeless-body.json",
+            "feature-fighter-bonus-feat.json",
+            "feature-monk-unarmed-strike.json", "feature-monk-flurry-of-blows.json", "feature-monk-ac-bonus.json", "feature-monk-bonus-feat.json",
+            "feature-monk-evasion.json", "feature-monk-fast-movement.json", "feature-monk-still-mind.json", "feature-monk-ki-strike.json",
+            "feature-monk-slow-fall.json", "feature-monk-purity-of-body.json", "feature-monk-wholeness-of-body.json", "feature-monk-improved-evasion.json",
+            "feature-monk-diamond-body.json", "feature-monk-abundant-step.json", "feature-monk-diamond-soul.json", "feature-monk-quivering-palm.json",
+            "feature-monk-timeless-body.json", "feature-monk-tongue-sun-moon.json", "feature-monk-empty-body.json", "feature-monk-perfect-self.json",
+            "feature-paladin-aura-good.json", "feature-paladin-detect-evil.json", "feature-paladin-smite-evil.json", "feature-paladin-divine-grace.json",
+            "feature-paladin-lay-on-hands.json", "feature-paladin-aura-courage.json", "feature-paladin-divine-health.json", "feature-paladin-turn-undead.json",
+            "feature-paladin-special-mount.json", "feature-paladin-remove-disease.json",
+            "feature-ranger-favored-enemy.json", "feature-ranger-track.json", "feature-ranger-wild-empathy.json", "feature-ranger-combat-style.json",
+            "feature-ranger-endurance.json", "feature-ranger-animal-companion.json", "feature-ranger-woodland-stride.json", "feature-ranger-swift-tracker.json",
+            "feature-ranger-evasion.json", "feature-ranger-camouflage.json", "feature-ranger-hide-in-plain-sight.json",
+            "feature-rogue-sneak-attack.json", "feature-rogue-trapfinding.json", "feature-rogue-evasion.json", "feature-rogue-trap-sense.json",
+            "feature-rogue-uncanny-dodge.json", "feature-rogue-improved-uncanny-dodge.json", "feature-rogue-special-ability.json",
+            "feature-sorcerer-familiar.json",
+            "feature-wizard-scribe-scroll.json", "feature-wizard-familiar.json", "feature-wizard-bonus-feat.json"
         ],
         "thirdera.thirdera_weapons": [
             "weapon-bastard-sword.json", "weapon-battleaxe.json", "weapon-bolas.json",
@@ -365,7 +424,6 @@ export class CompendiumLoader {
                     continue;
                 }
                 const jsonData = await response.json();
-                
                 // Remove invalid _id - Foundry will generate a valid one
                 // Foundry requires 16-character alphanumeric IDs, but our JSON files have IDs like "race-dwarf"
                 if (jsonData._id && !jsonData._id.match(/^[a-zA-Z0-9]{16}$/)) {
@@ -408,24 +466,36 @@ export class CompendiumLoader {
                 return;
             }
             
-            // Get existing documents from the compendium to check for updates
+            // Get existing documents from the compendium; match by stable key (not name)
             const existingDocs = await pack.getDocuments();
-            const existingByName = new Map(existingDocs.map(doc => [doc.name, doc]));
-            
+            const existingByKey = new Map();
+            for (const doc of existingDocs) {
+                const key = getStableKey(doc);
+                if (key != null) {
+                    existingByKey.set(key, doc);
+                }
+            }
+
             const toCreate = [];
             const toUpdate = [];
-            
+
             for (const docData of documents) {
-                const existing = existingByName.get(docData.name);
+                const key = getStableKey(docData);
+                if (key == null || key === "") {
+                    console.warn(`Third Era | Skipping document with no stable key (name/key/conditionId) in ${pack.collection}:`, docData.name ?? docData.system?.key ?? "(unknown)");
+                    continue;
+                }
+                const existing = existingByKey.get(key);
                 if (existing) {
-                    // Update existing document
-                    toUpdate.push({_id: existing.id, ...docData});
+                    // Update existing document: use existing.id so the client can find the document.
+                    // Do not spread docData._id — JSON _ids can differ from the collection's ids and cause "id does not exist".
+                    const { _id: _omit, ...rest } = docData;
+                    toUpdate.push({ _id: existing.id, ...rest });
                 } else {
                     // Create new document
                     toCreate.push(docData);
                 }
             }
-            
             // Update existing documents
             if (toUpdate.length > 0) {
                 await DocumentClass.implementation.updateDocuments(toUpdate, {pack: pack.collection});

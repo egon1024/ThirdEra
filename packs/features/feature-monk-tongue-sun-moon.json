@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkTongueSunM01",
+  "name": "Tongue of the Sun and Moon",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Speak with any living creature.</p>",
+    "key": "monkTongueSunMoon",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 19
+}

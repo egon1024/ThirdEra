@@ -384,6 +384,110 @@ async function buildConditionStatusEffects() {
 }
 
 /**
+ * Resolve compendium index img paths so thumbnails load when the UI is under /game.
+ * Relative paths like "icons/svg/shield.svg" are resolved with getRoute to be origin-relative
+ * (e.g. "/icons/svg/shield.svg" or "/vtt/icons/...") so they don't 404 when requested from /game.
+ * The UI uses the index populated from metadata at load (constructor), not getIndex(), so we must
+ * resolve both the existing index and wrap getIndex for future refreshes.
+ */
+// Icons that don't exist in Foundry core — use shield instead so thumbnails don't 404.
+const COMPENDIUM_MISSING_ICONS = new Set(["wolf.svg", "star.svg", "dodge.svg", "raven.svg", "run.svg"]);
+
+function resolveIndexImgPaths(index) {
+    const base = typeof window !== "undefined" && window.location?.origin
+        ? window.location.origin
+        : "";
+    for (const entry of index.values()) {
+        if (!entry.img) continue;
+        const filename = (entry.img.split("/").pop() ?? "").split("?")[0];
+        if (COMPENDIUM_MISSING_ICONS.has(filename)) entry.img = "icons/svg/shield.svg";
+        const isRelative = !entry.img.startsWith("/") && !entry.img.startsWith("http");
+        if (isRelative) {
+            const path = foundry.utils.getRoute(entry.img);
+            entry.img = base ? `${base}${path.startsWith("/") ? path : `/${path}`}` : path;
+        }
+    }
+}
+
+function applyCompendiumImageRouteFix() {
+    for (const pack of game.packs) {
+        if (!pack?.collection?.index) continue;
+
+        // Resolve img on the index already in memory (from metadata at load).
+        resolveIndexImgPaths(pack.collection.index);
+        // Force tree rebuild so directory UI uses entries with resolved img (tree is built from index.contents).
+        pack.initializeTree();
+
+        const origGetIndex = pack.collection.getIndex.bind(pack.collection);
+        pack.collection.getIndex = async function (options) {
+            const index = await origGetIndex(options);
+            resolveIndexImgPaths(index);
+            this.initializeTree();
+            return index;
+        };
+    }
+
+    const base = window.location?.origin ?? "";
+    const fixThumbnailSrc = (rawSrc) => {
+        const filename = (rawSrc.split("/").pop() ?? "").split("?")[0];
+        if (COMPENDIUM_MISSING_ICONS.has(filename)) return "icons/svg/shield.svg";
+        return rawSrc;
+    };
+    const setThumbnailSrc = (img, rawSrc) => {
+        const src = fixThumbnailSrc(rawSrc);
+        const path = src.startsWith("/") ? src : foundry.utils.getRoute(src);
+        img.setAttribute("src", `${base}${path.startsWith("/") ? path : `/${path}`}`);
+    };
+
+    // Fix any compendium thumbnail img that has a bad src (run on a single element or a root).
+    const fixThumbnailsIn = (root) => {
+        if (!root?.querySelectorAll) return;
+        for (const img of root.querySelectorAll("img.thumbnail")) {
+            const src = (img.getAttribute("src") ?? img.src ?? "").trim();
+            if (!src || src.startsWith("data:")) continue;
+            setThumbnailSrc(img, src);
+        }
+    };
+
+    // Run when compendium app renders.
+    Hooks.on("renderApplication", (app, html, data) => {
+        if (!app?.options?.id?.startsWith("compendium-")) return;
+        fixThumbnailsIn(app?.element ?? html);
+        setTimeout(() => fixThumbnailsIn(app?.element), 0);
+        setTimeout(() => fixThumbnailsIn(app?.element), 100);
+    });
+
+    // Fix thumbnails as soon as they are added to the DOM (before the browser requests the bad URL).
+    const observer = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+            for (const node of m.addedNodes) {
+                if (!node?.querySelectorAll) continue;
+                if (node.classList?.contains("thumbnail") && node.tagName === "IMG") {
+                    const src = (node.getAttribute("src") ?? node.src ?? "").trim();
+                    if (src && !src.startsWith("data:")) setThumbnailSrc(node, src);
+                }
+                fixThumbnailsIn(node);
+            }
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // When a compendium thumbnail fails to load, replace with fallback icon so it displays.
+    document.body.addEventListener(
+        "error",
+        (e) => {
+            if (e.target?.tagName !== "IMG" || !e.target.classList?.contains("thumbnail")) return;
+            const src = e.target.src || e.target.getAttribute("src") || "";
+            const filename = (src.split("/").pop() ?? "").split("?")[0];
+            if (COMPENDIUM_MISSING_ICONS.has(filename)) {
+                setThumbnailSrc(e.target, "icons/svg/shield.svg");
+            }
+        },
+        true
+    );
+}
+
+/**
  * Ready hook
  */
 Hooks.once("ready", async function () {
@@ -391,6 +495,8 @@ Hooks.once("ready", async function () {
     
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
+    // Resolve compendium index img paths so thumbnails work from /game.
+    applyCompendiumImageRouteFix();
     // Build CONFIG.statusEffects from condition items so Token HUD and toggleStatusEffect work
     await buildConditionStatusEffects();
     // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData

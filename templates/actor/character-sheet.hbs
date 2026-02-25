@@ -596,7 +596,7 @@
     <div class="tab classes {{#if (eq tabs.primary 'classes')}}active{{/if}}" data-group="primary" data-tab="classes">
       <div class="classes-header">
         <h3 class="items-header">Classes</h3>
-        <a class="item-create" data-action="createItem" data-type="class"><i class="fas fa-plus"></i> Add Class</a>
+        <a class="level-up-button" data-action="openLevelUpFlow" title="{{localize "THIRDERA.LevelUp.Title"}}"><i class="fas fa-arrow-up"></i> {{localize "THIRDERA.LevelUp.Title"}}</a>
       </div>
       {{#if classes.length}}
       <ol class="items-list classes-list">
@@ -656,36 +656,69 @@
       <p class="no-items hint">No classes — drag a class item here</p>
       {{/if}}
 
-      {{!-- Level History --}}
+      {{!-- Level History (collapsible panel) --}}
       {{#if levelHistory.length}}
-      <div class="items-header level-history-header">
-        <h3 class="items-header">Level History</h3>
-        <span class="level-history-hp-total">HP Max: {{system.attributes.hp.max}}</span>
-      </div>
-      <div class="level-history-grid">
-        <span class="level-history-col-header">Lvl</span>
-        <span class="level-history-col-header">Class</span>
-        <span class="level-history-col-header">Hit Die</span>
-        <span class="level-history-col-header">HP Rolled</span>
-        <span class="level-history-col-header">CON</span>
-        <span class="level-history-col-header">Total</span>
+      <details class="level-history-panel" open>
+        <summary class="level-history-panel-header">
+          <span class="level-history-panel-title">{{localize "THIRDERA.LevelHistory.Title"}}</span>
+          <span class="level-history-hp-total">HP Max: {{system.attributes.hp.max}}</span>
+        </summary>
+        <div class="level-history-grid">
+          <span class="level-history-col-header">Lvl</span>
+          <span class="level-history-col-header">Class</span>
+          <span class="level-history-col-header">Hit Die</span>
+          <span class="level-history-col-header">HP Rolled</span>
+          <span class="level-history-col-header">CON</span>
+          <span class="level-history-col-header">Total</span>
+          <span class="level-history-col-header level-history-col-actions"></span>
 
-        {{#each levelHistory as |entry|}}
-        <span class="level-history-cell level-history-level">{{entry.characterLevel}}</span>
-        <span class="level-history-cell level-history-class">{{entry.className}}</span>
-        {{#if (eq entry.hpRolled 0)}}
-        <a class="level-history-cell level-history-roll-hp" data-action="rollHitDie" data-hit-die="{{entry.hitDie}}"
-          data-level-index="{{entry.index}}" title="Click to roll {{entry.hitDie}}">{{entry.hitDie}} <i
-            class="fas fa-dice-d20"></i></a>
-        {{else}}
-        <span class="level-history-cell">{{entry.hitDie}}</span>
-        {{/if}}
-        <input type="text" data-level-hp-index="{{entry.index}}" value="{{entry.hpRolled}}" data-dtype="Number"
-          class="level-history-input" />
-        <span class="level-history-cell">{{signedNumber entry.conMod}}</span>
-        <span class="level-history-cell level-history-subtotal">{{entry.subtotal}}</span>
-        {{/each}}
-      </div>
+          {{#each levelHistory as |entry|}}
+          <span class="level-history-cell level-history-level">{{entry.characterLevel}}</span>
+          <span class="level-history-cell level-history-class" data-item-id="{{entry.classItemId}}">{{entry.className}}</span>
+          {{#if (eq entry.hpRolled 0)}}
+          <a class="level-history-cell level-history-roll-hp" data-action="rollHitDie" data-hit-die="{{entry.hitDie}}"
+            data-level-index="{{entry.index}}" title="Click to roll {{entry.hitDie}}">{{entry.hitDie}} <i
+              class="fas fa-dice-d20"></i></a>
+          {{else}}
+          <span class="level-history-cell">{{entry.hitDie}}</span>
+          {{/if}}
+          <input type="text" data-level-hp-index="{{entry.index}}" value="{{entry.hpRolled}}" data-dtype="Number"
+            class="level-history-input" />
+          <span class="level-history-cell">{{signedNumber entry.conMod}}</span>
+          <span class="level-history-cell level-history-subtotal">{{entry.subtotal}}</span>
+          {{#if entry.isLastLevelOfClass}}
+          <a class="level-history-cell level-history-remove" data-action="removeClassLevel" data-item-id="{{entry.classItemId}}"
+            title="{{localize "THIRDERA.LevelHistory.RemoveLevel"}}"><i class="fas fa-minus"></i></a>
+          {{else}}
+          <span class="level-history-cell level-history-col-actions"></span>
+          {{/if}}
+
+          {{#if entry.featuresGainedAtLevel.length}}
+          <div class="level-history-gained" style="grid-column: 1 / -1;">
+            {{localize "THIRDERA.LevelHistory.Gained"}}: {{#each entry.featuresGainedAtLevel as |f|}}{{f.name}}{{#if f.scaling}} ({{f.scaling}}){{/if}}{{#unless @last}}, {{/unless}}{{/each}}
+            {{#if entry.featGainedAtLevel}}. {{localize "THIRDERA.LevelHistory.Feat"}}: {{entry.featGainedAtLevel}}{{/if}}
+            {{#if entry.skillsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
+            {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
+          </div>
+          {{else}}
+          {{#if entry.featGainedAtLevel}}
+          <div class="level-history-gained" style="grid-column: 1 / -1;">
+            {{localize "THIRDERA.LevelHistory.Feat"}}: {{entry.featGainedAtLevel}}
+            {{#if entry.skillsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
+            {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
+          </div>
+          {{else}}
+          {{#if entry.skillsGainedAtLevel.length}}
+          <div class="level-history-gained" style="grid-column: 1 / -1;">
+            {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}
+            {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
+          </div>
+          {{/if}}
+          {{/if}}
+          {{/if}}
+          {{/each}}
+        </div>
+      </details>
       {{/if}}
     </div>
 
@@ -944,7 +977,7 @@
         {{!-- Known / Available panel: roster only, no prepared/cast; Add to ready for full-list --}}
         <div class="subtab spells-known {{#if (eq tabs.spells 'known')}}active{{/if}}" data-group="spells" data-tab="known">
           {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-known-search" inputName="spellKnownSearch" placeholderKey="THIRDERA.Spells.SearchPlaceholder" noResultsKey="THIRDERA.Spells.SearchNoResults"}}
-          {{!-- Manually added spells first: not on any class list or domain; e.g. dropped without class assignment --}}
+          {{!-- Manually added spells: not on any class list or domain; e.g. dropped without class assignment --}}
           {{#if hasManuallyAddedSpells}}
             <div class="spellcasting-class manually-added-spells">
               <div class="spellcasting-header">
@@ -1297,9 +1330,46 @@
           <p class="spell-ready-hint">{{localize "THIRDERA.Spells.DragFromKnownHint"}}</p>
         </div>
       {{else}}
-        <div class="no-spells">
-          <p>{{localize "THIRDERA.Spells.NoSpellcastingClasses"}}</p>
-        </div>
+        {{#if hasManuallyAddedSpells}}
+          {{!-- No spellcasting classes but actor has manually added spells: show them with a hint --}}
+          <div class="subtab spells-known active" data-group="spells" data-tab="known">
+            <p class="spell-section-hint no-spellcasting-hint">{{localize "THIRDERA.Spells.NoSpellcastingClassesWithSpellsHint"}}</p>
+            {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-known-search-no-class" inputName="spellKnownSearch" placeholderKey="THIRDERA.Spells.SearchPlaceholder" noResultsKey="THIRDERA.Spells.SearchNoResults"}}
+            <div class="spellcasting-class manually-added-spells">
+              <div class="spellcasting-header">
+                <h4>{{localize "THIRDERA.Spells.ManuallyAddedHeading"}}</h4>
+                <p class="spell-section-hint">{{localize "THIRDERA.Spells.ManuallyAddedHint"}}</p>
+              </div>
+              {{#each manuallyAddedSpellsByLevel as |spells spellLevel|}}
+                {{#if spells.length}}
+                  <div class="spell-level-group">
+                    <div class="spell-level-header">
+                      <h5>{{#if (eq spellLevel "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal spellLevel}} Level{{/if}}</h5>
+                    </div>
+                    <ol class="items-list spells-list">
+                      {{#each spells as |spell|}}
+                      <li class="item flexrow spell-item" data-item-id="{{spell.id}}" data-spell-name="{{spell.name}}">
+                        <div class="item-name">
+                          {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
+                          <h4><a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
+                        </div>
+                        <div class="item-controls">
+                          <a class="item-edit" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}"><i class="fas fa-edit"></i></a>
+                          <a class="item-delete" data-action="deleteItem" title="Delete Spell"><i class="fas fa-trash"></i></a>
+                        </div>
+                      </li>
+                      {{/each}}
+                    </ol>
+                  </div>
+                {{/if}}
+              {{/each}}
+            </div>
+          </div>
+        {{else}}
+          <div class="no-spells">
+            <p>{{localize "THIRDERA.Spells.NoSpellcastingClasses"}}</p>
+          </div>
+        {{/if}}
       {{/if}}
       </div>
     </div>

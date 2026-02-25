@@ -1,0 +1,14 @@
+{
+  "_id": "cfBrImpUncanny01",
+  "name": "Improved Uncanny Dodge (Barbarian)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Cannot be flanked. Denies a rogue the ability to sneak attack by flanking unless the attacker has at least four more rogue levels than the target has barbarian levels.</p>",
+    "key": "barbarianImprovedUncannyDodge",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

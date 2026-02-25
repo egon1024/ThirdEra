@@ -1,0 +1,14 @@
+{
+  "_id": "cfBrFastMove0001",
+  "name": "Fast Movement (Barbarian)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>A barbarian's land speed is faster than the norm for his race by +10 feet. This benefit applies only when he is wearing no armor, light armor, or medium armor and not carrying a heavy load.</p>",
+    "key": "barbarianFastMovement",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

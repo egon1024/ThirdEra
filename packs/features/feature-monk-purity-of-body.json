@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkPurityBody01",
+  "name": "Purity of Body",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>Immunity to all diseases except supernatural and magical diseases.</p>",
+    "key": "monkPurityOfBody",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

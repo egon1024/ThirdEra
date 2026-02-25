@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgHidePlain01",
+  "name": "Hide in Plain Sight",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>In natural terrain, use Hide even while being observed.</p>",
+    "key": "rangerHideInPlainSight",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 10
+}

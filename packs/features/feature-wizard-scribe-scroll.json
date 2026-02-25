@@ -1,0 +1,14 @@
+{
+  "_id": "cfWzScribeScroll01",
+  "name": "Scribe Scroll",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Gain Scribe Scroll as a bonus feat.</p>",
+    "key": "wizardScribeScroll",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

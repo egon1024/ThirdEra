@@ -1,0 +1,26 @@
+{
+  "_id": "cfFgBonusFeat01",
+  "name": "Bonus Feat (Fighter)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>At 1st level and every two levels thereafter (2nd, 4th, 6th, 8th, 10th, 12th, 14th, 16th, 18th, 20th), gain a bonus combat-oriented feat from the fighter bonus feats list. Must meet all prerequisites.</p>",
+    "key": "fighterBonusFeat",
+    "scalingTable": [
+      {"minLevel": 1, "value": "1st bonus feat"},
+      {"minLevel": 2, "value": "2nd"},
+      {"minLevel": 4, "value": "3rd"},
+      {"minLevel": 6, "value": "4th"},
+      {"minLevel": 8, "value": "5th"},
+      {"minLevel": 10, "value": "6th"},
+      {"minLevel": 12, "value": "7th"},
+      {"minLevel": 14, "value": "8th"},
+      {"minLevel": 16, "value": "9th"},
+      {"minLevel": 18, "value": "10th"},
+      {"minLevel": 20, "value": "11th"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

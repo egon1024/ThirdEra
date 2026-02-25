@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdInspCompet01",
+  "name": "Inspire Competence",
+  "type": "feature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>At 3rd level with 6+ ranks in Perform, ally within 30 ft. gets +2 competence on skill checks with one skill while hearing you. Requires concentration; max 2 minutes. Cannot inspire yourself.</p>",
+    "key": "bardInspireCompetence",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

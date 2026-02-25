@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdInspGreat01",
+  "name": "Inspire Greatness",
+  "type": "feature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>At 9th level with 12+ ranks in Perform, willing ally within 30 ft. gains 2 bonus HD (d10), temp hp, +2 competence on attack, +1 competence on Fortitude. For every three levels beyond 9th, target one additional ally. Lasts while they hear you and 5 rounds after.</p>",
+    "key": "bardInspireGreatness",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 7
+}

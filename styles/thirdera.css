@@ -1383,6 +1383,257 @@
   text-shadow: none;
 }
 
+.thirdera .classes-header .level-up-button {
+  margin-right: 0.5em;
+  color: var(--color-character-accent);
+  cursor: pointer;
+}
+
+.thirdera .classes-header .level-up-button:hover {
+  color: var(--color-hover);
+}
+
+/* Level-up flow — force left alignment and fill height so content can use remaining space */
+.application.thirdera.level-up-flow .window-content,
+.thirdera.level-up-flow .window-content {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+.thirdera.level-up-flow .level-up-flow-form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.5em;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  width: 100% !important;
+  max-width: 100% !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+}
+
+/* Force every direct child of the form to align left (overrides any parent center) */
+.thirdera.level-up-flow .level-up-flow-form > * {
+  align-self: flex-start !important;
+  text-align: left !important;
+}
+
+.thirdera.level-up-flow .level-up-flow-header {
+  flex-shrink: 0;
+  margin-bottom: 0.75em;
+  text-align: left;
+}
+
+.thirdera.level-up-flow .level-up-flow-title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text-primary);
+  text-align: left;
+}
+
+.thirdera.level-up-flow .level-up-flow-body {
+  margin-bottom: 0.75em;
+  align-self: stretch;
+  text-align: left;
+}
+
+/* Skills step: body and list fill remaining vertical space when window is resized */
+.thirdera.level-up-flow .level-up-flow-body.level-up-flow-skills {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.thirdera.level-up-flow .level-up-flow-hint {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin: 0 0 0.35em 0;
+}
+
+/* Compact radio list: no box, single-line labels */
+.thirdera.level-up-flow .level-up-class-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: flex-start;
+}
+
+/* Custom class options (no native radio — avoids browser/Foundry styling issues) */
+.thirdera.level-up-flow .level-up-class-option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* left-align content; overrides Foundry/button center */
+  gap: 0.5em;
+  cursor: pointer;
+  line-height: 1.2;
+  padding: 0.2em 0;
+  white-space: nowrap;
+  min-height: 1.5em;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+}
+
+.thirdera.level-up-flow .level-up-class-option:hover {
+  color: var(--color-hover);
+}
+
+.thirdera.level-up-flow .level-up-option-label {
+  white-space: nowrap;
+  line-height: 1.5em;
+}
+
+/* Dot: empty circle by default, filled when selected */
+.thirdera.level-up-flow .level-up-option-dot {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  border: 2px solid var(--color-border-divider);
+  border-radius: 50%;
+  background: var(--color-bg-parchment, #fff);
+}
+
+.thirdera.level-up-flow .level-up-class-option.selected .level-up-option-dot {
+  background: var(--color-character-accent, currentColor);
+  border-color: var(--color-character-accent, currentColor);
+}
+
+.thirdera.level-up-flow .level-up-new-class-picker {
+  margin-top: 0.75em;
+}
+
+.thirdera.level-up-flow .level-up-flow-hp-info {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 0.75em;
+  font-size: var(--font-size-body);
+}
+
+.thirdera.level-up-flow .level-up-hp-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.thirdera.level-up-flow .level-up-hp-controls input[type="number"] {
+  width: 4em;
+}
+
+.thirdera.level-up-flow .level-up-flow-footer {
+  flex-shrink: 0;
+  justify-content: flex-end;
+  gap: 0.5em;
+  margin-top: 0.75em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--color-border-divider);
+}
+
+.thirdera.level-up-flow .level-up-flow-skill-budget {
+  font-size: var(--font-size-label);
+  margin: 0 0 0.35em 0;
+}
+
+.thirdera.level-up-flow .level-up-flow-over-budget {
+  color: var(--color-modified, #c00);
+}
+
+.thirdera.level-up-flow .level-up-flow-skills-list {
+  flex: 1 1 auto;
+  min-height: 120px;
+  overflow-y: auto;
+  resize: vertical;
+  margin-top: 0.5em;
+}
+
+.thirdera.level-up-flow .level-up-flow-skill-group {
+  margin-bottom: 0.5em;
+}
+
+.thirdera.level-up-flow .level-up-flow-skill-group:last-child {
+  margin-bottom: 0;
+}
+
+.thirdera.level-up-flow .level-up-flow-skill-group-title {
+  font-family: var(--font-family-readable);
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  margin: 0 0 0.25em 0;
+  padding: 0.35em 0.5em;
+  color: var(--color-text-primary);
+  background: var(--color-bg-parchment-dark);
+  border-radius: 2px;
+  border-bottom: 1px solid var(--color-border-divider);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.thirdera.level-up-flow .level-up-flow-skills-list .items-list .item {
+  gap: 0.5em;
+  padding: 2px 5px;
+  min-height: 0;
+}
+
+.thirdera.level-up-flow .level-up-flow-skills-list .skill-name {
+  flex: 1 1 auto;
+  min-width: 18em;
+  line-height: 1.3;
+}
+
+.thirdera.level-up-flow .level-up-flow-skills-list .level-up-flow-skill-modifiers {
+  flex-shrink: 0;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin-left: 0.5em;
+}
+
+.thirdera.level-up-flow .level-up-flow-skills-list .level-up-flow-points-input,
+.thirdera.level-up-flow .level-up-flow-skills-list input[name="pointsToSpend"] {
+  width: 3ch;
+  min-width: 3ch;
+  max-width: 3ch;
+  height: 1.5em;
+  min-height: 1.5em;
+  line-height: 1.2;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 1px;
+  padding-right: 1px;
+  text-align: right;
+  box-sizing: border-box;
+  font-size: var(--font-size-label);
+  flex-shrink: 0;
+}
+
+.thirdera.level-up-flow .level-up-flow-skills-list .skill-resulting-ranks {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  min-width: 2.5em;
+  flex-shrink: 0;
+}
+
+.thirdera.level-up-flow .level-up-flow-skills-list .skill-max {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
 .thirdera .items-list {
   list-style: none;
   margin: 0;
@@ -1816,7 +2067,44 @@
   margin-left: 4px;
 }
 
-/* Level History grid */
+/* Level History panel (collapsible) */
+.thirdera .level-history-panel {
+  margin-top: 8px;
+  border: 1px solid var(--color-border-divider);
+  border-radius: 4px;
+}
+
+.thirdera .level-history-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  list-style: none;
+}
+
+.thirdera .level-history-panel-header::-webkit-details-marker {
+  display: none;
+}
+
+.thirdera .level-history-panel-header::before {
+  content: "\25bc";
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin-right: 6px;
+}
+
+.thirdera .level-history-panel[open] .level-history-panel-header::before {
+  content: "\25b2";
+}
+
+.thirdera .level-history-panel-title {
+  flex: 1;
+}
+
 .thirdera .level-history-hp-total {
   font-size: var(--font-size-body);
   color: var(--color-text-light);
@@ -1824,7 +2112,7 @@
 
 .thirdera .level-history-grid {
   display: grid;
-  grid-template-columns: 40px 1fr 60px 60px 50px 50px;
+  grid-template-columns: 40px 1fr 60px 60px 50px 50px 32px;
   gap: 4px 8px;
   align-items: center;
   padding: 4px 8px;
@@ -1836,6 +2124,10 @@
   text-transform: uppercase;
   color: var(--color-text-muted);
   text-align: center;
+}
+
+.thirdera .level-history-col-header.level-history-col-actions {
+  min-width: 32px;
 }
 
 .thirdera .level-history-cell {
@@ -1870,6 +2162,24 @@
 
 .thirdera .level-history-roll-hp:hover {
   color: var(--color-hover);
+}
+
+.thirdera .level-history-remove {
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 2px;
+}
+
+.thirdera .level-history-remove:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .level-history-gained {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  grid-column: 1 / -1;
+  padding-left: 4px;
+  margin-bottom: 2px;
 }
 
 /* Save base value (derived from classes) */
@@ -3590,6 +3900,21 @@
 
 .thirdera.spell-list-browser .spell-item:hover h4 {
   color: var(--color-hover-alt);
+}
+
+.thirdera.spell-list-browser .spell-item--already-known {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.thirdera.spell-list-browser .spell-item--already-known:hover {
+  background: transparent;
+}
+
+.thirdera.spell-list-browser .spell-item--already-known .spell-item-already-known-label {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  min-width: 5em;
 }
 
 /* Icons dark for visibility on light background (color for i, filter for img) */

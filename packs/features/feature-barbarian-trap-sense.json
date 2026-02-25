@@ -1,0 +1,21 @@
+{
+  "_id": "cfBrTrapSense0001",
+  "name": "Trap Sense (Barbarian)",
+  "type": "feature",
+  "img": "icons/svg/trap.svg",
+  "system": {
+    "description": "<p>+1 bonus on Reflex saves to avoid traps and +1 dodge bonus to AC against attacks made by traps. These bonuses increase by +1 every three barbarian levels (6th, 9th, 12th, 15th, 18th).</p>",
+    "key": "barbarianTrapSense",
+    "scalingTable": [
+      {"minLevel": 3, "value": "+1"},
+      {"minLevel": 6, "value": "+2"},
+      {"minLevel": 9, "value": "+3"},
+      {"minLevel": 12, "value": "+4"},
+      {"minLevel": 15, "value": "+5"},
+      {"minLevel": 18, "value": "+6"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

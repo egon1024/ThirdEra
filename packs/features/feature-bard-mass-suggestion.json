@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdMassSuggst01",
+  "name": "Mass Suggestion",
+  "type": "feature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "description": "<p>At 18th level with 21+ ranks in Perform, make a suggestion simultaneously to any number of creatures you have already fascinated. Functions like suggestion.</p>",
+    "key": "bardMassSuggestion",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 10
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "cfBdBardicMusic01",
+  "name": "Bardic Music",
+  "type": "feature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "description": "<p>Once per day per bard level, use song or poetics to produce magical effects: countersong, fascinate, inspire courage, inspire competence, suggestion, inspire greatness, song of freedom, inspire heroics, mass suggestion. Starting is a standard action. Cannot cast spells or activate magic items while using bardic music.</p>",
+    "key": "bardBardicMusic",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

@@ -1,10 +1,11 @@
 import { getWieldingInfo } from "../data/_damage-helpers.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { SpellData } from "../data/item-spell.mjs";
+import { LevelUpFlow } from "../applications/level-up-flow.mjs";
 import { getDerivedFrom } from "../logic/derived-conditions.mjs";
 import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
-import { getXpForLevel, getNextLevelXp } from "../logic/xp-table.mjs";
+import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -38,6 +39,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             openClass: ThirdEraActorSheet.#onOpenClass,
             removeClass: ThirdEraActorSheet.#onRemoveClass,
             addClassLevel: ThirdEraActorSheet.#onAddClassLevel,
+            openLevelUpFlow: ThirdEraActorSheet.#onOpenLevelUpFlow,
             removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel,
             addHpAdjustment: ThirdEraActorSheet.#onAddHpAdjustment,
             removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment,
@@ -459,9 +461,34 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Prepare level history display data for Classes tab
         const hpBreakdown = systemData.attributes.hp.hpBreakdown || [];
-        const levelHistory = (systemData.levelHistory || []).map((entry, i) => {
+        const rawHistory = systemData.levelHistory || [];
+        const lastIndexByClass = new Map();
+        for (let j = rawHistory.length - 1; j >= 0; j--) {
+            const cid = rawHistory[j].classItemId;
+            if (!lastIndexByClass.has(cid)) lastIndexByClass.set(cid, j);
+        }
+        const intMod = systemData.abilities?.int?.mod ?? 0;
+        const levelHistory = rawHistory.map((entry, i) => {
             const cls = actor.items.get(entry.classItemId);
             const bp = hpBreakdown[i];
+            const classLevel = 1 + rawHistory.slice(0, i).filter((e) => e.classItemId === entry.classItemId).length;
+            const featuresAtLevel = (cls?.system?.features || [])
+                .filter((f) => f.level === classLevel)
+                .map((f) => ({ name: f.featName ?? "?", scaling: f.scalingTable?.[classLevel] ?? null }));
+            const basePoints = cls?.system.skillPointsPerLevel ?? 0;
+            let skillPointsAtLevel = Math.max(1, basePoints + intMod);
+            if (i === 0) skillPointsAtLevel *= 4;
+            const featItemId = entry.featItemId?.trim?.();
+            const featGainedAtLevel = featItemId || entry.featName?.trim?.()
+                ? (actor.items.get(featItemId)?.name ?? entry.featName?.trim?.() ?? "Unknown")
+                : null;
+            const skillsGained = entry.skillsGained ?? [];
+            const skillsGainedAtLevel = skillsGained.map(({ key, ranks }) => {
+                const k = String(key ?? "").toLowerCase();
+                const skillItem = actor.items.find((it) => it.type === "skill" && (it.system?.key ?? "").toLowerCase() === k)
+                    ?? game.items?.find?.((it) => it.type === "skill" && (it.system?.key ?? "").toLowerCase() === k);
+                return { name: skillItem?.name ?? key ?? "?", ranks: ranks ?? 0 };
+            });
             return {
                 index: i,
                 characterLevel: i + 1,
@@ -469,7 +496,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 hitDie: cls?.system.hitDie ?? "?",
                 hpRolled: entry.hpRolled,
                 conMod: bp?.conMod ?? 0,
-                subtotal: bp?.subtotal ?? 0
+                subtotal: bp?.subtotal ?? 0,
+                featuresGainedAtLevel: featuresAtLevel,
+                skillPointsAtLevel,
+                featGainedAtLevel,
+                skillsGainedAtLevel,
+                isLastLevelOfClass: lastIndexByClass.get(entry.classItemId) === i
             };
         });
 
@@ -1278,10 +1310,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 const classScEnabled = sc?.enabled === true || sc?.enabled === "true";
                 const isFullListCaster = sc?.spellListAccess === "full";
                 if (levelCountForClass >= 1 && classScEnabled && isFullListCaster) {
-                    const actorSpellCount = this.actor.items.filter(i => i.type === "spell").length;
-                    if (actorSpellCount === 0) {
-                        await this._addClassSpellListForFullListCaster(existing, levelCountForClass);
-                    }
+                    await this._addClassSpellListForFullListCaster(existing, levelCountForClass);
                 }
                 return false;
             }
@@ -1523,6 +1552,26 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        // If dropping a spell, add via actor API so source UUID is set; then skip parent drop.
+        if (item.type === "spell") {
+            const added = await this.actor.addSpell(item);
+            if (added) {
+                await this.actor.prepareData();
+                await this.render(true);
+                const overLimit = ThirdEraActorSheet._getSpellsKnownOverLimit(this.actor);
+                if (overLimit.length > 0) {
+                    const first = overLimit[0];
+                    ui.notifications.warn(
+                        game.i18n.format("THIRDERA.Spells.KnownOverLimitWarn", {
+                            class: first.className,
+                            level: first.spellLevel
+                        })
+                    );
+                }
+                return false;
+            }
+        }
+
         const result = await super._onDropItem(event, item);
         if (result) {
             await this.actor.prepareData();
@@ -1759,10 +1808,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * For a full-list spellcasting class (cleric, druid, etc.), add all class spells from the compendium
      * at levels the character has slots for. No-op if not enabled/full-list or pack unavailable.
      * Learned casters (wizard, sorcerer, bard) must add spells manually via spellbook or spell list browser.
+     * Static version for use from LevelUpFlow (no sheet instance).
+     * @param {Actor} actor - Character actor
      * @param {Item} classItem - The class item (must have spellcasting with spellListAccess "full")
      * @param {number} classLevel - Character's level in this class (used to determine which spell levels have slots)
      */
-    async _addClassSpellListForFullListCaster(classItem, classLevel) {
+    static async addClassSpellListForFullListCaster(actor, classItem, classLevel) {
         const sc = classItem?.system?.spellcasting;
         const enabled = sc?.enabled === true || sc?.enabled === "true";
         if (!sc || !enabled || sc.spellListAccess !== "full") return;
@@ -1771,13 +1822,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!spellListKey) return;
         const table = sc.spellsPerDayTable || [];
         const existingNames = new Set(
-            this.actor.items.filter(i => i.type === "spell").map(s => s.name.toLowerCase().trim())
+            actor.items.filter(i => i.type === "spell").map(s => s.name.toLowerCase().trim())
         );
         const pack = game.packs?.get("thirdera.thirdera_spells");
         if (!pack) return;
         try {
             const docs = await pack.getDocuments();
-            const toCreate = [];
+            const docsToAdd = [];
             for (const doc of docs) {
                 if (doc.type !== "spell") continue;
                 if (!SpellData.hasLevelForClass(doc.system, spellListKey)) continue;
@@ -1785,17 +1836,24 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 if (spellLevel < 0 || spellLevel > 9) continue;
                 if (ClassData.getSpellsPerDay(table, classLevel, spellLevel) <= 0) continue;
                 if (existingNames.has((doc.name || "").toLowerCase().trim())) continue;
-                const clone = doc.toObject();
-                delete clone._id;
-                toCreate.push(clone);
+                docsToAdd.push(doc);
                 existingNames.add((doc.name || "").toLowerCase().trim());
             }
-            if (toCreate.length > 0) {
-                await this.actor.createEmbeddedDocuments("Item", toCreate);
+            if (docsToAdd.length > 0) {
+                await actor.addSpells(docsToAdd);
             }
         } catch (err) {
             console.warn("Third Era | Failed to auto-add class spells:", err);
         }
+    }
+
+    /**
+     * Instance wrapper for addClassSpellListForFullListCaster (used by sheet drop handler).
+     * @param {Item} classItem - The class item (must have spellcasting with spellListAccess "full")
+     * @param {number} classLevel - Character's level in this class
+     */
+    async _addClassSpellListForFullListCaster(classItem, classLevel) {
+        return ThirdEraActorSheet.addClassSpellListForFullListCaster(this.actor, classItem, classLevel);
     }
 
     /**
@@ -1833,6 +1891,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             const actorSpells = this.actor.items.filter(i => i.type === "spell");
             const levelStats = [];
+            const docsToAdd = [];
             for (let level = 0; level <= 9; level++) {
                 const need = ClassData.getSpellsKnown(table, classLevel, level);
                 if (need <= 0) continue;
@@ -1843,19 +1902,16 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 levelStats.push({ level, need, currentAtLevel, toAdd });
                 if (toAdd === 0) continue;
                 const candidates = (byLevel.get(level) || []).slice().sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-                const toCreate = [];
                 for (const doc of candidates) {
-                    if (toCreate.length >= toAdd) break;
+                    if (docsToAdd.length >= toAdd) break;
                     const nameKey = (doc.name || "").toLowerCase().trim();
                     if (existingNames.has(nameKey)) continue;
-                    const clone = doc.toObject();
-                    delete clone._id;
-                    toCreate.push(clone);
+                    docsToAdd.push(doc);
                     existingNames.add(nameKey);
                 }
-                if (toCreate.length > 0) {
-                    await this.actor.createEmbeddedDocuments("Item", toCreate);
-                }
+            }
+            if (docsToAdd.length > 0) {
+                await this.actor.addSpells(docsToAdd);
             }
         } catch (err) {
             console.warn("Third Era | Failed to auto-add spells known for spontaneous caster:", err);
@@ -3393,6 +3449,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
+     * Open the Level-up wizard (guided level-up flow).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenLevelUpFlow(event, target) {
+        if (this.actor.type !== "character") return;
+        new LevelUpFlow(this.actor).render(true);
+    }
+
+    /**
      * Handle adding a level to an existing class
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
@@ -3440,13 +3507,48 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const classLevels = (this.actor.system.details.classLevels || {})[itemId] || 0;
         if (classLevels <= 0) return;
 
-        const confirmed = await foundry.applications.api.DialogV2.confirm({
-            window: { title: `Remove ${cls.name} Level` },
-            content: `<p>Remove one level of ${cls.name} from ${this.actor.name}? (${classLevels} → ${classLevels - 1})</p>`,
+        const history = [...(this.actor.system.levelHistory || [])];
+        const newTotalLevel = Math.max(0, history.length - 1);
+        const minXp = getXpForLevel(newTotalLevel);
+        const midpointXp = getMidpointXpForLevel(newTotalLevel);
+        const minXpFormatted = minXp.toLocaleString();
+        const midpointXpFormatted = midpointXp.toLocaleString();
+
+        const result = await foundry.applications.api.DialogV2.wait({
             rejectClose: false,
-            modal: true
+            modal: true,
+            window: { title: `Remove ${cls.name} Level` },
+            position: { width: 440 },
+            content: `
+                <p>Remove one level of ${foundry.utils.escapeHTML(cls.name)} from ${foundry.utils.escapeHTML(this.actor.name)}? (${classLevels} → ${classLevels - 1})</p>
+                <p>What should happen to this character's experience points?</p>
+                <div class="form-group">
+                    <label><input type="radio" name="xpChoice" value="leave" checked> Leave unchanged</label><br>
+                    <label><input type="radio" name="xpChoice" value="midpoint"> Set to midpoint of new level (${midpointXpFormatted} XP)</label><br>
+                    <label><input type="radio" name="xpChoice" value="minimum"> Set to minimum of new level (${minXpFormatted} XP)</label>
+                </div>
+            `,
+            buttons: [
+                {
+                    action: "cancel",
+                    label: "Cancel",
+                    icon: "fa-solid fa-xmark",
+                    default: true,
+                    callback: () => ({ cancel: true })
+                },
+                {
+                    action: "remove",
+                    label: "Remove level",
+                    icon: "fa-solid fa-minus",
+                    callback: (_event, button) => {
+                        const choice = button.form?.elements?.xpChoice?.value || "leave";
+                        return { cancel: false, xpChoice: choice };
+                    }
+                }
+            ]
         });
-        if (!confirmed) return;
+
+        if (!result || result.cancel) return;
 
         const newClassLevel = classLevels - 1;
         const spellListAccess = cls?.system?.spellcasting?.spellListAccess;
@@ -3458,19 +3560,39 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const currentHp = this.actor.system.attributes.hp.value;
 
         // Remove the last levelHistory entry for this class
-        const history = [...(this.actor.system.levelHistory || [])];
         const lastIndex = history.findLastIndex(e => e.classItemId === itemId);
         if (lastIndex >= 0) {
+            const entry = history[lastIndex];
+
+            // Remove feat gained at this level (if any)
+            const featId = entry.featItemId?.trim?.();
+            if (featId && this.actor.items.has(featId)) {
+                await this.actor.deleteEmbeddedDocuments("Item", [featId]);
+            }
+
+            // Subtract skill ranks gained at this level
+            const skillsGained = entry.skillsGained ?? [];
+            for (const { key, ranks } of skillsGained) {
+                if (!key || ranks <= 0) continue;
+                const keyLower = String(key).toLowerCase();
+                const skill = this.actor.items.find((i) => i.type === "skill" && String(i.system?.key ?? "").toLowerCase() === keyLower);
+                if (skill) {
+                    const current = skill.system.ranks ?? 0;
+                    const newRanks = Math.max(0, current - ranks);
+                    await skill.update({ "system.ranks": newRanks });
+                }
+            }
+
             history.splice(lastIndex, 1);
             const updateData = { "system.levelHistory": history };
-            
+
             // After removal, prepareDerivedData will recalculate max HP
             // We need to update first, then check and adjust current HP
             await this.actor.update(updateData);
-            
+
             // Now that prepareDerivedData has run, get the new max HP
             const newMaxHp = this.actor.system.attributes.hp.max;
-            
+
             // If current HP exceeds new max HP, reduce it to max HP
             if (currentHp > newMaxHp) {
                 await this.actor.update({ "system.attributes.hp.value": newMaxHp });
@@ -3481,6 +3603,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (idsToRemove.length > 0) {
             await ThirdEraActorSheet._removeSpellIdsFromShortlist(this.actor, idsToRemove);
             await this.actor.deleteEmbeddedDocuments("Item", idsToRemove);
+        }
+
+        // Optional XP adjustment from dialog choice
+        const { xpChoice } = result;
+        if (xpChoice === "midpoint") {
+            await this.actor.update({ "system.experience.value": midpointXp });
+        } else if (xpChoice === "minimum") {
+            await this.actor.update({ "system.experience.value": minXp });
         }
     }
 
@@ -3866,9 +3996,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         try {
             const spellDoc = await foundry.utils.fromUuid(entry.uuid);
             if (spellDoc && spellDoc.type === "spell") {
-                const clone = spellDoc.toObject();
-                delete clone._id;
-                await this.actor.createEmbeddedDocuments("Item", [clone]);
+                await this.actor.addSpell(spellDoc);
                 await this.actor.prepareData();
                 await this.render();
                 ui.notifications.info(`Added ${spellName} to your character.`);

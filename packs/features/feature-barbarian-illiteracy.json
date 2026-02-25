@@ -1,0 +1,14 @@
+{
+  "_id": "cfBrIllitercy0001",
+  "name": "Illiteracy",
+  "type": "feature",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "description": "<p>Barbarians do not automatically know how to read and write. A barbarian may spend 2 skill points to gain literacy. A barbarian who gains a level in any other class automatically gains literacy.</p>",
+    "key": "barbarianIlliteracy",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

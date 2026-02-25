@@ -1,0 +1,185 @@
+<form class="level-up-flow-form level-up-flow-form--flex" data-appid="{{appId}}" autocomplete="off">
+  <header class="level-up-flow-header">
+    <h2 class="level-up-flow-title">{{stepLabel}}: {{stepTitle}}</h2>
+  </header>
+
+  {{#if (eq step "class")}}
+  <div class="level-up-flow-body">
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.ChooseClassHint"}}</p>
+    {{#if hasClasses}}
+    <div class="level-up-class-choices">
+      {{#each classes as |cls|}}
+      <button type="button" class="level-up-class-option {{#if (eq cls.id ../selectedClassValue)}}selected{{/if}}" data-value="{{cls.id}}">
+        <span class="level-up-option-dot"></span>
+        <span class="level-up-option-label">{{localize "THIRDERA.LevelUp.LevelUpClass" name=cls.name current=cls.currentLevels}}</span>
+      </button>
+      {{/each~}}
+      <button type="button" class="level-up-class-option {{#if addNewClassMode}}selected{{/if}}" data-value="add-new">
+        <span class="level-up-option-dot"></span>
+        <span class="level-up-option-label">{{localize "THIRDERA.LevelUp.AddNewClass"}}</span>
+      </button>
+    </div>
+    {{else}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.NoClassesHint"}}</p>
+    <div class="level-up-class-choices">
+      <button type="button" class="level-up-class-option {{#if addNewClassMode}}selected{{/if}}" data-value="add-new">
+        <span class="level-up-option-dot"></span>
+        <span class="level-up-option-label">{{localize "THIRDERA.LevelUp.AddNewClass"}}</span>
+      </button>
+    </div>
+    {{/if}}
+
+    {{#if addNewClassMode}}
+    <div class="form-group level-up-new-class-picker">
+      <label for="level-up-new-class-select">{{localize "THIRDERA.LevelUp.SelectClassToAdd"}}</label>
+      <select id="level-up-new-class-select" name="newClassUuid">
+        <option value="" {{#unless selectedNewClassUuid}}selected{{/unless}}>{{localize "THIRDERA.LevelUp.SelectClassPlaceholder"}}</option>
+        {{#each availableClasses as |opt|}}
+        <option value="{{opt.uuid}}" {{#if (eq opt.uuid selectedNewClassUuid)}}selected{{/if}}>{{opt.name}} ({{opt.packName}})</option>
+        {{/each}}
+      </select>
+    </div>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  {{#if (eq step "hp")}}
+  <div class="level-up-flow-body form-group">
+    <p class="level-up-flow-hp-info">
+      <span class="level-up-flow-hp-class">{{localize "THIRDERA.LevelUp.ClassLabel"}}: {{className}}</span>
+      <span class="level-up-flow-hp-die">{{localize "THIRDERA.LevelUp.HitDieLabel"}}: {{hitDie}}</span>
+    </p>
+    <div class="form-group level-up-hp-input-row">
+      <label for="level-up-hp-input">{{localize "THIRDERA.LevelUp.HpForThisLevel"}}</label>
+      <div class="level-up-hp-controls">
+        <input type="number" id="level-up-hp-input" name="hpRolled" value="{{hpRolled}}" min="0" data-dtype="Number" />
+        {{#if canRoll}}
+        <button type="button" class="level-up-roll-hp" data-action="rollHp" data-hit-die="{{hitDie}}" title="{{localize "THIRDERA.LevelUp.RollHpTitle"}}">
+          <i class="fas fa-dice-d20"></i> {{localize "THIRDERA.LevelUp.Roll"}} {{hitDie}}
+        </button>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if (eq step "skills")}}
+  <div class="level-up-flow-body level-up-flow-skills">
+    <p class="level-up-flow-skill-budget {{#unless valid}}level-up-flow-over-budget{{/unless}}">
+      {{localize "THIRDERA.LevelUp.SkillPointsThisLevel"}}: <strong>{{skillPointsForLevel}}</strong>
+      · {{localize "THIRDERA.Skills.spent"}}: {{pointsSpent}}
+      · <span class="{{#unless valid}}level-up-flow-over-budget{{/unless}}">{{localize "THIRDERA.Skills.remaining"}}: {{remaining}}</span>
+    </p>
+    <p class="level-up-flow-hint level-up-flow-max-ranks-note">{{localize "THIRDERA.LevelUp.SkillPointsMaxRanksNote"}}</p>
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SkillPointsHint"}}</p>
+    <div class="level-up-flow-skills-list">
+      <section class="level-up-flow-skill-group">
+        <h4 class="level-up-flow-skill-group-title">{{localize "THIRDERA.LevelUp.SkillGroupClassSkills"}}</h4>
+        <ol class="items-list">
+          {{#each classSkills as |sk|}}
+          <li class="item flexrow {{#if sk.isForbidden}}skill-forbidden{{else}}class-skill{{/if}}">
+            <span class="skill-name">{{sk.name}}</span>
+            <span class="level-up-flow-skill-modifiers" title="{{localize "THIRDERA.LevelUp.SkillModifiersTitle"}}">{{sk.modifierSummary}}</span>
+            {{#if sk.isForbidden}}
+            <span class="skill-forbidden-label" title="{{sk.forbiddenReason}}">{{localize "THIRDERA.Skills.forbidden"}}</span>
+            {{else}}
+            <span class="skill-max" title="{{localize "THIRDERA.Skills.maxRanks"}}">max {{sk.maxRanksAfter}}</span>
+            <input type="number" name="pointsToSpend" data-skill-id="{{sk.id}}" value="{{sk.pointsToSpend}}" min="0" max="{{sk.maxPoints}}" step="1" data-dtype="Number" class="level-up-flow-points-input"
+              title="{{localize "THIRDERA.Skills.classSkill"}} (1 {{localize "THIRDERA.LevelUp.pointPerRank"}})" />
+            <span class="skill-resulting-ranks" title="{{localize "THIRDERA.LevelUp.ResultingRanksTitle"}}">→ {{sk.resultingRanks}}</span>
+            {{/if}}
+          </li>
+          {{/each}}
+        </ol>
+      </section>
+      <section class="level-up-flow-skill-group">
+        <h4 class="level-up-flow-skill-group-title">{{localize "THIRDERA.LevelUp.SkillGroupCrossClassSkills"}}</h4>
+        <ol class="items-list">
+          {{#each crossClassSkills as |sk|}}
+          <li class="item flexrow {{#if sk.isForbidden}}skill-forbidden{{else}}cross-class-skill{{/if}}">
+            <span class="skill-name">{{sk.name}}</span>
+            <span class="level-up-flow-skill-modifiers" title="{{localize "THIRDERA.LevelUp.SkillModifiersTitle"}}">{{sk.modifierSummary}}</span>
+            {{#if sk.isForbidden}}
+            <span class="skill-forbidden-label" title="{{sk.forbiddenReason}}">{{localize "THIRDERA.Skills.forbidden"}}</span>
+            {{else}}
+            <span class="skill-max" title="{{localize "THIRDERA.Skills.maxRanks"}}">max {{sk.maxRanksAfter}}</span>
+            <input type="number" name="pointsToSpend" data-skill-id="{{sk.id}}" value="{{sk.pointsToSpend}}" min="0" max="{{sk.maxPoints}}" step="1" data-dtype="Number" class="level-up-flow-points-input"
+              title="{{localize "THIRDERA.Skills.crossClassSkill"}} (2 {{localize "THIRDERA.LevelUp.pointsPerRank"}})" />
+            <span class="skill-resulting-ranks" title="{{localize "THIRDERA.LevelUp.ResultingRanksTitle"}}">→ {{sk.resultingRanks}}</span>
+            {{/if}}
+          </li>
+          {{/each}}
+        </ol>
+      </section>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if (eq step "feat")}}
+  <div class="level-up-flow-body">
+    {{#if gainsFeat}}
+    {{#if gainsFighterBonus}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.FighterBonusFeatHint" name=className}}</p>
+    {{else}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.GeneralFeatHint"}}</p>
+    {{/if}}
+    <div class="form-group">
+      <label for="level-up-feat-select">{{localize "THIRDERA.LevelUp.SelectFeat"}}</label>
+      <select id="level-up-feat-select" name="featUuid">
+        <option value="" {{#unless selectedFeatUuid}}selected{{/unless}}>{{localize "THIRDERA.LevelUp.SelectFeatPlaceholder"}}</option>
+        {{#each availableFeats as |opt|}}
+        <option value="{{opt.uuid}}" {{#if (eq opt.uuid ../selectedFeatUuid)}}selected{{/if}}>{{opt.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    {{else}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.NoFeatThisLevel"}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  {{#if (eq step "spells")}}
+  <div class="level-up-flow-body">
+    {{#if isFullListCaster}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SpellcastersFullListMessage"}}</p>
+    {{/if}}
+    {{#if isLearnedCaster}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SpellcastersLearnedHint"}}</p>
+    {{#if spellsKnownSummary}}
+    <p class="level-up-flow-spells-known">{{spellsKnownSummary}}</p>
+    {{/if}}
+    <div class="form-group">
+      <button type="button" class="level-up-open-spell-list" data-action="openSpellList" title="{{localize "THIRDERA.LevelUp.OpenSpellListTitle"}}">
+        <i class="fas fa-book-sparkles"></i> {{localize "THIRDERA.LevelUp.OpenSpellList"}}
+      </button>
+    </div>
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SpellcastersLearnedNextHint"}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  {{#if (eq step "features")}}
+  <div class="level-up-flow-body">
+    <p class="level-up-flow-features-intro">{{localize "THIRDERA.LevelUp.NewFeaturesIntro" name=className level=newClassLevel}}</p>
+    {{#if featuresAtLevel.length}}
+    <ul class="level-up-flow-features-list">
+      {{#each featuresAtLevel as |f|}}
+      <li>{{f.featName}}</li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.NewFeaturesNone"}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <footer class="level-up-flow-footer flexrow">
+    {{#unless (eq step "class")}}
+    <button type="button" data-action="back"><i class="fas fa-arrow-left"></i> {{localize "THIRDERA.LevelUp.Back"}}</button>
+    {{/unless}}
+    <button type="button" data-action="cancel">{{localize "THIRDERA.LevelUp.Cancel"}}</button>
+    <button type="button" data-action="next">
+      {{#if isLastStep}}{{localize "THIRDERA.LevelUp.Finish"}}{{else}}{{localize "THIRDERA.LevelUp.Next"}}{{/if}}
+    </button>
+  </footer>
+</form>

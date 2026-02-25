@@ -4,7 +4,7 @@
   "type": "class",
   "img": "icons/svg/sword.svg",
   "system": {
-    "description": "<p>Rogues share little in common with each other. Some are stealthy thieves. Others are silver-tongued tricksters.</p>",
+    "description": "<p>Rogues are skilled in stealth, traps, and striking when an opponent cannot defend effectively. They have the most skill points per level and excel at finding and disarming traps.</p><h3>Alignment</h3><p>Any.</p><h3>Key Class Features</h3><ul><li><strong>Sneak Attack:</strong> Extra damage (1d6 at 1st, +1d6 every 2 levels) when the target is denied Dex to AC or when the rogue flanks. Ranged only within 30 ft. No extra damage vs. creatures immune to critical hits or without vital anatomy.</li><li><strong>Trapfinding:</strong> Only rogues can use Search to find traps with DC &gt; 20 and Disable Device to disarm magic traps.</li><li><strong>Evasion (2nd):</strong> On successful Reflex save for half damage, take no damage. Light armor or no armor only.</li><li><strong>Trap Sense (3rd):</strong> +1 on Reflex vs. traps and dodge AC vs. trap attacks (improves every 3 levels).</li><li><strong>Uncanny Dodge (4th):</strong> Retain Dex bonus to AC when flat-footed or struck by invisible attackers.</li><li><strong>Improved Uncanny Dodge (8th):</strong> Cannot be flanked; denies sneak attack by flanking unless attacker has 4+ more rogue levels.</li><li><strong>Special Abilities (10th, 13th, 16th, 19th):</strong> Choose one: Crippling Strike, Defensive Roll, Improved Evasion, Opportunist, Skill Mastery, Slippery Mind, or a bonus feat.</li></ul>",
     "hitDie": "d6",
     "babProgression": "average",
     "saves": {
@@ -18,7 +18,7 @@
       {"key": "balance", "name": "Balance"},
       {"key": "bluff", "name": "Bluff"},
       {"key": "climb", "name": "Climb"},
-      {"key": "craft", "name": "Craft"},
+      {"key": "craft-alchemy", "name": "Craft (Alchemy)"}, {"key": "craft-armorsmithing", "name": "Craft (Armorsmithing)"}, {"key": "craft-bowmaking", "name": "Craft (Bowmaking)"}, {"key": "craft-weaponsmithing", "name": "Craft (Weaponsmithing)"}, {"key": "craft-trapmaking", "name": "Craft (Trapsmithing)"},
       {"key": "decipherScript", "name": "Decipher Script"},
       {"key": "diplomacy", "name": "Diplomacy"},
       {"key": "disableDevice", "name": "Disable Device"},
@@ -29,10 +29,11 @@
       {"key": "hide", "name": "Hide"},
       {"key": "intimidate", "name": "Intimidate"},
       {"key": "jump", "name": "Jump"},
+      {"key": "knowledge-local", "name": "Knowledge (Local)"},
       {"key": "listen", "name": "Listen"},
       {"key": "moveSilently", "name": "Move Silently"},
       {"key": "openLock", "name": "Open Lock"},
-      {"key": "perform", "name": "Perform"},
+      {"key": "perform-act", "name": "Perform (Act)"}, {"key": "perform-comedy", "name": "Perform (Comedy)"}, {"key": "perform-dance", "name": "Perform (Dance)"}, {"key": "perform-keyboard-instruments", "name": "Perform (Keyboard Instruments)"}, {"key": "perform-oratory", "name": "Perform (Oratory)"}, {"key": "perform-percussion-instruments", "name": "Perform (Percussion Instruments)"}, {"key": "perform-sing", "name": "Perform (Sing)"}, {"key": "perform-string-instruments", "name": "Perform (String Instruments)"}, {"key": "perform-wind-instruments", "name": "Perform (Wind Instruments)"},
       {"key": "profession", "name": "Profession"},
       {"key": "search", "name": "Search"},
       {"key": "senseMotive", "name": "Sense Motive"},
@@ -43,7 +44,7 @@
       {"key": "useMagicDevice", "name": "Use Magic Device"},
       {"key": "useRope", "name": "Use Rope"}
     ],
-    "features": [],
+    "features": [{"level":1,"featItemId":"cfRoSneakAttack01","featName":"Sneak Attack","featKey":"rogueSneakAttack"},{"level":1,"featItemId":"cfRoTrapfinding01","featName":"Trapfinding","featKey":"rogueTrapfinding"},{"level":2,"featItemId":"cfRoEvasion0000","featName":"Evasion","featKey":"rogueEvasion"},{"level":3,"featItemId":"cfRoTrapSense001","featName":"Trap Sense","featKey":"rogueTrapSense"},{"level":4,"featItemId":"cfRoUncannyDod01","featName":"Uncanny Dodge","featKey":"rogueUncannyDodge"},{"level":8,"featItemId":"cfRoImpUncanny01","featName":"Improved Uncanny Dodge","featKey":"rogueImprovedUncannyDodge"},{"level":10,"featItemId":"cfRoSpecialAb01","featName":"Special Ability","featKey":"rogueSpecialAbility"},{"level":13,"featItemId":"cfRoSpecialAb01","featName":"Special Ability","featKey":"rogueSpecialAbility"},{"level":16,"featItemId":"cfRoSpecialAb01","featName":"Special Ability","featKey":"rogueSpecialAbility"},{"level":19,"featItemId":"cfRoSpecialAb01","featName":"Special Ability","featKey":"rogueSpecialAbility"}],
     "isPrestige": "false"
   },
   "flags": {},

@@ -1,0 +1,27 @@
+{
+  "_id": "cfDrWildShape001",
+  "name": "Wild Shape",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Transform into Small or Medium animal (1 hour per level). At 6th–7th, 10th, 14th, 18th: more uses per day. At 8th: Large animal; 11th: Tiny; 12th: plant; 15th: Huge animal; 16th: elemental 1/day (Small/Medium/Large); 18th: elemental 2/day; 20th: elemental 3/day, Huge elemental. Changing form is a standard action; each use heals as if rested overnight.</p>",
+    "key": "druidWildShape",
+    "scalingTable": [
+      {"minLevel": 5, "value": "1/day (Small/Medium animal)"},
+      {"minLevel": 6, "value": "2/day"},
+      {"minLevel": 7, "value": "3/day"},
+      {"minLevel": 8, "value": "Large animal"},
+      {"minLevel": 10, "value": "4/day"},
+      {"minLevel": 11, "value": "Tiny animal"},
+      {"minLevel": 12, "value": "Plant"},
+      {"minLevel": 14, "value": "5/day"},
+      {"minLevel": 15, "value": "Huge animal"},
+      {"minLevel": 16, "value": "Elemental 1/day"},
+      {"minLevel": 18, "value": "6/day, elemental 2/day"},
+      {"minLevel": 20, "value": "Elemental 3/day, Huge elemental"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

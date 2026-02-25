@@ -1,0 +1,14 @@
+{
+  "_id": "cfDrAnimalComp01",
+  "name": "Animal Companion (Druid)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Begin play with an animal companion from the SRD list (badger, camel, dire rat, dog, eagle, hawk, horse, owl, pony, snake, wolf; aquatic options in aquatic campaigns). Companion gains bonus HD, natural armor, and special abilities as you advance. Can release and gain a new one with 24 hours of prayer.</p>",
+    "key": "druidAnimalCompanion",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

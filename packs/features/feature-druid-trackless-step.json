@@ -1,0 +1,14 @@
+{
+  "_id": "cfDrTrackless01",
+  "name": "Trackless Step",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>Leave no trail in natural surroundings and cannot be tracked. You may choose to leave a trail if desired.</p>",
+    "key": "druidTracklessStep",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 4
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgWildEmpathy01",
+  "name": "Wild Empathy (Ranger)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Improve animal attitude like a Diplomacy check. 1d20 + ranger level + Cha modifier. Must be within 30 ft. Generally 1 minute. -4 to influence magical beasts with Int 1–2.</p>",
+    "key": "rangerWildEmpathy",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

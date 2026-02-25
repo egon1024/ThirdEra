@@ -3,6 +3,7 @@
  * Allows selecting a class or domain, viewing spells by level (and school for arcane class),
  * clicking to open spell sheets, and dragging spells to actors or domains.
  */
+import { ClassData } from "../data/item-class.mjs";
 import { getAllClasses, getSpellsForClass } from "../logic/class-spell-list.mjs";
 import { getAllDomains, getSpellsForDomain } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
@@ -21,7 +22,8 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
             resizable: true
         },
         actions: {
-            changeClass: SpellListBrowser.#onChangeClass
+            changeClass: SpellListBrowser.#onChangeClass,
+            addToCharacter: SpellListBrowser.#onAddToCharacter
         }
     };
 
@@ -42,16 +44,48 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
     /** Search/filter term for spells. */
     searchTerm = "";
 
+    /** When set from level-up flow: actor to add spells to. */
+    actor = null;
+
+    /** When true, show checkboxes and "Add to character" button (opened from level-up flow). */
+    addToActorMode = false;
+
+    /** When set, pre-select this spell list (class) by spellListKey. */
+    spellListKey = null;
+
+    /** Optional new class level for display when in addToActorMode. */
+    newClassLevel = null;
+
     /** @override */
     async _prepareContext(options) {
         const [classes, domains] = await Promise.all([getAllClasses(), getAllDomains()]);
         this._cachedClasses = classes;
         this._cachedDomains = domains;
 
-        const selectedSource = this.selectedSource ?? (this.selectedClass ? { type: "class", ...this.selectedClass } : null);
+        let selectedSource = this.selectedSource ?? (this.selectedClass ? { type: "class", ...this.selectedClass } : null);
+        const initialSpellListKey = this.options?.spellListKey ?? this.spellListKey;
+        if (!selectedSource && initialSpellListKey) {
+            const keyLower = String(initialSpellListKey).toLowerCase();
+            const match = classes.find((c) => (c.spellListKey || "").toLowerCase() === keyLower);
+            if (match) {
+                selectedSource = { type: "class", ...match };
+                this.selectedSource = selectedSource;
+            }
+        }
 
         let spellsByLevel = [];
         let isArcane = false;
+
+        const actorForKnown = this.options?.actor ?? this.actor;
+        const addToActorModeActive = !!(this.options?.addToActorMode || this.addToActorMode) && !!actorForKnown;
+        const knownSourceUuids = addToActorModeActive
+            ? new Set(
+                actorForKnown.items
+                    .filter((i) => i.type === "spell")
+                    .map((i) => i.flags?.thirdera?.sourceSpellUuid)
+                    .filter(Boolean)
+            )
+            : new Set();
 
         if (selectedSource?.type === "class" && selectedSource?.spellListKey) {
             const rawSpells = await getSpellsForClass(selectedSource.spellListKey);
@@ -68,7 +102,14 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
                 byLevel.get(level).push(entry);
             }
 
+            const allowedLevels = SpellListBrowser.#getAllowedSpellLevelsForAddToActor(
+                this.options?.actor ?? this.actor,
+                selectedSource,
+                this.options?.newClassLevel ?? this.newClassLevel
+            );
+
             for (let level = 0; level <= 9; level++) {
+                if (allowedLevels !== null && !allowedLevels.has(level)) continue;
                 const entries = byLevel.get(level) || [];
                 if (entries.length === 0) continue;
 
@@ -87,12 +128,14 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
                         const spellList = bySchool.get(school);
                         spellList.sort((a, b) => (a.spell?.name || "").localeCompare(b.spell?.name || ""));
                         for (const e of spellList) {
+                            const uuid = e.spell?.uuid ?? "";
                             spells.push({
                                 spell: e.spell,
-                                uuid: e.spell?.uuid ?? "",
+                                uuid,
                                 name: e.spell?.name ?? "",
                                 img: e.spell?.img ?? "",
-                                schoolName: school
+                                schoolName: school,
+                                alreadyKnown: knownSourceUuids.has(uuid)
                             });
                         }
                     }
@@ -101,12 +144,16 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
                     const spells = entries
                         .slice()
                         .sort((a, b) => (a.spell?.name || "").localeCompare(b.spell?.name || ""))
-                        .map((e) => ({
-                            spell: e.spell,
-                            uuid: e.spell?.uuid ?? "",
-                            name: e.spell?.name ?? "",
-                            img: e.spell?.img ?? ""
-                        }));
+                        .map((e) => {
+                            const uuid = e.spell?.uuid ?? "";
+                            return {
+                                spell: e.spell,
+                                uuid,
+                                name: e.spell?.name ?? "",
+                                img: e.spell?.img ?? "",
+                                alreadyKnown: knownSourceUuids.has(uuid)
+                            };
+                        });
                     spellsByLevel.push({ level, spells, isArcane: false });
                 }
             }
@@ -130,7 +177,8 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
                         spell,
                         uuid: entry.uuid,
                         name: spell?.name ?? entry.spellName ?? "",
-                        img: spell?.img ?? ""
+                        img: spell?.img ?? "",
+                        alreadyKnown: knownSourceUuids.has(entry.uuid)
                     });
                 }
 
@@ -148,6 +196,7 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
         const domainsWithValue = domains.map((d) => ({ ...d, optionValue: `domain:${d.uuid}` }));
 
         return {
+            appId: this.id,
             classes: classesWithValue,
             domains: domainsWithValue,
             selectedSource,
@@ -155,8 +204,40 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
             spellsByLevel,
             isArcane,
             searchTerm: this.searchTerm ?? "",
-            hasSpells: spellsByLevel.length > 0
+            hasSpells: spellsByLevel.length > 0,
+            addToActorMode: !!(this.options?.addToActorMode || this.addToActorMode) && !!(this.options?.actor || this.actor),
+            actor: this.options?.actor ?? this.actor
         };
+    }
+
+    /**
+     * When in addToActorMode, return a Set of spell levels (0-9) the character has access to at the given class level.
+     * Returns null if not in addToActorMode or no restriction (show all levels).
+     * @param {Actor|null} actor
+     * @param {object|null} selectedSource - { type, spellListKey }
+     * @param {number|null} newClassLevel
+     * @returns {Set<number>|null}
+     */
+    static #getAllowedSpellLevelsForAddToActor(actor, selectedSource, newClassLevel) {
+        if (!actor || !selectedSource || selectedSource.type !== "class" || !selectedSource.spellListKey || !Number.isInteger(newClassLevel) || newClassLevel < 1) {
+            return null;
+        }
+        const classItem = actor.items.find(
+            (i) => i.type === "class" && (i.system?.spellcasting?.spellListKey || "").toLowerCase() === (selectedSource.spellListKey || "").toLowerCase()
+        );
+        if (!classItem?.system?.spellcasting) return null;
+        const sc = classItem.system.spellcasting;
+        const allowed = new Set();
+        const spellsKnownTable = sc.spellsKnownTable;
+        const spellsPerDayTable = sc.spellsPerDayTable;
+        const useKnown = Array.isArray(spellsKnownTable) && spellsKnownTable.length > 0;
+        for (let sl = 0; sl <= 9; sl++) {
+            const hasAccess = useKnown
+                ? ClassData.getSpellsKnown(spellsKnownTable, newClassLevel, sl) > 0
+                : ClassData.getSpellsPerDay(spellsPerDayTable, newClassLevel, sl) > 0;
+            if (hasAccess) allowed.add(sl);
+        }
+        return allowed.size > 0 ? allowed : null;
     }
 
     /** @override */
@@ -243,6 +324,29 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
             }
         } catch (_) {
             // Ignore
+        }
+    }
+
+    /**
+     * Add selected spells (checkboxes) to the actor. Used when opened from level-up flow.
+     * @param {Event} event
+     */
+    static async #onAddToCharacter(event, target) {
+        const el = (typeof target !== "undefined" ? target : event?.target)?.closest?.("[data-appid]");
+        const appId = el?.dataset?.appid;
+        const app = appId ? foundry.applications.instances.get(appId) : null;
+        const actor = app?.options?.actor ?? app?.actor;
+        if (!app || app.constructor?.name !== "SpellListBrowser" || !actor) return;
+        const root = app.element?.querySelector?.(".window-content") ?? app.element;
+        const checked = root?.querySelectorAll?.('input[name="addSpellToActor"]:checked') ?? [];
+        const uuids = [...checked].map((el) => el.dataset?.spellUuid).filter(Boolean);
+        if (uuids.length === 0) {
+            ui.notifications.warn(game.i18n.localize("THIRDERA.SpellListBrowser.SelectSpellsFirst"));
+            return;
+        }
+        const created = await actor.addSpells(uuids);
+        if (created.length > 0) {
+            ui.notifications.info(game.i18n.format("THIRDERA.SpellListBrowser.AddedToCharacter", { count: created.length }));
         }
     }
 

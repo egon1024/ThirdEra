@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkStillMind001",
+  "name": "Still Mind",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>+2 bonus on saving throws against enchantment spells and effects.</p>",
+    "key": "monkStillMind",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

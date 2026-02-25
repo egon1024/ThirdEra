@@ -1,0 +1,14 @@
+{
+  "_id": "cfSoFamiliar001",
+  "name": "Familiar (Sorcerer)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Obtain a familiar (24 hours, 100 gp). Familiar is a magical beast that serves as companion and servant; grants special abilities based on type and your level. If it dies or is dismissed, Fortitude DC 15 or lose 200 XP per level (minimum 0). Cannot replace for a year and day.</p>",
+    "key": "sorcererFamiliar",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}

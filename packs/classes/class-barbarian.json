@@ -4,7 +4,7 @@
   "type": "class",
   "img": "icons/svg/sword.svg",
   "system": {
-    "description": "<p>Barbarians are warriors who shun heavy armor and shields in favor of mobility and raw power.</p>",
+    "description": "<p>Barbarians are fierce warriors who rely on primal fury and instinct. They favor mobility and raw power over heavy armor and shields.</p><h3>Alignment</h3><p>Any nonlawful.</p><h3>Key Class Features</h3><ul><li><strong>Fast Movement:</strong> Land speed is faster than normal (+10 ft.) when not wearing heavy armor or carrying a heavy load.</li><li><strong>Rage:</strong> Fly into a rage a number of times per day, gaining +4 Str, +4 Con, +2 morale on Will saves, and -2 AC. Duration: 3 + Con modifier rounds. At the end, the barbarian is fatigued (unless 17th level).</li><li><strong>Uncanny Dodge (2nd):</strong> Retain Dex bonus to AC when flat-footed or struck by invisible attackers.</li><li><strong>Trap Sense (3rd):</strong> +1 bonus on Reflex saves vs. traps and dodge AC vs. trap attacks, improving every 3 levels.</li><li><strong>Damage Reduction (7th):</strong> Subtract 1 from weapon/natural attack damage (improves at 10th and every 3 levels).</li><li><strong>Greater Rage (11th):</strong> Rage bonuses increase to +6 Str, +6 Con, +3 Will.</li><li><strong>Mighty Rage (20th):</strong> Rage bonuses increase to +8 Str, +8 Con, +4 Will.</li></ul><p><em>Ex-barbarians:</em> A barbarian who becomes lawful loses the ability to rage and cannot gain more barbarian levels.</p>",
     "hitDie": "d12",
     "babProgression": "good",
     "saves": {
@@ -15,7 +15,7 @@
     "skillPointsPerLevel": 4,
     "classSkills": [
       {"key": "climb", "name": "Climb"},
-      {"key": "craft", "name": "Craft"},
+      {"key": "craft-alchemy", "name": "Craft (Alchemy)"}, {"key": "craft-armorsmithing", "name": "Craft (Armorsmithing)"}, {"key": "craft-bowmaking", "name": "Craft (Bowmaking)"}, {"key": "craft-weaponsmithing", "name": "Craft (Weaponsmithing)"}, {"key": "craft-trapmaking", "name": "Craft (Trapsmithing)"},
       {"key": "handleAnimal", "name": "Handle Animal"},
       {"key": "intimidate", "name": "Intimidate"},
       {"key": "jump", "name": "Jump"},
@@ -24,7 +24,7 @@
       {"key": "survival", "name": "Survival"},
       {"key": "swim", "name": "Swim"}
     ],
-    "features": [],
+    "features": [{"level":1,"featItemId":"cfBrFastMove0001","featName":"Fast Movement","featKey":"barbarianFastMovement"},{"level":1,"featItemId":"cfBrIllitercy0001","featName":"Illiteracy","featKey":"barbarianIlliteracy"},{"level":1,"featItemId":"cfBrRage000000","featName":"Rage","featKey":"barbarianRage"},{"level":2,"featItemId":"cfBrUncannyDod01","featName":"Uncanny Dodge","featKey":"barbarianUncannyDodge"},{"level":3,"featItemId":"cfBrTrapSense0001","featName":"Trap Sense","featKey":"barbarianTrapSense"},{"level":5,"featItemId":"cfBrImpUncanny01","featName":"Improved Uncanny Dodge","featKey":"barbarianImprovedUncannyDodge"},{"level":7,"featItemId":"cfBrDmgReduct001","featName":"Damage Reduction","featKey":"barbarianDamageReduction"},{"level":11,"featItemId":"cfBrGreaterRage01","featName":"Greater Rage","featKey":"barbarianGreaterRage"},{"level":14,"featItemId":"cfBrIndomWill001","featName":"Indomitable Will","featKey":"barbarianIndomitableWill"},{"level":17,"featItemId":"cfBrTirelessRg01","featName":"Tireless Rage","featKey":"barbarianTirelessRage"},{"level":20,"featItemId":"cfBrMightyRage01","featName":"Mighty Rage","featKey":"barbarianMightyRage"}],
     "isPrestige": "false"
   },
   "flags": {},

@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgEvasion0001",
+  "name": "Evasion (Ranger)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>On successful Reflex save against an attack that allows half damage on a save, take no damage. Light armor or no armor only. Helpless rangers do not gain this benefit.</p>",
+    "key": "rangerEvasion",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

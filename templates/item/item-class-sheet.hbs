@@ -98,11 +98,11 @@
         <div class="tab skills {{#if (eq tabs.primary 'skills')}}active{{/if}}" data-group="primary" data-tab="skills">
             <h3 class="form-header">Class Skills</h3>
             <p class="hint">Drag skill items here to add them as class skills.</p>
-            {{#if system.classSkills.length}}
+            {{#if classSkillsForDisplay.length}}
             <ol class="skill-ref-list">
-                {{#each system.classSkills as |entry|}}
+                {{#each classSkillsForDisplay as |entry|}}
                 <li class="skill-ref-entry">
-                    <span class="skill-ref-name">{{entry.name}}</span>
+                    <span class="skill-ref-name">{{entry.displayName}}</span>
                     <a class="skill-ref-remove" data-action="removeClassSkill" data-skill-key="{{entry.key}}"
                         title="Remove"><i class="fas fa-times"></i></a>
                 </li>

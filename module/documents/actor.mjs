@@ -271,4 +271,63 @@ export class ThirdEraActor extends Actor {
 
         return true;
     }
+
+    /**
+     * Resolve a source (Item or UUID string) to a spell document. Returns null if not found or not a spell.
+     * @param {Item|string} source - Spell document or UUID of a spell document
+     * @returns {Promise<Item|null>}
+     */
+    static async _resolveSpellSource(source) {
+        if (!source) return null;
+        let doc = typeof source === "string" ? await foundry.utils.fromUuid(source) : source;
+        if (!doc?.type || doc.type !== "spell") return null;
+        return doc;
+    }
+
+    /**
+     * Add a single spell to this actor with source UUID so it can be recognized as "already known" (e.g. in level-up Spell List).
+     * @param {Item|string} source - Spell document or UUID of a spell document
+     * @returns {Promise<Item|null>} The created embedded spell item, or null if source invalid or not a spell
+     */
+    async addSpell(source) {
+        const doc = await ThirdEraActor._resolveSpellSource(source);
+        if (!doc) return null;
+        const clone = doc.toObject();
+        delete clone._id;
+        clone.flags = {
+            ...clone.flags,
+            thirdera: {
+                ...(clone.flags?.thirdera || {}),
+                sourceSpellUuid: doc.uuid
+            }
+        };
+        const created = await this.createEmbeddedDocuments("Item", [clone]);
+        return created?.[0] ?? null;
+    }
+
+    /**
+     * Add multiple spells to this actor with source UUIDs. All valid sources are created in one batch.
+     * @param {Array<Item|string>} sources - Array of spell documents or UUIDs
+     * @returns {Promise<Item[]>} The created embedded spell items (order matches successful sources)
+     */
+    async addSpells(sources) {
+        if (!Array.isArray(sources) || sources.length === 0) return [];
+        const toCreate = [];
+        for (const source of sources) {
+            const doc = await ThirdEraActor._resolveSpellSource(source);
+            if (!doc) continue;
+            const clone = doc.toObject();
+            delete clone._id;
+            clone.flags = {
+                ...clone.flags,
+                thirdera: {
+                    ...(clone.flags?.thirdera || {}),
+                    sourceSpellUuid: doc.uuid
+                }
+            };
+            toCreate.push(clone);
+        }
+        if (toCreate.length === 0) return [];
+        return this.createEmbeddedDocuments("Item", toCreate);
+    }
 }

@@ -1,0 +1,14 @@
+{
+  "_id": "cfDrTimelessBd01",
+  "name": "Timeless Body (Druid)",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>No longer take ability score penalties for aging and cannot be magically aged. Existing penalties remain. Bonuses still accrue; you still die of old age when your time is up.</p>",
+    "key": "druidTimelessBody",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 9
+}

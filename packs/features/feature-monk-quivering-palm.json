@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkQuiverPalm01",
+  "name": "Quivering Palm",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Once per week, set up vibrations in a living creature you strike. Later (within a number of days equal to your monk level), you can slay it as a free action; target gets Fortitude save (DC 10 + ½ level + Wis) to resist. No effect on constructs, oozes, plants, undead, incorporeal, or creatures immune to critical hits.</p>",
+    "key": "monkQuiveringPalm",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 15
+}

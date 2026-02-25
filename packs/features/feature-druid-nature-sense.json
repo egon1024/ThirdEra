@@ -1,0 +1,14 @@
+{
+  "_id": "cfDrNatureSens01",
+  "name": "Nature Sense",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>+2 bonus on Knowledge (nature) and Survival checks.</p>",
+    "key": "druidNatureSense",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}

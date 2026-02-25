@@ -1,0 +1,14 @@
+{
+  "_id": "cfMkDiamondSoul01",
+  "name": "Diamond Soul",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Spell resistance equal to monk level + 10.</p>",
+    "key": "monkDiamondSoul",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 14
+}

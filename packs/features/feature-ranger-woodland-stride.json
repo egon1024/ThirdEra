@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgWoodlandSt01",
+  "name": "Woodland Stride (Ranger)",
+  "type": "feature",
+  "img": "icons/svg/oak.svg",
+  "system": {
+    "description": "<p>Move through natural undergrowth at normal speed without damage or impairment. Magically manipulated undergrowth still affects you.</p>",
+    "key": "rangerWoodlandStride",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 6
+}

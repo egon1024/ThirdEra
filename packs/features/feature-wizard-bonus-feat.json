@@ -1,0 +1,19 @@
+{
+  "_id": "cfWzBonusFeat01",
+  "name": "Bonus Feat (Wizard)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>At 5th, 10th, 15th, and 20th level, gain a bonus feat: metamagic, item creation, or Spell Mastery. Must meet all prerequisites.</p>",
+    "key": "wizardBonusFeat",
+    "scalingTable": [
+      {"minLevel": 5, "value": "1st"},
+      {"minLevel": 10, "value": "2nd"},
+      {"minLevel": 15, "value": "3rd"},
+      {"minLevel": 20, "value": "4th"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "cfDr1000Faces01",
+  "name": "A Thousand Faces",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Change appearance at will as disguise self, but only in normal form. Minor physical alteration, not illusory.</p>",
+    "key": "druidAThousandFaces",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 8
+}

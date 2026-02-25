@@ -1,0 +1,20 @@
+{
+  "_id": "cfPlSmiteEvil01",
+  "name": "Smite Evil",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "description": "<p>Once per day (additional uses at 5th, 10th, 15th, 20th), add Cha bonus to attack and 1 point of damage per paladin level on one melee attack against an evil creature. If the target is not evil, the smite has no effect but the use is still expended.</p>",
+    "key": "paladinSmiteEvil",
+    "scalingTable": [
+      {"minLevel": 1, "value": "1/day"},
+      {"minLevel": 5, "value": "2/day"},
+      {"minLevel": 10, "value": "3/day"},
+      {"minLevel": 15, "value": "4/day"},
+      {"minLevel": 20, "value": "5/day"}
+    ]
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 2
+}

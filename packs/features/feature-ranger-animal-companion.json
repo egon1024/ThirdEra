@@ -1,0 +1,14 @@
+{
+  "_id": "cfRgAnimalComp01",
+  "name": "Animal Companion (Ranger)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>At 4th level gain an animal companion as a druid, except your effective druid level is one-half your ranger level. Same list and alternative lists as druid.</p>",
+    "key": "rangerAnimalCompanion",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 5
+}

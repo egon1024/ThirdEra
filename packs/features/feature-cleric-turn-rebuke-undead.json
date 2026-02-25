@@ -1,0 +1,14 @@
+{
+  "_id": "cfClTurnUndead01",
+  "name": "Turn or Rebuke Undead",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>Channel faith through holy symbol to affect undead. Good clerics (or neutral of good deity) turn or destroy undead; evil clerics rebuke or command. Uses per day: 3 + Cha modifier. Knowledge (religion) 5+ ranks gives +2 on turning checks.</p>",
+    "key": "clericTurnRebukeUndead",
+    "scalingTable": []
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 1
+}
