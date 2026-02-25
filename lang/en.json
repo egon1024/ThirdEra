@@ -187,7 +187,22 @@
             "Cancel": "Cancel",
             "Next": "Next",
             "Finish": "Finish",
-            "LevelAdded": "Level added for {name}."
+            "LevelAdded": "Level added for {name}.",
+            "FeatsNotQualified": "Feats you don't qualify for yet",
+            "MissingReasons": "Missing: {reasons}"
+        },
+        "FeatPrereq": {
+            "RequiredFeats": "Required feats",
+            "MinBAB": "Minimum BAB",
+            "MinAbilityScores": "Minimum ability scores",
+            "AddFeat": "Add prerequisite feat",
+            "SelectFeatPlaceholder": "Select a feat…",
+            "UuidPlaceholder": "Document UUID (e.g. from compendium)",
+            "RequiresFeatMissing": "Requires feat: {name}. You do not have this feat.",
+            "RequiresFeatUnknown": "Requires feat (document not found).",
+            "RequiresBAB": "Requires BAB +{required}. You have +{current}.",
+            "RequiresAbility": "Requires {ability} {required}. You have {current}.",
+            "UnknownFeat": "Unknown feat"
         },
         "LevelHistory": {
             "Title": "Level History",

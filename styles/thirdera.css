@@ -1634,6 +1634,47 @@
   flex-shrink: 0;
 }
 
+.thirdera.level-up-flow .level-up-feats-not-qualified {
+  margin-top: 0.75em;
+  padding-top: 0.75em;
+  border-top: 1px solid var(--color-border-divider);
+}
+
+.thirdera.level-up-flow .level-up-feats-not-qualified-title {
+  margin: 0 0 0.35em 0;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+}
+
+.thirdera.level-up-flow .level-up-feats-not-qualified-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera.level-up-flow .level-up-feat-not-qualified {
+  padding: 0.25em 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.thirdera.level-up-flow .level-up-feat-not-qualified:last-child {
+  border-bottom: none;
+}
+
+.thirdera.level-up-flow .level-up-feat-not-qualified-name {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-body);
+}
+
+.thirdera.level-up-flow .level-up-feat-not-qualified-reasons {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+}
+
 .thirdera .items-list {
   list-style: none;
   margin: 0;
@@ -1831,6 +1872,67 @@
 
 .thirdera .ability-adj-entry input {
   width: 60px;
+  text-align: center;
+}
+
+/* Feat item sheet — prerequisite feats and ability minimums */
+.thirdera .prerequisite-feats-list {
+  list-style: none;
+  margin: 0 0 0.5em 0;
+  padding: 0;
+}
+
+.thirdera .prerequisite-feat-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.2em 0;
+}
+
+.thirdera .prerequisite-feat-name {
+  flex: 1;
+}
+
+.thirdera .prerequisite-feat-remove {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.thirdera .prerequisite-feat-remove:hover {
+  color: var(--color-hover-alt);
+}
+
+.thirdera .prerequisite-feat-add {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  margin-top: 0.35em;
+}
+
+.thirdera .prerequisite-feat-select,
+.thirdera .prerequisite-feat-uuid-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.thirdera .prerequisite-abilities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto 1fr);
+  gap: 0.35em 0.75em;
+  align-items: center;
+}
+
+.thirdera .prerequisite-ability-row {
+  display: contents;
+}
+
+.thirdera .prerequisite-ability-label {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+}
+
+.thirdera .prerequisite-ability-row input {
+  width: 3em;
   text-align: center;
 }
 

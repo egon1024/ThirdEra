@@ -132,6 +132,19 @@
         {{/each}}
       </select>
     </div>
+    {{#if notQualifyingFeats.length}}
+    <div class="form-group level-up-feats-not-qualified">
+      <h4 class="level-up-feats-not-qualified-title">{{localize "THIRDERA.LevelUp.FeatsNotQualified"}}</h4>
+      <ul class="level-up-feats-not-qualified-list">
+        {{#each notQualifyingFeats as |opt|}}
+        <li class="level-up-feat-not-qualified">
+          <span class="level-up-feat-not-qualified-name">{{opt.name}}</span>
+          <span class="level-up-feat-not-qualified-reasons" title="{{#each opt.unmetReasons}}{{this}}{{#unless @last}} &#10;{{/unless}}{{/each}}">{{#each opt.unmetReasons}}{{this}}{{#unless @last}} {{/unless}}{{/each}}</span>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
     {{else}}
     <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.NoFeatThisLevel"}}</p>
     {{/if}}

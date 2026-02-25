@@ -52,7 +52,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             openEditorBox: ThirdEraItemSheet.#onOpenEditorBox,
             addConditionChange: ThirdEraItemSheet.#onAddConditionChange,
             removeConditionChange: ThirdEraItemSheet.#onRemoveConditionChange,
-            editImage: ThirdEraItemSheet.#onEditImage
+            editImage: ThirdEraItemSheet.#onEditImage,
+            addPrerequisiteFeat: ThirdEraItemSheet.#onAddPrerequisiteFeat,
+            removePrerequisiteFeat: ThirdEraItemSheet.#onRemovePrerequisiteFeat
         }
     };
 
@@ -270,6 +272,44 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 .sort((a, b) => a.displayName.localeCompare(b.displayName));
         }
 
+        // Feat: resolve prerequisite feat UUIDs to names for display; build dropdown of available feats (world + compendiums)
+        let prerequisiteFeatsDisplay = [];
+        let availableFeatsForPrereq = [];
+        if (item.type === "feat") {
+            const existingUuids = new Set((systemData.prerequisiteFeatUuids ?? []).map((u) => String(u).trim()).filter(Boolean));
+            for (const u of systemData.prerequisiteFeatUuids ?? []) {
+                const uuid = String(u).trim();
+                if (!uuid) continue;
+                let name = game.i18n.localize("THIRDERA.FeatPrereq.UnknownFeat");
+                try {
+                    const doc = await foundry.utils.fromUuid(uuid);
+                    if (doc?.name) name = doc.name;
+                } catch (_) { /* ignore */ }
+                prerequisiteFeatsDisplay.push({ uuid, name });
+            }
+            const seen = new Map();
+            const worldFeats = (game.items?.contents ?? []).filter((i) => i.type === "feat");
+            for (const doc of worldFeats) {
+                const u = doc.uuid?.trim();
+                if (!u || existingUuids.has(u)) continue;
+                const name = doc.name || game.i18n.localize("THIRDERA.FeatPrereq.UnknownFeat");
+                if (!seen.has(u)) seen.set(u, { uuid: u, name, packName: game.i18n.localize("Type.world") || "World" });
+            }
+            for (const pack of game.packs?.values() ?? []) {
+                if (pack.documentName !== "Item") continue;
+                try {
+                    const docs = await pack.getDocuments({ type: "feat" });
+                    for (const doc of docs) {
+                        const u = doc.uuid?.trim();
+                        if (!u || existingUuids.has(u)) continue;
+                        const name = doc.name || game.i18n.localize("THIRDERA.FeatPrereq.UnknownFeat");
+                        if (!seen.has(u)) seen.set(u, { uuid: u, name, packName: pack.metadata?.label ?? pack.collection });
+                    }
+                } catch (_) { /* ignore */ }
+            }
+            availableFeatsForPrereq = [...seen.values()].sort((a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" }));
+        }
+
         return {
             ...context,
             item,
@@ -290,6 +330,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             grantedSpells,
             classSkillsForDisplay,
             excludedSkillsForDisplay,
+            prerequisiteFeatsDisplay,
+            availableFeatsForPrereq,
             ...(item.type === "condition" ? { conditionChangeKeys: ThirdEraItemSheet.#getConditionChangeKeyOptions() } : {})
         };
     }
@@ -1284,5 +1326,28 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
         });
         await fp.browse();
+    }
+
+    /** Add a prerequisite feat from dropdown selection (feat sheet). */
+    static async #onAddPrerequisiteFeat(_event, target) {
+        if (this.document?.type !== "feat") return;
+        const form = target.closest("form");
+        const select = form?.querySelector(".prerequisite-feat-select");
+        const uuid = select?.value?.trim();
+        if (!uuid) return;
+        const uuids = [...(this.document.system.prerequisiteFeatUuids ?? [])];
+        if (uuids.includes(uuid)) return;
+        uuids.push(uuid);
+        await this.document.update({ "system.prerequisiteFeatUuids": uuids });
+        if (select) select.value = "";
+    }
+
+    /** Remove a prerequisite feat by UUID (feat sheet). */
+    static async #onRemovePrerequisiteFeat(_event, target) {
+        if (this.document?.type !== "feat") return;
+        const uuid = target.closest("[data-uuid]")?.dataset?.uuid;
+        if (!uuid) return;
+        const uuids = (this.document.system.prerequisiteFeatUuids ?? []).filter((u) => u !== uuid);
+        await this.document.update({ "system.prerequisiteFeatUuids": uuids });
     }
 }
