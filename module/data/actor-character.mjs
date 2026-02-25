@@ -121,7 +121,14 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             // Class level advancement history (ordered by character level)
             levelHistory: new ArrayField(new SchemaField({
                 classItemId: new StringField({ required: true, blank: false, label: "Class Item ID" }),
-                hpRolled: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "HP Rolled" })
+                hpRolled: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "HP Rolled" }),
+                featItemId: new StringField({ required: false, blank: true, initial: "", label: "Feat Item ID (gained at this level)" }),
+                featName: new StringField({ required: false, blank: true, initial: "", label: "Feat Name (display fallback)" }),
+                featKey: new StringField({ required: false, blank: true, initial: "", label: "Feat Key" }),
+                skillsGained: new ArrayField(new SchemaField({
+                    key: new StringField({ required: true, blank: false, label: "Skill Key" }),
+                    ranks: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Ranks Added" })
+                }), { required: false, initial: [], label: "Skills Gained at This Level" })
             })),
 
             // GM-granted skills (override forbidden status, treat as class skills)

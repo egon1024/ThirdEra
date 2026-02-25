@@ -193,7 +193,9 @@
             "Title": "Level History",
             "RemoveLevel": "Remove level",
             "Gained": "Gained",
-            "SkillPoints": "skill points"
+            "SkillPoints": "skill points",
+            "Feat": "Feat",
+            "Skills": "Skills"
         },
         "Spells": {
             "SpellsPerDay": "Spells/Day",

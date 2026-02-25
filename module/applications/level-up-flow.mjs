@@ -791,7 +791,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     }
 
     /**
-     * Commit the level-up: push levelHistory, update skill ranks, add feat if selected, close.
+     * Commit the level-up: push levelHistory (with feat + skillsGained), update skill ranks, close.
      * @param {LevelUpFlow} flow
      */
     static async #commitLevelUp(flow) {
@@ -803,10 +803,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         }
 
         const history = [...(flow.actor.system.levelHistory || [])];
-        history.push({ classItemId: flow.selectedClassItemId, hpRolled: flow.hpRolled });
-        await flow.actor.update({ "system.levelHistory": history });
-
-        const totalLevelAfter = flow.actor.system.levelHistory.length;
+        const totalLevelAfter = history.length + 1;
         const classSkillKeys = flow.actor.system.classSkillKeys ?? new Set();
         const grantedSkillKeys = flow.actor.system.grantedSkillKeys ?? new Set();
         const cls = flow.actor.items.get(flow.selectedClassItemId);
@@ -819,6 +816,53 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         const classSkillKeysLower = new Set([...classSkillKeys].map((k) => String(k).toLowerCase()));
         const grantedSkillKeysLower = new Set([...grantedSkillKeys].map((k) => String(k).toLowerCase()));
 
+        // Build skillsGained for this level (same cost logic as applying ranks)
+        const skillsGained = [];
+        for (const [skillId, points] of Object.entries(flow.pendingSkillPoints ?? {})) {
+            if (points <= 0) continue;
+            const keyLower = skillId.startsWith("key:") ? skillId.slice(4).toLowerCase() : (flow.actor.items.get(skillId)?.system?.key || "").toLowerCase();
+            const isClassSkill = keyLower && (grantedSkillKeysLower.has(keyLower) || classSkillKeysLower.has(keyLower) || selectedClassSkillKeysLower.has(keyLower));
+            const costPerRank = isClassSkill ? 1 : 2;
+            const maxRanksAfter = isClassSkill ? totalLevelAfter + 3 : Math.floor((totalLevelAfter + 3) / 2);
+            const addRanks = Math.min(points / costPerRank, maxRanksAfter);
+            if (addRanks <= 0) continue;
+            const key = skillId.startsWith("key:") ? skillId.slice(4) : (flow.actor.items.get(skillId)?.system?.key ?? "");
+            if (key) skillsGained.push({ key, ranks: addRanks });
+        }
+
+        // Add feat first so we can store its id on the history entry
+        let featItemId = "";
+        let featName = "";
+        let featKey = "";
+        if (flow.selectedFeatUuid) {
+            try {
+                const sourceFeat = await foundry.utils.fromUuid(flow.selectedFeatUuid);
+                if (sourceFeat && sourceFeat.type === "feat") {
+                    const obj = sourceFeat.toObject();
+                    delete obj._id;
+                    const created = await flow.actor.createEmbeddedDocuments("Item", [obj]);
+                    if (created?.length) {
+                        featItemId = created[0].id;
+                        featName = sourceFeat.name ?? "";
+                        featKey = sourceFeat.system?.key ?? "";
+                    }
+                }
+            } catch (err) {
+                console.error("Third Era | Level-up flow add feat:", err);
+                ui.notifications.warn(game.i18n.format("THIRDERA.LevelUp.FeatAddFailed", { message: err?.message || "Unknown error" }));
+            }
+        }
+
+        const newEntry = {
+            classItemId: flow.selectedClassItemId,
+            hpRolled: flow.hpRolled,
+            ...(featItemId && { featItemId, featName, featKey }),
+            skillsGained
+        };
+        history.push(newEntry);
+        await flow.actor.update({ "system.levelHistory": history });
+
+        // Apply skill rank updates
         for (const [skillId, points] of Object.entries(flow.pendingSkillPoints ?? {})) {
             if (points <= 0) continue;
             const keyLower = skillId.startsWith("key:") ? skillId.slice(4).toLowerCase() : (flow.actor.items.get(skillId)?.system?.key || "").toLowerCase();
@@ -846,20 +890,6 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const current = sd.ranks ?? 0;
             const newRanks = Math.min(current + addRanks, maxRanksAfter);
             if (newRanks > current) await skill.update({ "system.ranks": newRanks });
-        }
-
-        if (flow.selectedFeatUuid) {
-            try {
-                const sourceFeat = await foundry.utils.fromUuid(flow.selectedFeatUuid);
-                if (sourceFeat && sourceFeat.type === "feat") {
-                    const obj = sourceFeat.toObject();
-                    delete obj._id;
-                    await flow.actor.createEmbeddedDocuments("Item", [obj]);
-                }
-            } catch (err) {
-                console.error("Third Era | Level-up flow add feat:", err);
-                ui.notifications.warn(game.i18n.format("THIRDERA.LevelUp.FeatAddFailed", { message: err?.message || "Unknown error" }));
-            }
         }
 
         // Ensure full-list caster has class spells when this is their first level (covers existing class selected in flow or class created earlier without spells)

@@ -478,6 +478,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const basePoints = cls?.system.skillPointsPerLevel ?? 0;
             let skillPointsAtLevel = Math.max(1, basePoints + intMod);
             if (i === 0) skillPointsAtLevel *= 4;
+            const featItemId = entry.featItemId?.trim?.();
+            const featGainedAtLevel = featItemId || entry.featName?.trim?.()
+                ? (actor.items.get(featItemId)?.name ?? entry.featName?.trim?.() ?? "Unknown")
+                : null;
+            const skillsGained = entry.skillsGained ?? [];
+            const skillsGainedAtLevel = skillsGained.map(({ key, ranks }) => {
+                const k = String(key ?? "").toLowerCase();
+                const skillItem = actor.items.find((it) => it.type === "skill" && (it.system?.key ?? "").toLowerCase() === k)
+                    ?? game.items?.find?.((it) => it.type === "skill" && (it.system?.key ?? "").toLowerCase() === k);
+                return { name: skillItem?.name ?? key ?? "?", ranks: ranks ?? 0 };
+            });
             return {
                 index: i,
                 characterLevel: i + 1,
@@ -488,6 +499,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 subtotal: bp?.subtotal ?? 0,
                 featuresGainedAtLevel: featuresAtLevel,
                 skillPointsAtLevel,
+                featGainedAtLevel,
+                skillsGainedAtLevel,
                 isLastLevelOfClass: lastIndexByClass.get(entry.classItemId) === i
             };
         });
@@ -3549,16 +3562,37 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         // Remove the last levelHistory entry for this class
         const lastIndex = history.findLastIndex(e => e.classItemId === itemId);
         if (lastIndex >= 0) {
+            const entry = history[lastIndex];
+
+            // Remove feat gained at this level (if any)
+            const featId = entry.featItemId?.trim?.();
+            if (featId && this.actor.items.has(featId)) {
+                await this.actor.deleteEmbeddedDocuments("Item", [featId]);
+            }
+
+            // Subtract skill ranks gained at this level
+            const skillsGained = entry.skillsGained ?? [];
+            for (const { key, ranks } of skillsGained) {
+                if (!key || ranks <= 0) continue;
+                const keyLower = String(key).toLowerCase();
+                const skill = this.actor.items.find((i) => i.type === "skill" && String(i.system?.key ?? "").toLowerCase() === keyLower);
+                if (skill) {
+                    const current = skill.system.ranks ?? 0;
+                    const newRanks = Math.max(0, current - ranks);
+                    await skill.update({ "system.ranks": newRanks });
+                }
+            }
+
             history.splice(lastIndex, 1);
             const updateData = { "system.levelHistory": history };
-            
+
             // After removal, prepareDerivedData will recalculate max HP
             // We need to update first, then check and adjust current HP
             await this.actor.update(updateData);
-            
+
             // Now that prepareDerivedData has run, get the new max HP
             const newMaxHp = this.actor.system.attributes.hp.max;
-            
+
             // If current HP exceeds new max HP, reduce it to max HP
             if (currentHp > newMaxHp) {
                 await this.actor.update({ "system.attributes.hp.value": newMaxHp });
