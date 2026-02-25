@@ -656,36 +656,52 @@
       <p class="no-items hint">No classes — drag a class item here</p>
       {{/if}}
 
-      {{!-- Level History --}}
+      {{!-- Level History (collapsible panel) --}}
       {{#if levelHistory.length}}
-      <div class="items-header level-history-header">
-        <h3 class="items-header">Level History</h3>
-        <span class="level-history-hp-total">HP Max: {{system.attributes.hp.max}}</span>
-      </div>
-      <div class="level-history-grid">
-        <span class="level-history-col-header">Lvl</span>
-        <span class="level-history-col-header">Class</span>
-        <span class="level-history-col-header">Hit Die</span>
-        <span class="level-history-col-header">HP Rolled</span>
-        <span class="level-history-col-header">CON</span>
-        <span class="level-history-col-header">Total</span>
+      <details class="level-history-panel" open>
+        <summary class="level-history-panel-header">
+          <span class="level-history-panel-title">{{localize "THIRDERA.LevelHistory.Title"}}</span>
+          <span class="level-history-hp-total">HP Max: {{system.attributes.hp.max}}</span>
+        </summary>
+        <div class="level-history-grid">
+          <span class="level-history-col-header">Lvl</span>
+          <span class="level-history-col-header">Class</span>
+          <span class="level-history-col-header">Hit Die</span>
+          <span class="level-history-col-header">HP Rolled</span>
+          <span class="level-history-col-header">CON</span>
+          <span class="level-history-col-header">Total</span>
+          <span class="level-history-col-header level-history-col-actions"></span>
 
-        {{#each levelHistory as |entry|}}
-        <span class="level-history-cell level-history-level">{{entry.characterLevel}}</span>
-        <span class="level-history-cell level-history-class">{{entry.className}}</span>
-        {{#if (eq entry.hpRolled 0)}}
-        <a class="level-history-cell level-history-roll-hp" data-action="rollHitDie" data-hit-die="{{entry.hitDie}}"
-          data-level-index="{{entry.index}}" title="Click to roll {{entry.hitDie}}">{{entry.hitDie}} <i
-            class="fas fa-dice-d20"></i></a>
-        {{else}}
-        <span class="level-history-cell">{{entry.hitDie}}</span>
-        {{/if}}
-        <input type="text" data-level-hp-index="{{entry.index}}" value="{{entry.hpRolled}}" data-dtype="Number"
-          class="level-history-input" />
-        <span class="level-history-cell">{{signedNumber entry.conMod}}</span>
-        <span class="level-history-cell level-history-subtotal">{{entry.subtotal}}</span>
-        {{/each}}
-      </div>
+          {{#each levelHistory as |entry|}}
+          <span class="level-history-cell level-history-level">{{entry.characterLevel}}</span>
+          <span class="level-history-cell level-history-class" data-item-id="{{entry.classItemId}}">{{entry.className}}</span>
+          {{#if (eq entry.hpRolled 0)}}
+          <a class="level-history-cell level-history-roll-hp" data-action="rollHitDie" data-hit-die="{{entry.hitDie}}"
+            data-level-index="{{entry.index}}" title="Click to roll {{entry.hitDie}}">{{entry.hitDie}} <i
+              class="fas fa-dice-d20"></i></a>
+          {{else}}
+          <span class="level-history-cell">{{entry.hitDie}}</span>
+          {{/if}}
+          <input type="text" data-level-hp-index="{{entry.index}}" value="{{entry.hpRolled}}" data-dtype="Number"
+            class="level-history-input" />
+          <span class="level-history-cell">{{signedNumber entry.conMod}}</span>
+          <span class="level-history-cell level-history-subtotal">{{entry.subtotal}}</span>
+          {{#if entry.isLastLevelOfClass}}
+          <a class="level-history-cell level-history-remove" data-action="removeClassLevel" data-item-id="{{entry.classItemId}}"
+            title="{{localize "THIRDERA.LevelHistory.RemoveLevel"}}"><i class="fas fa-minus"></i></a>
+          {{else}}
+          <span class="level-history-cell level-history-col-actions"></span>
+          {{/if}}
+
+          {{#if entry.featuresGainedAtLevel.length}}
+          <div class="level-history-gained" style="grid-column: 1 / -1;">
+            {{localize "THIRDERA.LevelHistory.Gained"}}: {{#each entry.featuresGainedAtLevel as |f|}}{{f.name}}{{#if f.scaling}} ({{f.scaling}}){{/if}}{{#unless @last}}, {{/unless}}{{/each}}
+            {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
+          </div>
+          {{/if}}
+          {{/each}}
+        </div>
+      </details>
       {{/if}}
     </div>
 

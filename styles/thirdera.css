@@ -2067,7 +2067,44 @@
   margin-left: 4px;
 }
 
-/* Level History grid */
+/* Level History panel (collapsible) */
+.thirdera .level-history-panel {
+  margin-top: 8px;
+  border: 1px solid var(--color-border-divider);
+  border-radius: 4px;
+}
+
+.thirdera .level-history-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  list-style: none;
+}
+
+.thirdera .level-history-panel-header::-webkit-details-marker {
+  display: none;
+}
+
+.thirdera .level-history-panel-header::before {
+  content: "\25bc";
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  margin-right: 6px;
+}
+
+.thirdera .level-history-panel[open] .level-history-panel-header::before {
+  content: "\25b2";
+}
+
+.thirdera .level-history-panel-title {
+  flex: 1;
+}
+
 .thirdera .level-history-hp-total {
   font-size: var(--font-size-body);
   color: var(--color-text-light);
@@ -2075,7 +2112,7 @@
 
 .thirdera .level-history-grid {
   display: grid;
-  grid-template-columns: 40px 1fr 60px 60px 50px 50px;
+  grid-template-columns: 40px 1fr 60px 60px 50px 50px 32px;
   gap: 4px 8px;
   align-items: center;
   padding: 4px 8px;
@@ -2087,6 +2124,10 @@
   text-transform: uppercase;
   color: var(--color-text-muted);
   text-align: center;
+}
+
+.thirdera .level-history-col-header.level-history-col-actions {
+  min-width: 32px;
 }
 
 .thirdera .level-history-cell {
@@ -2121,6 +2162,24 @@
 
 .thirdera .level-history-roll-hp:hover {
   color: var(--color-hover);
+}
+
+.thirdera .level-history-remove {
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 2px;
+}
+
+.thirdera .level-history-remove:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .level-history-gained {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  grid-column: 1 / -1;
+  padding-left: 4px;
+  margin-bottom: 2px;
 }
 
 /* Save base value (derived from classes) */

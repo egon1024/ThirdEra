@@ -189,6 +189,12 @@
             "Finish": "Finish",
             "LevelAdded": "Level added for {name}."
         },
+        "LevelHistory": {
+            "Title": "Level History",
+            "RemoveLevel": "Remove level",
+            "Gained": "Gained",
+            "SkillPoints": "skill points"
+        },
         "Spells": {
             "SpellsPerDay": "Spells/Day",
             "Prepared": "Prepared",

@@ -461,9 +461,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Prepare level history display data for Classes tab
         const hpBreakdown = systemData.attributes.hp.hpBreakdown || [];
-        const levelHistory = (systemData.levelHistory || []).map((entry, i) => {
+        const rawHistory = systemData.levelHistory || [];
+        const lastIndexByClass = new Map();
+        for (let j = rawHistory.length - 1; j >= 0; j--) {
+            const cid = rawHistory[j].classItemId;
+            if (!lastIndexByClass.has(cid)) lastIndexByClass.set(cid, j);
+        }
+        const intMod = systemData.abilities?.int?.mod ?? 0;
+        const levelHistory = rawHistory.map((entry, i) => {
             const cls = actor.items.get(entry.classItemId);
             const bp = hpBreakdown[i];
+            const classLevel = 1 + rawHistory.slice(0, i).filter((e) => e.classItemId === entry.classItemId).length;
+            const featuresAtLevel = (cls?.system?.features || [])
+                .filter((f) => f.level === classLevel)
+                .map((f) => ({ name: f.featName ?? "?", scaling: f.scalingTable?.[classLevel] ?? null }));
+            const basePoints = cls?.system.skillPointsPerLevel ?? 0;
+            let skillPointsAtLevel = Math.max(1, basePoints + intMod);
+            if (i === 0) skillPointsAtLevel *= 4;
             return {
                 index: i,
                 characterLevel: i + 1,
@@ -471,7 +485,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 hitDie: cls?.system.hitDie ?? "?",
                 hpRolled: entry.hpRolled,
                 conMod: bp?.conMod ?? 0,
-                subtotal: bp?.subtotal ?? 0
+                subtotal: bp?.subtotal ?? 0,
+                featuresGainedAtLevel: featuresAtLevel,
+                skillPointsAtLevel,
+                isLastLevelOfClass: lastIndexByClass.get(entry.classItemId) === i
             };
         });
 
