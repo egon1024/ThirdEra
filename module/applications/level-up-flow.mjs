@@ -447,9 +447,20 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
 
         let availableFeats = [];
         if (gainsFeat) {
+            const actorFeatKeysLower = new Set(
+                actor.items
+                    .filter((i) => i.type === "feat" && (i.system?.key || "").trim())
+                    .map((f) => String(f.system.key).toLowerCase().trim())
+            );
+            const alreadyHas = (doc) => {
+                const key = (doc.system?.key || "").trim();
+                return key !== "" && actorFeatKeysLower.has(key.toLowerCase());
+            };
+
             const seen = new Map();
             const worldItems = (game.items?.contents ?? []).filter((i) => i.type === "feat");
             for (const doc of worldItems) {
+                if (alreadyHas(doc)) continue;
                 const k = (doc.name || "").toLowerCase().trim();
                 if (!seen.has(k)) seen.set(k, { uuid: doc.uuid, name: doc.name, packName: game.i18n.localize("Type.world") || "World" });
             }
@@ -458,6 +469,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 try {
                     const docs = await pack.getDocuments({ type: "feat" });
                     for (const doc of docs) {
+                        if (alreadyHas(doc)) continue;
                         const k = (doc.name || "").toLowerCase().trim();
                         if (!seen.has(k)) seen.set(k, { uuid: doc.uuid, name: doc.name, packName: pack.metadata?.label ?? pack.collection });
                     }
