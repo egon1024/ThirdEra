@@ -5,7 +5,7 @@ import { LevelUpFlow } from "../applications/level-up-flow.mjs";
 import { getDerivedFrom } from "../logic/derived-conditions.mjs";
 import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
-import { getXpForLevel, getNextLevelXp } from "../logic/xp-table.mjs";
+import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -3477,13 +3477,48 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const classLevels = (this.actor.system.details.classLevels || {})[itemId] || 0;
         if (classLevels <= 0) return;
 
-        const confirmed = await foundry.applications.api.DialogV2.confirm({
-            window: { title: `Remove ${cls.name} Level` },
-            content: `<p>Remove one level of ${cls.name} from ${this.actor.name}? (${classLevels} → ${classLevels - 1})</p>`,
+        const history = [...(this.actor.system.levelHistory || [])];
+        const newTotalLevel = Math.max(0, history.length - 1);
+        const minXp = getXpForLevel(newTotalLevel);
+        const midpointXp = getMidpointXpForLevel(newTotalLevel);
+        const minXpFormatted = minXp.toLocaleString();
+        const midpointXpFormatted = midpointXp.toLocaleString();
+
+        const result = await foundry.applications.api.DialogV2.wait({
             rejectClose: false,
-            modal: true
+            modal: true,
+            window: { title: `Remove ${cls.name} Level` },
+            position: { width: 440 },
+            content: `
+                <p>Remove one level of ${foundry.utils.escapeHTML(cls.name)} from ${foundry.utils.escapeHTML(this.actor.name)}? (${classLevels} → ${classLevels - 1})</p>
+                <p>What should happen to this character's experience points?</p>
+                <div class="form-group">
+                    <label><input type="radio" name="xpChoice" value="leave" checked> Leave unchanged</label><br>
+                    <label><input type="radio" name="xpChoice" value="midpoint"> Set to midpoint of new level (${midpointXpFormatted} XP)</label><br>
+                    <label><input type="radio" name="xpChoice" value="minimum"> Set to minimum of new level (${minXpFormatted} XP)</label>
+                </div>
+            `,
+            buttons: [
+                {
+                    action: "cancel",
+                    label: "Cancel",
+                    icon: "fa-solid fa-xmark",
+                    default: true,
+                    callback: () => ({ cancel: true })
+                },
+                {
+                    action: "remove",
+                    label: "Remove level",
+                    icon: "fa-solid fa-minus",
+                    callback: (_event, button) => {
+                        const choice = button.form?.elements?.xpChoice?.value || "leave";
+                        return { cancel: false, xpChoice: choice };
+                    }
+                }
+            ]
         });
-        if (!confirmed) return;
+
+        if (!result || result.cancel) return;
 
         const newClassLevel = classLevels - 1;
         const spellListAccess = cls?.system?.spellcasting?.spellListAccess;
@@ -3495,7 +3530,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const currentHp = this.actor.system.attributes.hp.value;
 
         // Remove the last levelHistory entry for this class
-        const history = [...(this.actor.system.levelHistory || [])];
         const lastIndex = history.findLastIndex(e => e.classItemId === itemId);
         if (lastIndex >= 0) {
             history.splice(lastIndex, 1);
@@ -3518,6 +3552,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (idsToRemove.length > 0) {
             await ThirdEraActorSheet._removeSpellIdsFromShortlist(this.actor, idsToRemove);
             await this.actor.deleteEmbeddedDocuments("Item", idsToRemove);
+        }
+
+        // Optional XP adjustment from dialog choice
+        const { xpChoice } = result;
+        if (xpChoice === "midpoint") {
+            await this.actor.update({ "system.experience.value": midpointXp });
+        } else if (xpChoice === "minimum") {
+            await this.actor.update({ "system.experience.value": minXp });
         }
     }
 
