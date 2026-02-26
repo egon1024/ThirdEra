@@ -1,18 +1,1 @@
-{
-  "_id": "feat-forge-ring",
-  "name": "Forge Ring",
-  "type": "feat",
-  "img": "icons/svg/aura.svg",
-  "system": {
-    "description": "<p>You can create magic rings.</p>",
-    "key": "forgeRing",
-    "type": "Item Creation",
-    "prerequisites": "Caster level 12th",
-    "benefit": "<p>You can create any ring whose prerequisites you meet. Crafting a ring takes one day for each 1,000 gp in its base price. To forge a ring, you must use up raw materials costing half of its base price. See the magic item creation rules in Chapter 7 for more information.</p><p>You can also mend a broken ring if it is one that you could forge. Doing so costs half the raw materials and half the XP it would take to forge that ring in the first place.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-forge-ring","name":"Forge Ring","type":"feat","img":"icons/svg/aura.svg","system":{"description":"<p>You can create magic rings.</p>","key":"forgeRing","type":"Item Creation","prerequisites":"Caster level 12th","benefit":"<p>You can create any ring whose prerequisites you meet. Crafting a ring takes one day for each 1,000 gp in its base price. To forge a ring, you must use up raw materials costing half of its base price. See the magic item creation rules in Chapter 7 for more information.</p><p>You can also mend a broken ring if it is one that you could forge. Doing so costs half the raw materials and half the XP it would take to forge that ring in the first place.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

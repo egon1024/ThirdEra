@@ -12,10 +12,15 @@ export class FeatData extends foundry.abstract.TypeDataModel {
             key: new StringField({ required: true, blank: true, initial: "", label: "Feat Key" }),
 
             type: new StringField({ required: true, blank: true, initial: "", label: "Feat Type" }), // General, Item Creation, Metamagic, etc.
+            /** Whether this feat can be chosen as a Fighter bonus feat (SRD fighter bonus feat list). */
+            fighterBonusEligible: new StringField({ required: true, blank: true, initial: "false", label: "Fighter Bonus Eligible" }),
+
             prerequisites: new StringField({ required: true, blank: true, initial: "", label: "Prerequisites" }),
             benefit: new HTMLField({ required: true, blank: true, label: "Benefit" }),
             special: new HTMLField({ required: true, blank: true, label: "Special" }),
 
+            /** Feat keys of required feats (resolved to prerequisiteFeatUuids when loading from compendium JSON). */
+            prerequisiteFeatKeys: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), { initial: [], label: "Prerequisite Feat Keys" }),
             /** Document UUIDs of required feat documents (ID-based references per project rule). */
             prerequisiteFeatUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), { initial: [], label: "Prerequisite Feat UUIDs" }),
             /** Minimum base attack bonus required (0 = no requirement). */

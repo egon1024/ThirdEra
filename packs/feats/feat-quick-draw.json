@@ -1,18 +1,1 @@
-{
-  "_id": "feat-quick-draw",
-  "name": "Quick Draw",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You can draw weapons faster than most.</p>",
-    "key": "quickDraw",
-    "type": "General",
-    "prerequisites": "Base attack bonus +1",
-    "benefit": "<p>You can draw a weapon as a free action instead of as a move action. You can draw a hidden weapon (see the Sleight of Hand skill) as a move action.</p><p>A character who has selected this feat may throw weapons at his full normal rate of attacks (much like a character with a bow).</p>",
-    "special": "A fighter may select Quick Draw as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-quick-draw","name":"Quick Draw","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You can draw weapons faster than most.</p>","key":"quickDraw","type":"General","prerequisites":"Base attack bonus +1","benefit":"<p>You can draw a weapon as a free action instead of as a move action. You can draw a hidden weapon (see the Sleight of Hand skill) as a move action.</p><p>A character who has selected this feat may throw weapons at his full normal rate of attacks (much like a character with a bow).</p>","special":"A fighter may select Quick Draw as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":1,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

@@ -1,18 +1,1 @@
-{
-  "_id": "feat-eschew-materials",
-  "name": "Eschew Materials",
-  "type": "feat",
-  "img": "icons/svg/aura.svg",
-  "system": {
-    "description": "<p>You can cast many spells without needing material components.</p>",
-    "key": "eschewMaterials",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>You can cast any spell that has a material component costing 1 gp or less without needing that component. The casting of the spell still provokes attacks of opportunity as normal. If the spell requires a material component that costs more than 1 gp, you must have the material component on hand to cast the spell, as normal.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-eschew-materials","name":"Eschew Materials","type":"feat","img":"icons/svg/aura.svg","system":{"description":"<p>You can cast many spells without needing material components.</p>","key":"eschewMaterials","type":"General","prerequisites":"","benefit":"<p>You can cast any spell that has a material component costing 1 gp or less without needing that component. The casting of the spell still provokes attacks of opportunity as normal. If the spell requires a material component that costs more than 1 gp, you must have the material component on hand to cast the spell, as normal.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

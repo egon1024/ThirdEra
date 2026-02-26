@@ -1,18 +1,1 @@
-{
-  "_id": "feat-improved-feint",
-  "name": "Improved Feint",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You are skilled at fooling your opponents in combat.</p>",
-    "key": "improvedFeint",
-    "type": "General",
-    "prerequisites": "Int 13, Combat Expertise",
-    "benefit": "<p>You can make a Bluff check to feint in combat as a move action instead of a standard action.</p>",
-    "special": "A fighter may select Improved Feint as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-improved-feint","name":"Improved Feint","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You are skilled at fooling your opponents in combat.</p>","key":"improvedFeint","type":"General","fighterBonusEligible":"true","prerequisites":"Int 13, Combat Expertise","benefit":"<p>You can make a Bluff check to feint in combat as a move action instead of a standard action.</p>","special":"A fighter may select Improved Feint as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["combatExpertise"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":13,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

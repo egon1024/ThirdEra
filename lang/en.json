@@ -180,7 +180,9 @@
             "SelectFeat": "Feat to gain",
             "SelectFeatPlaceholder": "Select a feat…",
             "GeneralFeatHint": "You gain a general feat this level (1st, 3rd, 6th, 9th, etc.).",
-            "FighterBonusFeatHint": "You gain a Fighter bonus feat this level ({name} level).",
+            "FighterBonusFeatHint": "You gain a Fighter bonus feat this level ({name} level). Only feats marked as Fighter bonus feats are listed.",
+            "FeatsNotFighterBonus": "Other feats (not eligible as Fighter bonus feat)",
+            "NotFighterBonusReason": "Not eligible as Fighter bonus feat",
             "NoFeatThisLevel": "No feat gained this level.",
             "FeatAddFailed": "Could not add feat: {message}",
             "Back": "Back",
@@ -189,7 +191,12 @@
             "Finish": "Finish",
             "LevelAdded": "Level added for {name}.",
             "FeatsNotQualified": "Feats you don't qualify for yet",
-            "MissingReasons": "Missing: {reasons}"
+            "MissingReasons": "Missing: {reasons}",
+            "ViewItemTitle": "Open item sheet to view details",
+            "ViewItemFailed": "Could not open item sheet."
+        },
+        "Feat": {
+            "FighterBonusEligible": "Fighter bonus feat eligible"
         },
         "FeatPrereq": {
             "RequiredFeats": "Required feats",

@@ -1595,6 +1595,15 @@
   min-width: 18em;
   line-height: 1.3;
 }
+.thirdera.level-up-flow .level-up-flow-skills-list .skill-name.level-up-skill-name-link {
+  cursor: pointer;
+  color: var(--color-character-accent, var(--color-text-primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.thirdera.level-up-flow .level-up-flow-skills-list .skill-name.level-up-skill-name-link:hover {
+  color: var(--color-hover);
+}
 
 .thirdera.level-up-flow .level-up-flow-skills-list .level-up-flow-skill-modifiers {
   flex-shrink: 0;
@@ -1638,31 +1647,46 @@
   margin-top: 0.75em;
   padding-top: 0.75em;
   border-top: 1px solid var(--color-border-divider);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .thirdera.level-up-flow .level-up-feats-not-qualified-title {
   margin: 0 0 0.35em 0;
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  flex-shrink: 0;
 }
 
 .thirdera.level-up-flow .level-up-feats-not-qualified-list {
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 1;
+  min-height: 0;
 }
 
 .thirdera.level-up-flow .level-up-feat-not-qualified {
-  padding: 0.25em 0;
+  padding: 0.35em 0;
   border-bottom: 1px solid var(--color-border-subtle);
   display: flex;
   flex-direction: column;
-  gap: 0.15em;
+  gap: 0.2em;
 }
 
 .thirdera.level-up-flow .level-up-feat-not-qualified:last-child {
   border-bottom: none;
+}
+
+.thirdera.level-up-flow .level-up-feat-not-qualified-head {
+  display: flex;
+  align-items: center;
+  gap: 0.35em 0.5em;
 }
 
 .thirdera.level-up-flow .level-up-feat-not-qualified-name {
@@ -1671,8 +1695,56 @@
 }
 
 .thirdera.level-up-flow .level-up-feat-not-qualified-reasons {
-  font-size: var(--font-size-note);
+  font-size: var(--font-size-body);
   color: var(--color-text-muted);
+  line-height: var(--line-height-comfortable);
+  list-style: disc;
+  margin: 0.25em 0 0 0;
+  padding-left: 1.25em;
+}
+
+.thirdera.level-up-flow .level-up-feat-not-qualified-reasons li {
+  margin: 0.1em 0;
+}
+
+.thirdera.level-up-flow .level-up-open-item-sheet {
+  flex-shrink: 0;
+  padding: 0.2em 0.4em;
+  min-width: 1.75em;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 3px;
+}
+.thirdera.level-up-flow .level-up-open-item-sheet:hover {
+  color: var(--color-hover);
+  border-color: var(--color-border-divider);
+}
+
+.thirdera.level-up-flow .level-up-feat-select-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.thirdera.level-up-flow .level-up-feat-select-row select {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.thirdera.level-up-flow .level-up-feat-not-qualified .level-up-feat-not-qualified-reasons {
+  margin: 0.15em 0 0 0;
+}
+
+.thirdera.level-up-flow .level-up-flow-features-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.thirdera.level-up-flow .level-up-flow-features-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.35em 0.5em;
+  padding: 0.25em 0;
 }
 
 .thirdera .items-list {

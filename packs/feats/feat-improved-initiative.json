@@ -1,18 +1,1 @@
-{
-  "_id": "feat-improved-initiative",
-  "name": "Improved Initiative",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You are exceptionally quick and alert.</p>",
-    "key": "improvedInitiative",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 8
-}
+{"_id":"feat-improved-initiative","name":"Improved Initiative","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You are exceptionally quick and alert.</p>","key":"improvedInitiative","type":"General","prerequisites":"","benefit":"<p>You get a +4 bonus on initiative checks.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":8}

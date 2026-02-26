@@ -1,18 +1,1 @@
-{
-  "_id": "feat-improved-counterspell",
-  "name": "Improved Counterspell",
-  "type": "feat",
-  "img": "icons/svg/aura.svg",
-  "system": {
-    "description": "<p>You are skilled at countering the spells of others using your own spells.</p>",
-    "key": "improvedCounterspell",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>When counterspelling, you may use a spell of the same school that is one or more spell levels higher than the target spell.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-improved-counterspell","name":"Improved Counterspell","type":"feat","img":"icons/svg/aura.svg","system":{"description":"<p>You are skilled at countering the spells of others using your own spells.</p>","key":"improvedCounterspell","type":"General","prerequisites":"","benefit":"<p>When counterspelling, you may use a spell of the same school that is one or more spell levels higher than the target spell.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":["spellFocus"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

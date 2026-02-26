@@ -1,18 +1,1 @@
-{
-  "_id": "feat-trample",
-  "name": "Trample",
-  "type": "feat",
-  "img": "icons/svg/pawprint.svg",
-  "system": {
-    "description": "<p>While mounted, you can ride down opponents.</p>",
-    "key": "trample",
-    "type": "General",
-    "prerequisites": "Ride 1 rank, Mounted Combat",
-    "benefit": "<p>When you attempt to overrun an opponent while mounted, your target may not choose to avoid you. Your mount may make one hoof attack against any target you knock down, gaining the standard +4 bonus on attack rolls against prone targets.</p>",
-    "special": "A fighter may select Trample as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-trample","name":"Trample","type":"feat","img":"icons/svg/pawprint.svg","system":{"description":"<p>While mounted, you can ride down opponents.</p>","key":"trample","type":"General","fighterBonusEligible":"true","prerequisites":"Ride 1 rank, Mounted Combat","benefit":"<p>When you attempt to overrun an opponent while mounted, your target may not choose to avoid you. Your mount may make one hoof attack against any target you knock down, gaining the standard +4 bonus on attack rolls against prone targets.</p>","special":"A fighter may select Trample as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["mountedCombat"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

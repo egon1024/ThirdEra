@@ -1,18 +1,1 @@
-{
-  "_id": "feat-spirited-charge",
-  "name": "Spirited Charge",
-  "type": "feat",
-  "img": "icons/svg/pawprint.svg",
-  "system": {
-    "description": "<p>You are skilled at charging while mounted.</p>",
-    "key": "spiritedCharge",
-    "type": "General",
-    "prerequisites": "Ride 1 rank, Mounted Combat, Ride-By Attack",
-    "benefit": "<p>When mounted and using the charge action, you deal double damage with a melee weapon (or triple damage with a lance).</p>",
-    "special": "A fighter may select Spirited Charge as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-spirited-charge","name":"Spirited Charge","type":"feat","img":"icons/svg/pawprint.svg","system":{"description":"<p>You are skilled at charging while mounted.</p>","key":"spiritedCharge","type":"General","fighterBonusEligible":"true","prerequisites":"Ride 1 rank, Mounted Combat, Ride-By Attack","benefit":"<p>When mounted and using the charge action, you deal double damage with a melee weapon (or triple damage with a lance).</p>","special":"A fighter may select Spirited Charge as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["mountedCombat","rideByAttack"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

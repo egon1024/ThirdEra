@@ -507,6 +507,32 @@ export class CompendiumLoader {
                 await DocumentClass.implementation.createDocuments(toCreate, {pack: pack.collection});
                 console.log(`Third Era | Created ${toCreate.length} new documents in ${pack.collection}`);
             }
+
+            // Feats pack: resolve prerequisiteFeatKeys to prerequisiteFeatUuids (by key within the same pack)
+            if (pack.collection === "thirdera.thirdera_feats" && (toUpdate.length > 0 || toCreate.length > 0)) {
+                const allDocs = await pack.getDocuments();
+                const keyToUuid = new Map();
+                for (const doc of allDocs) {
+                    const k = getStableKey(doc);
+                    if (k != null) keyToUuid.set(k, doc.uuid);
+                }
+                const toResolve = allDocs.filter((doc) => {
+                    const keys = doc.system?.prerequisiteFeatKeys;
+                    return Array.isArray(keys) && keys.length > 0;
+                });
+                if (toResolve.length > 0) {
+                    const resolveUpdates = toResolve.map((doc) => {
+                        const keys = doc.system.prerequisiteFeatKeys;
+                        const uuids = keys.map((k) => keyToUuid.get(String(k).trim())).filter(Boolean);
+                        return {
+                            _id: doc.id,
+                            system: { ...doc.system, prerequisiteFeatUuids: uuids, prerequisiteFeatKeys: [] }
+                        };
+                    });
+                    await DocumentClass.implementation.updateDocuments(resolveUpdates, {pack: pack.collection});
+                    console.log(`Third Era | Resolved prerequisite feats for ${resolveUpdates.length} feats in ${pack.collection}`);
+                }
+            }
             
             if (toUpdate.length > 0 || toCreate.length > 0) {
                 console.log(`Third Era | Processed ${documents.length} documents in ${pack.collection}`);

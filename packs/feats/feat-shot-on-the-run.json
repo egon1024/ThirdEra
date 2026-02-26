@@ -1,18 +1,1 @@
-{
-  "_id": "feat-shot-on-the-run",
-  "name": "Shot on the Run",
-  "type": "feat",
-  "img": "icons/svg/target.svg",
-  "system": {
-    "description": "<p>You can move, fire a ranged weapon, and move again before your foes can react.</p>",
-    "key": "shotOnTheRun",
-    "type": "General",
-    "prerequisites": "Dex 13, Dodge, Mobility, Point Blank Shot, base attack bonus +4",
-    "benefit": "<p>As a full-round action, you can move up to your speed and make a single ranged attack at any point during your movement. You must move at least 10 feet before and after your shot. You may not take a 5-foot step before, during, or after this action.</p>",
-    "special": "A fighter may select Shot on the Run as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-shot-on-the-run","name":"Shot on the Run","type":"feat","img":"icons/svg/target.svg","system":{"description":"<p>You can move, fire a ranged weapon, and move again before your foes can react.</p>","key":"shotOnTheRun","type":"General","fighterBonusEligible":"true","prerequisites":"Dex 13, Dodge, Mobility, Point Blank Shot, base attack bonus +4","benefit":"<p>As a full-round action, you can move up to your speed and make a single ranged attack at any point during your movement. You must move at least 10 feet before and after your shot. You may not take a 5-foot step before, during, or after this action.</p>","special":"A fighter may select Shot on the Run as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["pointBlankShot","rapidShot","dodge","mobility"],"prerequisiteBAB":4,"prerequisiteAbilityScores":{"str":0,"dex":13,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

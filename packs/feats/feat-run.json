@@ -1,18 +1,1 @@
-{
-  "_id": "feat-run",
-  "name": "Run",
-  "type": "feat",
-  "img": "icons/svg/walk.svg",
-  "system": {
-    "description": "<p>You are swift of foot.</p>",
-    "key": "run",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>When running, you move five times your normal speed (if wearing medium, light, or no armor and carrying no more than a medium load) or four times your speed (if wearing heavy armor or carrying a heavy load). If you make a jump after a running start (see the Jump skill description), you gain a +4 bonus on your Jump check. While running, you retain your Dexterity bonus to AC.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-run","name":"Run","type":"feat","img":"icons/svg/walk.svg","system":{"description":"<p>You are swift of foot.</p>","key":"run","type":"General","prerequisites":"","benefit":"<p>When running, you move five times your normal speed (if wearing medium, light, or no armor and carrying no more than a medium load) or four times your speed (if wearing heavy armor or carrying a heavy load). If you make a jump after a running start (see the Jump skill description), you gain a +4 bonus on your Jump check. While running, you retain your Dexterity bonus to AC.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

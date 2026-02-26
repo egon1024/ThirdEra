@@ -1,18 +1,1 @@
-{
-  "_id": "feat-weapon-specialization",
-  "name": "Weapon Specialization",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>Choose one type of weapon for which you have already selected the Weapon Focus feat. You deal extra damage when using this weapon.</p>",
-    "key": "weaponSpecialization",
-    "type": "General",
-    "prerequisites": "Proficient with weapon, Weapon Focus with chosen weapon, fighter level 4th",
-    "benefit": "<p>You gain a +2 bonus on all damage rolls you make using the selected weapon.</p>",
-    "special": "You can gain Weapon Specialization multiple times. Each time you take the feat, it applies to a new type of weapon. A fighter may select Weapon Specialization as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-weapon-specialization","name":"Weapon Specialization","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>Choose one type of weapon for which you have already selected the Weapon Focus feat. You deal extra damage when using this weapon.</p>","key":"weaponSpecialization","type":"General","fighterBonusEligible":"true","prerequisites":"Proficient with weapon, Weapon Focus with chosen weapon, fighter level 4th","benefit":"<p>You gain a +2 bonus on all damage rolls you make using the selected weapon.</p>","special":"You can gain Weapon Specialization multiple times. Each time you take the feat, it applies to a new type of weapon. A fighter may select Weapon Specialization as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["weaponFocus"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

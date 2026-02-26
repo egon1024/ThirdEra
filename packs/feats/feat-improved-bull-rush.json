@@ -1,18 +1,1 @@
-{
-  "_id": "feat-improved-bull-rush",
-  "name": "Improved Bull Rush",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You are skilled at pushing your opponents around.</p>",
-    "key": "improvedBullRush",
-    "type": "Fighter Bonus",
-    "prerequisites": "Str 13, Power Attack",
-    "benefit": "<p>When you perform a bull rush, you do not provoke an attack of opportunity from the defender. You also gain a +4 bonus on the opposed Strength check you make to push back the defender.</p>",
-    "special": "A fighter may select Improved Bull Rush as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-improved-bull-rush","name":"Improved Bull Rush","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You are skilled at pushing your opponents around.</p>","key":"improvedBullRush","type":"Fighter Bonus","prerequisites":"Str 13, Power Attack","benefit":"<p>When you perform a bull rush, you do not provoke an attack of opportunity from the defender. You also gain a +4 bonus on the opposed Strength check you make to push back the defender.</p>","special":"A fighter may select Improved Bull Rush as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["powerAttack"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":13,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

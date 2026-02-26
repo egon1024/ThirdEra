@@ -1,18 +1,1 @@
-{
-  "_id": "feat-point-blank-shot",
-  "name": "Point-Blank Shot",
-  "type": "feat",
-  "img": "icons/svg/target.svg",
-  "system": {
-    "description": "<p>You are skilled at making well-placed shots with ranged weapons at close range.</p>",
-    "key": "pointBlankShot",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>You get a +1 bonus on attack and damage rolls with ranged weapons against opponents within 30 feet.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 9
-}
+{"_id":"feat-point-blank-shot","name":"Point-Blank Shot","type":"feat","img":"icons/svg/target.svg","system":{"description":"<p>You are skilled at making well-placed shots with ranged weapons at close range.</p>","key":"pointBlankShot","type":"General","fighterBonusEligible":"true","prerequisites":"","benefit":"<p>You get a +1 bonus on attack and damage rolls with ranged weapons against opponents within 30 feet.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":9}

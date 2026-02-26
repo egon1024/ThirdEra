@@ -1,18 +1,1 @@
-{
-  "_id": "feat-cleave",
-  "name": "Cleave",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You can strike two adjacent foes with a single swing.</p>",
-    "key": "cleave",
-    "type": "Fighter Bonus",
-    "prerequisites": "Power Attack, Str 13",
-    "benefit": "<p>As a standard action, you can make a single attack at your full base attack bonus against a foe within reach. If you hit, you deal damage normally and can make an additional attack (using your full base attack bonus) against a foe that is adjacent to the first and also within reach. You can only make one additional attack per round with this feat. You cannot use this feat if you are wearing heavy armor.</p>",
-    "special": "A fighter may select Cleave as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-cleave","name":"Cleave","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You can strike two adjacent foes with a single swing.</p>","key":"cleave","type":"Fighter Bonus","fighterBonusEligible":"true","prerequisites":"Power Attack, Str 13","benefit":"<p>As a standard action, you can make a single attack at your full base attack bonus against a foe within reach. If you hit, you deal damage normally and can make an additional attack (using your full base attack bonus) against a foe that is adjacent to the first and also within reach. You can only make one additional attack per round with this feat. You cannot use this feat if you are wearing heavy armor.</p>","special":"A fighter may select Cleave as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["powerAttack"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":13,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

@@ -1,18 +1,1 @@
-{
-  "_id": "feat-spell-focus",
-  "name": "Spell Focus",
-  "type": "feat",
-  "img": "icons/svg/aura.svg",
-  "system": {
-    "description": "<p>Choose a school of magic. Any spells you cast of that school are more difficult to resist.</p>",
-    "key": "spellFocus",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>Add +1 to the Difficulty Class for all saving throws against spells from the school of magic you select.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 7
-}
+{"_id":"feat-spell-focus","name":"Spell Focus","type":"feat","img":"icons/svg/aura.svg","system":{"description":"<p>Choose a school of magic. Any spells you cast of that school are more difficult to resist.</p>","key":"spellFocus","type":"General","prerequisites":"","benefit":"<p>Add +1 to the Difficulty Class for all saving throws against spells from the school of magic you select.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":7}

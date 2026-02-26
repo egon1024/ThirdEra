@@ -1,18 +1,1 @@
-{
-  "_id": "feat-martial-weapon-proficiency",
-  "name": "Martial Weapon Proficiency",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>Choose one type of martial weapon. You understand how to use that type of martial weapon in combat.</p>",
-    "key": "martialWeaponProficiency",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>You make attack rolls with the selected weapon normally.</p>",
-    "special": "You can gain Martial Weapon Proficiency multiple times. Each time you take the feat, it applies to a new type of martial weapon. A fighter may select Martial Weapon Proficiency as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-martial-weapon-proficiency","name":"Martial Weapon Proficiency","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>Choose one type of martial weapon. You understand how to use that type of martial weapon in combat.</p>","key":"martialWeaponProficiency","type":"General","prerequisites":"","benefit":"<p>You make attack rolls with the selected weapon normally.</p>","special":"You can gain Martial Weapon Proficiency multiple times. Each time you take the feat, it applies to a new type of martial weapon. A fighter may select Martial Weapon Proficiency as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

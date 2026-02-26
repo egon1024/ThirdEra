@@ -1,18 +1,1 @@
-{
-  "_id": "feat-leadership",
-  "name": "Leadership",
-  "type": "feat",
-  "img": "icons/svg/temple.svg",
-  "system": {
-    "description": "<p>You are able to attract loyal companions and devoted followers.</p>",
-    "key": "leadership",
-    "type": "General",
-    "prerequisites": "Character level 6th",
-    "benefit": "<p>Having this feat enables the character to attract loyal companions and devoted followers. A character can try to attract a cohort (a companion, typically an NPC with class levels) or to attract followers (normally a group of lower-level NPCs) to his cause.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-leadership","name":"Leadership","type":"feat","img":"icons/svg/temple.svg","system":{"description":"<p>You are able to attract loyal companions and devoted followers.</p>","key":"leadership","type":"General","prerequisites":"Character level 6th","benefit":"<p>Having this feat enables the character to attract loyal companions and devoted followers. A character can try to attract a cohort (a companion, typically an NPC with class levels) or to attract followers (normally a group of lower-level NPCs) to his cause.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}
