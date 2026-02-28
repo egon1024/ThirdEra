@@ -2641,6 +2641,37 @@
   color: var(--color-character-accent);
 }
 
+.thirdera .auto-granted-use-unconditional {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  padding: 0 4px;
+  cursor: pointer;
+  flex: 0 0 100%;
+  text-align: left;
+}
+
+.thirdera .auto-granted-use-unconditional:hover {
+  color: var(--color-character-accent);
+}
+
+.thirdera .auto-granted-remove-entry {
+  font-size: var(--font-size-note);
+  color: var(--color-text-faint);
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.thirdera .auto-granted-remove-entry:hover {
+  color: var(--color-hover);
+  opacity: 1;
+}
+
 .thirdera .auto-granted-unconditional-block {
   display: flex;
   flex-direction: column;

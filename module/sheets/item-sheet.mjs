@@ -38,6 +38,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addAutoGrantedFeat: ThirdEraItemSheet.onAddAutoGrantedFeat,
             removeAutoGrantedFeat: ThirdEraItemSheet.onRemoveAutoGrantedFeat,
             setAutoGrantedToConditional: ThirdEraItemSheet.onSetAutoGrantedToConditional,
+            setAutoGrantedToUnconditional: ThirdEraItemSheet.onSetAutoGrantedToUnconditional,
             addConditionalFeatUuid: ThirdEraItemSheet.onAddConditionalFeatUuid,
             removeConditionalFeatUuid: ThirdEraItemSheet.onRemoveConditionalFeatUuid,
             removeDomain: ThirdEraItemSheet.onRemoveDomain,
@@ -444,6 +445,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                             return fu === currentVal || !previousUuids.includes(fu);
                         });
                     });
+                    base._canSwitchToUnconditional = uuids.length < 2;
                 }
                 return base;
             });
@@ -1353,6 +1355,31 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             i === entryIndex
                 ? { ...e, featUuid: "", featUuids: [...(e.featUuids || []), ""] }
                 : e
+        );
+        await this.document.update({ "system.autoGrantedFeats": updated });
+    }
+
+    /**
+     * Switch an auto-granted feat entry from conditional back to unconditional (only when fewer than 2 rows). Uses first slot value as the single feat, or empty.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraItemSheet}
+     */
+    static async onSetAutoGrantedToUnconditional(event, target) {
+        if (this.document.type !== "class") return;
+        const entryIndex = parseInt(target.dataset.entryIndex, 10);
+        if (isNaN(entryIndex) || entryIndex < 0) return;
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        const current = ThirdEraItemSheet.getAutoGrantedFeatsFromForm(this, form);
+        const entry = current[entryIndex];
+        if (!entry || !Array.isArray(entry.featUuids) || entry.featUuids.length >= 2) return;
+        const featUuid = (entry.featUuids[0] != null ? String(entry.featUuids[0]).trim() : "");
+        const updated = current.map((e, i) =>
+            i === entryIndex ? { ...e, featUuid, featUuids: [] } : e
         );
         await this.document.update({ "system.autoGrantedFeats": updated });
     }

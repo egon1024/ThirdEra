@@ -67,7 +67,15 @@ export async function createAutoGrantedFeatsForLevel(actor, classItem, newClassL
         if (uuids.length === 0) continue;
 
         for (const uuid of uuids) {
-            if (actorHasFeatByUuid(actor, uuid)) continue;
+            let has = actorHasFeatByUuid(actor, uuid);
+            if (!has) {
+                try {
+                    const doc = await foundry.utils.fromUuid(uuid);
+                    const name = doc?.name?.trim();
+                    if (name && actor.items.some((i) => i.type === "feat" && i.name === name && !(i.flags?.core?.sourceId || i.flags?.thirdera?.sourceFeatUuid))) has = true;
+                } catch (_) { /* ignore */ }
+            }
+            if (has) continue;
             const id = await createOneAutoGrantedFeat(actor, uuid, classItem, newClassLevel);
             if (id) createdIds.push(id);
             break;
