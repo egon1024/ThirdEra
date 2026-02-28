@@ -33,36 +33,6 @@ export class CompendiumLoader {
             "race-dwarf.json", "race-elf.json", "race-gnome.json",
             "race-half-elf.json", "race-half-orc.json", "race-halfling.json", "race-human.json"
         ],
-        "thirdera.thirdera_classes": [
-            "class-barbarian.json", "class-bard.json", "class-cleric.json",
-            "class-druid.json", "class-fighter.json", "class-monk.json",
-            "class-paladin.json", "class-ranger.json", "class-rogue.json",
-            "class-sorcerer.json", "class-wizard.json"
-        ],
-        "thirdera.thirdera_skills": [
-            "skill-appraise.json", "skill-balance.json", "skill-bluff.json",
-            "skill-climb.json", "skill-concentration.json",
-            "skill-craft-alchemy.json", "skill-craft-armorsmithing.json", "skill-craft-bowmaking.json",
-            "skill-craft-trapmaking.json", "skill-craft-weaponsmithing.json",
-            "skill-decipher-script.json", "skill-diplomacy.json", "skill-disable-device.json",
-            "skill-disguise.json", "skill-escape-artist.json", "skill-forgery.json",
-            "skill-gather-information.json", "skill-handle-animal.json", "skill-heal.json",
-            "skill-hide.json", "skill-intimidate.json", "skill-jump.json",
-            "skill-knowledge-arcana.json", "skill-knowledge-architecture-and-engineering.json",
-            "skill-knowledge-dungeoneering.json", "skill-knowledge-geography.json",
-            "skill-knowledge-history.json", "skill-knowledge-local.json", "skill-knowledge-nature.json",
-            "skill-knowledge-nobility-and-royalty.json", "skill-knowledge-religion.json",
-            "skill-knowledge-the-planes.json",
-            "skill-listen.json", "skill-move-silently.json", "skill-open-lock.json",
-            "skill-perform-act.json", "skill-perform-comedy.json", "skill-perform-dance.json",
-            "skill-perform-keyboard-instruments.json", "skill-perform-oratory.json",
-            "skill-perform-percussion-instruments.json", "skill-perform-sing.json",
-            "skill-perform-string-instruments.json", "skill-perform-wind-instruments.json",
-            "skill-profession.json", "skill-ride.json", "skill-search.json", "skill-sense-motive.json",
-            "skill-sleight-of-hand.json", "skill-speak-language.json", "skill-spellcraft.json",
-            "skill-spot.json", "skill-survival.json", "skill-swim.json",
-            "skill-tumble.json", "skill-use-magic-device.json", "skill-use-rope.json"
-        ],
         "thirdera.thirdera_feats": [
             "feat-acrobatic.json", "feat-agile.json", "feat-alertness.json", "feat-animal-affinity.json", "feat-athletic.json",
             "feat-armor-proficiency-heavy.json", "feat-armor-proficiency-light.json", "feat-armor-proficiency-medium.json",
@@ -93,6 +63,36 @@ export class CompendiumLoader {
             "feat-trample.json", "feat-tower-shield-proficiency.json", "feat-two-weapon-defense.json", "feat-two-weapon-fighting.json",
             "feat-weapon-finesse.json", "feat-weapon-focus.json", "feat-weapon-specialization.json",
             "feat-whirlwind-attack.json", "feat-widen-spell.json"
+        ],
+        "thirdera.thirdera_classes": [
+            "class-barbarian.json", "class-bard.json", "class-cleric.json",
+            "class-druid.json", "class-fighter.json", "class-monk.json",
+            "class-paladin.json", "class-ranger.json", "class-rogue.json",
+            "class-sorcerer.json", "class-wizard.json"
+        ],
+        "thirdera.thirdera_skills": [
+            "skill-appraise.json", "skill-balance.json", "skill-bluff.json",
+            "skill-climb.json", "skill-concentration.json",
+            "skill-craft-alchemy.json", "skill-craft-armorsmithing.json", "skill-craft-bowmaking.json",
+            "skill-craft-trapmaking.json", "skill-craft-weaponsmithing.json",
+            "skill-decipher-script.json", "skill-diplomacy.json", "skill-disable-device.json",
+            "skill-disguise.json", "skill-escape-artist.json", "skill-forgery.json",
+            "skill-gather-information.json", "skill-handle-animal.json", "skill-heal.json",
+            "skill-hide.json", "skill-intimidate.json", "skill-jump.json",
+            "skill-knowledge-arcana.json", "skill-knowledge-architecture-and-engineering.json",
+            "skill-knowledge-dungeoneering.json", "skill-knowledge-geography.json",
+            "skill-knowledge-history.json", "skill-knowledge-local.json", "skill-knowledge-nature.json",
+            "skill-knowledge-nobility-and-royalty.json", "skill-knowledge-religion.json",
+            "skill-knowledge-the-planes.json",
+            "skill-listen.json", "skill-move-silently.json", "skill-open-lock.json",
+            "skill-perform-act.json", "skill-perform-comedy.json", "skill-perform-dance.json",
+            "skill-perform-keyboard-instruments.json", "skill-perform-oratory.json",
+            "skill-perform-percussion-instruments.json", "skill-perform-sing.json",
+            "skill-perform-string-instruments.json", "skill-perform-wind-instruments.json",
+            "skill-profession.json", "skill-ride.json", "skill-search.json", "skill-sense-motive.json",
+            "skill-sleight-of-hand.json", "skill-speak-language.json", "skill-spellcraft.json",
+            "skill-spot.json", "skill-survival.json", "skill-swim.json",
+            "skill-tumble.json", "skill-use-magic-device.json",             "skill-use-rope.json"
         ],
         "thirdera.thirdera_features": [
             "feature-barbarian-fast-movement.json", "feature-barbarian-rage.json", "feature-barbarian-illiteracy.json",
@@ -449,6 +449,39 @@ export class CompendiumLoader {
                 documents.push(jsonData);
             } catch (error) {
                 console.warn(`Third Era | Failed to load ${filePath}:`, error);
+            }
+        }
+
+        // Classes pack: resolve autoGrantedFeats featKey/featKeys to feat UUIDs from feats pack
+        if (documents.length > 0 && pack.collection === "thirdera.thirdera_classes") {
+            const featsPack = game.packs.get("thirdera.thirdera_feats");
+            if (featsPack) {
+                const featDocs = await featsPack.getDocuments();
+                const keyToUuid = new Map();
+                for (const doc of featDocs) {
+                    const k = getStableKey(doc);
+                    if (k != null) keyToUuid.set(k, doc.uuid);
+                }
+                for (const docData of documents) {
+                    const entries = docData.system?.autoGrantedFeats;
+                    if (!Array.isArray(entries)) continue;
+                    for (const entry of entries) {
+                        const key = (entry.featKey ?? "").trim();
+                        if (key) {
+                            const uuid = keyToUuid.get(key);
+                            if (uuid) {
+                                entry.featUuid = uuid;
+                                delete entry.featKey;
+                            }
+                        }
+                        const keys = entry.featKeys;
+                        if (Array.isArray(keys) && keys.length > 0) {
+                            const uuids = keys.map((k) => keyToUuid.get(String(k).trim())).filter(Boolean);
+                            entry.featUuids = uuids;
+                            delete entry.featKeys;
+                        }
+                    }
+                }
             }
         }
 

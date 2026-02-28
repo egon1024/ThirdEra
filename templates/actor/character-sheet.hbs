@@ -329,10 +329,7 @@
         </ol>
         {{/if}}
         {{!-- Manually-Added Class Features --}}
-        <h4 class="items-header">
-          Class Features
-          <a class="item-create" data-action="createItem" data-type="feature"><i class="fas fa-plus"></i></a>
-        </h4>
+        <h4 class="items-header">Class Features</h4>
         <ol class="items-list">
           {{#each classFeatures as |item id|}}
           <li class="item flexrow" data-item-id="{{item._id}}">
@@ -738,7 +735,6 @@
       {{!-- Weapons --}}
       <div class="items-header">
         <h3 class="items-header">Weapons</h3>
-        <a class="item-create" data-action="createItem" data-type="weapon"><i class="fas fa-plus"></i> Add Weapon</a>
       </div>
       <ol class="items-list">
         {{#each itemsNotInContainers.weapons as |item id|}}
@@ -785,7 +781,6 @@
       {{!-- Armor --}}
       <div class="items-header">
         <h3 class="items-header">Armor</h3>
-        <a class="item-create" data-action="createItem" data-type="armor"><i class="fas fa-plus"></i> Add Armor</a>
       </div>
       <ol class="items-list">
         {{#each itemsNotInContainers.armor as |item id|}}
@@ -816,8 +811,6 @@
       {{!-- Equipment --}}
       <div class="items-header">
         <h3 class="items-header">Equipment</h3>
-        <a class="item-create" data-action="createItem" data-type="equipment"><i class="fas fa-plus"></i> Add
-          Equipment</a>
       </div>
       <ol class="items-list">
         {{!-- Regular equipment (not in containers) --}}
