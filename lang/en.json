@@ -56,7 +56,9 @@
             "feature": "Class Feature",
             "domain": "Domain",
             "school": "School of Magic",
-            "condition": "Condition"
+            "condition": "Condition",
+            "creatureType": "Creature Type",
+            "subtype": "Subtype"
         },
         "ConditionEffects": "Mechanical effects",
         "ConditionEffectsHint": "Optional modifiers when this condition is active (e.g. AC -2, half speed).",
@@ -78,6 +80,11 @@
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"
+        },
+        "NPC": {
+            "CreatureType": "Creature Type",
+            "Subtypes": "Subtypes",
+            "AddSubtype": "Add subtype"
         },
         "Skills": {
             "classSkill": "Class Skill",
@@ -354,7 +361,9 @@
             "feature": "Class Feature",
             "domain": "Domain",
             "school": "School of Magic",
-            "condition": "Condition"
+            "condition": "Condition",
+            "creatureType": "Creature Type",
+            "subtype": "Subtype"
         },
         "Actor": {
             "character": "Character",

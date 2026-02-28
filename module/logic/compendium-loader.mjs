@@ -349,6 +349,19 @@ export class CompendiumLoader {
             "condition-prone.json", "condition-shaken.json", "condition-sickened.json",
             "condition-stable.json", "condition-staggered.json", "condition-stunned.json",
             "condition-turned.json", "condition-unconscious.json"
+        ],
+        "thirdera.thirdera_creature_types": [
+            "creature-type-aberration.json", "creature-type-animal.json", "creature-type-construct.json",
+            "creature-type-dragon.json", "creature-type-elemental.json", "creature-type-fey.json",
+            "creature-type-giant.json", "creature-type-humanoid.json", "creature-type-magical-beast.json",
+            "creature-type-monstrous-humanoid.json", "creature-type-ooze.json", "creature-type-outsider.json",
+            "creature-type-plant.json", "creature-type-undead.json", "creature-type-vermin.json"
+        ],
+        "thirdera.thirdera_subtypes": [
+            "subtype-air.json", "subtype-aquatic.json", "subtype-chaotic.json", "subtype-cold.json",
+            "subtype-earth.json", "subtype-evil.json", "subtype-fire.json", "subtype-good.json",
+            "subtype-lawful.json", "subtype-native.json", "subtype-shapechanger.json", "subtype-water.json",
+            "subtype-goblinoid.json", "subtype-reptilian.json"
         ]
     };
 

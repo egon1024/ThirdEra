@@ -18,6 +18,8 @@ import { FeatureData } from "./module/data/item-feature.mjs";
 import { DomainData } from "./module/data/item-domain.mjs";
 import { SchoolData } from "./module/data/item-school.mjs";
 import { ConditionData } from "./module/data/item-condition.mjs";
+import { CreatureTypeData } from "./module/data/item-creature-type.mjs";
+import { SubtypeData } from "./module/data/item-subtype.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -301,7 +303,9 @@ Hooks.once("init", async function () {
         class: ClassData,
         domain: DomainData,
         school: SchoolData,
-        condition: ConditionData
+        condition: ConditionData,
+        creatureType: CreatureTypeData,
+        subtype: SubtypeData
     };
 
     // Register item type labels for the creation menu
@@ -317,7 +321,9 @@ Hooks.once("init", async function () {
         class: "THIRDERA.TYPES.Item.class",
         domain: "THIRDERA.TYPES.Item.domain",
         school: "THIRDERA.TYPES.Item.school",
-        condition: "THIRDERA.TYPES.Item.condition"
+        condition: "THIRDERA.TYPES.Item.condition",
+        creatureType: "THIRDERA.TYPES.Item.creatureType",
+        subtype: "THIRDERA.TYPES.Item.subtype"
     };
 
     // Register sheet application classes

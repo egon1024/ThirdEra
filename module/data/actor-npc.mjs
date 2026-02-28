@@ -1,4 +1,4 @@
-const { BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
+const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { getConditionItemsMapSync, getActiveConditionModifiers } from "../logic/condition-helpers.mjs";
@@ -41,6 +41,8 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             // NPC Details (simplified)
             details: new SchemaField({
                 type: new StringField({ required: true, blank: true, initial: "" }),
+                creatureTypeUuid: new StringField({ required: true, blank: true, initial: "" }),
+                subtypeUuids: new ArrayField(new StringField(), { required: true, initial: [] }),
                 cr: new StringField({ required: true, blank: true, initial: "1" }),
                 alignment: new StringField({ required: true, blank: true, initial: "" }),
                 size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes })

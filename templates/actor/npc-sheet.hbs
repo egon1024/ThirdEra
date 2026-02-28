@@ -20,9 +20,14 @@
                 <span class="actor-type-badge badge--npc">NPC</span>
             </div>
             <div class="resources grid grid-4col">
-                <div class="resource flex-group-center">
-                    <label for="system.details.type" class="resource-label">Type</label>
-                    <input type="text" name="system.details.type" value="{{system.details.type}}" data-dtype="String" />
+                <div class="resource flex-group-center" data-drop-zone="creature-type">
+                    <label for="npc-creature-type-select" class="resource-label">{{localize 'THIRDERA.NPC.CreatureType'}}</label>
+                    <select name="system.details.creatureTypeUuid" id="npc-creature-type-select" class="creature-type-select" aria-label="{{localize 'THIRDERA.NPC.CreatureType'}}">
+                        <option value="">—</option>
+                        {{#each creatureTypeChoices as |choice|}}
+                        <option value="{{choice.uuid}}" {{#if (eq choice.uuid ../system.details.creatureTypeUuid)}}selected{{/if}}>{{choice.name}}</option>
+                        {{/each}}
+                    </select>
                 </div>
                 <div class="resource flex-group-center">
                     <label for="system.details.cr" class="resource-label">CR</label>
@@ -42,6 +47,28 @@
                         {{/each}}
                     </select>
                 </div>
+            </div>
+            <div class="npc-subtypes-row">
+                <label class="resource-label">{{localize 'THIRDERA.NPC.Subtypes'}}</label>
+                <div class="subtypes-controls" data-drop-zone="subtypes">
+                    <select class="subtype-add-select" aria-label="{{localize 'THIRDERA.NPC.AddSubtype'}}">
+                        <option value="">— Add subtype —</option>
+                        {{#each subtypeChoices as |choice|}}
+                        <option value="{{choice.uuid}}">{{choice.name}}</option>
+                        {{/each}}
+                    </select>
+                    <a class="subtype-add-btn" data-action="addSubtype" title="{{localize 'THIRDERA.NPC.AddSubtype'}}"><i class="fas fa-plus"></i></a>
+                </div>
+                {{#if selectedSubtypes.length}}
+                <ul class="subtypes-list">
+                    {{#each selectedSubtypes as |st|}}
+                    <li class="subtype-tag flexrow" data-subtype-uuid="{{st.uuid}}">
+                        <span class="subtype-name">{{st.name}}</span>
+                        <a class="subtype-remove" data-action="removeSubtype" title="{{localize 'THIRDERA.Remove'}}"><i class="fas fa-trash"></i></a>
+                    </li>
+                    {{/each}}
+                </ul>
+                {{/if}}
             </div>
         </div>
     </header>

@@ -57,6 +57,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts,
             addCondition: ThirdEraActorSheet.#onAddCondition,
             removeCondition: ThirdEraActorSheet.#onRemoveCondition,
+            setCreatureType: ThirdEraActorSheet.#onSetCreatureType,
+            addSubtype: ThirdEraActorSheet.#onAddSubtype,
+            removeSubtype: ThirdEraActorSheet.#onRemoveSubtype,
             openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor,
             configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
             editImage: ThirdEraActorSheet.#onEditImage,
@@ -977,6 +980,44 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             };
         });
 
+        // NPC-only: creature type and subtype choices + resolved (for dropdown and display)
+        let creatureTypeChoices = [];
+        let creatureTypeResolved = null;
+        let subtypeChoices = [];
+        let selectedSubtypes = [];
+        if (actor.type === "npc") {
+            const typesPack = game.packs.get("thirdera.thirdera_creature_types");
+            const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
+            const typesFromPack = typesPack ? await typesPack.getDocuments() : [];
+            const typesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "creatureType");
+            const subtypesFromPack = subtypesPack ? await subtypesPack.getDocuments() : [];
+            const subtypesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "subtype");
+            const allTypes = [...typesFromPack, ...typesFromWorld];
+            const allSubtypes = [...subtypesFromPack, ...subtypesFromWorld];
+            const typeSort = (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
+            creatureTypeChoices = allTypes.map((doc) => ({ uuid: doc.uuid, name: doc.name })).sort((a, b) => typeSort({ name: a.name }, { name: b.name }));
+            subtypeChoices = allSubtypes.map((doc) => ({ uuid: doc.uuid, name: doc.name })).sort((a, b) => typeSort({ name: a.name }, { name: b.name }));
+            const creatureTypeUuid = (systemData.details?.creatureTypeUuid ?? "").trim();
+            if (creatureTypeUuid) {
+                try {
+                    creatureTypeResolved = await fromUuid(creatureTypeUuid);
+                } catch (_e) {
+                    creatureTypeResolved = null;
+                }
+            }
+            const subtypeUuids = systemData.details?.subtypeUuids ?? [];
+            for (const uuid of subtypeUuids) {
+                const u = (uuid ?? "").trim();
+                if (!u) continue;
+                try {
+                    const doc = await fromUuid(u);
+                    if (doc) selectedSubtypes.push({ uuid: doc.uuid, name: doc.name });
+                } catch (_e) {
+                    // skip invalid uuid
+                }
+            }
+        }
+
         return {
             ...context,
             actor,
@@ -1028,7 +1069,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 : "Reset prepared",
             resetPreparedCountsHint: game.i18n.has("THIRDERA.Spells.ResetPreparedCountsHint")
                 ? game.i18n.localize("THIRDERA.Spells.ResetPreparedCountsHint")
-                : "Set all spell prepared counts to 0 (e.g. after rest, before preparing spells again)."
+                : "Set all spell prepared counts to 0 (e.g. after rest, before preparing spells again).",
+            // NPC-only: creature type and subtypes
+            creatureTypeChoices,
+            creatureTypeResolved,
+            subtypeChoices,
+            selectedSubtypes
         };
     }
 
@@ -1220,6 +1266,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 return false;
             }
             return false;
+        }
+
+        // Creature type or subtype dropped on NPC: set classification by UUID (do not embed the item)
+        if (this.actor.type === "npc") {
+            const uuid = item.uuid ?? "";
+            if (item.type === "creatureType" && uuid) {
+                event.preventDefault?.();
+                event.stopPropagation?.();
+                await this.actor.update({ "system.details.creatureTypeUuid": uuid });
+                return false;
+            }
+            if (item.type === "subtype" && uuid) {
+                event.preventDefault?.();
+                event.stopPropagation?.();
+                const current = this.actor.system.details?.subtypeUuids ?? [];
+                if (current.includes(uuid)) {
+                    ui.notifications.info(`${item.name} is already added.`);
+                    return false;
+                }
+                await this.actor.update({ "system.details.subtypeUuids": [...current, uuid] });
+                return false;
+            }
         }
 
         // Domain dropped on character: add to spellcasting class (character chooses domains)
@@ -3769,6 +3837,52 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const effectId = target.closest("[data-effect-id]")?.dataset?.effectId;
         if (!effectId) return;
         await this.actor.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }
+
+    /**
+     * Set NPC creature type from dropdown (value = document UUID).
+     * @param {PointerEvent} event   The change/click event
+     * @param {HTMLElement} target   The select element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onSetCreatureType(event, target) {
+        if (this.actor.type !== "npc") return;
+        const select = target.tagName === "SELECT" ? target : target.closest("select");
+        const uuid = select?.value?.trim() ?? "";
+        await this.actor.update({ "system.details.creatureTypeUuid": uuid || "" });
+    }
+
+    /**
+     * Add a subtype to the NPC from dropdown (value = document UUID).
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The button or its container
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddSubtype(event, target) {
+        if (this.actor.type !== "npc") return;
+        const sheetEl = target.closest(".thirdera.actor");
+        const select = sheetEl?.querySelector(".subtype-add-select");
+        const uuid = select?.value?.trim();
+        if (!uuid) return;
+        const current = this.actor.system.details?.subtypeUuids ?? [];
+        if (current.includes(uuid)) return;
+        await this.actor.update({ "system.details.subtypeUuids": [...current, uuid] });
+    }
+
+    /**
+     * Remove a subtype from the NPC (data-subtype-uuid on the row).
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The remove button
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveSubtype(event, target) {
+        if (this.actor.type !== "npc") return;
+        const row = target.closest("[data-subtype-uuid]");
+        const uuid = row?.dataset?.subtypeUuid?.trim();
+        if (!uuid) return;
+        const current = this.actor.system.details?.subtypeUuids ?? [];
+        const next = current.filter((u) => (u ?? "").trim() !== uuid);
+        await this.actor.update({ "system.details.subtypeUuids": next });
     }
 
     /**

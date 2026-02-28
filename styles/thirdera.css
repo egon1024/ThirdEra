@@ -354,6 +354,59 @@
   border-color: var(--color-npc-border);
 }
 
+.thirdera .npc-subtypes-row {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.thirdera .npc-subtypes-row .resource-label {
+  flex: 0 0 auto;
+  margin-right: 6px;
+}
+
+.thirdera .subtypes-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.thirdera .subtype-add-select {
+  min-width: 140px;
+}
+
+.thirdera .subtypes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.thirdera .subtype-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-divider);
+  border-radius: 4px;
+  font-size: var(--font-size-note);
+}
+
+.thirdera .subtype-tag .subtype-remove {
+  opacity: 0.7;
+}
+
+.thirdera .subtype-tag .subtype-remove:hover {
+  opacity: 1;
+  color: var(--color-text-primary);
+}
+
 .thirdera .sheet-header .header-fields {
   flex: 1;
   display: flex;
