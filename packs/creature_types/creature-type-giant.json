@@ -1,1 +1,1 @@
-{"name":"Giant","type":"creatureType","img":"icons/svg/mountain.svg","system":{"key":"giant","defaultHitDie":"d8","description":""},"flags":{},"folder":null}
+{"name":"Giant","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/giant.png","system":{"key":"giant","defaultHitDie":"d8","description":""},"flags":{},"folder":null}

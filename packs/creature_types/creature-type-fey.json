@@ -1,1 +1,1 @@
-{"name":"Fey","type":"creatureType","img":"icons/svg/light.svg","system":{"key":"fey","defaultHitDie":"d6","description":""},"flags":{},"folder":null}
+{"name":"Fey","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/fey.png","system":{"key":"fey","defaultHitDie":"d6","description":""},"flags":{},"folder":null}

@@ -1,1 +1,1 @@
-{"name":"Elemental","type":"creatureType","img":"icons/svg/explosion.svg","system":{"key":"elemental","defaultHitDie":"d8","description":""},"flags":{},"folder":null}
+{"name":"Elemental","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/elemental.png","system":{"key":"elemental","defaultHitDie":"d8","description":""},"flags":{},"folder":null}

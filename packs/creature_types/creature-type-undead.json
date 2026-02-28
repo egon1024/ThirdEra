@@ -1,1 +1,1 @@
-{"name":"Undead","type":"creatureType","img":"icons/svg/skull.svg","system":{"key":"undead","defaultHitDie":"d12","description":""},"flags":{},"folder":null}
+{"name":"Undead","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/undead.png","system":{"key":"undead","defaultHitDie":"d12","description":""},"flags":{},"folder":null}

@@ -1,1 +1,1 @@
-{"name":"Dragon","type":"creatureType","img":"icons/svg/wing.svg","system":{"key":"dragon","defaultHitDie":"d12","description":""},"flags":{},"folder":null}
+{"name":"Dragon","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/dragon.png","system":{"key":"dragon","defaultHitDie":"d12","description":""},"flags":{},"folder":null}

@@ -1,1 +1,1 @@
-{"name":"Construct","type":"creatureType","img":"icons/svg/clockwork.svg","system":{"key":"construct","defaultHitDie":"d10","description":""},"flags":{},"folder":null}
+{"name":"Construct","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/construct.png","system":{"key":"construct","defaultHitDie":"d10","description":""},"flags":{},"folder":null}

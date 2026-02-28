@@ -1,1 +1,1 @@
-{"name":"Monstrous Humanoid","type":"creatureType","img":"icons/svg/combat.svg","system":{"key":"monstrousHumanoid","defaultHitDie":"d8","description":""},"flags":{},"folder":null}
+{"name":"Monstrous Humanoid","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/monstrous humanoid.png","system":{"key":"monstrousHumanoid","defaultHitDie":"d8","description":""},"flags":{},"folder":null}

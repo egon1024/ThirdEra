@@ -1,1 +1,1 @@
-{"name":"Animal","type":"creatureType","img":"icons/svg/pawprint.svg","system":{"key":"animal","defaultHitDie":"d8","description":""},"flags":{},"folder":null}
+{"name":"Animal","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/animal.png","system":{"key":"animal","defaultHitDie":"d8","description":""},"flags":{},"folder":null}

@@ -1,1 +1,1 @@
-{"name":"Aberration","type":"creatureType","img":"icons/svg/eye.svg","system":{"key":"aberration","defaultHitDie":"d8","description":""},"flags":{},"folder":null}
+{"name":"Aberration","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/aberration.png","system":{"key":"aberration","defaultHitDie":"d8","description":""},"flags":{},"folder":null}

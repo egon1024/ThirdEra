@@ -1,1 +1,1 @@
-{"name":"Vermin","type":"creatureType","img":"icons/svg/mole.svg","system":{"key":"vermin","defaultHitDie":"d8","description":""},"flags":{},"folder":null}
+{"name":"Vermin","type":"creatureType","img":"systems/thirdera/assets/icons/Creature Types/vermin.png","system":{"key":"vermin","defaultHitDie":"d8","description":""},"flags":{},"folder":null}
