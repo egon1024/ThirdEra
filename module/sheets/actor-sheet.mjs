@@ -495,6 +495,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             return {
                 index: i,
                 characterLevel: i + 1,
+                classItemId: entry.classItemId,
                 className: cls?.name ?? "Unknown",
                 hitDie: cls?.system.hitDie ?? "?",
                 hpRolled: entry.hpRolled,
@@ -3425,9 +3426,50 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @this {ThirdEraActorSheet}
      */
     static async #onRemoveClass(event, target) {
+        event.preventDefault?.();
+        event.stopPropagation?.();
         const itemId = target.closest("[data-item-id]")?.dataset.itemId;
         const cls = this.actor.items.get(itemId);
         if (!cls) return;
+
+        const className = foundry.utils.escapeHTML(cls.name);
+        const actorName = foundry.utils.escapeHTML(this.actor.name);
+        const levelCount = (this.actor.system.details.classLevels || {})[itemId] ?? 0;
+        const title = game.i18n.localize("THIRDERA.RemoveClassConfirmTitle");
+        const warning = game.i18n.localize("THIRDERA.RemoveClassConfirmWarning");
+        const detail = game.i18n.localize("THIRDERA.RemoveClassConfirmDetail");
+
+        const result = await foundry.applications.api.DialogV2.wait({
+            rejectClose: false,
+            modal: true,
+            window: { title },
+            position: { width: 480 },
+            content: `
+                <p class="thirdera-remove-class-warning"><strong>${warning}</strong></p>
+                <ul>
+                    <li>${detail}</li>
+                    <li>${className} (${levelCount} ${levelCount === 1 ? "level" : "levels"}) will be removed from ${actorName}.</li>
+                </ul>
+                <p style="margin-top: 1em; color: var(--color-danger, #d61400); font-weight: bold;">This action cannot be undone.</p>
+            `,
+            buttons: [
+                {
+                    action: "cancel",
+                    label: "Cancel",
+                    icon: "fa-solid fa-xmark",
+                    default: true,
+                    callback: () => ({ cancel: true })
+                },
+                {
+                    action: "remove",
+                    label: game.i18n.localize("THIRDERA.RemoveClassConfirmButton"),
+                    icon: "fa-solid fa-trash",
+                    callback: () => ({ cancel: false })
+                }
+            ]
+        });
+
+        if (!result || result.cancel) return;
 
         const spellListAccess = cls?.system?.spellcasting?.spellListAccess;
         const idsToRemove = spellListAccess === "full"
@@ -3524,7 +3566,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @this {ThirdEraActorSheet}
      */
     static async #onRemoveClassLevel(event, target) {
-        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        event.preventDefault?.();
+        event.stopPropagation?.();
+        const actionEl = target.closest("[data-action='removeClassLevel']") || target;
+        const itemId = actionEl?.dataset?.itemId ?? target.closest("[data-item-id]")?.dataset?.itemId;
         const cls = this.actor.items.get(itemId);
         if (!cls) return;
 

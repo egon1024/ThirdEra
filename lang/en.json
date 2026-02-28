@@ -211,6 +211,10 @@
             "RequiresAbility": "Requires {ability} {required}. You have {current}.",
             "UnknownFeat": "Unknown feat"
         },
+        "RemoveClassConfirmTitle": "Remove class — confirm",
+        "RemoveClassConfirmWarning": "You are about to remove ALL levels of this class from the character. This cannot be undone and will:",
+        "RemoveClassConfirmDetail": "Delete the class from the character, remove all level history entries for this class, remove class-granted feats and features, and may remove spells known from this class.",
+        "RemoveClassConfirmButton": "Remove all levels",
         "LevelHistory": {
             "Title": "Level History",
             "RemoveLevel": "Remove level",

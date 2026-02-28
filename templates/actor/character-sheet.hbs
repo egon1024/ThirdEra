@@ -687,8 +687,8 @@
           <span class="level-history-cell">{{signedNumber entry.conMod}}</span>
           <span class="level-history-cell level-history-subtotal">{{entry.subtotal}}</span>
           {{#if entry.isLastLevelOfClass}}
-          <a class="level-history-cell level-history-remove" data-action="removeClassLevel" data-item-id="{{entry.classItemId}}"
-            title="{{localize "THIRDERA.LevelHistory.RemoveLevel"}}"><i class="fas fa-minus"></i></a>
+          <button type="button" class="level-history-cell level-history-remove" data-action="removeClassLevel" data-item-id="{{entry.classItemId}}"
+            title="{{localize "THIRDERA.LevelHistory.RemoveLevel"}}"><i class="fas fa-minus"></i></button>
           {{else}}
           <span class="level-history-cell level-history-col-actions"></span>
           {{/if}}

@@ -2281,7 +2281,7 @@
 
 .thirdera .level-history-hp-total {
   font-size: var(--font-size-body);
-  color: var(--color-text-light);
+  color: var(--color-text-primary);
 }
 
 .thirdera .level-history-grid {
@@ -2342,6 +2342,9 @@
   cursor: pointer;
   color: var(--color-text-muted);
   padding: 2px;
+  border: none;
+  background: none;
+  font: inherit;
 }
 
 .thirdera .level-history-remove:hover {
