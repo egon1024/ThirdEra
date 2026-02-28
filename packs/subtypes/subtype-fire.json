@@ -1,0 +1,1 @@
+{"name":"Fire","type":"subtype","img":"icons/svg/fire.svg","system":{"key":"fire","description":"<p>A creature with the fire subtype has immunity to fire. It has vulnerability to cold, which means it takes half again as much (+50%) damage as normal from cold, regardless of whether a saving throw is allowed, or if the save is a success or failure.</p>"},"flags":{},"folder":null}

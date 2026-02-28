@@ -6,28 +6,13 @@
         </div>
     </header>
 
-    <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
-            data-group="primary" data-tab="description">Description</a>
-        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
-            data-tab="details">Details</a>
-    </nav>
-
     <section class="sheet-body">
-        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
-            data-tab="description">
+        <div class="tab active" data-group="primary" data-tab="description">
             <div class="editor-box">
                 <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
                     value="{{system.description}}" toggled="false">
                     {{{enriched.description}}}
                 </prose-mirror>
-            </div>
-        </div>
-        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
-            data-tab="details">
-            <div class="form-group">
-                <label for="system.key">Key</label>
-                <input type="text" name="system.key" value="{{system.key}}" data-dtype="String" placeholder="e.g. fire" />
             </div>
         </div>
     </section>
