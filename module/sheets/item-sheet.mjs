@@ -425,13 +425,28 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
         // For class, expose system as a plain object with autoGrantedFeats normalized to an array (Handlebars needs plain objects).
         // Add _index to each entry so the template can output correct select names inside nested {{#each}} (../index is not in scope there).
+        // For conditional entries, add _featsForSlot[j] = feats available for slot j (exclude feats already chosen in slots 0..j-1; include current slot value so selection shows).
         let systemForContext = systemData;
         if (item.type === "class") {
             const rawSystem = item._source?.system ?? item.toObject?.()?.system;
             const systemPlain = (rawSystem && typeof rawSystem === "object")
                 ? foundry.utils.deepClone(rawSystem)
                 : (typeof systemData?.toObject === "function" ? systemData.toObject() : systemData);
-            const autoGrantedWithIndex = autoGrantedFeatsArray.map((e, i) => ({ ...e, _index: i }));
+            const autoGrantedWithIndex = autoGrantedFeatsArray.map((e, i) => {
+                const base = { ...e, _index: i };
+                const uuids = e?.featUuids ?? [];
+                if (uuids.length) {
+                    base._featsForSlot = uuids.map((_, j) => {
+                        const previousUuids = uuids.slice(0, j).map((u) => (u != null ? String(u).trim() : "")).filter(Boolean);
+                        const currentVal = (uuids[j] != null ? String(uuids[j]).trim() : "");
+                        return availableFeats.filter((f) => {
+                            const fu = (f.uuid || "").trim();
+                            return fu === currentVal || !previousUuids.includes(fu);
+                        });
+                    });
+                }
+                return base;
+            });
             systemForContext = { ...systemPlain, autoGrantedFeats: autoGrantedWithIndex };
         }
 

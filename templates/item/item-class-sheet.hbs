@@ -165,7 +165,7 @@
                             <li class="auto-granted-conditional-uuid-entry">
                                 <select name="system.autoGrantedFeats.{{entry._index}}.featUuids.{{slotIdx}}" class="auto-granted-feat-select">
                                     <option value="">— Select feat —</option>
-                                    {{#each @root.availableFeats}}
+                                    {{#each (lookup entry._featsForSlot slotIdx)}}
                                     <option value="{{uuid}}" {{#if (eq uuid slotVal)}}selected{{/if}}>{{name}}</option>
                                     {{/each}}
                                 </select>
