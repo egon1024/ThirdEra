@@ -139,7 +139,9 @@
             {{/if}}
 
             <h3 class="form-header">Auto-Granted Feats</h3>
-            <p class="hint">Feats granted when a character gains the given class level (level-up or Quick add). <strong>Unconditional</strong>: always grant one feat. <strong>Conditional</strong>: grant the first feat in the list the character doesn’t already have; if they have all, nothing is granted.</p>
+            <p class="hint">Feats granted when a character gains the given class level (level-up or Quick add).<br>
+            <strong>Unconditional</strong>: always grant one feat.<br>
+            <strong>Conditional</strong>: grant the first feat in the list the character doesn’t already have; if they have all, nothing is granted.</p>
             {{#if system.autoGrantedFeats.length}}
             <ol class="auto-granted-feats-list">
                 {{#each system.autoGrantedFeats as |entry index|}}
@@ -159,7 +161,7 @@
                     {{else}}
                     {{#if entry.featUuids.length}}
                     <div class="auto-granted-conditional-block">
-                        <span class="auto-granted-type-label">Conditional (first missing)</span>
+                        <span class="auto-granted-type-label">Conditional</span>
                         <ol class="auto-granted-conditional-uuid-list">
                             {{#each entry.featUuids as |slotVal slotIdx|}}
                             <li class="auto-granted-conditional-uuid-entry">
@@ -177,14 +179,16 @@
                         <a class="feature-remove auto-granted-row-remove" data-action="removeAutoGrantedFeat" data-auto-granted-index="{{index}}" title="Remove row"><i class="fas fa-times"></i></a>
                     </div>
                     {{else}}
-                    <span class="auto-granted-type-label">Unconditional</span>
-                    <select name="system.autoGrantedFeats.{{index}}.featUuid" class="auto-granted-feat-select">
-                        <option value="">— Select feat —</option>
-                        {{#each @root.availableFeats}}
-                        <option value="{{uuid}}" {{#if (eq uuid ../entry.featUuid)}}selected{{/if}}>{{name}}</option>
-                        {{/each}}
-                    </select>
-                    <button type="button" class="auto-granted-use-conditional" data-action="setAutoGrantedToConditional" data-entry-index="{{index}}">Use conditional instead</button>
+                    <div class="auto-granted-unconditional-block">
+                        <button type="button" class="auto-granted-use-conditional" data-action="setAutoGrantedToConditional" data-entry-index="{{index}}">Use conditional instead</button>
+                        <span class="auto-granted-type-label">Unconditional</span>
+                        <select name="system.autoGrantedFeats.{{index}}.featUuid" class="auto-granted-feat-select">
+                            <option value="">— Select feat —</option>
+                            {{#each @root.availableFeats}}
+                            <option value="{{uuid}}" {{#if (eq uuid ../entry.featUuid)}}selected{{/if}}>{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
                     <a class="feature-remove" data-action="removeAutoGrantedFeat" data-auto-granted-index="{{index}}" title="Remove"><i class="fas fa-times"></i></a>
                     {{/if}}
                     {{/if}}

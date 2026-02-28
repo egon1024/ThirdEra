@@ -2600,11 +2600,15 @@
 
 .thirdera .auto-granted-feat-entry {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
   padding: 3px 8px;
   border-bottom: 1px solid var(--color-border-divider);
   font-size: var(--font-size-body);
+}
+
+.thirdera .auto-granted-feat-entry > .feature-remove {
+  align-self: center;
 }
 
 .thirdera .auto-granted-feat-select {
@@ -2635,6 +2639,14 @@
 
 .thirdera .auto-granted-use-conditional:hover {
   color: var(--color-character-accent);
+}
+
+.thirdera .auto-granted-unconditional-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
 .thirdera .auto-granted-conditional-block {
