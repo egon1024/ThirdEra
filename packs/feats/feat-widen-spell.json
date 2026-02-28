@@ -1,18 +1,1 @@
-{
-  "_id": "feat-widen-spell",
-  "name": "Widen Spell",
-  "type": "feat",
-  "img": "icons/svg/aura.svg",
-  "system": {
-    "description": "<p>You can cast spells that cover a wider area.</p>",
-    "key": "widenSpell",
-    "type": "Metamagic",
-    "prerequisites": "",
-    "benefit": "<p>You can alter a burst, emanation, or spread spell to increase its area. Any numeric measurements of the spell's area increase by 100%. A widened spell uses up a spell slot three levels higher than the spell's actual level. Spells that do not have an area of one of these four sorts are not affected by this feat.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-widen-spell","name":"Widen Spell","type":"feat","img":"icons/svg/aura.svg","system":{"description":"<p>You can cast spells that cover a wider area.</p>","key":"widenSpell","type":"Metamagic","prerequisites":"","benefit":"<p>You can alter a burst, emanation, or spread spell to increase its area. Any numeric measurements of the spell's area increase by 100%. A widened spell uses up a spell slot three levels higher than the spell's actual level. Spells that do not have an area of one of these four sorts are not affected by this feat.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

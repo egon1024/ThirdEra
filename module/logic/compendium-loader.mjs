@@ -33,6 +33,37 @@ export class CompendiumLoader {
             "race-dwarf.json", "race-elf.json", "race-gnome.json",
             "race-half-elf.json", "race-half-orc.json", "race-halfling.json", "race-human.json"
         ],
+        "thirdera.thirdera_feats": [
+            "feat-acrobatic.json", "feat-agile.json", "feat-alertness.json", "feat-animal-affinity.json", "feat-athletic.json",
+            "feat-armor-proficiency-heavy.json", "feat-armor-proficiency-light.json", "feat-armor-proficiency-medium.json",
+            "feat-augment-summoning.json", "feat-blind-fight.json", "feat-brew-potion.json", "feat-cleave.json",
+            "feat-combat-casting.json", "feat-combat-expertise.json", "feat-combat-reflexes.json", "feat-craft-magic-arms-and-armor.json",
+            "feat-craft-rod.json", "feat-craft-staff.json", "feat-craft-wand.json",
+            "feat-craft-wondrous-item.json", "feat-deceitful.json", "feat-deft-hands.json", "feat-deflect-arrows.json",
+            "feat-diehard.json", "feat-diligent.json", "feat-dodge.json", "feat-empower-spell.json",
+            "feat-endurance.json", "feat-enlarge-spell.json", "feat-eschew-materials.json",
+            "feat-exotic-weapon-proficiency.json", "feat-extend-spell.json", "feat-extra-turning.json", "feat-far-shot.json",
+            "feat-forge-ring.json", "feat-great-cleave.json", "feat-great-fortitude.json", "feat-greater-spell-focus.json", "feat-greater-spell-penetration.json",
+            "feat-greater-two-weapon-fighting.json", "feat-greater-weapon-focus.json", "feat-greater-weapon-specialization.json",
+            "feat-heighten-spell.json", "feat-improved-bull-rush.json", "feat-improved-counterspell.json", "feat-improved-familiar.json", "feat-improved-critical.json", "feat-improved-disarm.json", "feat-improved-feint.json",
+            "feat-improved-grapple.json", "feat-improved-initiative.json", "feat-improved-overrun.json", "feat-improved-precise-shot.json", "feat-improved-sunder.json", "feat-improved-trip.json", "feat-improved-turning.json", "feat-improved-two-weapon-fighting.json",
+            "feat-improved-unarmed-strike.json", "feat-investigator.json", "feat-iron-will.json",
+            "feat-leadership.json", "feat-lightning-reflexes.json", "feat-magical-aptitude.json",
+            "feat-martial-weapon-proficiency.json", "feat-manyshot.json", "feat-maximize-spell.json", "feat-mobility.json",
+            "feat-mounted-archery.json", "feat-mounted-combat.json",
+            "feat-nimble-fingers.json", "feat-natural-spell.json", "feat-negotiator.json", "feat-persuasive.json", "feat-point-blank-shot.json",
+            "feat-power-attack.json", "feat-precise-shot.json", "feat-quick-draw.json",
+            "feat-quicken-spell.json", "feat-rapid-reload.json", "feat-rapid-shot.json",
+            "feat-ride-by-attack.json", "feat-run.json", "feat-scribe-scroll.json",
+            "feat-self-sufficient.json", "feat-shield-bash.json", "feat-shield-proficiency.json", "feat-snatch-arrows.json",
+            "feat-shot-on-the-run.json", "feat-silent-spell.json", "feat-simple-weapon-proficiency.json",
+            "feat-skill-focus.json", "feat-spell-focus.json", "feat-spell-mastery.json", "feat-spell-penetration.json",
+            "feat-spirited-charge.json", "feat-spring-attack.json", "feat-stealthy.json", "feat-stunning-fist.json",
+            "feat-still-spell.json", "feat-toughness.json", "feat-track.json",
+            "feat-trample.json", "feat-tower-shield-proficiency.json", "feat-two-weapon-defense.json", "feat-two-weapon-fighting.json",
+            "feat-weapon-finesse.json", "feat-weapon-focus.json", "feat-weapon-specialization.json",
+            "feat-whirlwind-attack.json", "feat-widen-spell.json"
+        ],
         "thirdera.thirdera_classes": [
             "class-barbarian.json", "class-bard.json", "class-cleric.json",
             "class-druid.json", "class-fighter.json", "class-monk.json",
@@ -61,38 +92,7 @@ export class CompendiumLoader {
             "skill-profession.json", "skill-ride.json", "skill-search.json", "skill-sense-motive.json",
             "skill-sleight-of-hand.json", "skill-speak-language.json", "skill-spellcraft.json",
             "skill-spot.json", "skill-survival.json", "skill-swim.json",
-            "skill-tumble.json", "skill-use-magic-device.json", "skill-use-rope.json"
-        ],
-        "thirdera.thirdera_feats": [
-            "feat-alertness.json", "feat-animal-affinity.json", "feat-athletic.json",
-            "feat-blind-fight.json", "feat-brew-potion.json", "feat-cleave.json",
-            "feat-combat-expertise.json", "feat-combat-reflexes.json", "feat-craft-magic-arms-and-armor.json",
-            "feat-craft-rod.json", "feat-craft-staff.json", "feat-craft-wand.json",
-            "feat-craft-wondrous-item.json", "feat-deceitful.json", "feat-deft-hands.json",
-            "feat-diligent.json", "feat-dodge.json", "feat-empower-spell.json",
-            "feat-endurance.json", "feat-enlarge-spell.json", "feat-eschew-materials.json",
-            "feat-exotic-weapon-proficiency.json", "feat-extend-spell.json", "feat-extra-turning.json",
-            "feat-forge-ring.json", "feat-great-cleave.json", "feat-great-fortitude.json",
-            "feat-heighten-spell.json", "feat-improved-bull-rush.json", "feat-improved-counterspell.json",
-            "feat-improved-critical.json", "feat-improved-disarm.json", "feat-improved-feint.json",
-            "feat-improved-grapple.json", "feat-improved-initiative.json", "feat-improved-overrun.json",
-            "feat-improved-sunder.json", "feat-improved-trip.json", "feat-improved-two-weapon-fighting.json",
-            "feat-improved-unarmed-strike.json", "feat-investigator.json", "feat-iron-will.json",
-            "feat-leadership.json", "feat-lightning-reflexes.json", "feat-magical-aptitude.json",
-            "feat-martial-weapon-proficiency.json", "feat-maximize-spell.json", "feat-mobility.json",
-            "feat-mounted-archery.json", "feat-mounted-combat.json", "feat-negotiator.json",
-            "feat-nimble-fingers.json", "feat-persuasive.json", "feat-point-blank-shot.json",
-            "feat-power-attack.json", "feat-precise-shot.json", "feat-quick-draw.json",
-            "feat-quicken-spell.json", "feat-rapid-reload.json", "feat-rapid-shot.json",
-            "feat-ride-by-attack.json", "feat-run.json", "feat-scribe-scroll.json",
-            "feat-self-sufficient.json", "feat-shield-bash.json", "feat-shield-proficiency.json",
-            "feat-shot-on-the-run.json", "feat-silent-spell.json", "feat-simple-weapon-proficiency.json",
-            "feat-skill-focus.json", "feat-spell-focus.json", "feat-spell-mastery.json",
-            "feat-spirited-charge.json", "feat-spring-attack.json", "feat-stealthy.json",
-            "feat-still-spell.json", "feat-toughness.json", "feat-track.json",
-            "feat-trample.json", "feat-two-weapon-defense.json", "feat-two-weapon-fighting.json",
-            "feat-weapon-finesse.json", "feat-weapon-focus.json", "feat-weapon-specialization.json",
-            "feat-whirlwind-attack.json", "feat-widen-spell.json"
+            "skill-tumble.json", "skill-use-magic-device.json",             "skill-use-rope.json"
         ],
         "thirdera.thirdera_features": [
             "feature-barbarian-fast-movement.json", "feature-barbarian-rage.json", "feature-barbarian-illiteracy.json",
@@ -452,6 +452,39 @@ export class CompendiumLoader {
             }
         }
 
+        // Classes pack: resolve autoGrantedFeats featKey/featKeys to feat UUIDs from feats pack
+        if (documents.length > 0 && pack.collection === "thirdera.thirdera_classes") {
+            const featsPack = game.packs.get("thirdera.thirdera_feats");
+            if (featsPack) {
+                const featDocs = await featsPack.getDocuments();
+                const keyToUuid = new Map();
+                for (const doc of featDocs) {
+                    const k = getStableKey(doc);
+                    if (k != null) keyToUuid.set(k, doc.uuid);
+                }
+                for (const docData of documents) {
+                    const entries = docData.system?.autoGrantedFeats;
+                    if (!Array.isArray(entries)) continue;
+                    for (const entry of entries) {
+                        const key = (entry.featKey ?? "").trim();
+                        if (key) {
+                            const uuid = keyToUuid.get(key);
+                            if (uuid) {
+                                entry.featUuid = uuid;
+                                delete entry.featKey;
+                            }
+                        }
+                        const keys = entry.featKeys;
+                        if (Array.isArray(keys) && keys.length > 0) {
+                            const uuids = keys.map((k) => keyToUuid.get(String(k).trim())).filter(Boolean);
+                            entry.featUuids = uuids;
+                            delete entry.featKeys;
+                        }
+                    }
+                }
+            }
+        }
+
         if (documents.length > 0) {
             // Unlock the compendium if it's locked (required to create/update documents)
             if (pack.locked) {
@@ -506,6 +539,32 @@ export class CompendiumLoader {
             if (toCreate.length > 0) {
                 await DocumentClass.implementation.createDocuments(toCreate, {pack: pack.collection});
                 console.log(`Third Era | Created ${toCreate.length} new documents in ${pack.collection}`);
+            }
+
+            // Feats pack: resolve prerequisiteFeatKeys to prerequisiteFeatUuids (by key within the same pack)
+            if (pack.collection === "thirdera.thirdera_feats" && (toUpdate.length > 0 || toCreate.length > 0)) {
+                const allDocs = await pack.getDocuments();
+                const keyToUuid = new Map();
+                for (const doc of allDocs) {
+                    const k = getStableKey(doc);
+                    if (k != null) keyToUuid.set(k, doc.uuid);
+                }
+                const toResolve = allDocs.filter((doc) => {
+                    const keys = doc.system?.prerequisiteFeatKeys;
+                    return Array.isArray(keys) && keys.length > 0;
+                });
+                if (toResolve.length > 0) {
+                    const resolveUpdates = toResolve.map((doc) => {
+                        const keys = doc.system.prerequisiteFeatKeys;
+                        const uuids = keys.map((k) => keyToUuid.get(String(k).trim())).filter(Boolean);
+                        return {
+                            _id: doc.id,
+                            system: { ...doc.system, prerequisiteFeatUuids: uuids, prerequisiteFeatKeys: [] }
+                        };
+                    });
+                    await DocumentClass.implementation.updateDocuments(resolveUpdates, {pack: pack.collection});
+                    console.log(`Third Era | Resolved prerequisite feats for ${resolveUpdates.length} feats in ${pack.collection}`);
+                }
             }
             
             if (toUpdate.length > 0 || toCreate.length > 0) {

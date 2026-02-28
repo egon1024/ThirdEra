@@ -5,6 +5,8 @@
 import { ThirdEraActorSheet } from "../sheets/actor-sheet.mjs";
 import { SpellData } from "../data/item-spell.mjs";
 import { ClassData } from "../data/item-class.mjs";
+import { meetsFeatPrerequisites, actorHasFeatByUuid } from "../logic/feat-prerequisites.mjs";
+import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
 
 /** Character levels that grant a general feat (3.5 SRD). */
 const GENERAL_FEAT_LEVELS = new Set([1, 3, 6, 9, 12, 15, 18]);
@@ -60,7 +62,9 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             selectClass: LevelUpFlow.#onSelectClass,
             addNewClass: LevelUpFlow.#onAddNewClass,
             rollHp: LevelUpFlow.#onRollHp,
-            openSpellList: LevelUpFlow.#onOpenSpellList
+            openSpellList: LevelUpFlow.#onOpenSpellList,
+            openItemSheet: LevelUpFlow.#onOpenItemSheet,
+            openSelectedFeatSheet: LevelUpFlow.#onOpenSelectedFeatSheet
         }
     };
 
@@ -287,6 +291,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             pushRow({
                 id: skill.id,
                 name: skill.name,
+                skillUuid: skill.uuid,
                 currentRanks,
                 pointsToSpend: Math.min(points, maxPoints),
                 maxPoints,
@@ -305,7 +310,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             });
         }
 
-        for (const [keyLower, { name, key: origKey, exclusive, ability: skillAbility }] of allSkillsByKeyLower) {
+        for (const [keyLower, { name, key: origKey, exclusive, ability: skillAbility, uuid: skillUuid }] of allSkillsByKeyLower) {
             if (actorSkillKeysLower.has(keyLower)) continue;
             if (exclusive && !classSkillKeysLower.has(keyLower) && !grantedSkillKeysLower.has(keyLower) && !selectedClassSkillKeysLower.has(keyLower)) continue;
             const isGranted = grantedSkillKeysLower.has(keyLower);
@@ -325,6 +330,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             pushRow({
                 id: rowId,
                 name,
+                skillUuid: skillUuid ?? "",
                 currentRanks,
                 pointsToSpend: Math.min(points, maxPoints),
                 maxPoints,
@@ -360,7 +366,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
 
     /**
      * Get all skill documents from world and compendiums, keyed by lowercase system.key.
-     * @returns {Promise<Map<string, { name: string, key: string, exclusive: boolean, ability: string }>>} keyLower -> skill info
+     * @returns {Promise<Map<string, { name: string, key: string, exclusive: boolean, ability: string, uuid: string }>>} keyLower -> skill info
      */
     static async #getAllSkillsByKey() {
         const map = new Map();
@@ -368,7 +374,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const key = doc.system?.key;
             if (!key) continue;
             const k = String(key).toLowerCase();
-            if (!map.has(k)) map.set(k, { name: doc.name, key, exclusive: doc.system?.exclusive === "true", ability: doc.system?.ability || "int" });
+            if (!map.has(k)) map.set(k, { name: doc.name, key, exclusive: doc.system?.exclusive === "true", ability: doc.system?.ability || "int", uuid: doc.uuid });
         }
         for (const pack of game.packs?.values() ?? []) {
             if (pack.documentName !== "Item") continue;
@@ -378,7 +384,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                     const key = doc.system?.key;
                     if (!key) continue;
                     const k = String(key).toLowerCase();
-                    if (!map.has(k)) map.set(k, { name: doc.name, key, exclusive: doc.system?.exclusive === "true", ability: doc.system?.ability || "int" });
+                    if (!map.has(k)) map.set(k, { name: doc.name, key, exclusive: doc.system?.exclusive === "true", ability: doc.system?.ability || "int", uuid: doc.uuid });
                 }
             } catch (_) { /* ignore */ }
         }
@@ -445,37 +451,55 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         const gainsFighterBonus = isFighter && FIGHTER_BONUS_FEAT_LEVELS.has(levelsInClass);
         const gainsFeat = gainsGeneralFeat || gainsFighterBonus;
 
-        let availableFeats = [];
+        let qualifyingFeats = [];
+        let notQualifyingFeats = [];
+        /** When gaining a Fighter bonus feat, feats excluded only because they are not marked Fighter bonus eligible. */
+        let excludedNotFighterBonusFeats = [];
         if (gainsFeat) {
-            const actorFeatKeysLower = new Set(
-                actor.items
-                    .filter((i) => i.type === "feat" && (i.system?.key || "").trim())
-                    .map((f) => String(f.system.key).toLowerCase().trim())
-            );
-            const alreadyHas = (doc) => {
-                const key = (doc.system?.key || "").trim();
-                return key !== "" && actorFeatKeysLower.has(key.toLowerCase());
-            };
-
             const seen = new Map();
             const worldItems = (game.items?.contents ?? []).filter((i) => i.type === "feat");
             for (const doc of worldItems) {
-                if (alreadyHas(doc)) continue;
-                const k = (doc.name || "").toLowerCase().trim();
-                if (!seen.has(k)) seen.set(k, { uuid: doc.uuid, name: doc.name, packName: game.i18n.localize("Type.world") || "World" });
+                if (actorHasFeatByUuid(actor, doc.uuid)) continue;
+                const k = (doc.uuid || "").trim();
+                if (!k || seen.has(k)) continue;
+                seen.set(k, { uuid: doc.uuid, name: doc.name, packName: game.i18n.localize("Type.world") || "World" });
             }
             for (const pack of game.packs?.values() ?? []) {
                 if (pack.documentName !== "Item") continue;
                 try {
                     const docs = await pack.getDocuments({ type: "feat" });
                     for (const doc of docs) {
-                        if (alreadyHas(doc)) continue;
-                        const k = (doc.name || "").toLowerCase().trim();
-                        if (!seen.has(k)) seen.set(k, { uuid: doc.uuid, name: doc.name, packName: pack.metadata?.label ?? pack.collection });
+                        if (actorHasFeatByUuid(actor, doc.uuid)) continue;
+                        const k = (doc.uuid || "").trim();
+                        if (!k || seen.has(k)) continue;
+                        seen.set(k, { uuid: doc.uuid, name: doc.name, packName: pack.metadata?.label ?? pack.collection });
                     }
                 } catch (_) { /* ignore */ }
             }
-            availableFeats = [...seen.values()].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+            const candidates = [...seen.values()].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+            for (const opt of candidates) {
+                let doc;
+                try {
+                    doc = await foundry.utils.fromUuid(opt.uuid);
+                } catch (_) {
+                    qualifyingFeats.push(opt);
+                    continue;
+                }
+                if (!doc) {
+                    qualifyingFeats.push(opt);
+                    continue;
+                }
+                if (gainsFighterBonus && doc.system?.fighterBonusEligible !== "true") {
+                    excludedNotFighterBonusFeats.push(opt);
+                    continue;
+                }
+                const { met, reasons } = await meetsFeatPrerequisites(actor, doc);
+                if (met) {
+                    qualifyingFeats.push(opt);
+                } else {
+                    notQualifyingFeats.push({ ...opt, unmetReasons: reasons });
+                }
+            }
         }
 
         return {
@@ -484,7 +508,10 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             gainsGeneralFeat,
             gainsFighterBonus,
             className,
-            availableFeats,
+            availableFeats: qualifyingFeats,
+            qualifyingFeats,
+            notQualifyingFeats,
+            excludedNotFighterBonusFeats,
             selectedFeatUuid: flow.selectedFeatUuid || ""
         };
     }
@@ -530,6 +557,25 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     }
 
     /**
+     * Resolve a feature document by id (world first, then compendiums).
+     * @param {string} featItemId - Document id of the feature item
+     * @returns {Promise<Item|null>}
+     */
+    static async #resolveFeatureDocument(featItemId) {
+        if (!featItemId) return null;
+        const world = game.items?.get(featItemId);
+        if (world?.type === "feature") return world;
+        for (const pack of game.packs?.values() ?? []) {
+            if (pack.documentName !== "Item") continue;
+            try {
+                const doc = await pack.getDocument(featItemId);
+                if (doc?.type === "feature") return doc;
+            } catch (_) { /* ignore */ }
+        }
+        return null;
+    }
+
+    /**
      * Build context for the features step: class features gained at the new class level.
      * @param {LevelUpFlow} flow
      * @returns {Promise<Object>}
@@ -544,15 +590,14 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         for (const feature of cls?.system?.features ?? []) {
             if (feature.level === newClassLevel) {
                 let displayName = feature.featName || "";
-                if (!displayName && feature.featItemId) {
-                    const featItem = game.items.get(feature.featItemId);
-                    if (featItem) displayName = featItem.name ?? "";
-                }
+                const featDoc = await LevelUpFlow.#resolveFeatureDocument(feature.featItemId);
+                if (!displayName && featDoc) displayName = featDoc.name ?? "";
                 if (!displayName) displayName = feature.featKey || game.i18n.localize("THIRDERA.LevelUp.FeatureUnknown");
                 featuresAtLevel.push({
                     featName: displayName,
                     featKey: feature.featKey,
-                    featItemId: feature.featItemId
+                    featItemId: feature.featItemId,
+                    featUuid: featDoc?.uuid ?? ""
                 });
             }
         }
@@ -852,6 +897,8 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 if (sourceFeat && sourceFeat.type === "feat") {
                     const obj = sourceFeat.toObject();
                     delete obj._id;
+                    // Store source UUID so prerequisite checks use ID-based membership (project rule).
+                    obj.flags = { ...(obj.flags || {}), thirdera: { ...(obj.flags?.thirdera || {}), sourceFeatUuid: flow.selectedFeatUuid } };
                     const created = await flow.actor.createEmbeddedDocuments("Item", [obj]);
                     if (created?.length) {
                         featItemId = created[0].id;
@@ -865,10 +912,14 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             }
         }
 
+        const newClassLevel = history.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+        const autoGrantedFeatIds = await createAutoGrantedFeatsForLevel(flow.actor, cls, newClassLevel);
+
         const newEntry = {
             classItemId: flow.selectedClassItemId,
             hpRolled: flow.hpRolled,
             ...(featItemId && { featItemId, featName, featKey }),
+            ...(autoGrantedFeatIds.length > 0 && { autoGrantedFeatIds }),
             skillsGained
         };
         history.push(newEntry);
@@ -994,6 +1045,44 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             spellListKey,
             newClassLevel: (flow.actor.system.levelHistory || []).filter((e) => e.classItemId === flow.selectedClassItemId).length + 1
         }).render(true);
+    }
+
+    /**
+     * Open the sheet for an item by UUID (skill, feat, or class feature). Used from skills step, feat step (not-qualified list), and features step.
+     * @param {Event} event
+     * @param {HTMLElement} target
+     */
+    static async #onOpenItemSheet(event, target) {
+        const uuid = target?.dataset?.itemUuid ?? target?.closest?.("[data-item-uuid]")?.dataset?.itemUuid;
+        if (!uuid) return;
+        try {
+            const doc = await foundry.utils.fromUuid(uuid);
+            if (doc?.sheet) doc.sheet.render(true);
+        } catch (_) {
+            ui.notifications.warn(game.i18n.localize("THIRDERA.LevelUp.ViewItemFailed"));
+        }
+    }
+
+    /**
+     * Open the sheet for the feat currently selected in the feat dropdown.
+     * @param {Event} event
+     * @param {HTMLElement} target
+     */
+    static async #onOpenSelectedFeatSheet(event, target) {
+        const flow = LevelUpFlow.#getFlowFromTarget(target);
+        if (!flow?.actor) return;
+        const select = flow.element?.querySelector?.('select[name="featUuid"]');
+        const uuid = select?.value?.trim();
+        if (!uuid) {
+            ui.notifications.warn(game.i18n.localize("THIRDERA.LevelUp.SelectFeatPlaceholder"));
+            return;
+        }
+        try {
+            const doc = await foundry.utils.fromUuid(uuid);
+            if (doc?.sheet) doc.sheet.render(true);
+        } catch (_) {
+            ui.notifications.warn(game.i18n.localize("THIRDERA.LevelUp.ViewItemFailed"));
+        }
     }
 
     static #getFlowFromTarget(target) {

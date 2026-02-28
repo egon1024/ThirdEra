@@ -1,18 +1,1 @@
-{
-  "_id": "feat-improved-overrun",
-  "name": "Improved Overrun",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You are skilled at running down your opponents.</p>",
-    "key": "improvedOverrun",
-    "type": "General",
-    "prerequisites": "Str 13, Power Attack",
-    "benefit": "<p>When you attempt to overrun an opponent, the target may not choose to avoid you. You also gain a +4 bonus on your Strength check to knock down your opponent.</p>",
-    "special": "A fighter may select Improved Overrun as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-improved-overrun","name":"Improved Overrun","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You are skilled at running down your opponents.</p>","key":"improvedOverrun","type":"General","prerequisites":"Str 13, Power Attack","benefit":"<p>When you attempt to overrun an opponent, the target may not choose to avoid you. You also gain a +4 bonus on your Strength check to knock down your opponent.</p>","special":"A fighter may select Improved Overrun as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["powerAttack"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":13,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

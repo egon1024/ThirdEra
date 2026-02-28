@@ -1,18 +1,1 @@
-{
-  "_id": "feat-combat-expertise",
-  "name": "Combat Expertise",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You can increase your defense at the expense of your accuracy.</p>",
-    "key": "combatExpertise",
-    "type": "General",
-    "prerequisites": "Int 13",
-    "benefit": "<p>When you use the attack action or the full attack action in melee, you can take a penalty of as much as -5 on your attack roll and add the same number (+5 or less) as a dodge bonus to your Armor Class. This number may not exceed your base attack bonus. The changes to attack rolls and Armor Class last until your next turn.</p>",
-    "special": "A fighter may select Combat Expertise as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-combat-expertise","name":"Combat Expertise","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You can increase your defense at the expense of your accuracy.</p>","key":"combatExpertise","type":"General","fighterBonusEligible":"true","prerequisites":"Int 13","benefit":"<p>When you use the attack action or the full attack action in melee, you can take a penalty of as much as -5 on your attack roll and add the same number (+5 or less) as a dodge bonus to your Armor Class. This number may not exceed your base attack bonus. The changes to attack rolls and Armor Class last until your next turn.</p>","special":"A fighter may select Combat Expertise as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":13,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

@@ -1,18 +1,1 @@
-{
-  "_id": "feat-nimble-fingers",
-  "name": "Nimble Fingers",
-  "type": "feat",
-  "img": "icons/svg/item-bag.svg",
-  "system": {
-    "description": "<p>You have exceptional manual dexterity.</p>",
-    "key": "nimbleFingers",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>You get a +2 bonus on all Disable Device checks and Open Lock checks.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-nimble-fingers","name":"Nimble Fingers","type":"feat","img":"icons/svg/item-bag.svg","system":{"description":"<p>You have exceptional manual dexterity.</p>","key":"nimbleFingers","type":"General","prerequisites":"","benefit":"<p>You get a +2 bonus on all Disable Device checks and Open Lock checks.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

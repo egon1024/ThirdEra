@@ -1,18 +1,1 @@
-{
-  "_id": "feat-mobility",
-  "name": "Mobility",
-  "type": "feat",
-  "img": "icons/svg/walk.svg",
-  "system": {
-    "description": "<p>You are skilled at dodging past opponents and avoiding their attacks.</p>",
-    "key": "mobility",
-    "type": "General",
-    "prerequisites": "Dex 13, Dodge",
-    "benefit": "<p>You get a +4 dodge bonus to Armor Class against attacks of opportunity caused when you move out of or within a threatened area. A condition that makes you lose your Dexterity bonus to Armor Class (if any) also makes you lose dodge bonuses. Dodge bonuses stack with each other, unlike most types of bonuses.</p>",
-    "special": "A fighter may select Mobility as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-mobility","name":"Mobility","type":"feat","img":"icons/svg/walk.svg","system":{"description":"<p>You are skilled at dodging past opponents and avoiding their attacks.</p>","key":"mobility","type":"General","fighterBonusEligible":"true","prerequisites":"Dex 13, Dodge","benefit":"<p>You get a +4 dodge bonus to Armor Class against attacks of opportunity caused when you move out of or within a threatened area. A condition that makes you lose your Dexterity bonus to Armor Class (if any) also makes you lose dodge bonuses. Dodge bonuses stack with each other, unlike most types of bonuses.</p>","special":"A fighter may select Mobility as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["dodge"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":13,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

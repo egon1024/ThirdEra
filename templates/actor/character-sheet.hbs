@@ -329,10 +329,7 @@
         </ol>
         {{/if}}
         {{!-- Manually-Added Class Features --}}
-        <h4 class="items-header">
-          Class Features
-          <a class="item-create" data-action="createItem" data-type="feature"><i class="fas fa-plus"></i></a>
-        </h4>
+        <h4 class="items-header">Class Features</h4>
         <ol class="items-list">
           {{#each classFeatures as |item id|}}
           <li class="item flexrow" data-item-id="{{item._id}}">
@@ -687,8 +684,8 @@
           <span class="level-history-cell">{{signedNumber entry.conMod}}</span>
           <span class="level-history-cell level-history-subtotal">{{entry.subtotal}}</span>
           {{#if entry.isLastLevelOfClass}}
-          <a class="level-history-cell level-history-remove" data-action="removeClassLevel" data-item-id="{{entry.classItemId}}"
-            title="{{localize "THIRDERA.LevelHistory.RemoveLevel"}}"><i class="fas fa-minus"></i></a>
+          <button type="button" class="level-history-cell level-history-remove" data-action="removeClassLevel" data-item-id="{{entry.classItemId}}"
+            title="{{localize "THIRDERA.LevelHistory.RemoveLevel"}}"><i class="fas fa-minus"></i></button>
           {{else}}
           <span class="level-history-cell level-history-col-actions"></span>
           {{/if}}
@@ -697,6 +694,7 @@
           <div class="level-history-gained" style="grid-column: 1 / -1;">
             {{localize "THIRDERA.LevelHistory.Gained"}}: {{#each entry.featuresGainedAtLevel as |f|}}{{f.name}}{{#if f.scaling}} ({{f.scaling}}){{/if}}{{#unless @last}}, {{/unless}}{{/each}}
             {{#if entry.featGainedAtLevel}}. {{localize "THIRDERA.LevelHistory.Feat"}}: {{entry.featGainedAtLevel}}{{/if}}
+            {{#if entry.autoGrantedFeatsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.AutoGranted"}}: {{#each entry.autoGrantedFeatsGainedAtLevel as |name|}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
             {{#if entry.skillsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
             {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
           </div>
@@ -704,6 +702,14 @@
           {{#if entry.featGainedAtLevel}}
           <div class="level-history-gained" style="grid-column: 1 / -1;">
             {{localize "THIRDERA.LevelHistory.Feat"}}: {{entry.featGainedAtLevel}}
+            {{#if entry.autoGrantedFeatsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.AutoGranted"}}: {{#each entry.autoGrantedFeatsGainedAtLevel as |name|}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
+            {{#if entry.skillsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
+            {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
+          </div>
+          {{else}}
+          {{#if entry.autoGrantedFeatsGainedAtLevel.length}}
+          <div class="level-history-gained" style="grid-column: 1 / -1;">
+            {{localize "THIRDERA.LevelHistory.AutoGranted"}}: {{#each entry.autoGrantedFeatsGainedAtLevel as |name|}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}
             {{#if entry.skillsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
             {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
           </div>
@@ -713,6 +719,7 @@
             {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}
             {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
           </div>
+          {{/if}}
           {{/if}}
           {{/if}}
           {{/if}}
@@ -728,7 +735,6 @@
       {{!-- Weapons --}}
       <div class="items-header">
         <h3 class="items-header">Weapons</h3>
-        <a class="item-create" data-action="createItem" data-type="weapon"><i class="fas fa-plus"></i> Add Weapon</a>
       </div>
       <ol class="items-list">
         {{#each itemsNotInContainers.weapons as |item id|}}
@@ -775,7 +781,6 @@
       {{!-- Armor --}}
       <div class="items-header">
         <h3 class="items-header">Armor</h3>
-        <a class="item-create" data-action="createItem" data-type="armor"><i class="fas fa-plus"></i> Add Armor</a>
       </div>
       <ol class="items-list">
         {{#each itemsNotInContainers.armor as |item id|}}
@@ -806,8 +811,6 @@
       {{!-- Equipment --}}
       <div class="items-header">
         <h3 class="items-header">Equipment</h3>
-        <a class="item-create" data-action="createItem" data-type="equipment"><i class="fas fa-plus"></i> Add
-          Equipment</a>
       </div>
       <ol class="items-list">
         {{!-- Regular equipment (not in containers) --}}

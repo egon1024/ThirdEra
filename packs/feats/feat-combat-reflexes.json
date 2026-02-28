@@ -1,18 +1,1 @@
-{
-  "_id": "feat-combat-reflexes",
-  "name": "Combat Reflexes",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You can make additional attacks of opportunity.</p>",
-    "key": "combatReflexes",
-    "type": "General",
-    "prerequisites": "Dex 13",
-    "benefit": "<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 1
-}
+{"_id":"feat-combat-reflexes","name":"Combat Reflexes","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You can make additional attacks of opportunity.</p>","key":"combatReflexes","type":"General","fighterBonusEligible":"true","prerequisites":"Dex 13","benefit":"<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":1}

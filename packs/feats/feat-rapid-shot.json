@@ -1,18 +1,1 @@
-{
-  "_id": "feat-rapid-shot",
-  "name": "Rapid Shot",
-  "type": "feat",
-  "img": "icons/svg/target.svg",
-  "system": {
-    "description": "<p>You can get multiple shots from a ranged weapon.</p>",
-    "key": "rapidShot",
-    "type": "General",
-    "prerequisites": "Dex 13, Point Blank Shot",
-    "benefit": "<p>When using a bow (not a crossbow), you may fire one extra arrow per round. All of your attack rolls take a -2 penalty when using Rapid Shot.</p>",
-    "special": "A fighter may select Rapid Shot as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-rapid-shot","name":"Rapid Shot","type":"feat","img":"icons/svg/target.svg","system":{"description":"<p>You can get multiple shots from a ranged weapon.</p>","key":"rapidShot","type":"General","fighterBonusEligible":"true","prerequisites":"Dex 13, Point Blank Shot","benefit":"<p>When using a bow (not a crossbow), you may fire one extra arrow per round. All of your attack rolls take a -2 penalty when using Rapid Shot.</p>","special":"A fighter may select Rapid Shot as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["pointBlankShot"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

@@ -1,18 +1,1 @@
-{
-  "_id": "feat-maximize-spell",
-  "name": "Maximize Spell",
-  "type": "feat",
-  "img": "icons/svg/aura.svg",
-  "system": {
-    "description": "<p>You can cast spells to maximum effect.</p>",
-    "key": "maximizeSpell",
-    "type": "Metamagic",
-    "prerequisites": "",
-    "benefit": "<p>All variable, numeric effects of a maximized spell are maximized. Saving throws and opposed rolls are not affected, nor are spells without random variables. A maximized spell uses up a spell slot three levels higher than the spell's actual level.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-maximize-spell","name":"Maximize Spell","type":"feat","img":"icons/svg/aura.svg","system":{"description":"<p>You can cast spells to maximum effect.</p>","key":"maximizeSpell","type":"Metamagic","prerequisites":"","benefit":"<p>All variable, numeric effects of a maximized spell are maximized. Saving throws and opposed rolls are not affected, nor are spells without random variables. A maximized spell uses up a spell slot three levels higher than the spell's actual level.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

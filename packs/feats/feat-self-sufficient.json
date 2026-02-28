@@ -1,18 +1,1 @@
-{
-  "_id": "feat-self-sufficient",
-  "name": "Self-Sufficient",
-  "type": "feat",
-  "img": "icons/svg/item-bag.svg",
-  "system": {
-    "description": "<p>You know how to get along on your own.</p>",
-    "key": "selfSufficient",
-    "type": "General",
-    "prerequisites": "",
-    "benefit": "<p>You get a +2 bonus on all Heal checks and Survival checks.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-self-sufficient","name":"Self-Sufficient","type":"feat","img":"icons/svg/item-bag.svg","system":{"description":"<p>You know how to get along on your own.</p>","key":"selfSufficient","type":"General","prerequisites":"","benefit":"<p>You get a +2 bonus on all Heal checks and Survival checks.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

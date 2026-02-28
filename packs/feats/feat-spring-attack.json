@@ -1,18 +1,1 @@
-{
-  "_id": "feat-spring-attack",
-  "name": "Spring Attack",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>You can move, attack, and move again before your foes can react.</p>",
-    "key": "springAttack",
-    "type": "General",
-    "prerequisites": "Dex 13, Dodge, Mobility, base attack bonus +4",
-    "benefit": "<p>As a full-round action, you can move up to your speed and make a single melee attack at any point during your movement. You must move at least 10 feet before and after your attack. You may not take a 5-foot step before, during, or after this action.</p>",
-    "special": "A fighter may select Spring Attack as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-spring-attack","name":"Spring Attack","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>You can move, attack, and move again before your foes can react.</p>","key":"springAttack","type":"General","fighterBonusEligible":"true","prerequisites":"Dex 13, Dodge, Mobility, base attack bonus +4","benefit":"<p>As a full-round action, you can move up to your speed and make a single melee attack at any point during your movement. You must move at least 10 feet before and after your attack. You may not take a 5-foot step before, during, or after this action.</p>","special":"A fighter may select Spring Attack as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["dodge","mobility"],"prerequisiteBAB":4,"prerequisiteAbilityScores":{"str":0,"dex":13,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

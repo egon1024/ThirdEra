@@ -1,18 +1,1 @@
-{
-  "_id": "feat-empower-spell",
-  "name": "Empower Spell",
-  "type": "feat",
-  "img": "icons/svg/aura.svg",
-  "system": {
-    "description": "<p>You can cast spells to greater effect.</p>",
-    "key": "empowerSpell",
-    "type": "Metamagic",
-    "prerequisites": "",
-    "benefit": "<p>All variable, numeric effects of an empowered spell are increased by one-half. Saving throws and opposed rolls are not affected. Spells without random variables are not affected. An empowered spell uses up a spell slot two levels higher than the spell's actual level.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-empower-spell","name":"Empower Spell","type":"feat","img":"icons/svg/aura.svg","system":{"description":"<p>You can cast spells to greater effect.</p>","key":"empowerSpell","type":"Metamagic","prerequisites":"","benefit":"<p>All variable, numeric effects of an empowered spell are increased by one-half. Saving throws and opposed rolls are not affected. Spells without random variables are not affected. An empowered spell uses up a spell slot two levels higher than the spell's actual level.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

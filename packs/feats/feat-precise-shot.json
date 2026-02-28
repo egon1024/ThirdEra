@@ -1,18 +1,1 @@
-{
-  "_id": "feat-precise-shot",
-  "name": "Precise Shot",
-  "type": "feat",
-  "img": "icons/svg/target.svg",
-  "system": {
-    "description": "<p>You are skilled at timing ranged attacks so that you avoid hitting your comrades.</p>",
-    "key": "preciseShot",
-    "type": "General",
-    "prerequisites": "Point Blank Shot",
-    "benefit": "<p>You can shoot or throw ranged weapons at an opponent engaged in melee without taking the standard -4 penalty on your attack roll.</p>",
-    "special": "A fighter may select Precise Shot as one of his fighter bonus feats.",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 0
-}
+{"_id":"feat-precise-shot","name":"Precise Shot","type":"feat","img":"icons/svg/target.svg","system":{"description":"<p>You are skilled at timing ranged attacks so that you avoid hitting your comrades.</p>","key":"preciseShot","type":"General","fighterBonusEligible":"true","prerequisites":"Point Blank Shot","benefit":"<p>You can shoot or throw ranged weapons at an opponent engaged in melee without taking the standard -4 penalty on your attack roll.</p>","special":"A fighter may select Precise Shot as one of his fighter bonus feats.","scalingTable":[],"prerequisiteFeatKeys":["pointBlankShot"],"prerequisiteBAB":0,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":0}

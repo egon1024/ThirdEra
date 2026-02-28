@@ -35,7 +35,7 @@
       <select id="level-up-new-class-select" name="newClassUuid">
         <option value="" {{#unless selectedNewClassUuid}}selected{{/unless}}>{{localize "THIRDERA.LevelUp.SelectClassPlaceholder"}}</option>
         {{#each availableClasses as |opt|}}
-        <option value="{{opt.uuid}}" {{#if (eq opt.uuid selectedNewClassUuid)}}selected{{/if}}>{{opt.name}} ({{opt.packName}})</option>
+        <option value="{{opt.uuid}}" {{#if (eq opt.uuid selectedNewClassUuid)}}selected{{/if}}>{{opt.name}}</option>
         {{/each}}
       </select>
     </div>
@@ -78,7 +78,11 @@
         <ol class="items-list">
           {{#each classSkills as |sk|}}
           <li class="item flexrow {{#if sk.isForbidden}}skill-forbidden{{else}}class-skill{{/if}}">
+            {{#if sk.skillUuid}}
+            <span class="skill-name level-up-skill-name-link" data-action="openItemSheet" data-item-uuid="{{sk.skillUuid}}" role="button" tabindex="0" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}">{{sk.name}}</span>
+            {{else}}
             <span class="skill-name">{{sk.name}}</span>
+            {{/if}}
             <span class="level-up-flow-skill-modifiers" title="{{localize "THIRDERA.LevelUp.SkillModifiersTitle"}}">{{sk.modifierSummary}}</span>
             {{#if sk.isForbidden}}
             <span class="skill-forbidden-label" title="{{sk.forbiddenReason}}">{{localize "THIRDERA.Skills.forbidden"}}</span>
@@ -97,7 +101,11 @@
         <ol class="items-list">
           {{#each crossClassSkills as |sk|}}
           <li class="item flexrow {{#if sk.isForbidden}}skill-forbidden{{else}}cross-class-skill{{/if}}">
+            {{#if sk.skillUuid}}
+            <span class="skill-name level-up-skill-name-link" data-action="openItemSheet" data-item-uuid="{{sk.skillUuid}}" role="button" tabindex="0" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}">{{sk.name}}</span>
+            {{else}}
             <span class="skill-name">{{sk.name}}</span>
+            {{/if}}
             <span class="level-up-flow-skill-modifiers" title="{{localize "THIRDERA.LevelUp.SkillModifiersTitle"}}">{{sk.modifierSummary}}</span>
             {{#if sk.isForbidden}}
             <span class="skill-forbidden-label" title="{{sk.forbiddenReason}}">{{localize "THIRDERA.Skills.forbidden"}}</span>
@@ -125,13 +133,54 @@
     {{/if}}
     <div class="form-group">
       <label for="level-up-feat-select">{{localize "THIRDERA.LevelUp.SelectFeat"}}</label>
-      <select id="level-up-feat-select" name="featUuid">
-        <option value="" {{#unless selectedFeatUuid}}selected{{/unless}}>{{localize "THIRDERA.LevelUp.SelectFeatPlaceholder"}}</option>
-        {{#each availableFeats as |opt|}}
-        <option value="{{opt.uuid}}" {{#if (eq opt.uuid ../selectedFeatUuid)}}selected{{/if}}>{{opt.name}}</option>
-        {{/each}}
-      </select>
+      <div class="level-up-feat-select-row">
+        <select id="level-up-feat-select" name="featUuid">
+          <option value="" {{#unless selectedFeatUuid}}selected{{/unless}}>{{localize "THIRDERA.LevelUp.SelectFeatPlaceholder"}}</option>
+          {{#each availableFeats as |opt|}}
+          <option value="{{opt.uuid}}" {{#if (eq opt.uuid ../selectedFeatUuid)}}selected{{/if}}>{{opt.name}}</option>
+          {{/each}}
+        </select>
+        <button type="button" class="level-up-open-item-sheet" data-action="openSelectedFeatSheet" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}"><i class="fas fa-external-link-alt"></i></button>
+      </div>
     </div>
+    {{#if notQualifyingFeats.length}}
+    <div class="form-group level-up-feats-not-qualified">
+      <h4 class="level-up-feats-not-qualified-title">{{localize "THIRDERA.LevelUp.FeatsNotQualified"}}</h4>
+      <ul class="level-up-feats-not-qualified-list">
+        {{#each notQualifyingFeats as |opt|}}
+        <li class="level-up-feat-not-qualified">
+          <div class="level-up-feat-not-qualified-head">
+            <span class="level-up-feat-not-qualified-name">{{opt.name}}</span>
+            <button type="button" class="level-up-open-item-sheet" data-action="openItemSheet" data-item-uuid="{{opt.uuid}}" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}"><i class="fas fa-external-link-alt"></i></button>
+          </div>
+          <ul class="level-up-feat-not-qualified-reasons" title="{{#each opt.unmetReasons}}{{this}}{{#unless @last}} &#10;{{/unless}}{{/each}}">
+            {{#each opt.unmetReasons as |reason|}}
+            <li>{{reason}}</li>
+            {{/each}}
+          </ul>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+    {{#if gainsFighterBonus}}
+    {{#if excludedNotFighterBonusFeats.length}}
+    <div class="form-group level-up-feats-not-fighter-bonus">
+      <h4 class="level-up-feats-not-qualified-title">{{localize "THIRDERA.LevelUp.FeatsNotFighterBonus"}}</h4>
+      <ul class="level-up-feats-not-qualified-list">
+        {{#each excludedNotFighterBonusFeats as |opt|}}
+        <li class="level-up-feat-not-qualified">
+          <div class="level-up-feat-not-qualified-head">
+            <span class="level-up-feat-not-qualified-name">{{opt.name}}</span>
+            <button type="button" class="level-up-open-item-sheet" data-action="openItemSheet" data-item-uuid="{{opt.uuid}}" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}"><i class="fas fa-external-link-alt"></i></button>
+          </div>
+          <p class="level-up-feat-not-qualified-reasons">{{localize "THIRDERA.LevelUp.NotFighterBonusReason"}}</p>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+    {{/if}}
     {{else}}
     <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.NoFeatThisLevel"}}</p>
     {{/if}}
@@ -164,7 +213,12 @@
     {{#if featuresAtLevel.length}}
     <ul class="level-up-flow-features-list">
       {{#each featuresAtLevel as |f|}}
-      <li>{{f.featName}}</li>
+      <li>
+        {{#if f.featUuid}}
+        <button type="button" class="level-up-open-item-sheet" data-action="openItemSheet" data-item-uuid="{{f.featUuid}}" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}"><i class="fas fa-external-link-alt"></i></button>
+        {{/if}}
+        {{f.featName}}
+      </li>
       {{/each}}
     </ul>
     {{else}}

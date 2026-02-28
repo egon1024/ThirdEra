@@ -28,31 +28,39 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             ]
         },
         actions: {
-            rollAttack: ThirdEraItemSheet.#onRollAttack,
-            rollDamage: ThirdEraItemSheet.#onRollDamage,
-            changeTab: ThirdEraItemSheet.#onChangeTab,
-            deleteItem: ThirdEraItemSheet.#onItemDeleteHeader,
-            removeClassSkill: ThirdEraItemSheet.#onRemoveClassSkill,
-            removeExcludedSkill: ThirdEraItemSheet.#onRemoveExcludedSkill,
-            removeFeature: ThirdEraItemSheet.#onRemoveFeature,
-            removeDomain: ThirdEraItemSheet.#onRemoveDomain,
-            addScalingRow: ThirdEraItemSheet.#onAddScalingRow,
-            removeScalingRow: ThirdEraItemSheet.#onRemoveScalingRow,
-            removeLevelByClass: ThirdEraItemSheet.#onRemoveLevelByClass,
-            removeLevelByDomain: ThirdEraItemSheet.#onRemoveLevelByDomain,
-            clearSchool: ThirdEraItemSheet.#onClearSchool,
-            addSchoolDescriptor: ThirdEraItemSheet.#onAddSchoolDescriptor,
-            removeSchoolDescriptor: ThirdEraItemSheet.#onRemoveSchoolDescriptor,
-            removeOppositionSchool: ThirdEraItemSheet.#onRemoveOppositionSchool,
-            addSubschool: ThirdEraItemSheet.#onAddSubschool,
-            removeSubschool: ThirdEraItemSheet.#onRemoveSubschool,
-            addDescriptorTag: ThirdEraItemSheet.#onAddDescriptorTag,
-            removeDescriptorTag: ThirdEraItemSheet.#onRemoveDescriptorTag,
-            openConditionDescription: ThirdEraItemSheet.#onOpenConditionDescription,
-            openEditorBox: ThirdEraItemSheet.#onOpenEditorBox,
-            addConditionChange: ThirdEraItemSheet.#onAddConditionChange,
-            removeConditionChange: ThirdEraItemSheet.#onRemoveConditionChange,
-            editImage: ThirdEraItemSheet.#onEditImage
+            rollAttack: ThirdEraItemSheet.onRollAttack,
+            rollDamage: ThirdEraItemSheet.onRollDamage,
+            changeTab: ThirdEraItemSheet.onChangeTab,
+            deleteItem: ThirdEraItemSheet.onItemDeleteHeader,
+            removeClassSkill: ThirdEraItemSheet.onRemoveClassSkill,
+            removeExcludedSkill: ThirdEraItemSheet.onRemoveExcludedSkill,
+            removeFeature: ThirdEraItemSheet.onRemoveFeature,
+            addAutoGrantedFeat: ThirdEraItemSheet.onAddAutoGrantedFeat,
+            removeAutoGrantedFeat: ThirdEraItemSheet.onRemoveAutoGrantedFeat,
+            setAutoGrantedToConditional: ThirdEraItemSheet.onSetAutoGrantedToConditional,
+            setAutoGrantedToUnconditional: ThirdEraItemSheet.onSetAutoGrantedToUnconditional,
+            addConditionalFeatUuid: ThirdEraItemSheet.onAddConditionalFeatUuid,
+            removeConditionalFeatUuid: ThirdEraItemSheet.onRemoveConditionalFeatUuid,
+            removeDomain: ThirdEraItemSheet.onRemoveDomain,
+            addScalingRow: ThirdEraItemSheet.onAddScalingRow,
+            removeScalingRow: ThirdEraItemSheet.onRemoveScalingRow,
+            removeLevelByClass: ThirdEraItemSheet.onRemoveLevelByClass,
+            removeLevelByDomain: ThirdEraItemSheet.onRemoveLevelByDomain,
+            clearSchool: ThirdEraItemSheet.onClearSchool,
+            addSchoolDescriptor: ThirdEraItemSheet.onAddSchoolDescriptor,
+            removeSchoolDescriptor: ThirdEraItemSheet.onRemoveSchoolDescriptor,
+            removeOppositionSchool: ThirdEraItemSheet.onRemoveOppositionSchool,
+            addSubschool: ThirdEraItemSheet.onAddSubschool,
+            removeSubschool: ThirdEraItemSheet.onRemoveSubschool,
+            addDescriptorTag: ThirdEraItemSheet.onAddDescriptorTag,
+            removeDescriptorTag: ThirdEraItemSheet.onRemoveDescriptorTag,
+            openConditionDescription: ThirdEraItemSheet.onOpenConditionDescription,
+            openEditorBox: ThirdEraItemSheet.onOpenEditorBox,
+            addConditionChange: ThirdEraItemSheet.onAddConditionChange,
+            removeConditionChange: ThirdEraItemSheet.onRemoveConditionChange,
+            editImage: ThirdEraItemSheet.onEditImage,
+            addPrerequisiteFeat: ThirdEraItemSheet.onAddPrerequisiteFeat,
+            removePrerequisiteFeat: ThirdEraItemSheet.onRemovePrerequisiteFeat
         }
     };
 
@@ -96,6 +104,53 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             const docSr = this.document.system?.spellResistance ?? "";
             if (srSel) srSel.value = docSr;
         }
+        // Sync auto-granted feat selects to document on every render (fixes value disappearing after panel refresh).
+        if (partId === "sheet" && this.document?.type === "class") {
+            const formInDom = this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form");
+            const ag = this.document?.system?.autoGrantedFeats;
+            const arr = Array.isArray(ag) ? ag : (ag && typeof ag === "object" ? Object.keys(ag).filter(k => /^\d+$/.test(k)).sort((a, b) => Number(a) - Number(b)).map(k => ag[k]) : []);
+            for (let i = 0; i < arr.length; i++) {
+                const entry = arr[i];
+                const featUuidSel = formInDom?.querySelector(`select[name="system.autoGrantedFeats.${i}.featUuid"]`);
+                if (featUuidSel && entry) {
+                    const docVal = (entry.featUuid ?? "").trim();
+                    if (featUuidSel.value !== docVal) featUuidSel.value = docVal;
+                }
+                const featUuids = entry?.featUuids ?? [];
+                for (let j = 0; j < featUuids.length; j++) {
+                    const condSel = formInDom?.querySelector(`select[name="system.autoGrantedFeats.${i}.featUuids.${j}"]`);
+                    if (condSel) {
+                        const docVal = (featUuids[j] != null ? String(featUuids[j]).trim() : "");
+                        if (condSel.value !== docVal) condSel.value = docVal;
+                    }
+                }
+            }
+            // Intercept change on conditional feat selects: update document directly and prevent form submit so a one-slot submit cannot race with "Add feat to list" and overwrite two slots.
+            formInDom?.addEventListener("change", (ev) => {
+                const el = ev.target;
+                if (el?.tagName !== "SELECT" || typeof el?.name !== "string") return;
+                const m = el.name.match(/^system\.autoGrantedFeats\.(\d+)\.featUuids\.(\d+)$/);
+                if (!m) return;
+                const entryIdx = parseInt(m[1], 10);
+                const slotIdx = parseInt(m[2], 10);
+                if (Number.isNaN(entryIdx) || Number.isNaN(slotIdx)) return;
+                const docList = ThirdEraItemSheet.normalizeAutoGrantedFeatsToArray(this.document?.system?.autoGrantedFeats);
+                if (entryIdx < 0 || entryIdx >= docList.length) return;
+                const value = (el.value != null ? String(el.value) : "").trim();
+                const docEntry = docList[entryIdx];
+                const docUuids = [...(docEntry?.featUuids ?? [])];
+                while (docUuids.length <= slotIdx) docUuids.push("");
+                docUuids[slotIdx] = value;
+                const toSet = docList.map((e, idx) => ({
+                    level: e?.level ?? 1,
+                    featUuid: (e?.featUuid ?? "").trim(),
+                    featUuids: idx === entryIdx ? docUuids : [...(e?.featUuids ?? [])]
+                }));
+                this.document.update({ system: { autoGrantedFeats: toSet } }).catch(() => {});
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
+            }, true);
+        }
     }
 
     /** @override */
@@ -106,10 +161,25 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     /** @override */
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
-
-        // Get item document and system data
         const item = this.document;
-        const systemData = item.system;
+        let systemData = item.system;
+
+        try {
+            return await this._prepareContextBody(context, item, systemData);
+        } catch (err) {
+            console.error("[ThirdEra] Item sheet _prepareContext error:", err);
+            throw err;
+        }
+    }
+
+    /**
+     * Body of _prepareContext (split so we can try/catch and log).
+     * @param {object} context - from super._prepareContext
+     * @param {Item} item - this.document
+     * @param {object} systemData - item.system
+     * @returns {Promise<object>} context for template
+     */
+    async _prepareContextBody(context, item, systemData) {
 
         // Add CONFIG data
         const config = {
@@ -212,7 +282,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         let schoolDescriptorOptions = [];
         let schoolDescriptorOptionsForAdd = [];
         if (item.type === "spell" && systemData.schoolKey) {
-            const school = await ThirdEraItemSheet.#findSchoolByKey(systemData.schoolKey);
+            const school = await ThirdEraItemSheet.findSchoolByKey(systemData.schoolKey);
             if (school) {
                 const subschools = school.system?.subschools ?? [];
                 const descriptorTags = school.system?.descriptorTags ?? [];
@@ -250,6 +320,52 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             grantedSpells = getSpellsForDomain(systemData.key);
         }
 
+        // Class: auto-granted feats — build available feats list and display names for current entries
+        let availableFeats = [];
+        let autoGrantedFeatsForDisplay = [];
+        /** @type {Array<{level?: number, featUuid?: string, featUuids?: string[]}>} */
+        let autoGrantedFeatsArray = [];
+        if (item.type === "class") {
+            const seen = new Map();
+            const worldFeats = (game.items?.contents ?? []).filter((i) => i.type === "feat");
+            for (const doc of worldFeats) {
+                const u = doc.uuid?.trim();
+                if (!u) continue;
+                if (!seen.has(u)) seen.set(u, { uuid: u, name: doc.name || "—", packName: game.i18n.localize("Type.world") || "World" });
+            }
+            for (const pack of game.packs?.values() ?? []) {
+                if (pack.documentName !== "Item") continue;
+                try {
+                    const docs = await pack.getDocuments({ type: "feat" });
+                    for (const doc of docs) {
+                        const u = doc.uuid?.trim();
+                        if (!u) continue;
+                        if (!seen.has(u)) seen.set(u, { uuid: u, name: doc.name || "—", packName: pack.metadata?.label ?? pack.collection });
+                    }
+                } catch (_) { /* ignore */ }
+            }
+            availableFeats = [...seen.values()].sort((a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" }));
+
+            autoGrantedFeatsArray = ThirdEraItemSheet.normalizeAutoGrantedFeatsToArray(systemData.autoGrantedFeats);
+            for (const entry of autoGrantedFeatsArray) {
+                const featUuid = (entry.featUuid ?? "").trim();
+                let featName = "";
+                if (featUuid) {
+                    const match = availableFeats.find((f) => f.uuid === featUuid);
+                    featName = match ? match.name : "";
+                    if (!featName) {
+                        try {
+                            const doc = await foundry.utils.fromUuid(featUuid);
+                            featName = doc?.name ?? game.i18n.localize("THIRDERA.LevelUp.FeatureUnknown") ?? "—";
+                        } catch (_) {
+                            featName = "—";
+                        }
+                    }
+                }
+                autoGrantedFeatsForDisplay.push({ level: entry.level ?? 1, featUuid, featName });
+            }
+        }
+
         // Class/race skill lists: resolve key → display name so we store only key
         let classSkillsForDisplay = [];
         let excludedSkillsForDisplay = [];
@@ -257,7 +373,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             classSkillsForDisplay = systemData.classSkills
                 .map((e) => ({
                     key: e.key,
-                    displayName: e.name?.trim() || ThirdEraItemSheet.#getSkillDisplayName(e.key) || e.key
+                    displayName: e.name?.trim() || ThirdEraItemSheet.getSkillDisplayName(e.key) || e.key
                 }))
                 .sort((a, b) => a.displayName.localeCompare(b.displayName));
         }
@@ -265,15 +381,81 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             excludedSkillsForDisplay = systemData.excludedSkills
                 .map((e) => ({
                     key: e.key,
-                    displayName: e.name?.trim() || ThirdEraItemSheet.#getSkillDisplayName(e.key) || e.key
+                    displayName: e.name?.trim() || ThirdEraItemSheet.getSkillDisplayName(e.key) || e.key
                 }))
                 .sort((a, b) => a.displayName.localeCompare(b.displayName));
+        }
+
+        // Feat: resolve prerequisite feat UUIDs to names for display; build dropdown of available feats (world + compendiums)
+        let prerequisiteFeatsDisplay = [];
+        let availableFeatsForPrereq = [];
+        if (item.type === "feat") {
+            const existingUuids = new Set((systemData.prerequisiteFeatUuids ?? []).map((u) => String(u).trim()).filter(Boolean));
+            for (const u of systemData.prerequisiteFeatUuids ?? []) {
+                const uuid = String(u).trim();
+                if (!uuid) continue;
+                let name = game.i18n.localize("THIRDERA.FeatPrereq.UnknownFeat");
+                try {
+                    const doc = await foundry.utils.fromUuid(uuid);
+                    if (doc?.name) name = doc.name;
+                } catch (_) { /* ignore */ }
+                prerequisiteFeatsDisplay.push({ uuid, name });
+            }
+            const seen = new Map();
+            const worldFeats = (game.items?.contents ?? []).filter((i) => i.type === "feat");
+            for (const doc of worldFeats) {
+                const u = doc.uuid?.trim();
+                if (!u || existingUuids.has(u)) continue;
+                const name = doc.name || game.i18n.localize("THIRDERA.FeatPrereq.UnknownFeat");
+                if (!seen.has(u)) seen.set(u, { uuid: u, name, packName: game.i18n.localize("Type.world") || "World" });
+            }
+            for (const pack of game.packs?.values() ?? []) {
+                if (pack.documentName !== "Item") continue;
+                try {
+                    const docs = await pack.getDocuments({ type: "feat" });
+                    for (const doc of docs) {
+                        const u = doc.uuid?.trim();
+                        if (!u || existingUuids.has(u)) continue;
+                        const name = doc.name || game.i18n.localize("THIRDERA.FeatPrereq.UnknownFeat");
+                        if (!seen.has(u)) seen.set(u, { uuid: u, name, packName: pack.metadata?.label ?? pack.collection });
+                    }
+                } catch (_) { /* ignore */ }
+            }
+            availableFeatsForPrereq = [...seen.values()].sort((a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" }));
+        }
+
+        // For class, expose system as a plain object with autoGrantedFeats normalized to an array (Handlebars needs plain objects).
+        // Add _index to each entry so the template can output correct select names inside nested {{#each}} (../index is not in scope there).
+        // For conditional entries, add _featsForSlot[j] = feats available for slot j (exclude feats already chosen in slots 0..j-1; include current slot value so selection shows).
+        let systemForContext = systemData;
+        if (item.type === "class") {
+            const rawSystem = item._source?.system ?? item.toObject?.()?.system;
+            const systemPlain = (rawSystem && typeof rawSystem === "object")
+                ? foundry.utils.deepClone(rawSystem)
+                : (typeof systemData?.toObject === "function" ? systemData.toObject() : systemData);
+            const autoGrantedWithIndex = autoGrantedFeatsArray.map((e, i) => {
+                const base = { ...e, _index: i };
+                const uuids = e?.featUuids ?? [];
+                if (uuids.length) {
+                    base._featsForSlot = uuids.map((_, j) => {
+                        const previousUuids = uuids.slice(0, j).map((u) => (u != null ? String(u).trim() : "")).filter(Boolean);
+                        const currentVal = (uuids[j] != null ? String(uuids[j]).trim() : "");
+                        return availableFeats.filter((f) => {
+                            const fu = (f.uuid || "").trim();
+                            return fu === currentVal || !previousUuids.includes(fu);
+                        });
+                    });
+                    base._canSwitchToUnconditional = uuids.length < 2;
+                }
+                return base;
+            });
+            systemForContext = { ...systemPlain, autoGrantedFeats: autoGrantedWithIndex };
         }
 
         return {
             ...context,
             item,
-            system: systemData,
+            system: systemForContext,
             config,
             enriched,
             tabs: this.tabGroups,
@@ -290,7 +472,11 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             grantedSpells,
             classSkillsForDisplay,
             excludedSkillsForDisplay,
-            ...(item.type === "condition" ? { conditionChangeKeys: ThirdEraItemSheet.#getConditionChangeKeyOptions() } : {})
+            prerequisiteFeatsDisplay,
+            availableFeatsForPrereq,
+            availableFeats,
+            autoGrantedFeatsForDisplay,
+            ...(item.type === "condition" ? { conditionChangeKeys: ThirdEraItemSheet.getConditionChangeKeyOptions() } : {})
         };
     }
 
@@ -299,7 +485,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {string} key   Skill system.key
      * @returns {string}    Skill name or key if not found
      */
-    static #getSkillDisplayName(key) {
+    static getSkillDisplayName(key) {
         if (!key || !game.items?.size) return key ?? "";
         const k = String(key).toLowerCase();
         const skill = game.items.find(
@@ -309,7 +495,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /** Condition effect key options for the condition sheet dropdown (key -> localized label). */
-    static #getConditionChangeKeyOptions() {
+    static getConditionChangeKeyOptions() {
         const t = (key) => game.i18n.localize(`THIRDERA.ConditionChangeKeys.${key}`);
         return {
             "": "—",
@@ -502,10 +688,13 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
         // Enable drag-and-drop for class, race, spell, school, and domain item sheets
         if (this.document.type === "class" || this.document.type === "race" || this.document.type === "spell" || this.document.type === "school" || this.document.type === "domain") {
-            new DragDrop.implementation({
+            const DragDropImpl = foundry.applications?.ux?.DragDrop?.implementation;
+            if (DragDropImpl) {
+                new DragDropImpl({
                 permissions: { drop: () => this.isEditable },
                 callbacks: { drop: this._onDrop.bind(this) }
             }).bind(this.element);
+            }
         }
 
         // Spell: applying a selection from the "Add descriptor" dropdown adds the descriptor (no need to click +)
@@ -780,8 +969,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
             current.push({ key: skillKey });
             current.sort((a, b) => {
-                const na = ThirdEraItemSheet.#getSkillDisplayName(a.key) || a.key;
-                const nb = ThirdEraItemSheet.#getSkillDisplayName(b.key) || b.key;
+                const na = ThirdEraItemSheet.getSkillDisplayName(a.key) || a.key;
+                const nb = ThirdEraItemSheet.getSkillDisplayName(b.key) || b.key;
                 return na.localeCompare(nb);
             });
             await this.document.update({ "system.classSkills": current });
@@ -793,8 +982,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
             current.push({ key: skillKey });
             current.sort((a, b) => {
-                const na = ThirdEraItemSheet.#getSkillDisplayName(a.key) || a.key;
-                const nb = ThirdEraItemSheet.#getSkillDisplayName(b.key) || b.key;
+                const na = ThirdEraItemSheet.getSkillDisplayName(a.key) || a.key;
+                const nb = ThirdEraItemSheet.getSkillDisplayName(b.key) || b.key;
                 return na.localeCompare(nb);
             });
             await this.document.update({ "system.excludedSkills": current });
@@ -850,6 +1039,82 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             data.system.scalingTable = table;
         }
 
+        // Class: build autoGrantedFeats from the live form so the current select values are never lost.
+        // (expandObject would give an object { "0": {...} }; we always want an array built from the form DOM.)
+        // If the change came from an auto-granted feat select, the form may have been re-rendered with stale
+        // document data before we read it; patch fromForm with event.target.value for that field so we don't lose the selection.
+        if (this.document?.type === "class" && form && form.nodeName === "FORM") {
+            const fromForm = ThirdEraItemSheet.getAutoGrantedFeatsFromForm(this, form);
+            const docList = ThirdEraItemSheet.normalizeAutoGrantedFeatsToArray(this.document?.system?.autoGrantedFeats);
+            // Never send fewer conditional slots than the document has: a competing submit (e.g. from Add feat to list click) may have run with a form that had fewer dropdowns and overwritten; padding preserves slots so the next submit doesn't reduce to one.
+            for (let i = 0; i < fromForm.length && i < docList.length; i++) {
+                const docUuids = docList[i]?.featUuids ?? [];
+                const fromUuids = fromForm[i]?.featUuids ?? [];
+                if (docUuids.length > fromUuids.length) {
+                    const padded = [...fromUuids];
+                    for (let k = fromUuids.length; k < docUuids.length; k++) {
+                        padded.push(docUuids[k] != null ? String(docUuids[k]).trim() : "");
+                    }
+                    fromForm[i] = { ...fromForm[i], featUuids: padded };
+                }
+            }
+            const anchor = event?.target;
+            const name = anchor?.name ?? "";
+            const autoGrantedMatch = name.match(/^system\.autoGrantedFeats\.(\d+)\.(featUuid|featUuids\.(\d+))$/);
+            let toSet = fromForm;
+            let usedDocumentOnlyBranch = false;
+            if (autoGrantedMatch && (anchor?.tagName === "SELECT" || anchor?.nodeName === "SELECT")) {
+                const i = parseInt(autoGrantedMatch[1], 10);
+                const field = autoGrantedMatch[2];
+                const value = (anchor.value != null ? String(anchor.value) : "").trim();
+                const conditionalFieldMatch = field === "featUuids." + (autoGrantedMatch[3] ?? "");
+                if (conditionalFieldMatch) {
+                    const j = parseInt(autoGrantedMatch[3], 10);
+                    if (!Number.isNaN(j) && j >= 0 && docList[i]) {
+                        const docEntry = docList[i];
+                        const docUuids = [...(docEntry?.featUuids ?? [])];
+                        while (docUuids.length <= j) docUuids.push("");
+                        docUuids[j] = value;
+                        toSet = docList.map((e, idx) => ({
+                            level: e?.level ?? 1,
+                            featUuid: (e?.featUuid ?? "").trim(),
+                            featUuids: idx === i ? docUuids : [...(e?.featUuids ?? [])]
+                        }));
+                        usedDocumentOnlyBranch = true;
+                    }
+                } else if (i >= 0 && i < fromForm.length) {
+                    if (field === "featUuid") {
+                        fromForm[i] = { ...fromForm[i], featUuid: value };
+                    } else if (field.startsWith("featUuids.")) {
+                        const j = parseInt(autoGrantedMatch[3], 10);
+                        if (!Number.isNaN(j) && j >= 0) {
+                            const docEntry = docList[i];
+                            const docUuids = docEntry?.featUuids ?? [];
+                            const fromUuids = fromForm[i]?.featUuids ?? [];
+                            const base = docUuids.length > fromUuids.length
+                                ? docUuids.map((u) => (u != null ? String(u).trim() : ""))
+                                : [...(fromUuids ?? [])];
+                            while (base.length <= j) base.push("");
+                            base[j] = value;
+                            fromForm[i] = { ...fromForm[i], featUuids: base };
+                        }
+                    }
+                }
+            }
+            if (toSet.length > 0) {
+                const wouldReduce = docList.some((docEntry, idx) => {
+                    const docLen = (docEntry?.featUuids ?? []).length;
+                    const fromLen = (toSet[idx]?.featUuids ?? []).length;
+                    return docLen > fromLen;
+                });
+                if (wouldReduce) {
+                    toSet = docList.map((e) => ({ level: e?.level ?? 1, featUuid: (e?.featUuid ?? "").trim(), featUuids: [...(e?.featUuids ?? [])] }));
+                }
+                data.system = data.system || {};
+                data.system.autoGrantedFeats = toSet;
+            }
+        }
+
         return data;
     }
 
@@ -878,7 +1143,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static #onRollAttack(event, target) {
+    static onRollAttack(event, target) {
         if (this.item.type === 'weapon') {
             this.item.rollAttack();
         }
@@ -890,7 +1155,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static #onRollDamage(event, target) {
+    static onRollDamage(event, target) {
         if (this.item.type === 'weapon') {
             this.item.rollDamage();
         }
@@ -902,7 +1167,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static #onChangeTab(event, target) {
+    static onChangeTab(event, target) {
         const tab = target.dataset.tab;
         const group = target.dataset.group;
 
@@ -926,7 +1191,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onItemDeleteHeader(event, target) {
+    static async onItemDeleteHeader(event, target) {
         const confirm = await foundry.applications.api.DialogV2.confirm({
             window: { title: "Delete Item" },
             content: `<h4>Are you sure you want to delete ${this.item.name}?</h4>`,
@@ -945,7 +1210,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveClassSkill(event, target) {
+    static async onRemoveClassSkill(event, target) {
         const skillKey = target.dataset.skillKey;
         if (!skillKey) return;
         const current = (this.item.system.classSkills || []).filter(e => e.key !== skillKey);
@@ -958,7 +1223,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveExcludedSkill(event, target) {
+    static async onRemoveExcludedSkill(event, target) {
         const skillKey = target.dataset.skillKey;
         if (!skillKey) return;
         const current = (this.item.system.excludedSkills || []).filter(e => e.key !== skillKey);
@@ -971,7 +1236,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveFeature(event, target) {
+    static async onRemoveFeature(event, target) {
         const index = parseInt(target.dataset.featureIndex);
         if (isNaN(index)) return;
         const current = [...(this.item.system.features || [])];
@@ -980,12 +1245,201 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
+     * Ensure autoGrantedFeats is an array (convert object with numeric keys from expandObject).
+     * @param {unknown} value
+     * @returns {Array<{level?: number, featUuid?: string, featUuids?: string[]}>}
+     */
+    static normalizeAutoGrantedFeatsToArray(value) {
+        if (Array.isArray(value)) return value;
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+            const keys = Object.keys(value).filter((k) => /^\d+$/.test(k)).sort((a, b) => Number(a) - Number(b));
+            return keys.map((k) => value[k]);
+        }
+        return [];
+    }
+
+    /**
+     * Build autoGrantedFeats array from the form so in-flight selections are preserved (e.g. before submit has updated the document).
+     * @param {ThirdEraItemSheet} sheet
+     * @param {HTMLFormElement|null} [formFromEvent] If provided (e.g. event.target.closest("form") from the button click), use this form so we read from the correct DOM.
+     * @returns {Array<{level: number, featUuid: string, featUuids: string[]}>}
+     */
+    static getAutoGrantedFeatsFromForm(sheet, formFromEvent) {
+        const docList = ThirdEraItemSheet.normalizeAutoGrantedFeatsToArray(sheet.document?.system?.autoGrantedFeats);
+        const form = formFromEvent && formFromEvent.nodeName === "FORM"
+            ? formFromEvent
+            : (sheet.form != null ? sheet.form : (sheet.element && (sheet.element.tagName === "FORM" ? sheet.element : sheet.element.querySelector && sheet.element.querySelector("form"))));
+        if (!form || !docList.length) return [...docList];
+        const current = [];
+        for (let i = 0; i < docList.length; i++) {
+            const docEntry = docList[i];
+            const levelInput = form.querySelector(`input[name="system.autoGrantedFeats.${i}.level"]`);
+            const featUuidSelect = form.querySelector(`select[name="system.autoGrantedFeats.${i}.featUuid"]`);
+            const level = levelInput ? (Number(levelInput.value) || (docEntry.level != null ? docEntry.level : 1)) : (docEntry.level != null ? docEntry.level : 1);
+            if (featUuidSelect) {
+                const featUuid = (featUuidSelect.value != null ? featUuidSelect.value : (docEntry.featUuid != null ? docEntry.featUuid : "")).trim();
+                current.push({ level, featUuid, featUuids: [] });
+            } else {
+                const docUuids = docEntry.featUuids ?? [];
+                // Build featUuids from form; for any index the form doesn't have a select for, use document so we never drop a slot when form was re-rendered with fewer selects.
+                const featUuids = [];
+                const maxJ = Math.max(docUuids.length, 16);
+                for (let j = 0; j < maxJ; j++) {
+                    const sel = form.querySelector(`select[name="system.autoGrantedFeats.${i}.featUuids.${j}"]`);
+                    if (sel) {
+                        let v = (sel.value != null ? sel.value : "").trim();
+                        if (!v && docUuids[j] != null && String(docUuids[j]).trim()) v = String(docUuids[j]).trim();
+                        featUuids.push(v);
+                    } else if (j < docUuids.length) {
+                        featUuids.push(docUuids[j] != null ? String(docUuids[j]).trim() : "");
+                    } else {
+                        break;
+                    }
+                }
+                current.push({ level, featUuid: "", featUuids: featUuids.length ? featUuids : (docEntry.featUuids != null ? docEntry.featUuids : []) });
+            }
+        }
+        return current;
+    }
+
+    /**
+     * Add an empty auto-granted feat row (level 1, no feat). Used on class sheet.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraItemSheet}
+     */
+    static async onAddAutoGrantedFeat(event, target) {
+        if (this.document.type !== "class") return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        const current = ThirdEraItemSheet.getAutoGrantedFeatsFromForm(this, form);
+        current.push({ level: 1, featUuid: "", featUuids: [] });
+        await this.document.update({ "system.autoGrantedFeats": current });
+    }
+
+    /**
+     * Remove an auto-granted feat row by index. Used on class sheet.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraItemSheet}
+     */
+    static async onRemoveAutoGrantedFeat(event, target) {
+        const index = parseInt(target.dataset.autoGrantedIndex, 10);
+        if (isNaN(index) || index < 0) return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        const current = ThirdEraItemSheet.getAutoGrantedFeatsFromForm(this, form);
+        current.splice(index, 1);
+        await this.document.update({ "system.autoGrantedFeats": current });
+    }
+
+    /**
+     * Switch an auto-granted feat row from unconditional (empty) to conditional: set featUuid to "", add one empty slot to featUuids.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraItemSheet}
+     */
+    static async onSetAutoGrantedToConditional(event, target) {
+        if (this.document.type !== "class") return;
+        const entryIndex = parseInt(target.dataset.entryIndex, 10);
+        if (isNaN(entryIndex) || entryIndex < 0) return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        const current = ThirdEraItemSheet.getAutoGrantedFeatsFromForm(this, form);
+        const entry = current[entryIndex];
+        if (!entry) return;
+        const updated = current.map((e, i) =>
+            i === entryIndex
+                ? { ...e, featUuid: "", featUuids: [...(e.featUuids || []), ""] }
+                : e
+        );
+        await this.document.update({ "system.autoGrantedFeats": updated });
+    }
+
+    /**
+     * Switch an auto-granted feat entry from conditional back to unconditional (only when fewer than 2 rows). Uses first slot value as the single feat, or empty.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraItemSheet}
+     */
+    static async onSetAutoGrantedToUnconditional(event, target) {
+        if (this.document.type !== "class") return;
+        const entryIndex = parseInt(target.dataset.entryIndex, 10);
+        if (isNaN(entryIndex) || entryIndex < 0) return;
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        const current = ThirdEraItemSheet.getAutoGrantedFeatsFromForm(this, form);
+        const entry = current[entryIndex];
+        if (!entry || !Array.isArray(entry.featUuids) || entry.featUuids.length >= 2) return;
+        const featUuid = (entry.featUuids[0] != null ? String(entry.featUuids[0]).trim() : "");
+        const updated = current.map((e, i) =>
+            i === entryIndex ? { ...e, featUuid, featUuids: [] } : e
+        );
+        await this.document.update({ "system.autoGrantedFeats": updated });
+    }
+
+    /**
+     * Add an empty UUID slot to a conditional auto-granted feat entry.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraItemSheet}
+     */
+    static async onAddConditionalFeatUuid(event, target) {
+        if (this.document.type !== "class") return;
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        const entryIndex = parseInt(target.dataset.entryIndex, 10);
+        if (isNaN(entryIndex) || entryIndex < 0) return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        const current = ThirdEraItemSheet.getAutoGrantedFeatsFromForm(this, form);
+        const entry = current[entryIndex];
+        if (!entry) return;
+        const featUuids = [...(entry.featUuids || []), ""];
+        const updated = current.map((e, i) =>
+            i === entryIndex ? { ...e, featUuid: "", featUuids } : e
+        );
+        await this.document.update({ "system.autoGrantedFeats": updated });
+    }
+
+    /**
+     * Remove one UUID from a conditional auto-granted feat entry by index.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraItemSheet}
+     */
+    static async onRemoveConditionalFeatUuid(event, target) {
+        if (this.document.type !== "class") return;
+        const entryIndex = parseInt(target.dataset.entryIndex, 10);
+        const uuidIndex = parseInt(target.dataset.uuidIndex, 10);
+        if (isNaN(entryIndex) || entryIndex < 0 || isNaN(uuidIndex) || uuidIndex < 0) return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        const current = ThirdEraItemSheet.getAutoGrantedFeatsFromForm(this, form);
+        const entry = current[entryIndex];
+        if (!entry || !Array.isArray(entry.featUuids)) return;
+        const featUuids = entry.featUuids.filter((_, i) => i !== uuidIndex);
+        const updated = current.map((e, i) =>
+            i === entryIndex ? { ...e, featUuids } : e
+        );
+        await this.document.update({ "system.autoGrantedFeats": updated });
+    }
+
+    /**
      * Handle removing a domain from a class
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveDomain(event, target) {
+    static async onRemoveDomain(event, target) {
         // Preserve scroll position
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -1004,7 +1458,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static #onOpenConditionDescription(event, target) {
+    static onOpenConditionDescription(event, target) {
         const pm = this.element?.querySelector?.(".condition-editor-box prose-mirror[name='system.description']");
         if (pm && typeof pm.open !== "undefined") pm.open = true;
     }
@@ -1015,7 +1469,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onAddConditionChange(event, target) {
+    static async onAddConditionChange(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
         const current = [...(this.item.system.changes || [])];
@@ -1029,7 +1483,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element (must have data-index)
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveConditionChange(event, target) {
+    static async onRemoveConditionChange(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
         const index = parseInt(target.dataset.index, 10);
@@ -1045,7 +1499,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element (must have data-field="system.description" etc.)
      * @this {ThirdEraItemSheet}
      */
-    static #onOpenEditorBox(event, target) {
+    static onOpenEditorBox(event, target) {
         const field = target.dataset?.field;
         if (!field) return;
         const pm = this.element?.querySelector?.(`prose-mirror[name="${field}"]`);
@@ -1058,7 +1512,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onAddScalingRow(event, target) {
+    static async onAddScalingRow(event, target) {
         // Manual scroll preservation
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -1076,7 +1530,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveScalingRow(event, target) {
+    static async onRemoveScalingRow(event, target) {
         // Manual scroll preservation
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -1094,7 +1548,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveLevelByClass(event, target) {
+    static async onRemoveLevelByClass(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1111,7 +1565,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveLevelByDomain(event, target) {
+    static async onRemoveLevelByDomain(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1127,7 +1581,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {string} schoolKey   The school's system key (e.g. "evocation", "conjuration")
      * @returns {Promise<Item|null>} The school Item document, or null if not found
      */
-    static async #findSchoolByKey(schoolKey) {
+    static async findSchoolByKey(schoolKey) {
         if (!schoolKey || typeof schoolKey !== "string") return null;
         const key = schoolKey.trim().toLowerCase();
         if (!key) return null;
@@ -1153,7 +1607,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onClearSchool(event, target) {
+    static async onClearSchool(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1171,7 +1625,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onAddSchoolDescriptor(event, target) {
+    static async onAddSchoolDescriptor(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1192,7 +1646,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async #onRemoveSchoolDescriptor(event, target) {
+    static async onRemoveSchoolDescriptor(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1203,7 +1657,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         await this.item.update({ "system.schoolDescriptors": current });
     }
 
-    static async #onRemoveOppositionSchool(event, target) {
+    static async onRemoveOppositionSchool(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1214,7 +1668,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         await this.item.update({ "system.oppositionSchools": current });
     }
 
-    static async #onAddSubschool(event, target) {
+    static async onAddSubschool(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1223,7 +1677,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         await this.item.update({ "system.subschools": current });
     }
 
-    static async #onRemoveSubschool(event, target) {
+    static async onRemoveSubschool(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1234,7 +1688,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         await this.item.update({ "system.subschools": current });
     }
 
-    static async #onAddDescriptorTag(event, target) {
+    static async onAddDescriptorTag(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1243,7 +1697,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         await this.item.update({ "system.descriptorTags": current });
     }
 
-    static async #onRemoveDescriptorTag(event, target) {
+    static async onRemoveDescriptorTag(event, target) {
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
 
@@ -1259,7 +1713,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {PointerEvent} _event
      * @param {HTMLImageElement} target
      */
-    static async #onEditImage(_event, target) {
+    static async onEditImage(_event, target) {
         if (target.nodeName !== "IMG") return;
         const attr = target.dataset.edit;
         if (!attr) return;
@@ -1284,5 +1738,28 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
         });
         await fp.browse();
+    }
+
+    /** Add a prerequisite feat from dropdown selection (feat sheet). */
+    static async onAddPrerequisiteFeat(_event, target) {
+        if (this.document?.type !== "feat") return;
+        const form = target.closest("form");
+        const select = form?.querySelector(".prerequisite-feat-select");
+        const uuid = select?.value?.trim();
+        if (!uuid) return;
+        const uuids = [...(this.document.system.prerequisiteFeatUuids ?? [])];
+        if (uuids.includes(uuid)) return;
+        uuids.push(uuid);
+        await this.document.update({ "system.prerequisiteFeatUuids": uuids });
+        if (select) select.value = "";
+    }
+
+    /** Remove a prerequisite feat by UUID (feat sheet). */
+    static async onRemovePrerequisiteFeat(_event, target) {
+        if (this.document?.type !== "feat") return;
+        const uuid = target.closest("[data-uuid]")?.dataset?.uuid;
+        if (!uuid) return;
+        const uuids = (this.document.system.prerequisiteFeatUuids ?? []).filter((u) => u !== uuid);
+        await this.document.update({ "system.prerequisiteFeatUuids": uuids });
     }
 }

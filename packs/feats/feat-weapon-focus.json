@@ -1,18 +1,1 @@
-{
-  "_id": "feat-weapon-focus",
-  "name": "Weapon Focus",
-  "type": "feat",
-  "img": "icons/svg/sword.svg",
-  "system": {
-    "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
-    "key": "weaponFocus",
-    "type": "General, Fighter",
-    "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
-    "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
-    "special": "",
-    "scalingTable": []
-  },
-  "flags": {},
-  "folder": null,
-  "sort": 4
-}
+{"_id":"feat-weapon-focus","name":"Weapon Focus","type":"feat","img":"icons/svg/sword.svg","system":{"description":"<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>","key":"weaponFocus","type":"General, Fighter","fighterBonusEligible":"true","prerequisites":"Proficiency with selected weapon, base attack bonus +1","benefit":"<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>","special":"","scalingTable":[],"prerequisiteFeatKeys":[],"prerequisiteBAB":1,"prerequisiteAbilityScores":{"str":0,"dex":0,"con":0,"int":0,"wis":0,"cha":0},"prerequisiteFeatUuids":[]},"flags":{},"folder":null,"sort":4}
