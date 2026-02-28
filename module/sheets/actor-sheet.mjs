@@ -6,6 +6,7 @@ import { getDerivedFrom } from "../logic/derived-conditions.mjs";
 import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
+import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -3430,10 +3431,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             ? ThirdEraActorSheet._getSpellIdsToRemoveForFullListClassRemoval(this.actor, cls)
             : [];
 
+        // Collect feat item IDs to delete (chosen feat + auto-granted feats from every level of this class)
+        const history = this.actor.system.levelHistory || [];
+        const itemIdsToDelete = [];
+        for (const entry of history) {
+            if (entry.classItemId !== itemId) continue;
+            const featId = entry.featItemId?.trim?.();
+            if (featId) itemIdsToDelete.push(featId);
+            const autoIds = entry.autoGrantedFeatIds ?? [];
+            for (const id of autoIds) {
+                if (id?.trim()) itemIdsToDelete.push(id.trim());
+            }
+        }
+
         // Remove levelHistory entries for this class and delete the class item
-        const history = (this.actor.system.levelHistory || []).filter(e => e.classItemId !== itemId);
-        await this.actor.update({ "system.levelHistory": history });
+        const newHistory = history.filter(e => e.classItemId !== itemId);
+        await this.actor.update({ "system.levelHistory": newHistory });
         await cls.delete();
+
+        const existingIds = itemIdsToDelete.filter((id) => this.actor.items.has(id));
+        if (existingIds.length > 0) {
+            await this.actor.deleteEmbeddedDocuments("Item", existingIds);
+        }
 
         // Full-list caster: remove spells that only this class granted and clean shortlist
         if (idsToRemove.length > 0) {
@@ -3470,25 +3489,27 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const cls = this.actor.items.get(itemId);
         if (cls) {
             const history = [...(this.actor.system.levelHistory || [])];
-            
+            const newClassLevel = history.filter((e) => e.classItemId === itemId).length + 1;
+
+            const autoGrantedFeatIds = await createAutoGrantedFeatsForLevel(this.actor, cls, newClassLevel);
+
             // Check if this is the first level: levelHistory is empty OR all entries reference classes that no longer exist
             const existingClassIds = new Set(this.actor.items.filter(i => i.type === "class").map(c => c.id));
             const hasValidLevels = history.some(entry => existingClassIds.has(entry.classItemId));
             const isFirstLevel = history.length === 0 || !hasValidLevels;
-            
+
             let hpRolled = 0;
-            
+
             // If this is the first level and the setting is enabled, set HP to max
             if (isFirstLevel && game.settings.get("thirdera", "firstLevelFullHp")) {
                 const hitDie = cls.system.hitDie;
-                // Parse hit die (e.g., "d8" -> 8, "d10" -> 10)
-                const dieSize = parseInt(hitDie.substring(1));
-                if (!isNaN(dieSize)) {
-                    hpRolled = dieSize; // Max value of the die
-                }
+                const dieSize = parseInt(hitDie.substring(1), 10);
+                if (!isNaN(dieSize)) hpRolled = dieSize;
             }
-            
-            history.push({ classItemId: cls.id, hpRolled });
+
+            const newEntry = { classItemId: cls.id, hpRolled };
+            if (autoGrantedFeatIds.length > 0) newEntry.autoGrantedFeatIds = autoGrantedFeatIds;
+            history.push(newEntry);
             await this.actor.update({ "system.levelHistory": history });
         }
     }
@@ -3568,6 +3589,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const featId = entry.featItemId?.trim?.();
             if (featId && this.actor.items.has(featId)) {
                 await this.actor.deleteEmbeddedDocuments("Item", [featId]);
+            }
+
+            // Remove auto-granted feats for this level
+            const autoGrantedFeatIds = entry.autoGrantedFeatIds ?? [];
+            const toDelete = autoGrantedFeatIds.filter((id) => id?.trim() && this.actor.items.has(id.trim()));
+            if (toDelete.length > 0) {
+                await this.actor.deleteEmbeddedDocuments("Item", toDelete);
             }
 
             // Subtract skill ranks gained at this level

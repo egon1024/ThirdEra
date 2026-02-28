@@ -6,6 +6,7 @@ import { ThirdEraActorSheet } from "../sheets/actor-sheet.mjs";
 import { SpellData } from "../data/item-spell.mjs";
 import { ClassData } from "../data/item-class.mjs";
 import { meetsFeatPrerequisites, actorHasFeatByUuid } from "../logic/feat-prerequisites.mjs";
+import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
 
 /** Character levels that grant a general feat (3.5 SRD). */
 const GENERAL_FEAT_LEVELS = new Set([1, 3, 6, 9, 12, 15, 18]);
@@ -911,10 +912,14 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             }
         }
 
+        const newClassLevel = history.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+        const autoGrantedFeatIds = await createAutoGrantedFeatsForLevel(flow.actor, cls, newClassLevel);
+
         const newEntry = {
             classItemId: flow.selectedClassItemId,
             hpRolled: flow.hpRolled,
             ...(featItemId && { featItemId, featName, featKey }),
+            ...(autoGrantedFeatIds.length > 0 && { autoGrantedFeatIds }),
             skillsGained
         };
         history.push(newEntry);

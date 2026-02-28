@@ -56,6 +56,13 @@ export class ClassData extends foundry.abstract.TypeDataModel {
                 featKey: new StringField({ required: true, blank: false, label: "Feat Key" })
             }), { label: "Class Features" }),
 
+            /** Auto-granted feats at specific class levels. Each entry: level + featUuid (unconditional) or featUuids (conditional). */
+            autoGrantedFeats: new ArrayField(new SchemaField({
+                level: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Level" }),
+                featUuid: new StringField({ required: false, blank: true, initial: "", label: "Feat UUID (unconditional)" }),
+                featUuids: new ArrayField(new StringField({ required: false, blank: true }), { required: false, initial: [], label: "Feat UUIDs (conditional, first missing)" })
+            }), { initial: [], label: "Auto-Granted Feats" }),
+
             isPrestige: new StringField({
                 required: true, blank: false, initial: "false",
                 label: "Prestige Class"

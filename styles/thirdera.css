@@ -2591,6 +2591,94 @@
   opacity: 1;
 }
 
+/* Auto-granted feats on class sheet (Features tab) — same row layout as feature-entry */
+.thirdera .auto-granted-feats-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.thirdera .auto-granted-feat-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--color-border-divider);
+  font-size: var(--font-size-body);
+}
+
+.thirdera .auto-granted-feat-select {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-body);
+}
+
+.thirdera .auto-granted-feat-add {
+  font-size: var(--font-size-note);
+  margin-top: 6px;
+}
+
+.thirdera .auto-granted-type-label {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.thirdera .auto-granted-use-conditional {
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+.thirdera .auto-granted-use-conditional:hover {
+  color: var(--color-character-accent);
+}
+
+.thirdera .auto-granted-conditional-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.thirdera .auto-granted-conditional-block .auto-granted-type-label {
+  flex: 0 0 100%;
+}
+
+.thirdera .auto-granted-conditional-uuid-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.thirdera .auto-granted-conditional-uuid-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.thirdera .auto-granted-conditional-uuid-entry .auto-granted-feat-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.thirdera .auto-granted-conditional-add {
+  font-size: var(--font-size-note);
+  margin-bottom: 4px;
+}
+
+.thirdera .auto-granted-row-remove {
+  align-self: center;
+}
+
 /* Class-granted features on character sheet (Classes tab) */
 .thirdera .class-features-sublist {
   list-style: none;

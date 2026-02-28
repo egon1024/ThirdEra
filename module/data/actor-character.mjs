@@ -125,6 +125,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 featItemId: new StringField({ required: false, blank: true, initial: "", label: "Feat Item ID (gained at this level)" }),
                 featName: new StringField({ required: false, blank: true, initial: "", label: "Feat Name (display fallback)" }),
                 featKey: new StringField({ required: false, blank: true, initial: "", label: "Feat Key" }),
+                /** Embedded feat item IDs that were auto-granted at this level (for level-down and class removal cleanup). */
+                autoGrantedFeatIds: new ArrayField(new StringField({ required: false, blank: true }), { required: false, initial: [], label: "Auto-Granted Feat IDs" }),
                 skillsGained: new ArrayField(new SchemaField({
                     key: new StringField({ required: true, blank: false, label: "Skill Key" }),
                     ranks: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Ranks Added" })
