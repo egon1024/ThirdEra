@@ -697,6 +697,7 @@
           <div class="level-history-gained" style="grid-column: 1 / -1;">
             {{localize "THIRDERA.LevelHistory.Gained"}}: {{#each entry.featuresGainedAtLevel as |f|}}{{f.name}}{{#if f.scaling}} ({{f.scaling}}){{/if}}{{#unless @last}}, {{/unless}}{{/each}}
             {{#if entry.featGainedAtLevel}}. {{localize "THIRDERA.LevelHistory.Feat"}}: {{entry.featGainedAtLevel}}{{/if}}
+            {{#if entry.autoGrantedFeatsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.AutoGranted"}}: {{#each entry.autoGrantedFeatsGainedAtLevel as |name|}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
             {{#if entry.skillsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
             {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
           </div>
@@ -704,6 +705,14 @@
           {{#if entry.featGainedAtLevel}}
           <div class="level-history-gained" style="grid-column: 1 / -1;">
             {{localize "THIRDERA.LevelHistory.Feat"}}: {{entry.featGainedAtLevel}}
+            {{#if entry.autoGrantedFeatsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.AutoGranted"}}: {{#each entry.autoGrantedFeatsGainedAtLevel as |name|}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
+            {{#if entry.skillsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
+            {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
+          </div>
+          {{else}}
+          {{#if entry.autoGrantedFeatsGainedAtLevel.length}}
+          <div class="level-history-gained" style="grid-column: 1 / -1;">
+            {{localize "THIRDERA.LevelHistory.AutoGranted"}}: {{#each entry.autoGrantedFeatsGainedAtLevel as |name|}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}
             {{#if entry.skillsGainedAtLevel.length}}. {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
             {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
           </div>
@@ -713,6 +722,7 @@
             {{localize "THIRDERA.LevelHistory.Skills"}}: {{#each entry.skillsGainedAtLevel as |s|}}{{s.name}} +{{s.ranks}}{{#unless @last}}, {{/unless}}{{/each}}
             {{#if entry.skillPointsAtLevel}} — {{entry.skillPointsAtLevel}} {{localize "THIRDERA.LevelHistory.SkillPoints"}}{{/if}}
           </div>
+          {{/if}}
           {{/if}}
           {{/if}}
           {{/if}}

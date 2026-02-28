@@ -217,6 +217,7 @@
             "Gained": "Gained",
             "SkillPoints": "skill points",
             "Feat": "Feat",
+            "AutoGranted": "Auto-granted",
             "Skills": "Skills"
         },
         "Spells": {

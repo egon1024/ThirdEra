@@ -490,6 +490,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     ?? game.items?.find?.((it) => it.type === "skill" && (it.system?.key ?? "").toLowerCase() === k);
                 return { name: skillItem?.name ?? key ?? "?", ranks: ranks ?? 0 };
             });
+            const autoGrantedFeatIds = entry.autoGrantedFeatIds ?? [];
+            const autoGrantedFeatsGainedAtLevel = autoGrantedFeatIds.map((id) => actor.items.get(id?.trim())?.name).filter(Boolean);
             return {
                 index: i,
                 characterLevel: i + 1,
@@ -501,6 +503,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 featuresGainedAtLevel: featuresAtLevel,
                 skillPointsAtLevel,
                 featGainedAtLevel,
+                autoGrantedFeatsGainedAtLevel,
                 skillsGainedAtLevel,
                 isLastLevelOfClass: lastIndexByClass.get(entry.classItemId) === i
             };

@@ -125,7 +125,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 featItemId: new StringField({ required: false, blank: true, initial: "", label: "Feat Item ID (gained at this level)" }),
                 featName: new StringField({ required: false, blank: true, initial: "", label: "Feat Name (display fallback)" }),
                 featKey: new StringField({ required: false, blank: true, initial: "", label: "Feat Key" }),
-                /** Embedded feat item IDs that were auto-granted at this level (for level-down and class removal cleanup). */
+                /** Embedded feat item IDs that were auto-granted at this level. For conditional progressions, only the feat actually granted (e.g. Feat B when actor had Feat A) is created and its id stored here; level-down and class removal delete by these IDs. */
                 autoGrantedFeatIds: new ArrayField(new StringField({ required: false, blank: true }), { required: false, initial: [], label: "Auto-Granted Feat IDs" }),
                 skillsGained: new ArrayField(new SchemaField({
                     key: new StringField({ required: true, blank: false, label: "Skill Key" }),
