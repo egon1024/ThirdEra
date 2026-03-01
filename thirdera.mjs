@@ -201,6 +201,14 @@ Hooks.once("init", async function () {
             poor: "Poor",
             clumsy: "Clumsy"
         },
+        /** Sense types for NPC/monster stat block (Phase E). */
+        senseTypes: {
+            darkvision: "Darkvision",
+            lowLight: "Low-light vision",
+            scent: "Scent",
+            blindsight: "Blindsight",
+            tremorsense: "Tremorsense"
+        },
         hitDice: {
             d4: "d4",
             d6: "d6",

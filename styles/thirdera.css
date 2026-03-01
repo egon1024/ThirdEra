@@ -951,6 +951,39 @@
   overflow: visible !important;
 }
 
+/* NPC Stat block: Other special abilities editor (Phase E) — same show/hide pattern as description */
+.thirdera .special-abilities-editor-box:not(.special-abilities-editing) prose-mirror[name="system.statBlock.specialAbilities"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.thirdera .special-abilities-editor-box .special-abilities-view {
+  display: block;
+  min-height: 0;
+  padding: 2px 0;
+  border: none;
+  background: transparent;
+}
+
+.thirdera .special-abilities-editor-box.special-abilities-editing .special-abilities-view {
+  display: none !important;
+}
+
+.thirdera .special-abilities-editor-box.special-abilities-editing prose-mirror[name="system.statBlock.specialAbilities"] {
+  display: flex !important;
+  visibility: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
 .thirdera prose-mirror {
   display: block;
   width: 100%;
@@ -1284,6 +1317,56 @@
   flex: 1;
   min-width: 0;
   font-size: var(--font-size-body);
+}
+
+/* Phase E: Stat block DR, SR, Senses, Other special abilities */
+.thirdera .stat-block-special-abilities {
+  margin-top: 16px;
+}
+
+.thirdera .stat-block-special-abilities .stat-block-dr-sr {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+}
+
+.thirdera .senses-list {
+  list-style: none;
+  margin: 0 0 8px 0;
+  padding: 0;
+}
+
+.thirdera .senses-list .sense {
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .senses-list .sense:last-child {
+  border-bottom: none;
+}
+
+.thirdera .senses-list .sense-type {
+  min-width: 140px;
+  flex: 0 1 auto;
+}
+
+.thirdera .senses-list .sense-range {
+  flex: 1;
+  min-width: 80px;
+}
+
+.thirdera .senses-list .sense-remove {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+}
+
+.thirdera .sense-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-note);
 }
 
 .thirdera .natural-attack-compact-total {

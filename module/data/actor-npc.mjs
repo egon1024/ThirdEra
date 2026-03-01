@@ -54,7 +54,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes })
             }),
 
-            // Stat block (monster-only; optional for humanoid NPCs). Phase B: natural armor, space, reach. Phase C: natural attacks. Phase D: movement.
+            // Stat block (monster-only; optional for humanoid NPCs). Phase B–D: natural armor, space, reach, movement, natural attacks. Phase E: DR, SR, senses, special abilities.
             statBlock: new SchemaField({
                 naturalArmor: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
                 space: new StringField({ required: true, blank: true, initial: "5 ft" }),
@@ -76,7 +76,21 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                         reach: new StringField({ required: true, blank: true, initial: "" })
                     }),
                     { required: true, initial: [] }
-                )
+                ),
+                // Phase E: structured special abilities
+                damageReduction: new SchemaField({
+                    value: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                    bypass: new StringField({ required: true, blank: true, initial: "" })
+                }),
+                spellResistance: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                senses: new ArrayField(
+                    new SchemaField({
+                        type: new StringField({ required: true, blank: false, initial: "darkvision", choices: () => CONFIG.THIRDERA?.senseTypes ?? {} }),
+                        range: new StringField({ required: true, blank: true, initial: "" })
+                    }),
+                    { required: true, initial: [] }
+                ),
+                specialAbilities: new HTMLField({ required: true, blank: true })
             }),
 
             // Hit Points

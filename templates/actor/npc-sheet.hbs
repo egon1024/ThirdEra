@@ -476,6 +476,66 @@
             <a class="natural-attack-add-btn" data-action="addNaturalAttack" title="{{localize 'THIRDERA.NPC.AddNaturalAttack'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddNaturalAttack'}}</a>
           </div>
         </div>
+
+        {{!-- Phase E: DR, SR, Senses, Other special abilities --}}
+        <div class="stat-block-special-abilities">
+          <h4 class="items-header">{{localize 'THIRDERA.NPC.DamageReduction'}}</h4>
+          <div class="stat-block-fields stat-block-dr-sr">
+            <div class="stat-block-field flexrow">
+              <label for="system.statBlock.damageReduction.value" class="details-label">{{localize 'THIRDERA.NPC.DamageReductionValue'}}</label>
+              <input type="number" name="system.statBlock.damageReduction.value" value="{{#if system.statBlock.damageReduction}}{{system.statBlock.damageReduction.value}}{{else}}0{{/if}}"
+                data-dtype="Number" class="details-input" min="0" step="1" />
+            </div>
+            <div class="stat-block-field flexrow">
+              <label for="system.statBlock.damageReduction.bypass" class="details-label">{{localize 'THIRDERA.NPC.DamageReductionBypass'}}</label>
+              <input type="text" name="system.statBlock.damageReduction.bypass" value="{{#if system.statBlock.damageReduction}}{{system.statBlock.damageReduction.bypass}}{{/if}}"
+                data-dtype="String" class="details-input" placeholder="e.g. magic, cold iron" />
+            </div>
+          </div>
+          <div class="stat-block-field flexrow">
+            <label for="system.statBlock.spellResistance" class="details-label">{{localize 'THIRDERA.NPC.SpellResistance'}}</label>
+            <input type="number" name="system.statBlock.spellResistance" value="{{#if system.statBlock}}{{system.statBlock.spellResistance}}{{else}}0{{/if}}"
+              data-dtype="Number" class="details-input" min="0" step="1" />
+          </div>
+
+          <h4 class="items-header">{{localize 'THIRDERA.NPC.Senses'}}</h4>
+          {{#if system.statBlock.senses}}
+          {{#if system.statBlock.senses.length}}
+          <ol class="senses-list items-list">
+            {{#each system.statBlock.senses as |sense idx|}}
+            <li class="sense flexrow" data-sense-index="{{idx}}">
+              <select name="system.statBlock.senses.{{idx}}.type" class="details-input sense-type">
+                {{#each @root.config.senseTypes as |label key|}}
+                <option value="{{key}}" {{#if (eq key sense.type)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+              <input type="text" name="system.statBlock.senses.{{idx}}.range" value="{{sense.range}}"
+                data-dtype="String" class="details-input sense-range" placeholder="{{localize 'THIRDERA.NPC.SenseRange'}}" />
+              <a class="sense-remove" data-action="removeSense" data-sense-index="{{idx}}" title="{{localize 'THIRDERA.NPC.RemoveSense'}}"><i class="fas fa-trash"></i></a>
+            </li>
+            {{/each}}
+          </ol>
+          {{/if}}
+          {{/if}}
+          <div class="senses-add">
+            <a class="sense-add-btn" data-action="addSense" title="{{localize 'THIRDERA.NPC.AddSense'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddSense'}}</a>
+          </div>
+
+          <h4 class="items-header">{{localize 'THIRDERA.NPC.OtherSpecialAbilities'}}</h4>
+          <div class="special-abilities-editor-box editor-box">
+            <div class="editor-box-header flexrow">
+              <label>{{localize 'THIRDERA.NPC.OtherSpecialAbilities'}}</label>
+              <button type="button" class="editor-box-edit-btn" data-action="openSpecialAbilitiesEditor" title="{{localize 'THIRDERA.Edit'}}">
+                <i class="fas fa-pen-to-square"></i>
+              </button>
+            </div>
+            <div class="editor-box-view special-abilities-view">{{{enriched.specialAbilities}}}</div>
+            <prose-mirror name="system.statBlock.specialAbilities" data-document-u-u-i-d="{{actor.uuid}}" value="{{system.statBlock.specialAbilities}}"
+              toggled="true" style="--editor-min-height: 10em;">
+              {{{enriched.specialAbilities}}}
+            </prose-mirror>
+          </div>
+        </div>
       </div>
       </div>
       {{!-- /Stat block subtab --}}

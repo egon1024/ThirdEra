@@ -65,6 +65,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             naturalAttackRollAttack: ThirdEraActorSheet.#onNaturalAttackRollAttack,
             naturalAttackRollDamage: ThirdEraActorSheet.#onNaturalAttackRollDamage,
             openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor,
+            openSpecialAbilitiesEditor: ThirdEraActorSheet.#onOpenSpecialAbilitiesEditor,
+            addSense: ThirdEraActorSheet.#onAddSense,
+            removeSense: ThirdEraActorSheet.#onRemoveSense,
             configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
             editImage: ThirdEraActorSheet.#onEditImage,
             editTokenImage: ThirdEraActorSheet.#onEditTokenImage
@@ -401,7 +404,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             babProgressions: CONFIG.THIRDERA?.babProgressions || {},
             saveProgressions: CONFIG.THIRDERA?.saveProgressions || {},
             damageTypes: CONFIG.THIRDERA?.damageTypes || {},
-            movementManeuverability: CONFIG.THIRDERA?.movementManeuverability || {}
+            movementManeuverability: CONFIG.THIRDERA?.movementManeuverability || {},
+            senseTypes: CONFIG.THIRDERA?.senseTypes || {}
         };
 
         // Ensure tabs state exists (TABS.primary has no initial in Foundry, so default to description)
@@ -550,10 +554,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             };
         });
 
-        // Enrich HTML biography
+        // Enrich HTML biography (and NPC stat block special abilities)
         const enriched = {
             biography: await foundry.applications.ux.TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
         };
+        if (actor.type === "npc") {
+            const specialAbilitiesHtml = systemData.statBlock?.specialAbilities ?? "";
+            enriched.specialAbilities = await foundry.applications.ux.TextEditor.enrichHTML(specialAbilitiesHtml, { async: true, relativeTo: actor });
+        }
 
         // Compute HP status for header colorization
         // Compute HP status for header colorization
@@ -1111,7 +1119,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             creatureTypeChoices,
             creatureTypeResolved,
             subtypeChoices,
-            selectedSubtypes
+            selectedSubtypes,
+            enriched
         };
     }
 
@@ -4002,6 +4011,56 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         };
         pm.addEventListener("close", onClose, { once: true });
         if (typeof pm.open !== "undefined") pm.open = true;
+    }
+
+    /**
+     * Open the NPC stat block "Other special abilities" prose-mirror in edit mode (Phase E).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenSpecialAbilitiesEditor(event, target) {
+        if (this.actor.type !== "npc") return;
+        const box = this.element?.querySelector?.(".special-abilities-editor-box");
+        const pm = box?.querySelector?.("prose-mirror[name='system.statBlock.specialAbilities']");
+        if (!box || !pm) return;
+        box.classList.add("special-abilities-editing");
+        const onClose = () => {
+            box.classList.remove("special-abilities-editing");
+            pm.removeEventListener("close", onClose);
+        };
+        pm.addEventListener("close", onClose, { once: true });
+        if (typeof pm.open !== "undefined") pm.open = true;
+    }
+
+    /**
+     * Add a sense entry to the NPC stat block (Phase E).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddSense(event, target) {
+        if (this.actor.type !== "npc") return;
+        const senses = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
+        senses.push({ type: "darkvision", range: "" });
+        await this.actor.update({ "system.statBlock.senses": senses });
+    }
+
+    /**
+     * Remove a sense entry from the NPC stat block (Phase E).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveSense(event, target) {
+        if (this.actor.type !== "npc") return;
+        const row = target?.closest?.("[data-sense-index]");
+        const idx = parseInt(row?.dataset?.senseIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const senses = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
+        if (idx < 0 || idx >= senses.length) return;
+        senses.splice(idx, 1);
+        await this.actor.update({ "system.statBlock.senses": senses });
     }
 
     /**

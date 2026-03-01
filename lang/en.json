@@ -113,7 +113,17 @@
             "DamageMinimum1": "minimum 1",
             "Rolled": "rolled",
             "DamageFormulaBreakdown": "Formula: {formula} (dice: {dice}, STR: {strMod}, {primaryOrSecondary})",
-            "Actions": "Actions"
+            "Actions": "Actions",
+            "DamageReduction": "Damage Reduction",
+            "DamageReductionValue": "DR value",
+            "DamageReductionBypass": "Bypass (e.g. magic, cold iron)",
+            "SpellResistance": "Spell Resistance",
+            "Senses": "Senses",
+            "SenseType": "Sense",
+            "SenseRange": "Range (e.g. 60 ft)",
+            "AddSense": "Add sense",
+            "RemoveSense": "Remove sense",
+            "OtherSpecialAbilities": "Other special abilities"
         },
         "Skills": {
             "classSkill": "Class Skill",
