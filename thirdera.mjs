@@ -183,6 +183,24 @@ Hooks.once("init", async function () {
             Gargantuan: -4,
             Colossal: -8
         },
+        /** Damage types for natural attacks (and weapon display). */
+        damageTypes: {
+            bludgeoning: "Bludgeoning",
+            slashing: "Slashing",
+            piercing: "Piercing",
+            "bludgeoning and piercing": "Bludgeoning and piercing",
+            "bludgeoning and slashing": "Bludgeoning and slashing",
+            "slashing and piercing": "Slashing and piercing"
+        },
+        /** Fly maneuverability (SRD). Used for NPC/monster movement. */
+        movementManeuverability: {
+            "": "—",
+            perfect: "Perfect",
+            good: "Good",
+            average: "Average",
+            poor: "Poor",
+            clumsy: "Clumsy"
+        },
         hitDice: {
             d4: "d4",
             d6: "d6",

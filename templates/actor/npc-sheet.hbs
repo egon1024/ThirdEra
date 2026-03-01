@@ -148,26 +148,35 @@
 
       {{!-- Scores & Saves Subtab --}}
       <div class="subtab {{#if (eq tabs.abilities 'scores')}}active{{/if}}" data-group="abilities" data-tab="scores">
+        {{!-- Ability Scores (grid aligned with PC: Base, Racial, Score, Mod, roller) --}}
         <div class="abilities-header">
           <h3 class="items-header">Ability Scores</h3>
         </div>
-        <ol class="abilities-list">
+        <div class="abilities-grid">
+          <span class="abilities-col-header"></span>
+          <span class="abilities-col-header">Base</span>
+          <span class="abilities-col-header">Racial</span>
+          <span class="abilities-col-header">Score</span>
+          <span class="abilities-col-header">Mod</span>
+          <span class="abilities-col-header"></span>
+
           {{#each system.abilities as |ability key|}}
-          <li class="ability flexrow">
-            <h4 class="ability-name">{{lookup @root.abilityScores key}}</h4>
-            <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}"
-              data-dtype="Number" placeholder="10" />
-            <span
-              class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isOverloaded}}dex-overloaded{{else}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}{{/if}}"
-              {{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}}title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by {{#if (eq @root.dexCap.reason 'both')}}armor and load{{else}}{{@root.dexCap.reason}}{{/if}} (Max Dex: {{#if (eq @root.dexCap.maxDex null)}}Unlimited{{else}}{{@root.dexCap.maxDex}}{{/if}})"
-              {{/if}}{{/if}}>{{signedNumber ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span
-                class="dex-cap-note {{#if @root.dexCap.isOverloaded}}dex-overloaded{{/if}}">(max)</span>{{/if}}{{/if}}</span>
-            <a class="ability-check rollable" data-action="abilityCheck" data-ability="{{key}}">
-              <i class="fas fa-dice-d20"></i>
-            </a>
-          </li>
+          <h4 class="ability-name">{{lookup @root.abilityScores key}}</h4>
+          <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"
+            placeholder="10" class="ability-base" />
+          <input type="text" name="system.abilities.{{key}}.racial" value="{{ability.racial}}" data-dtype="Number"
+            placeholder="0" class="ability-racial-input" title="{{localize 'THIRDERA.NPC.RacialBonusHint'}}" />
+          <span class="ability-effective">{{ability.effective}}</span>
+          <span
+            class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isOverloaded}}dex-overloaded{{else}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}{{/if}}"
+            {{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}}title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by {{#if (eq @root.dexCap.reason 'both')}}armor and load{{else}}{{@root.dexCap.reason}}{{/if}} (Max Dex: {{#if (eq @root.dexCap.maxDex null)}}Unlimited{{else}}{{@root.dexCap.maxDex}}{{/if}})"
+            {{/if}}{{/if}}>{{signedNumber ability.mod}}{{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}} <span
+              class="dex-cap-note {{#if @root.dexCap.isOverloaded}}dex-overloaded{{/if}}">(max)</span>{{/if}}{{/if}}</span>
+          <a class="ability-check" data-action="abilityCheck" data-ability="{{key}}">
+            <i class="fas fa-dice-d20"></i>
+          </a>
           {{/each}}
-        </ol>
+        </div>
 
         <div class="saves-header">
           <h3 class="items-header">Saving Throws</h3>
@@ -189,6 +198,16 @@
 
     {{!-- Combat Tab --}}
     <div class="tab combat {{#if (eq tabs.primary 'combat')}}active{{/if}}" data-group="primary" data-tab="combat">
+      {{!-- Subtab Navigation --}}
+      <nav class="subtabs tabs" data-group="combat">
+        <a class="item {{#if (eq tabs.combat 'combat')}}active{{/if}}" data-action="changeTab" data-group="combat"
+          data-tab="combat">{{localize 'THIRDERA.NPC.CombatSubtabCombat'}}</a>
+        <a class="item {{#if (eq tabs.combat 'statblock')}}active{{/if}}" data-action="changeTab" data-group="combat"
+          data-tab="statblock">{{localize 'THIRDERA.NPC.StatBlock'}}</a>
+      </nav>
+
+      {{!-- Combat Subtab: HP, Speed, Init, BAB, Attack grid, AC, Conditions --}}
+      <div class="subtab combat-subtab {{#if (eq tabs.combat 'combat')}}active{{/if}}" data-group="combat" data-tab="combat">
       <div class="combat-stats">
         <div class="stat-block">
           <label>HP</label>
@@ -213,9 +232,16 @@
         <div class="stat-block">
           <label>Speed</label>
           <div class="stat-value {{#if speedInfo.reduced}}value-modified{{/if}}" {{#if speedInfo.reduced}}title="{{#if speedInfo.overloaded}}Overloaded! Maximum load exceeded — cannot move.{{else}}Reduced from {{speedInfo.baseSpeed}} ft by {{speedInfo.reason}}{{/if}}"{{/if}}>
+            {{#if system.movementDisplayLine}}
+            <span class="{{#if speedInfo.overloaded}}speed-overloaded{{else}}{{#if speedInfo.reduced}}speed-reduced{{/if}}{{/if}}">{{system.movementDisplayLine}}</span>
+            {{#if speedInfo.reduced}}
+            <span class="modified-note {{#if speedInfo.overloaded}}speed-overloaded{{/if}}">(land reduced)</span>
+            {{/if}}
+            {{else}}
             <span class="{{#if speedInfo.overloaded}}speed-overloaded{{else}}{{#if speedInfo.reduced}}speed-reduced{{/if}}{{/if}}">{{system.attributes.speed.value}} ft</span>
             {{#if speedInfo.reduced}}
             <span class="modified-note {{#if speedInfo.overloaded}}speed-overloaded{{/if}}">({{#if speedInfo.overloaded}}overloaded{{else}}reduced{{/if}})</span>
+            {{/if}}
             {{/if}}
           </div>
         </div>
@@ -230,6 +256,26 @@
           </div>
         </div>
       </div>
+
+      {{!-- Compact natural attacks (roll only); edit on Stat block subtab --}}
+      {{#if system.statBlock.naturalAttacks}}
+      {{#if system.statBlock.naturalAttacks.length}}
+      <div class="natural-attacks-compact">
+        <h3 class="items-header">{{localize 'THIRDERA.NPC.NaturalAttacks'}}</h3>
+        <ol class="natural-attacks-compact-list items-list">
+          {{#each system.statBlock.naturalAttacks as |atk idx|}}
+          <li class="natural-attack-compact flexrow" data-natural-attack-index="{{idx}}">
+            <span class="natural-attack-compact-name">{{atk.name}}{{#unless atk.name}}—{{/unless}}</span>
+            <span class="natural-attack-compact-total" title="{{#each atk.attackBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber atk.attackBonus}}</span>
+            <a class="natural-attack-roll rollable" data-action="naturalAttackRollAttack" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.NPC.AttackRoll'}}"><i class="fas fa-dice-d20"></i></a>
+            <a class="natural-attack-roll rollable" data-action="naturalAttackRollDamage" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.NPC.DamageRoll'}}"><i class="fas fa-dice-d6"></i></a>
+          </li>
+          {{/each}}
+        </ol>
+        <p class="natural-attacks-compact-hint">{{localize 'THIRDERA.NPC.NaturalAttacksEditHint'}}</p>
+      </div>
+      {{/if}}
+      {{/if}}
 
       <div class="attack-section">
         <div class="attack-grid">
@@ -319,13 +365,126 @@
         <p class="conditions-empty">No conditions</p>
         {{/if}}
       </div>
+      </div>
+      {{!-- /Combat subtab --}}
+
+      {{!-- Stat block Subtab: Natural armor, Space, Reach, Movement, Natural attacks --}}
+      <div class="subtab statblock-subtab {{#if (eq tabs.combat 'statblock')}}active{{/if}}" data-group="combat" data-tab="statblock">
+      <div class="npc-stat-block-section">
+        <h3 class="items-header">{{localize 'THIRDERA.NPC.StatBlock'}}</h3>
+        <div class="stat-block-fields">
+          <div class="stat-block-field flexrow">
+            <label for="system.statBlock.naturalArmor" class="details-label">{{localize 'THIRDERA.NPC.NaturalArmor'}}</label>
+            <input type="number" name="system.statBlock.naturalArmor" value="{{#if system.statBlock}}{{system.statBlock.naturalArmor}}{{else}}0{{/if}}"
+              data-dtype="Number" class="details-input" min="0" step="1" />
+          </div>
+          <div class="stat-block-field flexrow">
+            <label for="system.statBlock.space" class="details-label">{{localize 'THIRDERA.NPC.Space'}}</label>
+            <input type="text" name="system.statBlock.space" value="{{#if system.statBlock}}{{system.statBlock.space}}{{else}}5 ft{{/if}}"
+              data-dtype="String" class="details-input" placeholder="5 ft" />
+          </div>
+          <div class="stat-block-field flexrow">
+            <label for="system.statBlock.reach" class="details-label">{{localize 'THIRDERA.NPC.Reach'}}</label>
+            <input type="text" name="system.statBlock.reach" value="{{#if system.statBlock}}{{system.statBlock.reach}}{{else}}5 ft{{/if}}"
+              data-dtype="String" class="details-input" placeholder="5 ft" />
+          </div>
+          <div class="stat-block-movement-block">
+            <h4 class="items-header">{{localize 'THIRDERA.NPC.Movement'}}</h4>
+            {{#if system.movementDisplayLine}}
+            <p class="stat-block-movement-display">{{system.movementDisplayLine}}</p>
+            {{/if}}
+            <div class="stat-block-movement-fields">
+              <div class="stat-block-field flexrow">
+                <label for="system.statBlock.movement.land" class="details-label">{{localize 'THIRDERA.NPC.MovementLand'}}</label>
+                <input type="number" name="system.statBlock.movement.land" value="{{#if system.statBlock.movement}}{{system.statBlock.movement.land}}{{else}}0{{/if}}"
+                  data-dtype="Number" class="details-input" min="0" step="1" placeholder="0 = use Speed above" title="{{localize 'THIRDERA.NPC.MovementLandHint'}}" />
+              </div>
+              <div class="stat-block-field flexrow">
+                <label for="system.statBlock.movement.fly" class="details-label">{{localize 'THIRDERA.NPC.MovementFly'}}</label>
+                <input type="number" name="system.statBlock.movement.fly" value="{{#if system.statBlock.movement}}{{system.statBlock.movement.fly}}{{else}}0{{/if}}"
+                  data-dtype="Number" class="details-input" min="0" step="1" />
+              </div>
+              <div class="stat-block-field flexrow">
+                <label for="system.statBlock.movement.flyManeuverability" class="details-label">{{localize 'THIRDERA.NPC.MovementFlyManeuverability'}}</label>
+                <select name="system.statBlock.movement.flyManeuverability" class="details-input">
+                  {{#each config.movementManeuverability as |label key|}}
+                  <option value="{{key}}" {{#if (eq key (lookup (lookup ../system.statBlock 'movement') 'flyManeuverability'))}}selected{{/if}}>{{label}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="stat-block-field flexrow">
+                <label for="system.statBlock.movement.swim" class="details-label">{{localize 'THIRDERA.NPC.MovementSwim'}}</label>
+                <input type="number" name="system.statBlock.movement.swim" value="{{#if system.statBlock.movement}}{{system.statBlock.movement.swim}}{{else}}0{{/if}}"
+                  data-dtype="Number" class="details-input" min="0" step="1" />
+              </div>
+              <div class="stat-block-field flexrow">
+                <label for="system.statBlock.movement.burrow" class="details-label">{{localize 'THIRDERA.NPC.MovementBurrow'}}</label>
+                <input type="number" name="system.statBlock.movement.burrow" value="{{#if system.statBlock.movement}}{{system.statBlock.movement.burrow}}{{else}}0{{/if}}"
+                  data-dtype="Number" class="details-input" min="0" step="1" />
+              </div>
+              <div class="stat-block-field flexrow">
+                <label for="system.statBlock.movement.climb" class="details-label">{{localize 'THIRDERA.NPC.MovementClimb'}}</label>
+                <input type="number" name="system.statBlock.movement.climb" value="{{#if system.statBlock.movement}}{{system.statBlock.movement.climb}}{{else}}0{{/if}}"
+                  data-dtype="Number" class="details-input" min="0" step="1" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="natural-attacks-block">
+          <h4 class="items-header">{{localize 'THIRDERA.NPC.NaturalAttacks'}}</h4>
+          {{#if system.statBlock.naturalAttacks}}
+          {{#if system.statBlock.naturalAttacks.length}}
+          <div class="natural-attacks-header">
+            <span class="natural-attack-col-header">{{localize 'THIRDERA.NPC.NaturalAttackName'}}</span>
+            <span class="natural-attack-col-header">{{localize 'THIRDERA.NPC.DamageDice'}}</span>
+            <span class="natural-attack-col-header">{{localize 'THIRDERA.NPC.DamageType'}}</span>
+            <span class="natural-attack-col-header">{{localize 'THIRDERA.NPC.Primary'}}</span>
+            <span class="natural-attack-col-header">{{localize 'THIRDERA.NPC.AttackReach'}}</span>
+            <span class="natural-attack-col-header">{{localize 'THIRDERA.NPC.AttackRoll'}}</span>
+          </div>
+          <ol class="natural-attacks-list items-list">
+            {{#each system.statBlock.naturalAttacks as |atk idx|}}
+            <li class="natural-attack" data-natural-attack-index="{{idx}}">
+              <input type="text" name="system.statBlock.naturalAttacks.{{idx}}.name" value="{{atk.name}}"
+                data-dtype="String" class="natural-attack-name" placeholder="—" title="{{localize 'THIRDERA.NPC.NaturalAttackName'}}" />
+              <input type="text" name="system.statBlock.naturalAttacks.{{idx}}.dice" value="{{atk.dice}}"
+                data-dtype="String" class="natural-attack-dice" placeholder="1d4" title="{{localize 'THIRDERA.NPC.DamageDice'}}" />
+              <select name="system.statBlock.naturalAttacks.{{idx}}.damageType" class="natural-attack-type">
+                {{#each @root.config.damageTypes as |label key|}}
+                <option value="{{key}}" {{#if (eq key atk.damageType)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+              <select name="system.statBlock.naturalAttacks.{{idx}}.primary" class="natural-attack-primary">
+                <option value="true" {{#if (eq atk.primary "true")}}selected{{/if}}>{{localize 'THIRDERA.NPC.Primary'}}</option>
+                <option value="false" {{#if (eq atk.primary "false")}}selected{{/if}}>{{localize 'THIRDERA.NPC.Secondary'}}</option>
+              </select>
+              <input type="text" name="system.statBlock.naturalAttacks.{{idx}}.reach" value="{{atk.reach}}"
+                data-dtype="String" class="natural-attack-reach" placeholder="—" title="{{localize 'THIRDERA.NPC.AttackReach'}} (optional)" />
+              <span class="natural-attack-total" title="{{#each atk.attackBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber atk.attackBonus}}</span>
+              <div class="natural-attack-actions-row">
+                <a class="natural-attack-roll rollable" data-action="naturalAttackRollAttack" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.NPC.AttackRoll'}}"><i class="fas fa-dice-d20"></i></a>
+                <a class="natural-attack-roll rollable" data-action="naturalAttackRollDamage" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.NPC.DamageRoll'}}"><i class="fas fa-dice-d6"></i></a>
+                <a class="natural-attack-delete" data-action="removeNaturalAttack" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.Remove'}}"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>
+            {{/each}}
+          </ol>
+          {{/if}}
+          {{/if}}
+          <div class="natural-attacks-add">
+            <a class="natural-attack-add-btn" data-action="addNaturalAttack" title="{{localize 'THIRDERA.NPC.AddNaturalAttack'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddNaturalAttack'}}</a>
+          </div>
+        </div>
+      </div>
+      </div>
+      {{!-- /Stat block subtab --}}
     </div>
 
     {{!-- Equipment Tab --}}
     <div class="tab equipment {{#if (eq tabs.primary 'equipment')}}active{{/if}}" data-group="primary" data-tab="equipment">
       <div class="items-header">
         <h3 class="items-header">Weapons</h3>
-        <a class="item-create" data-action="createItem" data-type="weapon"><i class="fas fa-plus"></i> Add Weapon</a>
       </div>
       <ol class="items-list">
         {{#each weapons as |item id|}}
@@ -354,7 +513,6 @@
 
       <div class="items-header">
         <h3 class="items-header">Armor</h3>
-        <a class="item-create" data-action="createItem" data-type="armor"><i class="fas fa-plus"></i> Add Armor</a>
       </div>
       <ol class="items-list">
         {{#each armor as |item id|}}
@@ -378,7 +536,6 @@
 
       <div class="items-header">
         <h3 class="items-header">Equipment</h3>
-        <a class="item-create" data-action="createItem" data-type="equipment"><i class="fas fa-plus"></i> Add Equipment</a>
       </div>
       <ol class="items-list">
         {{#each itemsNotInContainers.equipment as |item id|}}

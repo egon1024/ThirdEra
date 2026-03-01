@@ -187,7 +187,7 @@
             <input type="text" name="system.saves.{{key}}.base" value="{{save.base}}" data-dtype="Number"
               placeholder="0" />
             {{/if}}
-            <span class="save-total">{{signedNumber save.total}}</span>
+            <span class="save-total" title="{{#each save.totalBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber save.total}}</span>
             <a class="save-roll" data-action="saveRoll" data-save="{{key}}">
               <i class="fas fa-dice-d20"></i>
             </a>

@@ -60,6 +60,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             setCreatureType: ThirdEraActorSheet.#onSetCreatureType,
             addSubtype: ThirdEraActorSheet.#onAddSubtype,
             removeSubtype: ThirdEraActorSheet.#onRemoveSubtype,
+            addNaturalAttack: ThirdEraActorSheet.#onAddNaturalAttack,
+            removeNaturalAttack: ThirdEraActorSheet.#onRemoveNaturalAttack,
+            naturalAttackRollAttack: ThirdEraActorSheet.#onNaturalAttackRollAttack,
+            naturalAttackRollDamage: ThirdEraActorSheet.#onNaturalAttackRollDamage,
             openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor,
             configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
             editImage: ThirdEraActorSheet.#onEditImage,
@@ -127,20 +131,35 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         await super._preRender(context, options);
         const focused = this.element?.querySelector(":focus");
         this._focusedInputName = focused?.name || null;
+        // When the sheet re-renders (form submit, add/remove condition, etc.), preserve scroll position
+        // so the sheet does not jump to top. See docs/plans/sheet-ux-conventions.md.
+        // The scrollable element is .sheet-body .tab.active (overflow-y: auto), not .sheet-body (overflow: hidden).
+        if (this.rendered) {
+            const scrollContainer = this.element?.querySelector(".sheet-body .tab.active")
+                ?? this.element?.querySelector(".sheet-body");
+            this._formUpdateScrollRestore = scrollContainer ? scrollContainer.scrollTop : 0;
+        }
     }
 
     /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
         if (this._focusedInputName) {
-            const input = this.element.querySelector(`[name="${this._focusedInputName}"]`);
-            if (input) {
-                input.focus();
-            }
+            const input = this.element?.querySelector(`[name="${CSS.escape(this._focusedInputName)}"]`);
+            if (input) input.focus();
             this._focusedInputName = null;
         }
+        // Restore scroll after form-driven re-render (submitOnChange). Do this synchronously so the
+        // next paint shows the correct position and we avoid a visible flicker (jump-to-top then back).
+        // Target .sheet-body .tab.active (the element that actually scrolls for both character and NPC sheets).
+        if (this._formUpdateScrollRestore != null) {
+            const scrollTop = this._formUpdateScrollRestore;
+            this._formUpdateScrollRestore = null;
+            const scrollContainer = this.element?.querySelector(".sheet-body .tab.active")
+                ?? this.element?.querySelector(".sheet-body");
+            if (scrollContainer) scrollContainer.scrollTop = scrollTop;
+        }
         // Restore scroll position after Cast/delete in Spells tab (prevents jumping to top).
-        // Defer with double rAF so the scrollable container has been laid out before we set scrollTop.
         if (this._preservedSpellScrollTop != null) {
             const scrollTop = this._preservedSpellScrollTop;
             this._preservedSpellScrollTop = null;
@@ -380,13 +399,16 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             weaponHand: CONFIG.THIRDERA?.weaponHand || {},
             hitDice: CONFIG.THIRDERA?.hitDice || {},
             babProgressions: CONFIG.THIRDERA?.babProgressions || {},
-            saveProgressions: CONFIG.THIRDERA?.saveProgressions || {}
+            saveProgressions: CONFIG.THIRDERA?.saveProgressions || {},
+            damageTypes: CONFIG.THIRDERA?.damageTypes || {},
+            movementManeuverability: CONFIG.THIRDERA?.movementManeuverability || {}
         };
 
         // Ensure tabs state exists (TABS.primary has no initial in Foundry, so default to description)
         if (!this.tabGroups.abilities) this.tabGroups.abilities = (actor.type === "npc" ? "details" : "scores");
         if (!this.tabGroups.spells) this.tabGroups.spells = "known";
         if (!this.tabGroups.primary) this.tabGroups.primary = "description";
+        if (actor.type === "npc" && !this.tabGroups.combat) this.tabGroups.combat = "combat";
         const tabs = this.tabGroups;
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
@@ -3898,6 +3920,68 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const current = this.actor.system.details?.subtypeUuids ?? [];
         const next = current.filter((u) => (u ?? "").trim() !== uuid);
         await this.actor.update({ "system.details.subtypeUuids": next });
+    }
+
+    /**
+     * Add a natural attack to the NPC stat block.
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The add button
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddNaturalAttack(event, target) {
+        if (this.actor.type !== "npc") return;
+        const current = this.actor.system.statBlock?.naturalAttacks ?? [];
+        const newEntry = { name: "", dice: "1d4", damageType: "bludgeoning", primary: "true", reach: "" };
+        await this.actor.update({ "system.statBlock.naturalAttacks": [...current, newEntry] });
+    }
+
+    /**
+     * Remove a natural attack by index.
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The remove button
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveNaturalAttack(event, target) {
+        if (this.actor.type !== "npc") return;
+        const row = target.closest("[data-natural-attack-index]");
+        const idx = row?.dataset?.naturalAttackIndex;
+        if (idx === undefined) return;
+        const i = parseInt(idx, 10);
+        if (Number.isNaN(i)) return;
+        const current = this.actor.system.statBlock?.naturalAttacks ?? [];
+        if (i < 0 || i >= current.length) return;
+        const next = current.filter((_, j) => j !== i);
+        await this.actor.update({ "system.statBlock.naturalAttacks": next });
+    }
+
+    /**
+     * Roll natural attack (attack roll).
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The roll button or row
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onNaturalAttackRollAttack(event, target) {
+        const row = target.closest("[data-natural-attack-index]");
+        const idx = row?.dataset?.naturalAttackIndex;
+        if (idx === undefined) return;
+        const i = parseInt(idx, 10);
+        if (Number.isNaN(i)) return;
+        await this.actor.rollNaturalAttack(i);
+    }
+
+    /**
+     * Roll natural attack damage.
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The roll button or row
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onNaturalAttackRollDamage(event, target) {
+        const row = target.closest("[data-natural-attack-index]");
+        const idx = row?.dataset?.naturalAttackIndex;
+        if (idx === undefined) return;
+        const i = parseInt(idx, 10);
+        if (Number.isNaN(i)) return;
+        await this.actor.rollNaturalDamage(i);
     }
 
     /**

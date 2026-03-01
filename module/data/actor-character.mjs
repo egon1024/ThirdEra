@@ -642,10 +642,20 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         this.saves.fort.total += conditionMods.saves.fort;
         this.saves.ref.total += conditionMods.saves.ref;
         this.saves.will.total += conditionMods.saves.will;
+        const saveAbilityKey = { fort: "con", ref: "dex", will: "wis" };
         for (const save of ["fort", "ref", "will"]) {
             if (conditionMods.saveBreakdown[save].length) {
                 this.saves[save].breakdown = [...(this.saves[save].breakdown || []), ...conditionMods.saveBreakdown[save]];
             }
+            // Build totalBreakdown for tooltip: base (class) + ability + conditions
+            const abilityKey = saveAbilityKey[save];
+            const abilityLabel = CONFIG.THIRDERA?.AbilityScores?.[abilityKey] ?? abilityKey;
+            const abilityEntry = { label: abilityLabel, value: this.abilities[abilityKey].mod };
+            const condBreakdown = conditionMods.saveBreakdown[save];
+            const baseLen = this.saves[save].breakdown.length - condBreakdown.length;
+            const baseParts = this.saves[save].breakdown.slice(0, baseLen);
+            const condParts = this.saves[save].breakdown.slice(baseLen);
+            this.saves[save].totalBreakdown = [...baseParts, abilityEntry, ...condParts];
         }
 
         // Calculate grapple (BAB + STR mod + size modifier)

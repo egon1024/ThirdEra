@@ -148,6 +148,76 @@ export class ThirdEraActor extends Actor {
     }
 
     /**
+     * Roll a natural attack (NPC/monster stat block). Uses derived attack bonus (primary = melee total, secondary = melee total − 5).
+     * @param {number} index - Index into system.statBlock.naturalAttacks
+     * @returns {Promise<Roll|null>}
+     */
+    async rollNaturalAttack(index) {
+        if (this.type !== "npc") {
+            ui.notifications.warn("Natural attacks are only available on NPCs.");
+            return null;
+        }
+        const attacks = this.system.statBlock?.naturalAttacks;
+        if (!Array.isArray(attacks) || index < 0 || index >= attacks.length) {
+            ui.notifications.warn("Invalid natural attack.");
+            return null;
+        }
+        const atk = attacks[index];
+        const bonus = atk.attackBonus ?? 0;
+        const roll = await new Roll(`1d20 + ${bonus}`).roll();
+        const name = (atk.name || "").trim() || game.i18n.localize("THIRDERA.NPC.NaturalAttacks");
+        roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            flavor: `${name} (${atk.primary === "true" ? game.i18n.localize("THIRDERA.NPC.Primary") : game.i18n.localize("THIRDERA.NPC.Secondary")})`
+        });
+        return roll;
+    }
+
+    /**
+     * Roll natural attack damage (NPC/monster stat block). Uses derived formula (primary = full Str, secondary = half Str).
+     * @param {number} index - Index into system.statBlock.naturalAttacks
+     * @returns {Promise<Roll|null>}
+     */
+    async rollNaturalDamage(index) {
+        if (this.type !== "npc") {
+            ui.notifications.warn("Natural attacks are only available on NPCs.");
+            return null;
+        }
+        const attacks = this.system.statBlock?.naturalAttacks;
+        if (!Array.isArray(attacks) || index < 0 || index >= attacks.length) {
+            ui.notifications.warn("Invalid natural attack.");
+            return null;
+        }
+        const atk = attacks[index];
+        const dice = (atk.dice || "").trim() || "1d4";
+        const mod = atk.damageMod ?? 0;
+        const formula = mod >= 0 ? `${dice} + ${mod}` : `${dice} - ${Math.abs(mod)}`;
+        const roll = await new Roll(formula).roll();
+        const name = (atk.name || "").trim() || game.i18n.localize("THIRDERA.NPC.NaturalAttacks");
+        const typeLabel = atk.damageType ? ` ${atk.damageType}` : "";
+        const primaryOrSecondary = atk.primary === "true"
+            ? game.i18n.localize("THIRDERA.NPC.Primary")
+            : game.i18n.localize("THIRDERA.NPC.Secondary");
+        const strLabel = mod >= 0 ? `+${mod}` : `−${Math.abs(mod)}`;
+        const breakdown = game.i18n.format("THIRDERA.NPC.DamageFormulaBreakdown", {
+            formula,
+            dice,
+            strMod: strLabel,
+            primaryOrSecondary
+        });
+        const minimumOne = roll.total < 1;
+        const rollToSend = minimumOne ? await new Roll("1").roll() : roll;
+        const flavorSuffix = minimumOne
+            ? ` — ${game.i18n.localize("THIRDERA.NPC.DamageMinimum1")} (${game.i18n.localize("THIRDERA.NPC.Rolled")} ${roll.total})`
+            : "";
+        rollToSend.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            flavor: `${name} Damage${typeLabel}: ${breakdown}${flavorSuffix}`
+        });
+        return rollToSend;
+    }
+
+    /**
      * Cast a spell: increment cast count and post a chat message with Save DC breakdown and spell resistance.
      * Used by the sheet Cast button and (Phase 2) by hotbar macros.
      * @param {Item} spellItem       The spell item to cast (must be type "spell" on this actor)
