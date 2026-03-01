@@ -222,6 +222,20 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
         }
 
+        // Subtype add-select: add on change and reset, prevent form submit from seeing this control
+        const subtypeAddSelect = this.element.querySelector(".subtype-add-select");
+        if (subtypeAddSelect && this.actor.type === "npc") {
+            subtypeAddSelect.addEventListener("change", async (event) => {
+                event.stopPropagation();
+                const uuid = event.target.value?.trim();
+                if (!uuid) return;
+                const current = this.actor.system.details?.subtypeUuids ?? [];
+                if (current.includes(uuid)) return;
+                await this.actor.update({ "system.details.subtypeUuids": [...current, uuid] });
+                event.target.value = "";
+            });
+        }
+
         // Context menu on race name
         new foundry.applications.ux.ContextMenu.implementation(this.element, ".race-name[data-action='openRace']", [
             {
@@ -359,6 +373,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const config = {
             abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
             saves: CONFIG.THIRDERA?.Saves || {},
+            alignments: CONFIG.THIRDERA?.alignments || {},
             armorTypes: CONFIG.THIRDERA?.armorTypes || {},
             sizes: CONFIG.THIRDERA?.sizes || {},
             weaponHandedness: CONFIG.THIRDERA?.weaponHandedness || {},
@@ -369,7 +384,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         };
 
         // Ensure tabs state exists (TABS.primary has no initial in Foundry, so default to description)
-        if (!this.tabGroups.abilities) this.tabGroups.abilities = "scores";
+        if (!this.tabGroups.abilities) this.tabGroups.abilities = (actor.type === "npc" ? "details" : "scores");
         if (!this.tabGroups.spells) this.tabGroups.spells = "known";
         if (!this.tabGroups.primary) this.tabGroups.primary = "description";
         const tabs = this.tabGroups;

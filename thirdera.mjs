@@ -139,6 +139,18 @@ Hooks.once("init", async function () {
             heavy: "Heavy Armor",
             shield: "Shield"
         },
+        alignments: {
+            "": "—",
+            "Lawful Good": "Lawful Good",
+            "Neutral Good": "Neutral Good",
+            "Chaotic Good": "Chaotic Good",
+            "Lawful Neutral": "Lawful Neutral",
+            "True Neutral": "True Neutral",
+            "Chaotic Neutral": "Chaotic Neutral",
+            "Lawful Evil": "Lawful Evil",
+            "Neutral Evil": "Neutral Evil",
+            "Chaotic Evil": "Chaotic Evil"
+        },
         sizes: {
             Fine: "Fine",
             Diminutive: "Diminutive",
