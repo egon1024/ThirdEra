@@ -57,7 +57,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts,
             addCondition: ThirdEraActorSheet.#onAddCondition,
             removeCondition: ThirdEraActorSheet.#onRemoveCondition,
+            setCreatureType: ThirdEraActorSheet.#onSetCreatureType,
+            addSubtype: ThirdEraActorSheet.#onAddSubtype,
+            removeSubtype: ThirdEraActorSheet.#onRemoveSubtype,
+            addNaturalAttack: ThirdEraActorSheet.#onAddNaturalAttack,
+            removeNaturalAttack: ThirdEraActorSheet.#onRemoveNaturalAttack,
+            naturalAttackRollAttack: ThirdEraActorSheet.#onNaturalAttackRollAttack,
+            naturalAttackRollDamage: ThirdEraActorSheet.#onNaturalAttackRollDamage,
             openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor,
+            openSpecialAbilitiesEditor: ThirdEraActorSheet.#onOpenSpecialAbilitiesEditor,
+            addSense: ThirdEraActorSheet.#onAddSense,
+            removeSense: ThirdEraActorSheet.#onRemoveSense,
             configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
             editImage: ThirdEraActorSheet.#onEditImage,
             editTokenImage: ThirdEraActorSheet.#onEditTokenImage
@@ -124,20 +134,35 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         await super._preRender(context, options);
         const focused = this.element?.querySelector(":focus");
         this._focusedInputName = focused?.name || null;
+        // When the sheet re-renders (form submit, add/remove condition, etc.), preserve scroll position
+        // so the sheet does not jump to top. See docs/plans/sheet-ux-conventions.md.
+        // The scrollable element is .sheet-body .tab.active (overflow-y: auto), not .sheet-body (overflow: hidden).
+        if (this.rendered) {
+            const scrollContainer = this.element?.querySelector(".sheet-body .tab.active")
+                ?? this.element?.querySelector(".sheet-body");
+            this._formUpdateScrollRestore = scrollContainer ? scrollContainer.scrollTop : 0;
+        }
     }
 
     /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
         if (this._focusedInputName) {
-            const input = this.element.querySelector(`[name="${this._focusedInputName}"]`);
-            if (input) {
-                input.focus();
-            }
+            const input = this.element?.querySelector(`[name="${CSS.escape(this._focusedInputName)}"]`);
+            if (input) input.focus();
             this._focusedInputName = null;
         }
+        // Restore scroll after form-driven re-render (submitOnChange). Do this synchronously so the
+        // next paint shows the correct position and we avoid a visible flicker (jump-to-top then back).
+        // Target .sheet-body .tab.active (the element that actually scrolls for both character and NPC sheets).
+        if (this._formUpdateScrollRestore != null) {
+            const scrollTop = this._formUpdateScrollRestore;
+            this._formUpdateScrollRestore = null;
+            const scrollContainer = this.element?.querySelector(".sheet-body .tab.active")
+                ?? this.element?.querySelector(".sheet-body");
+            if (scrollContainer) scrollContainer.scrollTop = scrollTop;
+        }
         // Restore scroll position after Cast/delete in Spells tab (prevents jumping to top).
-        // Defer with double rAF so the scrollable container has been laid out before we set scrollTop.
         if (this._preservedSpellScrollTop != null) {
             const scrollTop = this._preservedSpellScrollTop;
             this._preservedSpellScrollTop = null;
@@ -216,6 +241,20 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             headerHpInput.addEventListener("change", async (event) => {
                 const value = Math.max(0, parseInt(event.target.value) || 0);
                 await this.actor.update({ "system.attributes.hp.value": value });
+            });
+        }
+
+        // Subtype add-select: add on change and reset, prevent form submit from seeing this control
+        const subtypeAddSelect = this.element.querySelector(".subtype-add-select");
+        if (subtypeAddSelect && this.actor.type === "npc") {
+            subtypeAddSelect.addEventListener("change", async (event) => {
+                event.stopPropagation();
+                const uuid = event.target.value?.trim();
+                if (!uuid) return;
+                const current = this.actor.system.details?.subtypeUuids ?? [];
+                if (current.includes(uuid)) return;
+                await this.actor.update({ "system.details.subtypeUuids": [...current, uuid] });
+                event.target.value = "";
             });
         }
 
@@ -356,19 +395,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const config = {
             abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
             saves: CONFIG.THIRDERA?.Saves || {},
+            alignments: CONFIG.THIRDERA?.alignments || {},
             armorTypes: CONFIG.THIRDERA?.armorTypes || {},
             sizes: CONFIG.THIRDERA?.sizes || {},
             weaponHandedness: CONFIG.THIRDERA?.weaponHandedness || {},
             weaponHand: CONFIG.THIRDERA?.weaponHand || {},
             hitDice: CONFIG.THIRDERA?.hitDice || {},
             babProgressions: CONFIG.THIRDERA?.babProgressions || {},
-            saveProgressions: CONFIG.THIRDERA?.saveProgressions || {}
+            saveProgressions: CONFIG.THIRDERA?.saveProgressions || {},
+            damageTypes: CONFIG.THIRDERA?.damageTypes || {},
+            movementManeuverability: CONFIG.THIRDERA?.movementManeuverability || {},
+            senseTypes: CONFIG.THIRDERA?.senseTypes || {},
+            treasure: CONFIG.THIRDERA?.treasure || {}
         };
 
         // Ensure tabs state exists (TABS.primary has no initial in Foundry, so default to description)
-        if (!this.tabGroups.abilities) this.tabGroups.abilities = "scores";
+        if (!this.tabGroups.abilities) this.tabGroups.abilities = (actor.type === "npc" ? "details" : "scores");
         if (!this.tabGroups.spells) this.tabGroups.spells = "known";
         if (!this.tabGroups.primary) this.tabGroups.primary = "description";
+        if (actor.type === "npc" && !this.tabGroups.combat) this.tabGroups.combat = "combat";
         const tabs = this.tabGroups;
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
@@ -510,10 +555,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             };
         });
 
-        // Enrich HTML biography
+        // Enrich HTML biography (and NPC stat block special abilities)
         const enriched = {
             biography: await foundry.applications.ux.TextEditor.enrichHTML(systemData.biography, { async: true, relativeTo: actor })
         };
+        if (actor.type === "npc") {
+            const specialAbilitiesHtml = systemData.statBlock?.specialAbilities ?? "";
+            enriched.specialAbilities = await foundry.applications.ux.TextEditor.enrichHTML(specialAbilitiesHtml, { async: true, relativeTo: actor });
+        }
 
         // Compute HP status for header colorization
         // Compute HP status for header colorization
@@ -977,6 +1026,44 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             };
         });
 
+        // NPC-only: creature type and subtype choices + resolved (for dropdown and display)
+        let creatureTypeChoices = [];
+        let creatureTypeResolved = null;
+        let subtypeChoices = [];
+        let selectedSubtypes = [];
+        if (actor.type === "npc") {
+            const typesPack = game.packs.get("thirdera.thirdera_creature_types");
+            const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
+            const typesFromPack = typesPack ? await typesPack.getDocuments() : [];
+            const typesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "creatureType");
+            const subtypesFromPack = subtypesPack ? await subtypesPack.getDocuments() : [];
+            const subtypesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "subtype");
+            const allTypes = [...typesFromPack, ...typesFromWorld];
+            const allSubtypes = [...subtypesFromPack, ...subtypesFromWorld];
+            const typeSort = (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
+            creatureTypeChoices = allTypes.map((doc) => ({ uuid: doc.uuid, name: doc.name })).sort((a, b) => typeSort({ name: a.name }, { name: b.name }));
+            subtypeChoices = allSubtypes.map((doc) => ({ uuid: doc.uuid, name: doc.name })).sort((a, b) => typeSort({ name: a.name }, { name: b.name }));
+            const creatureTypeUuid = (systemData.details?.creatureTypeUuid ?? "").trim();
+            if (creatureTypeUuid) {
+                try {
+                    creatureTypeResolved = await fromUuid(creatureTypeUuid);
+                } catch (_e) {
+                    creatureTypeResolved = null;
+                }
+            }
+            const subtypeUuids = systemData.details?.subtypeUuids ?? [];
+            for (const uuid of subtypeUuids) {
+                const u = (uuid ?? "").trim();
+                if (!u) continue;
+                try {
+                    const doc = await fromUuid(u);
+                    if (doc) selectedSubtypes.push({ uuid: doc.uuid, name: doc.name });
+                } catch (_e) {
+                    // skip invalid uuid
+                }
+            }
+        }
+
         return {
             ...context,
             actor,
@@ -1028,7 +1115,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 : "Reset prepared",
             resetPreparedCountsHint: game.i18n.has("THIRDERA.Spells.ResetPreparedCountsHint")
                 ? game.i18n.localize("THIRDERA.Spells.ResetPreparedCountsHint")
-                : "Set all spell prepared counts to 0 (e.g. after rest, before preparing spells again)."
+                : "Set all spell prepared counts to 0 (e.g. after rest, before preparing spells again).",
+            // NPC-only: creature type and subtypes
+            creatureTypeChoices,
+            creatureTypeResolved,
+            subtypeChoices,
+            selectedSubtypes,
+            enriched
         };
     }
 
@@ -1220,6 +1313,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 return false;
             }
             return false;
+        }
+
+        // Creature type or subtype dropped on NPC: set classification by UUID (do not embed the item)
+        if (this.actor.type === "npc") {
+            const uuid = item.uuid ?? "";
+            if (item.type === "creatureType" && uuid) {
+                event.preventDefault?.();
+                event.stopPropagation?.();
+                await this.actor.update({ "system.details.creatureTypeUuid": uuid });
+                return false;
+            }
+            if (item.type === "subtype" && uuid) {
+                event.preventDefault?.();
+                event.stopPropagation?.();
+                const current = this.actor.system.details?.subtypeUuids ?? [];
+                if (current.includes(uuid)) {
+                    ui.notifications.info(`${item.name} is already added.`);
+                    return false;
+                }
+                await this.actor.update({ "system.details.subtypeUuids": [...current, uuid] });
+                return false;
+            }
         }
 
         // Domain dropped on character: add to spellcasting class (character chooses domains)
@@ -3772,6 +3887,114 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
+     * Set NPC creature type from dropdown (value = document UUID).
+     * @param {PointerEvent} event   The change/click event
+     * @param {HTMLElement} target   The select element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onSetCreatureType(event, target) {
+        if (this.actor.type !== "npc") return;
+        const select = target.tagName === "SELECT" ? target : target.closest("select");
+        const uuid = select?.value?.trim() ?? "";
+        await this.actor.update({ "system.details.creatureTypeUuid": uuid || "" });
+    }
+
+    /**
+     * Add a subtype to the NPC from dropdown (value = document UUID).
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The button or its container
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddSubtype(event, target) {
+        if (this.actor.type !== "npc") return;
+        const sheetEl = target.closest(".thirdera.actor");
+        const select = sheetEl?.querySelector(".subtype-add-select");
+        const uuid = select?.value?.trim();
+        if (!uuid) return;
+        const current = this.actor.system.details?.subtypeUuids ?? [];
+        if (current.includes(uuid)) return;
+        await this.actor.update({ "system.details.subtypeUuids": [...current, uuid] });
+    }
+
+    /**
+     * Remove a subtype from the NPC (data-subtype-uuid on the row).
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The remove button
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveSubtype(event, target) {
+        if (this.actor.type !== "npc") return;
+        const row = target.closest("[data-subtype-uuid]");
+        const uuid = row?.dataset?.subtypeUuid?.trim();
+        if (!uuid) return;
+        const current = this.actor.system.details?.subtypeUuids ?? [];
+        const next = current.filter((u) => (u ?? "").trim() !== uuid);
+        await this.actor.update({ "system.details.subtypeUuids": next });
+    }
+
+    /**
+     * Add a natural attack to the NPC stat block.
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The add button
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddNaturalAttack(event, target) {
+        if (this.actor.type !== "npc") return;
+        const current = this.actor.system.statBlock?.naturalAttacks ?? [];
+        const newEntry = { name: "", dice: "1d4", damageType: "bludgeoning", primary: "true", reach: "" };
+        await this.actor.update({ "system.statBlock.naturalAttacks": [...current, newEntry] });
+    }
+
+    /**
+     * Remove a natural attack by index.
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The remove button
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveNaturalAttack(event, target) {
+        if (this.actor.type !== "npc") return;
+        const row = target.closest("[data-natural-attack-index]");
+        const idx = row?.dataset?.naturalAttackIndex;
+        if (idx === undefined) return;
+        const i = parseInt(idx, 10);
+        if (Number.isNaN(i)) return;
+        const current = this.actor.system.statBlock?.naturalAttacks ?? [];
+        if (i < 0 || i >= current.length) return;
+        const next = current.filter((_, j) => j !== i);
+        await this.actor.update({ "system.statBlock.naturalAttacks": next });
+    }
+
+    /**
+     * Roll natural attack (attack roll).
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The roll button or row
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onNaturalAttackRollAttack(event, target) {
+        const row = target.closest("[data-natural-attack-index]");
+        const idx = row?.dataset?.naturalAttackIndex;
+        if (idx === undefined) return;
+        const i = parseInt(idx, 10);
+        if (Number.isNaN(i)) return;
+        await this.actor.rollNaturalAttack(i);
+    }
+
+    /**
+     * Roll natural attack damage.
+     * @param {PointerEvent} event   The click event
+     * @param {HTMLElement} target   The roll button or row
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onNaturalAttackRollDamage(event, target) {
+        const row = target.closest("[data-natural-attack-index]");
+        const idx = row?.dataset?.naturalAttackIndex;
+        if (idx === undefined) return;
+        const i = parseInt(idx, 10);
+        if (Number.isNaN(i)) return;
+        await this.actor.rollNaturalDamage(i);
+    }
+
+    /**
      * Open the biography prose-mirror in edit mode (external Edit button; built-in toggle is hidden).
      * Toggles .description-editing on the wrapper so CSS can hide the view div and show the editor.
      * @param {PointerEvent} event   The originating click event
@@ -3789,6 +4012,56 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         };
         pm.addEventListener("close", onClose, { once: true });
         if (typeof pm.open !== "undefined") pm.open = true;
+    }
+
+    /**
+     * Open the NPC stat block "Other special abilities" prose-mirror in edit mode (Phase E).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static #onOpenSpecialAbilitiesEditor(event, target) {
+        if (this.actor.type !== "npc") return;
+        const box = this.element?.querySelector?.(".special-abilities-editor-box");
+        const pm = box?.querySelector?.("prose-mirror[name='system.statBlock.specialAbilities']");
+        if (!box || !pm) return;
+        box.classList.add("special-abilities-editing");
+        const onClose = () => {
+            box.classList.remove("special-abilities-editing");
+            pm.removeEventListener("close", onClose);
+        };
+        pm.addEventListener("close", onClose, { once: true });
+        if (typeof pm.open !== "undefined") pm.open = true;
+    }
+
+    /**
+     * Add a sense entry to the NPC stat block (Phase E).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddSense(event, target) {
+        if (this.actor.type !== "npc") return;
+        const senses = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
+        senses.push({ type: "darkvision", range: "" });
+        await this.actor.update({ "system.statBlock.senses": senses });
+    }
+
+    /**
+     * Remove a sense entry from the NPC stat block (Phase E).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveSense(event, target) {
+        if (this.actor.type !== "npc") return;
+        const row = target?.closest?.("[data-sense-index]");
+        const idx = parseInt(row?.dataset?.senseIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const senses = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
+        if (idx < 0 || idx >= senses.length) return;
+        senses.splice(idx, 1);
+        await this.actor.update({ "system.statBlock.senses": senses });
     }
 
     /**

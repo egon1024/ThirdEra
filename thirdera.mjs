@@ -18,6 +18,8 @@ import { FeatureData } from "./module/data/item-feature.mjs";
 import { DomainData } from "./module/data/item-domain.mjs";
 import { SchoolData } from "./module/data/item-school.mjs";
 import { ConditionData } from "./module/data/item-condition.mjs";
+import { CreatureTypeData } from "./module/data/item-creature-type.mjs";
+import { SubtypeData } from "./module/data/item-subtype.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -137,6 +139,18 @@ Hooks.once("init", async function () {
             heavy: "Heavy Armor",
             shield: "Shield"
         },
+        alignments: {
+            "": "—",
+            "Lawful Good": "Lawful Good",
+            "Neutral Good": "Neutral Good",
+            "Chaotic Good": "Chaotic Good",
+            "Lawful Neutral": "Lawful Neutral",
+            "True Neutral": "True Neutral",
+            "Chaotic Neutral": "Chaotic Neutral",
+            "Lawful Evil": "Lawful Evil",
+            "Neutral Evil": "Neutral Evil",
+            "Chaotic Evil": "Chaotic Evil"
+        },
         sizes: {
             Fine: "Fine",
             Diminutive: "Diminutive",
@@ -168,6 +182,40 @@ Hooks.once("init", async function () {
             Huge: -2,
             Gargantuan: -4,
             Colossal: -8
+        },
+        /** Damage types for natural attacks (and weapon display). */
+        damageTypes: {
+            bludgeoning: "Bludgeoning",
+            slashing: "Slashing",
+            piercing: "Piercing",
+            "bludgeoning and piercing": "Bludgeoning and piercing",
+            "bludgeoning and slashing": "Bludgeoning and slashing",
+            "slashing and piercing": "Slashing and piercing"
+        },
+        /** Fly maneuverability (SRD). Used for NPC/monster movement. */
+        movementManeuverability: {
+            "": "—",
+            perfect: "Perfect",
+            good: "Good",
+            average: "Average",
+            poor: "Poor",
+            clumsy: "Clumsy"
+        },
+        /** Sense types for NPC/monster stat block (Phase E). */
+        senseTypes: {
+            darkvision: "Darkvision",
+            lowLight: "Low-light vision",
+            scent: "Scent",
+            blindsight: "Blindsight",
+            tremorsense: "Tremorsense"
+        },
+        /** Treasure presets for NPC/monster reference (Phase F). Custom text allowed via sheet. */
+        treasure: {
+            "": "—",
+            "None": "None",
+            "Standard": "Standard",
+            "Double": "Double",
+            "Triple": "Triple"
         },
         hitDice: {
             d4: "d4",
@@ -301,7 +349,9 @@ Hooks.once("init", async function () {
         class: ClassData,
         domain: DomainData,
         school: SchoolData,
-        condition: ConditionData
+        condition: ConditionData,
+        creatureType: CreatureTypeData,
+        subtype: SubtypeData
     };
 
     // Register item type labels for the creation menu
@@ -317,7 +367,9 @@ Hooks.once("init", async function () {
         class: "THIRDERA.TYPES.Item.class",
         domain: "THIRDERA.TYPES.Item.domain",
         school: "THIRDERA.TYPES.Item.school",
-        condition: "THIRDERA.TYPES.Item.condition"
+        condition: "THIRDERA.TYPES.Item.condition",
+        creatureType: "THIRDERA.TYPES.Item.creatureType",
+        subtype: "THIRDERA.TYPES.Item.subtype"
     };
 
     // Register sheet application classes

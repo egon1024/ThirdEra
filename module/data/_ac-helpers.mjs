@@ -67,6 +67,9 @@ export function computeAC(system, conditionModifiers = null) {
     const misc = ac.misc ?? 0;
     const conditionAc = conditionModifiers?.ac ?? 0;
 
+    // Natural armor (NPC/monster stat block only)
+    const naturalArmor = (system.statBlock && typeof system.statBlock.naturalArmor === "number") ? system.statBlock.naturalArmor : 0;
+
     // Gather equipped armor items (bonuses only; maxDex already applied to dex.mod)
     let armorBonus = 0;
     let shieldBonus = 0;
@@ -96,14 +99,17 @@ export function computeAC(system, conditionModifiers = null) {
     // Flat-footed: lose positive dex bonus (negative dex still applies)
     const flatFootedDex = Math.min(dexMod, 0);
 
-    // Calculate totals (include condition modifier)
-    ac.value = 10 + armorBonus + shieldBonus + dexMod + sizeMod + misc + conditionAc;
+    // Calculate totals (include natural armor and condition modifier)
+    ac.value = 10 + naturalArmor + armorBonus + shieldBonus + dexMod + sizeMod + misc + conditionAc;
     ac.touch = 10 + dexMod + sizeMod + misc + conditionAc;
-    ac.flatFooted = 10 + armorBonus + shieldBonus + flatFootedDex + sizeMod + misc + conditionAc;
+    ac.flatFooted = 10 + naturalArmor + armorBonus + shieldBonus + flatFootedDex + sizeMod + misc + conditionAc;
 
-    // Build breakdown for display (modifiers only; base 10 shown separately in template)
+    // Build breakdown for display (modifiers only; base 10 shown separately in template). Order: Natural, Armor, Shield, Dex, Size, Misc, condition.
     const breakdown = [];
 
+    if (naturalArmor !== 0) {
+        breakdown.push({ label: "Natural", value: naturalArmor });
+    }
     if (armorBonus !== 0) {
         breakdown.push({ label: armorName, value: armorBonus });
     }

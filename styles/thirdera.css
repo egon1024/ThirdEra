@@ -354,6 +354,59 @@
   border-color: var(--color-npc-border);
 }
 
+.thirdera .npc-subtypes-row {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.thirdera .npc-subtypes-row .resource-label {
+  flex: 0 0 auto;
+  margin-right: 6px;
+}
+
+.thirdera .subtypes-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.thirdera .subtype-add-select {
+  min-width: 140px;
+}
+
+.thirdera .subtypes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.thirdera .subtype-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-divider);
+  border-radius: 4px;
+  font-size: var(--font-size-note);
+}
+
+.thirdera .subtype-tag .subtype-remove {
+  opacity: 0.7;
+}
+
+.thirdera .subtype-tag .subtype-remove:hover {
+  opacity: 1;
+  color: var(--color-text-primary);
+}
+
 .thirdera .sheet-header .header-fields {
   flex: 1;
   display: flex;
@@ -763,6 +816,18 @@
   width: auto;
   min-width: 10ch;
 }
+.thirdera .details-subtab .details-input.cr-input,
+.thirdera .sheet-header--npc .header-cr-input {
+  width: 8ch;
+  min-width: 8ch;
+  max-width: 8ch;
+  box-sizing: border-box;
+}
+.thirdera .sheet-header--npc .header-size-display,
+.thirdera .sheet-header--npc .header-cr-display {
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+}
 .thirdera .details-subtab .details-input.experience-current {
   width: 8ch;
   min-width: 8ch;
@@ -878,6 +943,39 @@
 }
 
 .thirdera .description-editor-box.description-editing prose-mirror[name="system.biography"] {
+  display: flex !important;
+  visibility: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* NPC Stat block: Other special abilities editor (Phase E) — same show/hide pattern as description */
+.thirdera .special-abilities-editor-box:not(.special-abilities-editing) prose-mirror[name="system.statBlock.specialAbilities"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.thirdera .special-abilities-editor-box .special-abilities-view {
+  display: block;
+  min-height: 0;
+  padding: 2px 0;
+  border: none;
+  background: transparent;
+}
+
+.thirdera .special-abilities-editor-box.special-abilities-editing .special-abilities-view {
+  display: none !important;
+}
+
+.thirdera .special-abilities-editor-box.special-abilities-editing prose-mirror[name="system.statBlock.specialAbilities"] {
   display: flex !important;
   visibility: visible !important;
   height: auto !important;
@@ -1034,6 +1132,11 @@
   text-align: center;
 }
 
+.thirdera .abilities-grid .ability-racial-input {
+  width: 100%;
+  text-align: center;
+}
+
 .thirdera .abilities-grid .ability-racial {
   font-size: var(--font-size-label);
   color: var(--color-modified);
@@ -1130,6 +1233,278 @@
   width: 60px;
   text-align: center;
   font-size: var(--font-size-value);
+}
+
+/* NPC Stat block section (natural armor, space, reach) */
+.thirdera .npc-stat-block-section {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px solid var(--color-border-divider);
+}
+
+.thirdera .npc-stat-block-section .stat-block-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.thirdera .npc-stat-block-section .stat-block-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thirdera .npc-stat-block-section .stat-block-field .details-label {
+  min-width: 100px;
+}
+
+.thirdera .npc-stat-block-section .stat-block-field .details-input {
+  flex: 1;
+  max-width: 120px;
+}
+
+.thirdera .stat-block-movement-block {
+  margin-top: 12px;
+}
+
+.thirdera .stat-block-movement-block .items-header {
+  margin-bottom: 6px;
+}
+
+.thirdera .stat-block-movement-display {
+  margin: 0 0 8px 0;
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+}
+
+.thirdera .stat-block-movement-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.thirdera .stat-block-movement-fields .stat-block-field .details-label {
+  min-width: 140px;
+}
+
+/* Natural attacks compact (Combat subtab — roll only) */
+.thirdera .natural-attacks-compact {
+  margin-top: 12px;
+}
+
+.thirdera .natural-attacks-compact .items-header {
+  margin-bottom: 6px;
+}
+
+.thirdera .natural-attacks-compact-list {
+  list-style: none;
+  margin: 0 0 6px 0;
+  padding: 0;
+}
+
+.thirdera .natural-attack-compact {
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .natural-attack-compact:last-child {
+  border-bottom: none;
+}
+
+.thirdera .natural-attack-compact-name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-body);
+}
+
+/* Phase E: Stat block DR, SR, Senses, Other special abilities */
+.thirdera .stat-block-special-abilities {
+  margin-top: 16px;
+}
+
+.thirdera .stat-block-special-abilities .stat-block-dr-sr {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+}
+
+.thirdera .senses-list {
+  list-style: none;
+  margin: 0 0 8px 0;
+  padding: 0;
+}
+
+.thirdera .senses-list .sense {
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .senses-list .sense:last-child {
+  border-bottom: none;
+}
+
+.thirdera .senses-list .sense-type {
+  min-width: 140px;
+  flex: 0 1 auto;
+}
+
+.thirdera .senses-list .sense-range {
+  flex: 1;
+  min-width: 80px;
+}
+
+.thirdera .senses-list .sense-remove {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+}
+
+.thirdera .sense-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-note);
+}
+
+.thirdera .natural-attack-compact-total {
+  font-weight: var(--font-weight-bold);
+  min-width: 2.5em;
+  text-align: right;
+}
+
+.thirdera .natural-attacks-compact-hint {
+  margin: 0;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+}
+
+/* Natural attacks (stat block) — header row + grid rows with actions underneath */
+.thirdera .natural-attacks-block {
+  margin-top: 12px;
+  --nat-col-name: minmax(80px, 1fr);
+  --nat-col-dice: 88px;
+  --nat-col-type: minmax(100px, 140px);
+  --nat-col-primary: 72px;
+  --nat-col-reach: 48px;
+  --nat-col-attack: 40px;
+}
+
+.thirdera .natural-attacks-block .items-header {
+  margin-bottom: 6px;
+}
+
+.thirdera .natural-attacks-header {
+  display: grid;
+  grid-template-columns: var(--nat-col-name) var(--nat-col-dice) var(--nat-col-type) var(--nat-col-primary) var(--nat-col-reach) var(--nat-col-attack);
+  gap: 6px 8px;
+  align-items: center;
+  padding: 2px 0 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.thirdera .natural-attack-col-header {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thirdera .natural-attacks-list {
+  list-style: none;
+  margin: 0 0 8px 0;
+  padding: 0;
+}
+
+.thirdera .natural-attack {
+  display: grid;
+  grid-template-columns: var(--nat-col-name) var(--nat-col-dice) var(--nat-col-type) var(--nat-col-primary) var(--nat-col-reach) var(--nat-col-attack);
+  grid-template-rows: auto auto;
+  gap: 6px 8px;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .natural-attack:last-of-type {
+  border-bottom: none;
+}
+
+.thirdera .natural-attack-name {
+  min-width: 0;
+  font-size: var(--font-size-label);
+}
+
+.thirdera .natural-attack-dice {
+  min-width: 0;
+  text-align: center;
+  font-size: var(--font-size-label);
+}
+
+.thirdera .natural-attack-type {
+  min-width: 0;
+  font-size: var(--font-size-label);
+}
+
+.thirdera .natural-attack-primary {
+  min-width: 0;
+  font-size: var(--font-size-label);
+}
+
+.thirdera .natural-attack-reach {
+  min-width: 0;
+  text-align: center;
+  font-size: var(--font-size-label);
+}
+
+.thirdera .natural-attack-total {
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-value);
+}
+
+.thirdera .natural-attack-actions-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 2px;
+}
+
+.thirdera .natural-attack-roll {
+  font-size: var(--font-size-body);
+  color: var(--color-npc-accent);
+}
+
+.thirdera .natural-attack-roll:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .natural-attack-delete {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
+
+.thirdera .natural-attack-delete:hover {
+  color: var(--color-hover);
+}
+
+.thirdera .natural-attacks-add {
+  margin-top: 4px;
+}
+
+.thirdera .natural-attack-add-btn {
+  font-size: var(--font-size-label);
+  color: var(--color-npc-accent);
+}
+
+.thirdera .natural-attack-add-btn:hover {
+  color: var(--color-hover);
 }
 
 /* AC Section */

@@ -1,0 +1,19 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Subtype Name" /></h1>
+        </div>
+    </header>
+
+    <section class="sheet-body">
+        <div class="tab active" data-group="primary" data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+    </section>
+</form>

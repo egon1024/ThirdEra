@@ -3,8 +3,14 @@ logs
 *.log
 
 # LevelDB internal files (Foundry compendium storage)
+# Only pack source JSON should be in git; *.ldb, CURRENT, LOCK, MANIFEST, lost/ are runtime.
 packs/*/LOG*
 packs/*/*.db
+packs/*/*.ldb
+packs/*/CURRENT
+packs/*/LOCK
+packs/*/MANIFEST*
+packs/*/lost/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

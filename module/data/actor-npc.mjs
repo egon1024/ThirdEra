@@ -1,4 +1,4 @@
-const { BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
+const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { getConditionItemsMapSync, getActiveConditionModifiers } from "../logic/condition-helpers.mjs";
@@ -10,30 +10,36 @@ import { getConditionItemsMapSync, getActiveConditionModifiers } from "../logic/
 export class NPCData extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
-            // Ability Scores (same as character)
+            // Ability Scores (base + optional racial adjustment; effective and mod derived)
             abilities: new SchemaField({
                 str: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
+                    racial: new NumberField({ required: true, integer: true, initial: 0 }),
                     mod: new NumberField({ required: true, integer: true, initial: 0 })
                 }),
                 dex: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
+                    racial: new NumberField({ required: true, integer: true, initial: 0 }),
                     mod: new NumberField({ required: true, integer: true, initial: 0 })
                 }),
                 con: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
+                    racial: new NumberField({ required: true, integer: true, initial: 0 }),
                     mod: new NumberField({ required: true, integer: true, initial: 0 })
                 }),
                 int: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
+                    racial: new NumberField({ required: true, integer: true, initial: 0 }),
                     mod: new NumberField({ required: true, integer: true, initial: 0 })
                 }),
                 wis: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
+                    racial: new NumberField({ required: true, integer: true, initial: 0 }),
                     mod: new NumberField({ required: true, integer: true, initial: 0 })
                 }),
                 cha: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: 0, initial: 10 }),
+                    racial: new NumberField({ required: true, integer: true, initial: 0 }),
                     mod: new NumberField({ required: true, integer: true, initial: 0 })
                 })
             }),
@@ -41,9 +47,56 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             // NPC Details (simplified)
             details: new SchemaField({
                 type: new StringField({ required: true, blank: true, initial: "" }),
+                creatureTypeUuid: new StringField({ required: true, blank: true, initial: "" }),
+                subtypeUuids: new ArrayField(new StringField(), { required: true, initial: [] }),
                 cr: new StringField({ required: true, blank: true, initial: "1" }),
                 alignment: new StringField({ required: true, blank: true, initial: "" }),
                 size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes })
+            }),
+
+            // Stat block (monster-only; optional for humanoid NPCs). Phase B–D: natural armor, space, reach, movement, natural attacks. Phase E: DR, SR, senses, special abilities.
+            statBlock: new SchemaField({
+                naturalArmor: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                space: new StringField({ required: true, blank: true, initial: "5 ft" }),
+                reach: new StringField({ required: true, blank: true, initial: "5 ft" }),
+                movement: new SchemaField({
+                    land: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                    fly: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                    flyManeuverability: new StringField({ required: true, blank: true, initial: "", choices: () => CONFIG.THIRDERA?.movementManeuverability ?? {} }),
+                    swim: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                    burrow: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                    climb: new NumberField({ required: true, integer: true, min: 0, initial: 0 })
+                }),
+                naturalAttacks: new ArrayField(
+                    new SchemaField({
+                        name: new StringField({ required: true, blank: true, initial: "" }),
+                        dice: new StringField({ required: true, blank: true, initial: "1d4" }),
+                        damageType: new StringField({ required: true, blank: true, initial: "bludgeoning" }),
+                        primary: new StringField({ required: true, blank: false, initial: "true", choices: () => ({ "true": "Primary", "false": "Secondary" }) }),
+                        reach: new StringField({ required: true, blank: true, initial: "" })
+                    }),
+                    { required: true, initial: [] }
+                ),
+                // Phase E: structured special abilities
+                damageReduction: new SchemaField({
+                    value: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                    bypass: new StringField({ required: true, blank: true, initial: "" })
+                }),
+                spellResistance: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+                senses: new ArrayField(
+                    new SchemaField({
+                        type: new StringField({ required: true, blank: false, initial: "darkvision", choices: () => CONFIG.THIRDERA?.senseTypes ?? {} }),
+                        range: new StringField({ required: true, blank: true, initial: "" })
+                    }),
+                    { required: true, initial: [] }
+                ),
+                specialAbilities: new HTMLField({ required: true, blank: true }),
+                // Phase F: encounter and reference
+                environment: new StringField({ required: true, blank: true, initial: "" }),
+                organization: new StringField({ required: true, blank: true, initial: "" }),
+                treasure: new StringField({ required: true, blank: true, initial: "" }),
+                advancement: new StringField({ required: true, blank: true, initial: "" }),
+                levelAdjustment: new NumberField({ required: true, integer: true, min: 0, initial: 0 })
             }),
 
             // Hit Points
@@ -114,10 +167,11 @@ export class NPCData extends foundry.abstract.TypeDataModel {
      * Prepare derived data for the NPC
      */
     prepareDerivedData() {
-        // Calculate ability modifiers
+        // Calculate effective score (base + racial) and modifier
         for (const [key, ability] of Object.entries(this.abilities)) {
-            ability.effective = ability.value; // NPCs usually don't have racial items
-            ability.mod = Math.floor((ability.value - 10) / 2);
+            const racial = ability.racial ?? 0;
+            ability.effective = ability.value + racial;
+            ability.mod = Math.floor((ability.effective - 10) / 2);
         }
 
         // Calculate inventory weight and load early so it can affect Dex and Speed
@@ -235,6 +289,24 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             ...(conditionMods.attackRangedBreakdown || [])
         ];
 
+        // Natural attacks (Phase C): primary = full attack bonus + full Str to damage; secondary = -5 attack, half Str to damage
+        const naturalAttacks = this.statBlock?.naturalAttacks ?? [];
+        const strMod = this.abilities.str.mod;
+        const meleeTotal = this.combat.meleeAttack.total;
+        for (let i = 0; i < naturalAttacks.length; i++) {
+            const atk = naturalAttacks[i];
+            const isPrimary = atk.primary === "true";
+            atk.attackBonus = meleeTotal + (isPrimary ? 0 : -5);
+            atk.attackBreakdown = [
+                { label: "Melee", value: meleeTotal },
+                ...(isPrimary ? [] : [{ label: "Secondary", value: -5 }])
+            ];
+            const damageStrMod = isPrimary ? strMod : Math.floor(strMod / 2);
+            atk.damageMod = damageStrMod;
+            const dice = (atk.dice || "").trim() || "1d4";
+            atk.damageFormula = damageStrMod >= 0 ? `${dice} + ${damageStrMod}` : `${dice} − ${Math.abs(damageStrMod)}`;
+        }
+
         // Calculate AC values from equipped armor, dex, size, misc, and conditions
         computeAC(this, conditionMods);
 
@@ -250,5 +322,40 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             capacity,
             load
         };
+
+        // Movement display (Phase D): build line and segments from statBlock.movement + base land speed
+        const mov = this.statBlock?.movement;
+        const baseLand = this.attributes.speed?.info?.baseSpeed ?? this.attributes.speed?.value ?? 30;
+        const landSpeed = (mov && Number(mov.land) > 0) ? Number(mov.land) : baseLand;
+        const maneuverabilityLabels = CONFIG.THIRDERA?.movementManeuverability ?? {};
+        const segments = [];
+        if (landSpeed > 0) {
+            segments.push({ mode: "land", label: "Land", value: landSpeed, maneuverability: null });
+        }
+        if (mov && Number(mov.fly) > 0) {
+            const man = (mov.flyManeuverability && maneuverabilityLabels[mov.flyManeuverability])
+                ? maneuverabilityLabels[mov.flyManeuverability]
+                : null;
+            segments.push({ mode: "fly", label: "Fly", value: Number(mov.fly), maneuverability: man });
+        }
+        if (mov && Number(mov.swim) > 0) {
+            segments.push({ mode: "swim", label: "Swim", value: Number(mov.swim), maneuverability: null });
+        }
+        if (mov && Number(mov.burrow) > 0) {
+            segments.push({ mode: "burrow", label: "Burrow", value: Number(mov.burrow), maneuverability: null });
+        }
+        if (mov && Number(mov.climb) > 0) {
+            segments.push({ mode: "climb", label: "Climb", value: Number(mov.climb), maneuverability: null });
+        }
+        this.movementDisplaySegments = segments;
+        this.movementDisplayLine = segments.length === 0
+            ? ""
+            : segments
+                .map(s => {
+                    if (s.mode === "land") return `${s.value} ft`;
+                    if (s.maneuverability) return `${s.label.toLowerCase()} ${s.value} ft (${s.maneuverability})`;
+                    return `${s.label.toLowerCase()} ${s.value} ft`;
+                })
+                .join(", ");
     }
 }
