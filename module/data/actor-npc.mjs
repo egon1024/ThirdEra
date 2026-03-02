@@ -90,7 +90,13 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                     }),
                     { required: true, initial: [] }
                 ),
-                specialAbilities: new HTMLField({ required: true, blank: true })
+                specialAbilities: new HTMLField({ required: true, blank: true }),
+                // Phase F: encounter and reference
+                environment: new StringField({ required: true, blank: true, initial: "" }),
+                organization: new StringField({ required: true, blank: true, initial: "" }),
+                treasure: new StringField({ required: true, blank: true, initial: "" }),
+                advancement: new StringField({ required: true, blank: true, initial: "" }),
+                levelAdjustment: new NumberField({ required: true, integer: true, min: 0, initial: 0 })
             }),
 
             // Hit Points

@@ -123,7 +123,13 @@
             "SenseRange": "Range (e.g. 60 ft)",
             "AddSense": "Add sense",
             "RemoveSense": "Remove sense",
-            "OtherSpecialAbilities": "Other special abilities"
+            "OtherSpecialAbilities": "Other special abilities",
+            "Reference": "Reference",
+            "Environment": "Environment",
+            "Organization": "Organization",
+            "Treasure": "Treasure",
+            "Advancement": "Advancement",
+            "LevelAdjustment": "Level adjustment"
         },
         "Skills": {
             "classSkill": "Class Skill",

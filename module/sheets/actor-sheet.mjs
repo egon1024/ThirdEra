@@ -405,7 +405,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             saveProgressions: CONFIG.THIRDERA?.saveProgressions || {},
             damageTypes: CONFIG.THIRDERA?.damageTypes || {},
             movementManeuverability: CONFIG.THIRDERA?.movementManeuverability || {},
-            senseTypes: CONFIG.THIRDERA?.senseTypes || {}
+            senseTypes: CONFIG.THIRDERA?.senseTypes || {},
+            treasure: CONFIG.THIRDERA?.treasure || {}
         };
 
         // Ensure tabs state exists (TABS.primary has no initial in Foundry, so default to description)

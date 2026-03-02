@@ -209,6 +209,14 @@ Hooks.once("init", async function () {
             blindsight: "Blindsight",
             tremorsense: "Tremorsense"
         },
+        /** Treasure presets for NPC/monster reference (Phase F). Custom text allowed via sheet. */
+        treasure: {
+            "": "—",
+            "None": "None",
+            "Standard": "Standard",
+            "Double": "Double",
+            "Triple": "Triple"
+        },
         hitDice: {
             d4: "d4",
             d6: "d6",

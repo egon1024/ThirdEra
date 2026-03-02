@@ -535,6 +535,41 @@
               {{{enriched.specialAbilities}}}
             </prose-mirror>
           </div>
+
+          {{!-- Phase F: Reference (environment, organization, treasure, advancement, LA) --}}
+          <h4 class="items-header">{{localize 'THIRDERA.NPC.Reference'}}</h4>
+          <div class="stat-block-fields stat-block-reference">
+            <div class="stat-block-field flexrow">
+              <label for="system.statBlock.environment" class="details-label">{{localize 'THIRDERA.NPC.Environment'}}</label>
+              <input type="text" name="system.statBlock.environment" value="{{#if system.statBlock}}{{system.statBlock.environment}}{{/if}}"
+                data-dtype="String" class="details-input" placeholder="e.g. temperate forest, underground" />
+            </div>
+            <div class="stat-block-field flexrow">
+              <label for="system.statBlock.organization" class="details-label">{{localize 'THIRDERA.NPC.Organization'}}</label>
+              <input type="text" name="system.statBlock.organization" value="{{#if system.statBlock}}{{system.statBlock.organization}}{{/if}}"
+                data-dtype="String" class="details-input" placeholder="e.g. solitary, pack 4–7" />
+            </div>
+            <div class="stat-block-field flexrow">
+              <label for="system.statBlock.treasure" class="details-label">{{localize 'THIRDERA.NPC.Treasure'}}</label>
+              <input type="text" name="system.statBlock.treasure" value="{{#if system.statBlock}}{{system.statBlock.treasure}}{{/if}}"
+                list="stat-block-treasure-list" data-dtype="String" class="details-input" placeholder="e.g. None, Standard, Double" aria-label="{{localize 'THIRDERA.NPC.Treasure'}}" />
+              <datalist id="stat-block-treasure-list">
+                {{#each config.treasure as |label key|}}
+                {{#if key}}<option value="{{key}}">{{/if}}
+                {{/each}}
+              </datalist>
+            </div>
+            <div class="stat-block-field flexrow">
+              <label for="system.statBlock.advancement" class="details-label">{{localize 'THIRDERA.NPC.Advancement'}}</label>
+              <input type="text" name="system.statBlock.advancement" value="{{#if system.statBlock}}{{system.statBlock.advancement}}{{/if}}"
+                data-dtype="String" class="details-input" placeholder="e.g. 4–6 HD, by character class" />
+            </div>
+            <div class="stat-block-field flexrow">
+              <label for="system.statBlock.levelAdjustment" class="details-label">{{localize 'THIRDERA.NPC.LevelAdjustment'}}</label>
+              <input type="number" name="system.statBlock.levelAdjustment" value="{{#if system.statBlock}}{{system.statBlock.levelAdjustment}}{{else}}0{{/if}}"
+                data-dtype="Number" class="details-input" min="0" step="1" placeholder="0" title="{{localize 'THIRDERA.NPC.LevelAdjustment'}} (for using as PC race)" />
+            </div>
+          </div>
         </div>
       </div>
       </div>
