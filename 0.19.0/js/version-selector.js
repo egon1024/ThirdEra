@@ -20,13 +20,14 @@
   // #region agent log
   log('A', 'computed path info', { scriptPath: scriptPath, segmentsLength: segments.length, segments: segments });
   // #endregion
-  // Script lives at <deploy_root>/<version>/js/version-selector.js
-  if (segments.length < 2) {
-    log('A', 'early exit: segments.length < 2', {});
+  // Script lives at <deploy_root>/<version_or_alias>/js/version-selector.js
+  // versions.json is at deploy_root (parent of version dir), not inside version dir
+  if (segments.length < 3) {
+    log('A', 'early exit: segments.length < 3', {});
     return;
   }
   var versionSegmentIndex = segments.length - 2;
-  var deployRootSegments = segments.slice(0, versionSegmentIndex);
+  var deployRootSegments = segments.slice(0, Math.max(0, versionSegmentIndex - 1));
   var deployRoot = deployRootSegments.length ? '/' + deployRootSegments.join('/') + '/' : '/';
   var versionsUrl = deployRoot + 'versions.json';
   var currentVersion = segments[versionSegmentIndex];
