@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>NPCs - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../../css/logo.png">
+  <link href="../../css/torillic.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="../..">Home</a>
+      
+      
+      
+      <a class="current" href="../">Usage</a>
+      
+      
+      
+      <a class="" href="../../implementation/">Implementation</a>
+      
+      
+      
+      <a class="" href="../../development/">Development</a>
+      
+      
+      
+      <a class="" href="../../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="npcs">NPCs</h1>
+<p>NPCs (non-player characters) use a dedicated sheet with tabs for description, attributes, combat, and equipment. The sheet is optimized for creatures and monsters rather than full character advancement.</p>
+<h2 id="npc-sheet-tabs">NPC sheet tabs</h2>
+<ul>
+<li><strong>Description</strong> — Biography and notes for the NPC.</li>
+<li><strong>Attributes</strong> — <strong>Details</strong> subtab: Challenge Rating, alignment, size, <strong>Creature Type</strong> and <strong>Subtypes</strong> (drag type/subtype items from compendiums). <strong>Scores &amp; Saves</strong> subtab: ability scores and saving throws.</li>
+<li><strong>Combat</strong> — Hit points, AC (including natural armor from the stat block), initiative, and a <strong>Stat block</strong> section (see below). You can add <strong>Conditions</strong> via the Conditions block (drag condition items or choose from the dropdown). Natural attacks and movement are also configured here.</li>
+<li><strong>Equipment</strong> — Weapons, armor, and other equipment. Add items by dragging them onto the sheet (there are no “Add weapon/armor” buttons; use drag-and-drop from compendiums or the Items directory).</li>
+</ul>
+<h2 id="stat-block">Stat block</h2>
+<p>The <strong>Combat</strong> tab includes a <strong>Stat block</strong> area that mirrors a typical D&amp;D 3.5 stat block:</p>
+<ul>
+<li><strong>Defense</strong> — Natural armor (applied to AC; the AC breakdown shows “Natural +X” when set).</li>
+<li><strong>Space and reach</strong> — Defaults (e.g. 5 ft) or custom values.</li>
+<li><strong>Natural attacks</strong> — List of natural weapons (e.g. bite, claws) with attack dice, damage type, and primary/secondary. Buttons to roll attack and damage are on each entry.</li>
+<li><strong>Movement</strong> — Land, fly (with maneuverability), swim, burrow, climb. The sheet shows a combined movement line (e.g. “30 ft, fly 60 ft (average)”).</li>
+<li><strong>Special</strong> — Damage reduction, spell resistance, senses (e.g. darkvision, low-light, scent), and a freeform “Other special abilities” field.</li>
+<li><strong>Reference</strong> — Environment, organization, treasure, advancement, and level adjustment for reference during play.</li>
+</ul>
+<p>These fields are optional; fill in what you need for the creature.</p>
+<h2 id="conditions">Conditions</h2>
+<p>NPCs can have conditions applied the same way as characters: drag a condition from the Conditions compendium (or world) onto the sheet, or select from the Conditions dropdown on the Combat tab. Conditions can affect AC, saves, speed, and attacks when they have mechanical effects defined. Some conditions (e.g. Dead, Dying, Flat-Footed) are derived automatically from hit points or combat state.</p>
+<h2 id="creature-type-and-subtypes">Creature type and subtypes</h2>
+<p>Creature Type and Subtype are item types with compendiums (<strong>Creature Types</strong> and <strong>Subtypes</strong>). Drag the appropriate type and subtypes onto the NPC’s sheet from the compendium sidebar to set them; they appear in <strong>Attributes → Details</strong>.</p>
+
+    
+    
+    
+    
+    
+    
+
+
+
+    
+        
+        
+    
+
+
+
+    
+        
+    
+
+
+<a href="../" class="torillic-backlink">🡐 Usage overview</a>
+    
+  </main>
+  <script src="../../js/version-selector.js"></script>
+  <script src="../../search/main.js"></script>
+</body>
+
+</html>
