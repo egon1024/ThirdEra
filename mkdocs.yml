@@ -9,6 +9,7 @@ theme:
 # Single-column layout (theme default is 2 columns)
 extra_css:
   - css/single-column.css
+  - css/navigation.css
 
 extra:
   version:
