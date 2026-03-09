@@ -1,0 +1,32 @@
+# Documentation config. Source: docs-site/ (user-facing only).
+site_name: ThirdEra
+site_url: https://thirdera.github.io/ThirdEra/
+docs_dir: docs-site
+theme:
+  name: torillic
+  variant: default
+
+# Single-column layout (theme default is 2 columns)
+extra_css:
+  - css/single-column.css
+  - css/navigation.css
+
+extra:
+  version:
+    provider: mike
+
+extra_javascript:
+  - js/version-selector.js
+
+nav:
+  - Home: index.md
+  - Usage:
+    - Usage overview: usage/index.md
+    - Characters: usage/characters.md
+    - NPCs: usage/npcs.md
+    - Compendiums: usage/compendiums.md
+  - Extending: extending.md
+  - Development:
+    - Development reference: development.md
+    - Compendium guide: compendium-guide.md
+  - Contributing: contributing.md

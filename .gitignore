@@ -114,6 +114,12 @@ dist
 # vitepress cache directory
 **/.vitepress/cache
 
+# MkDocs build output (docs-site)
+site/
+
+# Internal dev docs (state-of-work, plans, testing) — not committed; docs-site/ is the published docs
+docs/
+
 # Docusaurus cache and generated files
 .docusaurus
 
@@ -147,3 +153,11 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# pyenv
+.python-version
+
+# Cursor session sync local config (hostnames/paths)
+utilities/cursor-session-config.sh
+# Local utility: deploy hidden docs preview (not for commit)
+utilities/deploy-docs-preview.sh
