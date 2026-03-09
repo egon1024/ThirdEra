@@ -1,0 +1,332 @@
+# Compendium Building Guide
+
+This document captures learnings and best practices for creating and managing Foundry VTT compendiums in the ThirdEra system.
+
+## Overview
+
+Compendiums in Foundry VTT are collections of pre-made game content (items, actors, etc.) that can be imported into worlds. ThirdEra uses compendiums to distribute SRD content (races, classes, skills, feats, spells, weapons, armor, equipment) so users don't have to manually create every item.
+
+## Compendium Architecture
+
+### Storage Model
+
+**Critical Understanding**: Foundry VTT stores compendium content in **LevelDB database files** (`.db` files) within the `packs/` directory, NOT as individual JSON files. The JSON files in `packs/` are source files that must be programmatically imported into the compendiums.
+
+### Compendium Pack Definition (`system.json`)
+
+Each compendium pack must be declared in `system.json` under the `"packs"` array:
+
+```json
+{
+  "name": "thirdera_races",
+  "label": "Races",
+  "path": "packs/races",
+  "type": "Item",
+  "system": "thirdera",
+  "ownership": {
+    "GAMEMASTER": "OWNER",
+    "ASSISTANT": "OWNER",
+    "TRUSTED": "OBSERVER",
+    "PLAYER": "OBSERVER"
+  }
+}
+```
+
+**Key Fields:**
+- `name`: Must use underscores, not dots (e.g., `thirdera_races` not `thirdera.races`) for Foundry V14 compatibility
+- `label`: Display name shown in the Compendium sidebar
+- `path`: Relative path to the directory containing JSON source files
+- `type`: Document type (`"Item"` for all ThirdEra compendiums)
+- `system`: System ID (`"thirdera"`)
+- `ownership`: **REQUIRED** - Without this, compendiums won't be visible in the UI. Defines permissions for each user role.
+- `banner`: **Optional.** A file path to a banner image shown behind each compendium entry in the Compendium sidebar (and in the compendium window header when opened). If omitted, Foundry uses the default for the pack type (e.g. the same generic Item banner for all Item packs).
+
+#### Compendium banner images (per-pack)
+
+You can give each pack its own banner by adding a `"banner"` property to that pack in `system.json`:
+
+```json
+{
+  "name": "thirdera_armor",
+  "label": "Armor",
+  "path": "packs/armor",
+  "type": "Item",
+  "system": "thirdera",
+  "banner": "systems/thirdera/assets/banners/armor-banner.webp",
+  "ownership": { ... }
+}
+```
+
+**Image characteristics:**
+
+| Spec | Value |
+|------|--------|
+| **Recommended dimensions** | **290 × 70** pixels (Foundry's documented size for the sidebar strip). |
+| **Aspect** | Landscape; the image is displayed with `object-fit: cover` and `object-position: center`, so it will be cropped to fit. A 290×70 (or proportional) landscape works best. |
+| **Where to put files** | Inside the system, e.g. `assets/banners/` (path in `system.json`: `systems/thirdera/assets/banners/your-banner.webp`). |
+| **Formats** | WebP, PNG, or JPEG. Foundry core uses `.webp`. |
+| **Display** | The image is shown at ~80% opacity with a slight dark overlay; the pack name and icon are centered on top. Design so important elements remain visible with that overlay. |
+| **Contexts** | Same image is used in the sidebar list (70px tall) and in the compendium window header when a pack is opened (100px tall). |
+
+### Collection IDs
+
+Foundry VTT uses collection IDs to reference compendium packs. The format is: `{systemId}.{packName}`
+
+Example: For pack name `thirdera_races`, the collection ID is `thirdera.thirdera_races`
+
+**Important**: When looking up packs in code, use the collection ID:
+```javascript
+const pack = game.packs.get("thirdera.thirdera_races");
+```
+
+## Compendium Loader (`module/logic/compendium-loader.mjs`)
+
+The `CompendiumLoader` class programmatically imports JSON files into compendiums.
+
+### Initialization
+
+Called from `thirdera.mjs` on the `Hooks.once("ready")` hook:
+```javascript
+Hooks.once("ready", () => {
+    CompendiumLoader.init();
+});
+```
+
+### Key Methods
+
+#### `init()`
+- Only runs for GM users
+- Waits 1 second for compendiums to be fully registered
+- Iterates through `FILE_MAPPINGS` to find and populate each pack
+- Checks if pack is already populated (skips if entries exist)
+- Updates existing items or creates new ones
+
+#### `loadPackFromJSON(pack, fileList)`
+- Normalizes file paths (removes duplicate `systems/thirdera/` prefixes)
+- Fetches JSON files via HTTP (`fetch()`)
+- Removes invalid `_id` values (Foundry requires 16-character alphanumeric IDs)
+- Unlocks compendium if locked (required to create/update documents)
+- **Matches by stable key**: For each document, the loader uses a stable key to decide whether to update an existing compendium entry or create a new one. The key is: `system.conditionId` for conditions, otherwise `system.key` if present, otherwise `name`. This allows renaming a document in JSON (e.g. for disambiguation) without creating duplicates-the same compendium document is updated.
+- Uses `Document.createDocuments()` and `Document.updateDocuments()` with `{pack: pack.collection}` option
+
+### FILE_MAPPINGS
+
+Maps collection IDs to arrays of JSON filenames:
+```javascript
+static FILE_MAPPINGS = {
+    "thirdera.thirdera_races": [
+        "race-dwarf.json",
+        "race-elf.json",
+        // ...
+    ],
+    // ...
+};
+```
+
+**Important**: Keys must match Foundry's collection IDs (`systemId.packName`).
+
+## JSON File Structure
+
+### Required Fields
+
+All compendium JSON files must follow this structure:
+
+```json
+{
+  "_id": "item-id",
+  "name": "Item Name",
+  "type": "itemType",
+  "img": "icons/svg/icon.svg",
+  "system": {
+    // Type-specific data matching the TypeDataModel schema
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 0
+}
+```
+
+### ID Handling
+
+**Critical**: Foundry VTT requires `_id` values to be exactly 16 alphanumeric characters. JSON files with descriptive IDs (like `"race-dwarf"`) will cause validation errors.
+
+**Solution**: The loader removes invalid `_id` values before importing, allowing Foundry to generate valid IDs automatically:
+```javascript
+if (jsonData._id && !jsonData._id.match(/^[a-zA-Z0-9]{16}$/)) {
+    delete jsonData._id;
+}
+```
+
+### Icon Paths
+
+Icons must use paths that exist in Foundry VTT's icon set. Common paths:
+- `icons/svg/sword.svg` - Weapons, combat feats
+- `icons/svg/shield.svg` - Armor, defensive feats
+- `icons/svg/target.svg` - Ranged weapons, archery feats
+- `icons/svg/aura.svg` - Magic, spells, metamagic feats
+- `icons/svg/book.svg` - Knowledge, skills, item creation feats
+- `icons/svg/temple.svg` - Holy symbols, religious items
+- `icons/svg/pawprint.svg` - Animals, mounted combat
+- `icons/svg/eye.svg` - Perception, awareness
+- `icons/svg/invisible.svg` - Stealth, hidden things
+
+**Icon Validation**: Verify icons exist in your Foundry installation's public icon set (e.g. `resources/app/public/icons/svg/` under the Foundry app directory) before using them.
+
+### Spell Compendium Format
+
+Spell compendium JSON should use the **current** schema (not legacy fields) so content does not depend on migration.
+
+- **School**: Use `schoolKey`, `schoolName`, `schoolSubschool`, and `schoolDescriptors` (do not use the legacy `school` string).
+  - `schoolKey`: One of the 8 SRD school keys: `abjuration`, `conjuration`, `divination`, `enchantment`, `evocation`, `illusion`, `necromancy`, `transmutation` (same as `CONFIG.THIRDERA.schools` and the Schools compendium item keys).
+  - `schoolName`: Display name (e.g. `"Evocation"`, `"Conjuration"`).
+  - `schoolSubschool`: Optional subschool in parentheses, e.g. `"(Healing)"`, `"(Creation)"`, `"(Compulsion)"`; use `""` if none.
+  - `schoolDescriptors`: Array of descriptor tags in brackets, e.g. `["[Fire]"]`, `["[Mind-Affecting]"]`; use `[]` if none.
+- **levelsByClass**: One entry per class list that has the spell. Each entry: `classKey` (from `CONFIG.THIRDERA.spellListKeys`: `sorcererWizard`, `bard`, `cleric`, `druid`, `paladin`, `ranger`), `className` (display name, e.g. `"Sorcerer/Wizard"`), and `level` (0–9). Migration can backfill `className` from CONFIG if omitted.
+- **levelsByDomain**: One entry per **cleric domain** that includes the spell (SRD cleric domain spell lists). Each entry: `domainKey` (must match a domain item's `system.key` in the Domains compendium, e.g. `knowledge`, `fire`, `healing`), `domainName` (display name, e.g. `"Knowledge"`), and `level` (1–9; domain spells are never 0-level). Use `[]` only when the spell does not appear on any SRD domain list. **All new spell JSONs must set levelsByDomain** by checking the SRD domain spell tables (e.g. d20srd.org cleric domains). Domain spell lists are **derived from spell levelsByDomain** (single source of truth); domain compendium JSONs do **not** include a `spells` array.
+- **spellResistance**: Use only machine-readable values: `""`, `"yes"`, `"no"`, `"yes-harmless"`, `"no-object"`, `"see-text"`.
+- **Components**: Use `"true"` / `"false"` strings for verbal, somatic, material, focus, divineFocus; `xp` as number. **Always populate `materialDescription`** when material or focus is true: put the SRD material component and/or focus text here (e.g. "Gold dust worth 25 gp." or "Focus: A pair of platinum rings (worth at least 50 gp each)..."). When both apply, combine in one string (e.g. "Material: Incense worth at least 25 gp. Focus: A set of marked sticks..."). Older compendium spells (0-level, 1st-level) may still have empty `materialDescription`; backfill from the SRD when editing those spells.
+- **IDs**: Omit `_id` or use a valid 16-character alphanumeric ID; the loader strips invalid IDs.
+
+Icon strategy: use a single default (e.g. `icons/svg/aura.svg`) or a small set by school; verify paths in Foundry's icon set.
+
+### Domain Compendium Format
+
+Domain items have `system.description` and `system.key` only. Domain spell lists are **not** stored on the domain; they are derived at runtime from spell items' `levelsByDomain` (world items + spells compendium). Domain compendium JSONs must **not** include a `spells` array.
+
+## Compendium Locking
+
+Compendiums are **locked by default** in Foundry VTT. You must unlock them before creating or updating documents:
+
+```javascript
+if (pack.locked) {
+    await pack.configure({ locked: false });
+}
+```
+
+## Updating Existing Content
+
+The loader supports updating existing compendium entries:
+
+1. Fetches existing documents from the compendium
+2. **Matches by stable key** (not name alone): `system.conditionId` for conditions, otherwise `system.key` if set, otherwise `name`. So you can change a document's `name` in JSON (e.g. to "Evasion (Rogue)") and the loader will update the same compendium document as long as `system.key` is unchanged.
+3. Updates existing items or creates new ones
+4. Uses `Document.updateDocuments()` for updates, `Document.createDocuments()` for new items
+
+This allows updating compendium content (e.g., fixing icons or disambiguating display names) without creating duplicates.
+
+### Key convention for new content
+
+**New document keys should use UUIDs** (or UUID-like unique identifiers). Human-readable keys that are similar across documents (e.g. `evasion` in multiple classes) can cause confusion; UUIDs keep each document's key globally distinct and avoid collisions when names are alike. Existing keys remain as-is; this convention applies to new compendium entries and should be followed when adding content.
+
+**Class Features compendium:** Feature document names in the compendium may include "(ClassName)" for disambiguation (e.g. "Evasion (Rogue)" vs "Evasion (Monk)"). Character sheet, class sheet, and level-up flow show the short name (e.g. "Evasion") from the class data (`featName`), not the compendium document name.
+
+## Common Issues and Solutions
+
+### Compendiums Not Visible
+
+**Problem**: Compendiums don't appear in the Compendium sidebar.
+
+**Solution**: Add `ownership` field to pack definition in `system.json`. Without it, Foundry won't display the compendium.
+
+### "Pack not found" Errors
+
+**Problem**: `game.packs.get(packName)` returns `undefined`.
+
+**Solution**: Use the collection ID format: `thirdera.thirdera_races` not just `thirdera_races`.
+
+### Path Duplication (404 Errors)
+
+**Problem**: File paths like `systems/thirdera/systems/thirdera/packs/...` cause 404 errors.
+
+**Solution**: Normalize paths by removing existing `systems/thirdera/` prefix:
+```javascript
+let normalizedPath = pack.metadata.path;
+if (normalizedPath.startsWith('systems/thirdera/')) {
+    normalizedPath = normalizedPath.replace(/^systems\/thirdera\//, '');
+}
+const basePath = `systems/thirdera/${normalizedPath}`;
+```
+
+### Invalid ID Validation Errors
+
+**Problem**: `DataModelValidationError: _id: must be a valid 16-character alphanumeric ID`
+
+**Solution**: Remove invalid `_id` values from JSON before importing. Foundry will generate valid IDs automatically.
+
+### "importDocuments is not a function"
+
+**Problem**: Trying to use `pack.importDocuments()`.
+
+**Solution**: Use `Document.createDocuments()` with pack option:
+```javascript
+await DocumentClass.implementation.createDocuments(documents, {pack: pack.collection});
+```
+
+### "locked compendium" Errors
+
+**Problem**: Cannot create documents in locked compendium.
+
+**Solution**: Unlock the compendium before creating documents:
+```javascript
+if (pack.locked) {
+    await pack.configure({ locked: false });
+}
+```
+
+### Icon or content updates not appearing after restart
+
+**Problem**: You changed JSON (e.g. `img` paths) and restarted Foundry, but the compendium still shows old icons or content.
+
+**Cause**: Foundry stores compendium data in **LevelDB files** (`.ldb`, `CURRENT`, `LOG`, `MANIFEST-*`, etc.) inside each pack directory. The loader updates existing documents by name; if the server or index keeps serving cached data, or updates don't persist as expected, the pack continues to show old values.
+
+**Solution**: Clear the pack's LevelDB cache so the loader re-imports from JSON (it will create all documents fresh). **Do this with Foundry fully stopped.**
+
+1. Stop Foundry (close the app or stop the headless process).
+2. From the repo root, remove only the LevelDB files in the pack directory (do **not** delete the `.json` source files):
+
+   ```bash
+   # Class Features pack
+   rm -f packs/features/*.ldb packs/features/CURRENT packs/features/LOCK packs/features/LOG packs/features/LOG.old packs/features/MANIFEST-*
+   ```
+
+3. Start Foundry and load the world. The loader will see an empty pack and run `createDocuments()` for all JSON files, so the new `img` and content will appear.
+
+To clear another pack (e.g. `packs/races`), use the same pattern: delete `*.ldb`, `CURRENT`, `LOCK`, `LOG`, `LOG.old`, `MANIFEST-*` in that directory only.
+
+## Best Practices
+
+1. **Always include `ownership`** in pack definitions
+2. **Use underscores in pack names** (not dots) for V14 compatibility
+3. **Remove invalid `_id` values** from JSON before importing
+4. **Unlock compendiums** before creating/updating documents
+5. **Use collection IDs** (`systemId.packName`) when looking up packs
+6. **Normalize file paths** to avoid duplication
+7. **Update existing items** by name to support content updates
+8. **Verify icon paths** exist in Foundry's icon set
+9. **Match JSON structure** to the TypeDataModel schema exactly
+10. **Test after changes** - restart Foundry and verify compendiums populate correctly
+
+## Current Compendium Status
+
+### Complete
+- **Races**: 7 items (all SRD races)
+- **Classes**: 11 items (all SRD base classes)
+- **Skills**: 36 items (all SRD skills)
+- **Feats**: 86 items (all SRD feats - General, Fighter Bonus, Metamagic, Item Creation)
+- **Armor**: 16 items (all SRD armor types and shields)
+- **Weapons**: 58 items (all SRD weapons - Simple, Martial, Exotic)
+
+### Incomplete
+- **Equipment**: 63 items (SRD adventuring gear and similar)
+
+### Spells
+- **Spells**: 28 items (all SRD 0-level cantrips/orisons plus 10 sample spells of higher levels; expansion ongoing)
+
+## Adding New Compendium Content
+
+1. Create JSON file in appropriate `packs/` subdirectory
+2. Match the TypeDataModel schema exactly
+3. Use valid Foundry icon paths
+4. Remove or omit `_id` (or use valid 16-char alphanumeric)
+5. Add filename to `FILE_MAPPINGS` in `compendium-loader.mjs`
+6. Restart Foundry - loader will automatically import/update the content

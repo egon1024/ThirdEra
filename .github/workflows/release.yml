@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
 
       - name: Create release
         id: create_release
@@ -127,3 +128,43 @@ jobs:
             });
             
             core.info('system.json uploaded as release asset');
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install doc dependencies
+        run: pip install -r requirements-docs.txt
+
+      - name: Configure git for mike
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy versioned docs
+        run: mike deploy ${{ steps.create_release.outputs.next_version }} latest --push
+
+      - name: Update repo system.json to match release
+        env:
+          NEXT_VERSION: ${{ steps.create_release.outputs.next_version }}
+          DEFAULT_BRANCH: ${{ github.event.pull_request.base.ref }}
+        run: |
+          cd $GITHUB_WORKSPACE
+          # Update system.json version and download URL (same logic as release asset)
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const repo = process.env.GITHUB_REPOSITORY;
+            const ver = process.env.NEXT_VERSION;
+            const p = path.join(process.cwd(), 'system.json');
+            const m = JSON.parse(fs.readFileSync(p, 'utf8'));
+            m.version = ver;
+            m.download = 'https://github.com/' + repo + '/archive/refs/tags/' + ver + '.zip';
+            fs.writeFileSync(p, JSON.stringify(m, null, 2));
+          "
+          git add system.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: set system.json version to $NEXT_VERSION"
+            git push origin HEAD:$DEFAULT_BRANCH
+          fi

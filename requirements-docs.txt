@@ -1,0 +1,7 @@
+# Documentation site: MkDocs + Material for MkDocs + mike (versioned deploys).
+# Install: pip install -r requirements-docs.txt
+# Pin MkDocs to 1.x for Material compatibility (Material does not support MkDocs 2.x).
+mkdocs>=1.5,<2
+mkdocs-material
+mkdocs-torillic
+mike
