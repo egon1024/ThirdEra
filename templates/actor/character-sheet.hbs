@@ -351,6 +351,18 @@
     {{!-- Combat Tab --}}
     <div class="tab combat {{#if (eq tabs.primary 'combat')}}active{{/if}}" data-group="primary" data-tab="combat">
 
+      {{!-- Apply damage/healing (Phase 2) --}}
+      <div class="apply-damage-healing-sheet-row">
+        <button type="button" class="apply-damage-healing-btn" data-action="applyDamageHealing" title="{{localize 'THIRDERA.ApplyDamageHealing.SheetButtonHint'}}">
+          <i class="fas fa-heart-pulse"></i> {{localize 'THIRDERA.ApplyDamageHealing.SheetButton'}}
+        </button>
+        {{#if hasTokenInScene}}
+        <button type="button" class="apply-damage-healing-to-token-btn" data-action="applyDamageHealingToThisToken" title="{{localize 'THIRDERA.ApplyDamageHealing.ToThisTokenHint'}}">
+          <i class="fas fa-crosshairs"></i> {{localize 'THIRDERA.ApplyDamageHealing.ToThisToken'}}
+        </button>
+        {{/if}}
+      </div>
+
       {{!-- Combat Stats --}}
       <div class="combat-stats">
         <div class="stat-block">

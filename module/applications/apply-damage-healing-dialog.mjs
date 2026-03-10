@@ -1,6 +1,7 @@
 /**
- * Apply damage/healing dialog: amount, type (Damage | Healing), targets from canvas selection.
- * Phase 1: open via game.thirdera.applyDamageHealing.openDialog() (macro/console). No sheet/chat/token entry points.
+ * Apply damage/healing dialog: amount, type (Damage | Healing), targets from canvas selection or explicit list.
+ * Phase 1: open via game.thirdera.applyDamageHealing.openDialog() (macro/console).
+ * Phase 2: sheet, chat, token entry points use openForSelection() or openWithOptions().
  */
 import { applyDamageOrHealing } from "../logic/apply-damage-healing.mjs";
 
@@ -53,9 +54,17 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
     /** @type {Actor[]} */
     targetActors = [];
 
+    /**
+     * @param {Actor[]} [targetActors] - Pre-selected target actors (e.g. from token context).
+     * @param {Object} [options] - Optional initial amount and mode for the form.
+     * @param {number|string} [options.amount] - Pre-filled amount (e.g. from chat roll).
+     * @param {string} [options.mode] - "damage" or "healing".
+     */
     constructor(targetActors, options = {}) {
         super(options);
         this.targetActors = targetActors ?? [];
+        if (options.amount !== undefined) this.amount = options.amount;
+        if (options.mode === "healing" || options.mode === "damage") this.mode = options.mode;
     }
 
     /** @override */
@@ -144,6 +153,23 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
     static openForSelection() {
         const targetActors = getTargetActorsFromSelection();
         const dialog = new ApplyDamageHealingDialog(targetActors);
+        dialog.render(true);
+    }
+
+    /**
+     * Open the Apply damage/healing dialog with explicit targets and optional amount/mode.
+     * Used by chat (amount + mode from roll), sheet (targets from selection), token (single actor).
+     * @param {Object} [options]
+     * @param {Actor[]} [options.targetActors] - Target actors (default: from canvas selection).
+     * @param {number|string} [options.amount] - Pre-filled amount (e.g. roll total).
+     * @param {string} [options.mode] - "damage" or "healing".
+     */
+    static openWithOptions(options = {}) {
+        const targetActors = options.targetActors ?? getTargetActorsFromSelection();
+        const dialog = new ApplyDamageHealingDialog(targetActors, {
+            amount: options.amount,
+            mode: options.mode
+        });
         dialog.render(true);
     }
 }

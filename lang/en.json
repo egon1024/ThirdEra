@@ -93,7 +93,13 @@
             "AppliedDamage": "Applied {amount} damage to {count} target(s).",
             "AppliedHealing": "Applied {amount} healing to {count} target(s).",
             "TempHP": "Temporary HP",
-            "NoPermission": "You do not have permission to modify the selected token(s)."
+            "NoPermission": "You do not have permission to modify the selected token(s).",
+            "SheetButton": "Apply damage/healing",
+            "SheetButtonHint": "Open dialog to apply damage or healing to selected tokens.",
+            "ToThisToken": "Apply to this token",
+            "ToThisTokenHint": "Open dialog with this token as the only target.",
+            "ChatApply": "Apply",
+            "ChatApplyHint": "Open Apply damage/healing dialog with this roll's total."
         },
         "NPC": {
             "CreatureType": "Creature Type",

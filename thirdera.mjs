@@ -38,6 +38,7 @@ import {
     removeDerivedFlatFooted
 } from "./module/logic/derived-conditions.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
+import "./module/logic/apply-damage-healing-entry-points.mjs";
 
 /**
  * Initialize HP auto-increase system
@@ -119,11 +120,12 @@ Hooks.once("init", async function () {
     CONFIG.Actor.documentClass = ThirdEraActor;
     CONFIG.Item.documentClass = ThirdEraItem;
 
-    // Expose Apply damage/healing dialog for macros/console (Phase 1: no sheet/chat/token entry points)
+    // Expose Apply damage/healing dialog for macros/console and Phase 2 entry points
     Hooks.on("ready", () => {
         game.thirdera = game.thirdera ?? {};
         game.thirdera.applyDamageHealing = {
-            openDialog: () => ApplyDamageHealingDialog.openForSelection()
+            openDialog: () => ApplyDamageHealingDialog.openForSelection(),
+            openWithOptions: (options) => ApplyDamageHealingDialog.openWithOptions(options)
         };
     });
 

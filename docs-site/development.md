@@ -121,3 +121,42 @@ See **[Compendium guide](compendium-guide.md)** for the full guide.
 - **Schema:** `defineSchema()` is lazily evaluated; safe to use `CONFIG.THIRDERA`; use `choices: () => CONFIG.THIRDERA.sizes` for dynamic choices.
 - **Dialog API:** `Dialog.render(true)` is **not** a Promise. Attach handlers after render (e.g. `requestAnimationFrame` + `setTimeout`); prefer event delegation.
 - **Item stacking:** Stack when same name/type, same `containerId`, same `equipped`, same type-specific props; containers don't stack. Use helpers like `_canStackItems`, `_findStackableItem`, `_splitItemStack`; quantity UI for actions on stacks.
+
+## Testing Apply damage/healing (Phase 2)
+
+Manual test steps for the Apply damage/healing entry points (chat, sheet, “to this token”, macro).
+
+1. **Setup**
+   - Load the Third Era system and a world (e.g. 3rd-era-testworld).
+   - Have at least one character and one NPC (or two tokens) with HP (value/max) and, for NPCs, temp HP if needed.
+   - Place tokens on a scene so you can select them.
+
+2. **Apply from sheet (targets from selection)**
+   - Open a character or NPC sheet; go to the **Combat** tab.
+   - Confirm **“Apply damage/healing”** is visible.
+   - Select one or more tokens on the canvas that have HP.
+   - Click **“Apply damage/healing”**. The Apply dialog should open with those tokens listed as targets, amount blank, type Damage/Healing.
+   - Enter an amount, choose Damage or Healing, click **Apply**. Confirm HP (and temp HP for damage) update and a short notification appears.
+   - Repeat with no tokens selected: dialog should open with no targets (and show “Select one or more tokens…”).
+
+3. **Apply to this token (single target from sheet)**
+   - Open the sheet of an actor that has at least one token on the current scene.
+   - On the Combat tab, confirm **“Apply to this token”** is visible (only when the actor has a token in the scene).
+   - Click **“Apply to this token”**. The Apply dialog should open with that actor as the only target, amount blank.
+   - Enter amount, apply; confirm that actor’s HP updates.
+
+4. **Apply from chat (amount from roll)**
+   - Roll damage or healing from the sheet (e.g. weapon damage, or a manual roll that posts to chat with a “Damage” or “Healing” flavor).
+   - On the chat message, confirm an **“Apply”** button appears.
+   - Select one or more target tokens (they will be used when the dialog opens).
+   - Click **“Apply”**. The Apply dialog should open with amount pre-filled from the roll total and type Damage or Healing inferred from the message flavor.
+   - Confirm targets (from selection), adjust if needed, click **Apply**; confirm HP updates.
+   - Right‑click the same message and confirm the context menu includes **“Apply”**; choose it and confirm the same behavior.
+
+5. **Macro / console**
+   - In the console or a macro, run `game.thirdera.applyDamageHealing.openDialog()`. Dialog should open with targets from current selection.
+   - Run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 5, mode: "healing" })`. Dialog should open with amount 5, Healing, and targets from selection.
+   - Run `game.thirdera.applyDamageHealing.openWithOptions({ targetActors: [actor] })` with an actor reference. Dialog should open with that actor as the only target.
+
+6. **Permissions**
+   - As a player, select a token you do not own. Open Apply from sheet or chat and try to apply. You should be blocked or see a “no permission” message if the system restricts applying to tokens you cannot edit.

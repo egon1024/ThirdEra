@@ -11,7 +11,7 @@ This page lists planned or possible work. Priorities can change. If you want to 
 
 The goal is smoother at-table combat for playtesting without full rules automation. The following are candidate features or considerations; prioritization can stay flexible.
 
-- **Apply damage/heal** — Apply the total from a damage or healing roll (in chat or from the sheet) to selected token(s) or a chosen actor. May include temp HP (damage to temp first per SRD) and optional nonlethal.
+- **Apply damage/heal** — Apply the total from a damage or healing roll (in chat or from the sheet) to selected token(s) or a chosen actor. May include temp HP (damage to temp first per SRD) and optional nonlethal. **Phase 2 (entry points)** is implemented: chat “Apply” button and context menu on roll messages; sheet “Apply damage/healing” and “Apply to this token” on Combat tab; macro `game.thirdera.applyDamageHealing.openDialog()` or `openWithOptions({ targetActors, amount, mode })`. See [Testing Apply damage/healing (Phase 2)](development.md#testing-apply-damagehealing-phase-2) for manual test steps.
 - **Rest and natural healing** — A single flow that resets spell slots and cast counts, plus optional natural healing (e.g. 1 HP per character level per day of rest per SRD).
 - **Concentration check** — A quick Concentration check (e.g. button or prompt when casting in a threatened area) with appropriate DCs (defensive casting, damage, etc.).
 - **Conditions with mechanical effects** — Ensure condition compendium items have `changes` (AC, saves, speed) populated where applicable so applying Blinded, Shaken, etc. updates the sheet automatically.
