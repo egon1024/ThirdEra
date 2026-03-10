@@ -160,3 +160,32 @@ Manual test steps for the Apply damage/healing entry points (chat, sheet, “to 
 
 6. **Permissions**
    - As a player, select a token you do not own. Open Apply from sheet or chat and try to apply. You should be blocked or see a “no permission” message if the system restricts applying to tokens you cannot edit.
+
+## Testing Apply damage/healing (Phase 3)
+
+Manual test steps for temp HP (damage to temp first), nonlethal damage, and healing that reduces nonlethal (SRD: heal lethal first, remainder heals nonlethal).
+
+1. **Setup**
+   - Use the same world and tokens as Phase 2. Ensure at least one NPC has **Temp HP** > 0 (set on Combat tab) and note current HP value/max and temp.
+
+2. **Temp HP — damage to temp first**
+   - Select a token with temp HP (e.g. 5 temp, 10/10 HP). Open Apply damage/healing (sheet or macro), enter an amount less than temp (e.g. 3), choose **Damage**, click **Apply**.
+   - **Expected:** Only temp HP decreases (e.g. 5 → 2). Current HP stays 10. Notification: “Applied 3 damage to 1 target(s).”
+   - Apply damage greater than remaining temp (e.g. 5 more). **Expected:** Temp goes to 0, remainder reduces current HP (e.g. 10 → 8). Notification as above.
+   - Optionally apply damage that would reduce HP below 0: **Expected:** HP is clamped to −9 (dying) or 0 (dead) per SRD.
+
+3. **Nonlethal damage**
+   - Select a token with 0 nonlethal. Open Apply dialog, enter amount (e.g. 4), choose **Damage**, check **“Apply as nonlethal damage”**, click **Apply**.
+   - **Expected:** Current HP and temp HP unchanged. **Nonlethal** on the sheet (Combat tab) and in the header (if present) shows 4. Notification: “Applied 4 nonlethal damage to 1 target(s).”
+   - Apply more nonlethal (e.g. 3). **Expected:** Nonlethal is cumulative (e.g. 4 → 7). HP and temp still unchanged.
+   - Confirm the “Apply as nonlethal damage” checkbox is visible when **Damage** is selected and hidden when **Healing** is selected (including after switching the type radio).
+
+4. **Healing — lethal first, remainder heals nonlethal**
+   - Use a token with current HP below max and some nonlethal (e.g. 6/10 HP, 5 nonlethal). Open Apply dialog, enter 3, choose **Healing**, click **Apply**.
+   - **Expected:** Lethal is healed first: 6 → 9 HP. No remainder, so nonlethal stays 5.
+   - Apply 5 healing. **Expected:** 1 point heals lethal (9 → 10), 4 points reduce nonlethal (5 → 1). Final: 10/10 HP, 1 nonlethal.
+   - Apply 2 more healing. **Expected:** No lethal to heal; both points reduce nonlethal (1 → 0). Final: 10/10 HP, 0 nonlethal.
+
+5. **Sheets and macro**
+   - On character and NPC sheets, Combat tab: confirm **Nonlethal** field is present and editable. In header, when nonlethal > 0, confirm “(N NL)” appears (e.g. “(5 NL)”).
+   - In console run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })`. **Expected:** Dialog opens with amount 2, Damage selected, “Apply as nonlethal damage” checked. Apply and confirm nonlethal increases on target.

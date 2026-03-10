@@ -22,6 +22,8 @@ For how to create and manage compendiums (pack definition, JSON layout, loader b
 
 Configuration that drives sheets and logic (sizes, damage types, movement maneuverability, etc.) lives in **CONFIG.THIRDERA**. The system uses this at runtime; you do not need to modify it to add new races, classes, or items—they are data, not config.
 
+For GM-facing world options (e.g. track currency weight, audit log, first-level full HP), see **[World configuration](usage/world-configuration.md)** in the Usage section.
+
 ## Changing the core code
 
 If you are working on the repository itself (entry points, file layout, conventions, Foundry v13 behavior), use the **[Development](development.md)** page on this site. It is the single reference for architecture, conventions, and operational notes when contributing to the codebase.

@@ -38,6 +38,9 @@
               {{#if system.attributes.hp.temp}}
               <span class="header-hp-temp" title="{{localize 'THIRDERA.ApplyDamageHealing.TempHP'}}">+{{system.attributes.hp.temp}}</span>
               {{/if}}
+              {{#if system.attributes.hp.nonlethal}}
+              <span class="header-hp-nonlethal" title="{{localize 'THIRDERA.ApplyDamageHealing.Nonlethal'}}"> ({{system.attributes.hp.nonlethal}} NL)</span>
+              {{/if}}
             </div>
           </div>
         </div>
@@ -237,6 +240,13 @@
           <label>{{localize 'THIRDERA.ApplyDamageHealing.TempHP'}}</label>
           <div class="stat-value">
             <input type="number" name="system.attributes.hp.temp" value="{{system.attributes.hp.temp}}"
+              data-dtype="Number" min="0" step="1" />
+          </div>
+        </div>
+        <div class="stat-block">
+          <label>{{localize 'THIRDERA.ApplyDamageHealing.Nonlethal'}}</label>
+          <div class="stat-value">
+            <input type="number" name="system.attributes.hp.nonlethal" value="{{system.attributes.hp.nonlethal}}"
               data-dtype="Number" min="0" step="1" />
           </div>
         </div>

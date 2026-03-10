@@ -16,6 +16,7 @@ Once the world is ready, you can create **Characters** and **NPCs** from the **A
 
 ## What to read next
 
+- **[World configuration](world-configuration.md)** - World-level settings (currency weight, audit log, first-level HP, etc.).
 - **[Characters](characters.md)** - Character sheet tabs (Description, Attributes, Classes, Spells, Combat), level-up, skills, feats, and spellcasting.
 - **[NPCs](npcs.md)** - NPC sheet overview, stat block, combat, and conditions.
 - **[Compendiums](compendiums.md)** - What compendiums are included and how to use them (drag-and-drop, browsing).

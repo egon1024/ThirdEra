@@ -59,12 +59,14 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
      * @param {Object} [options] - Optional initial amount and mode for the form.
      * @param {number|string} [options.amount] - Pre-filled amount (e.g. from chat roll).
      * @param {string} [options.mode] - "damage" or "healing".
+     * @param {boolean} [options.nonlethal] - When mode is damage, apply as nonlethal.
      */
     constructor(targetActors, options = {}) {
         super(options);
         this.targetActors = targetActors ?? [];
         if (options.amount !== undefined) this.amount = options.amount;
         if (options.mode === "healing" || options.mode === "damage") this.mode = options.mode;
+        if (options.nonlethal === true) this.nonlethal = true;
     }
 
     /** @override */
@@ -73,12 +75,14 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
         const canApply = this.targetActors.length > 0;
         const mode = this.mode ?? "damage";
         const amount = this.amount ?? "";
+        const nonlethal = Boolean(this.nonlethal);
         return {
             appId: this.id,
             targetNames,
             canApply,
             mode,
-            amount
+            amount,
+            nonlethal
         };
     }
 
@@ -99,6 +103,15 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
             e.preventDefault();
             if (this.targetActors.length > 0) this._doApply();
         });
+        const body = htmlElement?.querySelector?.(".apply-damage-healing-dialog-body");
+        const modeRadios = form?.querySelectorAll?.("input[name='mode']");
+        if (body && modeRadios?.length) {
+            const updateMode = () => {
+                const checked = form.querySelector("input[name='mode']:checked");
+                if (checked) body.dataset.mode = checked.value;
+            };
+            for (const radio of modeRadios) radio.addEventListener("change", updateMode);
+        }
     }
 
     static #onApply(event, target) {
@@ -122,8 +135,10 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
         if (!form) return;
         const amountInput = form.querySelector("input[name='amount']");
         const modeInput = form.querySelector("input[name='mode']:checked");
+        const nonlethalInput = form.querySelector("input[name='nonlethal']");
         const amount = Math.max(0, Math.floor(parseInt(amountInput?.value, 10) || 0));
         const mode = modeInput?.value === "healing" ? "healing" : "damage";
+        const nonlethal = mode === "damage" && nonlethalInput?.checked === true;
 
         const allowed = this.targetActors.filter((actor) => actor.canUserModify(game.user, "update"));
         if (allowed.length === 0) {
@@ -135,12 +150,14 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
             return;
         }
 
-        const { updated, errors } = await applyDamageOrHealing(allowed, amount, mode);
+        const { updated, errors } = await applyDamageOrHealing(allowed, amount, mode, { nonlethal });
         if (errors.length) {
             ui.notifications?.warn(errors.join(" "));
         }
         const msg = mode === "damage"
-            ? game.i18n.format("THIRDERA.ApplyDamageHealing.AppliedDamage", { amount, count: updated.length })
+            ? (nonlethal
+                ? game.i18n.format("THIRDERA.ApplyDamageHealing.AppliedNonlethalDamage", { amount, count: updated.length })
+                : game.i18n.format("THIRDERA.ApplyDamageHealing.AppliedDamage", { amount, count: updated.length }))
             : game.i18n.format("THIRDERA.ApplyDamageHealing.AppliedHealing", { amount, count: updated.length });
         ui.notifications?.info(msg);
         this.close();

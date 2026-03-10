@@ -2275,6 +2275,14 @@
   gap: 0.35em;
   font-weight: normal;
 }
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-nonlethal-label {
+  display: block;
+  margin-top: 0.5em;
+  font-weight: normal;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-dialog-body[data-mode="healing"] .apply-damage-healing-nonlethal-label {
+  display: none;
+}
 .thirdera.apply-damage-healing-dialog .apply-damage-healing-target-list {
   margin: 0.25em 0 0;
   padding-left: 1.25em;

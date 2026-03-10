@@ -14,7 +14,7 @@ This documentation is generated using [mkdocs](https://www.mkdocs.org/) and uses
 
 ## What you’ll find here
 
-- **[Usage](usage/index.md)** - Installing the system, creating a world, general usage guides.
+- **[Usage](usage/index.md)** - Installing the system, creating a world, world configuration, and general usage guides.
 - **[Contributing](contributing.md)** - Development approach, how to give feedback, and where to find code and commit conventions.
 - **[Extending](extending.md)** - Adding compendiums, modules, or new content (data-driven design, references, compendiums, config).
 - **[Development](development.md)** - Contributing to the codebase (architecture, file layout, conventions, Foundry v13 notes).

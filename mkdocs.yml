@@ -22,6 +22,7 @@ nav:
   - Home: index.md
   - Usage:
     - Usage overview: usage/index.md
+    - World configuration: usage/world-configuration.md
     - Characters: usage/characters.md
     - NPCs: usage/npcs.md
     - Compendiums: usage/compendiums.md

@@ -47,6 +47,9 @@
                 class="header-hp-current {{hpStatus}}" min="0" />
               <span class="header-hp-sep">/</span>
               <span class="header-hp-max">{{system.attributes.hp.max}}</span>
+              {{#if system.attributes.hp.nonlethal}}
+              <span class="header-hp-nonlethal" title="{{localize 'THIRDERA.ApplyDamageHealing.Nonlethal'}}"> ({{system.attributes.hp.nonlethal}} NL)</span>
+              {{/if}}
             </div>
           </div>
         </div>
@@ -378,6 +381,13 @@
             <input type="text" name="system.attributes.hp.max" value="{{system.attributes.hp.max}}"
               data-dtype="Number" />
             {{/if}}
+          </div>
+        </div>
+        <div class="stat-block">
+          <label>{{localize 'THIRDERA.ApplyDamageHealing.Nonlethal'}}</label>
+          <div class="stat-value">
+            <input type="text" name="system.attributes.hp.nonlethal" value="{{system.attributes.hp.nonlethal}}"
+              data-dtype="Number" />
           </div>
         </div>
         {{#if system.attributes.hp.dyingStableVisible}}
