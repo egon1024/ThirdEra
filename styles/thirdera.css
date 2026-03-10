@@ -125,13 +125,20 @@
   background-color: rgba(244, 67, 54, 0.05);
 }
 
-.thirdera form {
+/* Only inside our app windows (not main game UI). Match by app root classes. */
+.thirdera.sheet form,
+.thirdera.level-up-flow form,
+.thirdera.spell-list-browser form,
+.thirdera.apply-damage-healing-dialog form {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.thirdera .window-content {
+.thirdera.sheet .window-content,
+.thirdera.level-up-flow .window-content,
+.thirdera.spell-list-browser .window-content,
+.thirdera.apply-damage-healing-dialog .window-content {
   height: 100%;
   padding: 5px;
   overflow-y: hidden;
@@ -2250,6 +2257,40 @@
 
 .thirdera .form-group input:not([type="checkbox"]) {
   width: 100%;
+}
+
+/* Apply damage/healing dialog — scoped to .apply-damage-healing-dialog only */
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-dialog-title {
+  margin: 0;
+  font-size: var(--font-size-heading);
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-type-row {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-type-row .radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  font-weight: normal;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-target-list {
+  margin: 0.25em 0 0;
+  padding-left: 1.25em;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-empty-targets {
+  margin: 0.25em 0 0;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5em;
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--color-border-divider);
 }
 
 /* Checkbox groups — labels inline with checkboxes */

@@ -315,12 +315,10 @@ To clear another pack (e.g. `packs/races`), use the same pattern: delete `*.ldb`
 - **Feats**: 86 items (all SRD feats - General, Fighter Bonus, Metamagic, Item Creation)
 - **Armor**: 16 items (all SRD armor types and shields)
 - **Weapons**: 58 items (all SRD weapons - Simple, Martial, Exotic)
+- **Spells**: 500+ items (SRD 0–9)
 
 ### Incomplete
 - **Equipment**: 63 items (SRD adventuring gear and similar)
-
-### Spells
-- **Spells**: 28 items (all SRD 0-level cantrips/orisons plus 10 sample spells of higher levels; expansion ongoing)
 
 ## Adding New Compendium Content
 

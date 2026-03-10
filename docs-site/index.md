@@ -18,5 +18,6 @@ This documentation is generated using [mkdocs](https://www.mkdocs.org/) and uses
 - **[Contributing](contributing.md)** - Development approach, how to give feedback, and where to find code and commit conventions.
 - **[Extending](extending.md)** - Adding compendiums, modules, or new content (data-driven design, references, compendiums, config).
 - **[Development](development.md)** - Contributing to the codebase (architecture, file layout, conventions, Foundry v13 notes).
+- **[Future plans](future-plans.md)** - Roadmap and planned or possible work.
 
-Start with **[Usage](usage/index.md)** if you’re a GM or player; use **[Extending](extending.md)** if you’re adding content or packs; use **[Development](development.md)** if you're changing core code.
+Start with **[Usage](usage/index.md)** if you’re a GM or player; use **[Extending](extending.md)** if you’re adding content or packs; use **[Development](development.md)** if you're changing core code. See **[Future plans](future-plans.md)** for what’s next on the roadmap.

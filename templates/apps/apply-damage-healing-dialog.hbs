@@ -1,0 +1,45 @@
+<form class="thirdera apply-damage-healing-dialog-form" data-appid="{{appId}}" autocomplete="off">
+  <header class="apply-damage-healing-dialog-header">
+    <h2 class="apply-damage-healing-dialog-title">{{localize "THIRDERA.ApplyDamageHealing.Title"}}</h2>
+  </header>
+
+  <div class="apply-damage-healing-dialog-body">
+    <div class="form-group">
+      <label for="apply-damage-healing-amount">{{localize "THIRDERA.ApplyDamageHealing.Amount"}}</label>
+      <input type="number" id="apply-damage-healing-amount" name="amount" value="{{amount}}" min="0" step="1"
+        data-dtype="Number" class="apply-damage-healing-amount-input" />
+    </div>
+
+    <div class="form-group">
+      <label>{{localize "THIRDERA.ApplyDamageHealing.Type"}}</label>
+      <div class="apply-damage-healing-type-row">
+        <label class="radio-label">
+          <input type="radio" name="mode" value="damage" {{#if (eq mode "damage")}}checked{{/if}} data-dtype="String" />
+          {{localize "THIRDERA.ApplyDamageHealing.Damage"}}
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="mode" value="healing" {{#if (eq mode "healing")}}checked{{/if}} data-dtype="String" />
+          {{localize "THIRDERA.ApplyDamageHealing.Healing"}}
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>{{localize "THIRDERA.ApplyDamageHealing.Targets"}}</label>
+      {{#if targetNames.length}}
+      <ul class="apply-damage-healing-target-list">
+        {{#each targetNames as |name|}}
+        <li>{{name}}</li>
+        {{/each}}
+      </ul>
+      {{else}}
+      <p class="apply-damage-healing-empty-targets">{{localize "THIRDERA.ApplyDamageHealing.NoTargets"}}</p>
+      {{/if}}
+    </div>
+  </div>
+
+  <footer class="apply-damage-healing-dialog-footer">
+    <button type="button" data-action="cancel">{{localize "THIRDERA.ApplyDamageHealing.Cancel"}}</button>
+    <button type="button" data-action="apply" {{#unless canApply}}disabled{{/unless}}>{{localize "THIRDERA.ApplyDamageHealing.Apply"}}</button>
+  </footer>
+</form>

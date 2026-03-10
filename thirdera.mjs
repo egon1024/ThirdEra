@@ -37,6 +37,7 @@ import {
     syncFlatFootedForCombat,
     removeDerivedFlatFooted
 } from "./module/logic/derived-conditions.mjs";
+import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 
 /**
  * Initialize HP auto-increase system
@@ -117,6 +118,14 @@ Hooks.once("init", async function () {
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;
     CONFIG.Item.documentClass = ThirdEraItem;
+
+    // Expose Apply damage/healing dialog for macros/console (Phase 1: no sheet/chat/token entry points)
+    Hooks.on("ready", () => {
+        game.thirdera = game.thirdera ?? {};
+        game.thirdera.applyDamageHealing = {
+            openDialog: () => ApplyDamageHealingDialog.openForSelection()
+        };
+    });
 
     // Define THIRDERA configuration
     CONFIG.THIRDERA = {

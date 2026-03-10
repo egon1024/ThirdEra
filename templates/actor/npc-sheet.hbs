@@ -35,6 +35,9 @@
                 class="header-hp-current {{hpStatus}}" min="0" data-dtype="Number" />
               <span class="header-hp-sep">/</span>
               <span class="header-hp-max">{{system.attributes.hp.max}}</span>
+              {{#if system.attributes.hp.temp}}
+              <span class="header-hp-temp" title="{{localize 'THIRDERA.ApplyDamageHealing.TempHP'}}">+{{system.attributes.hp.temp}}</span>
+              {{/if}}
             </div>
           </div>
         </div>
@@ -217,6 +220,13 @@
             <span>/</span>
             <input type="number" name="system.attributes.hp.max" value="{{system.attributes.hp.max}}"
               data-dtype="Number" min="1" step="1" />
+          </div>
+        </div>
+        <div class="stat-block">
+          <label>{{localize 'THIRDERA.ApplyDamageHealing.TempHP'}}</label>
+          <div class="stat-value">
+            <input type="number" name="system.attributes.hp.temp" value="{{system.attributes.hp.temp}}"
+              data-dtype="Number" min="0" step="1" />
           </div>
         </div>
         {{#if system.attributes.hp.dyingStableVisible}}

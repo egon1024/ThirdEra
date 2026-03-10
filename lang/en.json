@@ -81,6 +81,20 @@
             "character": "Character",
             "npc": "NPC"
         },
+        "ApplyDamageHealing": {
+            "Title": "Apply damage / healing",
+            "Amount": "Amount",
+            "Damage": "Damage",
+            "Healing": "Healing",
+            "Targets": "Targets",
+            "Apply": "Apply",
+            "Cancel": "Cancel",
+            "NoTargets": "Select one or more tokens on the canvas.",
+            "AppliedDamage": "Applied {amount} damage to {count} target(s).",
+            "AppliedHealing": "Applied {amount} healing to {count} target(s).",
+            "TempHP": "Temporary HP",
+            "NoPermission": "You do not have permission to modify the selected token(s)."
+        },
         "NPC": {
             "CreatureType": "Creature Type",
             "Subtypes": "Subtypes",
