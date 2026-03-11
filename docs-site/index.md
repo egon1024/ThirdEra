@@ -6,7 +6,7 @@ contents: none
 
 **Disclaimer:** This repository and its code are primarily authored by AI. Any and all artwork in the repository is AI-generated.
 
-ThirdEra is a **Foundry VTT game system** for **D&D 3.5 Edition** using the System Reference Document (SRD). It targets **Foundry VTT v13** and provides character and NPC sheets, level-up, spellcasting, conditions, compendiums of SRD content, and integration with Foundry’s core tools (combat, tokens, chat).
+ThirdEra is a **Foundry VTT game system** for **D&D 3.5 Edition** using the System Reference Document (SRD). It targets **Foundry VTT v13** and provides character and NPC sheets, level-up, spellcasting, conditions, compendiums of SRD content, apply damage/healing from sheet or chat, and integration with Foundry’s core tools (combat, tokens, chat).
 
 This documentation is generated using [mkdocs](https://www.mkdocs.org/) and uses the [torillic](https://github.com/TEParsons/torillic) theme.
 

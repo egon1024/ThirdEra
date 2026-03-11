@@ -6,7 +6,7 @@ NPCs (non-player characters) use a dedicated sheet with tabs for description, at
 
 - **Description** - Biography and notes for the NPC.
 - **Attributes** - **Details** subtab: Challenge Rating, alignment, size, **Creature Type** and **Subtypes** (drag type/subtype items from compendiums). **Scores & Saves** subtab: ability scores and saving throws.
-- **Combat** - Hit points, AC (including natural armor from the stat block), initiative, and a **Stat block** section (see below). You can add **Conditions** via the Conditions block (drag condition items or choose from the dropdown). Natural attacks and movement are also configured here.
+- **Combat** - Hit points (including temp HP and nonlethal), AC (including natural armor from the stat block), initiative, and a **Stat block** section (see below). **Apply damage/healing** and **Apply to this token** work the same as on the character sheet (see [Applying damage and healing](characters.md#applying-damage-and-healing) in Characters). You can add **Conditions** via the Conditions block (drag condition items or choose from the dropdown). Natural attacks and movement are also configured here.
 - **Equipment** - Weapons, armor, and other equipment. Add items by dragging them onto the sheet (there are no “Add weapon/armor” buttons; use drag-and-drop from compendiums or the Items directory).
 
 ## Stat block
