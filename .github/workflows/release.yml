@@ -143,7 +143,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Deploy versioned docs
-        run: mike deploy ${{ steps.create_release.outputs.next_version }} latest --push
+        run: mike deploy ${{ steps.create_release.outputs.next_version }} latest --push --update-aliases
 
       - name: Update repo system.json to match release
         env:

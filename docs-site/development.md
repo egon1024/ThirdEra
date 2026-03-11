@@ -121,3 +121,93 @@ See **[Compendium guide](compendium-guide.md)** for the full guide.
 - **Schema:** `defineSchema()` is lazily evaluated; safe to use `CONFIG.THIRDERA`; use `choices: () => CONFIG.THIRDERA.sizes` for dynamic choices.
 - **Dialog API:** `Dialog.render(true)` is **not** a Promise. Attach handlers after render (e.g. `requestAnimationFrame` + `setTimeout`); prefer event delegation.
 - **Item stacking:** Stack when same name/type, same `containerId`, same `equipped`, same type-specific props; containers don't stack. Use helpers like `_canStackItems`, `_findStackableItem`, `_splitItemStack`; quantity UI for actions on stacks.
+
+## Testing Apply damage/healing (Phase 2)
+
+Manual test steps for the Apply damage/healing entry points (chat, sheet, “to this token”, macro).
+
+1. **Setup**
+   - Load the Third Era system and a world (e.g. 3rd-era-testworld).
+   - Have at least one character and one NPC (or two tokens) with HP (value/max) and, for NPCs, temp HP if needed.
+   - Place tokens on a scene so you can select them.
+
+2. **Apply from sheet (targets from selection)**
+   - Open a character or NPC sheet; go to the **Combat** tab.
+   - Confirm **“Apply damage/healing”** is visible.
+   - Select one or more tokens on the canvas that have HP.
+   - Click **“Apply damage/healing”**. The Apply dialog should open with those tokens listed as targets, amount blank, type Damage/Healing.
+   - Enter an amount, choose Damage or Healing, click **Apply**. Confirm HP (and temp HP for damage) update and a short notification appears.
+   - Repeat with no tokens selected: dialog should open with no targets (and show “Select one or more tokens…”).
+
+3. **Apply to this token (single target from sheet)**
+   - Open the sheet of an actor that has at least one token on the current scene.
+   - On the Combat tab, confirm **“Apply to this token”** is visible (only when the actor has a token in the scene).
+   - Click **“Apply to this token”**. The Apply dialog should open with that actor as the only target, amount blank.
+   - Enter amount, apply; confirm that actor’s HP updates.
+
+4. **Apply from chat (amount from roll)**
+   - Roll damage or healing from the sheet (e.g. weapon damage, or a manual roll that posts to chat with a “Damage” or “Healing” flavor).
+   - On the chat message, confirm an **“Apply”** button appears.
+   - Select one or more target tokens (they will be used when the dialog opens).
+   - Click **“Apply”**. The Apply dialog should open with amount pre-filled from the roll total and type Damage or Healing inferred from the message flavor.
+   - Confirm targets (from selection), adjust if needed, click **Apply**; confirm HP updates.
+   - Right‑click the same message and confirm the context menu includes **“Apply”**; choose it and confirm the same behavior.
+
+5. **Macro / console**
+   - In the console or a macro, run `game.thirdera.applyDamageHealing.openDialog()`. Dialog should open with targets from current selection.
+   - Run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 5, mode: "healing" })`. Dialog should open with amount 5, Healing, and targets from selection.
+   - Run `game.thirdera.applyDamageHealing.openWithOptions({ targetActors: [actor] })` with an actor reference. Dialog should open with that actor as the only target.
+
+6. **Permissions**
+   - As a player, select a token you do not own. Open Apply from sheet or chat and try to apply. You should be blocked or see a “no permission” message if the system restricts applying to tokens you cannot edit.
+
+## Testing Apply damage/healing (Phase 3)
+
+Manual test steps for temp HP (damage to temp first), nonlethal damage, and healing that reduces nonlethal (SRD: heal lethal first, remainder heals nonlethal).
+
+1. **Setup**
+   - Use the same world and tokens as Phase 2. Ensure at least one NPC has **Temp HP** > 0 (set on Combat tab) and note current HP value/max and temp.
+
+2. **Temp HP — damage to temp first**
+   - Select a token with temp HP (e.g. 5 temp, 10/10 HP). Open Apply damage/healing (sheet or macro), enter an amount less than temp (e.g. 3), choose **Damage**, click **Apply**.
+   - **Expected:** Only temp HP decreases (e.g. 5 → 2). Current HP stays 10. Notification: “Applied 3 damage to 1 target(s).”
+   - Apply damage greater than remaining temp (e.g. 5 more). **Expected:** Temp goes to 0, remainder reduces current HP (e.g. 10 → 8). Notification as above.
+   - Optionally apply damage that would reduce HP below 0: **Expected:** HP is clamped to −9 (dying) or 0 (dead) per SRD.
+
+3. **Nonlethal damage**
+   - Select a token with 0 nonlethal. Open Apply dialog, enter amount (e.g. 4), choose **Damage**, check **“Apply as nonlethal damage”**, click **Apply**.
+   - **Expected:** Current HP and temp HP unchanged. **Nonlethal** on the sheet (Combat tab) and in the header (if present) shows 4. Notification: “Applied 4 nonlethal damage to 1 target(s).”
+   - Apply more nonlethal (e.g. 3). **Expected:** Nonlethal is cumulative (e.g. 4 → 7). HP and temp still unchanged.
+   - Confirm the “Apply as nonlethal damage” checkbox is visible when **Damage** is selected and hidden when **Healing** is selected (including after switching the type radio).
+
+4. **Healing — lethal first, remainder heals nonlethal**
+   - Use a token with current HP below max and some nonlethal (e.g. 6/10 HP, 5 nonlethal). Open Apply dialog, enter 3, choose **Healing**, click **Apply**.
+   - **Expected:** Lethal is healed first: 6 → 9 HP. No remainder, so nonlethal stays 5.
+   - Apply 5 healing. **Expected:** 1 point heals lethal (9 → 10), 4 points reduce nonlethal (5 → 1). Final: 10/10 HP, 1 nonlethal.
+   - Apply 2 more healing. **Expected:** No lethal to heal; both points reduce nonlethal (1 → 0). Final: 10/10 HP, 0 nonlethal.
+
+5. **Sheets and macro**
+   - On character and NPC sheets, Combat tab: confirm **Nonlethal** field is present and editable. In header, when nonlethal > 0, confirm “(N NL)” appears (e.g. “(5 NL)”).
+   - In console run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })`. **Expected:** Dialog opens with amount 2, Damage selected, “Apply as nonlethal damage” checked. Apply and confirm nonlethal increases on target.
+
+## Testing Apply damage/healing (Phase 4)
+
+Manual test steps for combined attack & damage roll and Apply using the damage total; and for `openWithOptions` passing `nonlethal`.
+
+1. **openWithOptions nonlethal (Phase 3 completion)**
+   - In console run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })`.
+   - **Expected:** Dialog opens with amount 2, Damage selected, **“Apply as nonlethal damage” checked**. Apply and confirm nonlethal increases on the selected target.
+
+2. **Attack & Damage button**
+   - Open a character or NPC sheet; go to the Combat tab and the weapons list.
+   - Confirm a third roll button (burst icon) with title **“Attack & Damage”** appears next to the Attack (d20) and Damage (d6) buttons for each weapon.
+   - Click **“Attack & Damage”** for a weapon. **Expected:** One chat message is posted containing both an attack roll and a damage roll, with flavor like “Longsword Attack & Damage (Primary)”.
+
+3. **Apply from combined message**
+   - After posting an Attack & Damage message, confirm an **“Apply”** button appears on that message.
+   - Select one or more target tokens on the canvas.
+   - Click **“Apply”**. **Expected:** The Apply dialog opens with the **damage roll total** (not attack + damage) in the Amount field and Damage selected.
+   - Click **Apply** and confirm the target’s HP decreases by that damage total (temp HP first if present).
+
+4. **Separate damage message unchanged**
+   - Roll only damage from the sheet (Damage d6 button). Confirm the Apply button still appears and uses the single roll total (unchanged from Phase 2).

@@ -104,6 +104,8 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 hp: new SchemaField({
                     value: new NumberField({ required: true, integer: true, min: -999, initial: 1 }),
                     max: new NumberField({ required: true, integer: true, min: 1, initial: 1 }),
+                    temp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Temporary HP" }),
+                    nonlethal: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Nonlethal damage" }),
                     stable: new BooleanField({ required: true, initial: false })
                 }),
                 ac: new SchemaField({

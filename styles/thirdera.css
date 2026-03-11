@@ -125,13 +125,20 @@
   background-color: rgba(244, 67, 54, 0.05);
 }
 
-.thirdera form {
+/* Only inside our app windows (not main game UI). Match by app root classes. */
+.thirdera.sheet form,
+.thirdera.level-up-flow form,
+.thirdera.spell-list-browser form,
+.thirdera.apply-damage-healing-dialog form {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.thirdera .window-content {
+.thirdera.sheet .window-content,
+.thirdera.level-up-flow .window-content,
+.thirdera.spell-list-browser .window-content,
+.thirdera.apply-damage-healing-dialog .window-content {
   height: 100%;
   padding: 5px;
   overflow-y: hidden;
@@ -2250,6 +2257,79 @@
 
 .thirdera .form-group input:not([type="checkbox"]) {
   width: 100%;
+}
+
+/* Apply damage/healing dialog — scoped to .apply-damage-healing-dialog only */
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-dialog-title {
+  margin: 0;
+  font-size: var(--font-size-heading);
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-type-row {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-type-row .radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  font-weight: normal;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-nonlethal-label {
+  display: block;
+  margin-top: 0.5em;
+  font-weight: normal;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-dialog-body[data-mode="healing"] .apply-damage-healing-nonlethal-label {
+  display: none;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-target-list {
+  margin: 0.25em 0 0;
+  padding-left: 1.25em;
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-empty-targets {
+  margin: 0.25em 0 0;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+}
+.thirdera.apply-damage-healing-dialog .apply-damage-healing-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5em;
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--color-border-divider);
+}
+
+/* Phase 2: Apply damage/healing sheet row (Combat tab) */
+.thirdera .apply-damage-healing-sheet-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 0.75em;
+}
+.thirdera .apply-damage-healing-sheet-row .apply-damage-healing-btn,
+.thirdera .apply-damage-healing-sheet-row .apply-damage-healing-to-token-btn {
+  padding: 0.25em 0.5em;
+  font-size: var(--font-size-12);
+}
+
+/* Phase 2: Apply button on chat roll messages */
+.thirdera-apply-from-chat-wrap {
+  margin-top: 0.25em;
+}
+.thirdera-chat-apply-btn,
+.thirdera-apply-damage-healing-from-chat {
+  padding: 0.2em 0.5em;
+  font-size: var(--font-size-12);
+  cursor: pointer;
+  background: var(--color-bg-parchment-dark);
+  border: 1px solid var(--color-popup-border);
+  border-radius: 3px;
+}
+.thirdera-chat-apply-btn:hover,
+.thirdera-apply-damage-healing-from-chat:hover {
+  background: var(--color-popup-hover-bg);
 }
 
 /* Checkbox groups — labels inline with checkboxes */
