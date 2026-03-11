@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Development reference - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../css/logo.png">
+  <link href="../css/torillic.css" rel="stylesheet">
+  <link href="../css/single-column.css" rel="stylesheet">
+  <link href="../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="..">Home</a>
+      
+      
+      
+      <a class="" href="../usage/">Usage</a>
+      
+      
+      
+      <a class="" href="../extending/">Extending</a>
+      
+      
+      
+      <a class="current" href="./">Development</a>
+      
+      
+      
+      <a class="" href="../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="development-reference">Development reference</h1>
+<p>This page is the single reference for <strong><a href="../contributing/">contributors</a></strong> working in this repository: project overview, architecture, conventions, and operational notes. If you are <strong>extending</strong> the system (adding compendiums, modules, or new content) rather than changing core code, see <strong><a href="../extending/">Extending</a></strong> first.</p>
+<h2 id="project-overview">Project Overview</h2>
+<p>ThirdEra is a <strong>Foundry VTT game system</strong> implementing D&amp;D 3.5 Edition using the System Reference Document (SRD). It targets <strong>Foundry VTT v13</strong> and uses the <strong>ApplicationV2 / HandlebarsApplicationMixin</strong> sheet framework (not the legacy Application v1). <strong>Only SRD content is intended to be implemented - no proprietary data outside the SRD.</strong> The system is designed so that third-party compendiums or modules can extend it.</p>
+<p>There is no build step, bundler, or package manager. The system is plain ES modules + CSS + Handlebars templates, loaded directly by Foundry VTT at runtime.</p>
+<h2 id="development-setup">Development Setup</h2>
+<ul>
+<li>Symlink or copy this repository into Foundry VTT <code>Data/systems/</code> as <code>thirdera/</code>. Foundry resolves paths relative to <code>systems/thirdera/</code> (e.g. template paths use <code>"systems/thirdera/templates/..."</code>).</li>
+<li>No tests, linters, or build commands. Test by reloading the Foundry VTT world in-browser (F5 or "Reload" in developer tools).</li>
+</ul>
+<h2 id="architecture">Architecture</h2>
+<h3 id="entry-point">Entry Point</h3>
+<p><code>thirdera.mjs</code> - Registers all data models, document classes, sheet classes, Handlebars helpers, and partials in <code>Hooks.once("init")</code>. Also registers sidebar delete button hooks. Global config: <code>CONFIG.THIRDERA</code>.</p>
+<h3 id="data-models-moduledata">Data Models (<code>module/data/</code>)</h3>
+<p>Each file defines a <code>TypeDataModel</code> subclass with static <code>defineSchema()</code> using Foundry field classes (<code>NumberField</code>, <code>StringField</code>, <code>SchemaField</code>, <code>HTMLField</code>, etc.).</p>
+<ul>
+<li><strong>Actor types</strong>: <code>CharacterData</code> (actor-character.mjs), <code>NPCData</code> (actor-npc.mjs)</li>
+<li><strong>Item types</strong>: <code>WeaponData</code>, <code>ArmorData</code>, <code>EquipmentData</code>, <code>SpellData</code>, <code>FeatData</code>, <code>SkillData</code>, <code>RaceData</code>, <code>ClassData</code>, <code>FeatureData</code></li>
+</ul>
+<p>Derived data (ability modifiers, save totals, grapple, initiative) is calculated in <code>prepareDerivedData()</code> on the data models, not on document classes.</p>
+<h3 id="document-classes-moduledocuments">Document Classes (<code>module/documents/</code>)</h3>
+<ul>
+<li><strong>ThirdEraActor</strong> (actor.mjs) - Extends <code>Actor</code>. Roll methods: <code>rollAbilityCheck</code>, <code>rollSavingThrow</code>, <code>rollSkillCheck</code>, <code>rollInitiative</code>. Delegates to type-specific <code>_prepareCharacterData</code> / <code>_prepareNPCData</code>.</li>
+<li><strong>ThirdEraItem</strong> (item.mjs) - Extends <code>Item</code>. <code>rollAttack</code> / <code>rollDamage</code> for weapons. Skill totals in <code>_prepareSkillData</code> when the item is owned by an actor.</li>
+</ul>
+<h3 id="sheet-classes-modulesheets">Sheet Classes (<code>module/sheets/</code>)</h3>
+<p>Both use <strong>ApplicationV2</strong>: <code>HandlebarsApplicationMixin(ActorSheetV2)</code> / <code>HandlebarsApplicationMixin(ItemSheetV2)</code>.</p>
+<ul>
+<li><strong>ThirdEraActorSheet</strong> (actor-sheet.mjs) - Single PARTS entry; template swapped in <code>_configureRenderParts()</code> by actor type (character vs npc). Actions: static private methods in <code>DEFAULT_OPTIONS.actions</code>.</li>
+<li><strong>ThirdEraItemSheet</strong> (item-sheet.mjs) - Template per item type (<code>item-${type}-sheet.hbs</code>). <code>submitOnChange: true</code> for auto-saving.</li>
+</ul>
+<p>Tab switching is manual via a <code>changeTab</code> action (not Foundry's built-in tab system).</p>
+<h3 id="templates-templates">Templates (<code>templates/</code>)</h3>
+<ul>
+<li><strong>Actor</strong>: <code>templates/actor/character-sheet.hbs</code>, <code>npc-sheet.hbs</code></li>
+<li><strong>Item</strong>: One per type (<code>item-weapon-sheet.hbs</code>, <code>item-armor-sheet.hbs</code>, etc.), plus <code>item-feature-sheet.hbs</code></li>
+<li><strong>Partials</strong>: <code>templates/partials/editor-box.hbs</code> (ProseMirror display/edit toggle). See <code>templates/partials/README.md</code>.</li>
+</ul>
+<p>Context comes from <code>_prepareContext()</code>; item lists are pre-sorted in the sheet's <code>_prepareItems()</code>.</p>
+<h3 id="handlebars-helpers">Handlebars Helpers</h3>
+<p>Registered in <code>thirdera.mjs:registerHandlebarsHelpers()</code>: <code>abilityMod(score)</code>, <code>signedNumber(num)</code>, <code>eq(a, b)</code>, <code>concat(...args)</code>.</p>
+<h3 id="styles">Styles</h3>
+<p><code>styles/thirdera.css</code> - All selectors under <code>.thirdera</code>. ProseMirror: <code>.active</code>/<code>.inactive</code> for edit/display; <code>--editor-min-height</code> custom property.</p>
+<p><strong>Design tokens</strong> (on <code>.thirdera</code>): Use <strong>only</strong> these - no new hardcoded colors or font sizes.</p>
+<ul>
+<li><strong>Colors</strong>: <code>--color-*</code> (text, backgrounds, theme accents, hover, status, borders)</li>
+<li><strong>Typography</strong>: <code>--font-family</code>, <code>--font-size-*</code> scale (note, label, body, value, value-lg, value-xl, heading)</li>
+</ul>
+<h3 id="localization">Localization</h3>
+<p><code>lang/en.json</code> - <code>THIRDERA.*</code> namespace; also <code>TYPES.Item.*</code> and <code>TYPES.Actor.*</code> for Foundry type labels.</p>
+<h2 id="reference-resources">Reference Resources</h2>
+<ul>
+<li><strong>Extenders:</strong> <strong><a href="../extending/">Extending</a></strong> (this site) - Adding compendiums or new content; data-driven design and reference rules.</li>
+<li><strong>Foundry VTT source:</strong> <code>~/foundryvtt/</code> - For base classes, hooks, API. Consult its own docs as needed.</li>
+<li><strong>Online:</strong> D&amp;D 3.5 SRD - https://www.d20srd.org/index.htm | Foundry API - https://foundryvtt.com/api/</li>
+</ul>
+<h2 id="key-conventions">Key Conventions</h2>
+<ul>
+<li><strong>Item references:</strong> Use <strong>document ID or UUID</strong> for references and membership checks, not name or key. See <a href="#item-references">Item references</a> below.</li>
+<li><strong>Config:</strong> <code>CONFIG.THIRDERA</code> uses mixed casing; sheets remap to camelCase in <code>_prepareContext()</code> for templates (e.g. <code>config.abilityScores</code>).</li>
+<li><strong>Sizes:</strong> Actors, weapons, armor use <code>choices: () =&gt; CONFIG.THIRDERA.sizes</code> (9 SRD size categories).</li>
+<li><strong>Booleans on items:</strong> Store as <strong>StringField</strong> <code>"true"</code> / <code>"false"</code>, not BooleanField.</li>
+<li><strong>Sheets:</strong> <code>form: { submitOnChange: true }</code> in <code>DEFAULT_OPTIONS</code>; actions via <code>data-action</code> and <code>DEFAULT_OPTIONS.actions</code>; item actions use <code>target.closest("[data-item-id]")?.dataset.itemId</code>.</li>
+<li><strong>Value breakdown:</strong> Show base + each modifier (labeled) + total; provide a <strong>visual indicator</strong> when a value is modified (e.g. armor capping Dex).</li>
+<li><strong>Extensibility:</strong> Races, classes, etc. are <strong>Item types</strong>, not hardcoded config.</li>
+<li><strong>Rich text:</strong> <code>&lt;prose-mirror&gt;</code> (Foundry v13); styling with <code>.active</code>/<code>.inactive</code>. Exception: npc-sheet biography still uses legacy <code>{{editor}}</code>. <code>toggled</code> is read-once config; <code>open</code> and <code>.active</code>/<code>.inactive</code> control state.</li>
+<li><strong>Checkboxes:</strong> Never style as text inputs (no background/border/full-width). Use transparent background, no border, <code>accent-color</code> for theme.</li>
+</ul>
+<h3 id="item-references">Item references</h3>
+<p>All references between items (and any membership or “do you have this?” checks) must use <strong>document identity</strong> — ID or UUID — not name, key, or other string labels.</p>
+<ul>
+<li><strong>Reference storage:</strong> When one item references another (e.g. required feat, class that grants this, spell school), store the <strong>document UUID</strong> (or, for same-world-only references, the document <strong>id</strong>). Do not store the referenced item’s name or a “key” for lookup or membership checks.</li>
+<li><strong>Membership / “has this” checks:</strong> When checking whether an actor (or another item) “has” or “includes” a given item (e.g. “does the character have the Dodge feat?”), resolve by <strong>document identity</strong>: compare by document UUID, document id, or by a stored source/origin that is itself an ID or UUID (e.g. compendium sourceId). Do not determine membership by matching name or key strings.</li>
+<li><strong>Display:</strong> Names and keys remain fine for <strong>display</strong> (e.g. showing “Dodge” in the UI). The constraint is on <strong>storage and logic</strong>: what we store and how we resolve “is this the same item?” must be ID/UUID-based.</li>
+</ul>
+<p><strong>Rationale:</strong> Names and keys can change or collide; IDs and UUIDs are stable and unique. Compendium documents are identified by UUID; world documents have id (and uuid). Using ID/UUID keeps world and compendium references consistent and avoids ambiguity when the same “logical” item exists in multiple packs or the world.</p>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><strong>Feat prerequisites “required feats”:</strong> Store an array of <strong>feat document UUIDs</strong> (e.g. <code>prerequisiteFeatUuids: ["Compendium.thirdera.thirdera_feats.Item.abc123", …]</code>). To check “actor has this feat”, resolve each UUID to a document and determine whether the actor has an item that is or derives from that document (e.g. by sourceId, origin, or same document id when applicable).</li>
+<li><strong>Class feature “feat item”:</strong> Store the <strong>feat document’s id or UUID</strong> (e.g. <code>featItemId</code> or <code>featItemUuid</code>), not the feat name. Lookup and membership by that id/UUID.</li>
+<li><strong>Spell’s school:</strong> Reference the school <strong>item’s id/UUID</strong> if the system models schools as items; otherwise a stable identifier that is not the display name.</li>
+</ul>
+<p><strong>Exception:</strong> Where the codebase explicitly uses a <strong>stable key</strong> (e.g. <code>system.key</code>) for compendium <strong>name-based matching</strong> (e.g. loader “match by key when name collides”), that remains a separate concern. The key is still not used as the <strong>canonical reference</strong> between items for “which feat is required” or “does the actor have this?” — those use ID/UUID. Keys may be used to <em>resolve</em> “which document is Dodge?” when building UUID references (e.g. in migration or authoring), but the stored reference is the document’s id/UUID.</p>
+<h3 id="compendiums-packs-and-modulelogiccompendium-loadermjs">Compendiums (<code>packs/</code> and <code>module/logic/compendium-loader.mjs</code>)</h3>
+<p>See <strong><a href="../compendium-guide/">Compendium guide</a></strong> for the full guide.</p>
+<ul>
+<li>Declared in <code>system.json</code> with <code>ownership</code>. Pack names use <strong>underscores</strong> (e.g. <code>thirdera_races</code>) for V14.</li>
+<li>Content in LevelDB; JSON in <code>packs/</code> is imported by <code>CompendiumLoader</code>. Collection IDs: <code>{systemId}.{packName}</code>.</li>
+<li>Unlock before create/update. Remove invalid <code>_id</code>; use <code>Document.createDocuments()</code> / <code>updateDocuments()</code> with <code>{pack: pack.collection}</code>. Loader can update by name/key for content fixes.</li>
+<li><strong>Current:</strong> Races (7), Classes (11), Skills (36), Feats (86), Armor (16), Weapons (58), Equipment (63), Spells (SRD 0–9), Schools, Conditions, Creature Types, Subtypes, Features.</li>
+</ul>
+<h2 id="foundry-vtt-v13-critical-technical-notes">Foundry VTT v13 - Critical Technical Notes</h2>
+<ul>
+<li><strong>Module caching:</strong> Foundry caches JS <strong>server-side</strong>. Browser refresh does not reload server modules. <strong>Restart Foundry</strong> after changing <code>.mjs</code> files if changes don't appear.</li>
+<li><strong>Capturing old values in hooks:</strong> In <code>updateItem</code>/<code>updateActor</code> hooks the document is already updated. Capture old values in <strong>preUpdate</strong> (e.g. in a Map keyed by document id). Empty string is a valid captured value; don't use <code>document.system.field</code> as "old" in update hooks.</li>
+<li><strong>Data preparation order:</strong> (1) Actor TypeDataModel <code>prepareBaseData</code>, (2) Actor <code>prepareBaseData</code>, (3) <code>prepareEmbeddedDocuments</code> (each item's full prepareData), (4) Actor TypeDataModel <code>prepareDerivedData</code>, (5) Actor <code>prepareDerivedData</code>. So embedded item <code>prepareDerivedData</code> runs <strong>before</strong> the actor's - put cross-cutting logic (e.g. class skill status, armor check penalty) in the <strong>actor's</strong> <code>prepareDerivedData</code>.</li>
+<li><strong>Item ownership:</strong> Items on actors are <strong>embedded copies</strong>, not references. Deleting a sidebar item does not affect actor-owned copies.</li>
+<li><strong>Schema:</strong> <code>defineSchema()</code> is lazily evaluated; safe to use <code>CONFIG.THIRDERA</code>; use <code>choices: () =&gt; CONFIG.THIRDERA.sizes</code> for dynamic choices.</li>
+<li><strong>Dialog API:</strong> <code>Dialog.render(true)</code> is <strong>not</strong> a Promise. Attach handlers after render (e.g. <code>requestAnimationFrame</code> + <code>setTimeout</code>); prefer event delegation.</li>
+<li><strong>Item stacking:</strong> Stack when same name/type, same <code>containerId</code>, same <code>equipped</code>, same type-specific props; containers don't stack. Use helpers like <code>_canStackItems</code>, <code>_findStackableItem</code>, <code>_splitItemStack</code>; quantity UI for actions on stacks.</li>
+</ul>
+<h2 id="testing-apply-damagehealing-phase-2">Testing Apply damage/healing (Phase 2)</h2>
+<p>Manual test steps for the Apply damage/healing entry points (chat, sheet, “to this token”, macro).</p>
+<ol>
+<li><strong>Setup</strong></li>
+<li>Load the Third Era system and a world (e.g. 3rd-era-testworld).</li>
+<li>Have at least one character and one NPC (or two tokens) with HP (value/max) and, for NPCs, temp HP if needed.</li>
+<li>
+<p>Place tokens on a scene so you can select them.</p>
+</li>
+<li>
+<p><strong>Apply from sheet (targets from selection)</strong></p>
+</li>
+<li>Open a character or NPC sheet; go to the <strong>Combat</strong> tab.</li>
+<li>Confirm <strong>“Apply damage/healing”</strong> is visible.</li>
+<li>Select one or more tokens on the canvas that have HP.</li>
+<li>Click <strong>“Apply damage/healing”</strong>. The Apply dialog should open with those tokens listed as targets, amount blank, type Damage/Healing.</li>
+<li>Enter an amount, choose Damage or Healing, click <strong>Apply</strong>. Confirm HP (and temp HP for damage) update and a short notification appears.</li>
+<li>
+<p>Repeat with no tokens selected: dialog should open with no targets (and show “Select one or more tokens…”).</p>
+</li>
+<li>
+<p><strong>Apply to this token (single target from sheet)</strong></p>
+</li>
+<li>Open the sheet of an actor that has at least one token on the current scene.</li>
+<li>On the Combat tab, confirm <strong>“Apply to this token”</strong> is visible (only when the actor has a token in the scene).</li>
+<li>Click <strong>“Apply to this token”</strong>. The Apply dialog should open with that actor as the only target, amount blank.</li>
+<li>
+<p>Enter amount, apply; confirm that actor’s HP updates.</p>
+</li>
+<li>
+<p><strong>Apply from chat (amount from roll)</strong></p>
+</li>
+<li>Roll damage or healing from the sheet (e.g. weapon damage, or a manual roll that posts to chat with a “Damage” or “Healing” flavor).</li>
+<li>On the chat message, confirm an <strong>“Apply”</strong> button appears.</li>
+<li>Select one or more target tokens (they will be used when the dialog opens).</li>
+<li>Click <strong>“Apply”</strong>. The Apply dialog should open with amount pre-filled from the roll total and type Damage or Healing inferred from the message flavor.</li>
+<li>Confirm targets (from selection), adjust if needed, click <strong>Apply</strong>; confirm HP updates.</li>
+<li>
+<p>Right‑click the same message and confirm the context menu includes <strong>“Apply”</strong>; choose it and confirm the same behavior.</p>
+</li>
+<li>
+<p><strong>Macro / console</strong></p>
+</li>
+<li>In the console or a macro, run <code>game.thirdera.applyDamageHealing.openDialog()</code>. Dialog should open with targets from current selection.</li>
+<li>Run <code>game.thirdera.applyDamageHealing.openWithOptions({ amount: 5, mode: "healing" })</code>. Dialog should open with amount 5, Healing, and targets from selection.</li>
+<li>
+<p>Run <code>game.thirdera.applyDamageHealing.openWithOptions({ targetActors: [actor] })</code> with an actor reference. Dialog should open with that actor as the only target.</p>
+</li>
+<li>
+<p><strong>Permissions</strong></p>
+</li>
+<li>As a player, select a token you do not own. Open Apply from sheet or chat and try to apply. You should be blocked or see a “no permission” message if the system restricts applying to tokens you cannot edit.</li>
+</ol>
+<h2 id="testing-apply-damagehealing-phase-3">Testing Apply damage/healing (Phase 3)</h2>
+<p>Manual test steps for temp HP (damage to temp first), nonlethal damage, and healing that reduces nonlethal (SRD: heal lethal first, remainder heals nonlethal).</p>
+<ol>
+<li><strong>Setup</strong></li>
+<li>
+<p>Use the same world and tokens as Phase 2. Ensure at least one NPC has <strong>Temp HP</strong> &gt; 0 (set on Combat tab) and note current HP value/max and temp.</p>
+</li>
+<li>
+<p><strong>Temp HP — damage to temp first</strong></p>
+</li>
+<li>Select a token with temp HP (e.g. 5 temp, 10/10 HP). Open Apply damage/healing (sheet or macro), enter an amount less than temp (e.g. 3), choose <strong>Damage</strong>, click <strong>Apply</strong>.</li>
+<li><strong>Expected:</strong> Only temp HP decreases (e.g. 5 → 2). Current HP stays 10. Notification: “Applied 3 damage to 1 target(s).”</li>
+<li>Apply damage greater than remaining temp (e.g. 5 more). <strong>Expected:</strong> Temp goes to 0, remainder reduces current HP (e.g. 10 → 8). Notification as above.</li>
+<li>
+<p>Optionally apply damage that would reduce HP below 0: <strong>Expected:</strong> HP is clamped to −9 (dying) or 0 (dead) per SRD.</p>
+</li>
+<li>
+<p><strong>Nonlethal damage</strong></p>
+</li>
+<li>Select a token with 0 nonlethal. Open Apply dialog, enter amount (e.g. 4), choose <strong>Damage</strong>, check <strong>“Apply as nonlethal damage”</strong>, click <strong>Apply</strong>.</li>
+<li><strong>Expected:</strong> Current HP and temp HP unchanged. <strong>Nonlethal</strong> on the sheet (Combat tab) and in the header (if present) shows 4. Notification: “Applied 4 nonlethal damage to 1 target(s).”</li>
+<li>Apply more nonlethal (e.g. 3). <strong>Expected:</strong> Nonlethal is cumulative (e.g. 4 → 7). HP and temp still unchanged.</li>
+<li>
+<p>Confirm the “Apply as nonlethal damage” checkbox is visible when <strong>Damage</strong> is selected and hidden when <strong>Healing</strong> is selected (including after switching the type radio).</p>
+</li>
+<li>
+<p><strong>Healing — lethal first, remainder heals nonlethal</strong></p>
+</li>
+<li>Use a token with current HP below max and some nonlethal (e.g. 6/10 HP, 5 nonlethal). Open Apply dialog, enter 3, choose <strong>Healing</strong>, click <strong>Apply</strong>.</li>
+<li><strong>Expected:</strong> Lethal is healed first: 6 → 9 HP. No remainder, so nonlethal stays 5.</li>
+<li>Apply 5 healing. <strong>Expected:</strong> 1 point heals lethal (9 → 10), 4 points reduce nonlethal (5 → 1). Final: 10/10 HP, 1 nonlethal.</li>
+<li>
+<p>Apply 2 more healing. <strong>Expected:</strong> No lethal to heal; both points reduce nonlethal (1 → 0). Final: 10/10 HP, 0 nonlethal.</p>
+</li>
+<li>
+<p><strong>Sheets and macro</strong></p>
+</li>
+<li>On character and NPC sheets, Combat tab: confirm <strong>Nonlethal</strong> field is present and editable. In header, when nonlethal &gt; 0, confirm “(N NL)” appears (e.g. “(5 NL)”).</li>
+<li>In console run <code>game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })</code>. <strong>Expected:</strong> Dialog opens with amount 2, Damage selected, “Apply as nonlethal damage” checked. Apply and confirm nonlethal increases on target.</li>
+</ol>
+<h2 id="testing-apply-damagehealing-phase-4">Testing Apply damage/healing (Phase 4)</h2>
+<p>Manual test steps for combined attack &amp; damage roll and Apply using the damage total; and for <code>openWithOptions</code> passing <code>nonlethal</code>.</p>
+<ol>
+<li><strong>openWithOptions nonlethal (Phase 3 completion)</strong></li>
+<li>In console run <code>game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })</code>.</li>
+<li>
+<p><strong>Expected:</strong> Dialog opens with amount 2, Damage selected, <strong>“Apply as nonlethal damage” checked</strong>. Apply and confirm nonlethal increases on the selected target.</p>
+</li>
+<li>
+<p><strong>Attack &amp; Damage button</strong></p>
+</li>
+<li>Open a character or NPC sheet; go to the Combat tab and the weapons list.</li>
+<li>Confirm a third roll button (burst icon) with title <strong>“Attack &amp; Damage”</strong> appears next to the Attack (d20) and Damage (d6) buttons for each weapon.</li>
+<li>
+<p>Click <strong>“Attack &amp; Damage”</strong> for a weapon. <strong>Expected:</strong> One chat message is posted containing both an attack roll and a damage roll, with flavor like “Longsword Attack &amp; Damage (Primary)”.</p>
+</li>
+<li>
+<p><strong>Apply from combined message</strong></p>
+</li>
+<li>After posting an Attack &amp; Damage message, confirm an <strong>“Apply”</strong> button appears on that message.</li>
+<li>Select one or more target tokens on the canvas.</li>
+<li>Click <strong>“Apply”</strong>. <strong>Expected:</strong> The Apply dialog opens with the <strong>damage roll total</strong> (not attack + damage) in the Amount field and Damage selected.</li>
+<li>
+<p>Click <strong>Apply</strong> and confirm the target’s HP decreases by that damage total (temp HP first if present).</p>
+</li>
+<li>
+<p><strong>Separate damage message unchanged</strong></p>
+</li>
+<li>Roll only damage from the sheet (Damage d6 button). Confirm the Apply button still appears and uses the single roll total (unchanged from Phase 2).</li>
+</ol>
+
+    
+    
+    
+
+<h4>Contents</h4>
+
+<blockquote class=torillic-toc>
+
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    <li class="torillic-toc-page">
+        <a href="../compendium-guide/">Compendium guide</a>
+    </li>
+    
+
+    
+    
+    
+    
+    
+    
+    <li class="torillic-toc-page">
+        <a href="../future-plans/">Future plans</a>
+    </li>
+    
+
+</blockquote>
+
+    
+    
+    
+    
+    
+
+
+
+    
+        
+        
+    
+
+
+
+    
+
+
+<a href=".." class="torillic-backlink">🡐 Development</a>
+    
+  </main>
+  <script src="../js/version-selector.js"></script>
+  <script src="../search/main.js"></script>
+</body>
+
+</html>
