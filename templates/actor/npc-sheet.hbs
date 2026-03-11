@@ -630,6 +630,7 @@
             {{#if item.system.wielding}}{{#if item.system.wielding.effectiveHandedness}}{{#unless (eq item.system.wielding.effectiveHandedness item.system.properties.handedness)}}<span class="item-detail value-modified" title="Base: {{lookup @root.config.weaponHandedness item.system.properties.handedness}} — shifted by size mismatch">{{lookup @root.config.weaponHandedness item.system.wielding.effectiveHandedness}}</span>{{/unless}}{{/if}}{{/if}}
             <a class="weapon-attack rollable" data-action="weaponAttack" title="Attack"><i class="fas fa-dice-d20"></i></a>
             <a class="weapon-damage rollable" data-action="weaponDamage" title="Damage"><i class="fas fa-dice-d6"></i></a>
+            <a class="weapon-attack-damage rollable" data-action="weaponAttackAndDamage" title="{{localize 'THIRDERA.Weapon.AttackAndDamage'}}"><i class="fas fa-burst" aria-hidden="true"></i></a>
             <a class="item-edit" data-action="editItem" title="Edit Item"><i class="fas fa-edit"></i></a>
             <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
           </div>

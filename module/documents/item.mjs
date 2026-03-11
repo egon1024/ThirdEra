@@ -293,4 +293,66 @@ export class ThirdEraItem extends Item {
 
         return roll;
     }
+
+    /**
+     * Roll weapon attack and damage together, posting a single chat message with both rolls.
+     * Apply damage/healing (Phase 4) uses the damage roll total for the Apply button.
+     * @returns {Promise<{ attackRoll: Roll, damageRoll: Roll }|null>}
+     */
+    async rollAttackAndDamage() {
+        if (this.type !== "weapon") {
+            ui.notifications.warn("Only weapons can roll attack and damage.");
+            return null;
+        }
+        if (!this.actor) {
+            ui.notifications.warn("This weapon is not owned by an actor.");
+            return null;
+        }
+
+        const weaponData = this.system;
+        const actorData = this.actor.system;
+
+        if (weaponData.wielding && !weaponData.wielding.canWield) {
+            ui.notifications.warn(`${this.name} is too large/small for ${this.actor.name} to wield.`);
+            return null;
+        }
+
+        // Attack roll
+        const baseAttack = (weaponData.properties.melee === "melee")
+            ? actorData.combat.meleeAttack.total
+            : actorData.combat.rangedAttack.total;
+        const sizePenalty = weaponData.wielding?.attackPenalty || 0;
+        const twfPenalty = weaponData.twf?.penalty || 0;
+        const attackBonus = baseAttack + sizePenalty + twfPenalty;
+        const attackRoll = await new Roll(`1d20 + ${attackBonus}`).roll();
+
+        // Damage roll
+        const damageDice = weaponData.damage.effectiveDice ?? weaponData.damage.dice;
+        let strMod = 0;
+        if (weaponData.properties.melee === "melee") {
+            const rawStr = this.actor.system.abilities.str?.mod || 0;
+            const multiplier = weaponData.strMultiplier ?? 1;
+            strMod = rawStr >= 0 ? Math.floor(rawStr * multiplier) : rawStr;
+        }
+        const damageRoll = await new Roll(`${damageDice} + ${strMod}`).roll();
+
+        const handLabels = { primary: "Primary", offhand: "Off-Hand" };
+        const handLabel = handLabels[weaponData.equipped] || "";
+        let flavor = `${this.name} Attack & Damage`;
+        if (handLabel) flavor += ` (${handLabel})`;
+
+        const messageData = {
+            speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+            flavor,
+            content: String(damageRoll.total),
+            rolls: [attackRoll, damageRoll],
+            sound: CONFIG.sounds.dice
+        };
+        const cls = foundry.utils.getDocumentClass("ChatMessage");
+        const msg = new cls(messageData);
+        msg.applyRollMode(game.settings.get("core", "rollMode"));
+        await cls.create(msg);
+
+        return { attackRoll, damageRoll };
+    }
 }

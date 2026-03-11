@@ -81,6 +81,9 @@
             "character": "Character",
             "npc": "NPC"
         },
+        "Weapon": {
+            "AttackAndDamage": "Attack & Damage"
+        },
         "ApplyDamageHealing": {
             "Title": "Apply damage / healing",
             "Amount": "Amount",

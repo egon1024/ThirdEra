@@ -189,3 +189,25 @@ Manual test steps for temp HP (damage to temp first), nonlethal damage, and heal
 5. **Sheets and macro**
    - On character and NPC sheets, Combat tab: confirm **Nonlethal** field is present and editable. In header, when nonlethal > 0, confirm “(N NL)” appears (e.g. “(5 NL)”).
    - In console run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })`. **Expected:** Dialog opens with amount 2, Damage selected, “Apply as nonlethal damage” checked. Apply and confirm nonlethal increases on target.
+
+## Testing Apply damage/healing (Phase 4)
+
+Manual test steps for combined attack & damage roll and Apply using the damage total; and for `openWithOptions` passing `nonlethal`.
+
+1. **openWithOptions nonlethal (Phase 3 completion)**
+   - In console run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })`.
+   - **Expected:** Dialog opens with amount 2, Damage selected, **“Apply as nonlethal damage” checked**. Apply and confirm nonlethal increases on the selected target.
+
+2. **Attack & Damage button**
+   - Open a character or NPC sheet; go to the Combat tab and the weapons list.
+   - Confirm a third roll button (burst icon) with title **“Attack & Damage”** appears next to the Attack (d20) and Damage (d6) buttons for each weapon.
+   - Click **“Attack & Damage”** for a weapon. **Expected:** One chat message is posted containing both an attack roll and a damage roll, with flavor like “Longsword Attack & Damage (Primary)”.
+
+3. **Apply from combined message**
+   - After posting an Attack & Damage message, confirm an **“Apply”** button appears on that message.
+   - Select one or more target tokens on the canvas.
+   - Click **“Apply”**. **Expected:** The Apply dialog opens with the **damage roll total** (not attack + damage) in the Amount field and Damage selected.
+   - Click **Apply** and confirm the target’s HP decreases by that damage total (temp HP first if present).
+
+4. **Separate damage message unchanged**
+   - Roll only damage from the sheet (Damage d6 button). Confirm the Apply button still appears and uses the single roll total (unchanged from Phase 2).

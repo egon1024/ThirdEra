@@ -2,6 +2,8 @@
  * Apply damage/healing dialog: amount, type (Damage | Healing), targets from canvas selection or explicit list.
  * Phase 1: open via game.thirdera.applyDamageHealing.openDialog() (macro/console).
  * Phase 2: sheet, chat, token entry points use openForSelection() or openWithOptions().
+ * Phase 3: temp HP, nonlethal, healing reduces nonlethal (openWithOptions accepts nonlethal).
+ * Phase 4: combined attack & damage roll; Apply from chat uses damage total on combined messages.
  */
 import { applyDamageOrHealing } from "../logic/apply-damage-healing.mjs";
 
@@ -185,7 +187,8 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
         const targetActors = options.targetActors ?? getTargetActorsFromSelection();
         const dialog = new ApplyDamageHealingDialog(targetActors, {
             amount: options.amount,
-            mode: options.mode
+            mode: options.mode,
+            nonlethal: options.nonlethal
         });
         dialog.render(true);
     }

@@ -9,6 +9,7 @@ const APPLY_BUTTON_SELECTOR = ".thirdera-apply-damage-healing-from-chat";
 
 /**
  * Check if a chat message has dice rolls we can apply (e.g. damage or healing).
+ * For combined "Attack & Damage" messages (Phase 4), uses only the damage (last) roll total.
  * @param {ChatMessage} message
  * @returns {{ amount: number, mode: "damage"|"healing" }|null}
  */
@@ -16,12 +17,20 @@ function getApplyDataFromMessage(message) {
     if (!message?.isRoll) return null;
     const rolls = message.rolls;
     if (!rolls?.length) return null;
-    let total = 0;
-    for (const roll of rolls) {
-        if (roll && typeof roll.total === "number") total += roll.total;
-    }
     const flavor = (message.flavor ?? "").toLowerCase();
     const mode = flavor.includes("heal") ? "healing" : "damage";
+
+    let total;
+    if (rolls.length >= 2 && flavor.includes("attack") && flavor.includes("damage")) {
+        // Phase 4: combined attack & damage message — use only the damage (last) roll
+        const lastRoll = rolls[rolls.length - 1];
+        total = lastRoll && typeof lastRoll.total === "number" ? lastRoll.total : 0;
+    } else {
+        total = 0;
+        for (const roll of rolls) {
+            if (roll && typeof roll.total === "number") total += roll.total;
+        }
+    }
     return { amount: total, mode };
 }
 

@@ -28,6 +28,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             skillCheck: ThirdEraActorSheet.#onSkillCheck,
             weaponAttack: ThirdEraActorSheet.#onWeaponAttack,
             weaponDamage: ThirdEraActorSheet.#onWeaponDamage,
+            weaponAttackAndDamage: ThirdEraActorSheet.#onWeaponAttackAndDamage,
             createItem: ThirdEraActorSheet.#onItemCreate,
             editItem: ThirdEraActorSheet.#onItemEdit,
             deleteItem: ThirdEraActorSheet.#onItemDelete,
@@ -2996,6 +2997,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const item = this.actor.items.get(itemId);
         if (item) {
             item.rollDamage();
+        }
+    }
+
+    /**
+     * Handle weapon attack and damage in one roll (Phase 4); posts a single chat message with Apply button using damage total.
+     */
+    static async #onWeaponAttackAndDamage(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const item = this.actor.items.get(itemId);
+        if (item) {
+            await item.rollAttackAndDamage();
         }
     }
 
