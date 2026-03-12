@@ -428,6 +428,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         // Add _index to each entry so the template can output correct select names inside nested {{#each}} (../index is not in scope there).
         // For conditional entries, add _featsForSlot[j] = feats available for slot j (exclude feats already chosen in slots 0..j-1; include current slot value so selection shows).
         let systemForContext = systemData;
+        if (item.type === "condition") {
+            // Ensure system is always an object with changes array so template never sees undefined (avoids "Cannot convert undefined or null to object" in selectOptions/each).
+            systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
+        }
         if (item.type === "class") {
             const rawSystem = item._source?.system ?? item.toObject?.()?.system;
             const systemPlain = (rawSystem && typeof rawSystem === "object")
@@ -476,7 +480,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             availableFeatsForPrereq,
             availableFeats,
             autoGrantedFeatsForDisplay,
-            ...(item.type === "condition" ? { conditionChangeKeys: ThirdEraItemSheet.getConditionChangeKeyOptions() } : {})
+            // Always provide conditionChangeKeys for condition template (selectOptions requires an object, never undefined)
+            conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
         };
     }
 
@@ -1470,11 +1475,15 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @this {ThirdEraItemSheet}
      */
     static async onAddConditionChange(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (this.document?.type !== "condition") return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
-        const current = [...(this.item.system.changes || [])];
+        const current = [...(this.document.system.changes || [])];
         current.push({ key: "", value: 0 });
-        await this.item.update({ "system.changes": current });
+        await this.document.update({ "system.changes": current }, { render: false });
+        await this.render(true);
     }
 
     /**
@@ -1484,13 +1493,17 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @this {ThirdEraItemSheet}
      */
     static async onRemoveConditionChange(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (this.document?.type !== "condition") return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
         const index = parseInt(target.dataset.index, 10);
         if (Number.isNaN(index)) return;
-        const current = [...(this.item.system.changes || [])];
+        const current = [...(this.document.system.changes || [])];
         current.splice(index, 1);
-        await this.item.update({ "system.changes": current });
+        await this.document.update({ "system.changes": current }, { render: false });
+        await this.render(true);
     }
 
     /**

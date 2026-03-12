@@ -3,7 +3,7 @@ import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
-import { getConditionItemsMapSync, getActiveConditionModifiers } from "../logic/condition-helpers.mjs";
+import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -634,27 +634,27 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[this.details.size] ?? 0;
         this.combat.sizeMod = sizeMod;
 
-        // Condition modifiers (Phase 2): aggregate from active effects
-        const conditionMap = getConditionItemsMapSync();
-        const conditionMods = getActiveConditionModifiers(this.parent, conditionMap);
+        // Unified modifier bag (conditions and future: feats, race, equipped items)
+        const mods = getActiveModifiers(this.parent);
 
-        // Apply condition modifiers to saves (total + breakdown)
-        this.saves.fort.total += conditionMods.saves.fort;
-        this.saves.ref.total += conditionMods.saves.ref;
-        this.saves.will.total += conditionMods.saves.will;
+        // Apply modifier-system contributions to saves (total + breakdown)
+        const saveKey = { fort: "saveFort", ref: "saveRef", will: "saveWill" };
+        this.saves.fort.total += mods.totals.saveFort ?? 0;
+        this.saves.ref.total += mods.totals.saveRef ?? 0;
+        this.saves.will.total += mods.totals.saveWill ?? 0;
         const saveAbilityKey = { fort: "con", ref: "dex", will: "wis" };
         for (const save of ["fort", "ref", "will"]) {
-            if (conditionMods.saveBreakdown[save].length) {
-                this.saves[save].breakdown = [...(this.saves[save].breakdown || []), ...conditionMods.saveBreakdown[save]];
+            const modBreakdown = mods.breakdown[saveKey[save]] ?? [];
+            if (modBreakdown.length) {
+                this.saves[save].breakdown = [...(this.saves[save].breakdown || []), ...modBreakdown];
             }
-            // Build totalBreakdown for tooltip: base (class) + ability + conditions
+            // Build totalBreakdown for tooltip: base (class) + ability + modifiers
             const abilityKey = saveAbilityKey[save];
             const abilityLabel = CONFIG.THIRDERA?.AbilityScores?.[abilityKey] ?? abilityKey;
             const abilityEntry = { label: abilityLabel, value: this.abilities[abilityKey].mod };
-            const condBreakdown = conditionMods.saveBreakdown[save];
-            const baseLen = this.saves[save].breakdown.length - condBreakdown.length;
-            const baseParts = this.saves[save].breakdown.slice(0, baseLen);
-            const condParts = this.saves[save].breakdown.slice(baseLen);
+            const baseLen = (this.saves[save].breakdown || []).length - modBreakdown.length;
+            const baseParts = (this.saves[save].breakdown || []).slice(0, baseLen);
+            const condParts = (this.saves[save].breakdown || []).slice(baseLen);
             this.saves[save].totalBreakdown = [...baseParts, abilityEntry, ...condParts];
         }
 
@@ -662,28 +662,34 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         // TODO: Add size modifier calculation
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;
 
-        // Calculate melee and ranged attack bonuses (include condition modifiers)
-        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + sizeMod + this.combat.meleeAttack.misc + conditionMods.attackMelee;
+        // Calculate melee and ranged attack bonuses (include modifier-system contributions)
+        const attackMeleeMod = mods.totals.attackMelee ?? 0;
+        const attackRangedMod = mods.totals.attackRanged ?? 0;
+        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + sizeMod + this.combat.meleeAttack.misc + attackMeleeMod;
         this.combat.meleeAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
             { label: "STR", value: this.abilities.str.mod },
             { label: "Size", value: sizeMod },
-            ...(conditionMods.attackMeleeBreakdown || [])
+            ...(mods.breakdown.attackMelee ?? [])
         ];
 
-        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + sizeMod + this.combat.rangedAttack.misc + conditionMods.attackRanged;
+        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + sizeMod + this.combat.rangedAttack.misc + attackRangedMod;
         this.combat.rangedAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
             { label: "DEX", value: this.abilities.dex.mod },
             { label: "Size", value: sizeMod },
-            ...(conditionMods.attackRangedBreakdown || [])
+            ...(mods.breakdown.attackRanged ?? [])
         ];
 
-        // Calculate AC values from equipped armor, dex, size, misc, and conditions
-        computeAC(this, conditionMods);
+        // Calculate AC values from equipped armor, dex, size, misc, and modifier bag
+        computeAC(this, mods);
 
-        // Apply armor speed reduction and condition speed multiplier (e.g. half speed)
-        this.attributes.speed.info = computeSpeed(this, this.loadEffects, conditionMods.speedMultiplier);
+        // Base speed from document source so we don't re-apply condition multiplier when prepareDerivedData runs again
+        const src = this.parent?.getSource?.() ?? this.parent?._source;
+        const baseSpeedFromSource = src != null ? (foundry.utils.getProperty(src, "system.attributes.speed.value") ?? this.attributes.speed.value) : this.attributes.speed.value;
+
+        // Apply armor speed reduction and modifier-system speed multiplier (e.g. half speed)
+        this.attributes.speed.info = computeSpeed(this, this.loadEffects, mods, baseSpeedFromSource);
 
         // Show Stable checkbox when HP is in dying range (−9 to −1)
         const hpVal = Number(this.attributes.hp.value);

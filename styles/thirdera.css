@@ -915,6 +915,49 @@
   margin-bottom: 4px;
 }
 
+/* Condition sheet: Mechanical effects tab — table header uses semantic header colors */
+.thirdera .condition-effects .condition-changes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-body);
+}
+
+.thirdera .condition-effects .condition-changes thead {
+  background: var(--color-bg-parchment-dark);
+  border-bottom: 2px solid var(--color-border-divider);
+}
+
+.thirdera .condition-effects .condition-changes th {
+  padding: 6px 8px;
+  text-align: left;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-label);
+  color: var(--color-text-primary);
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .condition-effects .condition-changes th:last-child {
+  border-right: none;
+}
+
+.thirdera .condition-effects .condition-changes tbody tr {
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .condition-effects .condition-changes td {
+  padding: 4px 8px;
+  color: var(--color-text-primary);
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .condition-effects .condition-changes td:last-child {
+  border-right: none;
+}
+
+.thirdera .condition-effects .add-condition-change {
+  margin-top: 8px;
+}
+
 /* Inactive description: hide prose-mirror (avoids Foundry’s 150px min-height box); show compact .description-view */
 /* Hide biography editor when not editing (two selectors in case .thirdera is elsewhere) */
 .thirdera .description-editor-box:not(.description-editing) prose-mirror[name="system.biography"],

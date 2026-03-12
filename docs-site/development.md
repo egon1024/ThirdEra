@@ -103,6 +103,14 @@ All references between items (and any membership or “do you have this?” chec
 
 **Exception:** Where the codebase explicitly uses a **stable key** (e.g. `system.key`) for compendium **name-based matching** (e.g. loader “match by key when name collides”), that remains a separate concern. The key is still not used as the **canonical reference** between items for “which feat is required” or “does the actor have this?” — those use ID/UUID. Keys may be used to *resolve* “which document is Dodge?” when building UUID references (e.g. in migration or authoring), but the stored reference is the document’s id/UUID.
 
+### Modifier system (`module/logic/modifier-aggregation.mjs`)
+
+A **unified modifier pipeline** aggregates contributions from conditions, feats, race, equipped items, and future sources into one **modifier bag** per actor. Design: [.cursor/plans/generalized-modifier-system.md](../.cursor/plans/generalized-modifier-system.md).
+
+- **Canonical keys:** `CONFIG.THIRDERA.modifierKeys` lists allowed keys (e.g. `ac`, `acLoseDex`, `speedMultiplier`, `saveFort`/`saveRef`/`saveWill`, `attack`/`attackMelee`/`attackRanged`, `ability.str` … `ability.cha`, `skill.<skillKey>`). Only these keys are applied.
+- **Provider contract:** A **modifier-source provider** is a function `(actor) => Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>`. The aggregator runs all functions in `CONFIG.THIRDERA.modifierSourceProviders` and merges results.
+- **Usage:** Call `getActiveModifiers(actor)` during actor `prepareDerivedData`; use the returned `{ totals, breakdown }` for AC, speed, saves, attack, and (in later phases) ability effective and skills. Extenders can push additional provider functions to the registry so new item types or effects participate without editing the aggregator.
+
 ### Compendiums (`packs/` and `module/logic/compendium-loader.mjs`)
 
 See **[Compendium guide](compendium-guide.md)** for the full guide.

@@ -37,6 +37,7 @@ import {
     syncFlatFootedForCombat,
     removeDerivedFlatFooted
 } from "./module/logic/derived-conditions.mjs";
+import { registerModifierSourceProviders } from "./module/logic/modifier-aggregation.mjs";
 
 /**
  * Initialize HP auto-increase system
@@ -284,7 +285,11 @@ Hooks.once("init", async function () {
             transmutation: "Transmutation"
         },
         /** Set of status IDs from condition items; populated in ready. Used to identify condition effects on actors. */
-        conditionStatusIds: new Set()
+        conditionStatusIds: new Set(),
+        /** Canonical modifier keys for the unified modifier system. See module/logic/modifier-aggregation.mjs and docs-site/development.md. */
+        modifierKeys: null,
+        /** Registry of modifier-source providers: (actor) => Array<{ label, changes }>. Populated at init by modifier-aggregation. */
+        modifierSourceProviders: []
     };
 
     // Register World Settings
@@ -393,6 +398,9 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/spell-search.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs"
     ]);
+
+    // Register modifier-source providers after CONFIG.THIRDERA exists
+    registerModifierSourceProviders();
 
     console.log("Third Era | System initialized");
 });
