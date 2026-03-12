@@ -75,7 +75,13 @@
             "saveWill": "Will save",
             "attack": "Attack (melee and ranged)",
             "attackMelee": "Melee attack",
-            "attackRanged": "Ranged attack"
+            "attackRanged": "Ranged attack",
+            "abilityStr": "Ability: Strength",
+            "abilityDex": "Ability: Dexterity",
+            "abilityCon": "Ability: Constitution",
+            "abilityInt": "Ability: Intelligence",
+            "abilityWis": "Ability: Wisdom",
+            "abilityCha": "Ability: Charisma"
         },
         "ActorTypes": {
             "character": "Character",

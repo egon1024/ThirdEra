@@ -156,11 +156,19 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
      * Prepare derived data for the character
      */
     prepareDerivedData() {
-        // Apply racial ability adjustments and calculate modifiers
+        // Base + racial ability effective (mod not set yet — applied after modifier system)
         const race = this.parent.items.find(i => i.type === "race");
         for (const [key, ability] of Object.entries(this.abilities)) {
             ability.racial = race?.system.abilityAdjustments[key] ?? 0;
             ability.effective = ability.value + ability.racial;
+        }
+
+        // Single modifier aggregation; apply ability deltas before any step that uses ability mod
+        const mods = getActiveModifiers(this.parent);
+        for (const [key, ability] of Object.entries(this.abilities)) {
+            const delta = mods.totals[`ability.${key}`] ?? 0;
+            ability.effective += delta;
+            ability.modifierBreakdown = mods.breakdown[`ability.${key}`] ?? [];
             ability.mod = Math.floor((ability.effective - 10) / 2);
         }
 
@@ -634,10 +642,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[this.details.size] ?? 0;
         this.combat.sizeMod = sizeMod;
 
-        // Unified modifier bag (conditions and future: feats, race, equipped items)
-        const mods = getActiveModifiers(this.parent);
-
-        // Apply modifier-system contributions to saves (total + breakdown)
+        // Apply modifier-system contributions to saves (total + breakdown); mods from top of prepareDerivedData
         const saveKey = { fort: "saveFort", ref: "saveRef", will: "saveWill" };
         this.saves.fort.total += mods.totals.saveFort ?? 0;
         this.saves.ref.total += mods.totals.saveRef ?? 0;

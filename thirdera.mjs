@@ -728,6 +728,10 @@ function registerHandlebarsHelpers() {
         return Number(a) > Number(b);
     });
 
+    Handlebars.registerHelper("length", function (arr) {
+        return Array.isArray(arr) ? arr.length : 0;
+    });
+
     Handlebars.registerHelper("or", function (...args) {
         const options = args.pop();
         return args.some(Boolean);

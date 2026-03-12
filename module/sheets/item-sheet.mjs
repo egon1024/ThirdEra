@@ -499,21 +499,32 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         return skill?.name ?? key;
     }
 
-    /** Condition effect key options for the condition sheet dropdown (key -> localized label). */
+    /** Condition effect key options for the condition sheet dropdown (key -> localized label). Sorted alphabetically by label (blank first). */
     static getConditionChangeKeyOptions() {
         const t = (key) => game.i18n.localize(`THIRDERA.ConditionChangeKeys.${key}`);
-        return {
-            "": "—",
-            ac: t("ac"),
-            acLoseDex: t("acLoseDex"),
-            speedMultiplier: t("speedMultiplier"),
-            saveFort: t("saveFort"),
-            saveRef: t("saveRef"),
-            saveWill: t("saveWill"),
-            attack: t("attack"),
-            attackMelee: t("attackMelee"),
-            attackRanged: t("attackRanged")
-        };
+        const entries = [
+            { key: "ac", label: t("ac") },
+            { key: "acLoseDex", label: t("acLoseDex") },
+            { key: "speedMultiplier", label: t("speedMultiplier") },
+            { key: "saveFort", label: t("saveFort") },
+            { key: "saveRef", label: t("saveRef") },
+            { key: "saveWill", label: t("saveWill") },
+            { key: "attack", label: t("attack") },
+            { key: "attackMelee", label: t("attackMelee") },
+            { key: "attackRanged", label: t("attackRanged") },
+            { key: "ability.str", label: t("abilityStr") },
+            { key: "ability.dex", label: t("abilityDex") },
+            { key: "ability.con", label: t("abilityCon") },
+            { key: "ability.int", label: t("abilityInt") },
+            { key: "ability.wis", label: t("abilityWis") },
+            { key: "ability.cha", label: t("abilityCha") }
+        ];
+        entries.sort((a, b) => a.label.localeCompare(b.label, game.i18n.lang ?? "en"));
+        const out = { "": "—" };
+        for (const { key, label } of entries) {
+            out[key] = label;
+        }
+        return out;
     }
 
     /** @override */
@@ -554,6 +565,14 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 });
             }
         }
+
+        // Capture scroll position on any form change (before submit) so scrollable tabs (e.g. condition Mechanical effects) don't jump to top
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        form?.addEventListener("change", () => {
+            if (this._preservedScrollTop !== undefined) return;
+            const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+        }, true);
 
         // Restore focus after re-render (preserves tab navigation with submitOnChange)
         if (this._focusedInputName) {

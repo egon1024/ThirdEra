@@ -157,8 +157,7 @@
           <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"
             placeholder="10" class="ability-base" />
           <span class="ability-racial">{{#if ability.racial}}{{signedNumber ability.racial}}{{/if}}</span>
-          <span class="ability-effective">{{#if
-            ability.racial}}{{ability.effective}}{{else}}{{ability.value}}{{/if}}</span>
+          <span class="ability-effective" {{#if (gt (length ability.modifierBreakdown) 0)}}title="Modifiers: {{#each ability.modifierBreakdown}}{{label}}: {{signedNumber value}}{{#unless @last}}; {{/unless}}{{/each}}"{{/if}}>{{#if ability.racial}}{{ability.effective}}{{else}}{{#if (gt (length ability.modifierBreakdown) 0)}}{{ability.effective}}{{else}}{{ability.value}}{{/if}}{{/if}}</span>
           <span
             class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isOverloaded}}dex-overloaded{{else}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}{{/if}}"
             {{#if (eq key 'dex' )}}{{#if
