@@ -181,6 +181,37 @@ function getActorEffectsList(actor) {
     return sourceList.length > 0 ? sourceList : docList;
 }
 
+// ---------------------------------------------------------------------------
+// Race provider (adapter: actor's race item abilityAdjustments → contribution)
+// ---------------------------------------------------------------------------
+
+/**
+ * Provider that returns one contribution for the actor's race (if any), converting
+ * abilityAdjustments into the canonical change shape (ability.str, ability.dex, ...).
+ * No schema change to race; uses existing abilityAdjustments.
+ *
+ * @param {Actor} actor
+ * @returns {Array<{ label: string, changes: Array<{ key: string, value: number }> }>}
+ */
+function raceModifierProvider(actor) {
+    const raceItem = actor?.items?.find(i => i.type === "race");
+    if (!raceItem) return [];
+    const adj = raceItem.system?.abilityAdjustments;
+    if (!adj) return [];
+    const changes = [];
+    for (const abil of ABILITY_KEYS) {
+        const value = Number(adj[abil]);
+        if (Number.isNaN(value) || value === 0) continue;
+        changes.push({ key: `ability.${abil}`, value });
+    }
+    if (changes.length === 0) return [];
+    return [{ label: raceItem.name || "Race", changes }];
+}
+
+// ---------------------------------------------------------------------------
+// Conditions provider (adapter: effects → condition items → contributions)
+// ---------------------------------------------------------------------------
+
 /**
  * Provider that returns one contribution per active condition (from actor.effects).
  * Uses getConditionItemsMapSync() so safe to call from prepareDerivedData.
@@ -231,4 +262,5 @@ export function registerModifierSourceProviders() {
     const reg = CONFIG.THIRDERA.modifierSourceProviders;
     if (!Array.isArray(reg)) return;
     reg.push(conditionsModifierProvider);
+    reg.push(raceModifierProvider);
 }

@@ -619,6 +619,39 @@ Hooks.on("deleteCombat", async (combat, options, userId) => {
  * re-render any open domain sheets so the "Granted spells" list updates immediately.
  */
 Hooks.on("updateItem", async (document, changes, options, userId) => {
+    if (document.type === "condition") {
+        const conditionId = (document.system?.conditionId ?? "").trim().toLowerCase();
+        if (conditionId && game.actors) {
+            const actorIdsWithCondition = new Set();
+            for (const actor of game.actors) {
+                const effects = actor.effects ?? [];
+                const has = effects.some((e) => {
+                    const s = e.statuses;
+                    if (s instanceof Set) return s.has(conditionId);
+                    if (Array.isArray(s)) return s.includes(conditionId);
+                    return false;
+                });
+                if (has) {
+                    actorIdsWithCondition.add(actor.id);
+                    await actor.prepareData();
+                }
+            }
+            const instances = foundry.applications?.instances;
+            if (instances) {
+                const actorFromApp = (app) => {
+                    const a = app.actor ?? app.document;
+                    return a && typeof a.effects !== "undefined" && a.id ? a : null;
+                };
+                for (const app of instances.values()) {
+                    const actor = actorFromApp(app);
+                    if (!actor || !actorIdsWithCondition.has(actor.id)) continue;
+                    await actor.prepareData();
+                    if (app.rendered) await app.render({ force: true });
+                }
+            }
+        }
+        return;
+    }
     if (document.type !== "spell") return;
     await populateCompendiumCache();
     const instances = foundry.applications?.instances;

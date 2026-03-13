@@ -156,20 +156,23 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
      * Prepare derived data for the character
      */
     prepareDerivedData() {
-        // Base + racial ability effective (mod not set yet — applied after modifier system)
+        // Base ability values only; racial and other modifiers flow through getActiveModifiers
         const race = this.parent.items.find(i => i.type === "race");
         for (const [key, ability] of Object.entries(this.abilities)) {
-            ability.racial = race?.system.abilityAdjustments[key] ?? 0;
-            ability.effective = ability.value + ability.racial;
+            ability.effective = ability.value;
         }
 
-        // Single modifier aggregation; apply ability deltas before any step that uses ability mod
+        // Single modifier aggregation (conditions, race, future: feats, equipment); apply ability deltas
         const mods = getActiveModifiers(this.parent);
         for (const [key, ability] of Object.entries(this.abilities)) {
             const delta = mods.totals[`ability.${key}`] ?? 0;
             ability.effective += delta;
             ability.modifierBreakdown = mods.breakdown[`ability.${key}`] ?? [];
             ability.mod = Math.floor((ability.effective - 10) / 2);
+            // Display: racial column shows sum of contributions from actor's race (for sheet UI)
+            ability.racial = race
+                ? (mods.breakdown[`ability.${key}`] ?? []).filter(b => b.label === race.name).reduce((s, b) => s + b.value, 0)
+                : 0;
         }
 
         // Calculate inventory weight and load early so it can affect Dex, Speed, and Skills
