@@ -58,6 +58,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             openEditorBox: ThirdEraItemSheet.onOpenEditorBox,
             addConditionChange: ThirdEraItemSheet.onAddConditionChange,
             removeConditionChange: ThirdEraItemSheet.onRemoveConditionChange,
+            addFeatModifierChange: ThirdEraItemSheet.onAddFeatModifierChange,
+            removeFeatModifierChange: ThirdEraItemSheet.onRemoveFeatModifierChange,
             editImage: ThirdEraItemSheet.onEditImage,
             addPrerequisiteFeat: ThirdEraItemSheet.onAddPrerequisiteFeat,
             removePrerequisiteFeat: ThirdEraItemSheet.onRemovePrerequisiteFeat
@@ -432,6 +434,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             // Ensure system is always an object with changes array so template never sees undefined (avoids "Cannot convert undefined or null to object" in selectOptions/each).
             systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
         }
+        if (item.type === "feat") {
+            systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
+        }
         if (item.type === "class") {
             const rawSystem = item._source?.system ?? item.toObject?.()?.system;
             const systemPlain = (rawSystem && typeof rawSystem === "object")
@@ -481,7 +486,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             availableFeats,
             autoGrantedFeatsForDisplay,
             // Always provide conditionChangeKeys for condition template (selectOptions requires an object, never undefined)
-            conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
+            conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
+            // Modifier key options for feat (and any other item type with changes dropdown)
+            modifierChangeKeys: (item.type === "feat" || item.type === "condition") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
         };
     }
 
@@ -527,6 +534,26 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         return out;
     }
 
+    /**
+     * When an owned feat is updated from this sheet, refresh the actor so the character sheet shows new modifiers (same idea as conditions).
+     */
+    _onFeatDocumentUpdate() {
+        const actor = this.document?.actor ?? this.document?.parent;
+        if (actor && typeof actor.prepareData === "function") {
+            actor.prepareData();
+            if (actor.sheet?.rendered) actor.sheet.render({ force: true });
+        }
+    }
+
+    /** @override */
+    async close(options = {}) {
+        if (this._featUpdateListenerBound && this.document?.off && this._featUpdateHandler) {
+            this.document.off("update", this._featUpdateHandler);
+            this._featUpdateListenerBound = false;
+        }
+        return super.close(options);
+    }
+
     /** @override */
     async _preRender(context, options) {
         await super._preRender(context, options);
@@ -542,6 +569,15 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     /** @override */
     _onRender(context, options) {
         super._onRender(context, options);
+
+        // When this sheet is for an owned feat, refresh the actor (and its sheet) when the feat is updated so modifiers update dynamically.
+        if (this.document?.type === "feat") {
+            if ((this.document.actor ?? this.document.parent) && !this._featUpdateListenerBound) {
+                this._featUpdateHandler = this._onFeatDocumentUpdate.bind(this);
+                this.document.on?.("update", this._featUpdateHandler);
+                this._featUpdateListenerBound = true;
+            }
+        }
 
         // Restore manual scroll position if set (prevents jumping when adding/removing rows)
         if (this._preservedScrollTop !== undefined) {
@@ -1142,9 +1178,71 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         return data;
     }
 
+    /**
+     * When this sheet's document is a world feat (no parent), sync its data to every actor that has this feat and refresh their sheets.
+     * Call after the world document is updated (form submit or add/remove mechanical effect row).
+     */
+    async _syncWorldFeatToActorCopies() {
+        if (this.document?.type !== "feat" || !this.document?.uuid) return;
+        const actor = this.document?.actor ?? this.document?.parent ?? this.document?.collection?.parent;
+        if (actor) return;
+        const docUuid = this.document.uuid;
+        const docName = (this.document.name ?? "").trim();
+        const actorList = game.actors?.contents ?? Array.from(game.actors?.values?.() ?? []);
+        const hasFeatNamed = (a, name) => {
+            const items = a.items?.contents ?? Array.from(a.items?.values?.() ?? []);
+            return items.some((it) => it.type === "feat" && (it.name ?? "").trim() === name);
+        };
+        const getMatchingFeatItems = (a) => {
+            const items = a.items?.contents ?? Array.from(a.items?.values?.() ?? []);
+            return items.filter((it) => it.sourceId === docUuid || (docName && it.type === "feat" && (it.name ?? "").trim() === docName));
+        };
+        let actorsToRefresh = actorList.filter((a) => a.items?.some?.((it) => it.sourceId === docUuid));
+        if (actorsToRefresh.length === 0 && docName) {
+            actorsToRefresh = actorList.filter((a) => hasFeatNamed(a, docName));
+        }
+        if (actorsToRefresh.length === 0 && docName) {
+            const instances = foundry.applications?.instances;
+            if (instances) {
+                for (const app of instances.values()) {
+                    const doc = app.document;
+                    if (doc?.documentName === "Actor" && hasFeatNamed(doc, docName)) {
+                        actorsToRefresh.push(doc);
+                    }
+                }
+            }
+        }
+        const fullDoc = this.document.toObject();
+        delete fullDoc._id;
+        const changes = this.document.system.changes ?? [];
+        for (const a of actorsToRefresh) {
+            const itemsToUpdate = getMatchingFeatItems(a);
+            for (const item of itemsToUpdate) {
+                const payload = { ...fullDoc };
+                payload["==system"] = this.document.system.toObject();
+                delete payload.system;
+                await item.update(payload);
+                await item.update({ "system.changes": changes });
+            }
+            if (typeof a.prepareData === "function") await a.prepareData();
+            if (a.sheet?.rendered) await a.sheet.render({ force: true });
+        }
+    }
+
     /** @override */
     async _processSubmitData(event, form, submitData, options = {}) {
         await super._processSubmitData(event, form, submitData, options);
+        // When a feat is saved, refresh the actor(s) so the character sheet shows new modifiers (hook sees compendium docs; sheet may have world item with no parent).
+        if (this.document?.type !== "feat") return;
+        let actor = this.document?.actor ?? this.document?.parent ?? this.document?.collection?.parent;
+        if (!actor && this.document?.uuid) {
+            await this._syncWorldFeatToActorCopies();
+            return;
+        }
+        if (actor && typeof actor.prepareData === "function") {
+            await actor.prepareData();
+            if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+        }
         // After a macrotask, force the subschool select to show the document value (wins over any stale re-render)
         if (this.rendered && this.document?.type === "spell") {
             const doc = this.document;
@@ -1522,6 +1620,46 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const current = [...(this.document.system.changes || [])];
         current.splice(index, 1);
         await this.document.update({ "system.changes": current }, { render: false });
+        await this.render(true);
+    }
+
+    /**
+     * Add a blank mechanical effect row to a feat item.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraItemSheet}
+     */
+    static async onAddFeatModifierChange(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (this.document?.type !== "feat") return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const current = [...(this.document.system.changes || [])];
+        current.push({ key: "", value: 0, label: "" });
+        await this.document.update({ "system.changes": current }, { render: false });
+        await this._syncWorldFeatToActorCopies();
+        await this.render(true);
+    }
+
+    /**
+     * Remove a mechanical effect row from a feat item.
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element (must have data-index)
+     * @this {ThirdEraItemSheet}
+     */
+    static async onRemoveFeatModifierChange(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (this.document?.type !== "feat") return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const index = parseInt(target.dataset.index, 10);
+        if (Number.isNaN(index)) return;
+        const current = [...(this.document.system.changes || [])];
+        current.splice(index, 1);
+        await this.document.update({ "system.changes": current }, { render: false });
+        await this._syncWorldFeatToActorCopies();
         await this.render(true);
     }
 

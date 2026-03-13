@@ -4,6 +4,11 @@
   "img": "icons/svg/leg.svg",
   "system": {
     "conditionId": "exhausted",
+    "changes": [
+      { "key": "speedMultiplier", "value": 0.5 },
+      { "key": "ability.str", "value": -6 },
+      { "key": "ability.dex", "value": -6 }
+    ],
     "description": "<p>An exhausted character moves at half speed and takes a -6 penalty to Strength and Dexterity. After 1 hour of complete rest, an exhausted character becomes fatigued. A fatigued character becomes exhausted by doing something else that would normally cause fatigue.</p>"
   },
   "flags": {},

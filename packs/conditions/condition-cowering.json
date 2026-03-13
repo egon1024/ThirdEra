@@ -4,6 +4,10 @@
   "img": "icons/svg/terror.svg",
   "system": {
     "conditionId": "cowering",
+    "changes": [
+      { "key": "ac", "value": -2 },
+      { "key": "acLoseDex", "value": 1 }
+    ],
     "description": "<p>The character is frozen in fear and can take no actions. A cowering character takes a -2 penalty to Armor Class and loses her Dexterity bonus (if any).</p>"
   },
   "flags": {},

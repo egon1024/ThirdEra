@@ -168,6 +168,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             const delta = mods.totals[`ability.${key}`] ?? 0;
             ability.effective += delta;
             ability.modifierBreakdown = mods.breakdown[`ability.${key}`] ?? [];
+            ability.modifierBreakdownFormatted = ability.modifierBreakdown.length
+                ? ability.modifierBreakdown.map(b => `${b.label}: ${b.value >= 0 ? "+" : ""}${b.value}`).join("\n")
+                : "";
             ability.mod = Math.floor((ability.effective - 10) / 2);
             // Display: racial column shows sum of contributions from actor's race (for sheet UI)
             ability.racial = race

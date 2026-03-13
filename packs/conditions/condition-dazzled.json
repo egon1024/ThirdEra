@@ -4,6 +4,11 @@
   "img": "icons/svg/sun.svg",
   "system": {
     "conditionId": "dazzled",
+    "changes": [
+      { "key": "attack", "value": -1 },
+      { "key": "skill.search", "value": -1 },
+      { "key": "skill.spot", "value": -1 }
+    ],
     "description": "<p>The creature is unable to see well because of overstimulation of the eyes. A dazzled creature takes a -1 penalty on attack rolls, Search checks, and Spot checks.</p>"
   },
   "flags": {},

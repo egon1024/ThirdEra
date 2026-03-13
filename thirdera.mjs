@@ -652,6 +652,37 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
         }
         return;
     }
+    // Resolve parent actor: (1) document.parent/actor/collection.parent, (2) parse UUID "Actor.actorId.Item.itemId", or (3) resolve via fromUuid (embedded doc may have .parent).
+    let actor = null;
+    if (document.type === "feat") {
+        actor = document.parent ?? document.actor ?? document.collection?.parent ?? null;
+        if (!actor && document.uuid && typeof game !== "undefined" && game.actors) {
+            const parts = String(document.uuid).split(".");
+            if (parts[0] === "Actor" && parts[1]) {
+                actor = game.actors.get(parts[1]) ?? null;
+            }
+            if (!actor && typeof foundry?.utils?.fromUuid === "function") {
+                try {
+                    const resolved = await foundry.utils.fromUuid(document.uuid);
+                    actor = resolved?.parent ?? resolved?.actor ?? null;
+                } catch (_) { /* ignore */ }
+            }
+        }
+    }
+    if (document.type === "feat" && actor) {
+        await actor.prepareData();
+        const instances = foundry.applications?.instances;
+        if (instances) {
+            for (const app of instances.values()) {
+                const appActor = app.actor ?? app.document;
+                if (appActor?.id === actor.id && app.rendered) {
+                    await app.render({ force: true });
+                    break;
+                }
+            }
+        }
+        return;
+    }
     if (document.type !== "spell") return;
     await populateCompendiumCache();
     const instances = foundry.applications?.instances;

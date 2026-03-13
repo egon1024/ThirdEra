@@ -249,6 +249,40 @@ function conditionsModifierProvider(actor) {
 }
 
 // ---------------------------------------------------------------------------
+// Item provider (feats, and later equipment/armor/weapon when equipped)
+// ---------------------------------------------------------------------------
+
+/**
+ * Provider that returns one contribution per owned item that has system.changes
+ * and applies (feat: always when owned; equipment/armor/weapon: when equipped — Phase 5).
+ *
+ * @param {Actor} actor
+ * @returns {Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>}
+ */
+function itemsModifierProvider(actor) {
+    const items = actor?.items ?? [];
+    const out = [];
+    for (const item of items) {
+        if (item.type === "feat") {
+            const changes = item.system?.changes;
+            if (!Array.isArray(changes) || changes.length === 0) continue;
+            const label = item.name || "Feat";
+            out.push({
+                label,
+                changes: changes.map(c => ({
+                    key: (c.key || "").trim(),
+                    value: Number(c.value),
+                    label: (c.label || "").trim() || undefined
+                }))
+            });
+            continue;
+        }
+        // Phase 5: equipment/armor/weapon when equipped
+    }
+    return out;
+}
+
+// ---------------------------------------------------------------------------
 // Registration (call from thirdera.mjs init)
 // ---------------------------------------------------------------------------
 
@@ -263,4 +297,5 @@ export function registerModifierSourceProviders() {
     if (!Array.isArray(reg)) return;
     reg.push(conditionsModifierProvider);
     reg.push(raceModifierProvider);
+    reg.push(itemsModifierProvider);
 }

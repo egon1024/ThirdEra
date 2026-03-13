@@ -83,6 +83,11 @@
             "abilityWis": "Ability: Wisdom",
             "abilityCha": "Ability: Charisma"
         },
+        "FeatModifiers": "Mechanical effects",
+        "FeatModifiersHint": "Optional modifiers from this feat (e.g. Will save +2, Strength +2). Applied when the character has this feat.",
+        "FeatModifierLabel": "Label",
+        "FeatModifierLabelPlaceholder": "Optional breakdown label",
+        "FeatAddModifier": "Add modifier",
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"
