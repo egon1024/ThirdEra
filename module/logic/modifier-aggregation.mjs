@@ -240,7 +240,8 @@ function conditionsModifierProvider(actor) {
                 label,
                 changes: changes.map(c => ({
                     key: (c.key || "").trim(),
-                    value: Number(c.value)
+                    value: Number(c.value),
+                    label: (c.label || "").trim() || undefined
                 }))
             });
         }

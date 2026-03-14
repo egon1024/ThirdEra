@@ -927,22 +927,25 @@
   margin-bottom: 4px;
 }
 
-/* Condition sheet + Feat sheet: Mechanical effects tables — semantic table header for readable header row */
+/* Mechanical effects table (shared partial: condition, feat, armor, weapon, equipment) */
 .thirdera .condition-effects .condition-changes,
-.thirdera .feat-modifier-changes {
+.thirdera .feat-modifier-changes,
+.thirdera .mechanical-effects-table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--font-size-body);
 }
 
 .thirdera .condition-effects .condition-changes thead,
-.thirdera .feat-modifier-changes thead {
+.thirdera .feat-modifier-changes thead,
+.thirdera .mechanical-effects-table thead {
   background: var(--color-table-header-bg);
   border-bottom: 2px solid var(--color-table-header-border);
 }
 
 .thirdera .condition-effects .condition-changes th,
-.thirdera .feat-modifier-changes th {
+.thirdera .feat-modifier-changes th,
+.thirdera .mechanical-effects-table th {
   padding: 6px 8px;
   text-align: left;
   font-weight: var(--font-weight-bold);
@@ -952,29 +955,34 @@
 }
 
 .thirdera .condition-effects .condition-changes th:last-child,
-.thirdera .feat-modifier-changes th:last-child {
+.thirdera .feat-modifier-changes th:last-child,
+.thirdera .mechanical-effects-table th:last-child {
   border-right: none;
 }
 
 .thirdera .condition-effects .condition-changes tbody tr,
-.thirdera .feat-modifier-changes tbody tr {
+.thirdera .feat-modifier-changes tbody tr,
+.thirdera .mechanical-effects-table tbody tr {
   border-bottom: 1px solid var(--color-border-divider);
 }
 
 .thirdera .condition-effects .condition-changes td,
-.thirdera .feat-modifier-changes td {
+.thirdera .feat-modifier-changes td,
+.thirdera .mechanical-effects-table td {
   padding: 4px 8px;
   color: var(--color-text-primary);
   border-right: 1px solid var(--color-border-divider);
 }
 
 .thirdera .condition-effects .condition-changes td:last-child,
-.thirdera .feat-modifier-changes td:last-child {
+.thirdera .feat-modifier-changes td:last-child,
+.thirdera .mechanical-effects-table td:last-child {
   border-right: none;
 }
 
 .thirdera .condition-effects .add-condition-change,
-.thirdera .add-feat-modifier {
+.thirdera .add-feat-modifier,
+.thirdera .mechanical-effects-section .add-mechanical-effect {
   margin-top: 8px;
 }
 

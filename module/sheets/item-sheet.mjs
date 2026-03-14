@@ -56,10 +56,12 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             removeDescriptorTag: ThirdEraItemSheet.onRemoveDescriptorTag,
             openConditionDescription: ThirdEraItemSheet.onOpenConditionDescription,
             openEditorBox: ThirdEraItemSheet.onOpenEditorBox,
-            addConditionChange: ThirdEraItemSheet.onAddConditionChange,
-            removeConditionChange: ThirdEraItemSheet.onRemoveConditionChange,
-            addFeatModifierChange: ThirdEraItemSheet.onAddFeatModifierChange,
-            removeFeatModifierChange: ThirdEraItemSheet.onRemoveFeatModifierChange,
+            addConditionChange: ThirdEraItemSheet.onAddMechanicalEffectRow,
+            removeConditionChange: ThirdEraItemSheet.onRemoveMechanicalEffectRow,
+            addFeatModifierChange: ThirdEraItemSheet.onAddMechanicalEffectRow,
+            removeFeatModifierChange: ThirdEraItemSheet.onRemoveMechanicalEffectRow,
+            addMechanicalEffectRow: ThirdEraItemSheet.onAddMechanicalEffectRow,
+            removeMechanicalEffectRow: ThirdEraItemSheet.onRemoveMechanicalEffectRow,
             editImage: ThirdEraItemSheet.onEditImage,
             addPrerequisiteFeat: ThirdEraItemSheet.onAddPrerequisiteFeat,
             removePrerequisiteFeat: ThirdEraItemSheet.onRemovePrerequisiteFeat
@@ -153,6 +155,42 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 ev.stopImmediatePropagation();
             }, true);
         }
+        // Mechanical effects table: save on blur and Enter (condition, feat, armor, weapon, equipment)
+        if (partId === "sheet") {
+            const root = this.element;
+            const fields = root?.querySelectorAll?.(".mechanical-effects-field");
+            if (fields?.length) {
+                fields.forEach((el) => {
+                    el.addEventListener("blur", () => {
+                        if (this._preservedScrollTop === undefined) {
+                            const tab = root?.querySelector?.(".sheet-body .tab.active");
+                            if (tab) this._preservedScrollTop = tab.scrollTop;
+                        }
+                        this.submit();
+                    });
+                    el.addEventListener("keydown", (e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (this._preservedScrollTop === undefined) {
+                                const tab = root?.querySelector?.(".sheet-body .tab.active");
+                                if (tab) this._preservedScrollTop = tab.scrollTop;
+                            }
+                            this.submit();
+                        }
+                    });
+                });
+            }
+        }
+    }
+
+    /** @override */
+    async _preparePartContext(partId, context, options) {
+        return super._preparePartContext(partId, context, options);
+    }
+
+    /** @override */
+    async _renderHTML(context, options) {
+        return super._renderHTML(context, options);
     }
 
     /** @override */
@@ -165,7 +203,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const context = await super._prepareContext(options);
         const item = this.document;
         let systemData = item.system;
-
         try {
             return await this._prepareContextBody(context, item, systemData);
         } catch (err) {
@@ -437,6 +474,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (item.type === "feat") {
             systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
         }
+        if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
+            systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
+        }
         if (item.type === "class") {
             const rawSystem = item._source?.system ?? item.toObject?.()?.system;
             const systemPlain = (rawSystem && typeof rawSystem === "object")
@@ -485,9 +525,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             availableFeatsForPrereq,
             availableFeats,
             autoGrantedFeatsForDisplay,
-            // Always provide conditionChangeKeys for condition template (selectOptions requires an object, never undefined)
+            // Key options for mechanical effects table (condition, feat, armor, weapon, equipment)
+            changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
-            // Modifier key options for feat, condition, armor, weapon, equipment (Phase 5)
             modifierChangeKeys: (item.type === "feat" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
         };
     }
@@ -595,23 +635,26 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         // Restore manual scroll position if set (prevents jumping when adding/removing rows)
         if (this._preservedScrollTop !== undefined) {
             const preservedScroll = this._preservedScrollTop;
-            this._preservedScrollTop = undefined;
+            // Defer clear so a second render in the same tick (e.g. after feat update) also restores scroll
+            const scrollToRestore = preservedScroll;
+            setTimeout(() => { this._preservedScrollTop = undefined; }, 100);
             const tab = this.element.querySelector(".sheet-body .tab.active");
-            if (tab && preservedScroll > 0) {
+            if (tab && scrollToRestore > 0) {
                 // Restore immediately
-                tab.scrollTop = preservedScroll;
+                tab.scrollTop = scrollToRestore;
                 // Also restore after frames to ensure it sticks (DOM updates may reset it)
                 requestAnimationFrame(() => {
-                    if (tab.scrollTop !== preservedScroll) {
-                        tab.scrollTop = preservedScroll;
-                    }
-                    // Second attempt after a short delay
-                    setTimeout(() => {
-                        if (tab.scrollTop !== preservedScroll) {
-                            tab.scrollTop = preservedScroll;
-                        }
-                    }, 10);
+                    const t = this.element?.querySelector?.(".sheet-body .tab.active");
+                    if (t && t.scrollTop !== scrollToRestore) t.scrollTop = scrollToRestore;
                 });
+                setTimeout(() => {
+                    const t = this.element?.querySelector?.(".sheet-body .tab.active");
+                    if (t && t.scrollTop !== scrollToRestore) t.scrollTop = scrollToRestore;
+                }, 10);
+                setTimeout(() => {
+                    const t = this.element?.querySelector?.(".sheet-body .tab.active");
+                    if (t && t.scrollTop !== scrollToRestore) t.scrollTop = scrollToRestore;
+                }, 100);
             }
         }
 
@@ -1766,54 +1809,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
-     * Add a blank mechanical effect row to a condition item.
+     * Add a blank mechanical effect row. Unified handler for condition, feat, armor, weapon, equipment.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async onAddConditionChange(event, target) {
-        event?.preventDefault?.();
-        event?.stopPropagation?.();
-        if (this.document?.type !== "condition") return;
-        const tab = target.closest(".tab");
-        if (tab) this._preservedScrollTop = tab.scrollTop;
-        const current = [...(this.document.system.changes || [])];
-        current.push({ key: "", value: 0 });
-        await this.document.update({ "system.changes": current }, { render: false });
-        await this.render(true);
-    }
-
-    /**
-     * Remove a mechanical effect row from a condition item.
-     * @param {PointerEvent} event   The originating click event
-     * @param {HTMLElement} target   The clicked element (must have data-index)
-     * @this {ThirdEraItemSheet}
-     */
-    static async onRemoveConditionChange(event, target) {
-        event?.preventDefault?.();
-        event?.stopPropagation?.();
-        if (this.document?.type !== "condition") return;
-        const tab = target.closest(".tab");
-        if (tab) this._preservedScrollTop = tab.scrollTop;
-        const index = parseInt(target.dataset.index, 10);
-        if (Number.isNaN(index)) return;
-        const current = [...(this.document.system.changes || [])];
-        current.splice(index, 1);
-        await this.document.update({ "system.changes": current }, { render: false });
-        await this.render(true);
-    }
-
-    /**
-     * Add a blank mechanical effect row to a feat item.
-     * @param {PointerEvent} event   The originating click event
-     * @param {HTMLElement} target   The clicked element
-     * @this {ThirdEraItemSheet}
-     */
-    static async onAddFeatModifierChange(event, target) {
+    static async onAddMechanicalEffectRow(event, target) {
         event?.preventDefault?.();
         event?.stopPropagation?.();
         const doc = this.document;
-        const typesWithChanges = ["feat", "armor", "weapon", "equipment"];
+        const typesWithChanges = ["condition", "feat", "armor", "weapon", "equipment"];
         if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -1821,21 +1826,24 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         current.push({ key: "", value: 0, label: "" });
         await doc.update({ "system.changes": current }, { render: false });
         if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
-        else if (doc.actor) { doc.actor.prepareData(); if (doc.actor.sheet?.rendered) doc.actor.sheet.render({ force: true }); }
+        else if (doc.type !== "condition" && doc.actor) {
+            doc.actor.prepareData();
+            if (doc.actor.sheet?.rendered) doc.actor.sheet.render({ force: true });
+        }
         await this.render(true);
     }
 
     /**
-     * Remove a mechanical effect row from a feat item.
+     * Remove a mechanical effect row. Unified handler for condition, feat, armor, weapon, equipment.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element (must have data-index)
      * @this {ThirdEraItemSheet}
      */
-    static async onRemoveFeatModifierChange(event, target) {
+    static async onRemoveMechanicalEffectRow(event, target) {
         event?.preventDefault?.();
         event?.stopPropagation?.();
         const doc = this.document;
-        const typesWithChanges = ["feat", "armor", "weapon", "equipment"];
+        const typesWithChanges = ["condition", "feat", "armor", "weapon", "equipment"];
         if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -1845,7 +1853,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         current.splice(index, 1);
         await doc.update({ "system.changes": current }, { render: false });
         if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
-        else if (doc.actor) { doc.actor.prepareData(); if (doc.actor.sheet?.rendered) doc.actor.sheet.render({ force: true }); }
+        else if (doc.type !== "condition" && doc.actor) {
+            doc.actor.prepareData();
+            if (doc.actor.sheet?.rendered) doc.actor.sheet.render({ force: true });
+        }
         await this.render(true);
     }
 

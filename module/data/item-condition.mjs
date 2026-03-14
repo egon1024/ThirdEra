@@ -12,10 +12,11 @@ export class ConditionData extends foundry.abstract.TypeDataModel {
             /** Unique ID for status effect and Token HUD (e.g. blinded, shaken). Blank allowed so custom items can be created; auto-filled in Item._preCreate. */
             conditionId: new StringField({ required: true, blank: true, initial: "", label: "Condition ID" }),
             description: new HTMLField({ required: true, blank: true, label: "Description" }),
-            /** Mechanical effect changes. Key: ac | acLoseDex | speedMultiplier | saveFort | saveRef | saveWill | attack | attackMelee | attackRanged. Value: number (or 1 for acLoseDex). */
+            /** Mechanical effect changes. Key: ac | acLoseDex | speedMultiplier | saveFort | saveRef | saveWill | attack | attackMelee | attackRanged. Value: number (or 1 for acLoseDex). Optional label for breakdown display. */
             changes: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
-                value: new NumberField({ required: true, initial: 0, label: "Value" })
+                value: new NumberField({ required: true, initial: 0, label: "Value" }),
+                label: new StringField({ required: false, blank: true, initial: "", label: "Label" })
             }), { required: true, initial: [], label: "Mechanical effects" })
         };
     }
