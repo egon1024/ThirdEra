@@ -683,6 +683,96 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
         }
         return;
     }
+    // Armor, weapon, equipment: when an owned item is updated, refresh the actor so AC and other derived stats update.
+    if (document.type === "armor" || document.type === "weapon" || document.type === "equipment") {
+        let armorActor = document.parent ?? document.actor ?? document.collection?.parent ?? null;
+        if (!armorActor && document.uuid && typeof game !== "undefined" && game.actors) {
+            const parts = String(document.uuid).split(".");
+            if (parts[0] === "Actor" && parts[1]) armorActor = game.actors.get(parts[1]) ?? null;
+            if (!armorActor && typeof foundry?.utils?.fromUuid === "function") {
+                try {
+                    const resolved = await foundry.utils.fromUuid(document.uuid);
+                    armorActor = resolved?.parent ?? resolved?.actor ?? null;
+                } catch (_) { /* ignore */ }
+            }
+        }
+        // Fallback: world item (uuid "Item.xxx") — find any actor that has an item with this id.
+        let foundByScan = false;
+        const actorsToCheck = [...(game.actors?.contents ?? game.actors ?? [])];
+        if (typeof canvas !== "undefined" && canvas.scene?.tokens) {
+            for (const token of canvas.scene.tokens) {
+                const tActor = token.actor;
+                if (tActor && !actorsToCheck.find(a => a.id === tActor.id)) actorsToCheck.push(tActor);
+            }
+        }
+        if (!armorActor && document.id && actorsToCheck.length) {
+            for (const a of actorsToCheck) {
+                const hasItem = a.items?.get(document.id);
+                if (hasItem) {
+                    armorActor = a;
+                    foundByScan = true;
+                    break;
+                }
+            }
+        }
+        // Last resort: world item — sync to all actors so we don't miss one whose .items didn't iterate (e.g. Victor).
+        const actorsToRefresh = [];
+        if (armorActor) {
+            actorsToRefresh.push(armorActor);
+        } else if (document.type === "armor" || document.type === "weapon" || document.type === "equipment") {
+            actorsToRefresh.push(...actorsToCheck);
+        }
+        // World item: sync this document's system data onto matching embedded items so AC/stats update
+        const docUuid = document.uuid;
+        const docName = (document.name ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+        const docType = document.type;
+        const systemData = document.system?.toObject?.() ?? document.system ?? {};
+        const getActorItems = (actor) => {
+            const c = actor?.items;
+            if (!c) return [];
+            if (Array.isArray(c)) return c;
+            try {
+                if (typeof c.contents !== "undefined" && Array.isArray(c.contents)) return c.contents;
+                if (typeof c[Symbol.iterator] === "function") return Array.from(c);
+                if (typeof c.values === "function") return Array.from(c.values());
+                if (typeof c.get === "function" && typeof c.keys === "function") {
+                    const out = [];
+                    for (const id of c.keys()) out.push(c.get(id));
+                    return out.filter(Boolean);
+                }
+                return [];
+            } catch (_) {
+                return [];
+            }
+        };
+        const nameMatches = (itemName) => (itemName ?? "").trim().toLowerCase().replace(/\s+/g, " ") === docName;
+        for (const a of actorsToRefresh) {
+            const items = getActorItems(a);
+            const sameType = (i) => i.type === docType || i._source?.type === docType || (docType === "armor" && i.system?.armor != null) || (docType === "weapon" && i.system?.weapon != null) || (docType === "equipment" && i.system?.equipment != null);
+            let matching = items.filter((i) => sameType(i) && (i.sourceId === docUuid || nameMatches(i.name ?? i._source?.name)));
+            if (matching.length === 0 && docType === "armor" && items.length) {
+                const equippedArmor = items.filter((i) => (i.type === "armor" || i.system?.armor != null) && i.system?.equipped === "true");
+                const byName = equippedArmor.filter((i) => nameMatches(i.name ?? i._source?.name));
+                if (byName.length > 0) matching = byName;
+                else if (equippedArmor.length === 1) matching = equippedArmor;
+            }
+            for (const item of matching) {
+                await item.update({ system: systemData });
+            }
+            await a.prepareData();
+            const instances = foundry.applications?.instances;
+            if (instances) {
+                for (const app of instances.values()) {
+                    const appActor = app.actor ?? app.document;
+                    if (appActor?.id === a.id && app.rendered) {
+                        await app.render({ force: true });
+                        break;
+                    }
+                }
+            }
+        }
+        return;
+    }
     if (document.type !== "spell") return;
     await populateCompendiumCache();
     const instances = foundry.applications?.instances;

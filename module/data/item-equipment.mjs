@@ -1,4 +1,4 @@
-const { NumberField, StringField, HTMLField, BooleanField } = foundry.data.fields;
+const { NumberField, StringField, HTMLField, BooleanField, SchemaField, ArrayField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Equipment/Gear items
@@ -14,6 +14,13 @@ export class EquipmentData extends foundry.abstract.TypeDataModel {
             weight: new NumberField({ required: true, nullable: false, min: 0, initial: 0, label: "Weight (lbs)" }),
 
             equipped: new StringField({ required: true, blank: false, initial: "false", label: "Equipped" }),
+
+            /** Optional mechanical modifiers when equipped (generalized modifier system). Same key set as conditions/feats. */
+            changes: new ArrayField(new SchemaField({
+                key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
+                value: new NumberField({ required: true, initial: 0, label: "Value" }),
+                label: new StringField({ required: false, blank: true, initial: "", label: "Label" })
+            }), { required: false, initial: [], label: "Modifiers" }),
 
             // Container properties
             isContainer: new BooleanField({ required: true, initial: false, label: "Is Container" }),

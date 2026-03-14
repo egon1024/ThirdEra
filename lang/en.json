@@ -70,12 +70,12 @@
             "ac": "AC modifier",
             "acLoseDex": "Lose Dex to AC",
             "speedMultiplier": "Speed multiplier (0.5=half)",
-            "saveFort": "Fortitude save",
-            "saveRef": "Reflex save",
-            "saveWill": "Will save",
-            "attack": "Attack (melee and ranged)",
-            "attackMelee": "Melee attack",
-            "attackRanged": "Ranged attack",
+            "saveFort": "Save: Fortitude",
+            "saveRef": "Save: Reflex",
+            "saveWill": "Save: Will",
+            "attack": "Attack: Melee and ranged",
+            "attackMelee": "Attack: Melee",
+            "attackRanged": "Attack: Ranged",
             "abilityStr": "Ability: Strength",
             "abilityDex": "Ability: Dexterity",
             "abilityCon": "Ability: Constitution",
@@ -88,6 +88,8 @@
         "FeatModifierLabel": "Label",
         "FeatModifierLabelPlaceholder": "Optional breakdown label",
         "FeatAddModifier": "Add modifier",
+        "ItemModifiers": "Modifiers",
+        "ItemModifiersHint": "Optional modifiers when this item is equipped (e.g. AC +1, Reflex save +2).",
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"
@@ -179,6 +181,13 @@
                 "Name": "First Level Full Hit Points",
                 "Hint": "When enabled, the first level of the first class added to a character automatically grants maximum hit points from the class's hit die (e.g., d8 = 8 HP). The value remains editable in the level history."
             }
+        },
+        "ApplyDamageHealing": {
+            "Nonlethal": "Nonlethal damage",
+            "SheetButton": "Apply damage / healing",
+            "SheetButtonHint": "Open dialog to apply damage or healing to this character",
+            "ToThisToken": "To this token",
+            "ToThisTokenHint": "Apply damage or healing to the token representing this character on the current scene"
         },
         "SpellListBrowser": {
             "Title": "Spell List Browser",

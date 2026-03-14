@@ -1,4 +1,4 @@
-const { NumberField, SchemaField, StringField, HTMLField } = foundry.data.fields;
+const { NumberField, SchemaField, StringField, HTMLField, ArrayField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Armor items
@@ -29,6 +29,13 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
             quantity: new NumberField({ required: true, integer: true, min: 0, initial: 1, label: "Quantity" }),
 
             equipped: new StringField({ required: true, blank: false, initial: "false", label: "Equipped" }),
+
+            /** Optional mechanical modifiers when equipped (generalized modifier system). Same key set as conditions/feats. */
+            changes: new ArrayField(new SchemaField({
+                key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
+                value: new NumberField({ required: true, initial: 0, label: "Value" }),
+                label: new StringField({ required: false, blank: true, initial: "", label: "Label" })
+            }), { required: false, initial: [], label: "Modifiers" }),
 
             // Track which container this item is in (if any)
             containerId: new StringField({ required: true, blank: true, initial: "", label: "Container ID" })

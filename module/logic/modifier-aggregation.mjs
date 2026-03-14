@@ -277,7 +277,37 @@ function itemsModifierProvider(actor) {
             });
             continue;
         }
-        // Phase 5: equipment/armor/weapon when equipped
+        // Phase 5: armor, weapon, equipment — apply when equipped
+        if (item.type === "armor" || item.type === "equipment") {
+            if (item.system?.equipped !== "true") continue;
+            const changes = item.system?.changes;
+            if (!Array.isArray(changes) || changes.length === 0) continue;
+            const label = item.name || (item.type === "armor" ? "Armor" : "Equipment");
+            out.push({
+                label,
+                changes: changes.map(c => ({
+                    key: (c.key || "").trim(),
+                    value: Number(c.value),
+                    label: (c.label || "").trim() || undefined
+                }))
+            });
+            continue;
+        }
+        if (item.type === "weapon") {
+            const eq = item.system?.equipped;
+            if (eq !== "primary" && eq !== "offhand") continue;
+            const changes = item.system?.changes;
+            if (!Array.isArray(changes) || changes.length === 0) continue;
+            const label = item.name || "Weapon";
+            out.push({
+                label,
+                changes: changes.map(c => ({
+                    key: (c.key || "").trim(),
+                    value: Number(c.value),
+                    label: (c.label || "").trim() || undefined
+                }))
+            });
+        }
     }
     return out;
 }

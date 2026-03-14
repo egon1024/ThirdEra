@@ -487,8 +487,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             autoGrantedFeatsForDisplay,
             // Always provide conditionChangeKeys for condition template (selectOptions requires an object, never undefined)
             conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
-            // Modifier key options for feat (and any other item type with changes dropdown)
-            modifierChangeKeys: (item.type === "feat" || item.type === "condition") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
+            // Modifier key options for feat, condition, armor, weapon, equipment (Phase 5)
+            modifierChangeKeys: (item.type === "feat" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
         };
     }
 
@@ -535,12 +535,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
-     * When an owned feat is updated from this sheet, refresh the actor so the character sheet shows new modifiers (same idea as conditions).
+     * When an owned item (feat, armor, weapon, equipment) is updated from this sheet, refresh the actor
+     * so the character sheet shows new modifiers and item-derived stats (AC, etc.) immediately.
      */
-    _onFeatDocumentUpdate() {
-        const actor = this.document?.actor ?? this.document?.parent;
+    async _onOwnedItemDocumentUpdate() {
+        const doc = this.document;
+        const actorDirect = doc?.actor ?? doc?.parent;
+        const actorFromUuid = doc?.uuid && game?.actors ? (() => { const p = String(doc.uuid).split("."); return p[0] === "Actor" && p[1] ? game.actors.get(p[1]) ?? null : null; })() : null;
+        const actor = actorDirect ?? actorFromUuid;
         if (actor && typeof actor.prepareData === "function") {
-            actor.prepareData();
+            await actor.prepareData();
             if (actor.sheet?.rendered) actor.sheet.render({ force: true });
         }
     }
@@ -570,13 +574,22 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     _onRender(context, options) {
         super._onRender(context, options);
 
-        // When this sheet is for an owned feat, refresh the actor (and its sheet) when the feat is updated so modifiers update dynamically.
-        if (this.document?.type === "feat") {
-            if ((this.document.actor ?? this.document.parent) && !this._featUpdateListenerBound) {
-                this._featUpdateHandler = this._onFeatDocumentUpdate.bind(this);
-                this.document.on?.("update", this._featUpdateHandler);
-                this._featUpdateListenerBound = true;
-            }
+        // When this sheet is for an owned item that affects actor stats (feat, armor, weapon, equipment),
+        // refresh the actor (and its sheet) when the item is updated so modifiers and derived stats update dynamically.
+        const doc = this.document;
+        const typesThatAffectActor = ["feat", "armor", "weapon", "equipment"];
+        const resolvedOwner = doc && (doc.actor ?? doc.parent);
+        const resolvedOwnerFromUuid = doc?.uuid && game?.actors ? (() => { const p = String(doc.uuid).split("."); return p[0] === "Actor" && p[1] ? game.actors.get(p[1]) ?? null : null; })() : null;
+        const owner = resolvedOwner ?? resolvedOwnerFromUuid;
+        // #region agent log
+        if (doc && typesThatAffectActor.includes(doc.type)) {
+            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_onRender", message: "armor/equip sheet render", data: { itemType: doc.type, itemId: doc.id, itemName: doc.name, hasOwner: !!owner, docActorId: doc.actor?.id, docParentId: doc.parent?.id, docUuid: doc.uuid, willRegisterListener: !!owner && !this._featUpdateListenerBound }, timestamp: Date.now() }) }).catch(() => {});
+        }
+        // #endregion
+        if (doc && typesThatAffectActor.includes(doc.type) && owner && !this._featUpdateListenerBound) {
+            this._featUpdateHandler = this._onOwnedItemDocumentUpdate.bind(this);
+            doc.on?.("update", this._featUpdateHandler);
+            this._featUpdateListenerBound = true;
         }
 
         // Restore manual scroll position if set (prevents jumping when adding/removing rows)
@@ -1229,19 +1242,186 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
     }
 
+    /**
+     * When this sheet's document is a world armor/weapon/equipment (no parent), sync its system data
+     * to every actor that has this item (by sourceId or name+type) and refresh their sheets.
+     */
+    async _syncWorldItemToActorCopies() {
+        const doc = this.document;
+        const types = ["armor", "weapon", "equipment"];
+        if (!doc || !types.includes(doc.type) || !doc.uuid) return;
+        const owner = doc.actor ?? doc.parent ?? doc.collection?.parent;
+        if (owner) return;
+        const docUuid = doc.uuid;
+        const docName = (doc.name ?? "").trim();
+        // #region agent log
+        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:entry", message: "sync entry", data: { docType: doc.type, docId: doc.id, docName, docUuid, armorBonus: doc.system?.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
+        // #endregion
+        const seenIds = new Set();
+        const actorList = [];
+        const add = (a) => { if (a?.id && !seenIds.has(a.id)) { seenIds.add(a.id); actorList.push(a); } };
+        const rawList = game.actors?.contents ?? Array.from(game.actors?.values?.() ?? []);
+        for (const a of rawList) {
+            const resolved = game.actors?.get?.(a?.id ?? a) ?? a;
+            if (resolved) add(resolved);
+        }
+        if (typeof game.scenes !== "undefined") {
+            for (const scene of game.scenes) {
+                const tokens = scene.tokens ?? scene.getEmbeddedCollection?.("tokens") ?? [];
+                const tokenList = Array.isArray(tokens) ? tokens : (typeof tokens.contents !== "undefined" ? tokens.contents : Array.from(tokens));
+                for (const t of tokenList) {
+                    const act = t.actor ?? (t.actorId && game.actors && game.actors.get(t.actorId));
+                    if (act) add(act);
+                }
+            }
+        }
+        // #region agent log
+        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:actorList", message: "actor list built", data: { rawListLength: rawList.length, actorListLength: actorList.length, actorIds: actorList.map((a) => a.id), actorNames: actorList.map((a) => a.name) }, timestamp: Date.now() }) }).catch(() => {});
+        // #endregion
+        // Prefer actor document from an open Actor sheet (items populated); game.actors reference can have empty items in this context.
+        const instances = foundry.applications?.instances;
+        const actorListToUse = !instances ? actorList : actorList.map((a) => {
+            for (const app of instances.values()) {
+                const d = app.document;
+                if (d?.documentName === "Actor" && d.id === a.id) return d;
+            }
+            return a;
+        });
+        const getItemsArray = (a) => {
+            if (!a?.items) return [];
+            const c = a.items;
+            if (Array.isArray(c)) return c;
+            try {
+                // #region agent log (first call per actor list only, for Victor)
+                if (a.id === "NOJtMp7r5VH8g8AP") {
+                    const hasContents = typeof c.contents !== "undefined";
+                    const contentsArr = hasContents && Array.isArray(c.contents);
+                    const contentsLen = contentsArr ? c.contents.length : "n/a";
+                    const hasValues = typeof c.values === "function";
+                    let valuesLen = "n/a";
+                    if (hasValues) try { valuesLen = Array.from(c.values()).length; } catch (e) { valuesLen = "err"; }
+                    const hasIterator = typeof c[Symbol.iterator] === "function";
+                    const cstr = Object.prototype.toString.call(c);
+                    fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:getItemsArray", message: "Victor items collection probe", data: { actorId: a.id, hasContents, contentsArr, contentsLen, hasValues, valuesLen, hasIterator, collectionType: cstr }, hypothesisId: "getItemsArray", timestamp: Date.now() }) }).catch(() => {});
+                }
+                // #endregion
+                if (typeof c.contents !== "undefined" && Array.isArray(c.contents)) return c.contents;
+                if (typeof c.values === "function") return Array.from(c.values());
+                if (typeof c[Symbol.iterator] === "function") {
+                    const arr = Array.from(c);
+                    if (arr.length > 0 && Array.isArray(arr[0]) && arr[0].length === 2) return arr.map((pair) => pair[1]);
+                    return arr;
+                }
+                if (typeof c.filter === "function") return c.filter(() => true);
+                if (typeof c.get === "function" && typeof c.keys === "function") {
+                    const out = [];
+                    for (const id of c.keys()) out.push(c.get(id));
+                    return out.filter(Boolean);
+                }
+                const out = [];
+                for (const x of c) out.push(x);
+                return out;
+            } catch (e) {
+                // #region agent log
+                if (a.id === "NOJtMp7r5VH8g8AP") fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:getItemsArray", message: "getItemsArray threw", data: { actorId: a.id, err: String(e && e.message) }, hypothesisId: "getItemsArray", timestamp: Date.now() }) }).catch(() => {});
+                // #endregion
+                return [];
+            }
+        };
+        const itemType = doc.type;
+        const docNameNorm = (str) => (str ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+        const docNameNormed = docNameNorm(docName);
+        const isArmorLike = (it) => it.type === "armor" || it._source?.type === "armor" || (it.system && "armor" in it.system);
+        const isEquipmentLike = (it) => it.type === "equipment" || it._source?.type === "equipment";
+        const isWeaponLike = (it) => it.type === "weapon" || it._source?.type === "weapon";
+        const sameType = (it) => {
+            if (itemType === "armor") return isArmorLike(it);
+            if (itemType === "equipment") return isEquipmentLike(it);
+            if (itemType === "weapon") return isWeaponLike(it);
+            return it.type === itemType || it._source?.type === itemType;
+        };
+        const getMatchingItems = (a) => {
+            const items = getItemsArray(a);
+            const byId = items.filter((it) => sameType(it) && (it.id === doc.id || it._id === doc.id));
+            if (byId.length > 0) return byId;
+            const nameMatches = (it) => docNameNorm(it.name ?? it._source?.name) === docNameNormed;
+            const bySourceOrName = items.filter((it) => sameType(it) && (it.sourceId === docUuid || nameMatches(it)));
+            if (bySourceOrName.length > 0) return bySourceOrName;
+            const isEquipped = (it) => (isArmorLike(it) || isEquipmentLike(it)) ? (it.system?.equipped === "true") : (it.system?.equipped === "primary" || it.system?.equipped === "offhand");
+            const equippedOfType = items.filter((it) => sameType(it) && isEquipped(it));
+            if (equippedOfType.length === 1) return equippedOfType;
+            if (doc.type === "armor" && equippedOfType.length > 0) {
+                const byName = equippedOfType.filter((it) => nameMatches(it));
+                if (byName.length > 0) return byName;
+                return equippedOfType.slice(0, 1);
+            }
+            return [];
+        };
+        let actorsToRefresh = actorListToUse.filter((a) => getMatchingItems(a).length > 0);
+        if (actorsToRefresh.length === 0 && typeof foundry?.utils?.fromUuid === "function") {
+            for (const a of actorListToUse) {
+                if (!a?.uuid) continue;
+                try {
+                    const ref = await foundry.utils.fromUuid(a.uuid);
+                    if (ref?.documentName === "Actor" && getMatchingItems(ref).length > 0) actorsToRefresh.push(ref);
+                } catch (_) {}
+            }
+        }
+        const systemData = doc.system?.toObject?.() ?? doc.system ?? {};
+        // #region agent log
+        const sampleForItems = actorListToUse.slice(0, 6).map((a) => {
+            const items = getItemsArray(a);
+            const armors = items.filter((it) => (it.type === "armor" || it._source?.type === "armor" || (it.system && "armor" in it.system)));
+            return { actorId: a.id, actorName: a.name, itemCount: items.length, armorCount: armors.length, armors: armors.slice(0, 3).map((it) => ({ id: it.id, name: it.name, sourceId: it.sourceId, bonus: it.system?.armor?.bonus })) };
+        });
+        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:match", message: "match result", data: { actorsToRefreshLength: actorsToRefresh.length, actorsToRefreshIds: actorsToRefresh.map((a) => a.id), docId: doc.id, sampleForItems }, timestamp: Date.now() }) }).catch(() => {});
+        // #endregion
+        for (const a of actorsToRefresh) {
+            const itemsToUpdate = getMatchingItems(a);
+            for (const item of itemsToUpdate) {
+                const payload = { ...systemData };
+                if (item.system?.equipped !== undefined && item.system?.equipped !== null) payload.equipped = item.system.equipped;
+                if (item.system?.containerId !== undefined && item.system?.containerId !== null) payload.containerId = item.system.containerId;
+                // #region agent log
+                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:update", message: "updating embedded item", data: { actorId: a.id, itemId: item.id, newBonus: systemData.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
+                // #endregion
+                await item.update({ system: payload });
+            }
+            if (typeof a.prepareData === "function") await a.prepareData();
+            if (a.sheet?.rendered) await a.sheet.render({ force: true });
+        }
+    }
+
     /** @override */
     async _processSubmitData(event, form, submitData, options = {}) {
         await super._processSubmitData(event, form, submitData, options);
-        // When a feat is saved, refresh the actor(s) so the character sheet shows new modifiers (hook sees compendium docs; sheet may have world item with no parent).
-        if (this.document?.type !== "feat") return;
-        let actor = this.document?.actor ?? this.document?.parent ?? this.document?.collection?.parent;
-        if (!actor && this.document?.uuid) {
-            await this._syncWorldFeatToActorCopies();
+        const doc = this.document;
+        let actor = doc?.actor ?? doc?.parent ?? doc?.collection?.parent;
+        // Feat: sync world feat to actor copies or refresh owning actor
+        if (doc?.type === "feat") {
+            if (!actor && doc.uuid) {
+                await this._syncWorldFeatToActorCopies();
+                return;
+            }
+            if (actor && typeof actor.prepareData === "function") {
+                await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            }
             return;
         }
-        if (actor && typeof actor.prepareData === "function") {
-            await actor.prepareData();
-            if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+        // Armor/weapon/equipment: sync world item to actor copies or refresh owning actor
+        if (doc && ["armor", "weapon", "equipment"].includes(doc.type)) {
+            // #region agent log
+            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_processSubmitData", message: "armor/equip submit", data: { itemType: doc.type, itemId: doc.id, hasActor: !!actor, docUuid: doc.uuid, willCallSync: !actor && !!doc.uuid, armorBonus: doc.system?.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
+            // #endregion
+            if (!actor && doc.uuid) {
+                await this._syncWorldItemToActorCopies();
+                return;
+            }
+            if (actor && typeof actor.prepareData === "function") {
+                await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            }
         }
         // After a macrotask, force the subschool select to show the document value (wins over any stale re-render)
         if (this.rendered && this.document?.type === "spell") {
@@ -1632,13 +1812,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     static async onAddFeatModifierChange(event, target) {
         event?.preventDefault?.();
         event?.stopPropagation?.();
-        if (this.document?.type !== "feat") return;
+        const doc = this.document;
+        const typesWithChanges = ["feat", "armor", "weapon", "equipment"];
+        if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
-        const current = [...(this.document.system.changes || [])];
+        const current = [...(doc.system.changes || [])];
         current.push({ key: "", value: 0, label: "" });
-        await this.document.update({ "system.changes": current }, { render: false });
-        await this._syncWorldFeatToActorCopies();
+        await doc.update({ "system.changes": current }, { render: false });
+        if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+        else if (doc.actor) { doc.actor.prepareData(); if (doc.actor.sheet?.rendered) doc.actor.sheet.render({ force: true }); }
         await this.render(true);
     }
 
@@ -1651,15 +1834,18 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     static async onRemoveFeatModifierChange(event, target) {
         event?.preventDefault?.();
         event?.stopPropagation?.();
-        if (this.document?.type !== "feat") return;
+        const doc = this.document;
+        const typesWithChanges = ["feat", "armor", "weapon", "equipment"];
+        if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
         const index = parseInt(target.dataset.index, 10);
         if (Number.isNaN(index)) return;
-        const current = [...(this.document.system.changes || [])];
+        const current = [...(doc.system.changes || [])];
         current.splice(index, 1);
-        await this.document.update({ "system.changes": current }, { render: false });
-        await this._syncWorldFeatToActorCopies();
+        await doc.update({ "system.changes": current }, { render: false });
+        if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+        else if (doc.actor) { doc.actor.prepareData(); if (doc.actor.sheet?.rendered) doc.actor.sheet.render({ force: true }); }
         await this.render(true);
     }
 
