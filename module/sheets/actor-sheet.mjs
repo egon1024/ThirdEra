@@ -7,6 +7,7 @@ import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } f
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
 import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
+import { getAllSkills } from "../applications/skill-picker-dialog.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -25,6 +26,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             abilityCheck: ThirdEraActorSheet.#onAbilityCheck,
             saveRoll: ThirdEraActorSheet.#onSaveRoll,
             skillCheck: ThirdEraActorSheet.#onSkillCheck,
+            skillCheckByKey: ThirdEraActorSheet.#onSkillCheckByKey,
             weaponAttack: ThirdEraActorSheet.#onWeaponAttack,
             weaponDamage: ThirdEraActorSheet.#onWeaponDamage,
             createItem: ThirdEraActorSheet.#onItemCreate,
@@ -1112,6 +1114,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             xpHeaderTotalLabel,
             xpHeaderLevelLabel,
             skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
+            // Phase 6: modifier-only skills (skill bonuses from items/feats/conditions when actor has no skill item)
+            modifierOnlySkills: await (async () => {
+                if (actor.type !== "character" || !systemData.modifierOnlySkills?.length) return [];
+                const allSkills = await getAllSkills();
+                const nameByKey = new Map(allSkills.map((s) => [(s.key ?? "").toLowerCase(), s.name]));
+                const humanize = (k) => (k && k.length) ? (k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()) : k;
+                return systemData.modifierOnlySkills.map((entry) => ({
+                    ...entry,
+                    displayName: nameByKey.get((entry.key || "").toLowerCase()) ?? humanize(entry.key)
+                }));
+            })(),
             grantedSkills: systemData.grantedSkills || [],
             grantedFeatures,
             grantedFeats,
@@ -2982,6 +2995,18 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const item = this.actor.items.get(itemId);
         if (item) {
             this.actor.rollSkillCheck(item.name);
+        }
+    }
+
+    /**
+     * Roll a modifier-only skill check (Phase 6: skill key, no ranks).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     */
+    static async #onSkillCheckByKey(event, target) {
+        const skillKey = target.closest("[data-skill-key]")?.dataset.skillKey;
+        if (skillKey) {
+            await this.actor.rollSkillCheckByKey(skillKey);
         }
     }
 

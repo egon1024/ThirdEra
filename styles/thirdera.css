@@ -134,7 +134,8 @@
 .thirdera.sheet form,
 .thirdera.level-up-flow form,
 .thirdera.spell-list-browser form,
-.thirdera.apply-damage-healing-dialog form {
+.thirdera.apply-damage-healing-dialog form,
+.thirdera.skill-picker-dialog .skill-picker-dialog-body {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -143,7 +144,8 @@
 .thirdera.sheet .window-content,
 .thirdera.level-up-flow .window-content,
 .thirdera.spell-list-browser .window-content,
-.thirdera.apply-damage-healing-dialog .window-content {
+.thirdera.apply-damage-healing-dialog .window-content,
+.thirdera.skill-picker-dialog .window-content {
   height: 100%;
   padding: 5px;
   overflow-y: hidden;
@@ -151,6 +153,69 @@
   flex-direction: column;
   background: var(--color-bg-parchment);
   color: var(--color-text-primary);
+}
+
+/* Skill picker dialog: stay above item/actor sheets when opened from Manual effects */
+.thirdera.skill-picker-dialog.window,
+.app.thirdera.skill-picker-dialog {
+  z-index: 120 !important;
+}
+
+/* Skill picker dialog: theme-aligned, readable, scrollable list */
+.thirdera.skill-picker-dialog .skill-picker-dialog-body {
+  min-height: 0;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-dialog-body .form-group label {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-label);
+}
+
+.thirdera.skill-picker-dialog .skill-picker-search {
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body);
+  padding: 4px 6px;
+  width: 100%;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 8px 0 0;
+  padding-left: 1.2em;
+  list-style: none;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-list li {
+  margin: 2px 0;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-item:hover {
+  background: var(--color-popup-hover-bg);
+  border-color: var(--color-popup-border);
+}
+
+.thirdera.skill-picker-dialog .skill-picker-dialog-body .note {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-note);
+  margin-top: 8px;
 }
 
 
@@ -984,6 +1049,21 @@
 .thirdera .add-feat-modifier,
 .thirdera .mechanical-effects-section .add-mechanical-effect {
   margin-top: 8px;
+}
+
+/* Key column: enough width for type dropdown + skill name; skill display does not wrap */
+.thirdera .mechanical-effects-key-cell {
+  min-width: 140px;
+}
+
+.thirdera .mechanical-effects-key-cell .mechanical-effects-skill-display {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 4px;
+  text-align: left;
 }
 
 /* Inactive description: hide prose-mirror (avoids Foundry’s 150px min-height box); show compact .description-view */

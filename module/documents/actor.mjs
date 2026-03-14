@@ -56,7 +56,7 @@ export class ThirdEraActor extends Actor {
     }
 
     /**
-     * Roll a skill check
+     * Roll a skill check (uses prepared modifier total when available, e.g. Phase 6 skill modifiers).
      * @param {string} skillName - The name of the skill to roll
      */
     async rollSkillCheck(skillName) {
@@ -68,10 +68,9 @@ export class ThirdEraActor extends Actor {
         }
 
         const skillData = skill.system;
-        const abilityMod = this.system.abilities[skillData.ability]?.mod || 0;
-        const ranks = skillData.ranks || 0;
-        const misc = skillData.modifier?.misc || 0;
-        const total = abilityMod + ranks + misc;
+        const total = (skillData.modifier?.total != null && Number.isFinite(skillData.modifier.total))
+            ? skillData.modifier.total
+            : (this.system.abilities[skillData.ability]?.mod || 0) + (skillData.ranks || 0) + (skillData.modifier?.misc || 0);
 
         const roll = await new Roll(`1d20 + ${total}`).roll();
 
@@ -80,6 +79,39 @@ export class ThirdEraActor extends Actor {
             flavor: `${skillName} Check`
         });
 
+        return roll;
+    }
+
+    /**
+     * Roll a skill check by skill key when the actor has no skill item (modifier-only skill, Phase 6).
+     * Uses 0 ranks, ability mod from the skill's key ability (looked up from world/compendium), plus modifier-only total.
+     * @param {string} skillKey - system.key of the skill (e.g. "hide")
+     */
+    async rollSkillCheckByKey(skillKey) {
+        if (!skillKey || !this.system.modifierOnlySkills?.length) {
+            ui.notifications.warn("No modifier-only skill data for that skill.");
+            return null;
+        }
+        const entry = this.system.modifierOnlySkills.find(
+            (e) => (e.key || "").toLowerCase() === (skillKey || "").toLowerCase()
+        );
+        if (!entry) {
+            ui.notifications.warn(`Skill key "${skillKey}" not found in modifier-only skills.`);
+            return null;
+        }
+        const skillItem = game.items?.find?.(
+            (i) => i.type === "skill" && (i.system?.key ?? "").toLowerCase() === (entry.key || "").toLowerCase()
+        );
+        const abilityId = skillItem?.system?.ability || "int";
+        const abilityMod = this.system.abilities[abilityId]?.mod ?? 0;
+        const total = abilityMod + (entry.total ?? 0);
+        const displayName = skillItem?.name ?? entry.key;
+
+        const roll = await new Roll(`1d20 + ${total}`).roll();
+        roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            flavor: `${displayName} Check (modifiers only)`
+        });
         return roll;
     }
 

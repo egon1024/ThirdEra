@@ -485,12 +485,15 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             }
             sd.armorPenalty = acpPenalty;
 
-            // Recalculate total with armor/load penalty
+            // Recalculate total with armor/load penalty and modifier-system skill contributions (Phase 6)
             const abilityMod = this.abilities[sd.ability]?.mod || 0;
             const misc = sd.modifier?.misc || 0;
-            sd.modifier.total = abilityMod + ranks + misc + acpPenalty;
+            const skillModKey = sd.key ? `skill.${sd.key}` : null;
+            const skillMod = skillModKey ? (mods.totals[skillModKey] ?? 0) : 0;
+            const skillModBreakdown = skillModKey ? (mods.breakdown[skillModKey] ?? []) : [];
+            sd.modifier.total = abilityMod + ranks + misc + acpPenalty + skillMod;
 
-            // Build skill breakdown for tooltips
+            // Build skill breakdown for tooltips (including modifier-system sources)
             sd.breakdown = [
                 { label: "Ability", value: abilityMod },
                 { label: "Ranks", value: ranks }
@@ -507,6 +510,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 }
                 sd.breakdown.push({ label, value: acpPenalty });
             }
+            for (const entry of skillModBreakdown) {
+                sd.breakdown.push({ label: entry.label, value: entry.value });
+            }
             sd.modifier.breakdown_formatted = sd.breakdown.map(b => `${b.label}: ${b.value >= 0 ? "+" : ""}${b.value}`).join("\n");
 
             // Cross-class skills cost 2 points per rank, class skills cost 1
@@ -515,6 +521,22 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 skillPointsSpent += isClassSkill ? ranks : ranks * 2;
             }
         }
+
+        // Modifier-only skills: skill.<key> in the bag but actor has no skill item (Phase 6)
+        const actorSkillKeys = new Set(skillItems.map((s) => (s.system?.key ?? "").toLowerCase()).filter(Boolean));
+        const modifierOnlySkills = [];
+        const skillKeysFromBag = new Set([
+            ...Object.keys(mods.totals || {}).filter((k) => k.startsWith("skill.")),
+            ...Object.keys(mods.breakdown || {}).filter((k) => k.startsWith("skill."))
+        ]);
+        for (const fullKey of skillKeysFromBag) {
+            const key = fullKey.slice("skill.".length);
+            if (!key || actorSkillKeys.has(key.toLowerCase())) continue;
+            const total = mods.totals[fullKey] ?? 0;
+            const breakdown = mods.breakdown[fullKey] ?? [];
+            modifierOnlySkills.push({ key, fullKey, total, breakdown });
+        }
+        this.modifierOnlySkills = modifierOnlySkills;
 
         this.skillPointBudget = {
             available: skillPointsAvailable,

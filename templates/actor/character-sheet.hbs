@@ -265,6 +265,26 @@
           </li>
           {{/each}}
         </ol>
+
+        {{!-- Phase 6: Other skill modifiers (bonuses from items/feats/conditions when actor has no skill item) --}}
+        {{#if modifierOnlySkills.length}}
+        <div class="modifier-only-skills-section">
+          <h4 class="form-header">{{localize "THIRDERA.Skills.ModifierOnlySkills"}}</h4>
+          <ol class="items-list modifier-only-skills-list">
+            {{#each modifierOnlySkills as |entry|}}
+            <li class="item flexrow" data-skill-key="{{entry.key}}">
+              <div class="item-name">
+                <h4>{{entry.displayName}}</h4>
+              </div>
+              <div class="item-controls">
+                <span class="skill-total" title="{{#each entry.breakdown}}{{this.label}}: {{signedNumber this.value}}{{#unless @last}}&#10;{{/unless}}{{/each}}">{{signedNumber entry.total}}</span>
+                <a class="skill-check" data-action="skillCheckByKey" data-skill-key="{{entry.key}}" title="{{localize "THIRDERA.Skills.RollSkill"}}"><i class="fas fa-dice-d20"></i></a>
+              </div>
+            </li>
+            {{/each}}
+          </ol>
+        </div>
+        {{/if}}
       </div>
 
       {{!-- Feats Subtab --}}

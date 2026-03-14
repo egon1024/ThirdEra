@@ -397,7 +397,8 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/scaling-table.hbs",
         "systems/thirdera/templates/partials/spell-search.hbs",
         "systems/thirdera/templates/partials/mechanical-effects-table.hbs",
-        "systems/thirdera/templates/apps/spell-list-browser.hbs"
+        "systems/thirdera/templates/apps/spell-list-browser.hbs",
+        "systems/thirdera/templates/apps/skill-picker-dialog.hbs"
     ]);
 
     // Register modifier-source providers after CONFIG.THIRDERA exists
@@ -881,6 +882,32 @@ function registerHandlebarsHelpers() {
 
     Handlebars.registerHelper("gt", function (a, b) {
         return Number(a) > Number(b);
+    });
+
+    Handlebars.registerHelper("gte", function (a, b) {
+        return Number(a) >= Number(b);
+    });
+
+    // Phase 6: mechanical effects key type "Skill" and skill picker
+    Handlebars.registerHelper("skillKeyForSelect", function (key) {
+        return (key || "").startsWith("skill.") ? "skill" : (key || "");
+    });
+    Handlebars.registerHelper("isSkillKey", function (key) {
+        const k = key || "";
+        return k === "skill" || k.startsWith("skill.");
+    });
+    Handlebars.registerHelper("skillKeySuffix", function (key) {
+        return (key || "").startsWith("skill.") ? (key || "").slice(6) : "";
+    });
+    /** Resolve skill key (e.g. "skill.appraise") to display name from world items; fallback to capitalized key suffix. */
+    Handlebars.registerHelper("skillNameForKey", function (key) {
+        const full = key || "";
+        const suffix = full.startsWith("skill.") ? full.slice(6).trim() : "";
+        if (!suffix) return "";
+        const items = typeof game !== "undefined" && game.items?.contents ? game.items.contents : [];
+        const skill = items.find((i) => i.type === "skill" && (i.system?.key ?? "").toLowerCase() === suffix.toLowerCase());
+        if (skill?.name) return skill.name;
+        return suffix.charAt(0).toUpperCase() + suffix.slice(1).toLowerCase();
     });
 
     Handlebars.registerHelper("length", function (arr) {

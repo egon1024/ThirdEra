@@ -81,8 +81,10 @@
             "abilityCon": "Ability: Constitution",
             "abilityInt": "Ability: Intelligence",
             "abilityWis": "Ability: Wisdom",
-            "abilityCha": "Ability: Charisma"
+            "abilityCha": "Ability: Charisma",
+            "skill": "Skill"
         },
+        "MechanicalEffectsChooseSkill": "Choose skill…",
         "FeatModifiers": "Mechanical effects",
         "FeatModifiersHint": "Optional modifiers from this feat (e.g. Will save +2, Strength +2). Applied when the character has this feat.",
         "FeatModifierLabel": "Label",
@@ -156,7 +158,12 @@
             "exclusive": "Exclusive",
             "excludedByRace": "Excluded by race",
             "exclusiveRequiresClass": "Exclusive — requires a class that grants this skill",
-            "gmGranted": "GM-Granted"
+            "gmGranted": "GM-Granted",
+            "ModifierOnlySkills": "Other skill modifiers",
+            "RollSkill": "Roll skill check",
+            "Search": "Search",
+            "SearchPlaceholder": "Type to filter skills…",
+            "NoMatch": "No skills match."
         },
         "Features": {
             "classFeatures": "Class Features",

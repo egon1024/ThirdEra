@@ -3,6 +3,7 @@
  * @extends {foundry.applications.sheets.ItemSheetV2}
  */
 import { addDomainSpellsToActor, getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { SkillPickerDialog } from "../applications/skill-picker-dialog.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -62,6 +63,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             removeFeatModifierChange: ThirdEraItemSheet.onRemoveMechanicalEffectRow,
             addMechanicalEffectRow: ThirdEraItemSheet.onAddMechanicalEffectRow,
             removeMechanicalEffectRow: ThirdEraItemSheet.onRemoveMechanicalEffectRow,
+            chooseSkillForModifier: ThirdEraItemSheet.onChooseSkillForModifier,
             editImage: ThirdEraItemSheet.onEditImage,
             addPrerequisiteFeat: ThirdEraItemSheet.onAddPrerequisiteFeat,
             removePrerequisiteFeat: ThirdEraItemSheet.onRemovePrerequisiteFeat
@@ -158,6 +160,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         // Mechanical effects table: save on blur and Enter (condition, feat, armor, weapon, equipment)
         if (partId === "sheet") {
             const root = this.element;
+            // #region agent log
+            const keyTypeSelectsCount = root?.querySelectorAll?.(".mechanical-effects-key-type")?.length ?? -1;
+            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:_attachPartListeners", message: "sheet part listeners", data: { partId, docType: this.document?.type, hasRoot: !!root, keyTypeSelectsCount }, timestamp: Date.now() }) }).catch(() => {});
+            // #endregion
             const fields = root?.querySelectorAll?.(".mechanical-effects-field");
             if (fields?.length) {
                 fields.forEach((el) => {
@@ -177,6 +183,71 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                             }
                             this.submit();
                         }
+                    });
+                });
+            }
+            // Phase 6: sync key-type dropdown to hidden key input; when "Skill" is selected, open picker instead of showing button
+            const keyTypeSelects = root?.querySelectorAll?.(".mechanical-effects-key-type");
+            if (keyTypeSelects?.length) {
+                keyTypeSelects.forEach((select) => {
+                    select.addEventListener("change", async () => {
+                        const row = select.closest(".mechanical-effects-row");
+                        const keyInput = row?.querySelector?.(".mechanical-effects-key-input");
+                        const val = select.value;
+                        // #region agent log
+                        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:keyType change", message: "change", data: { selectValue: val, hasKeyInput: !!keyInput, valueUndefined: select.value === undefined }, timestamp: Date.now() }) }).catch(() => {});
+                        // #endregion
+                        if (!keyInput || select.value === undefined) return;
+                        if (select.value === "skill") {
+                            // #region agent log
+                            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:opening picker", message: "entering skill branch", data: {}, timestamp: Date.now() }) }).catch(() => {});
+                            // #endregion
+                            const idx = parseInt(row?.dataset?.changeIndex ?? select.dataset?.changeIndex, 10);
+                            const prevKey = keyInput.value || "";
+                            const dialog = new SkillPickerDialog({
+                                id: "thirdera-skill-picker",
+                                resolve: async (skillKey) => {
+                                    if (!skillKey || Number.isNaN(idx)) return;
+                                    const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+                                    if (tab) this._preservedScrollTop = tab.scrollTop;
+                                    const doc = this.document;
+                                    const updates = [...(doc.system.changes || [])];
+                                    if (updates[idx]) {
+                                        updates[idx] = { ...updates[idx], key: `skill.${skillKey}` };
+                                        await doc.update({ "system.changes": updates }, { render: false });
+                                        if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+                                        else if (doc.type !== "condition") {
+                                            if (doc.actor) {
+                                                const actor = doc.actor;
+                                                if (typeof actor.prepareData === "function") await actor.prepareData();
+                                                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                                            } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                                                await this._syncWorldItemToActorCopies();
+                                            }
+                                        }
+                                        await this.render(true);
+                                    }
+                                },
+                                onClose: () => {
+                                    select.value = prevKey ? (prevKey.startsWith("skill.") ? "skill" : prevKey) : "";
+                                }
+                            });
+                            // #region agent log
+                            try {
+                                await dialog.render(true);
+                                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:after render", message: "dialog.render done", data: {}, timestamp: Date.now() }) }).catch(() => {});
+                            } catch (e) {
+                                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:dialog render err", message: String(e?.message || e), data: { stack: e?.stack?.slice?.(0, 200) }, timestamp: Date.now() }) }).catch(() => {});
+                            }
+                            // #endregion
+                            return;
+                        }
+                        keyInput.value = select.value;
+                        if (this._preservedScrollTop === undefined) {
+                            const tab = root?.querySelector?.(".sheet-body .tab.active");
+                            if (tab) this._preservedScrollTop = tab.scrollTop;
+                        }
+                        this.submit();
                     });
                 });
             }
@@ -564,7 +635,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             { key: "ability.con", label: t("abilityCon") },
             { key: "ability.int", label: t("abilityInt") },
             { key: "ability.wis", label: t("abilityWis") },
-            { key: "ability.cha", label: t("abilityCha") }
+            { key: "ability.cha", label: t("abilityCha") },
+            { key: "skill", label: t("skill") }
         ];
         entries.sort((a, b) => a.label.localeCompare(b.label, game.i18n.lang ?? "en"));
         const out = { "": "—" };
@@ -1826,9 +1898,14 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         current.push({ key: "", value: 0, label: "" });
         await doc.update({ "system.changes": current }, { render: false });
         if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
-        else if (doc.type !== "condition" && doc.actor) {
-            doc.actor.prepareData();
-            if (doc.actor.sheet?.rendered) doc.actor.sheet.render({ force: true });
+        else if (doc.type !== "condition") {
+            if (doc.actor) {
+                const actor = doc.actor;
+                if (typeof actor.prepareData === "function") await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                await this._syncWorldItemToActorCopies();
+            }
         }
         await this.render(true);
     }
@@ -1853,11 +1930,57 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         current.splice(index, 1);
         await doc.update({ "system.changes": current }, { render: false });
         if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
-        else if (doc.type !== "condition" && doc.actor) {
-            doc.actor.prepareData();
-            if (doc.actor.sheet?.rendered) doc.actor.sheet.render({ force: true });
+        else if (doc.type !== "condition") {
+            if (doc.actor) {
+                // Use the actor that owns this item so prepareData sees the updated doc in its items
+                const actor = doc.actor;
+                if (typeof actor.prepareData === "function") await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                await this._syncWorldItemToActorCopies();
+            }
         }
         await this.render(true);
+    }
+
+    /**
+     * Open skill picker for mechanical effect row; on select, set key to skill.<key> and re-render (Phase 6).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target   Button with data-change-index
+     * @this {ThirdEraItemSheet}
+     */
+    static async onChooseSkillForModifier(event, target) {
+        event?.preventDefault?.();
+        const idx = parseInt(target?.dataset?.changeIndex ?? target?.closest?.("[data-change-index]")?.dataset?.changeIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const doc = this.document;
+        const changes = [...(doc.system.changes || [])];
+        if (idx < 0 || idx >= changes.length) return;
+        const dialog = new SkillPickerDialog({
+            id: "thirdera-skill-picker",
+            resolve: async (skillKey) => {
+                if (!skillKey) return;
+                const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+                if (tab) this._preservedScrollTop = tab.scrollTop;
+                const updates = [...(doc.system.changes || [])];
+                if (updates[idx]) {
+                    updates[idx] = { ...updates[idx], key: `skill.${skillKey}` };
+                    await doc.update({ "system.changes": updates }, { render: false });
+                    if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+                    else if (doc.type !== "condition") {
+                        if (doc.actor) {
+                            const actor = doc.actor;
+                            if (typeof actor.prepareData === "function") await actor.prepareData();
+                            if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                        } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                            await this._syncWorldItemToActorCopies();
+                        }
+                    }
+                    await this.render(true);
+                }
+            }
+        });
+        dialog.render(true);
     }
 
     /**
