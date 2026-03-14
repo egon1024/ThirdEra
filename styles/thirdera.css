@@ -1470,6 +1470,13 @@
   font-size: var(--font-size-body);
 }
 
+.thirdera .natural-attack-compact-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
 /* Phase E: Stat block DR, SR, Senses, Other special abilities */
 .thirdera .stat-block-special-abilities {
   margin-top: 16px;

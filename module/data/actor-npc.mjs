@@ -167,11 +167,25 @@ export class NPCData extends foundry.abstract.TypeDataModel {
      * Prepare derived data for the NPC
      */
     prepareDerivedData() {
-        // Calculate effective score (base + racial) and modifier
+        // Base ability values only; racial and other modifiers flow through getActiveModifiers (same as character)
         for (const [key, ability] of Object.entries(this.abilities)) {
-            const racial = ability.racial ?? 0;
-            ability.effective = ability.value + racial;
+            ability.effective = ability.value;
+        }
+
+        // Single modifier aggregation (conditions, race, feats, equipped items); apply ability deltas
+        const mods = getActiveModifiers(this.parent);
+        const race = this.parent.items.find(i => i.type === "race");
+        for (const [key, ability] of Object.entries(this.abilities)) {
+            const delta = mods.totals[`ability.${key}`] ?? 0;
+            ability.effective += delta;
+            ability.modifierBreakdown = mods.breakdown[`ability.${key}`] ?? [];
+            ability.modifierBreakdownFormatted = ability.modifierBreakdown.length
+                ? ability.modifierBreakdown.map(b => `${b.label}: ${b.value >= 0 ? "+" : ""}${b.value}`).join("\n")
+                : "";
             ability.mod = Math.floor((ability.effective - 10) / 2);
+            ability.racial = race
+                ? (mods.breakdown[`ability.${key}`] ?? []).filter(b => b.label === race.name).reduce((s, b) => s + b.value, 0)
+                : 0;
         }
 
         // Calculate inventory weight and load early so it can affect Dex and Speed
@@ -236,7 +250,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             }
         }
 
-        const capacity = getCarryingCapacity(this.abilities.str.value, this.details.size);
+        const capacity = getCarryingCapacity(this.abilities.str.effective, this.details.size);
         const load = getLoadStatus(totalWeight, capacity);
         const loadEffects = getLoadEffects(load);
         this.loadEffects = loadEffects;
@@ -257,16 +271,28 @@ export class NPCData extends foundry.abstract.TypeDataModel {
         const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[this.details.size] ?? 0;
         this.combat.sizeMod = sizeMod;
 
-        // Unified modifier bag (conditions and future: feats, race, equipped items)
-        const mods = getActiveModifiers(this.parent);
-
-        // Apply modifier-system contributions to saves
+        // Apply modifier-system contributions to saves (mods from top of prepareDerivedData)
         this.saves.fort.total += mods.totals.saveFort ?? 0;
         this.saves.ref.total += mods.totals.saveRef ?? 0;
         this.saves.will.total += mods.totals.saveWill ?? 0;
         this.saves.fort.breakdown = [...(this.saves.fort.breakdown || []), ...(mods.breakdown.saveFort ?? [])];
         this.saves.ref.breakdown = [...(this.saves.ref.breakdown || []), ...(mods.breakdown.saveRef ?? [])];
         this.saves.will.breakdown = [...(this.saves.will.breakdown || []), ...(mods.breakdown.saveWill ?? [])];
+
+        // Build totalBreakdown for tooltips: base + ability + modifiers (same idea as character)
+        const saveAbilityKey = { fort: "con", ref: "dex", will: "wis" };
+        const saveKey = { fort: "saveFort", ref: "saveRef", will: "saveWill" };
+        for (const save of ["fort", "ref", "will"]) {
+            const abilityKey = saveAbilityKey[save];
+            const abilityLabel = CONFIG.THIRDERA?.AbilityScores?.[abilityKey] ?? abilityKey;
+            const abilityEntry = { label: abilityLabel, value: this.abilities[abilityKey].mod };
+            const modBreakdown = mods.breakdown[saveKey[save]] ?? [];
+            this.saves[save].totalBreakdown = [
+                { label: "Base", value: this.saves[save].base },
+                abilityEntry,
+                ...modBreakdown
+            ];
+        }
 
         // Calculate grapple
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;

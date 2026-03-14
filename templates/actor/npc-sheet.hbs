@@ -166,7 +166,7 @@
             placeholder="10" class="ability-base" />
           <input type="text" name="system.abilities.{{key}}.racial" value="{{ability.racial}}" data-dtype="Number"
             placeholder="0" class="ability-racial-input" title="{{localize 'THIRDERA.NPC.RacialBonusHint'}}" />
-          <span class="ability-effective">{{ability.effective}}</span>
+          <span class="ability-effective" {{#if ability.modifierBreakdownFormatted}}title="{{ability.modifierBreakdownFormatted}}"{{/if}}>{{ability.effective}}</span>
           <span
             class="ability-mod {{#if (eq key 'dex')}}{{#if @root.dexCap.isOverloaded}}dex-overloaded{{else}}{{#if @root.dexCap.isCapped}}dex-capped{{/if}}{{/if}}{{/if}}"
             {{#if (eq key 'dex')}}{{#if @root.dexCap.isCapped}}title="Uncapped: {{signedNumber @root.dexCap.uncappedMod}} — limited by {{#if (eq @root.dexCap.reason 'both')}}armor and load{{else}}{{@root.dexCap.reason}}{{/if}} (Max Dex: {{#if (eq @root.dexCap.maxDex null)}}Unlimited{{else}}{{@root.dexCap.maxDex}}{{/if}})"
@@ -186,7 +186,7 @@
           <li class="save flexrow">
             <h4 class="save-name">{{lookup @root.saves key}}</h4>
             <input type="text" name="system.saves.{{key}}.base" value="{{save.base}}" data-dtype="Number" placeholder="0" />
-            <span class="save-total">{{signedNumber save.total}}</span>
+            <span class="save-total" title="{{#each save.totalBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber save.total}}</span>
             <a class="save-roll rollable" data-action="saveRoll" data-save="{{key}}">
               <i class="fas fa-dice-d20"></i>
             </a>
@@ -267,8 +267,10 @@
           <li class="natural-attack-compact flexrow" data-natural-attack-index="{{idx}}">
             <span class="natural-attack-compact-name">{{atk.name}}{{#unless atk.name}}—{{/unless}}</span>
             <span class="natural-attack-compact-total" title="{{#each atk.attackBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber atk.attackBonus}}</span>
-            <a class="natural-attack-roll rollable" data-action="naturalAttackRollAttack" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.NPC.AttackRoll'}}"><i class="fas fa-dice-d20"></i></a>
-            <a class="natural-attack-roll rollable" data-action="naturalAttackRollDamage" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.NPC.DamageRoll'}}"><i class="fas fa-dice-d6"></i></a>
+            <span class="natural-attack-compact-actions">
+              <a class="natural-attack-roll rollable" data-action="naturalAttackRollAttack" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.NPC.AttackRoll'}}"><i class="fas fa-dice-d20"></i></a>
+              <a class="natural-attack-roll rollable" data-action="naturalAttackRollDamage" data-natural-attack-index="{{idx}}" title="{{localize 'THIRDERA.NPC.DamageRoll'}}"><i class="fas fa-dice-d6"></i></a>
+            </span>
           </li>
           {{/each}}
         </ol>

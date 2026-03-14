@@ -27,16 +27,14 @@ The goal is smoother at-table combat for playtesting without full rules automati
 
 ## Generalized modifier system and magic items
 
-A **generalized modifier system** provides a single, shared way for any source (conditions, equipped items, feats, class features, and later spells) to apply modifiers to actors: ability scores, skills, AC, saves, attack, damage reduction, spell resistance, etc. Conditions already use a subset (AC, saves, speed, attack) via a `changes` array and one aggregation in character `prepareDerivedData`. The system would extend the key set and add equipped items (and other sources) so that all modifiers are aggregated in one place with consistent breakdowns.
+The **generalized modifier system** (Phases 1–7 complete) provides a single pipeline for any source to apply modifiers to actors: ability scores, skills, AC, saves, attack, speed, etc. Character and NPC both call `getActiveModifiers(actor)` once in `prepareDerivedData`; ability deltas, then AC, speed, saves, attack, and skills use the same modifier bag. Design and validation: [.cursor/plans/generalized-modifier-system.md](../.cursor/plans/generalized-modifier-system.md).
 
-**Sequencing:** Implementing the generalized modifier system **before** adding magic items (and other modifier-granting content) is recommended. That way each new content type can use and extend the same pipeline instead of duplicating logic; conditions already fit the pattern.
+**Current sources:** Conditions (via ActiveEffects), race (abilityAdjustments → ability.\*), feats (optional `system.changes`), and equipped armor/weapons/equipment (optional `system.changes` when equipped). Skill modifiers and breakdowns, including “modifier-only” skills and a shared key UI (e.g. skill picker), are implemented. Extenders can add providers to `CONFIG.THIRDERA.modifierSourceProviders` or implement `getModifierChanges(actor)` on items; see [Development — Modifier system](development.md#modifier-system-modulelogicmodifier-aggregationmjs).
 
-**Consumers of the modifier system:**
+**Planned extensions:**
 
-- **Conditions** — Already implemented; condition items with a `changes` array apply via ActiveEffects and the existing aggregation.
-- **Feats** — When a feat grants numeric bonuses (e.g. Iron Will +2 Will), the feat item can carry a `changes` array; aggregation includes owned feat items so bonuses flow through the same totals and breakdowns.
-- **Class features** — When a class feature is granted (actor has the class at the right level), it can contribute `changes` (e.g. explicit bonuses); "active" features are resolved from the actor's classes and levelHistory, then fed into the same aggregation.
-- **Magic items** — All magic item categories below use the same modifier schema when they grant bonuses.
+- **Class features** — When a class feature is granted (actor has the class at the right level), it could contribute `changes`; a provider would resolve active features from levelHistory and feed them into the same aggregation.
+- **Magic items** — All magic item categories below would use the same modifier schema when they grant bonuses.
 
 **Magic item categories (depend on modifier system):**
 
