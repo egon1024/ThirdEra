@@ -29,6 +29,8 @@ The system uses a **unified modifier pipeline**: conditions, feats, race, and eq
 - **Register a provider:** Push a function `(actor) => Array<{ label, changes }>` to `CONFIG.THIRDERA.modifierSourceProviders`. See [Development — Modifier system](development.md#modifier-system-modulelogicmodifier-aggregationmjs) for the full contract and canonical keys.
 - **Item method:** Implement `getModifierChanges(actor)` on your item type returning `{ applies, changes }`; the built-in item provider will call it and merge when `applies` is true.
 
+For GM-facing world options (e.g. track currency weight, audit log, first-level full HP), see **[World configuration](usage/world-configuration.md)** in the Usage section.
+
 ## Changing the core code
 
 If you are working on the repository itself (entry points, file layout, conventions, Foundry v13 behavior), use the **[Development](development.md)** page on this site. It is the single reference for architecture, conventions, and operational notes when contributing to the codebase.

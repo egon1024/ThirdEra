@@ -8,6 +8,7 @@ import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logi
 import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
 import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
 import { getAllSkills } from "../applications/skill-picker-dialog.mjs";
+import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -29,6 +30,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             skillCheckByKey: ThirdEraActorSheet.#onSkillCheckByKey,
             weaponAttack: ThirdEraActorSheet.#onWeaponAttack,
             weaponDamage: ThirdEraActorSheet.#onWeaponDamage,
+            weaponAttackAndDamage: ThirdEraActorSheet.#onWeaponAttackAndDamage,
             createItem: ThirdEraActorSheet.#onItemCreate,
             editItem: ThirdEraActorSheet.#onItemEdit,
             deleteItem: ThirdEraActorSheet.#onItemDelete,
@@ -72,7 +74,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             removeSense: ThirdEraActorSheet.#onRemoveSense,
             configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
             editImage: ThirdEraActorSheet.#onEditImage,
-            editTokenImage: ThirdEraActorSheet.#onEditTokenImage
+            editTokenImage: ThirdEraActorSheet.#onEditTokenImage,
+            applyDamageHealing: ThirdEraActorSheet.#onApplyDamageHealing,
+            applyDamageHealingToThisToken: ThirdEraActorSheet.#onApplyDamageHealingToThisToken
         },
         window: {
             resizable: true,
@@ -1152,7 +1156,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             creatureTypeResolved,
             subtypeChoices,
             selectedSubtypes,
-            enriched
+            enriched,
+            // Phase 2: Apply damage/healing — show "Apply to this token" when actor has a token in the scene
+            hasTokenInScene: (actor.getActiveTokens?.()?.length ?? 0) > 0
         };
     }
 
@@ -3039,6 +3045,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
+     * Handle weapon attack and damage in one roll (Phase 4); posts a single chat message with Apply button using damage total.
+     */
+    static async #onWeaponAttackAndDamage(event, target) {
+        const itemId = target.closest("[data-item-id]")?.dataset.itemId;
+        const item = this.actor.items.get(itemId);
+        if (item) {
+            await item.rollAttackAndDamage();
+        }
+    }
+
+    /**
      * Handle creating a new item
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
@@ -4056,6 +4073,36 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         };
         pm.addEventListener("close", onClose, { once: true });
         if (typeof pm.open !== "undefined") pm.open = true;
+    }
+
+    /**
+     * Open the NPC stat block "Other special abilities" prose-mirror in edit mode (Phase E).
+     * @param {PointerEvent} event   The originating click event
+     * @param {HTMLElement} target   The clicked element
+     * @this {ThirdEraActorSheet}
+     */
+    /**
+     * Open Apply damage/healing dialog with targets from current canvas selection (Phase 2).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraActorSheet}
+     */
+    static #onApplyDamageHealing(event, target) {
+        ApplyDamageHealingDialog.openForSelection();
+    }
+
+    /**
+     * Open Apply damage/healing dialog with this actor as the only target (Phase 2 token entry point).
+     * Only relevant when this actor has a token in the scene.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraActorSheet}
+     */
+    static #onApplyDamageHealingToThisToken(event, target) {
+        const actor = this.actor;
+        const hp = actor?.system?.attributes?.hp;
+        if (!actor || !hp || typeof hp.value !== "number" || typeof hp.max !== "number") return;
+        ApplyDamageHealingDialog.openWithOptions({ targetActors: [actor] });
     }
 
     /**

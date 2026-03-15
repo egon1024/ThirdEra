@@ -59,6 +59,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                     value: new NumberField({ required: true, integer: true, min: -999, initial: 1, label: "Current HP" }),
                     max: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Maximum HP" }),
                     temp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Temporary HP" }),
+                    nonlethal: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Nonlethal damage" }),
                     stable: new BooleanField({ required: true, initial: false, label: "Stabilized (when dying)" }),
                     adjustments: new ArrayField(new SchemaField({
                         value: new NumberField({ required: true, integer: true, initial: 0, label: "Adjustment" }),

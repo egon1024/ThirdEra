@@ -96,6 +96,32 @@
             "character": "Character",
             "npc": "NPC"
         },
+        "Weapon": {
+            "AttackAndDamage": "Attack & Damage"
+        },
+        "ApplyDamageHealing": {
+            "Title": "Apply damage / healing",
+            "Amount": "Amount",
+            "Damage": "Damage",
+            "Healing": "Healing",
+            "Targets": "Targets",
+            "Apply": "Apply",
+            "Cancel": "Cancel",
+            "NoTargets": "Select one or more tokens on the canvas.",
+            "AppliedDamage": "Applied {amount} damage to {count} target(s).",
+            "AppliedNonlethalDamage": "Applied {amount} nonlethal damage to {count} target(s).",
+            "AppliedHealing": "Applied {amount} healing to {count} target(s).",
+            "ApplyAsNonlethal": "Apply as nonlethal damage",
+            "TempHP": "Temporary HP",
+            "Nonlethal": "Nonlethal",
+            "NoPermission": "You do not have permission to modify the selected token(s).",
+            "SheetButton": "Apply damage/healing",
+            "SheetButtonHint": "Open dialog to apply damage or healing to selected tokens.",
+            "ToThisToken": "Apply to this token",
+            "ToThisTokenHint": "Open dialog with this token as the only target.",
+            "ChatApply": "Apply",
+            "ChatApplyHint": "Open Apply damage/healing dialog with this roll's total."
+        },
         "NPC": {
             "CreatureType": "Creature Type",
             "Subtypes": "Subtypes",

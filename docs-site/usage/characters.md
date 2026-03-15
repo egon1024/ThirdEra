@@ -13,7 +13,7 @@ The character sheet is the main interface for player characters. It is organized
   - **Class Features** - Class features granted by your classes, shown by level.
 - **Classes** - Class levels and level history. Add a class by dragging a class item from a compendium onto the sheet. The **Level History** panel shows each level’s hit points, class features, feats, and skills gained. You can remove the last level of a class (with optional XP adjustment) from here.
 - **Spells** - Spellcasting by class: known/prepared spells, slots per day, domain spells (if any), and cast/prepared counts. See [Spellcasting](#spellcasting) below.
-- **Combat** - Hit points, initiative, AC (with breakdown), conditions, and combat-related actions.
+- **Combat** - Hit points, initiative, AC (with breakdown), conditions, and combat-related actions. From here you can apply damage or healing to selected tokens, apply to this character’s token, and roll attack and damage (or a combined Attack & Damage). See [Applying damage and healing](#applying-damage-and-healing) below.
 
 The header shows the character’s portrait and token image; you can click the token image to set the prototype token image used on the map.
 
@@ -48,6 +48,15 @@ If a character has one or more classes with spellcasting enabled:
 - **Cast** on a spell in Ready to cast posts the spell to chat with save DC and spell resistance; you can drag a spell to the macro bar to create a “Cast: &lt;Spell&gt;” macro.
 
 Spells are added to the character by dragging from the Spells compendium (or from the Spell List browser). Classes with a “learned” spell list (e.g. wizard) do not auto-add all spells when you add the class; you add spells to the character as the character learns them.
+
+## Applying damage and healing
+
+From the **Combat** tab you can apply damage or healing to tokens without editing HP by hand:
+
+- **Apply damage/healing** — Select one or more tokens on the canvas, then click **Apply damage/healing**. Enter the amount and choose Damage or Healing; temp HP is reduced first for damage, and healing removes lethal damage before reducing nonlethal. You can optionally apply as **nonlethal damage** when dealing damage.
+- **Apply to this token** — If this character has a token on the current scene, **Apply to this token** opens the same dialog with that token as the only target (no selection needed).
+
+Weapon rows offer **Attack** (d20), **Damage**, and **Attack & Damage** (one message with both rolls). On any damage or healing roll posted to chat (including Attack & Damage), an **Apply** button appears; select target tokens and click **Apply** to open the dialog with the roll’s total pre-filled. You can also open the dialog from a macro: `game.thirdera.applyDamageHealing.openDialog()` or `game.thirdera.applyDamageHealing.openWithOptions({ targetActors, amount, mode, nonlethal })`.
 
 ## Experience and level
 

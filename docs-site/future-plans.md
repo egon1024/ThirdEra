@@ -19,8 +19,9 @@ The goal is smoother at-table combat for playtesting without full rules automati
 2. **Rest and natural healing** — Single flow: reset spell slots and cast counts, plus optional natural healing (e.g. 1 HP per character level per day of rest per SRD).
 3. **Initiative and combat tracker** — Use `@attributes.initiative.bonus` in system initiative formula (for feats like Improved Initiative); add a "Roll initiative" (or "Add to combat & roll initiative") button on the Combat tab that calls Foundry's `Actor.rollInitiative({ createCombatants: true })`.
 4. **Concentration check** — Quick Concentration check (button or prompt when casting) with appropriate DCs (defensive casting, damage, etc.).
-5. **Classes Phase 6** — Prestige classes and prerequisites (BAB, skills, feats, spellcasting level).
-6. **Later: Iterative attacks / full attack** — Multiple attacks at BAB +6/+11/+16 (currently single attack per weapon).
+5. **Conditions with mechanical effects** — Ensure condition compendium items have `changes` (AC, saves, speed) populated where applicable so applying Blinded, Shaken, etc. updates the sheet automatically.
+6. **Classes Phase 6** — Prestige classes and prerequisites (BAB, skills, feats, spellcasting level).
+7. **Later: Iterative attacks / full attack** — Multiple attacks at BAB +6/+11/+16 (currently single attack per weapon).
 
 
 **Scope:** Attacks of opportunity, flanking, and grid-facing are left to table ruling or modules; the system does not automate them. The same applies to complex special cases (e.g. full grappling automation). Documenting this keeps scope clear.
