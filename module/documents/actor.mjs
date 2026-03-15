@@ -1,4 +1,5 @@
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { parseSaveType } from "../logic/spell-save-helpers.mjs";
 
 /**
  * Extended Actor document class for Third Era
@@ -140,10 +141,12 @@ export class ThirdEraActor extends Actor {
     }
 
     /**
-     * Roll a saving throw
+     * Roll a saving throw.
      * @param {string} saveId - The save to roll (fort, ref, will)
+     * @param {Object} [options={}]
+     * @param {number} [options.dc] - Optional DC to show in the roll message (e.g. vs spell DC)
      */
-    async rollSavingThrow(saveId) {
+    async rollSavingThrow(saveId, { dc } = {}) {
         const save = this.system.saves[saveId];
 
         if (!save) {
@@ -154,10 +157,14 @@ export class ThirdEraActor extends Actor {
         const roll = await new Roll(`1d20 + ${save.total}`).roll();
 
         const saveName = CONFIG.THIRDERA?.Saves?.[saveId] || saveId.toUpperCase();
+        let flavor = `${saveName} Save`;
+        if (typeof dc === "number" && Number.isFinite(dc)) {
+            flavor += ` (vs DC ${dc})`;
+        }
 
         roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this }),
-            flavor: `${saveName} Save`
+            flavor
         });
 
         return roll;
@@ -256,9 +263,10 @@ export class ThirdEraActor extends Actor {
      * @param {Object} options
      * @param {string} options.classItemId  The class item ID (from spellcastingByClass) for DC and slot context
      * @param {number|string} options.spellLevel  Spell level 0-9 for this class
+     * @param {Actor[]|string[]} [options.targetActors]  Optional targets (Actor docs or actor UUIDs); stored on message for Roll save
      * @returns {Promise<boolean>}   True if cast was applied and message posted
      */
-    async castSpell(spellItem, { classItemId, spellLevel }) {
+    async castSpell(spellItem, { classItemId, spellLevel, targetActors: rawTargets }) {
         if (!spellItem || spellItem.type !== "spell") return false;
         if (this.type !== "character") return false;
 
@@ -360,15 +368,46 @@ export class ThirdEraActor extends Actor {
         const dcLine = game.i18n.format("THIRDERA.Spells.SaveDCBreakdown", dcPayload);
         const srLine = game.i18n.format("THIRDERA.Spells.SpellResistanceLine", srPayload);
 
+        let targetActorUuids = [];
+        let targetNamesLine = "";
+        if (Array.isArray(rawTargets) && rawTargets.length > 0) {
+            const seen = new Set();
+            const names = [];
+            for (const t of rawTargets) {
+                const actor = typeof t === "string" ? await foundry.utils.fromUuid(t) : t;
+                if (actor?.uuid && (actor.type === "character" || actor.type === "npc") && !seen.has(actor.uuid)) {
+                    seen.add(actor.uuid);
+                    targetActorUuids.push(actor.uuid);
+                    names.push(actor.name || "?");
+                }
+            }
+            if (targetActorUuids.length > 0) {
+                targetNamesLine = `<p class="cast-targets">${game.i18n.format("THIRDERA.Spells.TargetsLine", { names: names.join(", ") })}</p>`;
+            }
+        }
+
         const content = `<div class="thirdera cast-message">
   <p><strong>${actorName}</strong> ${castsLabel} <strong>${spellName}</strong>.</p>
   <div class="cast-dc-breakdown">${dcLine}</div>
   <p>${srLine}</p>
+  ${targetNamesLine}
 </div>`;
+
+        const saveType = parseSaveType(spellItem.system.savingThrow);
+        const spellCastFlags = {
+            dc: totalDC,
+            saveType,
+            spellName,
+            spellUuid: spellItem.uuid ?? null
+        };
+        if (targetActorUuids.length > 0) {
+            spellCastFlags.targetActorUuids = targetActorUuids;
+        }
 
         await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor: this }),
-            content
+            content,
+            flags: { thirdera: { spellCast: spellCastFlags } }
         });
 
         return true;

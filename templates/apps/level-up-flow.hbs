@@ -1,6 +1,9 @@
 <form class="level-up-flow-form level-up-flow-form--flex" data-appid="{{appId}}" autocomplete="off">
   <header class="level-up-flow-header">
     <h2 class="level-up-flow-title">{{stepLabel}}: {{stepTitle}}</h2>
+    {{#if levelProgressionText}}
+    <p class="level-up-flow-level-progression">{{levelProgressionText}}</p>
+    {{/if}}
   </header>
 
   {{#if (eq step "class")}}

@@ -45,6 +45,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             removeClass: ThirdEraActorSheet.#onRemoveClass,
             addClassLevel: ThirdEraActorSheet.#onAddClassLevel,
             openLevelUpFlow: ThirdEraActorSheet.#onOpenLevelUpFlow,
+            completeLevelUpChoices: ThirdEraActorSheet.#onCompleteLevelUpChoices,
             removeClassLevel: ThirdEraActorSheet.#onRemoveClassLevel,
             addHpAdjustment: ThirdEraActorSheet.#onAddHpAdjustment,
             removeHpAdjustment: ThirdEraActorSheet.#onRemoveHpAdjustment,
@@ -1046,7 +1047,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 id: cls.id,
                 _id: cls._id ?? cls.id,
                 supportsDomains: sc ? (sc.supportsDomains === true || sc.supportsDomains === "true") : false,
-                domains: sc?.domains ?? []
+                domains: sc?.domains ?? [],
+                hasIncompleteLevel: ThirdEraActorSheet.getOldestIncompleteLevelHistoryIndex(actor, cls.id) !== null
             };
         });
 
@@ -1842,6 +1844,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             counts[entry.classItemId] = (counts[entry.classItemId] || 0) + 1;
         }
         return counts;
+    }
+
+    /**
+     * Index of the oldest incomplete levelHistory entry for a class (no or empty skillsGained).
+     * @param {Actor} actor
+     * @param {string} classItemId
+     * @returns {number|null} First index for that class with incomplete choices, or null
+     */
+    static getOldestIncompleteLevelHistoryIndex(actor, classItemId) {
+        const history = actor?.system?.levelHistory ?? [];
+        for (let i = 0; i < history.length; i++) {
+            const entry = history[i];
+            if (entry.classItemId !== classItemId) continue;
+            const hasSkills = Array.isArray(entry.skillsGained) && entry.skillsGained.length > 0;
+            if (!hasSkills) return i;
+        }
+        return null;
     }
 
     /**
@@ -3700,6 +3719,28 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
+     * Open catch-up level-up flow for the oldest incomplete level of the class (Complete choices).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraActorSheet}
+     */
+    static #onCompleteLevelUpChoices(event, target) {
+        const classItemId = target.closest("[data-item-id]")?.dataset?.itemId;
+        if (this.actor.type !== "character") return;
+        if (!classItemId) return;
+        const idx = ThirdEraActorSheet.getOldestIncompleteLevelHistoryIndex(this.actor, classItemId);
+        if (idx === null) {
+            ui.notifications.info(game.i18n.localize("THIRDERA.LevelUp.NoIncompleteLevels"));
+            return;
+        }
+        new LevelUpFlow(this.actor, {
+            catchUpMode: true,
+            catchUpLevelHistoryIndex: idx,
+            selectedClassItemId: classItemId
+        }).render(true);
+    }
+
+    /**
      * Handle adding a level to an existing class
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
@@ -4332,11 +4373,20 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!itemId || !classItemId) return;
         const item = this.actor.items.get(itemId);
         if (!item || item.type !== "spell") return;
-        // Preserve scroll position so Ready to cast panel doesn't jump to top after re-render
+        const controlled = game.canvas?.tokens?.controlled ?? [];
+        const targetActors = [];
+        const seen = new Set();
+        for (const token of controlled) {
+            const actor = token.actor;
+            if (actor && !seen.has(actor.id)) {
+                targetActors.push(actor);
+                seen.add(actor.id);
+            }
+        }
         const scrollContainer = this.element?.querySelector(".tab.spells.active .spells-tab-content")
             ?? this.element?.querySelector(".sheet-body .tab.active");
         this._preservedSpellScrollTop = scrollContainer?.scrollTop ?? this.element?.querySelector(".sheet-body")?.scrollTop ?? 0;
-        await this.actor.castSpell(item, { classItemId, spellLevel });
+        await this.actor.castSpell(item, { classItemId, spellLevel, targetActors: targetActors.length > 0 ? targetActors : undefined });
     }
 
     /**

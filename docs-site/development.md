@@ -136,6 +136,10 @@ See **[Compendium guide](compendium-guide.md)** for the full guide.
 - **Dialog API:** `Dialog.render(true)` is **not** a Promise. Attach handlers after render (e.g. `requestAnimationFrame` + `setTimeout`); prefer event delegation.
 - **Item stacking:** Stack when same name/type, same `containerId`, same `equipped`, same type-specific props; containers don't stack. Use helpers like `_canStackItems`, `_findStackableItem`, `_splitItemStack`; quantity UI for actions on stacks.
 
+### Spell cast and roll save (chat message flags)
+
+When a character casts a spell, the posted chat message includes **`flags.thirdera.spellCast`** with: `dc` (number), `saveType` (`"fort"` | `"ref"` | `"will"` | `null`), `spellName`, `spellUuid`, and optionally `targetActorUuids` (actor UUIDs of targets when casting with tokens selected). The **Roll save** button and context menu (see `module/logic/spell-save-from-chat.mjs`) read this payload to offer the correct save type and DC; when targets exist, per-target "Roll save (Name)" buttons roll for that actor. Extenders can rely on this flag shape when adding custom spell-cast messages or tools that react to spell casts.
+
 ## Testing Apply damage/healing (Phase 2)
 
 Manual test steps for the Apply damage/healing entry points (chat, sheet, “to this token”, macro).

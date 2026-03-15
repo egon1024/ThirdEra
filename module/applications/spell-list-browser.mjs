@@ -336,10 +336,10 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
         const appId = el?.dataset?.appid;
         const app = appId ? foundry.applications.instances.get(appId) : null;
         const actor = app?.options?.actor ?? app?.actor;
-        if (!app || app.constructor?.name !== "SpellListBrowser" || !actor) return;
-        const root = app.element?.querySelector?.(".window-content") ?? app.element;
+        const root = app?.element?.querySelector?.(".window-content") ?? app?.element;
         const checked = root?.querySelectorAll?.('input[name="addSpellToActor"]:checked') ?? [];
-        const uuids = [...checked].map((el) => el.dataset?.spellUuid).filter(Boolean);
+        const uuids = [...checked].map((e) => e.dataset?.spellUuid).filter(Boolean);
+        if (!app || app.constructor?.name !== "SpellListBrowser" || !actor) return;
         if (uuids.length === 0) {
             ui.notifications.warn(game.i18n.localize("THIRDERA.SpellListBrowser.SelectSpellsFirst"));
             return;
@@ -347,6 +347,14 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
         const created = await actor.addSpells(uuids);
         if (created.length > 0) {
             ui.notifications.info(game.i18n.format("THIRDERA.SpellListBrowser.AddedToCharacter", { count: created.length }));
+        }
+        app.close();
+        const levelUpFlow = [...(foundry.applications?.instances?.values() ?? [])].find(
+            (a) => a.constructor?.name === "LevelUpFlow" && a.step === "spells" && a.actor === actor
+        );
+        if (levelUpFlow) {
+            levelUpFlow.step = "features";
+            await levelUpFlow.render(true);
         }
     }
 

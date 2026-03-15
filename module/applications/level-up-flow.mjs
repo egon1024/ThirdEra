@@ -20,6 +20,24 @@ const FIGHTER_BONUS_FEAT_LEVELS = new Set([1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20
  * @returns {string[]}
  */
 function getStepSequence(flow) {
+    if (flow.catchUpMode) {
+        const steps = ["skills"];
+        const ctx = getCatchUpLevelContext(flow);
+        if (!ctx || !flow.selectedClassItemId) return [...steps, "feat", "spells", "features"];
+        const cls = flow.actor.items.get(flow.selectedClassItemId);
+        const className = cls?.name ?? "";
+        const gainsGeneralFeat = GENERAL_FEAT_LEVELS.has(ctx.totalLevelAtTarget);
+        const isFighter = className.toLowerCase() === "fighter";
+        const gainsFighterBonus = isFighter && FIGHTER_BONUS_FEAT_LEVELS.has(ctx.levelsInClassAtTarget);
+        if (gainsGeneralFeat || gainsFighterBonus) steps.push("feat");
+        const sc = cls?.system?.spellcasting;
+        if (sc?.enabled && (sc.spellListAccess === "full" || sc.spellListAccess === "learned")) {
+            steps.push("spells");
+        }
+        steps.push("features");
+        return steps;
+    }
+
     const steps = ["class", "hp", "skills"];
     if (!flow?.actor?.system || !flow.selectedClassItemId) {
         steps.push("feat", "spells", "features");
@@ -40,6 +58,23 @@ function getStepSequence(flow) {
     }
     steps.push("features");
     return steps;
+}
+
+/**
+ * When in catch-up mode, return total character level and class level at the target levelHistory index.
+ * @param {LevelUpFlow} flow
+ * @returns {{ totalLevelAtTarget: number, levelsInClassAtTarget: number }|null}
+ */
+function getCatchUpLevelContext(flow) {
+    if (!flow?.actor?.system || !flow.catchUpMode || flow.catchUpLevelHistoryIndex == null) return null;
+    const levelHistory = flow.actor.system.levelHistory || [];
+    const idx = flow.catchUpLevelHistoryIndex;
+    if (idx < 0 || idx >= levelHistory.length) return null;
+    const totalLevelAtTarget = idx + 1;
+    const levelsInClassAtTarget = levelHistory
+        .slice(0, idx + 1)
+        .filter((e) => e.classItemId === flow.selectedClassItemId).length;
+    return { totalLevelAtTarget, levelsInClassAtTarget };
 }
 
 export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationMixin(
@@ -63,6 +98,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             addNewClass: LevelUpFlow.#onAddNewClass,
             rollHp: LevelUpFlow.#onRollHp,
             openSpellList: LevelUpFlow.#onOpenSpellList,
+            addToCharacter: LevelUpFlow.#onAddToCharacterFromSpellList,
             openItemSheet: LevelUpFlow.#onOpenItemSheet,
             openSelectedFeatSheet: LevelUpFlow.#onOpenSelectedFeatSheet
         }
@@ -102,9 +138,35 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     /** UUID of feat to add when committing (general or fighter bonus feat this level). */
     selectedFeatUuid = "";
 
+    /** When true, we are completing choices for an already-added level (catch-up); no class/hp steps, commit updates entry in place. */
+    catchUpMode = false;
+
+    /** When catchUpMode is true, the levelHistory index of the entry we are completing. */
+    catchUpLevelHistoryIndex = null;
+
     constructor(actor, options = {}) {
-        super(options);
+        let opts = options;
+        if (options.catchUpMode) {
+            const idx = options.catchUpLevelHistoryIndex ?? null;
+            const classItemId = options.selectedClassItemId;
+            const cls = actor?.items?.get(classItemId);
+            const history = actor?.system?.levelHistory ?? [];
+            const levelsInClassAtTarget = history.slice(0, idx + 1).filter((e) => e.classItemId === classItemId).length;
+            const title = game.i18n.format("THIRDERA.LevelUp.CompleteChoicesTitle", { name: cls?.name ?? "", level: levelsInClassAtTarget });
+            opts = foundry.utils.mergeObject({}, options, { inplace: false });
+            opts.window = foundry.utils.mergeObject(opts.window ?? {}, { title });
+        }
+        super(opts);
         this.actor = actor;
+        if (options.catchUpMode) {
+            this.catchUpMode = true;
+            this.catchUpLevelHistoryIndex = options.catchUpLevelHistoryIndex ?? null;
+            if (options.selectedClassItemId) this.selectedClassItemId = options.selectedClassItemId;
+            const seq = getStepSequence(this);
+            this.step = seq[0] ?? "skills";
+            const entry = actor?.system?.levelHistory?.[this.catchUpLevelHistoryIndex];
+            if (entry?.hpRolled != null) this.hpRolled = entry.hpRolled;
+        }
     }
 
     /** @override */
@@ -116,6 +178,20 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             m: sequence.length
         });
         const isLastStep = stepIndex >= 0 && stepIndex === sequence.length - 1;
+
+        let levelProgressionText = "";
+        if (this.selectedClassItemId) {
+            const cls = this.actor.items.get(this.selectedClassItemId);
+            const className = cls?.name ?? "";
+            if (this.catchUpMode) {
+                const ctx = getCatchUpLevelContext(this);
+                if (ctx) levelProgressionText = game.i18n.format("THIRDERA.LevelUp.LevelProgressionCompleting", { name: className, level: ctx.levelsInClassAtTarget });
+            } else {
+                const history = this.actor.system.levelHistory || [];
+                const newLevel = history.filter((e) => e.classItemId === this.selectedClassItemId).length + 1;
+                levelProgressionText = game.i18n.format("THIRDERA.LevelUp.LevelProgressionAdding", { name: className, level: newLevel });
+            }
+        }
 
         if (this.step === "class") {
             const classes = (this.actor.items.filter(i => i.type === "class") || []).map((cls) => {
@@ -161,6 +237,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 stepLabel,
                 stepTitle: game.i18n.localize("THIRDERA.LevelUp.StepChooseClass"),
                 isLastStep,
+                levelProgressionText,
                 classes,
                 hasClasses,
                 addNewClassMode: this.addNewClassMode,
@@ -188,6 +265,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 stepLabel,
                 stepTitle: game.i18n.localize("THIRDERA.LevelUp.StepHitPoints"),
                 isLastStep,
+                levelProgressionText,
                 className,
                 hitDie,
                 hpRolled: this.hpRolled,
@@ -198,25 +276,25 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
 
         if (this.step === "skills") {
             const ctx = await LevelUpFlow.#buildSkillsStepContext(this);
-            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, ...ctx };
+            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, levelProgressionText, ...ctx };
         }
 
         if (this.step === "feat") {
             const ctx = await LevelUpFlow.#buildFeatStepContext(this);
-            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, ...ctx };
+            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, levelProgressionText, ...ctx };
         }
 
         if (this.step === "spells") {
             const ctx = await LevelUpFlow.#buildSpellsStepContext(this);
-            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, ...ctx };
+            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, levelProgressionText, ...ctx };
         }
 
         if (this.step === "features") {
             const ctx = await LevelUpFlow.#buildFeaturesStepContext(this);
-            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, ...ctx };
+            return { appId: this.id, step: this.step, stepLabel, stepTitle: ctx.stepTitle, isLastStep, levelProgressionText, ...ctx };
         }
 
-        return { appId: this.id, step: this.step, stepLabel, stepTitle: "", isLastStep: false };
+        return { appId: this.id, step: this.step, stepLabel, stepTitle: "", isLastStep: false, levelProgressionText: "" };
     }
 
     /**
@@ -228,8 +306,15 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         const actor = flow.actor;
         const cls = actor.items.get(flow.selectedClassItemId);
         const levelHistory = actor.system.levelHistory || [];
-        const totalLevelAfter = levelHistory.length + 1;
-        const isFirstLevel = levelHistory.length === 0;
+        let totalLevelAfter, isFirstLevel;
+        if (flow.catchUpMode) {
+            const ctx = getCatchUpLevelContext(flow);
+            totalLevelAfter = ctx ? ctx.totalLevelAtTarget : levelHistory.length + 1;
+            isFirstLevel = totalLevelAfter === 1;
+        } else {
+            totalLevelAfter = levelHistory.length + 1;
+            isFirstLevel = levelHistory.length === 0;
+        }
 
         let skillPointsForLevel = 0;
         if (cls) {
@@ -441,10 +526,17 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     static async #buildFeatStepContext(flow) {
         const actor = flow.actor;
         const levelHistory = actor.system.levelHistory || [];
-        const totalLevelAfter = levelHistory.length + 1;
+        let totalLevelAfter, levelsInClass;
+        if (flow.catchUpMode) {
+            const ctx = getCatchUpLevelContext(flow);
+            totalLevelAfter = ctx ? ctx.totalLevelAtTarget : levelHistory.length + 1;
+            levelsInClass = ctx ? ctx.levelsInClassAtTarget : levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+        } else {
+            totalLevelAfter = levelHistory.length + 1;
+            levelsInClass = levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+        }
         const cls = actor.items.get(flow.selectedClassItemId);
         const className = cls?.name ?? "";
-        const levelsInClass = levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
 
         const gainsGeneralFeat = GENERAL_FEAT_LEVELS.has(totalLevelAfter);
         const isFighter = (className || "").toLowerCase() === "fighter";
@@ -525,7 +617,9 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         const actor = flow.actor;
         const cls = actor.items.get(flow.selectedClassItemId);
         const levelHistory = actor.system.levelHistory || [];
-        const newClassLevel = levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+        const newClassLevel = flow.catchUpMode
+            ? (getCatchUpLevelContext(flow)?.levelsInClassAtTarget ?? levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1)
+            : levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
         const sc = cls?.system?.spellcasting ?? {};
         const isFullListCaster = sc.enabled && sc.spellListAccess === "full";
         const isLearnedCaster = sc.enabled && sc.spellListAccess === "learned";
@@ -584,7 +678,9 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         const actor = flow.actor;
         const cls = actor.items.get(flow.selectedClassItemId);
         const levelHistory = actor.system.levelHistory || [];
-        const newClassLevel = levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
+        const newClassLevel = flow.catchUpMode
+            ? (getCatchUpLevelContext(flow)?.levelsInClassAtTarget ?? levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1)
+            : levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
         const className = cls?.name ?? "";
         const featuresAtLevel = [];
         for (const feature of cls?.system?.features ?? []) {
@@ -664,6 +760,8 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const skillsListEl = root?.querySelector?.(".level-up-flow-skills-list");
             /** When user clicks a skill input (mousedown), we record its index so after change→render we focus that input instead of nextIndex. Do not reset here: render() re-invokes activateListeners and would wipe the value before our rAF runs. */
             if (this._skillInputClickedIndex === undefined) this._skillInputClickedIndex = -1;
+            /** When keydown Tab/Shift-Tab moves focus, we set this so syncPending (change) can restore that focus after re-render; change may run before the browser has updated document.activeElement. */
+            if (this._skillPendingFocusIndex === undefined) this._skillPendingFocusIndex = -1;
             if (skillsListEl) {
                 skillsListEl.addEventListener("mousedown", (e) => {
                     const t = e.target;
@@ -677,9 +775,13 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const syncPending = async (ev) => {
                 const triggerInput = ev?.target?.name === "pointsToSpend" ? ev.target : null;
                 let nextIndex = 0;
+                let triggerIndex = -1;
                 if (triggerInput) {
                     const idx = Array.from(pointsInputs).indexOf(triggerInput);
-                    if (idx >= 0) nextIndex = (idx + 1) % pointsInputs.length;
+                    if (idx >= 0) {
+                        triggerIndex = idx;
+                        nextIndex = (idx + 1) % pointsInputs.length;
+                    }
                 }
                 for (const input of pointsInputs) {
                     const id = input.dataset.skillId;
@@ -688,28 +790,51 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                     if (id) this.pendingSkillPoints[id] = points;
                 }
                 const scrollTop = skillsListEl?.scrollTop ?? 0;
+                // Preserve focus: use pending index from keydown Tab/Shift-Tab if set (change can run before activeElement updates); else if focus is on another skill input, use it; else use next.
+                const pendingIdx = this._skillPendingFocusIndex >= 0 ? this._skillPendingFocusIndex : -1;
+                this._skillPendingFocusIndex = -1;
+                const activeIdx = document.activeElement && pointsInputs?.length ? Array.from(pointsInputs).indexOf(document.activeElement) : -1;
+                const focusTargetIndex = pendingIdx >= 0 ? pendingIdx : (activeIdx >= 0 ? activeIdx : nextIndex);
                 await this.render(true);
                 requestAnimationFrame(() => {
                     const list = this.element?.querySelector?.(".level-up-flow-skills-list");
-                    if (list) list.scrollTop = scrollTop;
                     const inputs = this.element?.querySelectorAll?.('input[name="pointsToSpend"]');
-                    const clickedIndex = this._skillInputClickedIndex;
                     this._skillInputClickedIndex = -1;
-                    if (inputs?.length) {
-                        if (clickedIndex >= 0 && clickedIndex < inputs.length) {
-                            inputs[clickedIndex].focus();
-                            inputs[clickedIndex].select();
-                        } else if (nextIndex < inputs.length) {
-                            inputs[nextIndex].focus();
-                            inputs[nextIndex].select();
-                        }
+                    if (inputs?.length && focusTargetIndex < inputs.length) {
+                        inputs[focusTargetIndex].focus();
+                        inputs[focusTargetIndex].select();
                     }
+                    if (list) list.scrollTop = scrollTop;
                 });
             };
             pointsInputs.forEach((input) => {
                 input.addEventListener("change", (e) => syncPending(e));
                 input.addEventListener("focus", function () {
                     this.select();
+                });
+                input.addEventListener("keydown", (e) => {
+                    if (e.key !== "Tab") return;
+                    const list = this.element?.querySelectorAll?.('input[name="pointsToSpend"]');
+                    if (!list?.length) return;
+                    const idx = Array.from(list).indexOf(e.target);
+                    if (idx < 0) return;
+                    if (e.shiftKey) {
+                        const prev = idx - 1;
+                        if (prev >= 0) {
+                            e.preventDefault();
+                            this._skillPendingFocusIndex = prev;
+                            list[prev].focus();
+                            list[prev].select();
+                        }
+                    } else {
+                        const next = idx + 1;
+                        if (next < list.length) {
+                            e.preventDefault();
+                            this._skillPendingFocusIndex = next;
+                            list[next].focus();
+                            list[next].select();
+                        }
+                    }
                 });
             });
         }
@@ -859,6 +984,11 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             if (uuid) flow.selectedFeatUuid = uuid;
         }
 
+        if (flow.catchUpMode) {
+            await LevelUpFlow.#commitCatchUpLevelUp(flow);
+            return;
+        }
+
         const history = [...(flow.actor.system.levelHistory || [])];
         const totalLevelAfter = history.length + 1;
         const classSkillKeys = flow.actor.system.classSkillKeys ?? new Set();
@@ -971,12 +1101,133 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         ui.notifications.info(game.i18n.format("THIRDERA.LevelUp.LevelAdded", { name: flow.actor.name }));
     }
 
+    /**
+     * Commit catch-up: update the existing levelHistory entry at catchUpLevelHistoryIndex (no push, no auto-granted feats).
+     * @param {LevelUpFlow} flow
+     */
+    static async #commitCatchUpLevelUp(flow) {
+        const ctx = getCatchUpLevelContext(flow);
+        if (!ctx) {
+            flow.close();
+            return;
+        }
+        const { totalLevelAtTarget, levelsInClassAtTarget } = ctx;
+        const history = [...(flow.actor.system.levelHistory || [])];
+        const idx = flow.catchUpLevelHistoryIndex;
+        if (idx < 0 || idx >= history.length) {
+            flow.close();
+            return;
+        }
+        const existingEntry = history[idx];
+        const classSkillKeys = flow.actor.system.classSkillKeys ?? new Set();
+        const grantedSkillKeys = flow.actor.system.grantedSkillKeys ?? new Set();
+        const cls = flow.actor.items.get(flow.selectedClassItemId);
+        const selectedClassSkillKeysLower = new Set();
+        if (cls?.system?.classSkills) {
+            for (const entry of cls.system.classSkills) {
+                if (entry.key) selectedClassSkillKeysLower.add(String(entry.key).toLowerCase());
+            }
+        }
+        const classSkillKeysLower = new Set([...classSkillKeys].map((k) => String(k).toLowerCase()));
+        const grantedSkillKeysLower = new Set([...grantedSkillKeys].map((k) => String(k).toLowerCase()));
+
+        const skillsGained = [];
+        for (const [skillId, points] of Object.entries(flow.pendingSkillPoints ?? {})) {
+            if (points <= 0) continue;
+            const keyLower = skillId.startsWith("key:") ? skillId.slice(4).toLowerCase() : (flow.actor.items.get(skillId)?.system?.key || "").toLowerCase();
+            const isClassSkill = keyLower && (grantedSkillKeysLower.has(keyLower) || classSkillKeysLower.has(keyLower) || selectedClassSkillKeysLower.has(keyLower));
+            const costPerRank = isClassSkill ? 1 : 2;
+            const maxRanksAfter = isClassSkill ? totalLevelAtTarget + 3 : Math.floor((totalLevelAtTarget + 3) / 2);
+            const addRanks = Math.min(points / costPerRank, maxRanksAfter);
+            if (addRanks <= 0) continue;
+            const key = skillId.startsWith("key:") ? skillId.slice(4) : (flow.actor.items.get(skillId)?.system?.key ?? "");
+            if (key) skillsGained.push({ key, ranks: addRanks });
+        }
+
+        let featItemId = "";
+        let featName = "";
+        let featKey = "";
+        if (flow.selectedFeatUuid) {
+            try {
+                const sourceFeat = await foundry.utils.fromUuid(flow.selectedFeatUuid);
+                if (sourceFeat && sourceFeat.type === "feat") {
+                    const obj = sourceFeat.toObject();
+                    delete obj._id;
+                    obj.flags = { ...(obj.flags || {}), thirdera: { ...(obj.flags?.thirdera || {}), sourceFeatUuid: flow.selectedFeatUuid } };
+                    const created = await flow.actor.createEmbeddedDocuments("Item", [obj]);
+                    if (created?.length) {
+                        featItemId = created[0].id;
+                        featName = sourceFeat.name ?? "";
+                        featKey = sourceFeat.system?.key ?? "";
+                    }
+                }
+            } catch (err) {
+                console.error("Third Era | Level-up flow catch-up add feat:", err);
+                ui.notifications.warn(game.i18n.format("THIRDERA.LevelUp.FeatAddFailed", { message: err?.message || "Unknown error" }));
+            }
+        }
+
+        const updatedEntry = {
+            ...existingEntry,
+            ...(featItemId && { featItemId, featName, featKey }),
+            skillsGained
+        };
+        history[idx] = updatedEntry;
+        await flow.actor.update({ "system.levelHistory": history });
+
+        for (const [skillId, points] of Object.entries(flow.pendingSkillPoints ?? {})) {
+            if (points <= 0) continue;
+            const keyLower = skillId.startsWith("key:") ? skillId.slice(4).toLowerCase() : (flow.actor.items.get(skillId)?.system?.key || "").toLowerCase();
+            const isClassSkill = keyLower && (grantedSkillKeysLower.has(keyLower) || classSkillKeysLower.has(keyLower) || selectedClassSkillKeysLower.has(keyLower));
+            const costPerRank = isClassSkill ? 1 : 2;
+            const maxRanksAfter = isClassSkill ? totalLevelAtTarget + 3 : Math.floor((totalLevelAtTarget + 3) / 2);
+            const addRanks = Math.min(points / costPerRank, maxRanksAfter);
+            if (addRanks <= 0) continue;
+            if (skillId.startsWith("key:")) {
+                const key = skillId.slice(4);
+                const newRanks = Math.min(addRanks, maxRanksAfter);
+                const sourceSkill = await LevelUpFlow.#findSkillByKey(key);
+                if (sourceSkill) {
+                    const obj = sourceSkill.toObject();
+                    delete obj._id;
+                    obj.system = obj.system ?? {};
+                    obj.system.ranks = newRanks;
+                    await flow.actor.createEmbeddedDocuments("Item", [obj]);
+                }
+                continue;
+            }
+            const skill = flow.actor.items.get(skillId);
+            if (!skill || skill.type !== "skill") continue;
+            const sd = skill.system;
+            const current = sd.ranks ?? 0;
+            const newRanks = Math.min(current + addRanks, maxRanksAfter);
+            if (newRanks > current) await skill.update({ "system.ranks": newRanks });
+        }
+
+        if (cls && levelsInClassAtTarget === 1) {
+            const sc = cls.system?.spellcasting;
+            const enabled = sc?.enabled === true || sc?.enabled === "true";
+            const isFullListCaster = enabled && sc?.spellListAccess === "full";
+            if (isFullListCaster) {
+                await ThirdEraActorSheet.addClassSpellListForFullListCaster(flow.actor, cls, 1);
+            }
+        }
+
+        flow.close();
+        if (flow.actor.sheet?.rendered) await flow.actor.sheet.render(true);
+        const className = cls?.name ?? "class";
+        ui.notifications.info(game.i18n.format("THIRDERA.LevelUp.ChoicesRecordedForLevel", { name: className, level: levelsInClassAtTarget }));
+    }
+
     static #onBack(event, target) {
         const flow = LevelUpFlow.#getFlowFromTarget(target);
         if (!flow) return;
         const sequence = getStepSequence(flow);
         const idx = sequence.indexOf(flow.step);
-        if (idx <= 0) return;
+        if (idx <= 0) {
+            if (flow.catchUpMode && idx === 0) flow.close();
+            return;
+        }
         const prevStep = sequence[idx - 1];
         flow.step = prevStep;
         if (prevStep === "feat") flow.selectedFeatUuid = "";
@@ -1034,6 +1285,10 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     static async #onOpenSpellList(event, target) {
         const flow = LevelUpFlow.#getFlowFromTarget(target);
         if (!flow?.actor) return;
+        const levelHistory = flow.actor.system.levelHistory || [];
+        const newClassLevel = flow.catchUpMode
+            ? (getCatchUpLevelContext(flow)?.levelsInClassAtTarget ?? levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1)
+            : levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
         const cls = flow.actor.items.get(flow.selectedClassItemId);
         const sc = cls?.system?.spellcasting;
         const spellListKey = (sc?.spellListKey || "").trim()
@@ -1043,8 +1298,36 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             actor: flow.actor,
             addToActorMode: true,
             spellListKey,
-            newClassLevel: (flow.actor.system.levelHistory || []).filter((e) => e.classItemId === flow.selectedClassItemId).length + 1
+            newClassLevel
         }).render(true);
+    }
+
+    /**
+     * Handle "Add to character" when the click is received by the level-up flow (Spell List browser may be rendered inside the flow's window).
+     * Finds the Spell List browser app, runs the add-spells logic, closes the browser, and advances the flow to the next step (or completes if features was last).
+     */
+    static async #onAddToCharacterFromSpellList(event, target) {
+        const browserApp = [...(foundry.applications?.instances?.values() ?? [])].find((a) => a.constructor?.name === "SpellListBrowser");
+        const actor = browserApp?.options?.actor ?? browserApp?.actor;
+        if (!browserApp || !actor) return;
+        const form = target?.closest?.("form.spell-list-browser-form") ?? browserApp?.element?.querySelector?.("form.spell-list-browser-form") ?? document.querySelector("form.spell-list-browser-form");
+        const root = form ?? browserApp?.element;
+        const checked = root?.querySelectorAll?.('input[name="addSpellToActor"]:checked') ?? [];
+        const uuids = [...checked].map((e) => e.dataset?.spellUuid).filter(Boolean);
+        if (uuids.length === 0) {
+            ui.notifications.warn(game.i18n.localize("THIRDERA.SpellListBrowser.SelectSpellsFirst"));
+            return;
+        }
+        const created = await actor.addSpells(uuids);
+        if (created.length > 0) {
+            ui.notifications.info(game.i18n.format("THIRDERA.SpellListBrowser.AddedToCharacter", { count: created.length }));
+        }
+        browserApp.close();
+        const flow = this;
+        if (flow?.actor && flow.step === "spells") {
+            flow.step = "features";
+            await flow.render(true);
+        }
     }
 
     /**

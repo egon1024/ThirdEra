@@ -1974,6 +1974,14 @@
   text-align: left;
 }
 
+.thirdera.level-up-flow .level-up-flow-level-progression {
+  font-size: var(--font-size-sm, 0.9em);
+  color: var(--color-text-secondary, #666);
+  margin: 0.25em 0 0;
+  font-weight: normal;
+  text-align: left;
+}
+
 .thirdera.level-up-flow .level-up-flow-body {
   margin-bottom: 0.75em;
   align-self: stretch;
@@ -2466,11 +2474,16 @@
 }
 
 /* Phase 2: Apply button on chat roll messages */
-.thirdera-apply-from-chat-wrap {
+.thirdera-apply-from-chat-wrap,
+.thirdera-spell-save-from-chat-wrap {
   margin-top: 0.25em;
 }
+.thirdera-spell-save-from-chat-wrap button + button {
+  margin-left: 0.35em;
+}
 .thirdera-chat-apply-btn,
-.thirdera-apply-damage-healing-from-chat {
+.thirdera-apply-damage-healing-from-chat,
+.thirdera-spell-save-from-chat {
   padding: 0.2em 0.5em;
   font-size: var(--font-size-12);
   cursor: pointer;
@@ -2479,7 +2492,8 @@
   border-radius: 3px;
 }
 .thirdera-chat-apply-btn:hover,
-.thirdera-apply-damage-healing-from-chat:hover {
+.thirdera-apply-damage-healing-from-chat:hover,
+.thirdera-spell-save-from-chat:hover {
   background: var(--color-popup-hover-bg);
 }
 

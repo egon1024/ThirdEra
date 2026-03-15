@@ -645,6 +645,9 @@
             <a class="class-level-remove" data-action="removeClassLevel" title="Remove Level"><i
                 class="fas fa-minus"></i></a>
             <span class="item-detail">Lvl {{cls.derivedLevels}}</span>
+            {{#if cls.hasIncompleteLevel}}
+            <a class="class-level-complete-choices" data-action="completeLevelUpChoices" title="{{localize "THIRDERA.LevelUp.CompleteChoices"}}">{{localize "THIRDERA.LevelUp.CompleteChoices"}}</a>
+            {{/if}}
             <a class="class-level-add" data-action="addClassLevel" title="Add Level"><i class="fas fa-plus"></i></a>
             <span class="item-detail">{{cls.system.hitDie}}</span>
             <span class="item-detail">BAB: {{lookup @root.config.babProgressions cls.system.babProgression}}</span>

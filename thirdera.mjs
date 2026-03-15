@@ -40,6 +40,7 @@ import {
 import { registerModifierSourceProviders } from "./module/logic/modifier-aggregation.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 import "./module/logic/apply-damage-healing-entry-points.mjs";
+import "./module/logic/spell-save-from-chat.mjs";
 
 /**
  * Initialize HP auto-increase system
