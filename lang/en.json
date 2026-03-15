@@ -249,7 +249,9 @@
             "AddToCharacter": "Add to character",
             "SelectSpellsFirst": "Select one or more spells (check the boxes) to add.",
             "AddedToCharacter": "Added {count} spell(s) to character.",
-            "AlreadyKnown": "Already known"
+            "AlreadyKnown": "Already known",
+            "SpellsLeftToSelectForLevel": "Spells left to select for this level: {summary}",
+            "NoSpellsLeft": "none"
         },
         "LevelUp": {
             "Title": "Level up",
@@ -264,6 +266,9 @@
             "SpellcastersLearnedHint": "You can add spells known for this level (see class table).",
             "SpellcastersLearnedNextHint": "Add spells in the Spell List if desired, then click Next to continue.",
             "SpellsKnownPerLevel": "Level {level}: up to {max}",
+            "SpellsKnownTotalLabel": "Total spells known at this level (class table):",
+            "SpellsLeft": "left",
+            "SpellsLeftToSelect": "Spells left to select: {summary}",
             "OpenSpellList": "Open Spell List",
             "OpenSpellListTitle": "Open the Spell List to add spells to your character",
             "NewFeaturesIntro": "{name} level {level}",

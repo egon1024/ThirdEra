@@ -198,7 +198,7 @@
     {{#if isLearnedCaster}}
     <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SpellcastersLearnedHint"}}</p>
     {{#if spellsKnownSummary}}
-    <p class="level-up-flow-spells-known">{{spellsKnownSummary}}</p>
+    <p class="level-up-flow-spells-known"><strong>{{localize "THIRDERA.LevelUp.SpellsKnownTotalLabel"}}</strong> {{spellsKnownSummary}}</p>
     {{/if}}
     <div class="form-group">
       <button type="button" class="level-up-open-spell-list" data-action="openSpellList" title="{{localize "THIRDERA.LevelUp.OpenSpellListTitle"}}">

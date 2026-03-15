@@ -4762,6 +4762,12 @@
   display: none !important;
 }
 
+.thirdera.spell-list-browser .spell-list-spells-remaining {
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  margin: 0 0 8px 0;
+}
+
 .thirdera.spell-list-browser .spell-list-body {
   flex: 1;
   min-height: 0;

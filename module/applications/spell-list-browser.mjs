@@ -4,6 +4,7 @@
  * clicking to open spell sheets, and dragging spells to actors or domains.
  */
 import { ClassData } from "../data/item-class.mjs";
+import { SpellData } from "../data/item-spell.mjs";
 import { getAllClasses, getSpellsForClass } from "../logic/class-spell-list.mjs";
 import { getAllDomains, getSpellsForDomain } from "../logic/domain-spells.mjs";
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
@@ -75,6 +76,8 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
 
         let spellsByLevel = [];
         let isArcane = false;
+        let spellsRemainingLine = "";
+        let remainingByLevel = {};
 
         const actorForKnown = this.options?.actor ?? this.actor;
         const addToActorModeActive = !!(this.options?.addToActorMode || this.addToActorMode) && !!actorForKnown;
@@ -108,8 +111,49 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
                 this.options?.newClassLevel ?? this.newClassLevel
             );
 
+            // In add-to-actor mode, compute remaining per level first so we can hide levels with 0 slots and show "spells left" header
+            if (addToActorModeActive && actorForKnown) {
+                const classItem = actorForKnown.items.find(
+                    (i) =>
+                        i.type === "class" &&
+                        (i.system?.spellcasting?.spellListKey || "").toLowerCase() === (selectedSource.spellListKey || "").toLowerCase()
+                );
+                const newClassLevel = this.options?.newClassLevel ?? this.newClassLevel;
+                const table = classItem?.system?.spellcasting?.spellsKnownTable;
+                if (classItem && Number.isInteger(newClassLevel) && newClassLevel >= 1 && Array.isArray(table) && table.length > 0) {
+                    const levelLabels = ["0-level", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
+                    const currentByLevel = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+                    for (const item of actorForKnown.items) {
+                        if (item.type !== "spell" || !SpellData.hasLevelForClass(item.system, selectedSource.spellListKey)) continue;
+                        const sl = SpellData.getLevelForClass(item.system, selectedSource.spellListKey);
+                        if (sl >= 0 && sl <= 9) currentByLevel[sl]++;
+                    }
+                    const remainingParts = [];
+                    for (let sl = 0; sl <= 9; sl++) {
+                        const max = ClassData.getSpellsKnown(table, newClassLevel, sl);
+                        if (max <= 0) continue;
+                        const current = currentByLevel[sl] ?? 0;
+                        const remaining = Math.max(0, max - current);
+                        remainingByLevel[String(sl)] = remaining;
+                        if (remaining > 0) {
+                            remainingParts.push(
+                                `${levelLabels[sl]}: ${remaining} ${game.i18n.localize("THIRDERA.LevelUp.SpellsLeft")}`
+                            );
+                        }
+                    }
+                    if (remainingParts.length) {
+                        spellsRemainingLine = game.i18n.format("THIRDERA.SpellListBrowser.SpellsLeftToSelectForLevel", {
+                            summary: remainingParts.join("; ")
+                        });
+                        this._remainingByLevel = { ...remainingByLevel };
+                        this._spellsRemainingLevelLabels = levelLabels;
+                    }
+                }
+            }
+
             for (let level = 0; level <= 9; level++) {
                 if (allowedLevels !== null && !allowedLevels.has(level)) continue;
+                if (addToActorModeActive && remainingByLevel[String(level)] !== undefined && remainingByLevel[String(level)] === 0) continue;
                 const entries = byLevel.get(level) || [];
                 if (entries.length === 0) continue;
 
@@ -206,7 +250,9 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
             searchTerm: this.searchTerm ?? "",
             hasSpells: spellsByLevel.length > 0,
             addToActorMode: !!(this.options?.addToActorMode || this.addToActorMode) && !!(this.options?.actor || this.actor),
-            actor: this.options?.actor ?? this.actor
+            actor: this.options?.actor ?? this.actor,
+            spellsRemainingLine,
+            remainingByLevel
         };
     }
 
@@ -300,6 +346,59 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
                 }
             });
             if (searchInput.value?.trim()) searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+
+        // Update "spells left to select" when checkboxes change (add-to-actor mode).
+        // Resolve container from the event target so we update the paragraph in the same app instance
+        // (ApplicationV2 scrollable may move .spell-list-body out of the form, so we need an ancestor of both).
+        if (this._remainingByLevel && this._spellsRemainingLevelLabels) {
+            const updateRemaining = (container) => {
+                if (!container) return;
+                const remainingEl = container.querySelector(".spell-list-spells-remaining");
+                const checked = container.querySelectorAll('input[name="addSpellToActor"]:checked') ?? [];
+                const countByLevel = {};
+                for (const input of checked) {
+                    let raw =
+                        input.getAttribute?.("data-spell-level") ??
+                        input.closest?.(".spell-item")?.getAttribute?.("data-spell-level") ??
+                        input.closest?.(".spell-level-group")?.getAttribute?.("data-level") ??
+                        input.dataset?.spellLevel ??
+                        input.closest?.(".spell-item")?.dataset?.spellLevel;
+                    if (raw == null || String(raw).trim() === "") {
+                        raw = input.closest?.(".spell-level-group")?.getAttribute?.("data-level");
+                    }
+                    const level = raw != null ? String(raw).trim() : undefined;
+                    if (level !== undefined && level !== "") {
+                        countByLevel[level] = (countByLevel[level] ?? 0) + 1;
+                    }
+                }
+                const parts = [];
+                for (let sl = 0; sl <= 9; sl++) {
+                    const key = String(sl);
+                    if (this._remainingByLevel[key] === undefined) continue;
+                    const baseRemaining = this._remainingByLevel[key] ?? 0;
+                    const selected = countByLevel[key] ?? 0;
+                    const displayRemaining = Math.max(0, baseRemaining - selected);
+                    if (displayRemaining > 0) {
+                        parts.push(
+                            `${this._spellsRemainingLevelLabels[sl]}: ${displayRemaining} ${game.i18n.localize("THIRDERA.LevelUp.SpellsLeft")}`
+                        );
+                    }
+                }
+                if (remainingEl) {
+                    const newText = parts.length
+                        ? game.i18n.format("THIRDERA.SpellListBrowser.SpellsLeftToSelectForLevel", { summary: parts.join("; ") })
+                        : game.i18n.format("THIRDERA.SpellListBrowser.SpellsLeftToSelectForLevel", { summary: game.i18n.localize("THIRDERA.SpellListBrowser.NoSpellsLeft") });
+                    remainingEl.textContent = newText;
+                }
+            };
+            root.addEventListener("change", (e) => {
+                if (e.target?.getAttribute?.("name") === "addSpellToActor") {
+                    const formEl = e.target?.closest?.("form.spell-list-browser-form");
+                    const container = formEl ?? e.target?.closest?.(".window-content") ?? e.target?.closest?.("[data-appid]") ?? root;
+                    updateRemaining(container);
+                }
+            });
         }
 
         // Drag handlers for spell entries
