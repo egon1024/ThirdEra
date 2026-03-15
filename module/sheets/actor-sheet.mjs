@@ -7,6 +7,7 @@ import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } f
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
 import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
+import { getAllSkills } from "../applications/skill-picker-dialog.mjs";
 import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
 
 /**
@@ -26,6 +27,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             abilityCheck: ThirdEraActorSheet.#onAbilityCheck,
             saveRoll: ThirdEraActorSheet.#onSaveRoll,
             skillCheck: ThirdEraActorSheet.#onSkillCheck,
+            skillCheckByKey: ThirdEraActorSheet.#onSkillCheckByKey,
             weaponAttack: ThirdEraActorSheet.#onWeaponAttack,
             weaponDamage: ThirdEraActorSheet.#onWeaponDamage,
             weaponAttackAndDamage: ThirdEraActorSheet.#onWeaponAttackAndDamage,
@@ -139,7 +141,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const focused = this.element?.querySelector(":focus");
         this._focusedInputName = focused?.name || null;
         // When the sheet re-renders (form submit, add/remove condition, etc.), preserve scroll position
-        // so the sheet does not jump to top. See docs/plans/sheet-ux-conventions.md.
+        // so the sheet does not jump to top. See .cursor/plans/sheet-ux-conventions.md.
         // The scrollable element is .sheet-body .tab.active (overflow-y: auto), not .sheet-body (overflow: hidden).
         if (this.rendered) {
             const scrollContainer = this.element?.querySelector(".sheet-body .tab.active")
@@ -388,12 +390,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
 
-        // Get actor document and system data
+        // Get actor document and system data (guard against uninitialized document)
         const actor = this.document;
-        const systemData = actor.system;
+        const systemData = actor?.system ?? {};
+        const abilities = systemData?.abilities ?? {};
+        const dexData = abilities?.dex ?? { effective: 10, value: 10 };
+
+        // Safe item list: avoid throwing if actor.items is missing or not iterable (e.g. during init)
+        let safeItemList = [];
+        try {
+            const coll = actor.items;
+            if (coll != null && typeof coll[Symbol.iterator] === "function") {
+                safeItemList = Array.from(coll);
+            }
+        } catch (_) {}
 
         // Prepare items
-        const items = this._prepareItems(actor.items);
+        const items = this._prepareItems(safeItemList);
 
         // Add CONFIG data
         const config = {
@@ -418,21 +431,21 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!this.tabGroups.spells) this.tabGroups.spells = "known";
         if (!this.tabGroups.primary) this.tabGroups.primary = "description";
         if (actor.type === "npc" && !this.tabGroups.combat) this.tabGroups.combat = "combat";
-        const tabs = this.tabGroups;
+        const tabs = this.tabGroups ?? { primary: "description", abilities: "scores", spells: "known" };
 
         // Compute Dex cap display info (dex.mod is already capped in prepareDerivedData)
-        const dexScore = systemData.abilities.dex.effective ?? systemData.abilities.dex.value;
+        const dexScore = dexData.effective ?? dexData.value ?? 10;
         const uncappedDexMod = Math.floor((dexScore - 10) / 2);
 
         // Determine why it's capped (armor, load, or both)
         let capReason = "armor";
         const loadMaxDex = systemData.loadEffects?.maxDex;
         if (loadMaxDex !== null && loadMaxDex !== undefined) {
-            // Find the most restrictive armor max dex
+            // Find the most restrictive armor max dex (use safe item list)
             let armorMaxDex = null;
-            for (const item of actor.items) {
-                if (item.type === "armor" && item.system.equipped === "true" && item.system.armor.type !== "shield") {
-                    const m = item.system.armor.maxDex;
+            for (const item of safeItemList) {
+                if (item.type === "armor" && item.system?.equipped === "true" && item.system?.armor?.type !== "shield") {
+                    const m = item.system?.armor?.maxDex;
                     if (m !== null) armorMaxDex = (armorMaxDex === null) ? m : Math.min(armorMaxDex, m);
                 }
             }
@@ -445,18 +458,18 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
 
         const dexCap = {
-            isCapped: systemData.abilities.dex.mod < uncappedDexMod,
+            isCapped: (dexData.mod ?? 0) < uncappedDexMod,
             isOverloaded: systemData.loadEffects?.load === "overload",
             uncappedMod: uncappedDexMod,
-            maxDex: systemData.abilities.dex.armorMaxDex,
+            maxDex: dexData.armorMaxDex ?? null,
             reason: capReason
         };
 
         // Compute speed reduction display info
-        const speedInfo = systemData.attributes.speed.info || { reduced: false, baseSpeed: systemData.attributes.speed.value, reason: null };
+        const speedInfo = systemData.attributes?.speed?.info || { reduced: false, baseSpeed: systemData.attributes?.speed?.value, reason: null };
 
         // Compute per-class level counts from derived data and augment class items
-        const classLevelCounts = systemData.details.classLevels || {};
+        const classLevelCounts = systemData.details?.classLevels || {};
         for (const cls of items.classes) {
             cls.derivedLevels = classLevelCounts[cls.id] || 0;
             // Attach granted features for this class (for Classes tab display)
@@ -473,13 +486,19 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             w.system.equipped === "primary" || w.system.equipped === "offhand"
         );
         const equippedArmor = items.armor.filter(a => a.system.equipped === "true");
+        // #region agent log
+        if (equippedArmor.length > 0) {
+            const armorDetails = equippedArmor.map((a) => ({ id: a.id, name: a.name, bonus: a.system?.armor?.bonus }));
+            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "actor-sheet.mjs:_prepareContext", message: "equippedArmor for template", data: { actorId: actor.id, actorName: actor.name, armorDetails }, timestamp: Date.now() }) }).catch(() => {});
+        }
+        // #endregion
 
         // Compute class summary for header display
         const classSummary = items.classes
             .filter(c => c.derivedLevels > 0)
             .map(c => `${c.name} ${c.derivedLevels}`)
             .join(" / ");
-        const totalLevel = systemData.details.totalLevel ?? systemData.details.level;
+        const totalLevel = systemData.details?.totalLevel ?? systemData.details?.level;
 
         // XP "next level at" for character sheet (SRD + Epic); computed in sheet to avoid data model mutation
         const experienceNextLevelAt = actor.type === "character"
@@ -510,7 +529,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
 
         // Prepare level history display data for Classes tab
-        const hpBreakdown = systemData.attributes.hp.hpBreakdown || [];
+        const hpBreakdown = systemData.attributes?.hp?.hpBreakdown || [];
         const rawHistory = systemData.levelHistory || [];
         const lastIndexByClass = new Map();
         for (let j = rawHistory.length - 1; j >= 0; j--) {
@@ -518,8 +537,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             if (!lastIndexByClass.has(cid)) lastIndexByClass.set(cid, j);
         }
         const intMod = systemData.abilities?.int?.mod ?? 0;
+        const getActorItem = (id) => (actor.items && typeof actor.items.get === "function")
+            ? actor.items.get(id) : safeItemList.find((it) => it.id === id);
         const levelHistory = rawHistory.map((entry, i) => {
-            const cls = actor.items.get(entry.classItemId);
+            const cls = getActorItem(entry.classItemId);
             const bp = hpBreakdown[i];
             const classLevel = 1 + rawHistory.slice(0, i).filter((e) => e.classItemId === entry.classItemId).length;
             const featuresAtLevel = (cls?.system?.features || [])
@@ -530,17 +551,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             if (i === 0) skillPointsAtLevel *= 4;
             const featItemId = entry.featItemId?.trim?.();
             const featGainedAtLevel = featItemId || entry.featName?.trim?.()
-                ? (actor.items.get(featItemId)?.name ?? entry.featName?.trim?.() ?? "Unknown")
+                ? (getActorItem(featItemId)?.name ?? entry.featName?.trim?.() ?? "Unknown")
                 : null;
             const skillsGained = entry.skillsGained ?? [];
             const skillsGainedAtLevel = skillsGained.map(({ key, ranks }) => {
                 const k = String(key ?? "").toLowerCase();
-                const skillItem = actor.items.find((it) => it.type === "skill" && (it.system?.key ?? "").toLowerCase() === k)
+                const skillItem = safeItemList.find((it) => it.type === "skill" && (it.system?.key ?? "").toLowerCase() === k)
                     ?? game.items?.find?.((it) => it.type === "skill" && (it.system?.key ?? "").toLowerCase() === k);
                 return { name: skillItem?.name ?? key ?? "?", ranks: ranks ?? 0 };
             });
             const autoGrantedFeatIds = entry.autoGrantedFeatIds ?? [];
-            const autoGrantedFeatsGainedAtLevel = autoGrantedFeatIds.map((id) => actor.items.get(id?.trim())?.name).filter(Boolean);
+            const autoGrantedFeatsGainedAtLevel = autoGrantedFeatIds.map((id) => getActorItem(id?.trim())?.name).filter(Boolean);
             return {
                 index: i,
                 characterLevel: i + 1,
@@ -569,9 +590,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
 
         // Compute HP status for header colorization
-        // Compute HP status for header colorization
-        const hpCurrent = systemData.attributes.hp.value;
-        const hpMax = systemData.attributes.hp.max;
+        const hpCurrent = systemData.attributes?.hp?.value ?? 0;
+        const hpMax = systemData.attributes?.hp?.max ?? 0;
         const hpStatus = hpCurrent >= hpMax ? "hp-full" : (hpCurrent >= hpMax * 0.5 ? "hp-warning" : "hp-danger");
 
         // Split granted features by type
@@ -855,7 +875,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 classSpells.preparedByLevel[levelKey] = preparedSum;
                 spellsKnownCurrent[levelKey] = spells.length;
                 if (classSpells.preparationType === "spontaneous") {
-                    const classItem = actor.items.get(classItemId);
+                    const classItem = getActorItem(classItemId);
                     const table = classItem?.system?.spellcasting?.spellsKnownTable;
                     const max = table && Array.isArray(table) && table.length > 0
                         ? ClassData.getSpellsKnown(table, classSpells.casterLevel, level)
@@ -998,8 +1018,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Format breakdown display
         const meta = inv.capacity.metadata || { baseMaxLoad: 0, sizeMod: 1 };
-        const str = systemData.abilities.str.effective;
-        const sizeLabel = systemData.details.size || "Medium";
+        const str = systemData.abilities?.str?.effective ?? 10;
+        const sizeLabel = systemData.details?.size || "Medium";
         const breakdown = {
             light: {
                 label: "THIRDERA.Inventory.Light",
@@ -1072,7 +1092,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             ...context,
             actor,
             system: systemData,
-            items: actor.items,
+            items: actor.items ?? safeItemList,
             ...items,
             classes: classesWithDomains,
             ...config,
@@ -1098,6 +1118,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             xpHeaderTotalLabel,
             xpHeaderLevelLabel,
             skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
+            // Phase 6: modifier-only skills (skill bonuses from items/feats/conditions when actor has no skill item)
+            modifierOnlySkills: await (async () => {
+                if (actor.type !== "character" || !systemData.modifierOnlySkills?.length) return [];
+                const allSkills = await getAllSkills();
+                const nameByKey = new Map(allSkills.map((s) => [(s.key ?? "").toLowerCase(), s.name]));
+                const humanize = (k) => (k && k.length) ? (k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()) : k;
+                return systemData.modifierOnlySkills.map((entry) => ({
+                    ...entry,
+                    displayName: nameByKey.get((entry.key || "").toLowerCase()) ?? humanize(entry.key)
+                }));
+            })(),
             grantedSkills: systemData.grantedSkills || [],
             grantedFeatures,
             grantedFeats,
@@ -1156,7 +1187,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             equipment: []
         };
 
-        for (const item of items) {
+        const iterable = (items != null && typeof items[Symbol.iterator] === "function") ? items : [];
+        for (const item of iterable) {
             const itemData = item;
             
             // Check if item is a container
@@ -2969,6 +3001,18 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const item = this.actor.items.get(itemId);
         if (item) {
             this.actor.rollSkillCheck(item.name);
+        }
+    }
+
+    /**
+     * Roll a modifier-only skill check (Phase 6: skill key, no ranks).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     */
+    static async #onSkillCheckByKey(event, target) {
+        const skillKey = target.closest("[data-skill-key]")?.dataset.skillKey;
+        if (skillKey) {
+            await this.actor.rollSkillCheckByKey(skillKey);
         }
     }
 

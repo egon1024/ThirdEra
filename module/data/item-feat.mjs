@@ -38,7 +38,14 @@ export class FeatData extends foundry.abstract.TypeDataModel {
             scalingTable: new ArrayField(new SchemaField({
                 minLevel: new NumberField({ required: true, integer: true, min: 1, initial: 1, label: "Min Level" }),
                 value: new StringField({ required: true, blank: true, initial: "", label: "Value" })
-            }), { label: "Scaling Table" })
+            }), { label: "Scaling Table" }),
+
+            /** Optional mechanical modifiers (generalized modifier system). Same key set as conditions: ac, saves, attack, ability.*, skill.<key>, etc. */
+            changes: new ArrayField(new SchemaField({
+                key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
+                value: new NumberField({ required: true, initial: 0, label: "Value" }),
+                label: new StringField({ required: false, blank: true, initial: "", label: "Label" })
+            }), { required: false, initial: [], label: "Mechanical effects" })
         };
     }
 }

@@ -57,6 +57,11 @@
   --color-border-profile: #555;
   --color-border-highlight: #8B4513;
 
+  /* Table header (mechanical effects / modifier tables) — semantic names for readable header row */
+  --color-table-header-bg: var(--color-bg-dark);
+  --color-table-header-text: var(--color-text-light);
+  --color-table-header-border: var(--color-border-divider);
+
   /* Typography - Font Families */
   --font-family: "Signika", sans-serif;
   --font-family-readable: "Roboto", "Helvetica Neue", Arial, sans-serif;
@@ -129,7 +134,8 @@
 .thirdera.sheet form,
 .thirdera.level-up-flow form,
 .thirdera.spell-list-browser form,
-.thirdera.apply-damage-healing-dialog form {
+.thirdera.apply-damage-healing-dialog form,
+.thirdera.skill-picker-dialog .skill-picker-dialog-body {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -138,7 +144,8 @@
 .thirdera.sheet .window-content,
 .thirdera.level-up-flow .window-content,
 .thirdera.spell-list-browser .window-content,
-.thirdera.apply-damage-healing-dialog .window-content {
+.thirdera.apply-damage-healing-dialog .window-content,
+.thirdera.skill-picker-dialog .window-content {
   height: 100%;
   padding: 5px;
   overflow-y: hidden;
@@ -146,6 +153,69 @@
   flex-direction: column;
   background: var(--color-bg-parchment);
   color: var(--color-text-primary);
+}
+
+/* Skill picker dialog: stay above item/actor sheets when opened from Manual effects */
+.thirdera.skill-picker-dialog.window,
+.app.thirdera.skill-picker-dialog {
+  z-index: 120 !important;
+}
+
+/* Skill picker dialog: theme-aligned, readable, scrollable list */
+.thirdera.skill-picker-dialog .skill-picker-dialog-body {
+  min-height: 0;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-dialog-body .form-group label {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-label);
+}
+
+.thirdera.skill-picker-dialog .skill-picker-search {
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body);
+  padding: 4px 6px;
+  width: 100%;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 8px 0 0;
+  padding-left: 1.2em;
+  list-style: none;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-list li {
+  margin: 2px 0;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border-input);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.thirdera.skill-picker-dialog .skill-picker-item:hover {
+  background: var(--color-popup-hover-bg);
+  border-color: var(--color-popup-border);
+}
+
+.thirdera.skill-picker-dialog .skill-picker-dialog-body .note {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-note);
+  margin-top: 8px;
 }
 
 
@@ -922,6 +992,80 @@
   margin-bottom: 4px;
 }
 
+/* Mechanical effects table (shared partial: condition, feat, armor, weapon, equipment) */
+.thirdera .condition-effects .condition-changes,
+.thirdera .feat-modifier-changes,
+.thirdera .mechanical-effects-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-body);
+}
+
+.thirdera .condition-effects .condition-changes thead,
+.thirdera .feat-modifier-changes thead,
+.thirdera .mechanical-effects-table thead {
+  background: var(--color-table-header-bg);
+  border-bottom: 2px solid var(--color-table-header-border);
+}
+
+.thirdera .condition-effects .condition-changes th,
+.thirdera .feat-modifier-changes th,
+.thirdera .mechanical-effects-table th {
+  padding: 6px 8px;
+  text-align: left;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-label);
+  color: var(--color-table-header-text);
+  border-right: 1px solid var(--color-table-header-border);
+}
+
+.thirdera .condition-effects .condition-changes th:last-child,
+.thirdera .feat-modifier-changes th:last-child,
+.thirdera .mechanical-effects-table th:last-child {
+  border-right: none;
+}
+
+.thirdera .condition-effects .condition-changes tbody tr,
+.thirdera .feat-modifier-changes tbody tr,
+.thirdera .mechanical-effects-table tbody tr {
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .condition-effects .condition-changes td,
+.thirdera .feat-modifier-changes td,
+.thirdera .mechanical-effects-table td {
+  padding: 4px 8px;
+  color: var(--color-text-primary);
+  border-right: 1px solid var(--color-border-divider);
+}
+
+.thirdera .condition-effects .condition-changes td:last-child,
+.thirdera .feat-modifier-changes td:last-child,
+.thirdera .mechanical-effects-table td:last-child {
+  border-right: none;
+}
+
+.thirdera .condition-effects .add-condition-change,
+.thirdera .add-feat-modifier,
+.thirdera .mechanical-effects-section .add-mechanical-effect {
+  margin-top: 8px;
+}
+
+/* Key column: enough width for type dropdown + skill name; skill display does not wrap */
+.thirdera .mechanical-effects-key-cell {
+  min-width: 140px;
+}
+
+.thirdera .mechanical-effects-key-cell .mechanical-effects-skill-display {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 4px;
+  text-align: left;
+}
+
 /* Inactive description: hide prose-mirror (avoids Foundry’s 150px min-height box); show compact .description-view */
 /* Hide biography editor when not editing (two selectors in case .thirdera is elsewhere) */
 .thirdera .description-editor-box:not(.description-editing) prose-mirror[name="system.biography"],
@@ -1324,6 +1468,13 @@
   flex: 1;
   min-width: 0;
   font-size: var(--font-size-body);
+}
+
+.thirdera .natural-attack-compact-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
 }
 
 /* Phase E: Stat block DR, SR, Senses, Other special abilities */

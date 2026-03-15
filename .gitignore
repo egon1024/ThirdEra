@@ -117,7 +117,7 @@ dist
 # MkDocs build output (docs-site)
 site/
 
-# Internal dev docs (state-of-work, plans, testing) — not committed; docs-site/ is the published docs
+# Optional local dev docs (e.g. testing checklists, compendium guide) — not committed; state and plans live in .cursor/
 docs/
 
 # Docusaurus cache and generated files

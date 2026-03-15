@@ -7,12 +7,12 @@
     </header>
 
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="description">{{localize 'THIRDERA.Description'}}</a>
-        <a class="item" data-tab="effects">{{localize 'THIRDERA.ConditionEffects'}}</a>
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab" data-group="primary" data-tab="description">{{localize 'THIRDERA.Description'}}</a>
+        <a class="item {{#if (eq tabs.primary 'effects')}}active{{/if}}" data-action="changeTab" data-group="primary" data-tab="effects">{{localize 'THIRDERA.ConditionEffects'}}</a>
     </nav>
 
     <section class="sheet-body">
-        <div class="tab active" data-group="primary" data-tab="description">
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary" data-tab="description">
             <div class="condition-editor-box editor-box">
                 <div class="editor-box-header flexrow">
                     <label>{{localize 'THIRDERA.Description'}}</label>
@@ -26,33 +26,8 @@
                 </prose-mirror>
             </div>
         </div>
-        <div class="tab" data-group="primary" data-tab="effects">
-            <div class="condition-effects">
-                <p class="note">{{localize 'THIRDERA.ConditionEffectsHint'}}</p>
-                <table class="condition-changes">
-                    <thead>
-                        <tr>
-                            <th>{{localize 'THIRDERA.ConditionEffectKey'}}</th>
-                            <th>{{localize 'THIRDERA.ConditionEffectValue'}}</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each system.changes as |change idx|}}
-                        <tr data-change-index="{{idx}}">
-                            <td>
-                                <select name="system.changes.{{idx}}.key">
-                                    {{selectOptions conditionChangeKeys selected=change.key}}
-                                </select>
-                            </td>
-                            <td><input type="number" name="system.changes.{{idx}}.value" value="{{change.value}}" data-dtype="Number" /></td>
-                            <td><button type="button" class="remove-change" data-action="removeConditionChange" data-index="{{idx}}" title="{{localize 'THIRDERA.Remove'}}"><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-                <button type="button" class="add-condition-change" data-action="addConditionChange"><i class="fas fa-plus"></i> {{localize 'THIRDERA.AddEffect'}}</button>
-            </div>
+        <div class="tab {{#if (eq tabs.primary 'effects')}}active{{/if}}" data-group="primary" data-tab="effects">
+            {{> "systems/thirdera/templates/partials/mechanical-effects-table.hbs" headerKey="THIRDERA.ConditionEffects" hintKey="THIRDERA.ConditionEffectsHint" showLabel=true addButtonKey="THIRDERA.AddEffect" changeKeyOptions=changeKeyOptions system=system}}
         </div>
     </section>
 </form>

@@ -4,6 +4,9 @@
   "img": "icons/svg/net.svg",
   "system": {
     "conditionId": "pinned",
+    "changes": [
+      { "key": "acLoseDex", "value": 1 }
+    ],
     "description": "<p>Held immobile (but not helpless) in a grapple.</p>"
   },
   "flags": {},

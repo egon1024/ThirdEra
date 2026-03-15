@@ -1,7 +1,7 @@
 const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
-import { getConditionItemsMapSync, getActiveConditionModifiers } from "../logic/condition-helpers.mjs";
+import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
 
 /**
  * Data model for D&D 3.5 NPC actors
@@ -169,11 +169,25 @@ export class NPCData extends foundry.abstract.TypeDataModel {
      * Prepare derived data for the NPC
      */
     prepareDerivedData() {
-        // Calculate effective score (base + racial) and modifier
+        // Base ability values only; racial and other modifiers flow through getActiveModifiers (same as character)
         for (const [key, ability] of Object.entries(this.abilities)) {
-            const racial = ability.racial ?? 0;
-            ability.effective = ability.value + racial;
+            ability.effective = ability.value;
+        }
+
+        // Single modifier aggregation (conditions, race, feats, equipped items); apply ability deltas
+        const mods = getActiveModifiers(this.parent);
+        const race = this.parent.items.find(i => i.type === "race");
+        for (const [key, ability] of Object.entries(this.abilities)) {
+            const delta = mods.totals[`ability.${key}`] ?? 0;
+            ability.effective += delta;
+            ability.modifierBreakdown = mods.breakdown[`ability.${key}`] ?? [];
+            ability.modifierBreakdownFormatted = ability.modifierBreakdown.length
+                ? ability.modifierBreakdown.map(b => `${b.label}: ${b.value >= 0 ? "+" : ""}${b.value}`).join("\n")
+                : "";
             ability.mod = Math.floor((ability.effective - 10) / 2);
+            ability.racial = race
+                ? (mods.breakdown[`ability.${key}`] ?? []).filter(b => b.label === race.name).reduce((s, b) => s + b.value, 0)
+                : 0;
         }
 
         // Calculate inventory weight and load early so it can affect Dex and Speed
@@ -238,7 +252,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             }
         }
 
-        const capacity = getCarryingCapacity(this.abilities.str.value, this.details.size);
+        const capacity = getCarryingCapacity(this.abilities.str.effective, this.details.size);
         const load = getLoadStatus(totalWeight, capacity);
         const loadEffects = getLoadEffects(load);
         this.loadEffects = loadEffects;
@@ -259,36 +273,47 @@ export class NPCData extends foundry.abstract.TypeDataModel {
         const sizeMod = CONFIG.THIRDERA.sizeModifiers?.[this.details.size] ?? 0;
         this.combat.sizeMod = sizeMod;
 
-        // Condition modifiers (Phase 2)
-        const conditionMap = getConditionItemsMapSync();
-        const conditionMods = getActiveConditionModifiers(this.parent, conditionMap);
+        // Apply modifier-system contributions to saves (mods from top of prepareDerivedData)
+        this.saves.fort.total += mods.totals.saveFort ?? 0;
+        this.saves.ref.total += mods.totals.saveRef ?? 0;
+        this.saves.will.total += mods.totals.saveWill ?? 0;
+        this.saves.fort.breakdown = [...(this.saves.fort.breakdown || []), ...(mods.breakdown.saveFort ?? [])];
+        this.saves.ref.breakdown = [...(this.saves.ref.breakdown || []), ...(mods.breakdown.saveRef ?? [])];
+        this.saves.will.breakdown = [...(this.saves.will.breakdown || []), ...(mods.breakdown.saveWill ?? [])];
 
-        // Apply condition modifiers to saves
-        this.saves.fort.total += conditionMods.saves.fort;
-        this.saves.ref.total += conditionMods.saves.ref;
-        this.saves.will.total += conditionMods.saves.will;
-        this.saves.fort.breakdown = [...(this.saves.fort.breakdown || []), ...conditionMods.saveBreakdown.fort];
-        this.saves.ref.breakdown = [...(this.saves.ref.breakdown || []), ...conditionMods.saveBreakdown.ref];
-        this.saves.will.breakdown = [...(this.saves.will.breakdown || []), ...conditionMods.saveBreakdown.will];
+        // Build totalBreakdown for tooltips: base + ability + modifiers (same idea as character)
+        const saveAbilityKey = { fort: "con", ref: "dex", will: "wis" };
+        const saveKey = { fort: "saveFort", ref: "saveRef", will: "saveWill" };
+        for (const save of ["fort", "ref", "will"]) {
+            const abilityKey = saveAbilityKey[save];
+            const abilityLabel = CONFIG.THIRDERA?.AbilityScores?.[abilityKey] ?? abilityKey;
+            const abilityEntry = { label: abilityLabel, value: this.abilities[abilityKey].mod };
+            const modBreakdown = mods.breakdown[saveKey[save]] ?? [];
+            this.saves[save].totalBreakdown = [
+                { label: "Base", value: this.saves[save].base },
+                abilityEntry,
+                ...modBreakdown
+            ];
+        }
 
         // Calculate grapple
         this.combat.grapple = this.combat.bab + this.abilities.str.mod;
 
-        // Calculate melee and ranged attack bonuses (include condition modifiers)
-        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + sizeMod + this.combat.meleeAttack.misc + conditionMods.attackMelee;
+        // Calculate melee and ranged attack bonuses (include modifier-system contributions)
+        this.combat.meleeAttack.total = this.combat.bab + this.abilities.str.mod + sizeMod + this.combat.meleeAttack.misc + (mods.totals.attackMelee ?? 0);
         this.combat.meleeAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
             { label: "STR", value: this.abilities.str.mod },
             { label: "Size", value: sizeMod },
-            ...(conditionMods.attackMeleeBreakdown || [])
+            ...(mods.breakdown.attackMelee ?? [])
         ];
 
-        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + sizeMod + this.combat.rangedAttack.misc + conditionMods.attackRanged;
+        this.combat.rangedAttack.total = this.combat.bab + this.abilities.dex.mod + sizeMod + this.combat.rangedAttack.misc + (mods.totals.attackRanged ?? 0);
         this.combat.rangedAttack.breakdown = [
             { label: "BAB", value: this.combat.bab },
             { label: "DEX", value: this.abilities.dex.mod },
             { label: "Size", value: sizeMod },
-            ...(conditionMods.attackRangedBreakdown || [])
+            ...(mods.breakdown.attackRanged ?? [])
         ];
 
         // Natural attacks (Phase C): primary = full attack bonus + full Str to damage; secondary = -5 attack, half Str to damage
@@ -309,11 +334,14 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             atk.damageFormula = damageStrMod >= 0 ? `${dice} + ${damageStrMod}` : `${dice} − ${Math.abs(damageStrMod)}`;
         }
 
-        // Calculate AC values from equipped armor, dex, size, misc, and conditions
-        computeAC(this, conditionMods);
+        // Calculate AC values from equipped armor, dex, size, misc, and modifier bag
+        computeAC(this, mods);
 
-        // Apply armor speed reduction and condition speed multiplier
-        this.attributes.speed.info = computeSpeed(this, this.loadEffects, conditionMods.speedMultiplier);
+        const src = this.parent?.getSource?.() ?? this.parent?._source;
+        const baseSpeedFromSource = src != null ? (foundry.utils.getProperty(src, "system.attributes.speed.value") ?? this.attributes.speed.value) : this.attributes.speed.value;
+
+        // Apply armor speed reduction and modifier-system speed multiplier
+        this.attributes.speed.info = computeSpeed(this, this.loadEffects, mods, baseSpeedFromSource);
 
         // Show Stable checkbox when HP is in dying range (−9 to −1)
         const hpVal = Number(this.attributes.hp.value);

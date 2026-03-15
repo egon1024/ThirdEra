@@ -4,6 +4,10 @@
   "img": "icons/svg/daze.svg",
   "system": {
     "conditionId": "stunned",
+    "changes": [
+      { "key": "ac", "value": -2 },
+      { "key": "acLoseDex", "value": 1 }
+    ],
     "description": "<p>A stunned creature drops everything held, can't take actions, takes a -2 penalty to AC, and loses his Dexterity bonus to AC (if any).</p>"
   },
   "flags": {},

@@ -96,11 +96,12 @@ export function getActiveConditionModifiers(actor, conditionMap) {
                 if (!CONDITION_KEYS.has(key)) continue;
                 const value = Number(c.value);
                 if (Number.isNaN(value)) continue;
+                const entryLabel = (c.label && String(c.label).trim()) ? String(c.label).trim() : name;
 
                 switch (key) {
                     case "ac":
                         out.ac += value;
-                        out.acBreakdown.push({ label: name, value });
+                        out.acBreakdown.push({ label: entryLabel, value });
                         break;
                     case "acLoseDex":
                         if (value !== 0) out.loseDexToAc = true;
@@ -110,29 +111,29 @@ export function getActiveConditionModifiers(actor, conditionMap) {
                         break;
                     case "saveFort":
                         out.saves.fort += value;
-                        out.saveBreakdown.fort.push({ label: name, value });
+                        out.saveBreakdown.fort.push({ label: entryLabel, value });
                         break;
                     case "saveRef":
                         out.saves.ref += value;
-                        out.saveBreakdown.ref.push({ label: name, value });
+                        out.saveBreakdown.ref.push({ label: entryLabel, value });
                         break;
                     case "saveWill":
                         out.saves.will += value;
-                        out.saveBreakdown.will.push({ label: name, value });
+                        out.saveBreakdown.will.push({ label: entryLabel, value });
                         break;
                     case "attack":
                         out.attackMelee += value;
                         out.attackRanged += value;
-                        out.attackMeleeBreakdown.push({ label: name, value });
-                        out.attackRangedBreakdown.push({ label: name, value });
+                        out.attackMeleeBreakdown.push({ label: entryLabel, value });
+                        out.attackRangedBreakdown.push({ label: entryLabel, value });
                         break;
                     case "attackMelee":
                         out.attackMelee += value;
-                        out.attackMeleeBreakdown.push({ label: name, value });
+                        out.attackMeleeBreakdown.push({ label: entryLabel, value });
                         break;
                     case "attackRanged":
                         out.attackRanged += value;
-                        out.attackRangedBreakdown.push({ label: name, value });
+                        out.attackRangedBreakdown.push({ label: entryLabel, value });
                         break;
                     default:
                         break;

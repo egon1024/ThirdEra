@@ -1,0 +1,19 @@
+<div class="skill-picker-dialog-body">
+  <div class="form-group">
+    <label for="skill-picker-search">{{localize "THIRDERA.Skills.Search"}}</label>
+    <input type="text" id="skill-picker-search" name="skillSearch" value="{{query}}" placeholder="{{localize "THIRDERA.Skills.SearchPlaceholder"}}"
+      data-action="filterSkills" class="skill-picker-search" />
+  </div>
+  <ol class="skill-picker-list">
+    {{#each skills as |skill|}}
+    <li>
+      <button type="button" class="skill-picker-item" data-action="selectSkill" data-skill-key="{{skill.key}}" title="{{skill.name}}">
+        {{skill.name}}
+      </button>
+    </li>
+    {{/each}}
+  </ol>
+  {{#if (eq skills.length 0)}}
+  <p class="note">{{localize "THIRDERA.Skills.NoMatch"}}</p>
+  {{/if}}
+</div>

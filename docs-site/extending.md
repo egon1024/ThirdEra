@@ -22,6 +22,13 @@ For how to create and manage compendiums (pack definition, JSON layout, loader b
 
 Configuration that drives sheets and logic (sizes, damage types, movement maneuverability, etc.) lives in **CONFIG.THIRDERA**. The system uses this at runtime; you do not need to modify it to add new races, classes, or items—they are data, not config.
 
+## Modifier system (adding new sources)
+
+The system uses a **unified modifier pipeline**: conditions, feats, race, and equipped items contribute modifiers through a single aggregation. If you add a new item type or effect that should grant numeric bonuses (e.g. to AC, saves, ability scores, skills), you can plug in without changing core code:
+
+- **Register a provider:** Push a function `(actor) => Array<{ label, changes }>` to `CONFIG.THIRDERA.modifierSourceProviders`. See [Development — Modifier system](development.md#modifier-system-modulelogicmodifier-aggregationmjs) for the full contract and canonical keys.
+- **Item method:** Implement `getModifierChanges(actor)` on your item type returning `{ applies, changes }`; the built-in item provider will call it and merge when `applies` is true.
+
 For GM-facing world options (e.g. track currency weight, audit log, first-level full HP), see **[World configuration](usage/world-configuration.md)** in the Usage section.
 
 ## Changing the core code

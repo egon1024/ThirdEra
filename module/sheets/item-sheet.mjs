@@ -3,6 +3,7 @@
  * @extends {foundry.applications.sheets.ItemSheetV2}
  */
 import { addDomainSpellsToActor, getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { SkillPickerDialog } from "../applications/skill-picker-dialog.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -56,8 +57,13 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             removeDescriptorTag: ThirdEraItemSheet.onRemoveDescriptorTag,
             openConditionDescription: ThirdEraItemSheet.onOpenConditionDescription,
             openEditorBox: ThirdEraItemSheet.onOpenEditorBox,
-            addConditionChange: ThirdEraItemSheet.onAddConditionChange,
-            removeConditionChange: ThirdEraItemSheet.onRemoveConditionChange,
+            addConditionChange: ThirdEraItemSheet.onAddMechanicalEffectRow,
+            removeConditionChange: ThirdEraItemSheet.onRemoveMechanicalEffectRow,
+            addFeatModifierChange: ThirdEraItemSheet.onAddMechanicalEffectRow,
+            removeFeatModifierChange: ThirdEraItemSheet.onRemoveMechanicalEffectRow,
+            addMechanicalEffectRow: ThirdEraItemSheet.onAddMechanicalEffectRow,
+            removeMechanicalEffectRow: ThirdEraItemSheet.onRemoveMechanicalEffectRow,
+            chooseSkillForModifier: ThirdEraItemSheet.onChooseSkillForModifier,
             editImage: ThirdEraItemSheet.onEditImage,
             addPrerequisiteFeat: ThirdEraItemSheet.onAddPrerequisiteFeat,
             removePrerequisiteFeat: ThirdEraItemSheet.onRemovePrerequisiteFeat
@@ -151,6 +157,111 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 ev.stopImmediatePropagation();
             }, true);
         }
+        // Mechanical effects table: save on blur and Enter (condition, feat, armor, weapon, equipment)
+        if (partId === "sheet") {
+            const root = this.element;
+            // #region agent log
+            const keyTypeSelectsCount = root?.querySelectorAll?.(".mechanical-effects-key-type")?.length ?? -1;
+            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:_attachPartListeners", message: "sheet part listeners", data: { partId, docType: this.document?.type, hasRoot: !!root, keyTypeSelectsCount }, timestamp: Date.now() }) }).catch(() => {});
+            // #endregion
+            const fields = root?.querySelectorAll?.(".mechanical-effects-field");
+            if (fields?.length) {
+                fields.forEach((el) => {
+                    el.addEventListener("blur", () => {
+                        if (this._preservedScrollTop === undefined) {
+                            const tab = root?.querySelector?.(".sheet-body .tab.active");
+                            if (tab) this._preservedScrollTop = tab.scrollTop;
+                        }
+                        this.submit();
+                    });
+                    el.addEventListener("keydown", (e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (this._preservedScrollTop === undefined) {
+                                const tab = root?.querySelector?.(".sheet-body .tab.active");
+                                if (tab) this._preservedScrollTop = tab.scrollTop;
+                            }
+                            this.submit();
+                        }
+                    });
+                });
+            }
+            // Phase 6: sync key-type dropdown to hidden key input; when "Skill" is selected, open picker instead of showing button
+            const keyTypeSelects = root?.querySelectorAll?.(".mechanical-effects-key-type");
+            if (keyTypeSelects?.length) {
+                keyTypeSelects.forEach((select) => {
+                    select.addEventListener("change", async () => {
+                        const row = select.closest(".mechanical-effects-row");
+                        const keyInput = row?.querySelector?.(".mechanical-effects-key-input");
+                        const val = select.value;
+                        // #region agent log
+                        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:keyType change", message: "change", data: { selectValue: val, hasKeyInput: !!keyInput, valueUndefined: select.value === undefined }, timestamp: Date.now() }) }).catch(() => {});
+                        // #endregion
+                        if (!keyInput || select.value === undefined) return;
+                        if (select.value === "skill") {
+                            // #region agent log
+                            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:opening picker", message: "entering skill branch", data: {}, timestamp: Date.now() }) }).catch(() => {});
+                            // #endregion
+                            const idx = parseInt(row?.dataset?.changeIndex ?? select.dataset?.changeIndex, 10);
+                            const prevKey = keyInput.value || "";
+                            const dialog = new SkillPickerDialog({
+                                id: "thirdera-skill-picker",
+                                resolve: async (skillKey) => {
+                                    if (!skillKey || Number.isNaN(idx)) return;
+                                    const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+                                    if (tab) this._preservedScrollTop = tab.scrollTop;
+                                    const doc = this.document;
+                                    const updates = [...(doc.system.changes || [])];
+                                    if (updates[idx]) {
+                                        updates[idx] = { ...updates[idx], key: `skill.${skillKey}` };
+                                        await doc.update({ "system.changes": updates }, { render: false });
+                                        if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+                                        else if (doc.type !== "condition") {
+                                            if (doc.actor) {
+                                                const actor = doc.actor;
+                                                if (typeof actor.prepareData === "function") await actor.prepareData();
+                                                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                                            } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                                                await this._syncWorldItemToActorCopies();
+                                            }
+                                        }
+                                        await this.render(true);
+                                    }
+                                },
+                                onClose: () => {
+                                    select.value = prevKey ? (prevKey.startsWith("skill.") ? "skill" : prevKey) : "";
+                                }
+                            });
+                            // #region agent log
+                            try {
+                                await dialog.render(true);
+                                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:after render", message: "dialog.render done", data: {}, timestamp: Date.now() }) }).catch(() => {});
+                            } catch (e) {
+                                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:dialog render err", message: String(e?.message || e), data: { stack: e?.stack?.slice?.(0, 200) }, timestamp: Date.now() }) }).catch(() => {});
+                            }
+                            // #endregion
+                            return;
+                        }
+                        keyInput.value = select.value;
+                        if (this._preservedScrollTop === undefined) {
+                            const tab = root?.querySelector?.(".sheet-body .tab.active");
+                            if (tab) this._preservedScrollTop = tab.scrollTop;
+                        }
+                        this.submit();
+                    });
+                });
+            }
+        }
+    }
+
+    /** @override */
+    async _preparePartContext(partId, context, options) {
+        return super._preparePartContext(partId, context, options);
+    }
+
+    /** @override */
+    async _renderHTML(context, options) {
+        return super._renderHTML(context, options);
     }
 
     /** @override */
@@ -163,7 +274,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const context = await super._prepareContext(options);
         const item = this.document;
         let systemData = item.system;
-
         try {
             return await this._prepareContextBody(context, item, systemData);
         } catch (err) {
@@ -428,6 +538,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         // Add _index to each entry so the template can output correct select names inside nested {{#each}} (../index is not in scope there).
         // For conditional entries, add _featsForSlot[j] = feats available for slot j (exclude feats already chosen in slots 0..j-1; include current slot value so selection shows).
         let systemForContext = systemData;
+        if (item.type === "condition") {
+            // Ensure system is always an object with changes array so template never sees undefined (avoids "Cannot convert undefined or null to object" in selectOptions/each).
+            systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
+        }
+        if (item.type === "feat") {
+            systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
+        }
+        if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
+            systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
+        }
         if (item.type === "class") {
             const rawSystem = item._source?.system ?? item.toObject?.()?.system;
             const systemPlain = (rawSystem && typeof rawSystem === "object")
@@ -476,7 +596,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             availableFeatsForPrereq,
             availableFeats,
             autoGrantedFeatsForDisplay,
-            ...(item.type === "condition" ? { conditionChangeKeys: ThirdEraItemSheet.getConditionChangeKeyOptions() } : {})
+            // Key options for mechanical effects table (condition, feat, armor, weapon, equipment)
+            changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
+            conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
+            modifierChangeKeys: (item.type === "feat" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
         };
     }
 
@@ -494,21 +617,57 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         return skill?.name ?? key;
     }
 
-    /** Condition effect key options for the condition sheet dropdown (key -> localized label). */
+    /** Condition effect key options for the condition sheet dropdown (key -> localized label). Sorted alphabetically by label (blank first). */
     static getConditionChangeKeyOptions() {
         const t = (key) => game.i18n.localize(`THIRDERA.ConditionChangeKeys.${key}`);
-        return {
-            "": "—",
-            ac: t("ac"),
-            acLoseDex: t("acLoseDex"),
-            speedMultiplier: t("speedMultiplier"),
-            saveFort: t("saveFort"),
-            saveRef: t("saveRef"),
-            saveWill: t("saveWill"),
-            attack: t("attack"),
-            attackMelee: t("attackMelee"),
-            attackRanged: t("attackRanged")
-        };
+        const entries = [
+            { key: "ac", label: t("ac") },
+            { key: "acLoseDex", label: t("acLoseDex") },
+            { key: "speedMultiplier", label: t("speedMultiplier") },
+            { key: "saveFort", label: t("saveFort") },
+            { key: "saveRef", label: t("saveRef") },
+            { key: "saveWill", label: t("saveWill") },
+            { key: "attack", label: t("attack") },
+            { key: "attackMelee", label: t("attackMelee") },
+            { key: "attackRanged", label: t("attackRanged") },
+            { key: "ability.str", label: t("abilityStr") },
+            { key: "ability.dex", label: t("abilityDex") },
+            { key: "ability.con", label: t("abilityCon") },
+            { key: "ability.int", label: t("abilityInt") },
+            { key: "ability.wis", label: t("abilityWis") },
+            { key: "ability.cha", label: t("abilityCha") },
+            { key: "skill", label: t("skill") }
+        ];
+        entries.sort((a, b) => a.label.localeCompare(b.label, game.i18n.lang ?? "en"));
+        const out = { "": "—" };
+        for (const { key, label } of entries) {
+            out[key] = label;
+        }
+        return out;
+    }
+
+    /**
+     * When an owned item (feat, armor, weapon, equipment) is updated from this sheet, refresh the actor
+     * so the character sheet shows new modifiers and item-derived stats (AC, etc.) immediately.
+     */
+    async _onOwnedItemDocumentUpdate() {
+        const doc = this.document;
+        const actorDirect = doc?.actor ?? doc?.parent;
+        const actorFromUuid = doc?.uuid && game?.actors ? (() => { const p = String(doc.uuid).split("."); return p[0] === "Actor" && p[1] ? game.actors.get(p[1]) ?? null : null; })() : null;
+        const actor = actorDirect ?? actorFromUuid;
+        if (actor && typeof actor.prepareData === "function") {
+            await actor.prepareData();
+            if (actor.sheet?.rendered) actor.sheet.render({ force: true });
+        }
+    }
+
+    /** @override */
+    async close(options = {}) {
+        if (this._featUpdateListenerBound && this.document?.off && this._featUpdateHandler) {
+            this.document.off("update", this._featUpdateHandler);
+            this._featUpdateListenerBound = false;
+        }
+        return super.close(options);
     }
 
     /** @override */
@@ -527,28 +686,57 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     _onRender(context, options) {
         super._onRender(context, options);
 
+        // When this sheet is for an owned item that affects actor stats (feat, armor, weapon, equipment),
+        // refresh the actor (and its sheet) when the item is updated so modifiers and derived stats update dynamically.
+        const doc = this.document;
+        const typesThatAffectActor = ["feat", "armor", "weapon", "equipment"];
+        const resolvedOwner = doc && (doc.actor ?? doc.parent);
+        const resolvedOwnerFromUuid = doc?.uuid && game?.actors ? (() => { const p = String(doc.uuid).split("."); return p[0] === "Actor" && p[1] ? game.actors.get(p[1]) ?? null : null; })() : null;
+        const owner = resolvedOwner ?? resolvedOwnerFromUuid;
+        // #region agent log
+        if (doc && typesThatAffectActor.includes(doc.type)) {
+            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_onRender", message: "armor/equip sheet render", data: { itemType: doc.type, itemId: doc.id, itemName: doc.name, hasOwner: !!owner, docActorId: doc.actor?.id, docParentId: doc.parent?.id, docUuid: doc.uuid, willRegisterListener: !!owner && !this._featUpdateListenerBound }, timestamp: Date.now() }) }).catch(() => {});
+        }
+        // #endregion
+        if (doc && typesThatAffectActor.includes(doc.type) && owner && !this._featUpdateListenerBound) {
+            this._featUpdateHandler = this._onOwnedItemDocumentUpdate.bind(this);
+            doc.on?.("update", this._featUpdateHandler);
+            this._featUpdateListenerBound = true;
+        }
+
         // Restore manual scroll position if set (prevents jumping when adding/removing rows)
         if (this._preservedScrollTop !== undefined) {
             const preservedScroll = this._preservedScrollTop;
-            this._preservedScrollTop = undefined;
+            // Defer clear so a second render in the same tick (e.g. after feat update) also restores scroll
+            const scrollToRestore = preservedScroll;
+            setTimeout(() => { this._preservedScrollTop = undefined; }, 100);
             const tab = this.element.querySelector(".sheet-body .tab.active");
-            if (tab && preservedScroll > 0) {
+            if (tab && scrollToRestore > 0) {
                 // Restore immediately
-                tab.scrollTop = preservedScroll;
+                tab.scrollTop = scrollToRestore;
                 // Also restore after frames to ensure it sticks (DOM updates may reset it)
                 requestAnimationFrame(() => {
-                    if (tab.scrollTop !== preservedScroll) {
-                        tab.scrollTop = preservedScroll;
-                    }
-                    // Second attempt after a short delay
-                    setTimeout(() => {
-                        if (tab.scrollTop !== preservedScroll) {
-                            tab.scrollTop = preservedScroll;
-                        }
-                    }, 10);
+                    const t = this.element?.querySelector?.(".sheet-body .tab.active");
+                    if (t && t.scrollTop !== scrollToRestore) t.scrollTop = scrollToRestore;
                 });
+                setTimeout(() => {
+                    const t = this.element?.querySelector?.(".sheet-body .tab.active");
+                    if (t && t.scrollTop !== scrollToRestore) t.scrollTop = scrollToRestore;
+                }, 10);
+                setTimeout(() => {
+                    const t = this.element?.querySelector?.(".sheet-body .tab.active");
+                    if (t && t.scrollTop !== scrollToRestore) t.scrollTop = scrollToRestore;
+                }, 100);
             }
         }
+
+        // Capture scroll position on any form change (before submit) so scrollable tabs (e.g. condition Mechanical effects) don't jump to top
+        const form = this.form ?? (this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form"));
+        form?.addEventListener("change", () => {
+            if (this._preservedScrollTop !== undefined) return;
+            const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+        }, true);
 
         // Restore focus after re-render (preserves tab navigation with submitOnChange)
         if (this._focusedInputName) {
@@ -1118,9 +1306,238 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         return data;
     }
 
+    /**
+     * When this sheet's document is a world feat (no parent), sync its data to every actor that has this feat and refresh their sheets.
+     * Call after the world document is updated (form submit or add/remove mechanical effect row).
+     */
+    async _syncWorldFeatToActorCopies() {
+        if (this.document?.type !== "feat" || !this.document?.uuid) return;
+        const actor = this.document?.actor ?? this.document?.parent ?? this.document?.collection?.parent;
+        if (actor) return;
+        const docUuid = this.document.uuid;
+        const docName = (this.document.name ?? "").trim();
+        const actorList = game.actors?.contents ?? Array.from(game.actors?.values?.() ?? []);
+        const hasFeatNamed = (a, name) => {
+            const items = a.items?.contents ?? Array.from(a.items?.values?.() ?? []);
+            return items.some((it) => it.type === "feat" && (it.name ?? "").trim() === name);
+        };
+        const getMatchingFeatItems = (a) => {
+            const items = a.items?.contents ?? Array.from(a.items?.values?.() ?? []);
+            return items.filter((it) => it.sourceId === docUuid || (docName && it.type === "feat" && (it.name ?? "").trim() === docName));
+        };
+        let actorsToRefresh = actorList.filter((a) => a.items?.some?.((it) => it.sourceId === docUuid));
+        if (actorsToRefresh.length === 0 && docName) {
+            actorsToRefresh = actorList.filter((a) => hasFeatNamed(a, docName));
+        }
+        if (actorsToRefresh.length === 0 && docName) {
+            const instances = foundry.applications?.instances;
+            if (instances) {
+                for (const app of instances.values()) {
+                    const doc = app.document;
+                    if (doc?.documentName === "Actor" && hasFeatNamed(doc, docName)) {
+                        actorsToRefresh.push(doc);
+                    }
+                }
+            }
+        }
+        const fullDoc = this.document.toObject();
+        delete fullDoc._id;
+        const changes = this.document.system.changes ?? [];
+        for (const a of actorsToRefresh) {
+            const itemsToUpdate = getMatchingFeatItems(a);
+            for (const item of itemsToUpdate) {
+                const payload = { ...fullDoc };
+                payload["==system"] = this.document.system.toObject();
+                delete payload.system;
+                await item.update(payload);
+                await item.update({ "system.changes": changes });
+            }
+            if (typeof a.prepareData === "function") await a.prepareData();
+            if (a.sheet?.rendered) await a.sheet.render({ force: true });
+        }
+    }
+
+    /**
+     * When this sheet's document is a world armor/weapon/equipment (no parent), sync its system data
+     * to every actor that has this item (by sourceId or name+type) and refresh their sheets.
+     */
+    async _syncWorldItemToActorCopies() {
+        const doc = this.document;
+        const types = ["armor", "weapon", "equipment"];
+        if (!doc || !types.includes(doc.type) || !doc.uuid) return;
+        const owner = doc.actor ?? doc.parent ?? doc.collection?.parent;
+        if (owner) return;
+        const docUuid = doc.uuid;
+        const docName = (doc.name ?? "").trim();
+        // #region agent log
+        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:entry", message: "sync entry", data: { docType: doc.type, docId: doc.id, docName, docUuid, armorBonus: doc.system?.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
+        // #endregion
+        const seenIds = new Set();
+        const actorList = [];
+        const add = (a) => { if (a?.id && !seenIds.has(a.id)) { seenIds.add(a.id); actorList.push(a); } };
+        const rawList = game.actors?.contents ?? Array.from(game.actors?.values?.() ?? []);
+        for (const a of rawList) {
+            const resolved = game.actors?.get?.(a?.id ?? a) ?? a;
+            if (resolved) add(resolved);
+        }
+        if (typeof game.scenes !== "undefined") {
+            for (const scene of game.scenes) {
+                const tokens = scene.tokens ?? scene.getEmbeddedCollection?.("tokens") ?? [];
+                const tokenList = Array.isArray(tokens) ? tokens : (typeof tokens.contents !== "undefined" ? tokens.contents : Array.from(tokens));
+                for (const t of tokenList) {
+                    const act = t.actor ?? (t.actorId && game.actors && game.actors.get(t.actorId));
+                    if (act) add(act);
+                }
+            }
+        }
+        // #region agent log
+        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:actorList", message: "actor list built", data: { rawListLength: rawList.length, actorListLength: actorList.length, actorIds: actorList.map((a) => a.id), actorNames: actorList.map((a) => a.name) }, timestamp: Date.now() }) }).catch(() => {});
+        // #endregion
+        // Prefer actor document from an open Actor sheet (items populated); game.actors reference can have empty items in this context.
+        const instances = foundry.applications?.instances;
+        const actorListToUse = !instances ? actorList : actorList.map((a) => {
+            for (const app of instances.values()) {
+                const d = app.document;
+                if (d?.documentName === "Actor" && d.id === a.id) return d;
+            }
+            return a;
+        });
+        const getItemsArray = (a) => {
+            if (!a?.items) return [];
+            const c = a.items;
+            if (Array.isArray(c)) return c;
+            try {
+                // #region agent log (first call per actor list only, for Victor)
+                if (a.id === "NOJtMp7r5VH8g8AP") {
+                    const hasContents = typeof c.contents !== "undefined";
+                    const contentsArr = hasContents && Array.isArray(c.contents);
+                    const contentsLen = contentsArr ? c.contents.length : "n/a";
+                    const hasValues = typeof c.values === "function";
+                    let valuesLen = "n/a";
+                    if (hasValues) try { valuesLen = Array.from(c.values()).length; } catch (e) { valuesLen = "err"; }
+                    const hasIterator = typeof c[Symbol.iterator] === "function";
+                    const cstr = Object.prototype.toString.call(c);
+                    fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:getItemsArray", message: "Victor items collection probe", data: { actorId: a.id, hasContents, contentsArr, contentsLen, hasValues, valuesLen, hasIterator, collectionType: cstr }, hypothesisId: "getItemsArray", timestamp: Date.now() }) }).catch(() => {});
+                }
+                // #endregion
+                if (typeof c.contents !== "undefined" && Array.isArray(c.contents)) return c.contents;
+                if (typeof c.values === "function") return Array.from(c.values());
+                if (typeof c[Symbol.iterator] === "function") {
+                    const arr = Array.from(c);
+                    if (arr.length > 0 && Array.isArray(arr[0]) && arr[0].length === 2) return arr.map((pair) => pair[1]);
+                    return arr;
+                }
+                if (typeof c.filter === "function") return c.filter(() => true);
+                if (typeof c.get === "function" && typeof c.keys === "function") {
+                    const out = [];
+                    for (const id of c.keys()) out.push(c.get(id));
+                    return out.filter(Boolean);
+                }
+                const out = [];
+                for (const x of c) out.push(x);
+                return out;
+            } catch (e) {
+                // #region agent log
+                if (a.id === "NOJtMp7r5VH8g8AP") fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:getItemsArray", message: "getItemsArray threw", data: { actorId: a.id, err: String(e && e.message) }, hypothesisId: "getItemsArray", timestamp: Date.now() }) }).catch(() => {});
+                // #endregion
+                return [];
+            }
+        };
+        const itemType = doc.type;
+        const docNameNorm = (str) => (str ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+        const docNameNormed = docNameNorm(docName);
+        const isArmorLike = (it) => it.type === "armor" || it._source?.type === "armor" || (it.system && "armor" in it.system);
+        const isEquipmentLike = (it) => it.type === "equipment" || it._source?.type === "equipment";
+        const isWeaponLike = (it) => it.type === "weapon" || it._source?.type === "weapon";
+        const sameType = (it) => {
+            if (itemType === "armor") return isArmorLike(it);
+            if (itemType === "equipment") return isEquipmentLike(it);
+            if (itemType === "weapon") return isWeaponLike(it);
+            return it.type === itemType || it._source?.type === itemType;
+        };
+        const getMatchingItems = (a) => {
+            const items = getItemsArray(a);
+            const byId = items.filter((it) => sameType(it) && (it.id === doc.id || it._id === doc.id));
+            if (byId.length > 0) return byId;
+            const nameMatches = (it) => docNameNorm(it.name ?? it._source?.name) === docNameNormed;
+            const bySourceOrName = items.filter((it) => sameType(it) && (it.sourceId === docUuid || nameMatches(it)));
+            if (bySourceOrName.length > 0) return bySourceOrName;
+            const isEquipped = (it) => (isArmorLike(it) || isEquipmentLike(it)) ? (it.system?.equipped === "true") : (it.system?.equipped === "primary" || it.system?.equipped === "offhand");
+            const equippedOfType = items.filter((it) => sameType(it) && isEquipped(it));
+            if (equippedOfType.length === 1) return equippedOfType;
+            if (doc.type === "armor" && equippedOfType.length > 0) {
+                const byName = equippedOfType.filter((it) => nameMatches(it));
+                if (byName.length > 0) return byName;
+                return equippedOfType.slice(0, 1);
+            }
+            return [];
+        };
+        let actorsToRefresh = actorListToUse.filter((a) => getMatchingItems(a).length > 0);
+        if (actorsToRefresh.length === 0 && typeof foundry?.utils?.fromUuid === "function") {
+            for (const a of actorListToUse) {
+                if (!a?.uuid) continue;
+                try {
+                    const ref = await foundry.utils.fromUuid(a.uuid);
+                    if (ref?.documentName === "Actor" && getMatchingItems(ref).length > 0) actorsToRefresh.push(ref);
+                } catch (_) {}
+            }
+        }
+        const systemData = doc.system?.toObject?.() ?? doc.system ?? {};
+        // #region agent log
+        const sampleForItems = actorListToUse.slice(0, 6).map((a) => {
+            const items = getItemsArray(a);
+            const armors = items.filter((it) => (it.type === "armor" || it._source?.type === "armor" || (it.system && "armor" in it.system)));
+            return { actorId: a.id, actorName: a.name, itemCount: items.length, armorCount: armors.length, armors: armors.slice(0, 3).map((it) => ({ id: it.id, name: it.name, sourceId: it.sourceId, bonus: it.system?.armor?.bonus })) };
+        });
+        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:match", message: "match result", data: { actorsToRefreshLength: actorsToRefresh.length, actorsToRefreshIds: actorsToRefresh.map((a) => a.id), docId: doc.id, sampleForItems }, timestamp: Date.now() }) }).catch(() => {});
+        // #endregion
+        for (const a of actorsToRefresh) {
+            const itemsToUpdate = getMatchingItems(a);
+            for (const item of itemsToUpdate) {
+                const payload = { ...systemData };
+                if (item.system?.equipped !== undefined && item.system?.equipped !== null) payload.equipped = item.system.equipped;
+                if (item.system?.containerId !== undefined && item.system?.containerId !== null) payload.containerId = item.system.containerId;
+                // #region agent log
+                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:update", message: "updating embedded item", data: { actorId: a.id, itemId: item.id, newBonus: systemData.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
+                // #endregion
+                await item.update({ system: payload });
+            }
+            if (typeof a.prepareData === "function") await a.prepareData();
+            if (a.sheet?.rendered) await a.sheet.render({ force: true });
+        }
+    }
+
     /** @override */
     async _processSubmitData(event, form, submitData, options = {}) {
         await super._processSubmitData(event, form, submitData, options);
+        const doc = this.document;
+        let actor = doc?.actor ?? doc?.parent ?? doc?.collection?.parent;
+        // Feat: sync world feat to actor copies or refresh owning actor
+        if (doc?.type === "feat") {
+            if (!actor && doc.uuid) {
+                await this._syncWorldFeatToActorCopies();
+                return;
+            }
+            if (actor && typeof actor.prepareData === "function") {
+                await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            }
+            return;
+        }
+        // Armor/weapon/equipment: sync world item to actor copies or refresh owning actor
+        if (doc && ["armor", "weapon", "equipment"].includes(doc.type)) {
+            // #region agent log
+            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_processSubmitData", message: "armor/equip submit", data: { itemType: doc.type, itemId: doc.id, hasActor: !!actor, docUuid: doc.uuid, willCallSync: !actor && !!doc.uuid, armorBonus: doc.system?.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
+            // #endregion
+            if (!actor && doc.uuid) {
+                await this._syncWorldItemToActorCopies();
+                return;
+            }
+            if (actor && typeof actor.prepareData === "function") {
+                await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            }
+        }
         // After a macrotask, force the subschool select to show the document value (wins over any stale re-render)
         if (this.rendered && this.document?.type === "spell") {
             const doc = this.document;
@@ -1464,33 +1881,106 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
-     * Add a blank mechanical effect row to a condition item.
+     * Add a blank mechanical effect row. Unified handler for condition, feat, armor, weapon, equipment.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async onAddConditionChange(event, target) {
+    static async onAddMechanicalEffectRow(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        const doc = this.document;
+        const typesWithChanges = ["condition", "feat", "armor", "weapon", "equipment"];
+        if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
-        const current = [...(this.item.system.changes || [])];
-        current.push({ key: "", value: 0 });
-        await this.item.update({ "system.changes": current });
+        const current = [...(doc.system.changes || [])];
+        current.push({ key: "", value: 0, label: "" });
+        await doc.update({ "system.changes": current }, { render: false });
+        if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+        else if (doc.type !== "condition") {
+            if (doc.actor) {
+                const actor = doc.actor;
+                if (typeof actor.prepareData === "function") await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                await this._syncWorldItemToActorCopies();
+            }
+        }
+        await this.render(true);
     }
 
     /**
-     * Remove a mechanical effect row from a condition item.
+     * Remove a mechanical effect row. Unified handler for condition, feat, armor, weapon, equipment.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element (must have data-index)
      * @this {ThirdEraItemSheet}
      */
-    static async onRemoveConditionChange(event, target) {
+    static async onRemoveMechanicalEffectRow(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        const doc = this.document;
+        const typesWithChanges = ["condition", "feat", "armor", "weapon", "equipment"];
+        if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
         const index = parseInt(target.dataset.index, 10);
         if (Number.isNaN(index)) return;
-        const current = [...(this.item.system.changes || [])];
+        const current = [...(doc.system.changes || [])];
         current.splice(index, 1);
-        await this.item.update({ "system.changes": current });
+        await doc.update({ "system.changes": current }, { render: false });
+        if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+        else if (doc.type !== "condition") {
+            if (doc.actor) {
+                // Use the actor that owns this item so prepareData sees the updated doc in its items
+                const actor = doc.actor;
+                if (typeof actor.prepareData === "function") await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                await this._syncWorldItemToActorCopies();
+            }
+        }
+        await this.render(true);
+    }
+
+    /**
+     * Open skill picker for mechanical effect row; on select, set key to skill.<key> and re-render (Phase 6).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target   Button with data-change-index
+     * @this {ThirdEraItemSheet}
+     */
+    static async onChooseSkillForModifier(event, target) {
+        event?.preventDefault?.();
+        const idx = parseInt(target?.dataset?.changeIndex ?? target?.closest?.("[data-change-index]")?.dataset?.changeIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const doc = this.document;
+        const changes = [...(doc.system.changes || [])];
+        if (idx < 0 || idx >= changes.length) return;
+        const dialog = new SkillPickerDialog({
+            id: "thirdera-skill-picker",
+            resolve: async (skillKey) => {
+                if (!skillKey) return;
+                const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+                if (tab) this._preservedScrollTop = tab.scrollTop;
+                const updates = [...(doc.system.changes || [])];
+                if (updates[idx]) {
+                    updates[idx] = { ...updates[idx], key: `skill.${skillKey}` };
+                    await doc.update({ "system.changes": updates }, { render: false });
+                    if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+                    else if (doc.type !== "condition") {
+                        if (doc.actor) {
+                            const actor = doc.actor;
+                            if (typeof actor.prepareData === "function") await actor.prepareData();
+                            if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                        } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                            await this._syncWorldItemToActorCopies();
+                        }
+                    }
+                    await this.render(true);
+                }
+            }
+        });
+        dialog.render(true);
     }
 
     /**

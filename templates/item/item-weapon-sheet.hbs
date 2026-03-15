@@ -96,6 +96,8 @@
                 <label>Quantity</label>
                 <input type="text" name="system.quantity" value="{{system.quantity}}" data-dtype="Number" />
             </div>
+
+            {{> "systems/thirdera/templates/partials/mechanical-effects-table.hbs" headerKey="THIRDERA.FeatModifiers" hintKey="THIRDERA.ItemModifiersHint" showLabel=true addButtonKey="THIRDERA.FeatAddModifier" changeKeyOptions=changeKeyOptions system=system}}
         </div>
     </section>
 </form>

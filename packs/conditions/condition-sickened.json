@@ -4,6 +4,12 @@
   "img": "icons/svg/biohazard.svg",
   "system": {
     "conditionId": "sickened",
+    "changes": [
+      { "key": "attack", "value": -2 },
+      { "key": "saveFort", "value": -2 },
+      { "key": "saveRef", "value": -2 },
+      { "key": "saveWill", "value": -2 }
+    ],
     "description": "<p>The character takes a -2 penalty on all attack rolls, weapon damage rolls, saving throws, skill checks, and ability checks.</p>"
   },
   "flags": {},
