@@ -113,7 +113,7 @@
             "AppliedHealing": "Applied {amount} healing to {count} target(s).",
             "ApplyAsNonlethal": "Apply as nonlethal damage",
             "TempHP": "Temporary HP",
-            "Nonlethal": "Nonlethal",
+            "Nonlethal": "Nonlethal damage",
             "NoPermission": "You do not have permission to modify the selected token(s).",
             "SheetButton": "Apply damage/healing",
             "SheetButtonHint": "Open dialog to apply damage or healing to selected tokens.",
@@ -121,6 +121,19 @@
             "ToThisTokenHint": "Open dialog with this token as the only target.",
             "ChatApply": "Apply",
             "ChatApplyHint": "Open Apply damage/healing dialog with this roll's total."
+        },
+        "SpellSave": {
+            "RollSave": "Roll save",
+            "RollSaveVsDC": "Roll save vs DC",
+            "ChooseWhoRolls": "Choose who rolls",
+            "RollSaveHint": "Roll the appropriate save vs. the spell's DC",
+            "RollSaveLabel": "Roll save ({save})",
+            "RollSaveContextMenu": "Roll save vs. spell DC",
+            "RollSaveFor": "Roll save ({name})",
+            "RollSaveForHint": "Roll save as {name}",
+            "NoActorToRoll": "No character or creature available to roll for.",
+            "SaveResultSuccess": "Success",
+            "SaveResultFailure": "Failure"
         },
         "NPC": {
             "CreatureType": "Creature Type",
@@ -215,13 +228,6 @@
                 "Hint": "When enabled, the first level of the first class added to a character automatically grants maximum hit points from the class's hit die (e.g., d8 = 8 HP). The value remains editable in the level history."
             }
         },
-        "ApplyDamageHealing": {
-            "Nonlethal": "Nonlethal damage",
-            "SheetButton": "Apply damage / healing",
-            "SheetButtonHint": "Open dialog to apply damage or healing to this character",
-            "ToThisToken": "To this token",
-            "ToThisTokenHint": "Apply damage or healing to the token representing this character on the current scene"
-        },
         "SpellListBrowser": {
             "Title": "Spell List Browser",
             "Button": "Spell List",
@@ -238,7 +244,9 @@
             "AddToCharacter": "Add to character",
             "SelectSpellsFirst": "Select one or more spells (check the boxes) to add.",
             "AddedToCharacter": "Added {count} spell(s) to character.",
-            "AlreadyKnown": "Already known"
+            "AlreadyKnown": "Already known",
+            "SpellsLeftToSelectForLevel": "Spells left to select for this level: {summary}",
+            "NoSpellsLeft": "none"
         },
         "LevelUp": {
             "Title": "Level up",
@@ -253,6 +261,9 @@
             "SpellcastersLearnedHint": "You can add spells known for this level (see class table).",
             "SpellcastersLearnedNextHint": "Add spells in the Spell List if desired, then click Next to continue.",
             "SpellsKnownPerLevel": "Level {level}: up to {max}",
+            "SpellsKnownTotalLabel": "Total spells known at this level (class table):",
+            "SpellsLeft": "left",
+            "SpellsLeftToSelect": "Spells left to select: {summary}",
             "OpenSpellList": "Open Spell List",
             "OpenSpellListTitle": "Open the Spell List to add spells to your character",
             "NewFeaturesIntro": "{name} level {level}",
@@ -295,6 +306,12 @@
             "Next": "Next",
             "Finish": "Finish",
             "LevelAdded": "Level added for {name}.",
+            "CompleteChoices": "Complete choices",
+            "CompleteChoicesTitle": "Complete level-up choices: {name} level {level}",
+            "LevelProgressionAdding": "Adding: {name} level {level}",
+            "LevelProgressionCompleting": "Completing: {name} level {level}",
+            "NoIncompleteLevels": "No incomplete levels for this class.",
+            "ChoicesRecordedForLevel": "Level-up choices recorded for {name} level {level}.",
             "FeatsNotQualified": "Feats you don't qualify for yet",
             "MissingReasons": "Missing: {reasons}",
             "ViewItemTitle": "Open item sheet to view details",
@@ -353,6 +370,7 @@
             "KnownTab": "Known / Available",
             "ReadyToCastTab": "Ready to cast",
             "AddToReady": "Add to ready",
+            "AddToReadyAs": "Add to ready as",
             "RemoveFromReady": "Remove from ready",
             "ToggleReady": "Include in Ready to cast (toggle to add or remove)",
             "InReady": "In ready",
@@ -370,7 +388,9 @@
             "CastSpell": "Cast",
             "CastMessageCastsVerb": "casts",
             "SaveDCBreakdown": "Save DC: 10 (base) + {spellLevel} (spell level) + {abilityMod} ({abilityName}) = {total}",
+            "SaveDCBreakdownNoAbility": "Save DC: 10 (base) + {spellLevel} (spell level) = {total}",
             "SpellResistanceLine": "Spell resistance: {value}",
+            "TargetsLine": "Target(s): {names}",
             "NoSlotsRemaining": "No spell slots remaining for this level ({spell}). Cast was still recorded.",
             "NoPreparedCastRemaining": "No prepared cast remaining for {spell}. Cast was still recorded.",
             "ResetCastCounts": "Reset cast counts (rest)",

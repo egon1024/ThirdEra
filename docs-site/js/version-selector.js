@@ -12,8 +12,9 @@
   // Script lives at <deploy_root>/<version_or_alias>/js/version-selector.js
   // versions.json is at deploy root (parent of version dir), not inside version dir
   if (segments.length < 3) return;
-  var versionSegmentIndex = segments.length - 2;
-  var deployRootSegments = segments.slice(0, Math.max(0, versionSegmentIndex - 1));
+  // Version segment is the one before "js" (path ends with .../version/js/version-selector.js).
+  var versionSegmentIndex = segments.length - 3;
+  var deployRootSegments = segments.slice(0, versionSegmentIndex);
   var deployRoot = deployRootSegments.length ? '/' + deployRootSegments.join('/') + '/' : '/';
   var versionsUrl = deployRoot + 'versions.json';
   var currentVersion = segments[versionSegmentIndex];

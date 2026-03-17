@@ -21,6 +21,9 @@
         {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-list-search" inputName="search" placeholderKey="THIRDERA.SpellListBrowser.SearchPlaceholder" noResultsKey="THIRDERA.SpellListBrowser.SearchNoResults" value=searchTerm}}
     </div>
     {{#if addToActorMode}}
+    {{#if spellsRemainingLine}}
+    <p class="spell-list-spells-remaining">{{spellsRemainingLine}}</p>
+    {{/if}}
     <div class="form-group spell-list-add-to-actor">
         <button type="button" class="spell-list-add-to-actor-btn" data-action="addToCharacter"><i class="fas fa-user-plus"></i> {{localize "THIRDERA.SpellListBrowser.AddToCharacter"}}</button>
     </div>
@@ -31,7 +34,7 @@
         {{#if selectedSource}}
             {{#if hasSpells}}
                 {{#each spellsByLevel as |levelData|}}
-                <div class="spell-level-group">
+                <div class="spell-level-group" data-level="{{levelData.level}}">
                     <div class="spell-level-header">
                         <h5>{{#if (eq levelData.level 0)}}{{localize "THIRDERA.SpellListBrowser.Level0"}}{{else}}{{ordinal levelData.level}} {{localize "THIRDERA.SpellListBrowser.Level"}}{{/if}}</h5>
                     </div>
@@ -41,8 +44,8 @@
                             <div class="spell-school-name" role="heading" aria-level="2">{{group.schoolName}}</div>
                             <ol class="items-list spells-list">
                                 {{#each group.spells as |entry|}}
-                                <li class="item flexrow spell-item{{#if entry.alreadyKnown}} spell-item--already-known{{/if}}" data-spell-uuid="{{entry.uuid}}" data-spell-name="{{entry.name}}" draggable="true">
-                                    {{#if ../../../addToActorMode}}{{#if entry.alreadyKnown}}<span class="spell-item-already-known-label">{{localize "THIRDERA.SpellListBrowser.AlreadyKnown"}}</span>{{else}}<input type="checkbox" name="addSpellToActor" data-spell-uuid="{{entry.uuid}}" title="{{localize "THIRDERA.SpellListBrowser.AddToCharacter"}}" />{{/if}}{{/if}}
+                                <li class="item flexrow spell-item{{#if entry.alreadyKnown}} spell-item--already-known{{/if}}" data-spell-uuid="{{entry.uuid}}" data-spell-name="{{entry.name}}" data-spell-level="{{../../../levelData.level}}" draggable="true">
+                                    {{#if ../../../addToActorMode}}{{#if entry.alreadyKnown}}<span class="spell-item-already-known-label">{{localize "THIRDERA.SpellListBrowser.AlreadyKnown"}}</span>{{else}}<input type="checkbox" name="addSpellToActor" data-spell-uuid="{{entry.uuid}}" data-spell-level="{{../../../levelData.level}}" title="{{localize "THIRDERA.SpellListBrowser.AddToCharacter"}}" />{{/if}}{{/if}}
                                     <div class="item-name">
                                         {{#if entry.img}}<div class="item-image"><img src="{{entry.img}}" alt="" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{entry.name}}"></i></div>{{/if}}
                                         <h4><a class="content-link" data-link data-uuid="{{entry.uuid}}" data-type="Item">{{entry.name}}</a></h4>
@@ -55,8 +58,8 @@
                     {{else}}
                         <ol class="items-list spells-list">
                             {{#each levelData.spells as |entry|}}
-                            <li class="item flexrow spell-item{{#if entry.alreadyKnown}} spell-item--already-known{{/if}}" data-spell-uuid="{{entry.uuid}}" data-spell-name="{{entry.name}}" draggable="true">
-                                {{#if ../../addToActorMode}}{{#if entry.alreadyKnown}}<span class="spell-item-already-known-label">{{localize "THIRDERA.SpellListBrowser.AlreadyKnown"}}</span>{{else}}<input type="checkbox" name="addSpellToActor" data-spell-uuid="{{entry.uuid}}" title="{{localize "THIRDERA.SpellListBrowser.AddToCharacter"}}" />{{/if}}{{/if}}
+                            <li class="item flexrow spell-item{{#if entry.alreadyKnown}} spell-item--already-known{{/if}}" data-spell-uuid="{{entry.uuid}}" data-spell-name="{{entry.name}}" data-spell-level="{{levelData.level}}" draggable="true">
+                                {{#if ../../addToActorMode}}{{#if entry.alreadyKnown}}<span class="spell-item-already-known-label">{{localize "THIRDERA.SpellListBrowser.AlreadyKnown"}}</span>{{else}}<input type="checkbox" name="addSpellToActor" data-spell-uuid="{{entry.uuid}}" data-spell-level="{{levelData.level}}" title="{{localize "THIRDERA.SpellListBrowser.AddToCharacter"}}" />{{/if}}{{/if}}
                                 <div class="item-name">
                                     {{#if entry.img}}<div class="item-image"><img src="{{entry.img}}" alt="" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{entry.name}}"></i></div>{{/if}}
                                     <h4><a class="content-link" data-link data-uuid="{{entry.uuid}}" data-type="Item">{{entry.name}}</a></h4>
