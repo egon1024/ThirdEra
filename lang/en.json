@@ -113,7 +113,7 @@
             "AppliedHealing": "Applied {amount} healing to {count} target(s).",
             "ApplyAsNonlethal": "Apply as nonlethal damage",
             "TempHP": "Temporary HP",
-            "Nonlethal": "Nonlethal",
+            "Nonlethal": "Nonlethal damage",
             "NoPermission": "You do not have permission to modify the selected token(s).",
             "SheetButton": "Apply damage/healing",
             "SheetButtonHint": "Open dialog to apply damage or healing to selected tokens.",
@@ -131,7 +131,9 @@
             "RollSaveContextMenu": "Roll save vs. spell DC",
             "RollSaveFor": "Roll save ({name})",
             "RollSaveForHint": "Roll save as {name}",
-            "NoActorToRoll": "No character or creature available to roll for."
+            "NoActorToRoll": "No character or creature available to roll for.",
+            "SaveResultSuccess": "Success",
+            "SaveResultFailure": "Failure"
         },
         "NPC": {
             "CreatureType": "Creature Type",
@@ -225,13 +227,6 @@
                 "Name": "First Level Full Hit Points",
                 "Hint": "When enabled, the first level of the first class added to a character automatically grants maximum hit points from the class's hit die (e.g., d8 = 8 HP). The value remains editable in the level history."
             }
-        },
-        "ApplyDamageHealing": {
-            "Nonlethal": "Nonlethal damage",
-            "SheetButton": "Apply damage / healing",
-            "SheetButtonHint": "Open dialog to apply damage or healing to this character",
-            "ToThisToken": "To this token",
-            "ToThisTokenHint": "Apply damage or healing to the token representing this character on the current scene"
         },
         "SpellListBrowser": {
             "Title": "Spell List Browser",
@@ -375,6 +370,7 @@
             "KnownTab": "Known / Available",
             "ReadyToCastTab": "Ready to cast",
             "AddToReady": "Add to ready",
+            "AddToReadyAs": "Add to ready as",
             "RemoveFromReady": "Remove from ready",
             "ToggleReady": "Include in Ready to cast (toggle to add or remove)",
             "InReady": "In ready",
@@ -392,6 +388,7 @@
             "CastSpell": "Cast",
             "CastMessageCastsVerb": "casts",
             "SaveDCBreakdown": "Save DC: 10 (base) + {spellLevel} (spell level) + {abilityMod} ({abilityName}) = {total}",
+            "SaveDCBreakdownNoAbility": "Save DC: 10 (base) + {spellLevel} (spell level) = {total}",
             "SpellResistanceLine": "Spell resistance: {value}",
             "TargetsLine": "Target(s): {names}",
             "NoSlotsRemaining": "No spell slots remaining for this level ({spell}). Cast was still recorded.",

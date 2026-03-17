@@ -157,9 +157,14 @@ export class ThirdEraActor extends Actor {
         const roll = await new Roll(`1d20 + ${save.total}`).roll();
 
         const saveName = CONFIG.THIRDERA?.Saves?.[saveId] || saveId.toUpperCase();
-        let flavor = `${saveName} Save`;
+        const modSigned = save.total >= 0 ? `+${save.total}` : String(save.total);
+        let flavor = `${saveName} Save (${modSigned})`;
         if (typeof dc === "number" && Number.isFinite(dc)) {
-            flavor += ` (vs DC ${dc})`;
+            flavor += ` vs DC ${dc}`;
+            const total = Math.round(roll.total * 100) / 100;
+            const success = total >= dc;
+            const resultKey = success ? "THIRDERA.SpellSave.SaveResultSuccess" : "THIRDERA.SpellSave.SaveResultFailure";
+            flavor += ` — ${game.i18n.localize(resultKey)}`;
         }
 
         roll.toMessage({
@@ -331,12 +336,14 @@ export class ThirdEraActor extends Actor {
         } else if (preparationType === "spontaneous") {
             const { SpellData } = await import("../data/item-spell.mjs");
             const spellListKey = classData.spellListKey;
+            const shortlistIds = new Set(systemData.spellShortlistByClass?.[classItemId] || []);
             let castSum = 0;
             for (const item of this.items) {
                 if (item.type !== "spell") continue;
                 if (domainSpellNamesAtLevel.has((item.name || "").toLowerCase().trim())) continue; // exclude domain spells from regular slot count
                 const itemLevel = SpellData.getLevelForClass(item.system, spellListKey);
-                if (itemLevel === level) castSum += (item.system.cast ?? 0);
+                const onShortlistAtLevel = shortlistIds.has(item.id) && (item.system?.level ?? 0) === level;
+                if (itemLevel === level || onShortlistAtLevel) castSum += (item.system.cast ?? 0);
             }
             const remaining = Math.max(0, slotsAtLevel - castSum);
             if (remaining <= 0) {
@@ -365,7 +372,9 @@ export class ThirdEraActor extends Actor {
         const castsLabel = game.i18n.localize("THIRDERA.Spells.CastMessageCastsVerb");
         const dcPayload = { spellLevel: level, abilityMod: abilityModSigned, abilityName, total: totalDC };
         const srPayload = { value: srLabel };
-        const dcLine = game.i18n.format("THIRDERA.Spells.SaveDCBreakdown", dcPayload);
+        const dcLine = abilityMod === 0
+            ? game.i18n.format("THIRDERA.Spells.SaveDCBreakdownNoAbility", { spellLevel: level, total: totalDC })
+            : game.i18n.format("THIRDERA.Spells.SaveDCBreakdown", dcPayload);
         const srLine = game.i18n.format("THIRDERA.Spells.SpellResistanceLine", srPayload);
 
         let targetActorUuids = [];

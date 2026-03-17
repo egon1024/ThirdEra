@@ -1006,9 +1006,6 @@
     {{!-- Spells Tab: sticky header + sub-tabs above scrollable Known / Ready to cast panels --}}
     <div class="tab spells {{#if (eq tabs.primary 'spells')}}active{{/if}}" data-group="primary" data-tab="spells">
       <div class="spells-tab-bar">
-        <div class="items-header">
-          <h3 class="items-header">Spells</h3>
-        </div>
         {{#if hasAnySpellcasting}}
           <nav class="spells-subtabs tabs" data-group="spells">
             <a class="item {{#if (eq tabs.spells 'known')}}active{{/if}}" data-action="changeTab" data-group="spells" data-tab="known">{{localize "THIRDERA.Spells.KnownTab"}}</a>
@@ -1042,6 +1039,26 @@
                           {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
                           <h4><a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a></h4>
                         </div>
+                        {{#if @root.hasAnySpellcasting}}
+                        <div class="spell-ready-manual-controls">
+                          {{#each (lookup @root.manuallyAddedInShortlist spell.id) as |entry|}}
+                          {{#if @first}}<span class="in-ready-label">{{localize "THIRDERA.Spells.InReady"}}: </span>{{/if}}
+                          <span class="in-ready-class">{{entry.className}}</span>
+                          <a class="item-control remove-from-ready-manual" data-action="removeFromShortlist" data-class-item-id="{{entry.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a>
+                          {{else}}
+                          {{#if (eq @root.spellcastingClassesForShortlist.length 1)}}
+                          <button type="button" class="shortlist-toggle-btn" data-action="addToShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{lookup (lookup @root.spellcastingClassesForShortlist 0) 'classItemId'}}" title="{{localize 'THIRDERA.Spells.ToggleReady'}}">{{localize "THIRDERA.Spells.AddToReady"}}</button>
+                          {{else}}
+                          <select name="readyAsClass" class="ready-as-class-select" title="{{localize 'THIRDERA.Spells.AddToReadyAs'}}">
+                            {{#each @root.spellcastingClassesForShortlist as |cls|}}
+                            <option value="{{cls.classItemId}}">{{cls.className}}</option>
+                            {{/each}}
+                          </select>
+                          <button type="button" class="shortlist-toggle-btn" data-action="addToShortlistFromSelect" data-item-id="{{spell.id}}" title="{{localize 'THIRDERA.Spells.AddToReady'}}">{{localize "THIRDERA.Spells.AddToReady"}}</button>
+                          {{/if}}
+                          {{/each}}
+                        </div>
+                        {{/if}}
                         <div class="item-controls">
                           <a class="item-edit" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}"><i class="fas fa-edit"></i></a>
                           <a class="item-delete" data-action="deleteItem" title="Delete Spell"><i class="fas fa-trash"></i></a>
@@ -1267,15 +1284,15 @@
                                         <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                                       </div>
                                       {{#if (eq classData.spellListAccess "full")}}
-                                      <div class="item-controls"><a class="item-delete" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-trash"></i></a></div>
+                                      <div class="item-controls"><a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a></div>
                                       {{else}}
-                                      <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a>{{#unless (or spell.domainName (eq classData.spellListAccess "full"))}}<a class="item-delete" data-action="deleteItem"><i class="fas fa-trash"></i></a>{{/unless}}</div>
+                                      <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
                                       {{/if}}
                                     {{else}}
                                       <div class="spell-tracking">
                                         <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                                       </div>
-                                      <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a>{{#unless (or spell.domainName (eq classData.spellListAccess "full"))}}<a class="item-delete" data-action="deleteItem"><i class="fas fa-trash"></i></a>{{/unless}}</div>
+                                      <div class="item-controls">{{#if spell.inShortlist}}<a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a>{{/if}}<a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
                                     {{/if}}
                                   </li>
                                   {{/each}}
@@ -1310,15 +1327,15 @@
                                 <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                               </div>
                               {{#if (eq classData.spellListAccess "full")}}
-                              <div class="item-controls"><a class="item-delete" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-trash"></i></a></div>
+                              <div class="item-controls"><a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a></div>
                               {{else}}
-                              <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a>{{#unless (or spell.domainName (eq classData.spellListAccess "full"))}}<a class="item-delete" data-action="deleteItem"><i class="fas fa-trash"></i></a>{{/unless}}</div>
+                              <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
                               {{/if}}
                             {{else}}
                               <div class="spell-tracking">
                                 <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                               </div>
-                              <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a>{{#unless (or spell.domainName (eq classData.spellListAccess "full"))}}<a class="item-delete" data-action="deleteItem"><i class="fas fa-trash"></i></a>{{/unless}}</div>
+                              <div class="item-controls">{{#if spell.inShortlist}}<a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a>{{/if}}<a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
                             {{/if}}
                           </li>
                           {{/each}}
@@ -1358,7 +1375,7 @@
                                 </div>
                                 <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                               </div>
-                              <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a>{{#unless (or spell.domainName (eq classData.spellListAccess "full"))}}<a class="item-delete" data-action="deleteItem"><i class="fas fa-trash"></i></a>{{/unless}}</div>
+                              <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
                             {{/if}}
                           </li>
                           {{/each}}

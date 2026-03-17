@@ -56,6 +56,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             removeDomain: ThirdEraActorSheet.#onRemoveDomain,
             addPlaceholderSpell: ThirdEraActorSheet.#onAddPlaceholderSpell,
             addToShortlist: ThirdEraActorSheet.#onAddToShortlist,
+            addToShortlistFromSelect: ThirdEraActorSheet.#onAddToShortlistFromSelect,
             removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist,
             toggleShortlist: ThirdEraActorSheet.#onToggleShortlist,
             resetSpellUsage: ThirdEraActorSheet.#onResetSpellUsage,
@@ -942,6 +943,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Ready to cast: filter by shortlist (full-list prepared), prepared>0 (wizard), or same (spontaneous)
         const spellShortlistByClass = systemData.spellShortlistByClass || {};
+        const manuallyAddedIds = new Set(manuallyAddedSpellList.map((s) => s.id));
+        const spellById = new Map();
+        for (const s of items.spells) {
+            if (s.id) spellById.set(s.id, s);
+        }
         // Mark each spell in Known with inShortlist for full-list prepared casters (for toggle UI)
         for (const classData of knownSpellsByClass) {
             if (classData.spellListAccess !== "full" || classData.preparationType !== "prepared") continue;
@@ -975,6 +981,24 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     ready = spells.filter((s) => !s._isPlaceholder && (s.system?.prepared ?? 0) > 0);
                 } else {
                     ready = spells.filter((s) => !s._isPlaceholder);
+                    // Merge shortlisted manually-added spells into this class's ready list (spontaneous only)
+                    for (const shortlistId of shortlistIds) {
+                        if (!manuallyAddedIds.has(shortlistId)) continue;
+                        const spellItem = spellById.get(shortlistId);
+                        if (!spellItem) continue;
+                        const rawLevel = spellItem.system?.level ?? 0;
+                        const spellLevel = Math.min(9, Math.max(0, Number(rawLevel)));
+                        if (String(spellLevel) !== levelKey) continue;
+                        const sys = spellItem.system || {};
+                        ready.push({
+                            id: spellItem.id,
+                            name: spellItem.name,
+                            img: spellItem.img,
+                            system: { ...sys, cast: sys.cast ?? 0, prepared: sys.prepared ?? 0 },
+                            inShortlist: true
+                        });
+                    }
+                    ready.sort(spellNameSort);
                 }
                 spellsByLevel[levelKey] = ready;
             }
@@ -1007,6 +1031,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             return result;
         });
+
+        // For Manually added section: which classes can receive "Add to ready", and which manually-added spells are already in a shortlist
+        const spellcastingClassesForShortlist = knownSpellsByClass
+            .filter((c) => c.hasSpellcasting)
+            .map((c) => ({ classItemId: c.classItemId, className: c.className }));
+        const classByName = new Map(spellcastingClassesForShortlist.map((c) => [c.classItemId, c.className]));
+        const manuallyAddedInShortlist = {};
+        for (const [classItemId, list] of Object.entries(spellShortlistByClass)) {
+            const arr = Array.isArray(list) ? list : [];
+            const className = classByName.get(classItemId) ?? classItemId;
+            for (const spellId of arr) {
+                if (manuallyAddedIds.has(spellId)) {
+                    if (!manuallyAddedInShortlist[spellId]) manuallyAddedInShortlist[spellId] = [];
+                    manuallyAddedInShortlist[spellId].push({ classItemId, className });
+                }
+            }
+        }
 
         // Compute encumbrance display info
         const inv = systemData.inventory || { totalWeight: 0, capacity: { light: 0, medium: 0, heavy: 1, metadata: { baseMaxLoad: 0, sizeMod: 1 } }, load: "light" };
@@ -1142,6 +1183,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             hasAnySpellcasting,
             manuallyAddedSpellsByLevel,
             hasManuallyAddedSpells,
+            spellcastingClassesForShortlist,
+            manuallyAddedInShortlist,
             editable: this.isEditable,
             // Token image for header (only when sheet is for world actor, not a token)
             showTokenImage: !actor.isToken,
@@ -4505,6 +4548,36 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     static async #onAddToShortlist(event, target) {
         const itemId = target.closest("[data-item-id]")?.dataset?.itemId || target.dataset?.itemId;
         const classItemId = target.dataset?.classItemId?.trim();
+        if (!itemId || !classItemId) return;
+        const item = this.actor.items.get(itemId);
+        if (!item || item.type !== "spell") return;
+        const scrollContainer = this.element?.querySelector(".tab.spells.active .spells-tab-content")
+            ?? this.element?.querySelector(".sheet-body .tab.active");
+        const scrollTop = scrollContainer?.scrollTop ?? this.element?.querySelector(".sheet-body")?.scrollTop ?? 0;
+        const shortlist = { ...(this.actor.system.spellShortlistByClass || {}) };
+        const list = Array.isArray(shortlist[classItemId]) ? [...shortlist[classItemId]] : [];
+        if (list.includes(itemId)) return;
+        list.push(itemId);
+        shortlist[classItemId] = list;
+        await this.actor.update({ "system.spellShortlistByClass": shortlist });
+        await this.actor.prepareData();
+        await this.render();
+        const afterContainer = this.element?.querySelector(".tab.spells.active .spells-tab-content")
+            ?? this.element?.querySelector(".sheet-body .tab.active");
+        if (afterContainer) afterContainer.scrollTop = scrollTop;
+        else this.element?.querySelector(".sheet-body")?.scrollTo({ top: scrollTop });
+    }
+
+    /**
+     * Add a manually-added spell to the shortlist using the class selected in the row's "ready as" dropdown.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target   Element with data-action="addToShortlistFromSelect" data-item-id
+     */
+    static async #onAddToShortlistFromSelect(event, target) {
+        const row = target.closest(".spell-item");
+        const itemId = row?.dataset?.itemId ?? target.dataset?.itemId;
+        const select = row?.querySelector("select[name='readyAsClass']");
+        const classItemId = select?.value?.trim();
         if (!itemId || !classItemId) return;
         const item = this.actor.items.get(itemId);
         if (!item || item.type !== "spell") return;

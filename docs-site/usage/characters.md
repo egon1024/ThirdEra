@@ -43,9 +43,12 @@ If a character has one or more classes with spellcasting enabled:
 
 - **Spells** tab shows a block per spellcasting class: caster type (arcane/divine), preparation style (prepared or spontaneous), spell DC, and slots per day.
 - **Known / Available** sub-tab lists spells by class and level; for prepared casters (e.g. wizard) you set how many of each spell are prepared. **Ready to cast** sub-tab shows the shortlist of spells you can cast and their remaining uses.
+- Spells that are not on any class list appear under **Manually added spells** in Known. You can add them to **Ready to cast** for a spellcasting class (e.g. Sorcerer) using **Add to ready** (or **Add to ready as** and choose the class when you have multiple). They then appear under that class in Ready to cast and use that class’s DC and spell slots when cast.
 - **Domain spells** (e.g. cleric domains) appear in a separate section, are always prepared, and use domain slots. They are added automatically when you add a domain to the class.
 - Use **Reset prepared** to clear prepared counts and **Reset cast counts (rest)** to restore daily cast usage after a rest.
 - **Cast** on a spell in Ready to cast posts the spell to chat with save DC and spell resistance; you can drag a spell to the macro bar to create a “Cast: &lt;Spell&gt;” macro.
+
+**Rolling saves from a spell cast:** When the spell has a saving throw (e.g. Fortitude, Reflex, or Will), the cast message in chat shows a **Roll save (…)** button. Click it to open a dialog where you choose which actor rolls the save; the roll is made against the spell's DC. You can also right‑click the message and choose "Roll save vs. spell DC" for the same dialog. If you **select one or more tokens** on the canvas before casting (e.g. the intended targets), the cast message instead lists **Target(s): …** and shows a **Roll save (Name)** button for each target; clicking one rolls that character's or creature's save immediately, with no picker. When no tokens are selected (or when casting from a macro), you get the single Roll save button and picker.
 
 Spells are added to the character by dragging from the Spells compendium (or from the Spell List browser). Classes with a “learned” spell list (e.g. wizard) do not auto-add all spells when you add the class; you add spells to the character as the character learns them.
 
