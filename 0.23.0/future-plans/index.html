@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Future plans - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../css/logo.png">
+  <link href="../css/torillic.css" rel="stylesheet">
+  <link href="../css/single-column.css" rel="stylesheet">
+  <link href="../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="..">Home</a>
+      
+      
+      
+      <a class="" href="../usage/">Usage</a>
+      
+      
+      
+      <a class="" href="../extending/">Extending</a>
+      
+      
+      
+      <a class="current" href="../development/">Development</a>
+      
+      
+      
+      <a class="" href="../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="future-plans">Future plans</h1>
+<p>This page lists planned or possible work. Priorities can change. If you want to contribute, open an issue first so we can align with current focus—see <a href="../contributing/">Contributing</a>.</p>
+<h2 id="in-progress-or-explicitly-planned">In progress or explicitly planned</h2>
+<ul>
+<li><strong>Equipment compendium</strong> — Complete or refine the Equipment pack. The <a href="../compendium-guide/">Compendium guide</a> lists it as “Incomplete.”</li>
+<li><strong>Feat prerequisites by UUID</strong> — Ensure all feat prerequisites use document ID/UUID (not name or key), per the project’s <a href="../development/#item-references">item-references rule</a>. The script <code>scripts/apply-feat-prerequisites.mjs</code> is related.</li>
+</ul>
+<h2 id="combat-workflow-support">Combat workflow / support</h2>
+<p>The goal is smoother at-table combat for playtesting without full rules automation. The following order prioritizes playability for playtesters (spell/save flow, rest, initiative, concentration), then character build depth (prestige classes), then higher-level combat (iterative attacks).</p>
+<p><strong>Already implemented:</strong> Apply damage/heal (Phases 2–4): sheet "Apply damage/healing" and "Apply to this token"; chat "Apply" button; weapon "Attack &amp; Damage"; temp HP, nonlethal, healing. See <a href="../development/#testing-apply-damagehealing-phase-2">Testing Apply damage/healing</a>. <strong>Roll save from spell message:</strong> Cast messages store save DC and type; "Roll save" button and context menu let the target (or GM) roll the appropriate save vs. DC. <strong>Spell targeting:</strong> When casting from the sheet, selected tokens are recorded as targets on the message; "Roll save (Target name)" buttons allow one-click rolls per target.</p>
+<p><strong>Planned (ordered):</strong></p>
+<ol>
+<li><strong>Rest and natural healing</strong> — Single flow: reset spell slots and cast counts, plus optional natural healing (e.g. 1 HP per character level per day of rest per SRD).</li>
+<li><strong>Initiative and combat tracker</strong> — Use <code>@attributes.initiative.bonus</code> in system initiative formula (for feats like Improved Initiative); add a "Roll initiative" (or "Add to combat &amp; roll initiative") button on the Combat tab that calls Foundry's <code>Actor.rollInitiative({ createCombatants: true })</code>.</li>
+<li><strong>Concentration check</strong> — Quick Concentration check (button or prompt when casting) with appropriate DCs (defensive casting, damage, etc.).</li>
+<li><strong>Conditions with mechanical effects</strong> — Ensure condition compendium items have <code>changes</code> (AC, saves, speed) populated where applicable so applying Blinded, Shaken, etc. updates the sheet automatically.</li>
+<li><strong>Classes Phase 6</strong> — Prestige classes and prerequisites (BAB, skills, feats, spellcasting level).</li>
+<li><strong>Later: Iterative attacks / full attack</strong> — Multiple attacks at BAB +6/+11/+16 (currently single attack per weapon).</li>
+</ol>
+<p><strong>Scope:</strong> Attacks of opportunity, flanking, and grid-facing are left to table ruling or modules; the system does not automate them. The same applies to complex special cases (e.g. full grappling automation). Documenting this keeps scope clear.</p>
+<h2 id="generalized-modifier-system-and-magic-items">Generalized modifier system and magic items</h2>
+<p>The <strong>generalized modifier system</strong> (Phases 1–7 complete) provides a single pipeline for any source to apply modifiers to actors: ability scores, skills, AC, saves, attack, speed, etc. Character and NPC both call <code>getActiveModifiers(actor)</code> once in <code>prepareDerivedData</code>; ability deltas, then AC, speed, saves, attack, and skills use the same modifier bag. Design and validation: <a href="../.cursor/plans/generalized-modifier-system.md">.cursor/plans/generalized-modifier-system.md</a>.</p>
+<p><strong>Current sources:</strong> Conditions (via ActiveEffects), race (abilityAdjustments → ability.*), feats (optional <code>system.changes</code>), and equipped armor/weapons/equipment (optional <code>system.changes</code> when equipped). Skill modifiers and breakdowns, including “modifier-only” skills and a shared key UI (e.g. skill picker), are implemented. Extenders can add providers to <code>CONFIG.THIRDERA.modifierSourceProviders</code> or implement <code>getModifierChanges(actor)</code> on items; see <a href="../development/#modifier-system-modulelogicmodifier-aggregationmjs">Development — Modifier system</a>.</p>
+<p><strong>Planned extensions:</strong></p>
+<ul>
+<li><strong>Class features</strong> — When a class feature is granted (actor has the class at the right level), it could contribute <code>changes</code>; a provider would resolve active features from levelHistory and feed them into the same aggregation.</li>
+<li><strong>Magic items</strong> — All magic item categories below would use the same modifier schema when they grant bonuses.</li>
+</ul>
+<p><strong>Magic item categories (depend on modifier system):</strong></p>
+<ul>
+<li><strong>Spell-completion (rods, staffs, wands)</strong> — Primarily grant use of specific spell(s) with charges; use the modifier system only if they also grant passive bonuses.</li>
+<li><strong>General magic items</strong> — Magic armor, weapons, wondrous items (belts, cloaks, etc.) that grant bonuses (+1 AC, +2 Str, +5 Swim, DR 5/magic, etc.). When equipped, their <code>changes</code> are applied via the shared pipeline.</li>
+<li><strong>Artifacts</strong> — Same modifier schema; may have many effects and/or special rules (e.g. one artifact active).</li>
+<li><strong>Intelligent items</strong> — Same modifier schema for bonuses; add Ego, communication, and conflict behavior on top.</li>
+<li><strong>Cursed items</strong> — Same modifier schema (often negative); add rules for when they apply (e.g. always active while in inventory, or cannot unequip until uncursed).</li>
+</ul>
+<h2 id="release-and-docs-setup">Release and docs setup</h2>
+<ul>
+<li><strong>First release and docs redirect</strong> — Run one full release (merge a PR with a version tag), confirm the release workflow and mike deploy, then run <code>mike set-default --push latest</code> once so the docs site root redirects to “latest” (if not already done).</li>
+</ul>
+<h2 id="under-consideration">Under consideration</h2>
+<ul>
+<li><strong>Temporary hit points</strong> — Track and apply temp HP (e.g. from spells, class features) with appropriate ordering vs. normal damage and healing.</li>
+<li><strong>Below 0 hit points</strong> — Mechanics for being at or below 0 HP: dying, disabled, stable, death at −10 (or variant rules); integration with derived conditions (Dead, Dying, Disabled, Stable) and rest/healing.</li>
+<li><strong>Losing more than half hit points</strong> — Rules for having lost more than half your HP (e.g. disabled when at 0, or half-HP–based effects); support in sheet and automation where useful.</li>
+<li><strong>Party XP calculator</strong> — A tool to automatically calculate and award XP for a party (e.g. by CR/EL, or from encounter totals divided by party size).</li>
+<li><strong>Foundry V14</strong> — Document whether the system is “v13 only” or “v13 with V14 in mind.” Pack names are already V14-friendly; a short compatibility checklist could be added when relevant.</li>
+<li><strong>Testing or linting</strong> — The project has no tests or linters today. ESLint or a minimal test run could be added later if stricter PR checks are desired.</li>
+<li><strong>Third-party modules</strong> — Document how to build and ship a module that extends ThirdEra, or add a module template, when the need arises.</li>
+<li><strong>Changelog</strong> — Release notes are currently PR-driven. Optionally add a <code>CHANGELOG.md</code> or a “What’s new” page in the docs.</li>
+</ul>
+
+    
+    
+    
+    
+    
+    
+
+
+
+    
+        
+        
+    
+
+
+
+    
+
+
+<a href=".." class="torillic-backlink">🡐 Development</a>
+    
+  </main>
+  <script src="../js/version-selector.js"></script>
+  <script src="../search/main.js"></script>
+</body>
+
+</html>
