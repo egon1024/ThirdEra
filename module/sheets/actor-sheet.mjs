@@ -143,7 +143,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const focused = this.element?.querySelector(":focus");
         this._focusedInputName = focused?.name || null;
         // When the sheet re-renders (form submit, add/remove condition, etc.), preserve scroll position
-        // so the sheet does not jump to top. See .cursor/plans/sheet-ux-conventions.md.
+        // so the sheet does not jump to top. See .cursor/rules/sheet-ux-scroll-focus.mdc.
         // The scrollable element is .sheet-body .tab.active (overflow-y: auto), not .sheet-body (overflow: hidden).
         if (this.rendered) {
             const scrollContainer = this.element?.querySelector(".sheet-body .tab.active")

@@ -4,7 +4,7 @@
  * modifiers by adhering to the modifier-source interface. This module provides the
  * canonical key set, provider registry, and getActiveModifiers(actor).
  *
- * @see .cursor/plans/generalized-modifier-system.md
+ * @see docs-site/development.md (Modifier system), .cursor/plans/future-features.md (GMS out of scope)
  * @see docs-site/development.md (Modifier system)
  */
 
