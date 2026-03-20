@@ -9,18 +9,17 @@ This page lists planned or possible work. Priorities can change. If you want to 
 
 ## Combat workflow / support
 
-The goal is smoother at-table combat for playtesting without full rules automation. The following order prioritizes playability for playtesters (spell/save flow, rest, initiative, concentration), then character build depth (prestige classes), then higher-level combat (iterative attacks).
+The goal is smoother at-table combat for playtesting without full rules automation. The following order prioritizes playability for playtesters (spell/save flow, initiative, concentration), then character build depth (prestige classes), then higher-level combat (iterative attacks).
 
-**Already implemented:** Apply damage/heal (Phases 2–4): sheet "Apply damage/healing" and "Apply to this token"; chat "Apply" button; weapon "Attack & Damage"; temp HP, nonlethal, healing. See [Testing Apply damage/healing](development.md#testing-apply-damagehealing-phase-2). **Roll save from spell message:** Cast messages store save DC and type; "Roll save" button and context menu let the target (or GM) roll the appropriate save vs. DC. **Spell targeting:** When casting from the sheet, selected tokens are recorded as targets on the message; "Roll save (Target name)" buttons allow one-click rolls per target.
+**Already implemented:** Apply damage/heal (Phases 2–4): sheet "Apply damage/healing" and "Apply to this token"; chat "Apply" button; weapon "Attack & Damage"; temp HP, nonlethal, healing. See [Testing Apply damage/healing](development.md#testing-apply-damagehealing-phase-2). **Roll save from spell message:** Cast messages store save DC and type; "Roll save" button and context menu let the target (or GM) roll the appropriate save vs. DC. **Spell targeting:** When casting from the sheet, selected tokens are recorded as targets on the message; "Roll save (Target name)" buttons allow one-click rolls per target. **Rest and natural healing:** **Take rest…** on Spells → Ready to cast opens a dialog for optional natural healing (level + modifier key `naturalHealingPerDay` + **Attributes → Details** bonus), optional reset of spell cast/prepared counts, and a chat summary (or “no changes”). See [Character sheet — Spellcasting](usage/characters.md#spellcasting) and [Development — Rest and natural healing](development.md#rest-and-natural-healing).
 
 **Planned (ordered):**
 
-1. **Rest and natural healing** — Single flow: reset spell slots and cast counts, plus optional natural healing (e.g. 1 HP per character level per day of rest per SRD).
-2. **Initiative and combat tracker** — Use `@attributes.initiative.bonus` in system initiative formula (for feats like Improved Initiative); add a "Roll initiative" (or "Add to combat & roll initiative") button on the Combat tab that calls Foundry's `Actor.rollInitiative({ createCombatants: true })`.
-3. **Concentration check** — Quick Concentration check (button or prompt when casting) with appropriate DCs (defensive casting, damage, etc.).
-4. **Conditions with mechanical effects** — Ensure condition compendium items have `changes` (AC, saves, speed) populated where applicable so applying Blinded, Shaken, etc. updates the sheet automatically.
-5. **Classes Phase 6** — Prestige classes and prerequisites (BAB, skills, feats, spellcasting level).
-6. **Later: Iterative attacks / full attack** — Multiple attacks at BAB +6/+11/+16 (currently single attack per weapon).
+1. **Initiative and combat tracker** — Use `@attributes.initiative.bonus` in system initiative formula (for feats like Improved Initiative); add a "Roll initiative" (or "Add to combat & roll initiative") button on the Combat tab that calls Foundry's `Actor.rollInitiative({ createCombatants: true })`.
+2. **Concentration check** — Quick Concentration check (button or prompt when casting) with appropriate DCs (defensive casting, damage, etc.).
+3. **Conditions with mechanical effects** — Ensure condition compendium items have `changes` (AC, saves, speed) populated where applicable so applying Blinded, Shaken, etc. updates the sheet automatically.
+4. **Classes Phase 6** — Prestige classes and prerequisites (BAB, skills, feats, spellcasting level).
+5. **Later: Iterative attacks / full attack** — Multiple attacks at BAB +6/+11/+16 (currently single attack per weapon).
 
 
 **Scope:** Attacks of opportunity, flanking, and grid-facing are left to table ruling or modules; the system does not automate them. The same applies to complex special cases (e.g. full grappling automation). Documenting this keeps scope clear.

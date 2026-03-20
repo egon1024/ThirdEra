@@ -127,6 +127,26 @@
             "ChatApply": "Apply",
             "ChatApplyHint": "Open Apply damage/healing dialog with this roll's total."
         },
+        "Rest": {
+            "Title": "Take rest",
+            "Intro": "Choose what happens when this character rests for the day:",
+            "Apply": "Apply",
+            "Cancel": "Cancel",
+            "Button": "Take rest…",
+            "ButtonHint": "Natural healing and optional spell cast / prepared resets.",
+            "NoPermission": "You do not have permission to update this actor.",
+            "ApplyNaturalHealingLabel": "Apply natural healing",
+            "NaturalHealingAmountHint": "Up to {amount} hit points from level, modifiers, and natural healing bonus.",
+            "ResetCastCountsLabel": "Reset all spell cast counts to 0",
+            "ResetPreparedCountsLabel": "Reset all spell prepared counts to 0",
+            "NotifyComplete": "Rest complete.",
+            "NotifyCompleteNoChanges": "Rest complete. No changes.",
+            "ChatNoChanges": "takes a rest. No changes.",
+            "ChatTakesRest": "takes a rest.",
+            "ChatSummaryHealing": "Recovered {amount} hit points.",
+            "ChatSummaryResetCast": "Reset cast counts for {count} spell(s).",
+            "ChatSummaryResetPrepared": "Reset prepared counts for {count} spell(s)."
+        },
         "SpellSave": {
             "RollSave": "Roll save",
             "RollSaveVsDC": "Roll save vs DC",

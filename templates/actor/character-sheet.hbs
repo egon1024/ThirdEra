@@ -1237,16 +1237,17 @@
 
         {{!-- Ready to cast panel: shortlist (full-list) or prepared>0 (wizard) or same (spontaneous); prepared/cast only for prepared casters --}}
         <div class="subtab spells-ready {{#if (eq tabs.spells 'ready')}}active{{/if}}" data-group="spells" data-tab="ready">
-          {{#if hasAnySpellcasting}}
           <div class="spell-rest-reset">
+            <button type="button" class="take-rest-btn" data-action="takeRest" title="{{localize 'THIRDERA.Rest.ButtonHint'}}">{{localize "THIRDERA.Rest.Button"}}</button>
+            {{#if hasAnySpellcasting}}
             <span class="reset-spell-usage-label">{{localize "THIRDERA.Spells.ResetCastCounts"}}</span>
             <button type="button" class="reset-spell-usage-btn" data-action="resetSpellUsage" title="{{localize 'THIRDERA.Spells.ResetCastCountsHint'}}" aria-label="{{localize 'THIRDERA.Spells.ResetCastCounts'}}"><i class="fas fa-moon" aria-hidden="true"></i></button>
             {{#if hasPreparedSpellcasting}}
             <span class="reset-spell-usage-label">{{resetPreparedCountsLabel}}</span>
             <button type="button" class="reset-spell-usage-btn" data-action="resetPreparedCounts" title="{{resetPreparedCountsHint}}" aria-label="{{resetPreparedCountsLabel}}"><i class="fas fa-scroll" aria-hidden="true"></i></button>
             {{/if}}
+            {{/if}}
           </div>
-          {{/if}}
           {{#each readyToCastByClass as |classData|}}
             {{#if classData.hasSpellcasting}}
               <div class="spellcasting-class">

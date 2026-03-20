@@ -9,6 +9,7 @@ import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/x
 import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
 import { getAllSkills } from "../applications/skill-picker-dialog.mjs";
 import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
+import { TakeRestDialog } from "../applications/take-rest-dialog.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -61,6 +62,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             toggleShortlist: ThirdEraActorSheet.#onToggleShortlist,
             resetSpellUsage: ThirdEraActorSheet.#onResetSpellUsage,
             resetPreparedCounts: ThirdEraActorSheet.#onResetPreparedCounts,
+            takeRest: ThirdEraActorSheet.#onTakeRest,
             addCondition: ThirdEraActorSheet.#onAddCondition,
             removeCondition: ThirdEraActorSheet.#onRemoveCondition,
             setCreatureType: ThirdEraActorSheet.#onSetCreatureType,
@@ -4557,6 +4559,29 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {PointerEvent} event
      * @param {HTMLElement} target   Element with data-action="resetSpellUsage"
      */
+    /**
+     * Open Take rest dialog (characters only): natural healing and optional spell resets.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     */
+    static #onTakeRest(event, target) {
+        if (this.actor.type !== "character") return;
+        const hasPreparedSpellcasting = ThirdEraActorSheet.actorHasPreparedSpellcasting(this.actor);
+        const dialog = new TakeRestDialog(this.actor, { sheet: this, hasPreparedSpellcasting });
+        dialog.render(true);
+    }
+
+    /**
+     * True if the actor has at least one class with spellcasting and preparation type "prepared"
+     * (matches Ready to cast / Reset prepared visibility).
+     * @param {Actor} actor
+     * @returns {boolean}
+     */
+    static actorHasPreparedSpellcasting(actor) {
+        const list = actor?.system?.spellcastingByClass || [];
+        return list.some((sc) => sc.hasSpellcasting && sc.preparationType === "prepared");
+    }
+
     static async #onResetSpellUsage(event, target) {
         const toReset = this.actor.items.filter(
             i => i.type === "spell" && (i.system?.cast ?? 0) !== 0

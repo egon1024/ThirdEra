@@ -135,6 +135,7 @@
 .thirdera.level-up-flow form,
 .thirdera.spell-list-browser form,
 .thirdera.apply-damage-healing-dialog form,
+.thirdera.take-rest-dialog form,
 .thirdera.skill-picker-dialog .skill-picker-dialog-body {
   height: 100%;
   display: flex;
@@ -145,6 +146,7 @@
 .thirdera.level-up-flow .window-content,
 .thirdera.spell-list-browser .window-content,
 .thirdera.apply-damage-healing-dialog .window-content,
+.thirdera.take-rest-dialog .window-content,
 .thirdera.skill-picker-dialog .window-content {
   height: 100%;
   padding: 5px;
@@ -742,6 +744,21 @@
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
+}
+
+.thirdera .spell-rest-reset .take-rest-btn {
+  margin-right: auto;
+  padding: 2px 8px;
+  font-size: var(--font-size-note);
+  color: var(--color-text-primary);
+  background: transparent;
+  border: 1px solid var(--color-border-tab);
+  border-radius: 3px;
+}
+
+.thirdera .spell-rest-reset .take-rest-btn:hover {
+  background: var(--color-hover);
+  border-color: var(--color-border-divider);
 }
 
 .thirdera .reset-spell-usage-label {
@@ -2525,6 +2542,38 @@
   color: var(--color-text-muted);
 }
 .thirdera.apply-damage-healing-dialog .apply-damage-healing-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5em;
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--color-border-divider);
+}
+
+/* Take rest dialog */
+.thirdera.take-rest-dialog .take-rest-dialog-intro {
+  margin: 0 0 0.35em;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+}
+.thirdera.take-rest-dialog .take-rest-dialog-name {
+  margin: 0 0 0.75em;
+}
+.thirdera.take-rest-dialog .take-rest-checkbox-group {
+  margin-bottom: 0.65em;
+}
+.thirdera.take-rest-dialog .take-rest-checkbox-group .checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4em;
+  font-weight: normal;
+}
+.thirdera.take-rest-dialog .take-rest-healing-amount-hint {
+  margin: 0.25em 0 0 1.6em;
+  font-size: var(--font-size-note);
+  color: var(--color-text-muted);
+}
+.thirdera.take-rest-dialog .take-rest-dialog-footer {
   display: flex;
   justify-content: flex-end;
   gap: 0.5em;
