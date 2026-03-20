@@ -68,10 +68,10 @@
 
   {{#if (eq step "skills")}}
   <div class="level-up-flow-body level-up-flow-skills">
-    <p class="level-up-flow-skill-budget {{#unless valid}}level-up-flow-over-budget{{/unless}}">
+    <p class="level-up-flow-skill-budget">
       {{localize "THIRDERA.LevelUp.SkillPointsThisLevel"}}: <strong>{{skillPointsForLevel}}</strong>
       · {{localize "THIRDERA.Skills.spent"}}: {{pointsSpent}}
-      · <span class="{{#unless valid}}level-up-flow-over-budget{{/unless}}">{{localize "THIRDERA.Skills.remaining"}}: {{remaining}}</span>
+      · <span class="{{#if isOverBudget}}level-up-flow-over-budget{{/if}}" {{#if isOverBudget}}title="{{localize "THIRDERA.LevelUp.SkillPointsRemainingNegativeTitle" points=remaining}}"{{/if}}>{{localize "THIRDERA.Skills.remaining"}}: {{remaining}}</span>
     </p>
     <p class="level-up-flow-hint level-up-flow-max-ranks-note">{{localize "THIRDERA.LevelUp.SkillPointsMaxRanksNote"}}</p>
     <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.SkillPointsHint"}}</p>
@@ -90,10 +90,10 @@
             {{#if sk.isForbidden}}
             <span class="skill-forbidden-label" title="{{sk.forbiddenReason}}">{{localize "THIRDERA.Skills.forbidden"}}</span>
             {{else}}
-            <span class="skill-max" title="{{localize "THIRDERA.Skills.maxRanks"}}">max {{sk.maxRanksAfter}}</span>
-            <input type="number" name="pointsToSpend" data-skill-id="{{sk.id}}" value="{{sk.pointsToSpend}}" min="0" max="{{sk.maxPoints}}" step="1" data-dtype="Number" class="level-up-flow-points-input"
-              title="{{localize "THIRDERA.Skills.classSkill"}} (1 {{localize "THIRDERA.LevelUp.pointPerRank"}})" />
-            <span class="skill-resulting-ranks" title="{{localize "THIRDERA.LevelUp.ResultingRanksTitle"}}">→ {{sk.resultingRanks}}</span>
+            <span class="skill-max {{#if sk.hasPointLimitError}}level-up-flow-invalid-indicator{{/if}}" title="{{#if sk.hasPointLimitError}}{{sk.pointLimitError}}{{else}}{{localize "THIRDERA.Skills.maxRanks"}}{{/if}}">max {{sk.maxRanksAfter}}</span>
+            <input type="number" name="pointsToSpend" data-skill-id="{{sk.id}}" value="{{sk.pointsToSpend}}" min="0" step="1" data-dtype="Number" class="level-up-flow-points-input {{#if sk.hasPointLimitError}}level-up-flow-input-invalid{{/if}}"
+              title="{{#if sk.hasPointLimitError}}{{sk.pointLimitError}}{{else}}{{localize "THIRDERA.Skills.classSkill"}} (1 {{localize "THIRDERA.LevelUp.pointPerRank"}}){{/if}}" />
+            <span class="skill-resulting-ranks {{#if sk.hasPointLimitError}}level-up-flow-invalid-indicator{{/if}}" title="{{#if sk.hasPointLimitError}}{{sk.pointLimitError}}{{else}}{{localize "THIRDERA.LevelUp.ResultingRanksTitle"}}{{/if}}">→ {{sk.resultingRanks}}</span>
             {{/if}}
           </li>
           {{/each}}
@@ -113,10 +113,10 @@
             {{#if sk.isForbidden}}
             <span class="skill-forbidden-label" title="{{sk.forbiddenReason}}">{{localize "THIRDERA.Skills.forbidden"}}</span>
             {{else}}
-            <span class="skill-max" title="{{localize "THIRDERA.Skills.maxRanks"}}">max {{sk.maxRanksAfter}}</span>
-            <input type="number" name="pointsToSpend" data-skill-id="{{sk.id}}" value="{{sk.pointsToSpend}}" min="0" max="{{sk.maxPoints}}" step="1" data-dtype="Number" class="level-up-flow-points-input"
-              title="{{localize "THIRDERA.Skills.crossClassSkill"}} (2 {{localize "THIRDERA.LevelUp.pointsPerRank"}})" />
-            <span class="skill-resulting-ranks" title="{{localize "THIRDERA.LevelUp.ResultingRanksTitle"}}">→ {{sk.resultingRanks}}</span>
+            <span class="skill-max {{#if sk.hasPointLimitError}}level-up-flow-invalid-indicator{{/if}}" title="{{#if sk.hasPointLimitError}}{{sk.pointLimitError}}{{else}}{{localize "THIRDERA.Skills.maxRanks"}}{{/if}}">max {{sk.maxRanksAfter}}</span>
+            <input type="number" name="pointsToSpend" data-skill-id="{{sk.id}}" value="{{sk.pointsToSpend}}" min="0" step="1" data-dtype="Number" class="level-up-flow-points-input {{#if sk.hasPointLimitError}}level-up-flow-input-invalid{{/if}}"
+              title="{{#if sk.hasPointLimitError}}{{sk.pointLimitError}}{{else}}{{localize "THIRDERA.Skills.crossClassSkill"}} (2 {{localize "THIRDERA.LevelUp.pointsPerRank"}}){{/if}}" />
+            <span class="skill-resulting-ranks {{#if sk.hasPointLimitError}}level-up-flow-invalid-indicator{{/if}}" title="{{#if sk.hasPointLimitError}}{{sk.pointLimitError}}{{else}}{{localize "THIRDERA.LevelUp.ResultingRanksTitle"}}{{/if}}">→ {{sk.resultingRanks}}</span>
             {{/if}}
           </li>
           {{/each}}
@@ -127,7 +127,7 @@
   {{/if}}
 
   {{#if (eq step "feat")}}
-  <div class="level-up-flow-body">
+  <div class="level-up-flow-body level-up-flow-feats">
     {{#if gainsFeat}}
     {{#if gainsFighterBonus}}
     <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.FighterBonusFeatHint" name=className}}</p>
@@ -146,9 +146,29 @@
         <button type="button" class="level-up-open-item-sheet" data-action="openSelectedFeatSheet" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}"><i class="fas fa-external-link-alt"></i></button>
       </div>
     </div>
+    {{#if availableFeats.length}}
+    <div class="form-group level-up-feat-section level-up-feats-available">
+      <p class="level-up-flow-hint">{{localize "THIRDERA.LevelUp.AvailableFeatsHint"}}</p>
+      <div class="level-up-flow-section-header">
+        <h4 class="level-up-flow-section-title level-up-feats-not-qualified-title">{{localize "THIRDERA.LevelUp.AvailableFeats"}}</h4>
+      </div>
+      <ul class="level-up-feats-not-qualified-list">
+        {{#each availableFeats as |opt|}}
+        <li class="level-up-feat-not-qualified {{#if (eq opt.uuid ../selectedFeatUuid)}}selected{{/if}}">
+          <div class="level-up-feat-not-qualified-head">
+            <span class="level-up-feat-not-qualified-name">{{opt.name}}</span>
+            <button type="button" class="level-up-open-item-sheet" data-action="openItemSheet" data-item-uuid="{{opt.uuid}}" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}"><i class="fas fa-external-link-alt"></i></button>
+          </div>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
     {{#if notQualifyingFeats.length}}
-    <div class="form-group level-up-feats-not-qualified">
-      <h4 class="level-up-feats-not-qualified-title">{{localize "THIRDERA.LevelUp.FeatsNotQualified"}}</h4>
+    <div class="form-group level-up-feat-section level-up-feats-not-qualified">
+      <div class="level-up-flow-section-header">
+        <h4 class="level-up-flow-section-title level-up-feats-not-qualified-title">{{localize "THIRDERA.LevelUp.FeatsNotQualified"}}</h4>
+      </div>
       <ul class="level-up-feats-not-qualified-list">
         {{#each notQualifyingFeats as |opt|}}
         <li class="level-up-feat-not-qualified">
@@ -168,8 +188,10 @@
     {{/if}}
     {{#if gainsFighterBonus}}
     {{#if excludedNotFighterBonusFeats.length}}
-    <div class="form-group level-up-feats-not-fighter-bonus">
-      <h4 class="level-up-feats-not-qualified-title">{{localize "THIRDERA.LevelUp.FeatsNotFighterBonus"}}</h4>
+    <div class="form-group level-up-feat-section level-up-feats-not-fighter-bonus">
+      <div class="level-up-flow-section-header">
+        <h4 class="level-up-flow-section-title level-up-feats-not-qualified-title">{{localize "THIRDERA.LevelUp.FeatsNotFighterBonus"}}</h4>
+      </div>
       <ul class="level-up-feats-not-qualified-list">
         {{#each excludedNotFighterBonusFeats as |opt|}}
         <li class="level-up-feat-not-qualified">
@@ -219,8 +241,13 @@
       <li>
         {{#if f.featUuid}}
         <button type="button" class="level-up-open-item-sheet" data-action="openItemSheet" data-item-uuid="{{f.featUuid}}" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}"><i class="fas fa-external-link-alt"></i></button>
+        <button type="button" class="level-up-feature-name level-up-feature-name-link" data-action="openItemSheet" data-item-uuid="{{f.featUuid}}" title="{{localize "THIRDERA.LevelUp.ViewItemTitle"}}">
+          {{f.featName}}
+        </button>
         {{/if}}
+        {{#unless f.featUuid}}
         {{f.featName}}
+        {{/unless}}
       </li>
       {{/each}}
     </ul>

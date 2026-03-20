@@ -23,7 +23,7 @@ When the character gains a level in a class:
 
 1. Use **Add Level** (or the level-up flow) for that class.
 2. Choose hit points (roll or fixed).
-3. Allocate **skill points** for the new level (class and cross-class costs apply).
+3. Allocate **skill points** for the new level (class and cross-class costs apply). The flow warns if you overspend the level budget or assign more points to one skill than D&D 3.5 normally allows at that level; remaining points turn red when negative, per-skill overages are highlighted in red with a tooltip, and those overages are still recorded if you keep them. Clicking **Next** with unspent points asks whether you want to continue and keep them unallocated.
 4. If the character gains a **feat** at this level (e.g. 1st, 3rd, 6th, or a fighter bonus feat), choose one from the list. The list only shows feats the character qualifies for; feats that are not yet available are listed separately with their requirements.
 5. Finish to commit the level. Class features, auto-granted feats (e.g. Improved Unarmed Strike for monk), and domain spells (for clerics) are applied automatically where applicable.
 
@@ -45,7 +45,7 @@ If a character has one or more classes with spellcasting enabled:
 - **Known / Available** sub-tab lists spells by class and level; for prepared casters (e.g. wizard) you set how many of each spell are prepared. **Ready to cast** sub-tab shows the shortlist of spells you can cast and their remaining uses.
 - Spells that are not on any class list appear under **Manually added spells** in Known. You can add them to **Ready to cast** for a spellcasting class (e.g. Sorcerer) using **Add to ready** (or **Add to ready as** and choose the class when you have multiple). They then appear under that class in Ready to cast and use that class’s DC and spell slots when cast.
 - **Domain spells** (e.g. cleric domains) appear in a separate section, are always prepared, and use domain slots. They are added automatically when you add a domain to the class.
-- Use **Reset prepared** to clear prepared counts and **Reset cast counts (rest)** to restore daily cast usage after a rest.
+- For prepared casters, use **Reset prepared** to clear prepared counts; use **Reset cast counts (rest)** to restore daily cast usage after a rest.
 - **Cast** on a spell in Ready to cast posts the spell to chat with save DC and spell resistance; you can drag a spell to the macro bar to create a “Cast: &lt;Spell&gt;” macro.
 
 **Rolling saves from a spell cast:** When the spell has a saving throw (e.g. Fortitude, Reflex, or Will), the cast message in chat shows a **Roll save (…)** button. Click it to open a dialog where you choose which actor rolls the save; the roll is made against the spell's DC. You can also right‑click the message and choose "Roll save vs. spell DC" for the same dialog. If you **select one or more tokens** on the canvas before casting (e.g. the intended targets), the cast message instead lists **Target(s): …** and shows a **Roll save (Name)** button for each target; clicking one rolls that character's or creature's save immediately, with no picker. When no tokens are selected (or when casting from a macro), you get the single Roll save button and picker.

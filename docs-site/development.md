@@ -84,6 +84,7 @@ Registered in `thirdera.mjs:registerHandlebarsHelpers()`: `abilityMod(score)`, `
 - **Extensibility:** Races, classes, etc. are **Item types**, not hardcoded config.
 - **Rich text:** `<prose-mirror>` (Foundry v13); styling with `.active`/`.inactive`. Exception: npc-sheet biography still uses legacy `{{editor}}`. `toggled` is read-once config; `open` and `.active`/`.inactive` control state.
 - **Checkboxes:** Never style as text inputs (no background/border/full-width). Use transparent background, no border, `accent-color` for theme.
+- **Release upgrades:** Every branch intended to become a release must include a migration path from the previous release version. See [Release migrations](#release-migrations) below.
 
 ### Item references
 
@@ -102,6 +103,16 @@ All references between items (and any membership or “do you have this?” chec
 - **Spell’s school:** Reference the school **item’s id/UUID** if the system models schools as items; otherwise a stable identifier that is not the display name.
 
 **Exception:** Where the codebase explicitly uses a **stable key** (e.g. `system.key`) for compendium **name-based matching** (e.g. loader “match by key when name collides”), that remains a separate concern. The key is still not used as the **canonical reference** between items for “which feat is required” or “does the actor have this?” — those use ID/UUID. Keys may be used to *resolve* “which document is Dodge?” when building UUID references (e.g. in migration or authoring), but the stored reference is the document’s id/UUID.
+
+### Release migrations
+
+Every meaningful change must consider **upgrade from the previous release version**. Migration work is part of development, not a post-release cleanup task.
+
+- **Goal:** Users upgrading into the release built from the current branch should keep their data and reach a working state without manual repair.
+- **When migration is required:** Any change that affects stored data, schema shapes, references, compendium-driven assumptions, derived-data expectations, or sheet/workflow behavior must be evaluated for upgrade impact.
+- **Branch-wide view:** Do not design migrations one ticket at a time in isolation. Consider the **combined effect of all changes in the current branch** so the resulting migration path accounts for ordering, compatibility between related changes, and idempotence.
+- **Expected outcome per task:** Either add/update migration logic and validation steps, or explicitly document why no migration is needed.
+- **Preferred migration behavior:** Preserve user data in place, repair outdated structures safely, and avoid one-off manual cleanup unless there is no safer alternative.
 
 ### Modifier system (`module/logic/modifier-aggregation.mjs`)
 

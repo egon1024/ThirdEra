@@ -146,8 +146,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         // so the sheet does not jump to top. See .cursor/rules/sheet-ux-scroll-focus.mdc.
         // The scrollable element is .sheet-body .tab.active (overflow-y: auto), not .sheet-body (overflow: hidden).
         if (this.rendered) {
-            const scrollContainer = this.element?.querySelector(".sheet-body .tab.active")
-                ?? this.element?.querySelector(".sheet-body");
+            const tabActive = this.element?.querySelector(".sheet-body .tab.active");
+            const spellsContent = this.element?.querySelector(".tab.spells.active .spells-tab-content");
+            const scrollContainer = spellsContent ?? tabActive ?? this.element?.querySelector(".sheet-body");
             this._formUpdateScrollRestore = scrollContainer ? scrollContainer.scrollTop : 0;
         }
     }
@@ -166,9 +167,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (this._formUpdateScrollRestore != null) {
             const scrollTop = this._formUpdateScrollRestore;
             this._formUpdateScrollRestore = null;
-            const scrollContainer = this.element?.querySelector(".sheet-body .tab.active")
-                ?? this.element?.querySelector(".sheet-body");
+            const spellsContent = this.element?.querySelector(".tab.spells.active .spells-tab-content");
+            const tabActive = this.element?.querySelector(".sheet-body .tab.active");
+            const scrollContainer = spellsContent ?? tabActive ?? this.element?.querySelector(".sheet-body");
             if (scrollContainer) scrollContainer.scrollTop = scrollTop;
+        }
+        // Restore focus to the "next" spell input after re-render (e.g. user tabbed from previous field).
+        if (this._focusRestoreSpellInput) {
+            const { itemId, field } = this._focusRestoreSpellInput;
+            this._focusRestoreSpellInput = null;
+            this._spellInputClickedTarget = null;
+            this._spellTabDirection = null;
+            const element = this.element;
+            requestAnimationFrame(() => {
+                const input = element?.querySelector(`.tab.spells.active .subtab.active input[data-item-id="${CSS.escape(itemId || "")}"][data-spell-field="${CSS.escape(field || "")}"]`);
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
+            });
         }
         // Restore scroll position after Cast/delete in Spells tab (prevents jumping to top).
         if (this._preservedSpellScrollTop != null) {
@@ -291,8 +308,60 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
         });
 
-        // Attach change listeners for spell prepared/cast inputs (embedded items, not form-bound)
-        this.element.querySelectorAll("input[data-spell-field]").forEach(input => {
+        // Capture which spell input was clicked (mousedown fires before blur/change, so we know the real target).
+        const spellsRegion = this.element.querySelector(".tab.spells");
+        if (spellsRegion) {
+            spellsRegion.addEventListener("mousedown", (event) => {
+                const target = event.target?.closest?.("input[data-spell-field]");
+                if (target?.dataset?.itemId && target?.dataset?.spellField) {
+                    this._spellInputClickedTarget = {
+                        itemId: target.dataset.itemId,
+                        field: target.dataset.spellField
+                    };
+                }
+            });
+        }
+        // Attach change and focus listeners for spell prepared/cast inputs (embedded items, not form-bound)
+        const spellInputs = Array.from(this.element.querySelectorAll(".tab.spells input[data-spell-field]"));
+        spellInputs.forEach((input) => {
+            input.addEventListener("keydown", (event) => {
+                // Keep tabbing within the active Spells subtab inputs.
+                const activeSpellInputs = Array.from(this.element.querySelectorAll(".tab.spells.active .subtab.active input[data-spell-field]"));
+                if (event.key !== "Tab" || activeSpellInputs.length === 0) return;
+                const activeIndex = activeSpellInputs.indexOf(event.currentTarget);
+                this._spellInputClickedTarget = null; // user is tabbing, not clicking
+                if (event.shiftKey) {
+                    // Shift+Tab: record direction so change handler restores to previous input.
+                    this._spellTabDirection = -1;
+                    return;
+                }
+                // Tab (no shift): wrap from last to first and handle here; otherwise browser moves to next.
+                if (activeIndex !== activeSpellInputs.length - 1) {
+                    this._spellTabDirection = 1; // in case change runs, restore to next
+                    return;
+                }
+                const firstInput = activeSpellInputs[0];
+                this._focusRestoreSpellInput = {
+                    itemId: firstInput.dataset.itemId,
+                    field: firstInput.dataset.spellField
+                };
+                event.preventDefault();
+                input.blur();
+                requestAnimationFrame(() => {
+                    const restoreTarget = this.element?.querySelector(
+                        `.tab.spells.active .subtab.active input[data-item-id="${CSS.escape(firstInput.dataset.itemId || "")}"][data-spell-field="${CSS.escape(firstInput.dataset.spellField || "")}"]`
+                    );
+                    if (restoreTarget) {
+                        restoreTarget.focus();
+                        restoreTarget.select();
+                    }
+                });
+            });
+            input.addEventListener("focus", (event) => {
+                requestAnimationFrame(() => {
+                    if (document.activeElement === event.target) event.target.select();
+                });
+            });
             input.addEventListener("change", async (event) => {
                 const itemId = event.target.dataset.itemId;
                 const field = event.target.dataset.spellField;
@@ -302,6 +371,51 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 let value = parseInt(event.target.value, 10);
                 if (Number.isNaN(value)) value = 0;
                 value = Math.max(0, value);
+                const currentSubtab = event.target.closest(".subtab");
+                const currentSpellInputs = Array.from((currentSubtab ?? this.element).querySelectorAll("input[data-spell-field]"));
+                const currentIndex = currentSpellInputs.indexOf(event.currentTarget);
+                // Before re-render: record which input should receive focus after render.
+                // Use mousedown-captured target if user clicked a different spell input (change can fire before focus moves).
+                // Otherwise (tab or click outside) use the next in tab order.
+                const clickedTarget = this._spellInputClickedTarget;
+                this._spellInputClickedTarget = null;
+                const isClickOnOther = clickedTarget && (clickedTarget.itemId !== itemId || clickedTarget.field !== field);
+                if (currentSpellInputs.length > 0) {
+                    if (isClickOnOther) {
+                        this._focusRestoreSpellInput = {
+                            itemId: clickedTarget.itemId,
+                            field: clickedTarget.field
+                        };
+                    } else {
+                        const direction = this._spellTabDirection ?? 1;
+                        this._spellTabDirection = null;
+                        const removesCurrentReadyRow = field === "prepared" && value === 0;
+                        let targetInput;
+                        if (removesCurrentReadyRow) {
+                            const nextCandidates = direction > 0
+                                ? currentSpellInputs.slice(currentIndex + 1)
+                                : currentSpellInputs.slice(0, currentIndex).reverse();
+                            targetInput = nextCandidates.find(next => next.dataset.itemId !== itemId)
+                                ?? currentSpellInputs.find(next => next.dataset.itemId !== itemId);
+                        } else {
+                            const len = currentSpellInputs.length;
+                            const nextIndex = direction > 0
+                                ? (currentIndex + 1) % len
+                                : (currentIndex - 1 + len) % len;
+                            targetInput = currentSpellInputs[nextIndex];
+                        }
+                        if (targetInput) {
+                            this._focusRestoreSpellInput = {
+                                itemId: targetInput.dataset.itemId,
+                                field: targetInput.dataset.spellField
+                            };
+                        } else {
+                            this._focusRestoreSpellInput = null;
+                        }
+                    }
+                } else {
+                    this._focusRestoreSpellInput = null;
+                }
                 await item.update({ ["system." + field]: value });
             });
         });
@@ -488,12 +602,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             w.system.equipped === "primary" || w.system.equipped === "offhand"
         );
         const equippedArmor = items.armor.filter(a => a.system.equipped === "true");
-        // #region agent log
-        if (equippedArmor.length > 0) {
-            const armorDetails = equippedArmor.map((a) => ({ id: a.id, name: a.name, bonus: a.system?.armor?.bonus }));
-            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "actor-sheet.mjs:_prepareContext", message: "equippedArmor for template", data: { actorId: actor.id, actorName: actor.name, armorDetails }, timestamp: Date.now() }) }).catch(() => {});
-        }
-        // #endregion
 
         // Compute class summary for header display
         const classSummary = items.classes
@@ -864,6 +972,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const spellsKnownCurrent = {};
             const spellsKnownMax = {};
             const spellsKnownOverLimit = {};
+            const remainingStateByLevel = {};
+            const preparedStateByLevel = {};
             for (let level = 0; level <= 9; level++) {
                 const levelKey = String(level);
                 const spells = classSpells.spellsByLevel[levelKey] || classSpells.spellsByLevel[level] || [];
@@ -872,7 +982,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 const preparedSum = spells.reduce((sum, s) => (s.domainName ? sum : sum + (s.system?.prepared ?? 0)), 0);
                 castByLevel[levelKey] = castSum;
                 const slots = classSpells.spellsPerDay?.[level] ?? classSpells.spellsPerDay?.[levelKey] ?? 0;
-                remainingByLevel[levelKey] = Math.max(0, slots - castSum);
+                const remaining = slots - castSum;
+                remainingByLevel[levelKey] = remaining;
+                remainingStateByLevel[levelKey] = remaining > 0 ? "positive" : (remaining === 0 ? "zero" : "negative");
+                // Prepared X/Y state for color coding: under limit (grey), at limit (green), over (red)
+                const preparedState = preparedSum < slots ? "under" : (preparedSum === slots ? "at" : "over");
+                preparedStateByLevel[levelKey] = preparedState;
                 // Prepared X/Y per level: only non-domain spells (domain spells are always prepared and use domain slot)
                 classSpells.preparedByLevel[levelKey] = preparedSum;
                 spellsKnownCurrent[levelKey] = spells.length;
@@ -891,6 +1006,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             classSpells.castByLevel = castByLevel;
             classSpells.remainingByLevel = remainingByLevel;
+            classSpells.remainingStateByLevel = remainingStateByLevel;
+            classSpells.preparedStateByLevel = preparedStateByLevel;
             classSpells.spellsKnownCurrent = spellsKnownCurrent;
             classSpells.spellsKnownMax = spellsKnownMax;
             classSpells.spellsKnownOverLimit = spellsKnownOverLimit;
@@ -936,10 +1053,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         
         // Convert Map to array for template
         const organizedSpells = Array.from(spellsByClass.values());
-
         // Known panel: same data as organizedSpells (roster; no tracking in UI)
         const knownSpellsByClass = organizedSpells;
         const hasAnySpellcasting = organizedSpells.some((c) => c.hasSpellcasting);
+        const hasPreparedSpellcasting = organizedSpells.some(
+            (c) => c.hasSpellcasting && c.preparationType === "prepared"
+        );
 
         // Ready to cast: filter by shortlist (full-list prepared), prepared>0 (wizard), or same (spontaneous)
         const spellShortlistByClass = systemData.spellShortlistByClass || {};
@@ -1181,6 +1300,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             knownSpellsByClass,
             readyToCastByClass,
             hasAnySpellcasting,
+            hasPreparedSpellcasting,
             manuallyAddedSpellsByLevel,
             hasManuallyAddedSpells,
             spellcastingClassesForShortlist,
@@ -4456,6 +4576,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
     /**
      * Reset all spell prepared counts to 0 for this character (e.g. after rest, before preparing anew).
+     * Shows a confirmation dialog first, since re-adding Ready to cast spells can be tedious.
      * @param {PointerEvent} event
      * @param {HTMLElement} target   Element with data-action="resetPreparedCounts"
      */
@@ -4467,6 +4588,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             ui.notifications.info(game.i18n.localize("THIRDERA.Spells.ResetPreparedCountsNoChange"));
             return;
         }
+        const confirm = await foundry.applications.api.DialogV2.confirm({
+            window: { title: game.i18n.localize("THIRDERA.Spells.ResetPreparedCounts") },
+            content: `<p>${game.i18n.localize("THIRDERA.Spells.ResetPreparedCountsConfirm")}</p>`,
+            rejectClose: false,
+            modal: true
+        });
+        if (!confirm) return;
         for (const item of toReset) {
             await item.update({ "system.prepared": 0 });
         }

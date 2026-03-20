@@ -1997,6 +1997,18 @@
   margin-bottom: 0;
 }
 
+/* Feat step: let the whole panel scroll so later sections and footer stay reachable. */
+.thirdera.level-up-flow .level-up-flow-body.level-up-flow-feats {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.25em;
+}
+
 .thirdera.level-up-flow .level-up-flow-hint {
   font-size: var(--font-size-note);
   color: var(--color-text-muted);
@@ -2091,7 +2103,7 @@
 }
 
 .thirdera.level-up-flow .level-up-flow-over-budget {
-  color: var(--color-modified, #c00);
+  color: var(--color-danger);
 }
 
 .thirdera.level-up-flow .level-up-flow-skills-list {
@@ -2171,6 +2183,12 @@
   flex-shrink: 0;
 }
 
+.thirdera.level-up-flow .level-up-flow-skills-list .level-up-flow-points-input.level-up-flow-input-invalid,
+.thirdera.level-up-flow .level-up-flow-skills-list input[name="pointsToSpend"].level-up-flow-input-invalid {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
 .thirdera.level-up-flow .level-up-flow-skills-list .skill-resulting-ranks {
   font-size: var(--font-size-note);
   color: var(--color-text-muted);
@@ -2184,21 +2202,52 @@
   flex-shrink: 0;
 }
 
+.thirdera.level-up-flow .level-up-flow-skills-list .level-up-flow-invalid-indicator {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
 .thirdera.level-up-flow .level-up-feats-not-qualified {
   margin-top: 0.75em;
   padding-top: 0.75em;
   border-top: 1px solid var(--color-border-divider);
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
 }
 
+.thirdera.level-up-flow .level-up-feats-available {
+  margin-top: 0.75em;
+}
+
+.thirdera.level-up-flow .level-up-feat-section {
+  position: relative;
+}
+
+.thirdera.level-up-flow .level-up-flow-feats .level-up-feats-not-qualified-list {
+  max-height: none;
+  overflow: visible;
+}
+
+.thirdera.level-up-flow .level-up-flow-feats .level-up-flow-section-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0 0 0.2em 0;
+  background: var(--color-bg-parchment);
+}
+
+.thirdera.level-up-flow .level-up-flow-feats .level-up-flow-section-title,
 .thirdera.level-up-flow .level-up-feats-not-qualified-title {
-  margin: 0 0 0.35em 0;
+  font-family: var(--font-family-readable);
   font-size: var(--font-size-body);
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: none;
+  letter-spacing: normal;
+  margin: 0;
+  padding: 0.3em 0.5em;
   color: var(--color-text-primary);
-  flex-shrink: 0;
+  background: var(--color-bg-parchment-dark);
+  border-radius: 2px;
+  border-bottom: 1px solid var(--color-border-divider);
 }
 
 .thirdera.level-up-flow .level-up-feats-not-qualified-list {
@@ -2213,26 +2262,33 @@
 }
 
 .thirdera.level-up-flow .level-up-feat-not-qualified {
-  padding: 0.35em 0;
+  padding: 0.08em 0;
   border-bottom: 1px solid var(--color-border-subtle);
   display: flex;
   flex-direction: column;
-  gap: 0.2em;
+  gap: 0.05em;
 }
 
 .thirdera.level-up-flow .level-up-feat-not-qualified:last-child {
   border-bottom: none;
 }
 
+.thirdera.level-up-flow .level-up-feat-not-qualified.selected {
+  background: var(--color-bg-parchment-dark);
+  border-radius: 3px;
+}
+
 .thirdera.level-up-flow .level-up-feat-not-qualified-head {
   display: flex;
   align-items: center;
-  gap: 0.35em 0.5em;
+  gap: 0.15em 0.35em;
+  line-height: 1.1;
 }
 
 .thirdera.level-up-flow .level-up-feat-not-qualified-name {
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-body);
+  line-height: 1.1;
 }
 
 .thirdera.level-up-flow .level-up-feat-not-qualified-reasons {
@@ -2250,8 +2306,10 @@
 
 .thirdera.level-up-flow .level-up-open-item-sheet {
   flex-shrink: 0;
-  padding: 0.2em 0.4em;
-  min-width: 1.75em;
+  padding: 0.1em 0.3em;
+  min-width: 1.5em;
+  min-height: 1.5em;
+  line-height: 1;
   color: var(--color-text-muted);
   background: transparent;
   border: 1px solid var(--color-border-subtle);
@@ -2286,6 +2344,21 @@
   align-items: center;
   gap: 0.35em 0.5em;
   padding: 0.25em 0;
+}
+
+.thirdera.level-up-flow .level-up-flow-features-list .level-up-feature-name-link {
+  cursor: pointer;
+  color: var(--color-character-accent, var(--color-text-primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+}
+
+.thirdera.level-up-flow .level-up-flow-features-list .level-up-feature-name-link:hover {
+  color: var(--color-hover);
 }
 
 .thirdera .items-list {
@@ -3446,6 +3519,30 @@
   font-style: italic;
 }
 
+/* Feats subtab: tighten row spacing so feat lists don't become unnecessarily tall */
+.thirdera .subtab[data-tab="feats"] .items-list .item,
+.thirdera .subtab[data-tab="features"] .granted-features-list .granted-feature {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.thirdera .subtab[data-tab="feats"] .items-list,
+.thirdera .subtab[data-tab="features"] .granted-features-list {
+  row-gap: 0;
+}
+
+.thirdera .subtab[data-tab="feats"] .items-list .item .item-controls,
+.thirdera .subtab[data-tab="features"] .granted-features-list .item-controls {
+  gap: 3px;
+}
+
+.thirdera .subtab[data-tab="feats"] .feats-section-header,
+.thirdera .subtab[data-tab="features"] .feats-section-header {
+  margin: 6px 0 2px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
 /* Feats subtab section header */
 .thirdera .feats-section-header {
   margin: 8px 0 4px;
@@ -4164,6 +4261,30 @@
 .thirdera .tab.spells .spells-per-day strong {
   color: var(--color-text-primary);
   font-weight: var(--font-weight-bold);
+}
+
+.thirdera .tab.spells .spells-per-day .spell-remaining-value.spell-remaining-positive {
+  color: var(--color-equipped);
+}
+
+.thirdera .tab.spells .spells-per-day .spell-remaining-value.spell-remaining-zero {
+  color: var(--color-text-muted);
+}
+
+.thirdera .tab.spells .spells-per-day .spell-remaining-value.spell-remaining-negative {
+  color: var(--color-danger);
+}
+
+.thirdera .tab.spells .spells-per-day .spell-prepared-value.spell-prepared-under {
+  color: var(--color-text-muted);
+}
+
+.thirdera .tab.spells .spells-per-day .spell-prepared-value.spell-prepared-at {
+  color: var(--color-equipped);
+}
+
+.thirdera .tab.spells .spells-per-day .spell-prepared-value.spell-prepared-over {
+  color: var(--color-danger);
 }
 
 .thirdera .tab.spells .spell-school-header {
