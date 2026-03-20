@@ -18,7 +18,8 @@ import { getConditionItemsMapSync } from "./condition-helpers.mjs";
 const FIXED_MODIFIER_KEYS = new Set([
     "ac", "acLoseDex", "speedMultiplier",
     "saveFort", "saveRef", "saveWill",
-    "attack", "attackMelee", "attackRanged"
+    "attack", "attackMelee", "attackRanged",
+    "naturalHealingPerDay"
 ]);
 
 /** Ability keys: ability.str, ability.dex, etc. */

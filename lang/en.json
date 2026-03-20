@@ -12,6 +12,10 @@
         "XPHeaderTotal": "Total",
         "XPHeaderThisLevel": "This level",
         "Size": "Size",
+        "Details": {
+            "NaturalHealingBonus": "Natural healing bonus (per day)",
+            "NaturalHealingBonusHint": "Extra hit points recovered when using natural healing on a rest (adds to one HP per level and modifiers from feats, items, etc.)."
+        },
         "Attributes": "Attributes",
         "TabDetails": "Details",
         "SheetLabels": {
@@ -76,6 +80,7 @@
             "attack": "Attack: Melee and ranged",
             "attackMelee": "Attack: Melee",
             "attackRanged": "Attack: Ranged",
+            "naturalHealingPerDay": "Natural healing (per day)",
             "abilityStr": "Ability: Strength",
             "abilityDex": "Ability: Dexterity",
             "abilityCon": "Ability: Constitution",
