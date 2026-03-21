@@ -1,0 +1,37 @@
+<form class="thirdera take-rest-dialog-form" data-appid="{{appId}}" autocomplete="off">
+  <header class="take-rest-dialog-header">
+    <p class="take-rest-dialog-intro">{{localize "THIRDERA.Rest.Intro"}}</p>
+    <p class="take-rest-dialog-name"><strong>{{characterName}}</strong></p>
+  </header>
+
+  <div class="take-rest-dialog-body">
+    <div class="form-group take-rest-checkbox-group">
+      <label class="checkbox-label">
+        <input type="checkbox" name="applyNaturalHealing" {{#if applyNaturalHealing}}checked{{/if}} data-dtype="Boolean" />
+        {{localize "THIRDERA.Rest.ApplyNaturalHealingLabel"}}
+      </label>
+      <p class="take-rest-healing-amount-hint">{{naturalHealingAmountHint}}</p>
+    </div>
+
+    <div class="form-group take-rest-checkbox-group">
+      <label class="checkbox-label">
+        <input type="checkbox" name="resetCastCounts" {{#if resetCastCounts}}checked{{/if}} data-dtype="Boolean" />
+        {{localize "THIRDERA.Rest.ResetCastCountsLabel"}}
+      </label>
+    </div>
+
+    {{#if hasPreparedSpellcasting}}
+    <div class="form-group take-rest-checkbox-group">
+      <label class="checkbox-label">
+        <input type="checkbox" name="resetPreparedCounts" {{#if resetPreparedCounts}}checked{{/if}} data-dtype="Boolean" />
+        {{localize "THIRDERA.Rest.ResetPreparedCountsLabel"}}
+      </label>
+    </div>
+    {{/if}}
+  </div>
+
+  <footer class="take-rest-dialog-footer">
+    <button type="button" data-action="cancel">{{localize "THIRDERA.Rest.Cancel"}}</button>
+    <button type="button" data-action="apply" {{#unless canApply}}disabled{{/unless}}>{{localize "THIRDERA.Rest.Apply"}}</button>
+  </footer>
+</form>

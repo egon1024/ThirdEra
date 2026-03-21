@@ -630,6 +630,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             { key: "attack", label: t("attack") },
             { key: "attackMelee", label: t("attackMelee") },
             { key: "attackRanged", label: t("attackRanged") },
+            { key: "naturalHealingPerDay", label: t("naturalHealingPerDay") },
             { key: "ability.str", label: t("abilityStr") },
             { key: "ability.dex", label: t("abilityDex") },
             { key: "ability.con", label: t("abilityCon") },

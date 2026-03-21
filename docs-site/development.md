@@ -84,6 +84,7 @@ Registered in `thirdera.mjs:registerHandlebarsHelpers()`: `abilityMod(score)`, `
 - **Extensibility:** Races, classes, etc. are **Item types**, not hardcoded config.
 - **Rich text:** `<prose-mirror>` (Foundry v13); styling with `.active`/`.inactive`. Exception: npc-sheet biography still uses legacy `{{editor}}`. `toggled` is read-once config; `open` and `.active`/`.inactive` control state.
 - **Checkboxes:** Never style as text inputs (no background/border/full-width). Use transparent background, no border, `accent-color` for theme.
+- **Release upgrades:** Every branch intended to become a release must include a migration path from the previous release version. See [Release migrations](#release-migrations) below.
 
 ### Item references
 
@@ -103,11 +104,21 @@ All references between items (and any membership or “do you have this?” chec
 
 **Exception:** Where the codebase explicitly uses a **stable key** (e.g. `system.key`) for compendium **name-based matching** (e.g. loader “match by key when name collides”), that remains a separate concern. The key is still not used as the **canonical reference** between items for “which feat is required” or “does the actor have this?” — those use ID/UUID. Keys may be used to *resolve* “which document is Dodge?” when building UUID references (e.g. in migration or authoring), but the stored reference is the document’s id/UUID.
 
+### Release migrations
+
+Every meaningful change must consider **upgrade from the previous release version**. Migration work is part of development, not a post-release cleanup task.
+
+- **Goal:** Users upgrading into the release built from the current branch should keep their data and reach a working state without manual repair.
+- **When migration is required:** Any change that affects stored data, schema shapes, references, compendium-driven assumptions, derived-data expectations, or sheet/workflow behavior must be evaluated for upgrade impact.
+- **Branch-wide view:** Do not design migrations one ticket at a time in isolation. Consider the **combined effect of all changes in the current branch** so the resulting migration path accounts for ordering, compatibility between related changes, and idempotence.
+- **Expected outcome per task:** Either add/update migration logic and validation steps, or explicitly document why no migration is needed.
+- **Preferred migration behavior:** Preserve user data in place, repair outdated structures safely, and avoid one-off manual cleanup unless there is no safer alternative.
+
 ### Modifier system (`module/logic/modifier-aggregation.mjs`)
 
-A **unified modifier pipeline** aggregates contributions from conditions, feats, race, equipped items, and future sources into one **modifier bag** per actor. Design: [.cursor/plans/generalized-modifier-system.md](../.cursor/plans/generalized-modifier-system.md).
+A **unified modifier pipeline** aggregates contributions from conditions, feats, race, equipped items, and future sources into one **modifier bag** per actor. Design and deferred work: [.cursor/plans/future-features.md](../.cursor/plans/future-features.md) (Generalized modifier system — out of scope).
 
-- **Canonical keys:** `CONFIG.THIRDERA.modifierKeys` lists allowed keys (e.g. `ac`, `acLoseDex`, `speedMultiplier`, `saveFort`/`saveRef`/`saveWill`, `attack`/`attackMelee`/`attackRanged`, `ability.str` … `ability.cha`, `skill.<skillKey>`). Only these keys are applied.
+- **Canonical keys:** `CONFIG.THIRDERA.modifierKeys` lists allowed keys (e.g. `ac`, `acLoseDex`, `speedMultiplier`, `saveFort`/`saveRef`/`saveWill`, `attack`/`attackMelee`/`attackRanged`, `naturalHealingPerDay`, `ability.str` … `ability.cha`, `skill.<skillKey>`). Only these keys are applied. The **`naturalHealingPerDay`** total is added to character level and to `actor.system.details.naturalHealingBonus` when computing daily natural healing in the **Take rest** flow (`getRestHealingAmount` in `module/logic/rest-healing.mjs`).
 - **Ability and skill keys:** Condition items (and later feats/equipped items) can use `ability.str`, `ability.dex`, etc. and `skill.<skillKey>` (e.g. `skill.hide`) in their `changes` array. The aggregator outputs per-key totals and breakdowns; character `prepareDerivedData` applies ability deltas to each ability’s **effective** (with breakdown), then recomputes **mod** before any other step uses ability mod. Skill modifiers from the bag are applied in the skill loop; modifier-only skills (no ranks) appear in an "Other skill modifiers" block with roll.
 - **Provider contract:** A **modifier-source provider** is a function `(actor) => Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>`. The aggregator runs all functions in `CONFIG.THIRDERA.modifierSourceProviders` and merges results.
 - **Usage:** Call `getActiveModifiers(actor)` once early in character or NPC `prepareDerivedData` (after base ability values); apply ability deltas and set mod; then use the same modifier bag for AC, speed, saves, attack, and skills. Race contributes via the built-in race provider (abilityAdjustments → ability.\* changes).
@@ -116,6 +127,13 @@ A **unified modifier pipeline** aggregates contributions from conditions, feats,
 
 1. **Register a provider function.** Push a function to `CONFIG.THIRDERA.modifierSourceProviders`. Each provider has signature `(actor) => Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>`. The aggregator runs all providers and merges contributions; only keys in the canonical set (see `CONFIG.THIRDERA.modifierKeys`) are applied. Example: a module that adds temporary spell effects could register a provider that returns one contribution per active spell with a `changes` array.
 2. **Item method `getModifierChanges(actor)`.** On any item type, implement `getModifierChanges(actor)` returning `{ applies: boolean, changes: Array<{ key: string, value: number, label?: string }> }`. The built-in item provider in the registry iterates `actor.items` and, when this method exists, calls it; when `applies === true`, it merges the returned `changes` with `label = item.name`. No change to the aggregator is required. Items can also use optional `system.changes` (same shape) and rely on the default item provider’s type-specific “applies” rules (e.g. feat: always; equipment/armor/weapon: when equipped; race: when this is the actor’s race).
+
+### Rest and natural healing
+
+- **Code:** `module/applications/take-rest-dialog.mjs` — `TakeRestDialog` (ApplicationV2 + HandlebarsApplicationMixin), opened from the character sheet (**Spells → Ready to cast → Take rest…**). Template: `templates/apps/take-rest-dialog.hbs`. Strings use `THIRDERA.Rest.*` in `lang/en.json`.
+- **Apply path:** Optional `applyDamageOrHealing(..., "healing")` with amount from `getRestHealingAmount(actor)`; optional bulk `system.cast: 0` / `system.prepared: 0` on spell items; `ChatMessage.create` with actor as speaker; notifications on close; sheet re-render when provided.
+- **Formula:** `getRestHealingAmount(actor)` = effective character level (from `details.totalLevel` or `details.level`, minimum 1) + `getActiveModifiers(actor).totals.naturalHealingPerDay` + non-negative integer `details.naturalHealingBonus`.
+- **NPCs:** No Take rest control on the NPC sheet (characters only).
 
 ### Compendiums (`packs/` and `module/logic/compendium-loader.mjs`)
 

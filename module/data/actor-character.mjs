@@ -50,7 +50,14 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 age: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Age" }),
                 gender: new StringField({ required: true, blank: true, initial: "", label: "Gender" }),
                 height: new StringField({ required: true, blank: true, initial: "", label: "Height" }),
-                weight: new StringField({ required: true, blank: true, initial: "", label: "Weight" })
+                weight: new StringField({ required: true, blank: true, initial: "", label: "Weight" }),
+                naturalHealingBonus: new NumberField({
+                    required: true,
+                    integer: true,
+                    min: 0,
+                    initial: 0,
+                    label: "Natural healing bonus (per day)"
+                })
             }),
 
             // Hit Points
@@ -151,6 +158,14 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             // Spell shortlist for full-list prepared casters (cleric, druid): classItemId -> spell item IDs to show in "Ready to cast"
             spellShortlistByClass: new ObjectField({ initial: {}, label: "Spell Shortlist by Class" })
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        if (source.details && source.details.naturalHealingBonus === undefined) {
+            source.details.naturalHealingBonus = 0;
+        }
+        return super.migrateData(source);
     }
 
     /**

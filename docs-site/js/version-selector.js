@@ -23,19 +23,29 @@
     .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
     .then(function (versions) {
       if (!Array.isArray(versions) || versions.length === 0) return;
+      // Resolve path segment to actual version: path may be an alias (e.g. "latest") not the version string
+      var resolvedVersion = currentVersion;
+      for (var i = 0; i < versions.length; i++) {
+        var v = versions[i];
+        if (v.version === currentVersion) break;
+        if (v.aliases && v.aliases.indexOf(currentVersion) !== -1) {
+          resolvedVersion = v.version;
+          break;
+        }
+      }
       var select = document.createElement('select');
       select.className = 'version-selector';
       select.setAttribute('aria-label', 'Documentation version');
 
       versions.forEach(function (v) {
         var hidden = v.properties && v.properties.hidden;
-        if (hidden && v.version !== currentVersion) return;  // hide from dropdown unless current
+        if (hidden && v.version !== currentVersion && v.version !== resolvedVersion) return;  // hide from dropdown unless current
         var title = v.title || v.version;
         var opt = document.createElement('option');
         opt.value = v.version;
         opt.textContent = title;
         if (v.aliases && v.aliases.indexOf('latest') !== -1) opt.textContent += ' (latest)';
-        if (v.version === currentVersion) opt.selected = true;
+        if (v.version === resolvedVersion) opt.selected = true;
         select.appendChild(opt);
       });
 

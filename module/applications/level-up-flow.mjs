@@ -348,7 +348,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         let pointsSpent = 0;
 
         function pushRow(row) {
-            const cost = row.isForbidden ? 0 : (row.effectivePoints ?? row.addRanks * row.costPerRank);
+            const cost = row.isForbidden ? 0 : (row.pointsToSpend ?? 0);
             pointsSpent += cost;
             if (row.isClassSkill) classSkills.push(row);
             else crossClassSkills.push(row);
@@ -369,17 +369,24 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const costPerRank = isClassSkill ? 1 : 2;
             const maxAdd = isForbidden ? 0 : Math.max(0, maxRanksAfter - currentRanks);
             const maxPoints = maxAdd * costPerRank;
-            const addRanks = Math.min(points / costPerRank, maxAdd);
-            const effectivePoints = addRanks * costPerRank;
+            const attemptedPoints = Math.max(0, Number(points) || 0);
+            const attemptedAddRanks = attemptedPoints / costPerRank;
+            const effectivePoints = attemptedPoints;
+            const addRanks = attemptedAddRanks;
             const resultingRanks = currentRanks + addRanks;
             const modSummary = LevelUpFlow.#skillModifierSummary(abilities, sd.ability, sd.modifier?.misc);
+            const hasPointLimitError = attemptedPoints > maxPoints;
+            const pointLimitError = hasPointLimitError
+                ? game.i18n.format("THIRDERA.LevelUp.SkillPointsOverMaxForSkill", { name: skill.name, entered: attemptedPoints, max: maxPoints })
+                : "";
             pushRow({
                 id: skill.id,
                 name: skill.name,
                 skillUuid: skill.uuid,
                 currentRanks,
-                pointsToSpend: Math.min(points, maxPoints),
+                pointsToSpend: attemptedPoints,
                 maxPoints,
+                attemptedAddRanks,
                 addRanks,
                 effectivePoints,
                 resultingRanks,
@@ -388,10 +395,12 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 isClassSkill,
                 isForbidden,
                 costPerRank,
+                hasPointLimitError,
+                pointLimitError,
                 ...modSummary,
                 forbiddenReason: keyLower && excludedSkillKeysLower.has(keyLower)
-                    ? "Excluded by race"
-                    : (sd.exclusive === "true" && keyLower && !classSkillKeysLower.has(keyLower) && !selectedClassSkillKeysLower.has(keyLower) && !isGranted ? "Exclusive — requires a class that grants this skill" : "")
+                    ? game.i18n.localize("THIRDERA.Skills.excludedByRace")
+                    : (sd.exclusive === "true" && keyLower && !classSkillKeysLower.has(keyLower) && !selectedClassSkillKeysLower.has(keyLower) && !isGranted ? game.i18n.localize("THIRDERA.Skills.exclusiveRequiresClass") : "")
             });
         }
 
@@ -408,17 +417,24 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const costPerRank = isClassSkill ? 1 : 2;
             const maxAdd = isForbidden ? 0 : Math.max(0, maxRanksAfter - currentRanks);
             const maxPoints = maxAdd * costPerRank;
-            const addRanks = Math.min(points / costPerRank, maxAdd);
-            const effectivePoints = addRanks * costPerRank;
+            const attemptedPoints = Math.max(0, Number(points) || 0);
+            const attemptedAddRanks = attemptedPoints / costPerRank;
+            const effectivePoints = attemptedPoints;
+            const addRanks = attemptedAddRanks;
             const resultingRanks = currentRanks + addRanks;
             const modSummary = LevelUpFlow.#skillModifierSummary(abilities, skillAbility, 0);
+            const hasPointLimitError = attemptedPoints > maxPoints;
+            const pointLimitError = hasPointLimitError
+                ? game.i18n.format("THIRDERA.LevelUp.SkillPointsOverMaxForSkill", { name, entered: attemptedPoints, max: maxPoints })
+                : "";
             pushRow({
                 id: rowId,
                 name,
                 skillUuid: skillUuid ?? "",
                 currentRanks,
-                pointsToSpend: Math.min(points, maxPoints),
+                pointsToSpend: attemptedPoints,
                 maxPoints,
+                attemptedAddRanks,
                 addRanks,
                 effectivePoints,
                 resultingRanks,
@@ -427,8 +443,10 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                 isClassSkill,
                 isForbidden,
                 costPerRank,
+                hasPointLimitError,
+                pointLimitError,
                 ...modSummary,
-                forbiddenReason: isForbidden ? "Excluded by race" : ""
+                forbiddenReason: isForbidden ? game.i18n.localize("THIRDERA.Skills.excludedByRace") : ""
             });
         }
 
@@ -436,17 +454,87 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         crossClassSkills.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 
         const remaining = skillPointsForLevel - pointsSpent;
-        const valid = remaining >= 0;
+        const isOverBudget = remaining < 0;
+        const hasPointLimitErrors = classSkills.some((row) => row.hasPointLimitError) || crossClassSkills.some((row) => row.hasPointLimitError);
 
         return {
             stepTitle: game.i18n.localize("THIRDERA.LevelUp.StepSkillPoints"),
             skillPointsForLevel,
             pointsSpent,
             remaining,
-            valid,
+            isOverBudget,
+            hasPointLimitErrors,
             classSkills,
             crossClassSkills
         };
+    }
+
+    /**
+     * Return all visible skill rows from a skills-step context.
+     * @param {object} ctx
+     * @returns {Array<object>}
+     */
+    static #getSkillRows(ctx) {
+        return [...(ctx?.classSkills ?? []), ...(ctx?.crossClassSkills ?? [])];
+    }
+
+    /**
+     * Notify once when the user pushes the skills step into an invalid state.
+     * @param {LevelUpFlow} flow
+     * @param {object} ctx
+     */
+    static #notifySkillValidationIssues(flow, ctx) {
+        const invalidRowIds = new Set();
+        for (const row of LevelUpFlow.#getSkillRows(ctx)) {
+            if (!row?.hasPointLimitError) continue;
+            const rowId = String(row.id);
+            invalidRowIds.add(rowId);
+            if (!flow._warnedSkillOverMaxIds?.has(rowId)) {
+                ui.notifications.warn(row.pointLimitError || game.i18n.localize("THIRDERA.LevelUp.SkillPointsOverMax"));
+            }
+        }
+        flow._warnedSkillOverMaxIds = invalidRowIds;
+
+        const isOverBudget = (ctx?.remaining ?? 0) < 0;
+        if (isOverBudget && !flow._skillBudgetWarningActive) {
+            ui.notifications.warn(game.i18n.format("THIRDERA.LevelUp.SkillPointsOverBudgetBy", { points: Math.abs(ctx.remaining ?? 0) }));
+        }
+        flow._skillBudgetWarningActive = isOverBudget;
+    }
+
+    /**
+     * Confirm moving past skills when points remain unspent.
+     * @param {number} remaining
+     * @returns {Promise<boolean>}
+     */
+    static async #confirmUnspentSkillPoints(remaining) {
+        if (remaining <= 0) return true;
+        const result = await foundry.applications.api.DialogV2.wait({
+            rejectClose: false,
+            modal: true,
+            window: { title: game.i18n.localize("THIRDERA.LevelUp.UnspentSkillPointsTitle") },
+            position: { width: 420 },
+            content: `
+                <p>${game.i18n.format("THIRDERA.LevelUp.UnspentSkillPointsMessage", { points: remaining })}</p>
+                <p>${game.i18n.localize("THIRDERA.LevelUp.UnspentSkillPointsQuestion")}</p>
+            `,
+            buttons: [
+                {
+                    action: "stay",
+                    label: game.i18n.localize("THIRDERA.LevelUp.UnspentSkillPointsStay"),
+                    icon: "fa-solid fa-arrow-left",
+                    default: true,
+                    callback: () => false
+                },
+                {
+                    action: "proceed",
+                    label: game.i18n.localize("THIRDERA.LevelUp.UnspentSkillPointsProceed"),
+                    icon: "fa-solid fa-arrow-right",
+                    callback: () => true
+                }
+            ]
+        });
+        return result === true;
     }
 
     /**
@@ -670,6 +758,88 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     }
 
     /**
+     * Build a compendium UUID from pack index when the feature id is known (avoids relying on getDocument alone).
+     * @param {string} featItemId
+     * @returns {string}
+     */
+    static #featureUuidFromCompendiumIndex(featItemId) {
+        if (!featItemId) return "";
+        for (const pack of game.packs?.values() ?? []) {
+            if (pack.documentName !== "Item") continue;
+            const row = pack.index.get(featItemId);
+            if (!row || row.type !== "feature") continue;
+            try {
+                return pack.getUuid(featItemId);
+            } catch (_) {
+                /* ignore */
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Find a feature item in world or compendiums by system.key (fallback when featItemId does not resolve).
+     * @param {string} featKey
+     * @returns {Promise<Item|null>}
+     */
+    static async #resolveFeatureDocumentByKey(featKey) {
+        const k = String(featKey || "").toLowerCase();
+        if (!k) return null;
+        const world = game.items?.find((i) => i.type === "feature" && String(i.system?.key || "").toLowerCase() === k);
+        if (world) return world;
+        const systemId = game.system?.id ?? "thirdera";
+        const preferredPack = game.packs?.get(`${systemId}.thirdera_features`);
+        const packs = [];
+        if (preferredPack) packs.push(preferredPack);
+        for (const pack of game.packs?.values() ?? []) {
+            if (pack.documentName !== "Item") continue;
+            if (pack === preferredPack) continue;
+            packs.push(pack);
+        }
+        for (const pack of packs) {
+            try {
+                const docs = await pack.getDocuments({ type: "feature" });
+                const found = docs.find((d) => String(d.system?.key || "").toLowerCase() === k);
+                if (found) return found;
+            } catch (_) {
+                /* ignore */
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Resolve a UUID for opening the class feature item sheet (compendium id, full UUID, or feat key).
+     * @param {{ featItemId?: string, featKey?: string }} feature
+     * @returns {Promise<string>}
+     */
+    static async #resolveFeatureItemUuid(feature) {
+        const rawId = (feature?.featItemId ?? "").trim();
+        const featKey = (feature?.featKey ?? "").trim();
+
+        if (rawId.includes("Compendium.") || /\.Item\./.test(rawId)) {
+            try {
+                const doc = await foundry.utils.fromUuid(rawId);
+                if (doc?.type === "feature") return doc.uuid;
+            } catch (_) {
+                /* ignore */
+            }
+        }
+
+        const docById = await LevelUpFlow.#resolveFeatureDocument(rawId);
+        if (docById?.uuid) return docById.uuid;
+
+        const fromIndex = LevelUpFlow.#featureUuidFromCompendiumIndex(rawId);
+        if (fromIndex) return fromIndex;
+
+        if (featKey) {
+            const docByKey = await LevelUpFlow.#resolveFeatureDocumentByKey(featKey);
+            if (docByKey?.uuid) return docByKey.uuid;
+        }
+        return "";
+    }
+
+    /**
      * Build context for the features step: class features gained at the new class level.
      * @param {LevelUpFlow} flow
      * @returns {Promise<Object>}
@@ -683,19 +853,27 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             : levelHistory.filter((e) => e.classItemId === flow.selectedClassItemId).length + 1;
         const className = cls?.name ?? "";
         const featuresAtLevel = [];
+        const targetLevel = Number(newClassLevel);
         for (const feature of cls?.system?.features ?? []) {
-            if (feature.level === newClassLevel) {
-                let displayName = feature.featName || "";
-                const featDoc = await LevelUpFlow.#resolveFeatureDocument(feature.featItemId);
-                if (!displayName && featDoc) displayName = featDoc.name ?? "";
-                if (!displayName) displayName = feature.featKey || game.i18n.localize("THIRDERA.LevelUp.FeatureUnknown");
-                featuresAtLevel.push({
-                    featName: displayName,
-                    featKey: feature.featKey,
-                    featItemId: feature.featItemId,
-                    featUuid: featDoc?.uuid ?? ""
-                });
+            const levelNum = Number(feature.level);
+            if (levelNum !== targetLevel) continue;
+            let displayName = feature.featName || "";
+            const featUuid = await LevelUpFlow.#resolveFeatureItemUuid(feature);
+            if (!displayName && featUuid) {
+                try {
+                    const d = await foundry.utils.fromUuid(featUuid);
+                    if (d?.name) displayName = d.name;
+                } catch (_) {
+                    /* ignore */
+                }
             }
+            if (!displayName) displayName = feature.featKey || game.i18n.localize("THIRDERA.LevelUp.FeatureUnknown");
+            featuresAtLevel.push({
+                featName: displayName,
+                featKey: feature.featKey,
+                featItemId: feature.featItemId,
+                featUuid
+            });
         }
         return {
             stepTitle: game.i18n.localize("THIRDERA.LevelUp.StepNewFeatures"),
@@ -790,6 +968,8 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
                     if (id) this.pendingSkillPoints[id] = points;
                 }
                 const scrollTop = skillsListEl?.scrollTop ?? 0;
+                const ctx = await LevelUpFlow.#buildSkillsStepContext(this);
+                LevelUpFlow.#notifySkillValidationIssues(this, ctx);
                 // Preserve focus: use pending index from keydown Tab/Shift-Tab if set (change can run before activeElement updates); else if focus is on another skill input, use it; else use next.
                 const pendingIdx = this._skillPendingFocusIndex >= 0 ? this._skillPendingFocusIndex : -1;
                 this._skillPendingFocusIndex = -1;
@@ -913,8 +1093,9 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         if (flow.step === "skills") {
             LevelUpFlow.#readPendingSkillPointsFromForm(flow);
             const ctx = await LevelUpFlow.#buildSkillsStepContext(flow);
-            if (!ctx.valid) {
-                ui.notifications.warn(game.i18n.localize("THIRDERA.LevelUp.SkillPointsOverBudget"));
+            LevelUpFlow.#notifySkillValidationIssues(flow, ctx);
+            const proceed = await LevelUpFlow.#confirmUnspentSkillPoints(ctx.remaining);
+            if (!proceed) {
                 return;
             }
             const sequence = getStepSequence(flow);
@@ -1010,8 +1191,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const keyLower = skillId.startsWith("key:") ? skillId.slice(4).toLowerCase() : (flow.actor.items.get(skillId)?.system?.key || "").toLowerCase();
             const isClassSkill = keyLower && (grantedSkillKeysLower.has(keyLower) || classSkillKeysLower.has(keyLower) || selectedClassSkillKeysLower.has(keyLower));
             const costPerRank = isClassSkill ? 1 : 2;
-            const maxRanksAfter = isClassSkill ? totalLevelAfter + 3 : Math.floor((totalLevelAfter + 3) / 2);
-            const addRanks = Math.min(points / costPerRank, maxRanksAfter);
+            const addRanks = points / costPerRank;
             if (addRanks <= 0) continue;
             const key = skillId.startsWith("key:") ? skillId.slice(4) : (flow.actor.items.get(skillId)?.system?.key ?? "");
             if (key) skillsGained.push({ key, ranks: addRanks });
@@ -1061,12 +1241,11 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const keyLower = skillId.startsWith("key:") ? skillId.slice(4).toLowerCase() : (flow.actor.items.get(skillId)?.system?.key || "").toLowerCase();
             const isClassSkill = keyLower && (grantedSkillKeysLower.has(keyLower) || classSkillKeysLower.has(keyLower) || selectedClassSkillKeysLower.has(keyLower));
             const costPerRank = isClassSkill ? 1 : 2;
-            const maxRanksAfter = isClassSkill ? totalLevelAfter + 3 : Math.floor((totalLevelAfter + 3) / 2);
-            const addRanks = Math.min(points / costPerRank, maxRanksAfter);
+            const addRanks = points / costPerRank;
             if (addRanks <= 0) continue;
             if (skillId.startsWith("key:")) {
                 const key = skillId.slice(4);
-                const newRanks = Math.min(addRanks, maxRanksAfter);
+                const newRanks = addRanks;
                 const sourceSkill = await LevelUpFlow.#findSkillByKey(key);
                 if (sourceSkill) {
                     const obj = sourceSkill.toObject();
@@ -1081,7 +1260,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             if (!skill || skill.type !== "skill") continue;
             const sd = skill.system;
             const current = sd.ranks ?? 0;
-            const newRanks = Math.min(current + addRanks, maxRanksAfter);
+            const newRanks = current + addRanks;
             if (newRanks > current) await skill.update({ "system.ranks": newRanks });
         }
 
@@ -1137,8 +1316,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const keyLower = skillId.startsWith("key:") ? skillId.slice(4).toLowerCase() : (flow.actor.items.get(skillId)?.system?.key || "").toLowerCase();
             const isClassSkill = keyLower && (grantedSkillKeysLower.has(keyLower) || classSkillKeysLower.has(keyLower) || selectedClassSkillKeysLower.has(keyLower));
             const costPerRank = isClassSkill ? 1 : 2;
-            const maxRanksAfter = isClassSkill ? totalLevelAtTarget + 3 : Math.floor((totalLevelAtTarget + 3) / 2);
-            const addRanks = Math.min(points / costPerRank, maxRanksAfter);
+            const addRanks = points / costPerRank;
             if (addRanks <= 0) continue;
             const key = skillId.startsWith("key:") ? skillId.slice(4) : (flow.actor.items.get(skillId)?.system?.key ?? "");
             if (key) skillsGained.push({ key, ranks: addRanks });
@@ -1180,12 +1358,11 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const keyLower = skillId.startsWith("key:") ? skillId.slice(4).toLowerCase() : (flow.actor.items.get(skillId)?.system?.key || "").toLowerCase();
             const isClassSkill = keyLower && (grantedSkillKeysLower.has(keyLower) || classSkillKeysLower.has(keyLower) || selectedClassSkillKeysLower.has(keyLower));
             const costPerRank = isClassSkill ? 1 : 2;
-            const maxRanksAfter = isClassSkill ? totalLevelAtTarget + 3 : Math.floor((totalLevelAtTarget + 3) / 2);
-            const addRanks = Math.min(points / costPerRank, maxRanksAfter);
+            const addRanks = points / costPerRank;
             if (addRanks <= 0) continue;
             if (skillId.startsWith("key:")) {
                 const key = skillId.slice(4);
-                const newRanks = Math.min(addRanks, maxRanksAfter);
+                const newRanks = addRanks;
                 const sourceSkill = await LevelUpFlow.#findSkillByKey(key);
                 if (sourceSkill) {
                     const obj = sourceSkill.toObject();
@@ -1200,7 +1377,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             if (!skill || skill.type !== "skill") continue;
             const sd = skill.system;
             const current = sd.ranks ?? 0;
-            const newRanks = Math.min(current + addRanks, maxRanksAfter);
+            const newRanks = current + addRanks;
             if (newRanks > current) await skill.update({ "system.ranks": newRanks });
         }
 

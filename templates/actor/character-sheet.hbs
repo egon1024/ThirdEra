@@ -138,6 +138,10 @@
             <span class="details-label details-label-inline">{{localize 'THIRDERA.NextLevelAt'}}</span>
             <span class="experience-next">{{experienceNextLevelAtFormatted}}</span>
           </div>
+          <div class="details-field flexrow">
+            <label for="system.details.naturalHealingBonus" class="details-label" title="{{localize 'THIRDERA.Details.NaturalHealingBonusHint'}}">{{localize 'THIRDERA.Details.NaturalHealingBonus'}}</label>
+            <input type="number" id="system.details.naturalHealingBonus" name="system.details.naturalHealingBonus" value="{{system.details.naturalHealingBonus}}" data-dtype="Number" min="0" class="details-input" />
+          </div>
         </div>
       </div>
 
@@ -1084,9 +1088,21 @@
                 </div>
                 {{#each classData.spellsByLevel as |spells spellLevel|}}
                   {{#if (or spells.length (gt (lookup classData.spellsPerDay spellLevel) 0))}}
-                    <div class="spell-level-group">
+                    <div class="spell-level-group{{#if (lookup classData.spellsKnownOverLimit spellLevel)}} spell-level-over-limit{{/if}}">
                       <div class="spell-level-header">
                         <h5>{{#if (eq spellLevel "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal spellLevel}} Level{{/if}}</h5>
+                        <div class="spells-per-day">
+                          {{#if (eq classData.preparationType "prepared")}}
+                            <span>{{localize "THIRDERA.Spells.SpellsPerDay"}}: <strong>{{lookup classData.spellsPerDay spellLevel}}</strong></span>
+                            <span>{{localize "THIRDERA.Spells.Prepared"}}: <strong class="spell-prepared-value spell-prepared-{{lookup classData.preparedStateByLevel spellLevel}}">{{lookup classData.preparedByLevel spellLevel}}</strong>/<strong>{{lookup classData.spellsPerDay spellLevel}}</strong></span>
+                            <span class="spell-tracking-hint" title="{{localize 'THIRDERA.Spells.PreparedHint'}} — {{localize 'THIRDERA.Spells.CastHint'}}"><i class="fas fa-info-circle" aria-hidden="true"></i></span>
+                          {{else}}
+                            <span>{{localize "THIRDERA.Spells.SpellsPerDay"}}: <strong>{{lookup classData.spellsPerDay spellLevel}}</strong></span>
+                            <span>{{localize "THIRDERA.Spells.Used"}}: <strong>{{lookup classData.castByLevel spellLevel}}</strong></span>
+                            <span>{{localize "THIRDERA.Spells.Remaining"}}: <strong class="spell-remaining-value spell-remaining-{{lookup classData.remainingStateByLevel spellLevel}}">{{lookup classData.remainingByLevel spellLevel}}</strong></span>
+                            <span>{{localize "THIRDERA.Spells.Known"}}: <strong>{{lookup classData.spellsKnownCurrent spellLevel}}</strong>{{#if (lookup classData.spellsKnownMax spellLevel)}}/{{lookup classData.spellsKnownMax spellLevel}}{{/if}}{{#if (lookup classData.spellsKnownOverLimit spellLevel)}} <span class="spell-known-over-limit" title="{{localize 'THIRDERA.Spells.KnownOverLimit'}}">{{localize "THIRDERA.Spells.KnownOverLimit"}}</span>{{/if}}</span>
+                          {{/if}}
+                        </div>
                       </div>
                       {{#if (and (eq classData.casterType "arcane") classData.spellsByLevelBySchool)}}
                         {{#with (lookup classData.spellsByLevelBySchool spellLevel) as |schoolGroups|}}
@@ -1221,14 +1237,17 @@
 
         {{!-- Ready to cast panel: shortlist (full-list) or prepared>0 (wizard) or same (spontaneous); prepared/cast only for prepared casters --}}
         <div class="subtab spells-ready {{#if (eq tabs.spells 'ready')}}active{{/if}}" data-group="spells" data-tab="ready">
-          {{#if hasAnySpellcasting}}
           <div class="spell-rest-reset">
+            <button type="button" class="take-rest-btn" data-action="takeRest" title="{{localize 'THIRDERA.Rest.ButtonHint'}}">{{localize "THIRDERA.Rest.Button"}}</button>
+            {{#if hasAnySpellcasting}}
             <span class="reset-spell-usage-label">{{localize "THIRDERA.Spells.ResetCastCounts"}}</span>
             <button type="button" class="reset-spell-usage-btn" data-action="resetSpellUsage" title="{{localize 'THIRDERA.Spells.ResetCastCountsHint'}}" aria-label="{{localize 'THIRDERA.Spells.ResetCastCounts'}}"><i class="fas fa-moon" aria-hidden="true"></i></button>
+            {{#if hasPreparedSpellcasting}}
             <span class="reset-spell-usage-label">{{resetPreparedCountsLabel}}</span>
             <button type="button" class="reset-spell-usage-btn" data-action="resetPreparedCounts" title="{{resetPreparedCountsHint}}" aria-label="{{resetPreparedCountsLabel}}"><i class="fas fa-scroll" aria-hidden="true"></i></button>
+            {{/if}}
+            {{/if}}
           </div>
-          {{/if}}
           {{#each readyToCastByClass as |classData|}}
             {{#if classData.hasSpellcasting}}
               <div class="spellcasting-class">
@@ -1248,12 +1267,12 @@
                         <div class="spells-per-day">
                           {{#if (eq classData.preparationType "prepared")}}
                             <span>{{localize "THIRDERA.Spells.SpellsPerDay"}}: <strong>{{lookup classData.spellsPerDay spellLevel}}</strong></span>
-                            <span>{{localize "THIRDERA.Spells.Prepared"}}: <strong>{{lookup classData.preparedByLevel spellLevel}}</strong>/<strong>{{lookup classData.spellsPerDay spellLevel}}</strong></span>
+                            <span>{{localize "THIRDERA.Spells.Prepared"}}: <strong class="spell-prepared-value spell-prepared-{{lookup classData.preparedStateByLevel spellLevel}}">{{lookup classData.preparedByLevel spellLevel}}</strong>/<strong>{{lookup classData.spellsPerDay spellLevel}}</strong></span>
                             <span class="spell-tracking-hint" title="{{localize 'THIRDERA.Spells.PreparedHint'}} — {{localize 'THIRDERA.Spells.CastHint'}}"><i class="fas fa-info-circle" aria-hidden="true"></i></span>
                           {{else}}
                             <span>{{localize "THIRDERA.Spells.SpellsPerDay"}}: <strong>{{lookup classData.spellsPerDay spellLevel}}</strong></span>
                             <span>{{localize "THIRDERA.Spells.Used"}}: <strong>{{lookup classData.castByLevel spellLevel}}</strong></span>
-                            <span>{{localize "THIRDERA.Spells.Remaining"}}: <strong>{{lookup classData.remainingByLevel spellLevel}}</strong></span>
+                            <span>{{localize "THIRDERA.Spells.Remaining"}}: <strong class="spell-remaining-value spell-remaining-{{lookup classData.remainingStateByLevel spellLevel}}">{{lookup classData.remainingByLevel spellLevel}}</strong></span>
                             <span>{{localize "THIRDERA.Spells.Known"}}: <strong>{{lookup classData.spellsKnownCurrent spellLevel}}</strong>{{#if (lookup classData.spellsKnownMax spellLevel)}}/{{lookup classData.spellsKnownMax spellLevel}}{{/if}}{{#if (lookup classData.spellsKnownOverLimit spellLevel)}} <span class="spell-known-over-limit" title="{{localize 'THIRDERA.Spells.KnownOverLimit'}}">{{localize "THIRDERA.Spells.KnownOverLimit"}}</span>{{/if}}</span>
                           {{/if}}
                         </div>
@@ -1281,7 +1300,7 @@
                                           <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
                                           <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.cast}}" data-item-id="{{spell.id}}" data-spell-field="cast" />
                                         </div>
-                                        <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+                                        <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                                       </div>
                                       {{#if (eq classData.spellListAccess "full")}}
                                       <div class="item-controls"><a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a></div>
@@ -1290,7 +1309,11 @@
                                       {{/if}}
                                     {{else}}
                                       <div class="spell-tracking">
-                                        <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+                                        <div class="cast-tracking" title="{{localize 'THIRDERA.Spells.CastHint'}}">
+                                          <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
+                                          <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.cast}}" data-item-id="{{spell.id}}" data-spell-field="cast" />
+                                        </div>
+                                        <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                                       </div>
                                       <div class="item-controls">{{#if spell.inShortlist}}<a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a>{{/if}}<a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
                                     {{/if}}
@@ -1324,7 +1347,7 @@
                                   <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
                                   <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.cast}}" data-item-id="{{spell.id}}" data-spell-field="cast" />
                                 </div>
-                                <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+                                <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                               </div>
                               {{#if (eq classData.spellListAccess "full")}}
                               <div class="item-controls"><a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a></div>
@@ -1333,7 +1356,11 @@
                               {{/if}}
                             {{else}}
                               <div class="spell-tracking">
-                                <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+                                <div class="cast-tracking" title="{{localize 'THIRDERA.Spells.CastHint'}}">
+                                  <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
+                                  <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.cast}}" data-item-id="{{spell.id}}" data-spell-field="cast" />
+                                </div>
+                                <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                               </div>
                               <div class="item-controls">{{#if spell.inShortlist}}<a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a>{{/if}}<a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
                             {{/if}}
@@ -1373,7 +1400,7 @@
                                   <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
                                   <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.cast}}" data-item-id="{{spell.id}}" data-spell-field="cast" />
                                 </div>
-                                <button type="button" class="cast-spell-btn" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+                                <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{classData.classItemId}}" data-spell-level="{{spellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
                               </div>
                               <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
                             {{/if}}
