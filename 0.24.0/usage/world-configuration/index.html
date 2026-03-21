@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>World configuration - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../../css/logo.png">
+  <link href="../../css/torillic.css" rel="stylesheet">
+  <link href="../../css/single-column.css" rel="stylesheet">
+  <link href="../../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="../..">Home</a>
+      
+      
+      
+      <a class="current" href="../">Usage</a>
+      
+      
+      
+      <a class="" href="../../extending/">Extending</a>
+      
+      
+      
+      <a class="" href="../../development/">Development</a>
+      
+      
+      
+      <a class="" href="../../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="world-configuration">World configuration</h1>
+<p>ThirdEra exposes several <strong>world-level settings</strong> that GMs can use to tune behavior for a given world. These are per-world options: each world can have different values.</p>
+<h2 id="where-to-find-the-settings">Where to find the settings</h2>
+<p>With a ThirdEra world loaded, open <strong>Configure</strong> (gear icon) in the right-hand sidebar, then choose <strong>Configure Game Settings</strong>. The ThirdEra options appear in the <strong>System Settings</strong> section.</p>
+<h2 id="available-options">Available options</h2>
+<h3 id="track-currency-weight">Track Currency Weight</h3>
+<ul>
+<li><strong>Default:</strong> Off  </li>
+<li>If <strong>enabled</strong>, every 50 coins (of any type) add 1 lb to the character’s or NPC’s total carried weight, following the D&amp;D 3.5 standard. Encumbrance and weight totals on the sheet reflect this.  </li>
+<li>If <strong>disabled</strong>, currency is not counted toward weight.</li>
+</ul>
+<h3 id="enable-audit-log">Enable Audit Log</h3>
+<ul>
+<li><strong>Default:</strong> On  </li>
+<li>When <strong>enabled</strong>, the system sends whisper notifications to the GM in chat when actors or items are created, updated, or deleted. This helps GMs track changes made by players (e.g. level-up, inventory, spells).  </li>
+<li>When <strong>disabled</strong>, no audit log messages are sent.</li>
+</ul>
+<h3 id="filter-gm-actions">Filter GM Actions</h3>
+<ul>
+<li><strong>Default:</strong> Off  </li>
+<li>Only applies when <strong>Enable Audit Log</strong> is on.  </li>
+<li>When <strong>enabled</strong>, actions performed by a user with the GM role are not included in the audit log; only non-GM actions are reported.  </li>
+<li>When <strong>disabled</strong>, both GM and player actions are logged.</li>
+</ul>
+<h3 id="first-level-full-hit-points">First Level Full Hit Points</h3>
+<ul>
+<li><strong>Default:</strong> On  </li>
+<li>When <strong>enabled</strong>, the first level of the first class added to a character automatically receives <strong>maximum</strong> hit points from that class’s hit die (e.g. d8 → 8 HP). The value remains editable in the character’s level history.  </li>
+<li>When <strong>disabled</strong>, first-level HP is rolled or entered manually as for other levels.</li>
+</ul>
+
+    
+    
+    
+    
+    
+    
+
+
+
+    
+        
+        
+    
+
+
+
+    
+        
+    
+
+
+<a href="../" class="torillic-backlink">🡐 Usage overview</a>
+    
+  </main>
+  <script src="../../js/version-selector.js"></script>
+  <script src="../../search/main.js"></script>
+</body>
+
+</html>
