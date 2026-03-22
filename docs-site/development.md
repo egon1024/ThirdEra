@@ -176,6 +176,8 @@ When a character casts a spell, the posted chat message includes **`flags.thirde
 | `casterLevel` | Caster level for that class at cast time |
 | `srKey` | Raw spell resistance setting from the spell item (`system.spellResistance`) for future automation |
 
+**Spell resistance helpers** (`module/logic/spell-resistance-helpers.mjs`): `getActorSpellResistance(actor)` returns the numeric SR for **NPCs** (`system.statBlock.spellResistance`) and **characters** (`system.details.spellResistance`), otherwise `0`. `spellAllowsPenetrationRoll(srKey)` is `true` only for `yes` and `yes-harmless`. For `yes-harmless`, automation still exposes penetration when B3/B4 land: willingness and “harmless” are adjudicated at the table: the GM skips or ignores the roll when SR does not apply.
+
 The **Roll save** button and context menu (`module/logic/spell-save-from-chat.mjs`) use `dc`, `saveType`, and `targetActorUuids`. **Concentration** (`module/logic/concentration-from-chat.mjs`) uses `spellLevel` and the message **speaker** as the caster: **Concentration (defensive)** rolls vs DC 15 + spell level (see `module/logic/concentration-dcs.mjs`); **Concentration (other)…** opens a dialog for damage-based DC (10 + damage + spell level) or a custom DC. Right‑click the message → **Roll Concentration…** opens the same dialog. Only the **owner** of the speaker actor (or a GM) sees these controls. Rolls use `ThirdEraActor#rollConcentrationCheck` (`module/documents/actor.mjs`), which requires a Concentration skill item or a modifier-only Concentration entry. Extenders can rely on this flag shape when adding custom spell-cast messages or tools that react to spell casts.
 
 ## Testing Apply damage/healing (Phase 2)
