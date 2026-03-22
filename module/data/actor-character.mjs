@@ -674,8 +674,14 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         const hpAdjTotal = this.attributes.hp.adjustments.reduce((sum, adj) => sum + adj.value, 0);
         this.attributes.hp.max = Math.max(1, this.attributes.hp.max + hpAdjTotal);
 
-        // Calculate initiative
-        this.attributes.initiative.bonus = this.abilities.dex.mod;
+        // Calculate initiative (Dex + generalized modifier-system contributions)
+        const initiativeMod = mods.totals.initiative ?? 0;
+        this.attributes.initiative.bonus = this.abilities.dex.mod + initiativeMod;
+        const dexAbilityLabel = CONFIG.THIRDERA?.AbilityScores?.dex ?? "Dex";
+        this.attributes.initiative.totalBreakdown = [
+            { label: dexAbilityLabel, value: this.abilities.dex.mod },
+            ...(mods.breakdown.initiative ?? [])
+        ];
 
         // Calculate saves (base + ability modifier)
         this.saves.fort.total = this.saves.fort.base + this.abilities.con.mod;

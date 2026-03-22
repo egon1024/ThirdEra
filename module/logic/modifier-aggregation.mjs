@@ -14,12 +14,13 @@ import { getConditionItemsMapSync } from "./condition-helpers.mjs";
 // Canonical modifier key set
 // ---------------------------------------------------------------------------
 
-/** Fixed modifier keys (AC, saves, attack, speed, acLoseDex). */
+/** Fixed modifier keys (AC, saves, attack, initiative, speed, acLoseDex, etc.). */
 const FIXED_MODIFIER_KEYS = new Set([
     "ac", "acLoseDex", "speedMultiplier",
     "saveFort", "saveRef", "saveWill",
     "attack", "attackMelee", "attackRanged",
-    "naturalHealingPerDay"
+    "naturalHealingPerDay",
+    "initiative"
 ]);
 
 /** Ability keys: ability.str, ability.dex, etc. */
