@@ -254,7 +254,7 @@
     }
   },
   "socket": false,
-  "initiative": "1d20 + @abilities.dex.mod",
+  "initiative": "1d20 + @attributes.initiative.bonus",
   "grid": {
     "distance": 5,
     "units": "ft"

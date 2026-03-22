@@ -1397,6 +1397,17 @@
   font-weight: var(--font-weight-bold);
 }
 
+.thirdera .stat-block-initiative .initiative-stat-value-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35em;
+}
+.thirdera .roll-initiative-combat-btn {
+  padding: 0.25em 0.5em;
+  font-size: var(--font-size-12);
+}
+
 .thirdera .stat-block input {
   width: 60px;
   text-align: center;

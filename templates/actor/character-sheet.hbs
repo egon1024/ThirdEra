@@ -433,10 +433,15 @@
             {{/if}}
           </div>
         </div>
-        <div class="stat-block">
+        <div class="stat-block stat-block-initiative">
           <label>Initiative</label>
-          <div class="stat-value">
-            {{signedNumber system.attributes.initiative.bonus}}
+          <div class="stat-value initiative-stat-value-row">
+            <span class="initiative-bonus-value"
+              title="{{#each system.attributes.initiative.totalBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber system.attributes.initiative.bonus}}</span>
+            <button type="button" class="roll-initiative-combat-btn" data-action="rollInitiativeCombat"
+              title="{{localize 'THIRDERA.SheetCombat.RollInitiativeHint'}}">
+              <i class="fas fa-dice-d20" aria-hidden="true"></i> {{localize 'THIRDERA.SheetCombat.RollInitiative'}}
+            </button>
           </div>
         </div>
         <div class="stat-block">

@@ -627,6 +627,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             { key: "saveFort", label: t("saveFort") },
             { key: "saveRef", label: t("saveRef") },
             { key: "saveWill", label: t("saveWill") },
+            { key: "initiative", label: t("initiative") },
             { key: "attack", label: t("attack") },
             { key: "attackMelee", label: t("attackMelee") },
             { key: "attackRanged", label: t("attackRanged") },

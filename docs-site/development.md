@@ -30,7 +30,7 @@ Derived data (ability modifiers, save totals, grapple, initiative) is calculated
 
 ### Document Classes (`module/documents/`)
 
-- **ThirdEraActor** (actor.mjs) - Extends `Actor`. Roll methods: `rollAbilityCheck`, `rollSavingThrow`, `rollSkillCheck`, `rollInitiative`. Delegates to type-specific `_prepareCharacterData` / `_prepareNPCData`.
+- **ThirdEraActor** (actor.mjs) - Extends `Actor`. Roll methods: `rollAbilityCheck`, `rollSavingThrow`, `rollSkillCheck`. **Initiative** uses Foundry’s inherited `Actor.rollInitiative` (no override) so combatants and chat messages stay in sync with the combat tracker. Delegates to type-specific `_prepareCharacterData` / `_prepareNPCData`.
 - **ThirdEraItem** (item.mjs) - Extends `Item`. `rollAttack` / `rollDamage` for weapons. Skill totals in `_prepareSkillData` when the item is owned by an actor.
 
 ### Sheet Classes (`module/sheets/`)
@@ -118,15 +118,22 @@ Every meaningful change must consider **upgrade from the previous release versio
 
 A **unified modifier pipeline** aggregates contributions from conditions, feats, race, equipped items, and future sources into one **modifier bag** per actor. Design and deferred work: [.cursor/plans/future-features.md](../.cursor/plans/future-features.md) (Generalized modifier system — out of scope).
 
-- **Canonical keys:** `CONFIG.THIRDERA.modifierKeys` lists allowed keys (e.g. `ac`, `acLoseDex`, `speedMultiplier`, `saveFort`/`saveRef`/`saveWill`, `attack`/`attackMelee`/`attackRanged`, `naturalHealingPerDay`, `ability.str` … `ability.cha`, `skill.<skillKey>`). Only these keys are applied. The **`naturalHealingPerDay`** total is added to character level and to `actor.system.details.naturalHealingBonus` when computing daily natural healing in the **Take rest** flow (`getRestHealingAmount` in `module/logic/rest-healing.mjs`).
+- **Canonical keys:** `CONFIG.THIRDERA.modifierKeys` lists allowed keys (e.g. `ac`, `acLoseDex`, `speedMultiplier`, `saveFort`/`saveRef`/`saveWill`, `attack`/`attackMelee`/`attackRanged`, `naturalHealingPerDay`, **`initiative`**, `ability.str` … `ability.cha`, `skill.<skillKey>`). Only these keys are applied. The **`initiative`** total is summed with Dexterity modifier into `attributes.initiative.bonus` (used by the system initiative formula in `system.json`). The **`naturalHealingPerDay`** total is added to character level and to `actor.system.details.naturalHealingBonus` when computing daily natural healing in the **Take rest** flow (`getRestHealingAmount` in `module/logic/rest-healing.mjs`).
 - **Ability and skill keys:** Condition items (and later feats/equipped items) can use `ability.str`, `ability.dex`, etc. and `skill.<skillKey>` (e.g. `skill.hide`) in their `changes` array. The aggregator outputs per-key totals and breakdowns; character `prepareDerivedData` applies ability deltas to each ability’s **effective** (with breakdown), then recomputes **mod** before any other step uses ability mod. Skill modifiers from the bag are applied in the skill loop; modifier-only skills (no ranks) appear in an "Other skill modifiers" block with roll.
 - **Provider contract:** A **modifier-source provider** is a function `(actor) => Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>`. The aggregator runs all functions in `CONFIG.THIRDERA.modifierSourceProviders` and merges results.
-- **Usage:** Call `getActiveModifiers(actor)` once early in character or NPC `prepareDerivedData` (after base ability values); apply ability deltas and set mod; then use the same modifier bag for AC, speed, saves, attack, and skills. Race contributes via the built-in race provider (abilityAdjustments → ability.\* changes).
+- **Usage:** Call `getActiveModifiers(actor)` once early in character or NPC `prepareDerivedData` (after base ability values); apply ability deltas and set mod; then use the same modifier bag for AC, speed, saves, attack, initiative, and skills. Race contributes via the built-in race provider (abilityAdjustments → ability.\* changes).
 
 **Extending the modifier system:** You can add new modifier sources in two ways.
 
 1. **Register a provider function.** Push a function to `CONFIG.THIRDERA.modifierSourceProviders`. Each provider has signature `(actor) => Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>`. The aggregator runs all providers and merges contributions; only keys in the canonical set (see `CONFIG.THIRDERA.modifierKeys`) are applied. Example: a module that adds temporary spell effects could register a provider that returns one contribution per active spell with a `changes` array.
 2. **Item method `getModifierChanges(actor)`.** On any item type, implement `getModifierChanges(actor)` returning `{ applies: boolean, changes: Array<{ key: string, value: number, label?: string }> }`. The built-in item provider in the registry iterates `actor.items` and, when this method exists, calls it; when `applies === true`, it merges the returned `changes` with `label = item.name`. No change to the aggregator is required. Items can also use optional `system.changes` (same shape) and rely on the default item provider’s type-specific “applies” rules (e.g. feat: always; equipment/armor/weapon: when equipped; race: when this is the actor’s race).
+
+### Initiative and combat
+
+- **`system.json`:** The `initiative` property is the roll formula string passed to Foundry’s combat pipeline (e.g. `Combatant.getInitiativeRoll`). Third Era sets it to **`1d20 + @attributes.initiative.bonus`**. `@` references resolve against **`actor.getRollData()`**, which returns the actor’s prepared **system** data, so the static bonus stays one source of truth with the sheet.
+- **Derived bonus:** In character and NPC `prepareDerivedData`, **`attributes.initiative.bonus`** = Dexterity modifier + **`getActiveModifiers(actor).totals.initiative`** (GMS key **`initiative`** from feats, conditions, equipped items, etc.).
+- **Document class:** Do **not** override **`rollInitiative`** on **ThirdEraActor** unless the implementation ends by delegating to **`super.rollInitiative(options)`** for the normal combat path; otherwise the combat tracker will not receive rolled totals.
+- **Sheet:** **Roll initiative** on the character and NPC Combat tabs (`data-action="rollInitiativeCombat"`) calls **`await this.actor.rollInitiative({ createCombatants: true })`** (`module/sheets/actor-sheet.mjs`). Requires a viewed scene for combatant creation; notifications use **`THIRDERA.SheetCombat.*`** in `lang/en.json`.
 
 ### Rest and natural healing
 
@@ -247,3 +254,31 @@ Manual test steps for combined attack & damage roll and Apply using the damage t
 
 4. **Separate damage message unchanged**
    - Roll only damage from the sheet (Damage d6 button). Confirm the Apply button still appears and uses the single roll total (unchanged from Phase 2).
+
+## Testing initiative and combat tracker
+
+Manual regression for system initiative formula, Foundry combat integration, sheet button, and GMS **`initiative`** contributions.
+
+1. **Formula and sheet display**
+   - Open a character with known Dex mod and no extra initiative modifiers. On **Combat**, note **Initiative** bonus; it should equal Dex mod.
+   - Add a feat or condition with **`initiative`** in mechanical effects (e.g. Improved Initiative +4). Reload/reprepare; bonus should be Dex + total from modifiers (tooltip/breakdown if shown).
+
+2. **Combat tracker and core controls**
+   - As GM, start or select an encounter on the current scene. Add tokens, use Foundry’s combat tracker to **roll initiative** (or “Roll NPCs”).
+   - **Expected:** Rolled total matches **1d20 +** the actor’s **`attributes.initiative.bonus`** (same as sheet). Chat uses Foundry’s initiative flavor; combatant **initiative** values update.
+
+3. **Sheet — Roll initiative**
+   - With tokens for the actor on the scene and an active combat, open the character or NPC sheet → **Combat** → **Roll initiative**.
+   - **Expected:** Combatants created for tokens if missing; this actor’s combatants roll; tracker totals match the formula. If there is no active scene, the sheet should warn (switch to a scene first).
+
+4. **Linked vs unlinked tokens**
+   - Repeat from the sheet with a **linked** token and an **unlinked** duplicate if applicable; confirm Foundry’s usual per-combatant behavior (one roll per combatant tied to the correct actor/token context).
+
+5. **No active combat / permissions**
+   - With no encounter started, **Roll initiative** should surface Foundry’s “no active combat” style warning (or system notification), not a silent failure.
+   - As a player, only combatants you own should roll when using tracker or sheet (Foundry skips others).
+
+6. **Contributors — optional local checklist**
+   - The repository **gitignores** `docs/` for optional local notes. You may copy this section into `docs/testing/initiative-and-combat-tracker-testing.md` if you keep checklists there; the committed source of this checklist is this page.
+
+**Compendium / world copies:** Updated SRD feat JSON in the system pack (e.g. Improved Initiative `changes`) applies on loader refresh; **world copies** of the same feat may need re-import or manual **`changes`** to pick up pack fixes.

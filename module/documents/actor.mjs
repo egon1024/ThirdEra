@@ -176,22 +176,6 @@ export class ThirdEraActor extends Actor {
     }
 
     /**
-     * Roll initiative for this actor
-     */
-    async rollInitiative(options = {}) {
-        const initBonus = this.system.attributes.initiative.bonus;
-
-        const roll = await new Roll(`1d20 + ${initBonus}`).roll();
-
-        roll.toMessage({
-            speaker: ChatMessage.getSpeaker({ actor: this }),
-            flavor: "Initiative"
-        });
-
-        return roll;
-    }
-
-    /**
      * Roll a natural attack (NPC/monster stat block). Uses derived attack bonus (primary = melee total, secondary = melee total − 5).
      * @param {number} index - Index into system.statBlock.naturalAttacks
      * @returns {Promise<Roll|null>}

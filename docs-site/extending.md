@@ -31,6 +31,8 @@ The system uses a **unified modifier pipeline**: conditions, feats, race, and eq
 
 **Natural healing (Take rest):** To grant extra hit points recovered per day of rest, use the canonical modifier key **`naturalHealingPerDay`** in `changes` (same shape as other GMS keys). The **Take rest** dialog sums `getActiveModifiers(actor).totals.naturalHealingPerDay` with character level and the character’s **`system.details.naturalHealingBonus`** field. See [Development — Rest and natural healing](development.md#rest-and-natural-healing) and [Character sheet — Spellcasting](usage/characters.md#spellcasting).
 
+**Initiative (combat):** Use the canonical key **`initiative`** in feat, condition, or equipped-item `changes` for flat bonuses or penalties (e.g. Improved Initiative +4, Deafened −4). The character and NPC data models add the aggregated total to Dexterity mod for `attributes.initiative.bonus`. The package **`initiative`** formula in `system.json` must stay aligned with that field (default: `1d20 + @attributes.initiative.bonus`); Foundry evaluates `@` paths from the actor’s roll data (`getRollData()` → system). See [Development — Initiative and combat](development.md#initiative-and-combat).
+
 For GM-facing world options (e.g. track currency weight, audit log, first-level full HP), see **[World configuration](usage/world-configuration.md)** in the Usage section.
 
 ## Changing the core code
