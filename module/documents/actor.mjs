@@ -176,6 +176,82 @@ export class ThirdEraActor extends Actor {
     }
 
     /**
+     * Find the actor's Concentration skill item: match `system.key === "concentration"` first, then display name "Concentration".
+     * @returns {Item|null}
+     */
+    _findConcentrationSkillItem() {
+        const byKey = this.items.find(
+            (i) => i.type === "skill" && (i.system?.key ?? "").toLowerCase() === "concentration"
+        );
+        if (byKey) return byKey;
+        return this.items.find((i) => i.type === "skill" && i.name === "Concentration") ?? null;
+    }
+
+    /**
+     * Roll a Concentration check (same bonus resolution as skill items / modifier-only skills).
+     * Flavor mirrors {@link ThirdEraActor#rollSavingThrow}: modifier, optional `vs DC N`, and success/failure when `dc` is finite.
+     * @param {Object} [options={}]
+     * @param {number} [options.dc] - DC to compare the roll total against (e.g. defensive casting)
+     * @param {string} [options.label] - Optional prefix (e.g. reason for the check)
+     * @returns {Promise<Roll|null>}
+     */
+    async rollConcentrationCheck({ dc, label } = {}) {
+        const skillItem = this._findConcentrationSkillItem();
+        let total;
+        let displayName;
+        let modifiersOnly = false;
+
+        if (skillItem) {
+            const skillData = skillItem.system;
+            total = (skillData.modifier?.total != null && Number.isFinite(skillData.modifier.total))
+                ? skillData.modifier.total
+                : (this.system.abilities[skillData.ability]?.mod || 0) + (skillData.ranks || 0) + (skillData.modifier?.misc || 0);
+            displayName = skillItem.name;
+        } else {
+            const entry = this.system.modifierOnlySkills?.find(
+                (e) => (e.key || "").toLowerCase() === "concentration"
+            );
+            if (entry) {
+                const skillRef = game.items?.find?.(
+                    (i) => i.type === "skill" && (i.system?.key ?? "").toLowerCase() === (entry.key || "").toLowerCase()
+                );
+                const abilityId = skillRef?.system?.ability || "con";
+                const abilityMod = this.system.abilities[abilityId]?.mod ?? 0;
+                total = abilityMod + (entry.total ?? 0);
+                displayName = skillRef?.name ?? entry.key;
+                modifiersOnly = true;
+            } else {
+                ui.notifications.warn(game.i18n.localize("THIRDERA.Concentration.NoSkillItem"));
+                return null;
+            }
+        }
+
+        const roll = await new Roll(`1d20 + ${total}`).roll();
+        const modSigned = total >= 0 ? `+${total}` : String(total);
+        const flavorKey = modifiersOnly
+            ? "THIRDERA.Concentration.CheckFlavorModifiersOnly"
+            : "THIRDERA.Concentration.CheckFlavor";
+        let flavor = game.i18n.format(flavorKey, { name: displayName, mod: modSigned });
+        if (label) {
+            flavor = `${label}: ${flavor}`;
+        }
+        if (typeof dc === "number" && Number.isFinite(dc)) {
+            flavor += ` vs DC ${dc}`;
+            const rolled = Math.round(roll.total * 100) / 100;
+            const success = rolled >= dc;
+            const resultKey = success ? "THIRDERA.SpellSave.SaveResultSuccess" : "THIRDERA.SpellSave.SaveResultFailure";
+            flavor += ` — ${game.i18n.localize(resultKey)}`;
+        }
+
+        roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            flavor
+        });
+
+        return roll;
+    }
+
+    /**
      * Roll a natural attack (NPC/monster stat block). Uses derived attack bonus (primary = melee total, secondary = melee total − 5).
      * @param {number} index - Index into system.statBlock.naturalAttacks
      * @returns {Promise<Roll|null>}

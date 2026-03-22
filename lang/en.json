@@ -169,6 +169,11 @@
             "SaveResultSuccess": "Success",
             "SaveResultFailure": "Failure"
         },
+        "Concentration": {
+            "CheckFlavor": "{name} Check ({mod})",
+            "CheckFlavorModifiersOnly": "{name} Check ({mod}) (modifiers only)",
+            "NoSkillItem": "This character has no Concentration skill. Add the Concentration skill item, or configure Concentration under modifier-only skills."
+        },
         "NPC": {
             "CreatureType": "Creature Type",
             "Subtypes": "Subtypes",
