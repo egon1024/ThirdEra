@@ -80,7 +80,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             editImage: ThirdEraActorSheet.#onEditImage,
             editTokenImage: ThirdEraActorSheet.#onEditTokenImage,
             applyDamageHealing: ThirdEraActorSheet.#onApplyDamageHealing,
-            applyDamageHealingToThisToken: ThirdEraActorSheet.#onApplyDamageHealingToThisToken
+            applyDamageHealingToThisToken: ThirdEraActorSheet.#onApplyDamageHealingToThisToken,
+            rollInitiativeCombat: ThirdEraActorSheet.#onRollInitiativeCombat
         },
         window: {
             resizable: true,
@@ -4309,6 +4310,50 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const hp = actor?.system?.attributes?.hp;
         if (!actor || !hp || typeof hp.value !== "number" || typeof hp.max !== "number") return;
         ApplyDamageHealingDialog.openWithOptions({ targetActors: [actor] });
+    }
+
+    /**
+     * Create combatants for this actor’s scene tokens if needed, then roll initiative via Foundry’s core flow.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRollInitiativeCombat(event, target) {
+        try {
+            const actor = this.actor;
+            const combat = game.combat;
+
+            if (!combat && !game.user.isGM) {
+                ui.notifications.warn(game.i18n.localize("COMBAT.NoneActive"));
+                return;
+            }
+            if (!combat && game.user.isGM && !canvas?.scene) {
+                ui.notifications.warn(game.i18n.localize("THIRDERA.SheetCombat.RollInitiativeNeedScene"));
+                return;
+            }
+
+            if (combat) {
+                const tokens = actor.getActiveTokens();
+                const willAddToken = tokens.some(t => !t.inCombat);
+                if (!willAddToken) {
+                    const relevant = combat.combatants.filter(c =>
+                        actor.isToken ? c.token?.id === actor.token?.id : c.actor?.id === actor.id
+                    );
+                    const owned = relevant.filter(c => c.isOwner);
+                    if (owned.length && owned.every(c => c.initiative !== null)) {
+                        ui.notifications.info(game.i18n.localize("THIRDERA.SheetCombat.InitiativeAlreadyRolled"));
+                        return;
+                    }
+                }
+            }
+
+            await actor.rollInitiative({ createCombatants: true, initiativeOptions: {} });
+        } catch (err) {
+            console.error("ThirdEra rollInitiativeCombat failed", err);
+            const fallback = game.i18n.localize("THIRDERA.SheetCombat.RollInitiativeFailed");
+            const msg = err?.message ? `${fallback} ${err.message}` : fallback;
+            ui.notifications.error(msg);
+        }
     }
 
     /**
