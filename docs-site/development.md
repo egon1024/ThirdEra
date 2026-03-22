@@ -161,9 +161,22 @@ See **[Compendium guide](compendium-guide.md)** for the full guide.
 - **Dialog API:** `Dialog.render(true)` is **not** a Promise. Attach handlers after render (e.g. `requestAnimationFrame` + `setTimeout`); prefer event delegation.
 - **Item stacking:** Stack when same name/type, same `containerId`, same `equipped`, same type-specific props; containers don't stack. Use helpers like `_canStackItems`, `_findStackableItem`, `_splitItemStack`; quantity UI for actions on stacks.
 
-### Spell cast and roll save (chat message flags)
+### Spell cast chat (message flags: save, concentration)
 
-When a character casts a spell, the posted chat message includes **`flags.thirdera.spellCast`** with: `dc` (number), `saveType` (`"fort"` | `"ref"` | `"will"` | `null`), `spellName`, `spellUuid`, and optionally `targetActorUuids` (actor UUIDs of targets when casting with tokens selected). The **Roll save** button and context menu (see `module/logic/spell-save-from-chat.mjs`) read this payload to offer the correct save type and DC; when targets exist, per-target "Roll save (Name)" buttons roll for that actor. Extenders can rely on this flag shape when adding custom spell-cast messages or tools that react to spell casts.
+When a character casts a spell, the posted chat message includes **`flags.thirdera.spellCast`** with:
+
+| Field | Purpose |
+| ----- | ------- |
+| `dc` | Save DC (number) |
+| `saveType` | `"fort"` \| `"ref"` \| `"will"` \| `null` |
+| `spellName`, `spellUuid` | Display and document reference |
+| `targetActorUuids` | Optional: UUIDs of targeted actors when casting with tokens selected |
+| `spellLevel` | Spell level (0–9) for this cast |
+| `classItemId` | Embedded class item id on the caster |
+| `casterLevel` | Caster level for that class at cast time |
+| `srKey` | Raw spell resistance setting from the spell item (`system.spellResistance`) for future automation |
+
+The **Roll save** button and context menu (`module/logic/spell-save-from-chat.mjs`) use `dc`, `saveType`, and `targetActorUuids`. **Concentration** (`module/logic/concentration-from-chat.mjs`) uses `spellLevel` and the message **speaker** as the caster: **Concentration (defensive)** rolls vs DC 15 + spell level (see `module/logic/concentration-dcs.mjs`); **Concentration (other)…** opens a dialog for damage-based DC (10 + damage + spell level) or a custom DC. Right‑click the message → **Roll Concentration…** opens the same dialog. Only the **owner** of the speaker actor (or a GM) sees these controls. Rolls use `ThirdEraActor#rollConcentrationCheck` (`module/documents/actor.mjs`), which requires a Concentration skill item or a modifier-only Concentration entry. Extenders can rely on this flag shape when adding custom spell-cast messages or tools that react to spell casts.
 
 ## Testing Apply damage/healing (Phase 2)
 
@@ -282,3 +295,42 @@ Manual regression for system initiative formula, Foundry combat integration, she
    - The repository **gitignores** `docs/` for optional local notes. You may copy this section into `docs/testing/initiative-and-combat-tracker-testing.md` if you keep checklists there; the committed source of this checklist is this page.
 
 **Compendium / world copies:** Updated SRD feat JSON in the system pack (e.g. Improved Initiative `changes`) applies on loader refresh; **world copies** of the same feat may need re-import or manual **`changes`** to pick up pack fixes.
+
+## Testing concentration from chat
+
+Manual regression for defensive concentration, custom/damage DC dialog, context menu, validation, permissions, and missing Concentration skill. **Code:** `module/logic/concentration-from-chat.mjs`, `module/logic/concentration-dcs.mjs`, `ThirdEraActor#rollConcentrationCheck` in `module/documents/actor.mjs`.
+
+1. **Setup**
+   - Load the Third Era system; hard-refresh the browser (`Ctrl+Shift+R`) after pulling changes.
+   - Use a PC you **own** (or GM) with spellcasting and at least one spell on **Ready to cast**.
+   - Ensure the actor has a **Concentration** skill item **or** a **modifier-only** Concentration entry (Attributes → Skills, “Other skill modifiers”).
+
+2. **Cast message and buttons**
+   - Cast a spell from **Ready to cast**. Confirm the chat card shows **Concentration (defensive)** (tooltip: DC 15 + spell level) and **Concentration (other)…**.
+
+3. **Defensive roll**
+   - Click **Concentration (defensive)**. **Expected:** Chat roll with “Defensive casting” in the flavor, **vs DC** = 15 + that spell’s level, success/failure vs that DC.
+
+4. **Other dialog — damage DC**
+   - Click **Concentration (other)…**; enter **Damage** = `7`, leave **Custom DC** empty; **Roll**. **Expected:** DC = 10 + 7 + spell level; flavor mentions damage while casting.
+
+5. **Other dialog — custom DC**
+   - Open again; leave **Damage** empty; **Custom DC** = `18`; **Roll**. **Expected:** vs DC 18; “Custom DC” style label in flavor.
+
+6. **Both fields (damage wins)**
+   - Set **Damage** = `5` and **Custom DC** = `99`; **Roll**. **Expected:** DC uses 10 + 5 + spell level, not 99.
+
+7. **Validation**
+   - Leave both fields empty; **Roll**. **Expected:** Warning; dialog stays open. Enter valid values and roll successfully.
+   - Invalid **Damage** (negative or non-numeric): warning, dialog stays open.
+
+8. **Context menu**
+   - Right‑click the cast message → **Roll Concentration…**. **Expected:** Same dialog as **Concentration (other)…**.
+
+9. **Permissions**
+   - As a user who is **not** GM and **not** owner of the caster: concentration controls should **not** appear on that message (or should not apply).
+
+10. **No Concentration configured**
+    - On an actor without Concentration skill and without modifier-only Concentration, attempt a roll. **Expected:** `THIRDERA.Concentration.NoSkillItem` notification; no roll.
+
+**Optional local copy:** The repo **gitignores** `docs/` for contributor-only notes. You may copy this section into `docs/testing/concentration-from-chat-testing.md` if you keep checklists there; the committed source is this page.

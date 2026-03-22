@@ -70,17 +70,20 @@ async function rollSaveWithActorPicker(saveType, dc, preselectedActorUuid) {
         content,
         buttons: {
             roll: {
-                icon: "fas fa-dice-d20",
+                // Dialog V1 template renders {{{button.icon}}} as HTML; a bare class string shows up as button text.
+                icon: '<i class="fas fa-dice-d20"></i>',
                 label: game.i18n.localize("THIRDERA.SpellSave.RollSave"),
                 callback: async (html) => {
-                    const uuid = html.querySelector("[name=actorUuid]")?.value;
+                    const uuid =
+                        (typeof html?.find === "function" && html.find('select[name="actorUuid"]').val?.()) ||
+                        html?.querySelector?.('select[name="actorUuid"]')?.value;
                     if (!uuid) return;
                     const chosen = await foundry.utils.fromUuid(uuid);
                     if (chosen?.rollSavingThrow) await chosen.rollSavingThrow(saveType, { dc });
                 }
             },
             cancel: {
-                icon: "fas fa-times",
+                icon: '<i class="fas fa-times"></i>',
                 label: game.i18n.localize("Cancel")
             }
         }

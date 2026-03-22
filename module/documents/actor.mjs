@@ -2,6 +2,18 @@ import { getSpellsForDomain } from "../logic/domain-spells.mjs";
 import { parseSaveType } from "../logic/spell-save-helpers.mjs";
 
 /**
+ * HTML for Success/Failure in roll flavor (chat template renders flavor with triple braces).
+ * @param {boolean} success
+ * @returns {string}
+ */
+function htmlRollDcOutcome(success) {
+    const resultKey = success ? "THIRDERA.SpellSave.SaveResultSuccess" : "THIRDERA.SpellSave.SaveResultFailure";
+    const text = foundry.utils.escapeHTML(game.i18n.localize(resultKey));
+    const mod = success ? "thirdera-roll-outcome--success" : "thirdera-roll-outcome--failure";
+    return `<span class="thirdera-roll-outcome ${mod}">${text}</span>`;
+}
+
+/**
  * Extended Actor document class for Third Era
  * @extends {Actor}
  */
@@ -163,8 +175,7 @@ export class ThirdEraActor extends Actor {
             flavor += ` vs DC ${dc}`;
             const total = Math.round(roll.total * 100) / 100;
             const success = total >= dc;
-            const resultKey = success ? "THIRDERA.SpellSave.SaveResultSuccess" : "THIRDERA.SpellSave.SaveResultFailure";
-            flavor += ` — ${game.i18n.localize(resultKey)}`;
+            flavor += ` — ${htmlRollDcOutcome(success)}`;
         }
 
         roll.toMessage({
@@ -239,8 +250,7 @@ export class ThirdEraActor extends Actor {
             flavor += ` vs DC ${dc}`;
             const rolled = Math.round(roll.total * 100) / 100;
             const success = rolled >= dc;
-            const resultKey = success ? "THIRDERA.SpellSave.SaveResultSuccess" : "THIRDERA.SpellSave.SaveResultFailure";
-            flavor += ` — ${game.i18n.localize(resultKey)}`;
+            flavor += ` — ${htmlRollDcOutcome(success)}`;
         }
 
         roll.toMessage({

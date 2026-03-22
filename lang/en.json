@@ -172,7 +172,26 @@
         "Concentration": {
             "CheckFlavor": "{name} Check ({mod})",
             "CheckFlavorModifiersOnly": "{name} Check ({mod}) (modifiers only)",
-            "NoSkillItem": "This character has no Concentration skill. Add the Concentration skill item, or configure Concentration under modifier-only skills."
+            "NoSkillItem": "This character has no Concentration skill. Add the Concentration skill item, or configure Concentration under modifier-only skills.",
+            "RollDefensiveButton": "Concentration (defensive)",
+            "RollDefensiveHint": "Roll Concentration vs DC {dc} (defensive casting)",
+            "DefensiveCastingLabel": "Defensive casting",
+            "NoCasterOrPermission": "Could not roll Concentration (caster missing or no permission).",
+            "RollOtherButton": "Concentration (other)…",
+            "RollOtherHint": "Concentration with custom DC or damage taken while casting",
+            "RollConcentrationContextMenu": "Roll Concentration…",
+            "OtherDialogTitle": "Concentration check",
+            "OtherSpellLevelNote": "Spell level for this cast: {level} (used in the damage-based DC).",
+            "OtherDamageLabel": "Damage taken (optional)",
+            "OtherDamageHint": "If set, DC = 10 + damage + spell level. If both damage and custom DC are set, damage is used.",
+            "OtherCustomDcLabel": "Custom DC (optional)",
+            "OtherCustomDcHint": "Use for entangled, weather, or any fixed DC. Ignored if damage is filled.",
+            "OtherNeedDcOrDamage": "Enter damage taken or a custom DC.",
+            "OtherInvalidDamage": "Damage taken must be a number ≥ 0.",
+            "OtherInvalidCustomDc": "Custom DC must be a number.",
+            "OtherRoll": "Roll",
+            "DamageWhileCastingLabel": "Damage while casting ({damage} hp)",
+            "CustomDcLabel": "Custom DC"
         },
         "NPC": {
             "CreatureType": "Creature Type",

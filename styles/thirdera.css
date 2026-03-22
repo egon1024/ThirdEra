@@ -34,6 +34,12 @@
   /* Icons on light background (e.g. condition list) */
   --color-condition-icon: var(--color-text-primary);
 
+  /* Skills subtab (Attributes): inline actions + default item art on parchment */
+  --color-sheet-skills-row-action-icon: var(--color-character-border);
+  --color-sheet-skills-row-action-icon-hover: var(--color-hover);
+  /* Default item/skill thumbnails are often light-on-dark; darken for light sheet bg (see also spell list) */
+  --filter-sheet-skills-item-image: brightness(0);
+
   /* Status indicators */
   --color-modified: #b8860b;
   --color-equipped: #2d8a4e;
@@ -2608,15 +2614,19 @@
 
 /* Phase 2: Apply button on chat roll messages */
 .thirdera-apply-from-chat-wrap,
-.thirdera-spell-save-from-chat-wrap {
+.thirdera-spell-save-from-chat-wrap,
+.thirdera-concentration-from-chat-wrap {
   margin-top: 0.25em;
 }
-.thirdera-spell-save-from-chat-wrap button + button {
+.thirdera-spell-save-from-chat-wrap button + button,
+.thirdera-concentration-from-chat-wrap button + button {
   margin-left: 0.35em;
 }
 .thirdera-chat-apply-btn,
 .thirdera-apply-damage-healing-from-chat,
-.thirdera-spell-save-from-chat {
+.thirdera-spell-save-from-chat,
+.thirdera-concentration-from-chat,
+.thirdera-concentration-other-from-chat {
   padding: 0.2em 0.5em;
   font-size: var(--font-size-12);
   cursor: pointer;
@@ -2626,8 +2636,20 @@
 }
 .thirdera-chat-apply-btn:hover,
 .thirdera-apply-damage-healing-from-chat:hover,
-.thirdera-spell-save-from-chat:hover {
+.thirdera-spell-save-from-chat:hover,
+.thirdera-concentration-from-chat:hover,
+.thirdera-concentration-other-from-chat:hover {
   background: var(--color-popup-hover-bg);
+}
+
+/* Save / concentration rolls vs DC: colored outcome in flavor (triple-brace HTML) */
+.chat-message .flavor-text .thirdera-roll-outcome--success {
+  color: var(--color-level-success, #26b231);
+  font-weight: var(--font-weight-bold, 600);
+}
+.chat-message .flavor-text .thirdera-roll-outcome--failure {
+  color: var(--color-level-error, #ce0707);
+  font-weight: var(--font-weight-bold, 600);
 }
 
 /* Checkbox groups — labels inline with checkboxes */
@@ -3231,6 +3253,20 @@
   font-size: var(--font-size-label);
   color: var(--color-modified);
   font-weight: var(--font-weight-bold);
+}
+
+/* Attributes → Skills: FA controls and thumbnails (contrast on parchment; overrides theme leakage) */
+.thirdera .abilities .subtab[data-tab="skills"] .items-list .item .item-controls a {
+  color: var(--color-sheet-skills-row-action-icon);
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .items-list .item .item-controls a:hover {
+  color: var(--color-sheet-skills-row-action-icon-hover);
+  text-shadow: 0 0 8px var(--color-sheet-skills-row-action-icon-hover);
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list .item .item-image img {
+  filter: var(--filter-sheet-skills-item-image);
 }
 
 /* Skill reference lists (class skills on class sheet, excluded skills on race sheet) */

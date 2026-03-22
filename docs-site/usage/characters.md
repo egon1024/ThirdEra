@@ -52,6 +52,8 @@ If a character has one or more classes with spellcasting enabled:
 
 **Rolling saves from a spell cast:** When the spell has a saving throw (e.g. Fortitude, Reflex, or Will), the cast message in chat shows a **Roll save (…)** button. Click it to open a dialog where you choose which actor rolls the save; the roll is made against the spell's DC. You can also right‑click the message and choose "Roll save vs. spell DC" for the same dialog. If you **select one or more tokens** on the canvas before casting (e.g. the intended targets), the cast message instead lists **Target(s): …** and shows a **Roll save (Name)** button for each target; clicking one rolls that character's or creature's save immediately, with no picker. When no tokens are selected (or when casting from a macro), you get the single Roll save button and picker.
 
+**Concentration from a spell cast:** The same cast message can show **Concentration (defensive)** (DC 15 + spell level, for casting defensively) and **Concentration (other)…** (opens a dialog: damage taken for DC 10 + damage + spell level, or a fixed custom DC). Right‑click the message and choose **Roll Concentration…** for the same dialog as “other.” You must **own** the caster (or be GM). The character needs the **Concentration** skill or a modifier-only Concentration entry under **Attributes → Skills**; otherwise the system warns and does not roll.
+
 Spells are added to the character by dragging from the Spells compendium (or from the Spell List browser). Classes with a “learned” spell list (e.g. wizard) do not auto-add all spells when you add the class; you add spells to the character as the character learns them.
 
 ## Applying damage and healing
