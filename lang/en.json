@@ -156,6 +156,11 @@
             "ChatSummaryResetCast": "Reset cast counts for {count} spell(s).",
             "ChatSummaryResetPrepared": "Reset prepared counts for {count} spell(s)."
         },
+        "SpellPenetration": {
+            "Flavor": "Spell penetration ({cl})",
+            "VsSR": " vs SR {sr}",
+            "InvalidSpellResistance": "Spell penetration requires a numeric spell resistance (SR)."
+        },
         "SpellSave": {
             "RollSave": "Roll save",
             "RollSaveVsDC": "Roll save vs DC",

@@ -6,12 +6,14 @@ This page is the single reference for **[contributors](contributing.md)** workin
 
 ThirdEra is a **Foundry VTT game system** implementing D&D 3.5 Edition using the System Reference Document (SRD). It targets **Foundry VTT v13** and uses the **ApplicationV2 / HandlebarsApplicationMixin** sheet framework (not the legacy Application v1). **Only SRD content is intended to be implemented - no proprietary data outside the SRD.** The system is designed so that third-party compendiums or modules can extend it.
 
-There is no build step, bundler, or package manager. The system is plain ES modules + CSS + Handlebars templates, loaded directly by Foundry VTT at runtime.
+There is no build step, bundler, or package manager **for the system at runtime**. The system is plain ES modules + CSS + Handlebars templates, loaded directly by Foundry VTT at runtime.
+
+**Automated testing** is the **next development priority**: the roadmap expects a small **dev-only** test setup (e.g. Node + a unit-test runner) for pure logic under `module/logic/`, with optional in-Foundry testing (e.g. Quench) documented in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Authoritative ordering and scope notes: [.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md) (Planned — Automated testing framework). Automated tests will **complement**, not replace, in-world checks after reload.
 
 ## Development Setup
 
 - Symlink or copy this repository into Foundry VTT `Data/systems/` as `thirdera/`. Foundry resolves paths relative to `systems/thirdera/` (e.g. template paths use `"systems/thirdera/templates/..."`).
-- No tests, linters, or build commands. Test by reloading the Foundry VTT world in-browser (F5 or "Reload" in developer tools).
+- **Today:** there is no automated test suite or linter in the repo yet. Verify behavior by reloading the Foundry VTT world in-browser (F5 or "Reload" in developer tools). When the test framework lands, contributor docs here will note how to run it.
 
 ## Architecture
 
@@ -30,7 +32,7 @@ Derived data (ability modifiers, save totals, grapple, initiative) is calculated
 
 ### Document Classes (`module/documents/`)
 
-- **ThirdEraActor** (actor.mjs) - Extends `Actor`. Roll methods: `rollAbilityCheck`, `rollSavingThrow`, `rollSkillCheck`. **Initiative** uses Foundry’s inherited `Actor.rollInitiative` (no override) so combatants and chat messages stay in sync with the combat tracker. Delegates to type-specific `_prepareCharacterData` / `_prepareNPCData`.
+- **ThirdEraActor** (actor.mjs) - Extends `Actor`. Roll methods: `rollAbilityCheck`, `rollSavingThrow`, `rollSkillCheck`, `rollConcentrationCheck`, `rollSpellPenetration`. **Initiative** uses Foundry’s inherited `Actor.rollInitiative` (no override) so combatants and chat messages stay in sync with the combat tracker. Delegates to type-specific `_prepareCharacterData` / `_prepareNPCData`.
 - **ThirdEraItem** (item.mjs) - Extends `Item`. `rollAttack` / `rollDamage` for weapons. Skill totals in `_prepareSkillData` when the item is owned by an actor.
 
 ### Sheet Classes (`module/sheets/`)
@@ -176,163 +178,8 @@ When a character casts a spell, the posted chat message includes **`flags.thirde
 | `casterLevel` | Caster level for that class at cast time |
 | `srKey` | Raw spell resistance setting from the spell item (`system.spellResistance`) for future automation |
 
-**Spell resistance helpers** (`module/logic/spell-resistance-helpers.mjs`): `getActorSpellResistance(actor)` returns the numeric SR for **NPCs** (`system.statBlock.spellResistance`) and **characters** (`system.details.spellResistance`), otherwise `0`. `spellAllowsPenetrationRoll(srKey)` is `true` only for `yes` and `yes-harmless`. For `yes-harmless`, automation still exposes penetration when B3/B4 land: willingness and “harmless” are adjudicated at the table: the GM skips or ignores the roll when SR does not apply.
+**Spell resistance helpers** (`module/logic/spell-resistance-helpers.mjs`): `getActorSpellResistance(actor)` returns the numeric SR for **NPCs** (`system.statBlock.spellResistance`) and **characters** (`system.details.spellResistance`), otherwise `0`. `spellAllowsPenetrationRoll(srKey)` is `true` only for `yes` and `yes-harmless`. For `yes-harmless`, automation still exposes penetration when B4 lands: willingness and “harmless” are adjudicated at the table: the GM skips or ignores the roll when SR does not apply.
+
+**Spell penetration roll:** `ThirdEraActor#rollSpellPenetration({ casterLevel, spellResistance, label })` (`module/documents/actor.mjs`) rolls **`1d20 + casterLevel`** (CL truncated; non-finite CL → 0) against the given **SR** (truncated, non-negative). SRD: the check **succeeds if the total meets or exceeds SR**. Chat flavor shows CL bonus, “vs SR *N*”, and **Success** / **Failure** (same styling as spell saves). Invalid non-numeric `spellResistance` aborts with a notification and returns `null`. Cast-chat SR UI (B4) will call this API.
 
 The **Roll save** button and context menu (`module/logic/spell-save-from-chat.mjs`) use `dc`, `saveType`, and `targetActorUuids`. **Concentration** (`module/logic/concentration-from-chat.mjs`) uses `spellLevel` and the message **speaker** as the caster: **Concentration (defensive)** rolls vs DC 15 + spell level (see `module/logic/concentration-dcs.mjs`); **Concentration (other)…** opens a dialog for damage-based DC (10 + damage + spell level) or a custom DC. Right‑click the message → **Roll Concentration…** opens the same dialog. Only the **owner** of the speaker actor (or a GM) sees these controls. Rolls use `ThirdEraActor#rollConcentrationCheck` (`module/documents/actor.mjs`), which requires a Concentration skill item or a modifier-only Concentration entry. Extenders can rely on this flag shape when adding custom spell-cast messages or tools that react to spell casts.
-
-## Testing Apply damage/healing (Phase 2)
-
-Manual test steps for the Apply damage/healing entry points (chat, sheet, “to this token”, macro).
-
-1. **Setup**
-   - Load the Third Era system and a world (e.g. 3rd-era-testworld).
-   - Have at least one character and one NPC (or two tokens) with HP (value/max) and, for NPCs, temp HP if needed.
-   - Place tokens on a scene so you can select them.
-
-2. **Apply from sheet (targets from selection)**
-   - Open a character or NPC sheet; go to the **Combat** tab.
-   - Confirm **“Apply damage/healing”** is visible.
-   - Select one or more tokens on the canvas that have HP.
-   - Click **“Apply damage/healing”**. The Apply dialog should open with those tokens listed as targets, amount blank, type Damage/Healing.
-   - Enter an amount, choose Damage or Healing, click **Apply**. Confirm HP (and temp HP for damage) update and a short notification appears.
-   - Repeat with no tokens selected: dialog should open with no targets (and show “Select one or more tokens…”).
-
-3. **Apply to this token (single target from sheet)**
-   - Open the sheet of an actor that has at least one token on the current scene.
-   - On the Combat tab, confirm **“Apply to this token”** is visible (only when the actor has a token in the scene).
-   - Click **“Apply to this token”**. The Apply dialog should open with that actor as the only target, amount blank.
-   - Enter amount, apply; confirm that actor’s HP updates.
-
-4. **Apply from chat (amount from roll)**
-   - Roll damage or healing from the sheet (e.g. weapon damage, or a manual roll that posts to chat with a “Damage” or “Healing” flavor).
-   - On the chat message, confirm an **“Apply”** button appears.
-   - Select one or more target tokens (they will be used when the dialog opens).
-   - Click **“Apply”**. The Apply dialog should open with amount pre-filled from the roll total and type Damage or Healing inferred from the message flavor.
-   - Confirm targets (from selection), adjust if needed, click **Apply**; confirm HP updates.
-   - Right‑click the same message and confirm the context menu includes **“Apply”**; choose it and confirm the same behavior.
-
-5. **Macro / console**
-   - In the console or a macro, run `game.thirdera.applyDamageHealing.openDialog()`. Dialog should open with targets from current selection.
-   - Run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 5, mode: "healing" })`. Dialog should open with amount 5, Healing, and targets from selection.
-   - Run `game.thirdera.applyDamageHealing.openWithOptions({ targetActors: [actor] })` with an actor reference. Dialog should open with that actor as the only target.
-
-6. **Permissions**
-   - As a player, select a token you do not own. Open Apply from sheet or chat and try to apply. You should be blocked or see a “no permission” message if the system restricts applying to tokens you cannot edit.
-
-## Testing Apply damage/healing (Phase 3)
-
-Manual test steps for temp HP (damage to temp first), nonlethal damage, and healing that reduces nonlethal (SRD: heal lethal first, remainder heals nonlethal).
-
-1. **Setup**
-   - Use the same world and tokens as Phase 2. Ensure at least one NPC has **Temp HP** > 0 (set on Combat tab) and note current HP value/max and temp.
-
-2. **Temp HP — damage to temp first**
-   - Select a token with temp HP (e.g. 5 temp, 10/10 HP). Open Apply damage/healing (sheet or macro), enter an amount less than temp (e.g. 3), choose **Damage**, click **Apply**.
-   - **Expected:** Only temp HP decreases (e.g. 5 → 2). Current HP stays 10. Notification: “Applied 3 damage to 1 target(s).”
-   - Apply damage greater than remaining temp (e.g. 5 more). **Expected:** Temp goes to 0, remainder reduces current HP (e.g. 10 → 8). Notification as above.
-   - Optionally apply damage that would reduce HP below 0: **Expected:** HP is clamped to −9 (dying) or 0 (dead) per SRD.
-
-3. **Nonlethal damage**
-   - Select a token with 0 nonlethal. Open Apply dialog, enter amount (e.g. 4), choose **Damage**, check **“Apply as nonlethal damage”**, click **Apply**.
-   - **Expected:** Current HP and temp HP unchanged. **Nonlethal** on the sheet (Combat tab) and in the header (if present) shows 4. Notification: “Applied 4 nonlethal damage to 1 target(s).”
-   - Apply more nonlethal (e.g. 3). **Expected:** Nonlethal is cumulative (e.g. 4 → 7). HP and temp still unchanged.
-   - Confirm the “Apply as nonlethal damage” checkbox is visible when **Damage** is selected and hidden when **Healing** is selected (including after switching the type radio).
-
-4. **Healing — lethal first, remainder heals nonlethal**
-   - Use a token with current HP below max and some nonlethal (e.g. 6/10 HP, 5 nonlethal). Open Apply dialog, enter 3, choose **Healing**, click **Apply**.
-   - **Expected:** Lethal is healed first: 6 → 9 HP. No remainder, so nonlethal stays 5.
-   - Apply 5 healing. **Expected:** 1 point heals lethal (9 → 10), 4 points reduce nonlethal (5 → 1). Final: 10/10 HP, 1 nonlethal.
-   - Apply 2 more healing. **Expected:** No lethal to heal; both points reduce nonlethal (1 → 0). Final: 10/10 HP, 0 nonlethal.
-
-5. **Sheets and macro**
-   - On character and NPC sheets, Combat tab: confirm **Nonlethal** field is present and editable. In header, when nonlethal > 0, confirm “(N NL)” appears (e.g. “(5 NL)”).
-   - In console run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })`. **Expected:** Dialog opens with amount 2, Damage selected, “Apply as nonlethal damage” checked. Apply and confirm nonlethal increases on target.
-
-## Testing Apply damage/healing (Phase 4)
-
-Manual test steps for combined attack & damage roll and Apply using the damage total; and for `openWithOptions` passing `nonlethal`.
-
-1. **openWithOptions nonlethal (Phase 3 completion)**
-   - In console run `game.thirdera.applyDamageHealing.openWithOptions({ amount: 2, mode: "damage", nonlethal: true })`.
-   - **Expected:** Dialog opens with amount 2, Damage selected, **“Apply as nonlethal damage” checked**. Apply and confirm nonlethal increases on the selected target.
-
-2. **Attack & Damage button**
-   - Open a character or NPC sheet; go to the Combat tab and the weapons list.
-   - Confirm a third roll button (burst icon) with title **“Attack & Damage”** appears next to the Attack (d20) and Damage (d6) buttons for each weapon.
-   - Click **“Attack & Damage”** for a weapon. **Expected:** One chat message is posted containing both an attack roll and a damage roll, with flavor like “Longsword Attack & Damage (Primary)”.
-
-3. **Apply from combined message**
-   - After posting an Attack & Damage message, confirm an **“Apply”** button appears on that message.
-   - Select one or more target tokens on the canvas.
-   - Click **“Apply”**. **Expected:** The Apply dialog opens with the **damage roll total** (not attack + damage) in the Amount field and Damage selected.
-   - Click **Apply** and confirm the target’s HP decreases by that damage total (temp HP first if present).
-
-4. **Separate damage message unchanged**
-   - Roll only damage from the sheet (Damage d6 button). Confirm the Apply button still appears and uses the single roll total (unchanged from Phase 2).
-
-## Testing initiative and combat tracker
-
-Manual regression for system initiative formula, Foundry combat integration, sheet button, and GMS **`initiative`** contributions.
-
-1. **Formula and sheet display**
-   - Open a character with known Dex mod and no extra initiative modifiers. On **Combat**, note **Initiative** bonus; it should equal Dex mod.
-   - Add a feat or condition with **`initiative`** in mechanical effects (e.g. Improved Initiative +4). Reload/reprepare; bonus should be Dex + total from modifiers (tooltip/breakdown if shown).
-
-2. **Combat tracker and core controls**
-   - As GM, start or select an encounter on the current scene. Add tokens, use Foundry’s combat tracker to **roll initiative** (or “Roll NPCs”).
-   - **Expected:** Rolled total matches **1d20 +** the actor’s **`attributes.initiative.bonus`** (same as sheet). Chat uses Foundry’s initiative flavor; combatant **initiative** values update.
-
-3. **Sheet — Roll initiative**
-   - With tokens for the actor on the scene and an active combat, open the character or NPC sheet → **Combat** → **Roll initiative**.
-   - **Expected:** Combatants created for tokens if missing; this actor’s combatants roll; tracker totals match the formula. If there is no active scene, the sheet should warn (switch to a scene first).
-
-4. **Linked vs unlinked tokens**
-   - Repeat from the sheet with a **linked** token and an **unlinked** duplicate if applicable; confirm Foundry’s usual per-combatant behavior (one roll per combatant tied to the correct actor/token context).
-
-5. **No active combat / permissions**
-   - With no encounter started, **Roll initiative** should surface Foundry’s “no active combat” style warning (or system notification), not a silent failure.
-   - As a player, only combatants you own should roll when using tracker or sheet (Foundry skips others).
-
-6. **Contributors — optional local checklist**
-   - The repository **gitignores** `docs/` for optional local notes. You may copy this section into `docs/testing/initiative-and-combat-tracker-testing.md` if you keep checklists there; the committed source of this checklist is this page.
-
-**Compendium / world copies:** Updated SRD feat JSON in the system pack (e.g. Improved Initiative `changes`) applies on loader refresh; **world copies** of the same feat may need re-import or manual **`changes`** to pick up pack fixes.
-
-## Testing concentration from chat
-
-Manual regression for defensive concentration, custom/damage DC dialog, context menu, validation, permissions, and missing Concentration skill. **Code:** `module/logic/concentration-from-chat.mjs`, `module/logic/concentration-dcs.mjs`, `ThirdEraActor#rollConcentrationCheck` in `module/documents/actor.mjs`.
-
-1. **Setup**
-   - Load the Third Era system; hard-refresh the browser (`Ctrl+Shift+R`) after pulling changes.
-   - Use a PC you **own** (or GM) with spellcasting and at least one spell on **Ready to cast**.
-   - Ensure the actor has a **Concentration** skill item **or** a **modifier-only** Concentration entry (Attributes → Skills, “Other skill modifiers”).
-
-2. **Cast message and buttons**
-   - Cast a spell from **Ready to cast**. Confirm the chat card shows **Concentration (defensive)** (tooltip: DC 15 + spell level) and **Concentration (other)…**.
-
-3. **Defensive roll**
-   - Click **Concentration (defensive)**. **Expected:** Chat roll with “Defensive casting” in the flavor, **vs DC** = 15 + that spell’s level, success/failure vs that DC.
-
-4. **Other dialog — damage DC**
-   - Click **Concentration (other)…**; enter **Damage** = `7`, leave **Custom DC** empty; **Roll**. **Expected:** DC = 10 + 7 + spell level; flavor mentions damage while casting.
-
-5. **Other dialog — custom DC**
-   - Open again; leave **Damage** empty; **Custom DC** = `18`; **Roll**. **Expected:** vs DC 18; “Custom DC” style label in flavor.
-
-6. **Both fields (damage wins)**
-   - Set **Damage** = `5` and **Custom DC** = `99`; **Roll**. **Expected:** DC uses 10 + 5 + spell level, not 99.
-
-7. **Validation**
-   - Leave both fields empty; **Roll**. **Expected:** Warning; dialog stays open. Enter valid values and roll successfully.
-   - Invalid **Damage** (negative or non-numeric): warning, dialog stays open.
-
-8. **Context menu**
-   - Right‑click the cast message → **Roll Concentration…**. **Expected:** Same dialog as **Concentration (other)…**.
-
-9. **Permissions**
-   - As a user who is **not** GM and **not** owner of the caster: concentration controls should **not** appear on that message (or should not apply).
-
-10. **No Concentration configured**
-    - On an actor without Concentration skill and without modifier-only Concentration, attempt a roll. **Expected:** `THIRDERA.Concentration.NoSkillItem` notification; no roll.
-
-**Optional local copy:** The repo **gitignores** `docs/` for contributor-only notes. You may copy this section into `docs/testing/concentration-from-chat-testing.md` if you keep checklists there; the committed source is this page.

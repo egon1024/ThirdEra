@@ -262,6 +262,43 @@ export class ThirdEraActor extends Actor {
     }
 
     /**
+     * Spell penetration check (D&D 3.5 SRD): {@code 1d20 + caster level} must meet or exceed the target’s spell resistance.
+     * @param {Object} [options={}]
+     * @param {number} [options.casterLevel] - Caster level for this spell (truncated integer; non-finite defaults to 0)
+     * @param {number} [options.spellResistance] - Target SR (required; non-negative integer after normalization)
+     * @param {string} [options.label] - Optional prefix in roll flavor (e.g. spell name)
+     * @returns {Promise<Roll|null>}
+     */
+    async rollSpellPenetration({ casterLevel, spellResistance, label } = {}) {
+        const clRaw = Number(casterLevel);
+        const cl = Number.isFinite(clRaw) ? Math.trunc(clRaw) : 0;
+        const srRaw = Number(spellResistance);
+        if (!Number.isFinite(srRaw)) {
+            ui.notifications.warn(game.i18n.localize("THIRDERA.SpellPenetration.InvalidSpellResistance"));
+            return null;
+        }
+        const sr = Math.max(0, Math.trunc(srRaw));
+
+        const roll = await new Roll(`1d20 + ${cl}`).roll();
+        const clSigned = cl >= 0 ? `+${cl}` : String(cl);
+        let flavor = game.i18n.format("THIRDERA.SpellPenetration.Flavor", { cl: clSigned });
+        if (label) {
+            flavor = `${label}: ${flavor}`;
+        }
+        flavor += game.i18n.format("THIRDERA.SpellPenetration.VsSR", { sr });
+        const total = Math.round(roll.total * 100) / 100;
+        const success = total >= sr;
+        flavor += ` — ${htmlRollDcOutcome(success)}`;
+
+        roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            flavor
+        });
+
+        return roll;
+    }
+
+    /**
      * Roll a natural attack (NPC/monster stat block). Uses derived attack bonus (primary = melee total, secondary = melee total − 5).
      * @param {number} index - Index into system.statBlock.naturalAttacks
      * @returns {Promise<Roll|null>}
