@@ -23,7 +23,7 @@ There is no build step, bundler, or package manager. The system is plain ES modu
 
 Each file defines a `TypeDataModel` subclass with static `defineSchema()` using Foundry field classes (`NumberField`, `StringField`, `SchemaField`, `HTMLField`, etc.).
 
-- **Actor types**: `CharacterData` (actor-character.mjs), `NPCData` (actor-npc.mjs)
+- **Actor types**: `CharacterData` (actor-character.mjs), `NPCData` (actor-npc.mjs). **Spell resistance (numeric):** PCs store `system.details.spellResistance` (integer ≥ 0, default 0; character sheet **Attributes → Details**); NPCs use `system.statBlock.spellResistance`.
 - **Item types**: `WeaponData`, `ArmorData`, `EquipmentData`, `SpellData`, `FeatData`, `SkillData`, `RaceData`, `ClassData`, `FeatureData`
 
 Derived data (ability modifiers, save totals, grapple, initiative) is calculated in `prepareDerivedData()` on the data models, not on document classes.
@@ -37,7 +37,7 @@ Derived data (ability modifiers, save totals, grapple, initiative) is calculated
 
 Both use **ApplicationV2**: `HandlebarsApplicationMixin(ActorSheetV2)` / `HandlebarsApplicationMixin(ItemSheetV2)`.
 
-- **ThirdEraActorSheet** (actor-sheet.mjs) - Single PARTS entry; template swapped in `_configureRenderParts()` by actor type (character vs npc). Actions: static private methods in `DEFAULT_OPTIONS.actions`.
+- **ThirdEraActorSheet** (actor-sheet.mjs) - Single PARTS entry; template swapped in `_configureRenderParts()` by actor type (character vs npc). Actions: static private methods in `DEFAULT_OPTIONS.actions`. **Unlinked tokens:** the sheet document is a synthetic actor (ActorDelta). Character **Attributes → Details** fields (size, natural healing bonus, spell resistance, current XP) are mirrored to the world `Actor` on submit and removed from the synthetic update so the same PC opened from the Actors sidebar stays in sync (same pattern as dropping a condition onto a token sheet targeting the world actor).
 - **ThirdEraItemSheet** (item-sheet.mjs) - Template per item type (`item-${type}-sheet.hbs`). `submitOnChange: true` for auto-saving.
 
 Tab switching is manual via a `changeTab` action (not Foundry's built-in tab system).

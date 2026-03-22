@@ -57,6 +57,13 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                     min: 0,
                     initial: 0,
                     label: "Natural healing bonus (per day)"
+                }),
+                spellResistance: new NumberField({
+                    required: true,
+                    integer: true,
+                    min: 0,
+                    initial: 0,
+                    label: "Spell Resistance"
                 })
             }),
 
@@ -162,8 +169,13 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
     /** @override */
     static migrateData(source) {
-        if (source.details && source.details.naturalHealingBonus === undefined) {
-            source.details.naturalHealingBonus = 0;
+        if (source.details) {
+            if (source.details.naturalHealingBonus === undefined) {
+                source.details.naturalHealingBonus = 0;
+            }
+            if (source.details.spellResistance === undefined) {
+                source.details.spellResistance = 0;
+            }
         }
         return super.migrateData(source);
     }
