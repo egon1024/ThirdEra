@@ -254,6 +254,11 @@ export class ThirdEraActor extends Actor {
      * @param {number|string} options.spellLevel  Spell level 0-9 for this class
      * @param {Actor[]|string[]} [options.targetActors]  Optional targets (Actor docs or actor UUIDs); stored on message for Roll save
      * @returns {Promise<boolean>}   True if cast was applied and message posted
+     *
+     * Chat message `flags.thirdera.spellCast` includes (for consumers such as concentration / SR UI):
+     * `dc`, `saveType`, `spellName`, `spellUuid`, optional `targetActorUuids`,
+     * `spellLevel` (0–9), `classItemId` (embedded class item id on this actor), `casterLevel` (for that class at cast time),
+     * `srKey` (spell item's spell resistance key, e.g. yes/no/yes-harmless).
      */
     async castSpell(spellItem, { classItemId, spellLevel, targetActors: rawTargets }) {
         if (!spellItem || spellItem.type !== "spell") return false;
@@ -387,11 +392,19 @@ export class ThirdEraActor extends Actor {
 </div>`;
 
         const saveType = parseSaveType(spellItem.system.savingThrow);
+        const casterLevelRaw = classData.casterLevel;
+        const casterLevel =
+            typeof casterLevelRaw === "number" && Number.isFinite(casterLevelRaw) ? Math.max(0, Math.floor(casterLevelRaw)) : 0;
+
         const spellCastFlags = {
             dc: totalDC,
             saveType,
             spellName,
-            spellUuid: spellItem.uuid ?? null
+            spellUuid: spellItem.uuid ?? null,
+            spellLevel: level,
+            classItemId,
+            casterLevel,
+            srKey: srKey || ""
         };
         if (targetActorUuids.length > 0) {
             spellCastFlags.targetActorUuids = targetActorUuids;
