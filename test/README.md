@@ -48,10 +48,10 @@ When you change a **covered** module, add or update tests in the matching `test/
 | Command | Purpose |
 |---------|---------|
 | `make test` | Same as `npm test` — run all tests once (fast; no coverage). |
-| `make test-coverage` | Same as `npm run test:coverage` — **v8** coverage; writes **`coverage/`** (HTML: `coverage/index.html`, LCOV: `coverage/lcov.info`). **Validate** CI uses this target. |
+| `make test-coverage` | Same as `npm run test:coverage` — **v8** coverage, **minimum thresholds** (see `coverage.thresholds` in [`vitest.config.mjs`](../vitest.config.mjs)); writes **`coverage/`** (HTML: `coverage/index.html`, LCOV: `coverage/lcov.info`). Fails if coverage is below the configured floors. **Validate** CI uses this target. |
 | `npm test` / `npm run test:coverage` | Direct npm invocations; equivalent to the `make` targets above. |
 | `npm run test:watch` | Re-run tests on change (local only). |
 
-Coverage **includes** `module/logic/**`, `module/utils/**`, and `module/data/_*.mjs`, but **excludes** modules we do not intend to cover in Node (Foundry chat hooks, packs, audit log, `_ac-helpers`, etc.) — see `coverage.exclude` in [`vitest.config.mjs`](../vitest.config.mjs). The headline percentage reflects **unit-test-in-scope** files; open the HTML report for per-file detail. When you add Vitest coverage for a previously excluded file, remove its path from `coverage.exclude`.
+Coverage **includes** `module/logic/**`, `module/utils/**`, and `module/data/_*.mjs`, but **excludes** modules we do not intend to cover in Node (Foundry chat hooks, packs, audit log, `_ac-helpers`, etc.) — see `coverage.exclude` in [`vitest.config.mjs`](../vitest.config.mjs). **`coverage.thresholds`** enforces minimum **lines**, **statements**, **branches**, and **functions** over that scoped set (CI and local **`make test-coverage`**). The headline percentage reflects **unit-test-in-scope** files; open the HTML report for per-file detail. When you add Vitest coverage for a previously excluded file, remove its path from `coverage.exclude`.
 
-**CI:** The **Validate** workflow’s **`unit-tests`** job runs **`make test-coverage`** and uploads `coverage/` as **`coverage-report`**. Other jobs: **`lint`** (placeholder for a future `npm run lint`), **`static-validation`** (JSON, JS syntax, templates).
+**CI:** **Validate** runs **`unit-tests`** (**`make test`**) and a separate **`coverage`** job (**`make test-coverage`**, thresholds + artifact **`coverage-report`**). Also **`lint`** (placeholder), **`static-validation`** (JSON, JS syntax, templates).

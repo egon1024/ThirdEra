@@ -5,7 +5,26 @@ on:
     types: [opened, synchronize]
 
 jobs:
+  # Fast gate: Vitest only (no coverage instrumentation).
   unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: make test
+
+  # Re-runs the suite with v8 coverage, enforces thresholds, uploads HTML/LCOV.
+  coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

@@ -24,7 +24,15 @@ export default defineConfig({
                 "module/logic/domain-spells.mjs",
                 // Needs Foundry-shaped actor graph; defer until extracted or CONFIG-injected tests.
                 "module/data/_ac-helpers.mjs"
-            ]
+            ],
+            // Enforced by `npm run test:coverage` / `make test-coverage` (CI **coverage** job).
+            // Floors are intentionally conservative for now; raise when the suite stabilizes.
+            thresholds: {
+                lines: 66,
+                statements: 66,
+                branches: 66,
+                functions: 66
+            }
         }
     }
 });
