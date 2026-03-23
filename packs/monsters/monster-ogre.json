@@ -1,0 +1,177 @@
+{
+  "name": "Ogre",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterOgre",
+    "creatureTypeKey": "giant",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Attack:</strong> Greatclub +8 melee (2d8+7) or javelin +1 ranged (1d8+5).</p><p><strong>Special:</strong> Darkvision 60 ft.; low-light vision.</p>",
+      "environment": "Temperate hills",
+      "organization": "Solitary, pair, gang, or band",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 2
+    },
+    "attributes": {
+      "hp": {
+        "value": 29,
+        "max": 29,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 1,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 1,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Adult ogres stand 9 to 10 feet tall and weigh 600 to 650 pounds. Their skin color ranges from dull yellow to dull brown. Their clothing consists of poorly cured furs and hides, which add to their naturally repellent odor.</p><p>Ogres speak Giant, and those specimens who boast Intelligence scores of at least 10 also speak Common.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Hide Armor",
+      "type": "armor",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>Hide armor is prepared from animal skin.</p>",
+        "armor": {
+          "type": "medium",
+          "bonus": 3,
+          "maxDex": 4,
+          "checkPenalty": -3,
+          "spellFailure": 20
+        },
+        "size": "Medium",
+        "speed": {
+          "ft30": 20,
+          "ft20": 15
+        },
+        "cost": 15,
+        "weight": 25,
+        "quantity": 1,
+        "equipped": "true",
+        "containerId": ""
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -36,7 +36,7 @@ Each compendium pack must be declared in `system.json` under the `"packs"` array
 - `name`: Must use underscores, not dots (e.g., `thirdera_races` not `thirdera.races`) for Foundry V14 compatibility
 - `label`: Display name shown in the Compendium sidebar
 - `path`: Relative path to the directory containing JSON source files
-- `type`: Document type (`"Item"` for all ThirdEra compendiums)
+- `type`: Document type — **`"Item"`** for races, classes, spells, etc.; **`"Actor"`** for the **Monsters (SRD)** pack (`thirdera_monsters`, NPC actors).
 - `system`: System ID (`"thirdera"`)
 - `ownership`: **REQUIRED** - Without this, compendiums won't be visible in the UI. Defines permissions for each user role.
 - `banner`: **Optional.** A file path to a banner image shown behind each compendium entry in the Compendium sidebar (and in the compendium window header when opened). If omitted, Foundry uses the default for the pack type (e.g. the same generic Item banner for all Item packs).
@@ -124,6 +124,15 @@ static FILE_MAPPINGS = {
 ```
 
 **Important**: Keys must match Foundry's collection IDs (`systemId.packName`).
+
+<a id="monster-npc-compendium-thirdera_monsters"></a>
+
+## Monster (NPC) compendium (`thirdera_monsters`)
+
+- **Pack:** `thirdera_monsters` — **`type`: `"Actor"`**, folder `packs/monsters/`.
+- **Stable key:** Each NPC must have **`system.key`** (e.g. `monsterGoblin`) so the compendium loader can update the same entry across reloads (same pattern as item `system.key`).
+- **Creature type / subtypes (authoring):** Source JSON may use **`system.creatureTypeKey`** (matches **Creature Type** item `system.key`, e.g. `humanoid`, `magicalBeast`) and **`system.subtypeKeys`** (array of **Subtype** item keys, e.g. `goblinoid`, `fire`). On load, the compendium loader resolves these to **`creatureTypeUuid`** and **`subtypeUuids`** using the **Creature Types** and **Subtypes** packs, then removes the authoring keys.
+- **Regenerating JSON:** Run `python3 scripts/build-monster-pack-json.py` from the repo root to rewrite the starter SRD monster files after editing the generator.
 
 ## JSON File Structure
 

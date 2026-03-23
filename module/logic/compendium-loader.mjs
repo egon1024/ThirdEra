@@ -4,6 +4,7 @@
  * Matching is by stable key (system.key, or conditionId for conditions, or name fallback).
  */
 import { parseSpellFields, applyParsedSpellFields } from "./spell-description-parser.mjs";
+import { resolveMonsterPackNpcKeys } from "./monster-pack-keys.mjs";
 
 /**
  * Returns a stable key for matching compendium documents (incoming JSON or existing).
@@ -362,8 +363,44 @@ export class CompendiumLoader {
             "subtype-earth.json", "subtype-evil.json", "subtype-fire.json", "subtype-good.json",
             "subtype-lawful.json", "subtype-native.json", "subtype-shapechanger.json", "subtype-water.json",
             "subtype-goblinoid.json", "subtype-reptilian.json"
+        ],
+        "thirdera.thirdera_monsters": [
+            "monster-basilisk.json",
+            "monster-bugbear.json",
+            "monster-chimera.json",
+            "monster-displacer-beast.json",
+            "monster-dire-wolf.json",
+            "monster-fire-elemental-large.json",
+            "monster-ghoul.json",
+            "monster-goblin.json",
+            "monster-griffon.json",
+            "monster-hobgoblin.json",
+            "monster-kobold.json",
+            "monster-manticore.json",
+            "monster-minotaur.json",
+            "monster-ogre.json",
+            "monster-orc.json",
+            "monster-owlbear.json",
+            "monster-skeleton-human-warrior.json",
+            "monster-troll.json",
+            "monster-wight.json",
+            "monster-zombie-human-commoner.json"
         ]
     };
+
+    /**
+     * Remove invalid embedded item _id values (Foundry expects 16-char alphanumeric).
+     * @param {object} data - Root document data from JSON
+     */
+    static sanitizeCompendiumDocumentForImport(data) {
+        if (!data || typeof data !== "object") return;
+        if (!Array.isArray(data.items)) return;
+        for (const item of data.items) {
+            if (item?._id && typeof item._id === "string" && !/^[a-zA-Z0-9]{16}$/.test(item._id)) {
+                delete item._id;
+            }
+        }
+    }
 
     /**
      * Initialize compendiums by loading JSON files
@@ -442,7 +479,8 @@ export class CompendiumLoader {
                 if (jsonData._id && !jsonData._id.match(/^[a-zA-Z0-9]{16}$/)) {
                     delete jsonData._id;
                 }
-                
+                CompendiumLoader.sanitizeCompendiumDocumentForImport(jsonData);
+
                 // Spells: populate Range, Target, Duration, Saving Throw from description when blank or "See text"
                 if (jsonData.type === "spell" && jsonData.system) {
                     const current = {
@@ -494,6 +532,37 @@ export class CompendiumLoader {
                             delete entry.featKeys;
                         }
                     }
+                }
+            }
+        }
+
+        // Monsters (NPC actors): resolve creatureTypeKey / subtypeKeys to UUIDs from type packs
+        if (documents.length > 0 && pack.collection === "thirdera.thirdera_monsters") {
+            const typesPack = game.packs.get("thirdera.thirdera_creature_types");
+            const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
+            const typeKeyToUuid = new Map();
+            const subtypeKeyToUuid = new Map();
+            if (typesPack) {
+                const typeDocs = await typesPack.getDocuments();
+                for (const doc of typeDocs) {
+                    const k = doc.system?.key;
+                    if (k != null && String(k).trim() !== "") {
+                        typeKeyToUuid.set(String(k).trim(), doc.uuid);
+                    }
+                }
+            }
+            if (subtypesPack) {
+                const subtypeDocs = await subtypesPack.getDocuments();
+                for (const doc of subtypeDocs) {
+                    const k = doc.system?.key;
+                    if (k != null && String(k).trim() !== "") {
+                        subtypeKeyToUuid.set(String(k).trim(), doc.uuid);
+                    }
+                }
+            }
+            for (const docData of documents) {
+                if (docData.type === "npc" && docData.system) {
+                    resolveMonsterPackNpcKeys(docData.system, typeKeyToUuid, subtypeKeyToUuid);
                 }
             }
         }

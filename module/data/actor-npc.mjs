@@ -10,6 +10,9 @@ import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
 export class NPCData extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
+            /** Stable id for compendium matching and migrations (e.g. monster-goblin). */
+            key: new StringField({ required: true, blank: true, initial: "" }),
+
             // Ability Scores (base + optional racial adjustment; effective and mod derived)
             abilities: new SchemaField({
                 str: new SchemaField({
