@@ -2622,18 +2622,21 @@
 /* Phase 2: Apply button on chat roll messages */
 .thirdera-apply-from-chat-wrap,
 .thirdera-spell-save-from-chat-wrap,
-.thirdera-concentration-from-chat-wrap {
+.thirdera-concentration-from-chat-wrap,
+.thirdera-spell-penetration-from-chat-wrap {
   margin-top: 0.25em;
 }
 .thirdera-spell-save-from-chat-wrap button + button,
-.thirdera-concentration-from-chat-wrap button + button {
+.thirdera-concentration-from-chat-wrap button + button,
+.thirdera-spell-penetration-from-chat-wrap button + button {
   margin-left: 0.35em;
 }
 .thirdera-chat-apply-btn,
 .thirdera-apply-damage-healing-from-chat,
 .thirdera-spell-save-from-chat,
 .thirdera-concentration-from-chat,
-.thirdera-concentration-other-from-chat {
+.thirdera-concentration-other-from-chat,
+.thirdera-spell-penetration-from-chat {
   padding: 0.2em 0.5em;
   font-size: var(--font-size-12);
   cursor: pointer;
@@ -2645,7 +2648,8 @@
 .thirdera-apply-damage-healing-from-chat:hover,
 .thirdera-spell-save-from-chat:hover,
 .thirdera-concentration-from-chat:hover,
-.thirdera-concentration-other-from-chat:hover {
+.thirdera-concentration-other-from-chat:hover,
+.thirdera-spell-penetration-from-chat:hover {
   background: var(--color-popup-hover-bg);
 }
 

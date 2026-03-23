@@ -42,6 +42,7 @@ import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-hea
 import "./module/logic/apply-damage-healing-entry-points.mjs";
 import "./module/logic/spell-save-from-chat.mjs";
 import "./module/logic/concentration-from-chat.mjs";
+import "./module/logic/spell-sr-from-chat.mjs";
 
 /**
  * Initialize HP auto-increase system

@@ -1,3 +1,8 @@
+import {
+    backfillCharacterSystemChangeObject,
+    backfillCharacterSystemSourceForActor,
+    backfillCharacterSystemSourceInPlace
+} from "../logic/character-system-source-backfill.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
 import { parseSaveType } from "../logic/spell-save-helpers.mjs";
 
@@ -47,6 +52,27 @@ export class ThirdEraActor extends Actor {
         // things organized
         if (actorData.type === 'character') this._prepareCharacterData(actorData);
         if (actorData.type === 'npc') this._prepareNPCData(actorData);
+    }
+
+    /** @inheritdoc */
+    async _preUpdate(changed, options, user) {
+        if (this.type === "character") {
+            const curSys = this.system?._source ?? this._source?.system;
+            // Embedded Item updates often send `items` on the Actor without `system`; validation still needs
+            // `details` / `experience` on the merged model.
+            if (changed?.items && !changed?.system) {
+                changed.system = {
+                    details: foundry.utils.deepClone(curSys?.details ?? {}),
+                    experience: foundry.utils.deepClone(curSys?.experience ?? { value: 0, max: 1000 })
+                };
+                backfillCharacterSystemSourceInPlace(changed.system);
+            }
+            if (changed?.system) {
+                backfillCharacterSystemChangeObject(changed.system, this);
+            }
+            backfillCharacterSystemSourceForActor(this);
+        }
+        return super._preUpdate(changed, options, user);
     }
 
     /**

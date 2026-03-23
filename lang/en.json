@@ -159,7 +159,17 @@
         "SpellPenetration": {
             "Flavor": "Spell penetration ({cl})",
             "VsSR": " vs SR {sr}",
-            "InvalidSpellResistance": "Spell penetration requires a numeric spell resistance (SR)."
+            "InvalidSpellResistance": "Spell penetration requires a numeric spell resistance (SR).",
+            "RollVsTarget": "Spell penetration vs {name} (SR {sr})",
+            "RollVsTargetHint": "Roll spell penetration as the caster vs {name} (SR {sr})",
+            "RollPickerButton": "Spell penetration…",
+            "RollPickerHint": "Choose a creature whose spell resistance applies",
+            "ChooseTarget": "Target",
+            "DialogTitle": "Spell penetration",
+            "RollButton": "Roll",
+            "NoSrTarget": "No creature with spell resistance is available to select.",
+            "NoCasterOrPermission": "Could not roll spell penetration (caster missing or no permission).",
+            "ContextMenu": "Roll spell penetration…"
         },
         "SpellSave": {
             "RollSave": "Roll save",

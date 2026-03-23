@@ -1,4 +1,5 @@
 const { ArrayField, BooleanField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
+import { backfillCharacterSystemSourceInPlace } from "../logic/character-system-source-backfill.mjs";
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
@@ -52,14 +53,14 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 height: new StringField({ required: true, blank: true, initial: "", label: "Height" }),
                 weight: new StringField({ required: true, blank: true, initial: "", label: "Weight" }),
                 naturalHealingBonus: new NumberField({
-                    required: true,
+                    required: false,
                     integer: true,
                     min: 0,
                     initial: 0,
                     label: "Natural healing bonus (per day)"
                 }),
                 spellResistance: new NumberField({
-                    required: true,
+                    required: false,
                     integer: true,
                     min: 0,
                     initial: 0,
@@ -129,8 +130,8 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
             // Experience Points
             experience: new SchemaField({
-                value: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Current XP" }),
-                max: new NumberField({ required: true, integer: true, min: 0, initial: 1000, label: "XP for Next Level" })
+                value: new NumberField({ required: false, integer: true, min: 0, initial: 0, label: "Current XP" }),
+                max: new NumberField({ required: false, integer: true, min: 0, initial: 1000, label: "XP for Next Level" })
             }),
 
             // Class level advancement history (ordered by character level)
@@ -169,14 +170,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
     /** @override */
     static migrateData(source) {
-        if (source.details) {
-            if (source.details.naturalHealingBonus === undefined) {
-                source.details.naturalHealingBonus = 0;
-            }
-            if (source.details.spellResistance === undefined) {
-                source.details.spellResistance = 0;
-            }
-        }
+        // Foundry's schema migrateSource only walks keys that already exist on disk, so missing nested
+        // required fields never get defaults. Same backfill runs from preUpdate hooks on live documents.
+        backfillCharacterSystemSourceInPlace(source);
         return super.migrateData(source);
     }
 
@@ -184,6 +180,16 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
      * Prepare derived data for the character
      */
     prepareDerivedData() {
+        // `required: false` on some details/experience numbers allows partial merges; normalize for derived math/UI.
+        if (this.details) {
+            if (this.details.naturalHealingBonus == null) this.details.naturalHealingBonus = 0;
+            if (this.details.spellResistance == null) this.details.spellResistance = 0;
+        }
+        if (this.experience) {
+            if (this.experience.value == null) this.experience.value = 0;
+            if (this.experience.max == null) this.experience.max = 1000;
+        }
+
         // Base ability values only; racial and other modifiers flow through getActiveModifiers
         const race = this.parent.items.find(i => i.type === "race");
         for (const [key, ability] of Object.entries(this.abilities)) {
