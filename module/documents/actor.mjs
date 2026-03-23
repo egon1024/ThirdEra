@@ -127,11 +127,12 @@ export class ThirdEraActor extends Actor {
      * @param {string} skillKey - system.key of the skill (e.g. "hide")
      */
     async rollSkillCheckByKey(skillKey) {
-        if (!skillKey || !this.system.modifierOnlySkills?.length) {
-            ui.notifications.warn("No modifier-only skill data for that skill.");
+        if (!skillKey) {
+            ui.notifications.warn("No skill key provided.");
             return null;
         }
-        const entry = this.system.modifierOnlySkills.find(
+        const list = this.system.modifierOnlySkills ?? [];
+        const entry = list.find(
             (e) => (e.key || "").toLowerCase() === (skillKey || "").toLowerCase()
         );
         if (!entry) {

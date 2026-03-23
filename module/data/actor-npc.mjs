@@ -2,6 +2,7 @@ const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringFie
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
+import { prepareNpcSkillItems, buildModifierOnlySkills } from "../logic/npc-skill-prep.mjs";
 
 /**
  * Data model for D&D 3.5 NPC actors
@@ -263,6 +264,11 @@ export class NPCData extends foundry.abstract.TypeDataModel {
         // Apply armor AND load max-Dex cap to Dex modifier before any derived calculations
         const effectiveMaxDex = getEffectiveMaxDex(this, loadEffects.maxDex);
         applyMaxDex(this, effectiveMaxDex);
+
+        // Skills: ability + ranks + misc + ACP + GMS skill.<key> (no skill points / max ranks)
+        prepareNpcSkillItems(this.parent, mods, loadEffects);
+        const skillItems = this.parent.items.filter((i) => i.type === "skill");
+        this.modifierOnlySkills = buildModifierOnlySkills(mods, skillItems);
 
         // Calculate initiative (Dex + generalized modifier-system contributions)
         const initiativeMod = mods.totals.initiative ?? 0;

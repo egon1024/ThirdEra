@@ -275,7 +275,18 @@
             "RollSkill": "Roll skill check",
             "Search": "Search",
             "SearchPlaceholder": "Type to filter skills…",
-            "NoMatch": "No skills match."
+            "NoMatch": "No skills match.",
+            "AcpTooltip": "Armor check penalty (from worn armor and encumbrance; the worse of the two applies to skills that use ACP).",
+            "NpcSkillsHintPart1": "Embed skills from the sidebar or choose one below. Totals include armor/load ",
+            "NpcSkillsHintPart2": " and other modifiers.",
+            "AddSkill": "Add skill",
+            "AddSkillPlaceholder": "Choose a skill to add…",
+            "AddSkillInvalid": "That entry is not a valid skill.",
+            "AddSkillDuplicate": "{name} is already on {actor} (same skill key).",
+            "AddSkillFailed": "Failed to add skill. See the console (F12) for details.",
+            "SourceWorld": "World",
+            "NpcClassSkillShort": "Class skill",
+            "NpcClassSkillToggle": "When checked, this skill is treated as a class skill on this NPC (row styling and C / CC badge). New skills default to on."
         },
         "Features": {
             "classFeatures": "Class Features",

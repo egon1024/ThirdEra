@@ -29,6 +29,7 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 | `module/logic/condition-helpers.mjs` (`getActiveConditionModifiers` only) | `unit/logic/condition-helpers.test.mjs` |
 | `module/logic/derived-conditions.mjs` (`getDerivedHpConditionId`, `getDerivedFrom` only) | `unit/logic/derived-conditions.test.mjs` |
 | `module/logic/monster-pack-keys.mjs` (`resolveMonsterPackNpcKeys`) | `unit/logic/monster-pack-keys.test.mjs` |
+| `module/logic/npc-skill-prep.mjs` (`prepareNpcSkillItems`, `buildModifierOnlySkills`) | `unit/logic/npc-skill-prep.test.mjs` |
 | `module/utils/fuzzy.mjs` | `unit/utils/fuzzy.test.mjs` |
 | `module/data/_damage-helpers.mjs` | `unit/data/damage-helpers.test.mjs` |
 | `module/data/_encumbrance-helpers.mjs` | `unit/data/encumbrance-helpers.test.mjs` |

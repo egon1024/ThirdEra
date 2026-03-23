@@ -1,4 +1,4 @@
-const { NumberField, SchemaField, StringField, HTMLField } = foundry.data.fields;
+const { BooleanField, NumberField, SchemaField, StringField, HTMLField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Skill items
@@ -20,7 +20,10 @@ export class SkillData extends foundry.abstract.TypeDataModel {
 
             trainedOnly: new StringField({ required: true, blank: false, initial: "false", label: "Trained Only" }),
             armorCheckPenalty: new StringField({ required: true, blank: false, initial: "false", label: "Armor Check Penalty Applies" }),
-            exclusive: new StringField({ required: true, blank: false, initial: "false", label: "Exclusive (Class Skill Only)" })
+            exclusive: new StringField({ required: true, blank: false, initial: "false", label: "Exclusive (Class Skill Only)" }),
+
+            /** When embedded on an NPC, treat as a class skill for sheet badge/styling (default true). Ignored on PCs (class rules apply). */
+            npcClassSkill: new BooleanField({ required: true, initial: true, label: "NPC: class skill" })
         };
     }
 }

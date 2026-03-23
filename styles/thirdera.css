@@ -2430,6 +2430,12 @@
   align-items: center;
 }
 
+/* Skill name grows; class/column controls keep a stable width (NPC class column + PC badges) */
+.thirdera .skills-list .item .item-name > h4 {
+  flex: 1;
+  min-width: 0;
+}
+
 .thirdera .items-list .item .item-image {
   flex: 0 0 30px;
   margin-right: 10px;
@@ -3264,6 +3270,86 @@
   font-size: var(--font-size-label);
   color: var(--color-modified);
   font-weight: var(--font-weight-bold);
+}
+
+/* NPC Skills hint: expand ACP + readable modifier key example (override theme code blocks) */
+.thirdera .npc-skills-acp-abbr {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
+/* NPC Skills: add-skill row (dropdown) */
+.thirdera .npc-skills-add {
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 10px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.thirdera .npc-skills-add-label {
+  flex: 0 0 auto;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+}
+
+/* Cap width: select was stretching with flex: 1 across the sheet */
+.thirdera .npc-skills-add-select-wrap {
+  flex: 0 1 auto;
+  width: min(100%, 220px);
+  max-width: 220px;
+  min-width: 0;
+}
+
+.thirdera .npc-add-skill-select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* NPC Skills: class-skill strip — checkbox + label + C/CC in one row (wide enough to avoid stacking) */
+.thirdera .npc-skill-class-column {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 0 0 auto;
+  min-width: 12.5rem;
+  max-width: none;
+}
+
+.thirdera .npc-skill-class-toggle {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: var(--font-size-note);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.thirdera .npc-skill-class-toggle input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.thirdera .npc-skill-class-toggle-text {
+  white-space: nowrap;
+}
+
+.thirdera .npc-skill-class-column .npc-skill-class-badge {
+  margin-left: 0;
+  flex-shrink: 0;
 }
 
 /* Attributes → Skills: FA controls and thumbnails (contrast on parchment; overrides theme leakage) */
