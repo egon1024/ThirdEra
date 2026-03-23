@@ -22,7 +22,7 @@ sidebar:
 
 ## Automated tests (contributors)
 
-From the repository root, with **Node.js 20+**: run `npm ci` once (or `npm install`), then `npm test`. This matches the GitHub Actions **Validate** workflow. See **Development reference** → **Automated unit tests** in the [documentation](https://egon1024.github.io/ThirdEra/latest/) for details and policy.
+From the repository root, with **Node.js 20+**: run `npm ci` once (or `npm install`), then `npm test`. This matches the GitHub Actions **Validate** workflow. **What is / is not covered:** [`test/README.md`](test/README.md). See **Development reference** → **Automated unit tests** in the [documentation](https://egon1024.github.io/ThirdEra/latest/) for setup and policy.
 
 ## Documentation
 

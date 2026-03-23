@@ -26,7 +26,7 @@ There is no build step, bundler, or package manager **for the system at runtime*
 
 **Day-to-day:** After dependencies are installed, `npm test` alone is enough. Use `npm run test:watch` for interactive re-runs while editing (not used in CI).
 
-**Layout:** Test files use the `*.test.mjs` (or `*.spec.mjs`) suffix under `test/` (e.g. `test/unit/`). They import production code from `module/` via relative paths. **Currently covered in CI:** `concentration-dcs`, `xp-table`, `fuzzy` (see `test/unit/*.test.mjs`). The system’s `esmodules` entry is unchanged; `node_modules/` is dev-only and gitignored.
+**Layout:** Tests live under `test/unit/`, grouped to mirror code: `test/unit/logic/` → `module/logic/`, `test/unit/utils/` → `module/utils/`, `test/unit/data/` → `module/data/` helpers. Use the `*.test.mjs` (or `*.spec.mjs`) suffix. **`test/README.md`** lists **which production files are covered** and **which are intentionally out of scope** for Node (Foundry-only). The system’s `esmodules` entry is unchanged; `node_modules/` is dev-only and gitignored.
 
 **Policy:** Changes to behavioral logic under `module/logic/`, `module/utils/`, and pure `module/data/*_helpers.mjs` should include new or updated tests where practical. See [.cursor/rules/automated-tests-for-logic.mdc](../.cursor/rules/automated-tests-for-logic.mdc). Pull request validation runs `npm ci` and `npm test` together with the existing JSON, syntax, and template checks.
 

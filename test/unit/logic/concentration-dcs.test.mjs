@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { damageWhileCastingDc, defensiveDc } from "../../module/logic/concentration-dcs.mjs";
+import { damageWhileCastingDc, defensiveDc } from "../../../module/logic/concentration-dcs.mjs";
 
 describe("defensiveDc", () => {
     it("returns 15 + spell level for finite levels", () => {

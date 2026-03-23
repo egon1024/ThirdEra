@@ -4,7 +4,7 @@ import {
     getMidpointXpForLevel,
     getNextLevelXp,
     getXpForLevel
-} from "../../module/logic/xp-table.mjs";
+} from "../../../module/logic/xp-table.mjs";
 
 describe("SRD_XP_TABLE", () => {
     it("has 20 entries for levels 1–20", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fuzzyScore, levenshtein } from "../../module/utils/fuzzy.mjs";
+import { fuzzyScore, levenshtein } from "../../../module/utils/fuzzy.mjs";
 
 describe("levenshtein", () => {
     it("returns 0 for identical strings (case-insensitive)", () => {
