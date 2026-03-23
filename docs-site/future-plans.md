@@ -4,7 +4,7 @@ This page lists planned or possible work. Priorities can change. If you want to 
 
 ## In progress or explicitly planned
 
-- **Automated testing framework** — **Next development focus** (before the ordered combat/spell items below). Goal: automated tests for **practical** targets first—especially **pure or data-in/data-out** code under `module/logic/`—via a small dev-only toolchain (e.g. Node + a test runner). Optional **Quench** (tests inside Foundry) remains described in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Full ordering, expectations (what is easy vs hard to test), and the note that UI/E2E is not the first wave: **[.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md)** (section 2 — Planned). No replacement for manual in-world verification; reduces regression risk on rules and helpers.
+- **Automated testing framework** — Vitest, **`make test`** / **`make test-coverage`**, CI in **Validate**; **import-safe** coverage under `test/unit/` with an explicit matrix in **`test/README.md`** (repo root). Optional **Quench** (in-Foundry) in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Scope: **[.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md)** (section 2). No replacement for manual in-world verification.
 - **Equipment compendium** — Complete or refine the Equipment pack. The [Compendium guide](compendium-guide.md) lists it as “Incomplete.”
 - **Feat prerequisites by UUID** — Ensure all feat prerequisites use document ID/UUID (not name or key), per the project’s [item-references rule](development.md#item-references). The script `scripts/apply-feat-prerequisites.mjs` is related.
 
