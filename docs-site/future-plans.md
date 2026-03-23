@@ -4,7 +4,7 @@ This page lists planned or possible work. Priorities can change. If you want to 
 
 ## In progress or explicitly planned
 
-- **Automated testing framework** — **Phase 1 shipped:** Vitest, `npm test`, CI in **Validate**, contributor docs in [development.md](development.md) (**Automated unit tests**). **Phase 2** expands coverage for pure logic under `module/logic/` and similar. Optional **Quench** (tests inside Foundry) remains in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Ordering and scope: **[.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md)** (section 2). No replacement for manual in-world verification.
+- **Automated testing framework** — **Phases 1–2 shipped:** Vitest, `npm test`, CI in **Validate**, unit tests for concentration DCs, XP table, and fuzzy matching (`test/unit/`). Further modules incrementally. Optional **Quench** (tests inside Foundry) remains in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Scope: **[.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md)** (section 2). No replacement for manual in-world verification.
 - **Equipment compendium** — Complete or refine the Equipment pack. The [Compendium guide](compendium-guide.md) lists it as “Incomplete.”
 - **Feat prerequisites by UUID** — Ensure all feat prerequisites use document ID/UUID (not name or key), per the project’s [item-references rule](development.md#item-references). The script `scripts/apply-feat-prerequisites.mjs` is related.
 
