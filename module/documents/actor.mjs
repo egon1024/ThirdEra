@@ -1,5 +1,22 @@
+import {
+    backfillCharacterSystemChangeObject,
+    backfillCharacterSystemSourceForActor,
+    backfillCharacterSystemSourceInPlace
+} from "../logic/character-system-source-backfill.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
 import { parseSaveType } from "../logic/spell-save-helpers.mjs";
+
+/**
+ * HTML for Success/Failure in roll flavor (chat template renders flavor with triple braces).
+ * @param {boolean} success
+ * @returns {string}
+ */
+function htmlRollDcOutcome(success) {
+    const resultKey = success ? "THIRDERA.SpellSave.SaveResultSuccess" : "THIRDERA.SpellSave.SaveResultFailure";
+    const text = foundry.utils.escapeHTML(game.i18n.localize(resultKey));
+    const mod = success ? "thirdera-roll-outcome--success" : "thirdera-roll-outcome--failure";
+    return `<span class="thirdera-roll-outcome ${mod}">${text}</span>`;
+}
 
 /**
  * Extended Actor document class for Third Era
@@ -35,6 +52,27 @@ export class ThirdEraActor extends Actor {
         // things organized
         if (actorData.type === 'character') this._prepareCharacterData(actorData);
         if (actorData.type === 'npc') this._prepareNPCData(actorData);
+    }
+
+    /** @inheritdoc */
+    async _preUpdate(changed, options, user) {
+        if (this.type === "character") {
+            const curSys = this.system?._source ?? this._source?.system;
+            // Embedded Item updates often send `items` on the Actor without `system`; validation still needs
+            // `details` / `experience` on the merged model.
+            if (changed?.items && !changed?.system) {
+                changed.system = {
+                    details: foundry.utils.deepClone(curSys?.details ?? {}),
+                    experience: foundry.utils.deepClone(curSys?.experience ?? { value: 0, max: 1000 })
+                };
+                backfillCharacterSystemSourceInPlace(changed.system);
+            }
+            if (changed?.system) {
+                backfillCharacterSystemChangeObject(changed.system, this);
+            }
+            backfillCharacterSystemSourceForActor(this);
+        }
+        return super._preUpdate(changed, options, user);
     }
 
     /**
@@ -163,9 +201,120 @@ export class ThirdEraActor extends Actor {
             flavor += ` vs DC ${dc}`;
             const total = Math.round(roll.total * 100) / 100;
             const success = total >= dc;
-            const resultKey = success ? "THIRDERA.SpellSave.SaveResultSuccess" : "THIRDERA.SpellSave.SaveResultFailure";
-            flavor += ` — ${game.i18n.localize(resultKey)}`;
+            flavor += ` — ${htmlRollDcOutcome(success)}`;
         }
+
+        roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            flavor
+        });
+
+        return roll;
+    }
+
+    /**
+     * Find the actor's Concentration skill item: match `system.key === "concentration"` first, then display name "Concentration".
+     * @returns {Item|null}
+     */
+    _findConcentrationSkillItem() {
+        const byKey = this.items.find(
+            (i) => i.type === "skill" && (i.system?.key ?? "").toLowerCase() === "concentration"
+        );
+        if (byKey) return byKey;
+        return this.items.find((i) => i.type === "skill" && i.name === "Concentration") ?? null;
+    }
+
+    /**
+     * Roll a Concentration check (same bonus resolution as skill items / modifier-only skills).
+     * Flavor mirrors {@link ThirdEraActor#rollSavingThrow}: modifier, optional `vs DC N`, and success/failure when `dc` is finite.
+     * @param {Object} [options={}]
+     * @param {number} [options.dc] - DC to compare the roll total against (e.g. defensive casting)
+     * @param {string} [options.label] - Optional prefix (e.g. reason for the check)
+     * @returns {Promise<Roll|null>}
+     */
+    async rollConcentrationCheck({ dc, label } = {}) {
+        const skillItem = this._findConcentrationSkillItem();
+        let total;
+        let displayName;
+        let modifiersOnly = false;
+
+        if (skillItem) {
+            const skillData = skillItem.system;
+            total = (skillData.modifier?.total != null && Number.isFinite(skillData.modifier.total))
+                ? skillData.modifier.total
+                : (this.system.abilities[skillData.ability]?.mod || 0) + (skillData.ranks || 0) + (skillData.modifier?.misc || 0);
+            displayName = skillItem.name;
+        } else {
+            const entry = this.system.modifierOnlySkills?.find(
+                (e) => (e.key || "").toLowerCase() === "concentration"
+            );
+            if (entry) {
+                const skillRef = game.items?.find?.(
+                    (i) => i.type === "skill" && (i.system?.key ?? "").toLowerCase() === (entry.key || "").toLowerCase()
+                );
+                const abilityId = skillRef?.system?.ability || "con";
+                const abilityMod = this.system.abilities[abilityId]?.mod ?? 0;
+                total = abilityMod + (entry.total ?? 0);
+                displayName = skillRef?.name ?? entry.key;
+                modifiersOnly = true;
+            } else {
+                ui.notifications.warn(game.i18n.localize("THIRDERA.Concentration.NoSkillItem"));
+                return null;
+            }
+        }
+
+        const roll = await new Roll(`1d20 + ${total}`).roll();
+        const modSigned = total >= 0 ? `+${total}` : String(total);
+        const flavorKey = modifiersOnly
+            ? "THIRDERA.Concentration.CheckFlavorModifiersOnly"
+            : "THIRDERA.Concentration.CheckFlavor";
+        let flavor = game.i18n.format(flavorKey, { name: displayName, mod: modSigned });
+        if (label) {
+            flavor = `${label}: ${flavor}`;
+        }
+        if (typeof dc === "number" && Number.isFinite(dc)) {
+            flavor += ` vs DC ${dc}`;
+            const rolled = Math.round(roll.total * 100) / 100;
+            const success = rolled >= dc;
+            flavor += ` — ${htmlRollDcOutcome(success)}`;
+        }
+
+        roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            flavor
+        });
+
+        return roll;
+    }
+
+    /**
+     * Spell penetration check (D&D 3.5 SRD): {@code 1d20 + caster level} must meet or exceed the target’s spell resistance.
+     * @param {Object} [options={}]
+     * @param {number} [options.casterLevel] - Caster level for this spell (truncated integer; non-finite defaults to 0)
+     * @param {number} [options.spellResistance] - Target SR (required; non-negative integer after normalization)
+     * @param {string} [options.label] - Optional prefix in roll flavor (e.g. spell name)
+     * @returns {Promise<Roll|null>}
+     */
+    async rollSpellPenetration({ casterLevel, spellResistance, label } = {}) {
+        const clRaw = Number(casterLevel);
+        const cl = Number.isFinite(clRaw) ? Math.trunc(clRaw) : 0;
+        const srRaw = Number(spellResistance);
+        if (!Number.isFinite(srRaw)) {
+            ui.notifications.warn(game.i18n.localize("THIRDERA.SpellPenetration.InvalidSpellResistance"));
+            return null;
+        }
+        const sr = Math.max(0, Math.trunc(srRaw));
+
+        const roll = await new Roll(`1d20 + ${cl}`).roll();
+        const clSigned = cl >= 0 ? `+${cl}` : String(cl);
+        let flavor = game.i18n.format("THIRDERA.SpellPenetration.Flavor", { cl: clSigned });
+        if (label) {
+            flavor = `${label}: ${flavor}`;
+        }
+        flavor += game.i18n.format("THIRDERA.SpellPenetration.VsSR", { sr });
+        const total = Math.round(roll.total * 100) / 100;
+        const success = total >= sr;
+        flavor += ` — ${htmlRollDcOutcome(success)}`;
 
         roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -254,6 +403,11 @@ export class ThirdEraActor extends Actor {
      * @param {number|string} options.spellLevel  Spell level 0-9 for this class
      * @param {Actor[]|string[]} [options.targetActors]  Optional targets (Actor docs or actor UUIDs); stored on message for Roll save
      * @returns {Promise<boolean>}   True if cast was applied and message posted
+     *
+     * Chat message `flags.thirdera.spellCast` includes (for consumers such as concentration / SR UI):
+     * `dc`, `saveType`, `spellName`, `spellUuid`, optional `targetActorUuids`,
+     * `spellLevel` (0–9), `classItemId` (embedded class item id on this actor), `casterLevel` (for that class at cast time),
+     * `srKey` (spell item's spell resistance key, e.g. yes/no/yes-harmless).
      */
     async castSpell(spellItem, { classItemId, spellLevel, targetActors: rawTargets }) {
         if (!spellItem || spellItem.type !== "spell") return false;
@@ -387,11 +541,19 @@ export class ThirdEraActor extends Actor {
 </div>`;
 
         const saveType = parseSaveType(spellItem.system.savingThrow);
+        const casterLevelRaw = classData.casterLevel;
+        const casterLevel =
+            typeof casterLevelRaw === "number" && Number.isFinite(casterLevelRaw) ? Math.max(0, Math.floor(casterLevelRaw)) : 0;
+
         const spellCastFlags = {
             dc: totalDC,
             saveType,
             spellName,
-            spellUuid: spellItem.uuid ?? null
+            spellUuid: spellItem.uuid ?? null,
+            spellLevel: level,
+            classItemId,
+            casterLevel,
+            srKey: srKey || ""
         };
         if (targetActorUuids.length > 0) {
             spellCastFlags.targetActorUuids = targetActorUuids;

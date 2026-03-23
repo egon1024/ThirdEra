@@ -1,4 +1,5 @@
 import { getWieldingInfo, getTWFPenalties, getStrMultiplier } from "../data/_damage-helpers.mjs";
+import { backfillCharacterSystemSourceForActor } from "../logic/character-system-source-backfill.mjs";
 
 /**
  * Slugify a string for use as conditionId (lowercase, spaces/special to hyphens).
@@ -27,6 +28,11 @@ export class ThirdEraItem extends Item {
     async _preCreate(data, options, user) {
         await super._preCreate(data, options, user);
 
+        const parentActor = this.parent;
+        if (parentActor?.type === "character") {
+            backfillCharacterSystemSourceForActor(parentActor);
+        }
+
         // Auto-generate a key if not already set (skills, feats, features, domains)
         if ((data.type === "skill" || data.type === "feat" || data.type === "feature" || data.type === "domain" || data.type === "school") && !data.system?.key) {
             this.updateSource({ "system.key": foundry.utils.randomID() });
@@ -48,6 +54,10 @@ export class ThirdEraItem extends Item {
 
     /** @override */
     _preUpdate(changes, options, user) {
+        const parentActor = this.parent;
+        if (parentActor?.type === "character") {
+            backfillCharacterSystemSourceForActor(parentActor);
+        }
         super._preUpdate(changes, options, user);
 
         // If conditionId is being set to blank, fill from name or random

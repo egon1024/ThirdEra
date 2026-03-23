@@ -140,6 +140,93 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         return controls;
     }
 
+    /**
+     * Form fields on the character sheet Attributes → Details subtab describe the world character, not a
+     * per-token override. For an unlinked token, the sheet's document is a synthetic actor (ActorDelta);
+     * default form submission would only persist to the token delta, so the same actor opened from the
+     * sidebar would look unchanged. Mirror these paths to the world Actor and strip them from the synthetic
+     * update (same idea as condition drop → world actor in _onDropItem).
+     */
+    static #CHAR_DETAILS_MIRROR_TO_BASE_PATHS = [
+        "system.details.size",
+        "system.details.naturalHealingBonus",
+        "system.details.spellResistance",
+        "system.experience.value"
+    ];
+
+    /** @param {object} root @param {string} path dot path */
+    static #deleteSubmitDataPath(root, path) {
+        const lastDot = path.lastIndexOf(".");
+        if (lastDot === -1) return;
+        const parentPath = path.slice(0, lastDot);
+        const leaf = path.slice(lastDot + 1);
+        const parents = [];
+        let cur = root;
+        for (const part of parentPath.split(".")) {
+            if (cur == null || typeof cur !== "object" || !(part in cur)) return;
+            parents.push({ obj: cur, key: part });
+            cur = cur[part];
+        }
+        if (cur == null || typeof cur !== "object" || !(leaf in cur)) return;
+        delete cur[leaf];
+        for (let i = parents.length - 1; i >= 0; i--) {
+            const { obj, key } = parents[i];
+            const child = obj[key];
+            if (child && typeof child === "object" && Object.keys(child).length === 0) {
+                delete obj[key];
+            } else {
+                break;
+            }
+        }
+    }
+
+    /** @override */
+    async _processSubmitData(event, form, submitData, options = {}) {
+        if (this.actor.type === "character" && this.actor.isToken) {
+            const base = game.actors.get(this.actor.id);
+            const tokenDoc = this.actor.token;
+            if (base) {
+                const baseUpdate = {};
+                const mirroredPaths = [];
+                for (const path of ThirdEraActorSheet.#CHAR_DETAILS_MIRROR_TO_BASE_PATHS) {
+                    if (!foundry.utils.hasProperty(submitData, path)) continue;
+                    const v = foundry.utils.getProperty(submitData, path);
+                    foundry.utils.setProperty(baseUpdate, path, v);
+                    mirroredPaths.push(path);
+                }
+                const flat = foundry.utils.flattenObject(baseUpdate);
+                if (Object.keys(flat).length > 0) {
+                    await base.update(baseUpdate, options);
+                    for (const path of mirroredPaths) {
+                        ThirdEraActorSheet.#deleteSubmitDataPath(submitData, path);
+                    }
+                    // Drop matching keys from the token's ActorDelta so they do not override the world actor.
+                    if (tokenDoc?.delta) {
+                        const deltaSys = tokenDoc.delta.system;
+                        if (deltaSys && typeof deltaSys === "object") {
+                            const deltaDeletes = {};
+                            for (const path of mirroredPaths) {
+                                const rel = path.startsWith("system.") ? path.slice(7) : path;
+                                if (!foundry.utils.hasProperty(deltaSys, rel)) continue;
+                                const parent = path.slice(0, path.lastIndexOf("."));
+                                const leaf = path.slice(path.lastIndexOf(".") + 1);
+                                deltaDeletes[`${parent}.-=${leaf}`] = null;
+                            }
+                            if (Object.keys(deltaDeletes).length > 0) {
+                                try {
+                                    await tokenDoc.delta.update(deltaDeletes, options);
+                                } catch (err) {
+                                    console.warn("Third Era | Could not clear token delta for mirrored details (non-fatal):", err);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        await super._processSubmitData(event, form, submitData, options);
+    }
+
     /** @override */
     async _preRender(context, options) {
         await super._preRender(context, options);
