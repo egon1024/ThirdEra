@@ -1,0 +1,16 @@
+{
+  "name": "thirdera",
+  "private": true,
+  "type": "module",
+  "description": "ThirdEra Foundry VTT system — devDependencies are for local/CI unit tests only; Foundry loads plain ES modules from the repo with no npm build.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

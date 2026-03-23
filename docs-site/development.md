@@ -8,12 +8,27 @@ ThirdEra is a **Foundry VTT game system** implementing D&D 3.5 Edition using the
 
 There is no build step, bundler, or package manager **for the system at runtime**. The system is plain ES modules + CSS + Handlebars templates, loaded directly by Foundry VTT at runtime.
 
-**Automated testing** is the **next development priority**: the roadmap expects a small **dev-only** test setup (e.g. Node + a unit-test runner) for pure logic under `module/logic/`, with optional in-Foundry testing (e.g. Quench) documented in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Authoritative ordering and scope notes: [.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md) (Planned — Automated testing framework). Automated tests will **complement**, not replace, in-world checks after reload.
+**Automated unit tests** use a **dev-only** toolchain ([`package.json`](../package.json) + **Vitest**) for logic that can run in Node. Tests live under `test/` and **complement** in-world checks (F5 reload, optional scenarios under gitignored `docs/testing/` when present). Optional in-Foundry testing (e.g. **Quench**) is described in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Roadmap: [.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md).
 
 ## Development Setup
 
 - Symlink or copy this repository into Foundry VTT `Data/systems/` as `thirdera/`. Foundry resolves paths relative to `systems/thirdera/` (e.g. template paths use `"systems/thirdera/templates/..."`).
-- **Today:** there is no automated test suite or linter in the repo yet. Verify behavior by reloading the Foundry VTT world in-browser (F5 or "Reload" in developer tools). When the test framework lands, contributor docs here will note how to run it.
+- **In-game verification:** Reload the Foundry VTT world in-browser (F5 or "Reload" in developer tools) when changing behavior the unit suite does not cover.
+
+## Automated unit tests
+
+**Prerequisites:** [Node.js](https://nodejs.org/) **v20+** on your PATH (same major version as [`.github/workflows/validate.yml`](../.github/workflows/validate.yml)). You do **not** need Foundry running to execute unit tests.
+
+**First-time setup (same as CI):** From the repository root:
+
+1. `npm ci` — installs exact versions from `package-lock.json` (use `npm install` instead if you are not using a lockfile-driven workflow locally, but CI always uses `npm ci`).
+2. `npm test` — runs **Vitest** once and exits; must pass before considering related work done.
+
+**Day-to-day:** After dependencies are installed, `npm test` alone is enough. Use `npm run test:watch` for interactive re-runs while editing (not used in CI).
+
+**Layout:** Test files use the `*.test.mjs` (or `*.spec.mjs`) suffix under `test/` (e.g. `test/unit/`). They import production code from `module/` via relative paths. The system’s `esmodules` entry is unchanged; `node_modules/` is dev-only and gitignored.
+
+**Policy:** Changes to behavioral logic under `module/logic/`, `module/utils/`, and pure `module/data/*_helpers.mjs` should include new or updated tests where practical. See [.cursor/rules/automated-tests-for-logic.mdc](../.cursor/rules/automated-tests-for-logic.mdc). Pull request validation runs `npm ci` and `npm test` together with the existing JSON, syntax, and template checks.
 
 ## Architecture
 

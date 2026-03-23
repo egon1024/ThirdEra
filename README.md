@@ -20,6 +20,10 @@ sidebar:
 - **Equipment** - Adventuring gear and containers
 - **Spells** - Core SRD spells across multiple levels
 
+## Automated tests (contributors)
+
+From the repository root, with **Node.js 20+**: run `npm ci` once (or `npm install`), then `npm test`. This matches the GitHub Actions **Validate** workflow. See **Development reference** → **Automated unit tests** in the [documentation](https://egon1024.github.io/ThirdEra/latest/) for details and policy.
+
 ## Documentation
 
 The user-facing documentation site is built with [MkDocs](https://www.mkdocs.org/), [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/), and [mike](https://github.com/jimporter/mike) for versioned deploys. Source lives in `docs-site/`; config is `mkdocs.yml`. To work on it locally:
