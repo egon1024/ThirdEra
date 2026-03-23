@@ -47,6 +47,14 @@ describe("getDerivedHpConditionId", () => {
             })
         ).toBe("dead");
     });
+
+    it("returns null when hp.value is non-numeric", () => {
+        expect(
+            getDerivedHpConditionId({
+                system: { attributes: { hp: { value: undefined, stable: false } } }
+            })
+        ).toBe(null);
+    });
 });
 
 describe("getDerivedFrom", () => {

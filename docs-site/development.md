@@ -22,13 +22,20 @@ There is no build step, bundler, or package manager **for the system at runtime*
 **First-time setup (same as CI):** From the repository root:
 
 1. `npm ci` — installs exact versions from `package-lock.json` (use `npm install` instead if you are not using a lockfile-driven workflow locally, but CI always uses `npm ci`).
-2. `npm test` — runs **Vitest** once and exits; must pass before considering related work done.
+2. **`make test`** or **`npm test`** — runs **Vitest** once and exits; must pass before considering related work done.
 
-**Day-to-day:** After dependencies are installed, `npm test` alone is enough. Use `npm run test:watch` for interactive re-runs while editing (not used in CI).
+**Day-to-day:** After dependencies are installed, **`make test`** or **`npm test`** is enough. Use `npm run test:watch` for interactive re-runs while editing (not used in CI).
+
+**Coverage (optional, same as CI for PRs):**
+
+- Run **`make test-coverage`** or **`npm run test:coverage`** — executes the full suite with the **v8** coverage provider, prints a table and summary in the terminal, and writes reports under **`coverage/`** (gitignored).
+- **HTML report:** open **`coverage/index.html`** in a browser for per-file line coverage. **`coverage/lcov.info`** is suitable for external tools (e.g. IDE extensions, Codecov).
+- Coverage is **scoped** in [`vitest.config.mjs`](../vitest.config.mjs) to `module/logic/**`, `module/utils/**`, and `module/data/_*.mjs`, with **`coverage.exclude`** omitting Foundry-only logic (chat hooks, packs, audit log, `_ac-helpers`, etc.) so the **headline percentage** reflects files we aim to cover in Node. Use the HTML report for per-file detail.
+- **Pull requests:** the **Validate** workflow runs parallel jobs (**`unit-tests`** with **`make test-coverage`** and coverage artifact **`coverage-report`**, **`lint`** placeholder for a future linter, **`static-validation`** for JSON / syntax / templates). Download coverage from the **unit-tests** job’s **Artifacts** on GitHub.
 
 **Layout:** Tests live under `test/unit/`, grouped to mirror code: `test/unit/logic/` → `module/logic/`, `test/unit/utils/` → `module/utils/`, `test/unit/data/` → `module/data/` helpers. Use the `*.test.mjs` (or `*.spec.mjs`) suffix. **`test/README.md`** lists **which production files are covered** and **which are intentionally out of scope** for Node (Foundry-only). The system’s `esmodules` entry is unchanged; `node_modules/` is dev-only and gitignored.
 
-**Policy:** Changes to behavioral logic under `module/logic/`, `module/utils/`, and pure `module/data/*_helpers.mjs` should include new or updated tests where practical. See [.cursor/rules/automated-tests-for-logic.mdc](../.cursor/rules/automated-tests-for-logic.mdc). Pull request validation runs `npm ci` and `npm test` together with the existing JSON, syntax, and template checks.
+**Policy:** Changes to behavioral logic under `module/logic/`, `module/utils/`, and pure `module/data/*_helpers.mjs` should include new or updated tests where practical. See [.cursor/rules/automated-tests-for-logic.mdc](../.cursor/rules/automated-tests-for-logic.mdc). Pull request validation uses the **Validate** workflow: **`unit-tests`** (`npm ci` + **`make test-coverage`**), **`lint`** (placeholder until configured), and **`static-validation`** (JSON, `node --check` on `.mjs`, template paths).
 
 ## Architecture
 

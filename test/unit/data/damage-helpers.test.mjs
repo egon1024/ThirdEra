@@ -43,6 +43,13 @@ describe("getWieldingInfo", () => {
         expect(r.attackPenalty).toBe(0);
         expect(r.canWield).toBe(true);
     });
+
+    it("marks cannot wield when effective handedness falls off scale (oversized + light)", () => {
+        const r = getWieldingInfo("Huge", "light", "Small");
+        expect(r.canWield).toBe(false);
+        expect(r.effectiveHandedness).toBe(null);
+        expect(r.attackPenalty).toBeLessThan(0);
+    });
 });
 
 describe("getTWFPenalties", () => {

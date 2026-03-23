@@ -26,6 +26,12 @@ describe("getCarryingCapacity", () => {
         const small = getCarryingCapacity(10, "Small");
         expect(small.heavy).toBe(Math.floor(med.metadata.baseMaxLoad * 0.75));
     });
+
+    it("scales load for STR above 29 using base-20+digit and 4^n multiplier", () => {
+        const c35 = getCarryingCapacity(35, "Medium");
+        const c25 = getCarryingCapacity(25, "Medium");
+        expect(c35.heavy).toBe(c25.heavy * 4);
+    });
 });
 
 describe("getLoadStatus", () => {

@@ -64,4 +64,42 @@ describe("getActiveConditionModifiers", () => {
         const out = getActiveConditionModifiers(actor, map);
         expect(out.ac).toBe(0);
     });
+
+    it("chains speedMultiplier across two conditions on one effect", () => {
+        const slow = mockConditionItem("Slow", [{ key: "speedMultiplier", value: 0.5 }]);
+        const entangled = mockConditionItem("Entangled", [{ key: "speedMultiplier", value: 0.5 }]);
+        const map = new Map([
+            ["slowed", slow],
+            ["entangled", entangled]
+        ]);
+        const actor = {
+            effects: [{ statuses: new Set(["slowed", "entangled"]) }]
+        };
+        const out = getActiveConditionModifiers(actor, map);
+        expect(out.speedMultiplier).toBeCloseTo(0.25);
+    });
+
+    it("applies generic attack to both melee and ranged breakdowns", () => {
+        const item = mockConditionItem("Bless", [{ key: "attack", value: 1 }]);
+        const map = new Map([["blessed", item]]);
+        const actor = {
+            effects: [{ statuses: new Set(["blessed"]) }]
+        };
+        const out = getActiveConditionModifiers(actor, map);
+        expect(out.attackMelee).toBe(1);
+        expect(out.attackRanged).toBe(1);
+        expect(out.attackMeleeBreakdown).toHaveLength(1);
+        expect(out.attackRangedBreakdown).toHaveLength(1);
+    });
+
+    it("applies attackMelee without affecting ranged", () => {
+        const item = mockConditionItem("WF", [{ key: "attackMelee", value: 2 }]);
+        const map = new Map([["wf", item]]);
+        const actor = {
+            effects: [{ statuses: new Set(["wf"]) }]
+        };
+        const out = getActiveConditionModifiers(actor, map);
+        expect(out.attackMelee).toBe(2);
+        expect(out.attackRanged).toBe(0);
+    });
 });

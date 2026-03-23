@@ -45,6 +45,39 @@ describe("parseSpellFields", () => {
         });
         expect(out.range).toMatch(/Touch/i);
     });
+
+    it("reads Area label when Target is absent", () => {
+        const html = "<p>Area: 20-ft. radius spread centered on you</p>";
+        const out = parseSpellFields(html, "Custom", {
+            range: "",
+            target: "",
+            duration: "",
+            savingThrow: ""
+        });
+        expect(out.target).toMatch(/radius/i);
+    });
+
+    it("parses Saving Throw line from description", () => {
+        const html = "<p>Saving Throw: Will negates</p>";
+        const out = parseSpellFields(html, "X", {
+            range: "",
+            target: "",
+            duration: "",
+            savingThrow: ""
+        });
+        expect(out.savingThrow).toMatch(/Will negates/i);
+    });
+
+    it("fills duration from heuristics when prose says instantaneous", () => {
+        const html = "<p>This effect is instantaneous and harmless.</p>";
+        const out = parseSpellFields(html, "NoSuchSpellInCanon", {
+            range: "",
+            target: "",
+            duration: "See text",
+            savingThrow: ""
+        });
+        expect(out.duration).toBe("Instantaneous");
+    });
 });
 
 describe("applyParsedSpellFields", () => {
