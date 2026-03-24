@@ -2436,6 +2436,261 @@
   min-width: 0;
 }
 
+/* Skills subtab: one row per skill — name column shrinks; ranks/misc/label/actions stay a single nowrap strip */
+.thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 8px;
+  align-items: center;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row .item-name {
+  flex: unset;
+  min-width: 0;
+  /* Keep long NPC class-skill strip + skill name from painting over the controls column */
+  overflow: hidden;
+}
+
+/* NPC class checkbox + C/CC is wide (global min-width 12.5rem); allow shrink inside the skills grid */
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list .npc-skill-class-column {
+  min-width: 0;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  row-gap: 4px;
+  column-gap: 6px;
+  justify-content: flex-end;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list .npc-skill-class-toggle {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list .npc-skill-class-toggle-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list .item .item-name > h4 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row .item-controls {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Same column template for skill header + rows (ranks, misc, label, ACP, total, roll, delete) */
+.thirdera .abilities .subtab[data-tab="skills"] {
+  container-type: inline-size;
+  container-name: thirdera-skills;
+  --skill-control-col-ranks: 45px;
+  --skill-control-col-misc: 42px;
+  --skill-control-col-label: 10.5rem;
+  --skill-control-col-acp: 28px;
+  /* Fixed so header row and each skill row use identical track sizes (separate grids). */
+  --skill-control-col-total: 3.5rem;
+  --skill-control-col-icon: 1.7rem;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid {
+  display: grid;
+  grid-template-columns:
+    var(--skill-control-col-ranks)
+    var(--skill-control-col-misc)
+    var(--skill-control-col-label)
+    var(--skill-control-col-acp)
+    var(--skill-control-col-total)
+    var(--skill-control-col-icon)
+    var(--skill-control-col-icon);
+  column-gap: 5px;
+  row-gap: 0;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid--modifier {
+  grid-template-columns:
+    var(--skill-control-col-total)
+    var(--skill-control-col-icon);
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row .item-controls.skill-sheet-controls-grid {
+  display: grid;
+  position: relative;
+  z-index: 1;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row .skill-total {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid input.skill-ranks-input,
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid input.skill-misc-input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid input.skill-misc-label-input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex: unset;
+  box-sizing: border-box;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid .skill-acp,
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid .skill-acp--empty {
+  text-align: center;
+  justify-self: center;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid .skill-acp--empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid .skill-total {
+  text-align: center;
+  justify-self: center;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skill-sheet-controls-grid > a {
+  justify-self: center;
+  text-align: center;
+}
+
+/* Header: one cell spans roll + delete icon columns (main skills grid only) */
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header .skill-col-hdr-icon-gap:not(.skill-col-hdr-icon-gap--single) {
+  grid-column: 6 / span 2;
+  min-height: 1em;
+}
+
+/* Wide layout: "Skill" label hidden (spacer is layout-only); shown in stacked (container) layout */
+.thirdera .abilities .subtab[data-tab="skills"] .skills-header-skill-col-label {
+  display: none;
+  font-size: var(--font-size-note);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  line-height: 1.1;
+}
+
+/* Skills subtab: column headers aligned to ranks / misc / label / ACP / total / action icons */
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 8px;
+  align-items: end;
+  padding: 4px 5px 6px 5px;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header--modifier-only {
+  margin-top: 2px;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header .skill-col-hdr {
+  font-size: var(--font-size-note);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header .skill-col-hdr-acp {
+  text-decoration: none;
+  border-bottom: none;
+  cursor: help;
+  font-size: var(--font-size-note);
+}
+
+.thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header .skill-col-hdr-total {
+  min-width: 0;
+}
+
+/* Narrow skills panel: stack name row + controls row; keep one controls grid so columns stay aligned */
+@container thirdera-skills (max-width: 720px) {
+  .thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 6px;
+    align-items: start;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] .skills-header-skill-col-label {
+    display: block;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header-controls {
+    justify-self: end;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header--modifier-only {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header--modifier-only .skills-list-column-header-spacer {
+    display: none;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] .skills-list-column-header--modifier-only .skills-list-column-header-controls {
+    justify-self: end;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 6px;
+    align-items: start;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row .item-name {
+    overflow: visible;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] .skills-list .item .item-name > h4 {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] .skills-list .npc-skill-class-toggle-text {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row .item-controls.skill-sheet-controls-grid {
+    justify-self: end;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+
+  .thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row .item-controls:not(.skill-sheet-controls-grid) {
+    justify-self: end;
+    width: max-content;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
 .thirdera .items-list .item .item-image {
   flex: 0 0 30px;
   margin-right: 10px;
@@ -3191,6 +3446,26 @@
   text-align: center;
   font-size: var(--font-size-body);
   padding: 1px 2px;
+}
+
+.thirdera .items-list .item .item-controls input.skill-misc-input {
+  width: 42px;
+  text-align: center;
+  font-size: var(--font-size-body);
+  padding: 1px 2px;
+}
+
+/* Misc label: fixed slot so every skill row uses the same width (ellipsis); avoids flex-grow wrap quirks */
+.thirdera .abilities .subtab[data-tab="skills"] ol.items-list .item.skill-sheet-row .item-controls input.skill-misc-label-input {
+  width: 10.5rem;
+  max-width: 10.5rem;
+  flex: 0 0 10.5rem;
+  box-sizing: border-box;
+  font-size: var(--font-size-note);
+  padding: 1px 4px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Class skill indicator */

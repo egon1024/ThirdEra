@@ -6,6 +6,30 @@
 const NPC_MAX_RANKS_DISPLAY = 999;
 
 /**
+ * Label for the misc line in skill breakdown tooltips (`modifier.miscLabel` on the skill item).
+ * @param {{ miscLabel?: string }} modifier
+ * @param {string} [fallback]
+ * @returns {string}
+ */
+export function skillMiscBreakdownLabel(modifier, fallback = "Misc") {
+    const s = typeof modifier?.miscLabel === "string" ? modifier.miscLabel.trim() : "";
+    return s || fallback;
+}
+
+function defaultMiscI18nFallback() {
+    try {
+        return game?.i18n?.localize?.("THIRDERA.Skills.MiscModifier") ?? "Misc";
+    } catch {
+        return "Misc";
+    }
+}
+
+/** Misc line label for tooltips (uses i18n "Misc" when miscLabel is blank). */
+export function resolvedSkillMiscLineLabel(modifier) {
+    return skillMiscBreakdownLabel(modifier, defaultMiscI18nFallback());
+}
+
+/**
  * Sum armor check penalty from all equipped armor items on an actor.
  * @param {{ items: Iterable<{ type: string, system: Record<string, unknown> }> }} actor
  * @returns {number}
@@ -72,6 +96,7 @@ export function prepareNpcSkillItems(actor, mods, loadEffects) {
 
         const abilityMod = abilities[sd.ability]?.mod || 0;
         const misc = sd.modifier?.misc || 0;
+        const miscLineLabel = resolvedSkillMiscLineLabel(sd.modifier);
         const skillModKey = sd.key ? `skill.${sd.key}` : null;
         const skillMod = skillModKey ? (mods.totals[skillModKey] ?? 0) : 0;
         const skillModBreakdown = skillModKey ? (mods.breakdown[skillModKey] ?? []) : [];
@@ -81,7 +106,7 @@ export function prepareNpcSkillItems(actor, mods, loadEffects) {
             { label: "Ability", value: abilityMod },
             { label: "Ranks", value: ranks }
         ];
-        if (misc !== 0) sd.breakdown.push({ label: "Misc", value: misc });
+        if (misc !== 0) sd.breakdown.push({ label: miscLineLabel, value: misc });
         if (acpPenalty !== 0) {
             const label = acpBreakdownLabel(loadEffects, totalArmorCheckPenalty, acpPenalty);
             sd.breakdown.push({ label, value: acpPenalty });

@@ -4,6 +4,7 @@ import {
     backfillCharacterSystemSourceInPlace
 } from "../logic/character-system-source-backfill.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { filterNpcSkillItemDataForCreate } from "../logic/npc-embedded-skill-identity.mjs";
 import { parseSaveType } from "../logic/spell-save-helpers.mjs";
 
 /**
@@ -23,6 +24,25 @@ function htmlRollDcOutcome(success) {
  * @extends {Actor}
  */
 export class ThirdEraActor extends Actor {
+
+    /**
+     * Block duplicate embedded skills on NPCs (same identity as `npcEmbeddedSkillIdentity` in
+     * `npc-embedded-skill-identity.mjs`) or earlier in this batch. Prevents compendium/import/drop bugs.
+     * @inheritdoc
+     */
+    async createEmbeddedDocuments(embeddedName, data, operation) {
+        if (embeddedName === "Item" && this.type === "npc" && Array.isArray(data) && data.length) {
+            const before = data.length;
+            const filtered = filterNpcSkillItemDataForCreate(this.items, data);
+            const skipped = before - filtered.length;
+            if (skipped > 0) {
+                console.warn(`Third Era | Skipped ${skipped} duplicate NPC skill embed(s) on ${this.name ?? this.id}.`);
+            }
+            if (filtered.length === 0) return [];
+            data = filtered;
+        }
+        return super.createEmbeddedDocuments(embeddedName, data, operation);
+    }
 
     /**
      * Augment the basic actor data with additional dynamic data.

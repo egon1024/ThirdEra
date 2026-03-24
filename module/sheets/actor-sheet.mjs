@@ -8,6 +8,7 @@ import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logi
 import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
 import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
 import { getAllSkills, getNpcSkillAddOptions } from "../applications/skill-picker-dialog.mjs";
+import { dedupeNpcEmbeddedSkillItemsForDisplay, npcActorWouldDuplicateSkillEmbed } from "../logic/npc-embedded-skill-identity.mjs";
 import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
 import { TakeRestDialog } from "../applications/take-rest-dialog.mjs";
 
@@ -453,6 +454,26 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
         });
 
+        this.element.querySelectorAll("input.skill-misc-input[data-skill-item-id]").forEach((input) => {
+            input.addEventListener("change", async (event) => {
+                const itemId = event.target.dataset.skillItemId;
+                const skill = this.actor.items.get(itemId);
+                if (!skill || skill.type !== "skill") return;
+                const raw = String(event.target.value ?? "").trim();
+                const v = parseInt(raw, 10);
+                const n = Number.isFinite(v) ? v : 0;
+                await skill.update({ "system.modifier.misc": n });
+            });
+        });
+        this.element.querySelectorAll("input.skill-misc-label-input[data-skill-item-id]").forEach((input) => {
+            input.addEventListener("change", async (event) => {
+                const itemId = event.target.dataset.skillItemId;
+                const skill = this.actor.items.get(itemId);
+                if (!skill || skill.type !== "skill") return;
+                await skill.update({ "system.modifier.miscLabel": String(event.target.value ?? "") });
+            });
+        });
+
         // NPC sheet: class-skill toggle (system.npcClassSkill)
         this.element.querySelectorAll("input.npc-skill-class-skill-checkbox[data-skill-item-id]").forEach((input) => {
             input.addEventListener("change", async (event) => {
@@ -532,20 +553,15 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                         ui.notifications.warn(game.i18n.localize("THIRDERA.Skills.AddSkillInvalid"));
                         return;
                     }
-                    const key = (doc.system?.key ?? "").trim().toLowerCase();
-                    if (key) {
-                        const exists = this.actor.items.find(
-                            (i) => i.type === "skill" && (i.system?.key ?? "").toLowerCase() === key
+                    const itemDataProbe = { type: "skill", name: doc.name, system: doc.system ?? {} };
+                    if (npcActorWouldDuplicateSkillEmbed(this.actor.items, itemDataProbe)) {
+                        ui.notifications.info(
+                            game.i18n.format("THIRDERA.Skills.AddSkillDuplicate", {
+                                name: doc.name,
+                                actor: this.actor.name
+                            })
                         );
-                        if (exists) {
-                            ui.notifications.info(
-                                game.i18n.format("THIRDERA.Skills.AddSkillDuplicate", {
-                                    name: doc.name,
-                                    actor: this.actor.name
-                                })
-                            );
-                            return;
-                        }
+                        return;
                     }
                     const itemData = doc.toObject();
                     if (itemData._id != null) delete itemData._id;
@@ -799,7 +815,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         } catch (_) {}
 
         // Prepare items
-        const items = this._prepareItems(safeItemList);
+        const items = this._prepareItems(safeItemList, actor.type);
 
         // Add CONFIG data
         const config = {
@@ -1622,9 +1638,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     /**
      * Organize and classify Items for the character sheet
      * @param {Collection} items  The actor's items
+     * @param {string} [actorType]  When `"npc"`, embedded skills are de-duplicated for display by skill identity
      * @returns {Object}          Organized items by type
      */
-    _prepareItems(items) {
+    _prepareItems(items, actorType = "") {
         const weapons = [];
         const armor = [];
         const equipment = [];
@@ -1748,6 +1765,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         skills.sort((a, b) => a.name.localeCompare(b.name));
         classFeatures.sort((a, b) => a.name.localeCompare(b.name));
         feats.sort((a, b) => a.name.localeCompare(b.name));
+
+        if (actorType === "npc" && skills.length > 0) {
+            skills.splice(0, skills.length, ...dedupeNpcEmbeddedSkillItemsForDisplay(skills));
+            skills.sort((a, b) => a.name.localeCompare(b.name));
+        }
 
         return { 
             weapons, 
@@ -2184,6 +2206,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     );
                 }
                 return false;
+            }
+        }
+
+        // NPC: do not embed a second copy of the same skill (sidebar drop onto sheet body)
+        if (item.type === "skill" && this.actor.type === "npc") {
+            const grantedZone = event.target?.closest?.("[data-drop-zone='granted-skills']");
+            if (!grantedZone) {
+                const probe = item.toObject?.() ?? { type: item.type, name: item.name, system: item.system ?? {} };
+                if (npcActorWouldDuplicateSkillEmbed(this.actor.items, probe)) {
+                    ui.notifications.info(
+                        game.i18n.format("THIRDERA.Skills.AddSkillDuplicate", {
+                            name: item.name,
+                            actor: this.actor.name
+                        })
+                    );
+                    return false;
+                }
             }
         }
 

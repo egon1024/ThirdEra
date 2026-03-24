@@ -3,7 +3,9 @@ import {
     prepareNpcSkillItems,
     buildModifierOnlySkills,
     getTotalArmorCheckPenaltyFromItems,
-    acpBreakdownLabel
+    acpBreakdownLabel,
+    skillMiscBreakdownLabel,
+    resolvedSkillMiscLineLabel
 } from "../../../module/logic/npc-skill-prep.mjs";
 
 function mockActor({ abilities, items }) {
@@ -24,6 +26,22 @@ describe("getTotalArmorCheckPenaltyFromItems", () => {
             ]
         });
         expect(getTotalArmorCheckPenaltyFromItems(actor)).toBe(-1);
+    });
+});
+
+describe("skillMiscBreakdownLabel", () => {
+    it("uses custom miscLabel when set", () => {
+        expect(skillMiscBreakdownLabel({ miscLabel: "  Large Hide  " }, "Misc")).toBe("Large Hide");
+    });
+    it("falls back when miscLabel blank", () => {
+        expect(skillMiscBreakdownLabel({ miscLabel: "" }, "Misc")).toBe("Misc");
+        expect(skillMiscBreakdownLabel({}, "Misc")).toBe("Misc");
+    });
+});
+
+describe("resolvedSkillMiscLineLabel", () => {
+    it("uses explicit miscLabel over i18n fallback", () => {
+        expect(resolvedSkillMiscLineLabel({ miscLabel: "Synergy" })).toBe("Synergy");
     });
 });
 
@@ -62,6 +80,29 @@ describe("prepareNpcSkillItems", () => {
         expect(hideSkill.system.isClassSkill).toBe(true);
         expect(hideSkill.system.maxRanks).toBe(999);
         expect(hideSkill.system.modifier.breakdown_formatted).toContain("Feat");
+    });
+
+    it("uses modifier.miscLabel in breakdown instead of generic Misc", () => {
+        const skill = {
+            type: "skill",
+            system: {
+                key: "hide",
+                ability: "dex",
+                ranks: 0,
+                armorCheckPenalty: "false",
+                npcClassSkill: true,
+                modifier: { misc: 8, total: 0, miscLabel: "Large (Hide) + MM" }
+            }
+        };
+        const actor = mockActor({
+            abilities: { dex: { mod: -1 } },
+            items: [skill]
+        });
+        prepareNpcSkillItems(actor, { totals: {}, breakdown: {} }, { acp: 0 });
+        expect(skill.system.modifier.total).toBe(7);
+        const miscLine = skill.system.breakdown.find((b) => b.value === 8);
+        expect(miscLine?.label).toBe("Large (Hide) + MM");
+        expect(skill.system.modifier.breakdown_formatted).toContain("Large (Hide) + MM");
     });
 
     it("defaults to class skill when npcClassSkill is omitted (e.g. newly added / compendium skill before first toggle)", () => {
