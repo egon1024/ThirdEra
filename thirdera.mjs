@@ -223,6 +223,7 @@ Hooks.once("init", async function () {
             lowLight: "Low-light vision",
             scent: "Scent",
             blindsight: "Blindsight",
+            blindsense: "Blindsense",
             tremorsense: "Tremorsense"
         },
         /** Treasure presets for NPC/monster reference (Phase F). Custom text allowed via sheet. */
