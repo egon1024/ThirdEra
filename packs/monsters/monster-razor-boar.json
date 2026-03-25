@@ -140,7 +140,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Razor Boar (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThis enormous boar has a black-bristled hide marked by hundreds of old scars. Its eyes are wild and bloodshot, and its tusks are more than three feet long, gleaming like polished ivory and sharper than many swords.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA razor boar attacks intruders on its territory without provocation or warning. If attacking more than one target, it often attempts to trample it's opponents. The creature is swift for its size, and the thickness of it's hide allows it to shrug off many blows. Razor boars, with their fast healing, have been known to recover from seemingly mortal wounds, track down their attackers using their scent ability, and exact revenge.\n</p>\n\n<h5 id=\"vorpalTusks\">Vorpal Tusks (Ex)</h5>\n<p>\n\tOn a successful critical hit against a creature of up to one size category larger than itself, the razor boars's tusk slash attack severs the opponents head (if it has one) from its body. Though some creatures, such as golems and undead other than vampires, are not affected by the loss of their heads, most creatures die when their heads are cut off. \n</p>\n\n<h5>Trample (Ex)</h5>\n<p>\n\tReflex DC 25 half. The save DC is Strength-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

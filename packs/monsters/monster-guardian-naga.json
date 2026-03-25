@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Guardian Naga (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tGuardian nagas speak Celestial and Common.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGuardian nagas usually warn off intruders before attacking. If the warning is ignored, they may begin a spell assault or spit poison.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury or contact, Fortitude DC 19, initial and secondary damage 1d10 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Spit (Ex)</h5>\n<p>\n\tA guardian naga can spit its venom up to 30 feet as a standard action. This is a ranged touch attack with no range increment. Opponents hit by this attack must make successful saves (see above) to avoid the effect.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tGuardian nagas cast spells as 9th-level sorcerers, and can also cast spells from the cleric list and from the Good and Law domains. The cleric spells and domain spells are considered arcane spells for a guardian naga, meaning that the creature does not need a divine focus to cast them.\n</p>\n\n<h6>Typical Spells Known (6/7/7/7/5; save DC 14 + spell level)</h6>\n<p>\n\t0— cure minor wounds, daze, detect magic, light, mage hand, open/close, ray of frost, read magic; 1st—cure light wounds, divine favor, expeditious retreat, mage armor, magic missile; 2nd—detect thoughts, lesser restoration, see invisibility, scorching ray; 3rd—cure serious wounds, dispel magic, lightning bolt; 4th—divine power, greater invisibility.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Hieracosphinx (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<h3>Combat</h3>\n<p>\n\tHieracosphinxes can make short work of even the most dangerous opponents with their claws. They are not particularly intelligent, but are cunning enough to dive at their enemies from above with their flying ability.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +13 melee, damage 1d6+2.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tHieracosphinxes have a +4 racial bonus on Spot checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

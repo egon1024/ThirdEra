@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Spirit Naga (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tSpirit nagas speak Abyssal and Common.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tSpirit nagas meet foes boldly so as to use their gaze attacks to best effect. They quickly slither forward to bite foes that avert their eyes.\n</p>\n\n<h5>Charming Gaze (Su)</h5>\n<p>\n\tAs charm person, 30 feet, Will DC 19 negates. The save DC is Charisma-based.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 18, initial and secondary damage 1d8 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tSpirit nagas cast spells as 7th-level sorcerers, and can also cast spells from the cleric spell list and from the Chaos and Evil domains as arcane spells. The cleric spells and domain spells are considered arcane spells for a spirit naga, meaning that the creature does not need a divine focus to cast them.\n</p>\n\n<h6>Typical Spells Known (6/7/7/5; save DC 13 + spell level)</h6>\n<p>\n\t0—cure minor wounds, daze, detect magic, mage hand, open/close, ray of frost, read magic; 1st—charm person, cure light wounds, divine favor, magic missile, shield of faith; 2nd—cat’s grace, invisibility, summon swarm; 3rd—displacement, fireball.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

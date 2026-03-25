@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Water Mephit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tWater mephits come from the Elemental Plane of Water.\n</p>\n<p>\n\tWater mephits are jaunty creatures with an unflagging sense of humor who quickly get on the nerves of everyone around them. Each one is about 4 feet tall and weighs about 30 pounds.\n</p>\n<p>\n\tWater mephits speak Common and Aquan.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t15-foot cone of caustic liquid, damage 1d8 acid, Reflex DC 13 half. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tOnce per hour a water mephit can hurl an acidic blob that functions like acid arrow (caster level 3rd). Once per day it can create a mass of smelly fog that duplicates the effect of a stinking cloud spell (DC 15, caster level 6th). The save DC is Charisma-based.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tA water mephit heals only if it is exposed to rain or submerged up to its waist in water.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA water mephit has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered.\n</p>\n<p>\n\tIt can use the run action while swimming, provided it swims in a straight line.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Rust Monster (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe hide of these creatures varies in color from a yellowish tan underside to a rust-red upper back. A rust monster’s prehensile antennae can rust metals on contact.\n</p>\n<p>\n\tThe typical rust monster measures 5 feet long and 3 feet high, weighing 200 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA rust monster can scent a metal object from up to 90 feet away. When it detects one, it dashes toward the source and attempts to strike it with its antennae. The creature is relentless, chasing characters over long distances if they still possess intact metal objects but usually ceasing its attacks to devour a freshly rusted meal.\n</p>\n<p>\n\tThe creature targets the largest metal object available, striking first at armor, then at shields and smaller items. It prefers ferrous metals (steel or iron) over precious metals (such as gold or silver) but will devour the latter if given the opportunity.\n</p>\n\n<h5>Rust (Ex)</h5>\n<p>\n\tA rust monster that makes a successful touch attack with its antennae causes the target metal to corrode, falling to pieces and becoming useless immediately. The touch can destroy up to a 10-foot cube of metal instantly. Magic armor and weapons, and other magic items made of metal, must succeed on a DC 17 Reflex save or be dissolved. The save DC is Constitution-based and includes a +4 racial bonus.\n</p>\n<p>\n\tA metal weapon that deals damage to a rust monster corrodes immediately. Wooden, stone, and other nonmetallic weapons are unaffected.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

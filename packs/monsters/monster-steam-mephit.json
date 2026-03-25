@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Steam Mephit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tSteam mephits come from the Elemental Plane of Fire.\n</p>\n<p>\n\tSteam mephits are bossy creatures who consider themselves the lords of all their kind. Each one is about 4 feet tall and weighs about 2 pounds.\n</p>\n<p>\n\tSteam mephits speak Common and Ignan.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tUnlike other mephits, steam mephits rush into combat eagerly, driven by an oversized ego.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t10-foot cone of steam, damage 1d4 fire, Reflex DC 12 half. Living creatures that fail their saves are tormented by burned skin and seared eyes unless they have immunity to fire or are otherwise protected. This effect imposes a -4 penalty to AC and a -2 penalty on attack rolls for 3 rounds. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tOnce per hour a steam mephit can surround itself with a plume of vapor, duplicating the effect of a blur spell (caster level 3rd). Once per day it can create a rainstorm of boiling water that affects a 20-foot-square area. Living creatures caught in the storm take 2d6 points of fire damage (Reflex DC 14 half; caster level 6th). This ability is the equivalent of a 2nd-level spell. The save DCs are Charisma-based.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tA steam mephit heals only if it is touching boiling water or is in a hot, humid area.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

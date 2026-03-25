@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Giant Bee (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tAlthough many times larger, growing to a length of about 5 feet, giant bees behave generally the same as their smaller cousins. Giant bees are usually not aggressive except when defending themselves or their hive.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 11, initial and secondary damage 1d4 Con. The save DC is Constitution-based. A giant bee that successfully stings another creature pulls away, leaving its stinger in the creature. The bee then dies.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tGiant bees have a +4 racial bonus on Spot checks. *They also have a +4 racial bonus on Survival checks to orient themselves.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

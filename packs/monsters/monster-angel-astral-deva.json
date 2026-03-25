@@ -140,7 +140,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Angel, Astral Deva (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tAn astral deva is about 7&frac12; feet tall and weighs about 250 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tAn astral deva is not afraid to enter melee combat. It takes a fierce joy in bashing evil foes with its powerful +3 heavy mace of disruption.\n</p>\n<p>\n\tAn astral deva’s natural weapons, as well as any weapons it wields, are treated as good-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—aid, continual flame, detect evil, discern lies (DC 19), dispel evil (DC 20), dispel magic, holy aura (DC 23), holy smite (DC 19), holy word (DC 22), invisibility (self only), plane shift (DC 22), remove curse (DC 18), remove disease (DC 18), remove fear (DC 16); 7/day—cure light wounds (DC 16), see invisibility; 1/day—blade barrier (DC 21), heal (DC 21). Caster level 12th. The save DCs are Charisma-based.\n</p>\n\n<h5>Change Shape (Su)</h5>\n<p>\n\tAn astral deva can assume the form of any Small or Medium humanoid.\n</p>\n\n<h5>Stun (Su)</h5>\n<p>\n\tIf an astral deva strikes an opponent twice in one round with its mace, that creature must succeed on a DC 22 Fortitude save or be stunned for 1d6 rounds. The save DC is Strength-based.\n</p>\n\n<h5>Uncanny Dodge (Ex)</h5>\n<p>\n\tAn astral deva retains its Dexterity bonus to AC when flat-footed, and it cannot be flanked except by a rogue of at least 16th level. It can flank characters with the uncanny dodge ability as if it were a 12th-level rogue.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

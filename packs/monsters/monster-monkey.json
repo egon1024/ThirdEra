@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Monkey (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe statistics presented here can describe any arboreal monkey that is no bigger than a housecat, such as a colobus or capuchin.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tMonkeys generally flee into the safety of the trees, but if cornered can fight ferociously.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tMonkeys have a +8 racial bonus on Balance and Climb checks. They can always choose to take 10 on Climb checks, even if rushed or threatened. They use their Dexterity modifier instead of their Strength modifier for Climb checks.\n</p>\n\n<h2>Celestial Monkey</h2>\n<p>\n\tThese celestial creatures are commonly summoned by the summon monster I spell.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Smite Evil (Su)</h5>\n<p>\n\tOnce per day a celestial monkey can make a normal melee attack to deal 1 point of extra damage against an evil foe.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

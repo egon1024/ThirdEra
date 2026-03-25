@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Tiger (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese great cats stand more than 3 feet tall at the shoulder and are about 9 feet long. They weigh from 400 to 600 pounds.\n</p>\n\n<h2>Combat</h2>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a tiger must hit with a claw or bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can rake.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a tiger charges a foe, it can make a full attack, including two rake attacks.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +9 melee, damage 1d8+3.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tTigers have a +4 racial bonus on Balance, Hide, and Move Silently checks. *In areas of tall grass or heavy undergrowth, the Hide bonus improves to +8.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

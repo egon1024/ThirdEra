@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Tyrannosaurus (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tDespite its enormous size and 6-ton weight, a tyrannosaurus is a swift runner. Its head is nearly 6 feet long, and its teeth are from 3 to 6 inches in length. It is slightly more than 30 feet long from nose to tail.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA tyrannosaurus pursues and eats just about anything it sees. Its tactics are simple—charge in and bite.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a tyrannosaurus must hit an opponent of up to one size smaller with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can try to swallow the foe the following round.\n</p>\n\n<h5>Swallow Whole (Ex)</h5>\n<p>\n\tA tyrannosaurus can try to swallow a grabbed opponent of up to two sizes smaller by making a successful grapple check. The swallowed creature takes 2d8+8 points of bludgeoning damage and 8 points of acid damage per round from the tyrannosaurus’s gizzard. A swallowed creature can cut its way out by using a light slashing or piercing weapon to deal 25 points of damage to the gizzard (AC 12). Once the creature exits, muscular action closes the hole; another swallowed opponent must cut its own way out.\n</p>\n<p>\n\tA Huge tyrannosaurus’s gizzard can hold 2 Medium, 8 Small, 32 Tiny, or 128 Diminutive or smaller opponents.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA tyrannosaurus has a +2 racial bonus on Listen and Spot checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

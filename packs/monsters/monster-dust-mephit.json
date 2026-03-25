@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dust Mephit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tDust mephits come from the Elemental Plane of Air.\n</p>\n<p>\n\tA dust mephit is about 4 feet tall and weighs about 2 pounds.\n</p>\n<p>\n\tDust mephits speak Common and Auran.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t10-foot cone of irritating particles, damage 1d4, Reflex DC 12 half. Living creatures that fail their saves are tormented by itching skin and burning eyes. This effect imposes a -4 penalty to AC and a -2 penalty on attack rolls for 3 rounds. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tOnce per hour, a dust mephit can surround itself with a plume of dust, duplicating the effect of a blur spell (caster level 3rd). Once per day it can create a mass of roiling dust that duplicates the effect of wind wall (DC 15, caster level 6th). The save DC is Charisma-based.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tA dust mephit heals only if in an arid, dusty environment.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

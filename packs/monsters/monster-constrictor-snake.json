@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Constrictor Snake (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tConstrictor snakes usually are not aggressive and flee when confronted. They hunt for food but do not attempt to make a meal out of any creature that is too large to constrict.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tConstrictor snakes hunt by grabbing prey with their mouths and then squeezing it with their powerful bodies.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tOn a successful grapple check, a constrictor snake deals 1d3+4 points of damage.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a constrictor snake must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

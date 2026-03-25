@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Giant Stag Beetle (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese creatures are serious pests that greedily devour cultivated crops. A single beetle can strip an entire farm in short order. An adult giant stag beetle is about 10 feet long.\n</p>\n\n<h5>Trample (Ex)</h5>\n<p>\n\tReflex half DC 19. The save DC is Strength-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

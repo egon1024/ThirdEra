@@ -141,7 +141,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Hound Archon (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tHound archons look like well-muscled humans with canine heads.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tHound archons prefer to attack with their natural weapons but occasionally use greatswords.\n</p>\n<p>\n\tA hound archon’s natural weapons, as well as any weapons it wields, are treated as good-aligned and lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—aid, continual flame, detect evil, message. Caster level 6th.\n</p>\n\n<h5>Aura of Menace (Su)</h5>\n<p>\n\tWill DC 16 negates.\n</p>\n\n<h5>Change Shape (Su)</h5>\n<p>\n\tA hound archon can assume any canine form of Small to Large size. While in canine form, the hound archon loses its bite, slam, and greatsword attacks, but gains the bite attack of the form it chooses. For the purposes of this ability, canines include any doglike or wolflike animal of the animal type.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*While in canine form, a hound archon gains a +4 circumstance bonus on Hide and Survival checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Manta Ray (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese fish are nonaggressive and generally avoid contact with other creatures. They filter plankton and similar small organisms from the water through their gaping, toothless maws.\n</p>\n\n<h2>Combat</h2>\n<p>\n\t*If threatened, a manta ray uses its size and weight to ram opponents. This is treated as a secondary attack.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA manta ray has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

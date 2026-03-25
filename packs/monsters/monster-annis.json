@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Annis (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tAn annis commonly uses its disguise self ability to take the form of an exceptionally tall human, a fair giant, or an ogre.\n</p>\n<p>\n\tAn annis stands some 8 feet tall and weighs about 325 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tThough physically powerful, these hags do not favor simple assaults but try to divide and confuse their foes before combat. They love to pose as commoners or gentlefolk to lull their victims into a sense of false security before they attack.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, an annis must hit a Large or smaller opponent with a claw attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +13 melee, damage 1d6+7. An annis can attack a grappled foe with both claws at no penalty.\n</p>\n\n<h5>Rend (Ex)</h5>\n<p>\n\tAn annis that hits with both claw attacks latches onto the opponent’s body and tears the flesh. This attack automatically deals an extra 2d6+10 points of damage.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t3/day—disguise self, fog cloud. Caster level 8th.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

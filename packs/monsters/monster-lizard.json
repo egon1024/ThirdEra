@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Lizard (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe statistics presented here describe small, nonvenomous lizards of perhaps a foot or two in length, such as an iguana.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tLizards prefer flight to combat, but they can bite painfully if there is no other option.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tLizards have a +8 racial bonus on Balance checks. They also have a +8 racial bonus on Climb checks and can always choose to take 10 on Climb checks, even if rushed or threatened. Lizards use their Dexterity modifier instead of their Strength modifier for Climb checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

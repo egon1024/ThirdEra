@@ -140,7 +140,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Krenshar (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe krenshar is a strange, catlike carnivore with extremely flexible skin on its head. A typical krenshar measures 4 or 5 feet in length with a long, narrow head. It weighs about 175 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tKrenshars use solitary scouts to drive prey into the waiting clutches of the pride. The scout appears from hiding, uses its scare ability, then chases the fleeing target to join the attack.\n</p>\n\n<h5>Scare (Ex or Su)</h5>\n<p>\n\tAs a standard action, a krenshar can pull the skin back from its head, revealing the musculature and bony structures of its skull. This alone is usually sufficient to scare away foes (treat as a Bluff check with a +3 bonus).\n</p>\n<p>\n\tCombining this scare ability with a loud screech produces an unsettling effect that works like a scare spell from a 3rd-level caster (Will DC 13 partial). A creature that successfully saves cannot be affected again by the same krenshar’s scare ability for 24 hours. The shriek does not affect other krenshars. This is a supernatural, sonic mind-affecting fear effect. The save DC is Charisma-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tKrenshars have a +4 racial bonus on Jump and Move Silently checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

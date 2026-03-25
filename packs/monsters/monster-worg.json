@@ -140,7 +140,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Worg (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA typical worg has gray or black fur, grows to 5 feet long and stands 3 feet tall at the shoulder. It weighs 300 pounds.\n</p>\n<p>\n\tMore intelligent than their smaller cousins, worgs speak their own language. Some can also speak Common and Goblin.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tMated pairs or packs work together to bring down large game, while lone worgs usually chase down creatures smaller than themselves. Both often use hit-and-run tactics to exhaust their quarry. A pack usually circles a larger opponent: Each wolf attacks in turn, biting and retreating, until the creature is exhausted, at which point the pack moves in for the kill. If they get impatient or heavily outnumber the opponent, worgs attempt to pin it.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA worg that hits with a bite attack can attempt to trip the opponent (+3 check modifier) as a free action without making a touch attack or provoking an attack of opportunity. If the attempt fails, the opponent cannot react to trip the worg.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA worg has a +1 racial bonus on Listen, Move Silently, and Spot checks, and a +2 racial bonus on Hide checks. *A worg has a +4 racial bonus on Survival checks when tracking by scent.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Pony (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe statistics presented here describe a small horse, under 5 feet tall at the shoulder. Ponies are otherwise similar to light horses and cannot fight while carrying a rider.\n</p>\n\n<h2>Combat</h2>\n<p>\n\t*A pony not trained for war does not normally use its hooves to attack but rather to run. Its hoof attack is treated as a secondary attack and adds only half the pony’s Strength bonus to damage.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a pony is up to 75 pounds; a medium load, 76-150 pounds; and a heavy load, 151-225 pounds. A pony can drag 1,125 pounds.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

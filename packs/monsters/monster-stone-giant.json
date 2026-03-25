@@ -138,7 +138,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Stone Giant (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tStone giants prefer thick leather garments, dyed in shades of brown and gray to match the stone around them. Adults are about 12 feet tall and weigh about 1,500 pounds. Stone giants can live to be 800 years old.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tStone giants fight from a distance whenever possible, but if they can’t avoid melee, they use gigantic clubs chiseled out of stone. A favorite tactic of stone giants is to stand nearly motionless, blending in with the background, then move forward to throw rocks and surprise their foes.\n</p>\n\n<h5>Rock Throwing (Ex)</h5>\n<p>\n\tThe range increment is 180 feet for a stone giant’s thrown rocks. It uses both hands when throwing a rock.\n</p>\n\n<h5>Rock Catching (Ex)</h5>\n<p>\n\tA stone giant gains a +4 racial bonus on its Reflex save when attempting to catch a thrown rock.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*A stone giant gains a +8 racial bonus on Hide checks in rocky terrain.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dire Lion (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tDire lions are patient hunters, just like their smaller cousins, but apt to take on bigger prey.\n</p>\n<p>\n\tDire lions grow to be up to 15 feet long and weigh up to 3,500 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA dire lion attacks by running at prey, leaping, and clawing and biting as it rakes with its rear claws. It often jumps onto a creature larger than itself.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a dire lion must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can rake.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a dire lion charges, it can make a full attack, including two rake attacks.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +12 melee, damage 1d6+3.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDire lions have a +4 racial bonus on Hide and Move Silently checks.\n</p>\n<p>\n\t*In areas of tall grass or heavy undergrowth, the Hide bonus improves to +8.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

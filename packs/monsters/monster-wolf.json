@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Wolf (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tWolves are pack hunters known for their persistence and cunning.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA favorite tactic is to send a few individuals against the foe’s front while the rest of the pack circles and attacks from the flanks or rear.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA wolf that hits with a bite attack can attempt to trip the opponent (+1 check modifier) as a free action without making a touch attack or provoking an attack of opportunity. If the attempt fails, the opponent cannot react to trip the wolf.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*Wolves have a +4 racial bonus on Survival checks when tracking by scent.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

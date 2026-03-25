@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Achaierai (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tAchaierais are massive, 15-foot-tall flightless birds that inhabit lawful planes of battle and are only occasionally encountered elsewhere.\n</p>\n<p>\n\tAchaierais speak Infernal. They weigh about 750 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tIn close combat, an achaierai lashes out with two of its four legs and snaps with its powerful beak. It makes frequent use of its Spring Attack feat to strike quickly and then retreat out of range before an enemy can counterattack.\n</p>\n<p>\n\tAn achaierai’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawfulaligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Black Cloud (Ex)</h5>\n<p>\n\tUp to three times per day an achaierai can release a choking, toxic black cloud.\n</p>\n<p>\n\tThose other than achaierai within 10 feet instantly take 2d6 points of damage. They must also succeed on a DC 15 Fortitude save or be affected for 3 hours as though by an insanity spell (caster level 16th). The save DC is Constitution-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

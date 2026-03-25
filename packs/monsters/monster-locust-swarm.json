@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Locust Swarm (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA locust swarm is a cloud of thousands of winged vermin that devours any organic material in its path.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA locust swarm surrounds and attacks any living prey it encounters. A swarm deals 2d6 points of damage to any creature whose space it occupies at the end of its move.\n</p>\n\n<h5>Distraction (Ex)</h5>\n<p>\n\tAny living creature that begins its turn with a locust swarm in its space must succeed on a DC 12 Fortitude save or be nauseated for 1 round. The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA locust swarm has a +4 racial bonus on Listen and Spot checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

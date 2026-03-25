@@ -127,7 +127,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dire Bat (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA dire bat has a wingspan of 15 feet and weighs about 200 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tDire bats swoop down upon unsuspecting prey from above.\n</p>\n\n<h5>Blindsense (Ex)</h5>\n<p>\n\tA dire bat uses echolocation to pinpoint creatures within 40 feet. Opponents still have total concealment against the bat unless it can actually see them.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDire bats have a +4 racial bonus on Spot and Listen checks. These bonuses are lost if its blindsense is negated.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

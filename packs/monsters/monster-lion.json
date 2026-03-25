@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Lion (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe statistics presented here describe a male African lion, which is 5 to 8 feet long and weighs 330 to 550 pounds. Females are slightly smaller but use the same statistics.\n</p>\n\n<h2>Combat</h2>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a lion charges a foe, it can make a full attack, including two rake attacks.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a lion must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can rake.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +7 melee, damage 1d4+2.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tLions have a +4 racial bonus on Balance, Hide, and Move Silently checks. *In areas of tall grass or heavy undergrowth, the Hide bonus improves to +12.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

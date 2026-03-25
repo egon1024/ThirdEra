@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Green Hag (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tGreen hags are found in desolate swamps and dark forests.\n</p>\n<p>\n\tA green hag is about the same height and weight as a female human.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGreen hags prefer to attack from hiding, usually after distracting foes. They often use darkvision to their advantage by attacking during moonless nights.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—dancing lights, disguise self, ghost sound (DC 12), invisibility, pass without trace, tongues, water breathing. Caster level 9th. The save DC is Charisma-based.\n</p>\n\n<h5>Weakness (Su)</h5>\n<p>\n\tA green hag can weaken a foe by making a special touch attack. The opponent must succeed on a DC 16 Fortitude save or take 2d4 points of Strength damage. The save DC is Charisma-based.\n</p>\n\n<h5>Mimicry (Ex)</h5>\n<p>\n\tA green hag can imitate the sounds of almost any animal found near its lair.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA green hag has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

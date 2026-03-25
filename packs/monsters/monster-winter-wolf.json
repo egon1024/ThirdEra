@@ -142,7 +142,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Winter Wolf (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA winter wolf grows about 8 feet long and stands about 4&frac12; feet at the shoulder. It weighs about 450 pounds.\n</p>\n<p>\n\tWinter wolves can speak Giant and Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tWinter wolves typically hunt in packs. Their size, cunning, and formidable breath weapon allow them to hunt and kill creatures much larger than themselves. A pack usually circles an opponent, each wolf attacking in turn to exhaust it. If they’re in a hurry, white wolves try to pin their foes.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t15-foot cone, once every 1d4 rounds, damage 4d6 cold, Reflex DC 16 half. The save DC is Constitution-based.\n</p>\n\n<h5>Freezing Bite (Su)</h5>\n<p>\n\tA winter wolf deals an extra 1d6 points of cold damage every time it bites an opponent, as if its bite were a frost weapon.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA winter wolf that hits with a bite attack can attempt to trip the opponent (+8 check modifier) as a free action without making a touch attack or provoking an attack of opportunity. If the attempt fails, the opponent cannot react to trip the winter wolf.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tWinter wolves have a +1 racial bonus on Listen, Move Silently, and Spot checks. Winter wolves have a +2 racial bonus on Hide checks. *Their natural coloration grants them a +7 racial bonus on Hide checks in areas of snow and ice. A winter wolf has a +4 racial bonus on Survival checks when tracking by scent.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

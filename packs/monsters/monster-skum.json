@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Skum (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA skum is about the same height and weight as a human. Skum speak Aquan.\n</p>\n\n<h2>Combat</h2>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +0 melee, damage 1d6+2. A skum also gains two rake attacks when it attacks while swimming.\n</p>\n\n<h5>Amphibious (Ex)</h5>\n<p>\n\tAlthough skum are aquatic, they can survive indefinitely on land.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*Skum have a +4 racial bonus on Hide, Listen, and Spot checks underwater.\n</p>\n<p>\n\tA skum has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

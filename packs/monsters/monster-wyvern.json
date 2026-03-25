@@ -140,7 +140,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Wyvern (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA distant cousin to the true dragons, the wyvern is a huge flying lizard with a poisonous stinger in its tail.\n</p>\n<p>\n\tA wyvern’s body is 15 feet long, and dark brown to gray; half that length is tail. Its wingspan is about 20 feet. A wyvern weighs about one ton.\n</p>\n<p>\n\tWyverns speak Draconic, but usually don’t bother with anything more elaborate than a loud hiss or a deep-throated growl much like that of a bull alligator.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tWyverns are rather stupid but always aggressive: They attack nearly anything that isn’t obviously more powerful than themselves. A wyvern dives from the air, snatching the opponent with its talons and stinging it to death. A wyvern can slash with its talons only when making a flyby attack.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a wyvern must hit with its talons. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and stings.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 17, initial and secondary damage 2d6 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tWyverns have a +3 racial bonus on Spot checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

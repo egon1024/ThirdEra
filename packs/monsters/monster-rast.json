@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Rast (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA rast has anywhere from ten to fifteen claws, though it can only use four at once.\n</p>\n<p>\n\tA rast has a body about the size of a large dog’s, with a head almost as large as the body. It weighs about 200 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tRasts paralyze as many of their foes as possible, then attack any that are still moving. A rast can claw or bite, but cannot do both during the same round.\n</p>\n\n<h5>Paralyzing Gaze (Su)</h5>\n<p>\n\tParalysis for 1d6 rounds, 30 feet, Fortitude DC 13 negates. The save DC is Charisma-based.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a rast must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity.\n</p>\n\n<h5>Blood Drain (Ex)</h5>\n<p>\n\tA rast drains blood from a grabbed opponent, dealing 1 point of Constitution damage each round it maintains the hold.\n</p>\n\n<h5>Flight (Su)</h5>\n<p>\n\tA rast can cease or resume flight as a free action. A rast that loses this ability falls and can perform only a single action (either a move action or an attack action) each round.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

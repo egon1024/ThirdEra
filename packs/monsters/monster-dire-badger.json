@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dire Badger (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese vicious creatures tolerate no intrusions. They cannot burrow into solid rock, but can move through just about any material softer than that. A dire badger usually leaves behind a usable tunnel 5 feet in diameter when burrowing unless the material it’s moving through is very loose.\n</p>\n<p>\n\tA dire badger is from 5 to 7 feet in length and can weigh up to 500 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tDire badgers attack with their sharp claws and teeth.\n</p>\n\n<h5>Rage (Ex)</h5>\n<p>\n\tA dire badger that takes damage in combat flies into a berserk rage on its next turn, clawing and biting madly until either it or its opponent is dead. It gains +4 Strength, +4 Constitution, and -2 AC. The creature cannot end its rage voluntarily.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

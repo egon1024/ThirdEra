@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dire Rat (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tDire rats are omnivorous scavengers, but will attack to defend their nests and territories.\n</p>\n<p>\n\tA dire rat can grow to be up to 4 feet long and weigh over 50 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tDire rat packs attack fearlessly, biting and chewing with their sharp incisors.\n</p>\n\n<h5>Disease (Ex)</h5>\n<p>\n\tFilth fever—bite, Fortitude DC 11, incubation period 1d3 days, damage 1d3 Dex and 1d3 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDire rats have a +8 racial bonus on Swim checks. Dire rats have a +8 racial bonus on Climb checks and can always choose to take 10 on Climb checks, even if rushed or threatened.\n</p>\n<p>\n\tDire rats use their Dexterity modifier for Climb and Swim checks.\n</p>\n\n<h2>Fiendish Dire Rat</h2>\n<p>\n\tThese fiendish creatures are commonly summoned by the summon monster I spell.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Smite Good (Su)</h5>\n<p>\n\tOnce per day a fiendish dire rat can make a normal melee attack to deal 1 point of extra damage against a good foe.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

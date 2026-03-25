@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Medusa (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA medusa is indistinguishable from a normal human at distances greater than 30 feet (or closer, if its face is concealed). The creature often wears garments that enhance its body while hiding its face behind a hood or veil.\n</p>\n<p>\n\tA typical medusa is 5 to 6 feet tall and about the same weight as a human.\n</p>\n<p>\n\tMedusas speak Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA medusa tries to disguise its true nature until the intended victim is within range of its petrifying gaze, using subterfuge and bluffing games to convince the target that there is no danger. It uses normal weapons to attack those who avert their eyes or survive its gaze, while its poisonous snakes strike at adjacent opponents.\n</p>\n\n<h5>Petrifying Gaze (Su)</h5>\n<p>\n\tTurn to stone permanently, 30 feet, Fortitude DC 15 negates. The save DC is Charisma-based.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 14, initial damage 1d6 Str, secondary damage 2d6 Str. The save DC is Constitution-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

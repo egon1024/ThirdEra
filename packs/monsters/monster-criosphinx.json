@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Criosphinx (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese sphinxes are always male. Neither good nor evil, they lack the intelligence of the androsphinx.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tCriosphinxes attack with their claws, as do their kin, but they can also butt with their horns. They don’t cast spells and employ only the most simple battle tactics.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +15 melee, damage 1d6+3.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Giant Bombardier Beetle (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese creatures feed primarily on carrion and offal, gathering heaps of the stuff in which to build nests and lay eggs. A giant bombardier beetle is about 6 feet long. Giant bombardier beetles normally attack only to defend themselves, their nests, or their eggs.\n</p>\n\n<h5>Acid Spray (Ex)</h5>\n<p>\n\tWhen attacked or disturbed, the creature can release a 10-foot cone of acidic vapor once per round. Those within the cone must succeed on a DC 13 Fortitude save or take 1d4+2 points of acid damage. The save DC is Constitution-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

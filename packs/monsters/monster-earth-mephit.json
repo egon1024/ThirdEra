@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Earth Mephit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tEarth mephits come from the Elemental Plane of Earth.\n</p>\n<p>\n\tAn earth mephit is about 4 feet tall and weighs about 80 pounds.\n</p>\n<p>\n\tEarth mephits speak Common and Terran.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t15-foot cone of rock shards and pebbles, damage 1d8, Reflex DC 13 half. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/day—soften earth and stone. Caster level 6th.\n</p>\n\n<h5>Change Size (Sp)</h5>\n<p>\n\tOnce per hour, an earth mephit can magically change its size. This works just like an enlarge person spell, except that the power works only on the earth mephit. This is the equivalent of a 2nd-level spell.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tAn earth mephit heals only if it is underground or buried up to its waist in earth.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

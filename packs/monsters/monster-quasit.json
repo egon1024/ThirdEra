@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Quasit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tIn its natural form, a quasit stands about 1&frac12; feet tall and weighs about 8 pounds.\n</p>\n<p>\n\tQuasits speak Common and Abyssal.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tAlthough quasits thirst for victory and power as other demons do, they are cowards at heart. They typically attack from ambush, using their alternate form ability and invisibility to get within reach, then try to scuttle away. When retreating, they use their cause fear ability to deter pursuit.\n</p>\n<p>\n\tA quasit’s natural weapons, as well as any weapons it wields, are treated as chaotic-aligned and evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 13, initial damage 1d4 Dex, secondary damage 2d4 Dex. The save DC is Constitution-based and includes a +2 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—detect good, detect magic, and invisibility (self only); 1/day—cause fear (as the spell, except that its area is a 30-foot radius from the quasit, save DC 11). Caster level 6th.\n</p>\n<p>\n\tThe save DCs are Charisma-based.\n</p>\n<p>\n\tOnce per week a quasit can use commune to ask six questions. The ability otherwise works as the spell (caster level 12th).\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tA quasit can assume another form at will as a standard action. Each quasit can assume one or two forms from the following list: bat, Small or Medium monstrous centipede, toad, and wolf.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

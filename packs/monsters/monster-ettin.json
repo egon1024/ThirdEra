@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Ettin (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tEttins, or two-headed giants, are vicious and unpredictable hunters that stalk the night.\n</p>\n<p>\n\tAn ettin never bathes if it can help it, which usually leaves it so grimy and dirty its skin resembles thick, gray hide. Adult ettins are about 13 feet tall and weigh 5,200 pounds. They live about 75 years.\n</p>\n<p>\n\tEttins have no language of their own but speak a pidgin of Orc, Goblin, and Giant. Creatures that can speak any of these languages must succeed on a DC 15 Intelligence check to communicate with an ettin. Check once for each bit of information: If the other creature speaks two of these languages, the DC is 10, and for someone who speaks all three, the DC is 5.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tThough ettins aren’t very intelligent, they are cunning fighters.\n</p>\n<p>\n\tThey prefer to ambush their victims rather than charge into a straight fight, but once the battle has started, an ettin usually fights furiously until all enemies are dead.\n</p>\n\n<h5>Superior Two-Weapon Fighting (Ex)</h5>\n<p>\n\tAn ettin fights with a morningstar or javelin in each hand. Because each of its two heads controls an arm, the ettin does not take a penalty on attack or damage rolls for attacking with two weapons.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tAn ettin’s two heads give it a +2 racial bonus on Listen, Spot, and Search checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

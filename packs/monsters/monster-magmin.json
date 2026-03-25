@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Magmin (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tMagmins are small, human-shaped beings from the Elemental Plane of Fire that radiate intense heat and are wreathed in an aura of searing flames. A typical magmin is 4 feet tall and weighs 400 pounds.\n</p>\n<p>\n\tMagmins speak Ignan.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tAlthough small, magmins are dangerous opponents. Their touch is effective against those who lack protection or immunity from heat and flames, but if faced with opponents who have immunity to fire, magmins rely on their slam attack. In any case, magmins are not valiant fighters. They usually flee if injured, although often only far enough to set up a fiery ambush for their enemies.\n</p>\n<p>\n\tA magmin’s natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Combustion (Ex)</h5>\n<p>\n\tAnyone a magmin touches must succeed on a DC 12 Reflex save or take an extra 1d8 points of fire damage as clothes ignite or armor becomes searing hot. The damage continues for another 1d4+2 rounds after the magmin’s last successful attack. Magmins can also ignite flammable materials with a touch. The save DC is Constitution-based.\n</p>\n\n<h5>Fiery Aura (Ex)</h5>\n<p>\n\tAnyone within 20 feet of a magmin must succeed on a DC 12 Fortitude save or take 1d6 points of heat damage per round from the intense heat. The save DC is Constitution-based.\n</p>\n\n<h5>Melt Weapons (Ex)</h5>\n<p>\n\tAny metal weapon that strikes a magmin must succeed on a DC 12 Fortitude save or melt away into slag. The save DC is Constitution-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

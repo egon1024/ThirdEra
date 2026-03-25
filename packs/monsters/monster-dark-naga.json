@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dark Naga (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tDark nagas speak Common and Infernal.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tDark nagas prefer to fight from an elevated position where they get a good view of the battlefield while also staying out of reach.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 16 or lapse into a nightmare-haunted sleep for 2d4 minutes. The save DC is Constitution-based.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tDark nagas cast spells as 7th-level sorcerers.\n</p>\n\n<h5>Typical Sorcerer Spells Known (6/7/7/5; save DC 13 + spell level)</h5>\n<p>\n\t0—daze, detect magic, light, mage hand, open/close, ray of frost, read magic; 1st—expeditious retreat, magic missile, ray of enfeeblement, shield, silent image; 2nd—cat’s grace, invisibility, scorching ray; 3rd—displacement, lightning bolt.\n</p>\n\n<h5>Resistance to Charm</h5>\n<p>\n\tDark nagas have a +2 racial bonus on saving throws against all charm effects (not included in the statistics block).\n</p>\n\n<h5>Detect Thoughts (Su)</h5>\n<p>\n\tA dark naga can continuously use detect thoughts as the spell (caster level 9th; Will DC 15 negates). This ability is always active. The save DC is Charisma-based.\n</p>\n\n<h5>Guarded Thoughts (Ex)</h5>\n<p>\n\tDark nagas are immune to any form of mind reading.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

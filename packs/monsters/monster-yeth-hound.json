@@ -139,7 +139,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Yeth Hound (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA yeth hound stands 5 feet tall at the shoulder and weighs about 400 pounds.\n</p>\n<p>\n\tYeth hounds cannot speak, but understand Infernal.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tYeth hounds hunt only at night. They fear the sun and never venture out in daylight, even if their lives depend on it.\n</p>\n<p>\n\tA yeth hound’s natural weapons, as well as any weapons it wields, are treated as evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Bay (Su)</h5>\n<p>\n\tWhen a yeth hound howls or barks, all creatures except other evil outsiders within a 300-foot spread must succeed on a DC 11 Will save or become panicked for 2d4 rounds. This is a sonic mind-affecting fear effect. Whether or not the save is successful, an affected creature is immune to the same hound’s bay for 24 hours. The save DC is Charisma-based.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA yeth hound that hits with its bite attack can attempt to trip the opponent (+3 check modifier) as a free action without making a touch attack or provoking an attack of opportunity. If the attempt fails, the opponent cannot react to trip the yeth hound.\n</p>\n\n<h5>Flight (Su)</h5>\n<p>\n\tA yeth hound can cease or resume flight as a free action.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*A yeth hound has a +4 racial bonus on Survival checks when tracking by scent.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

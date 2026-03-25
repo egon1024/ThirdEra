@@ -142,7 +142,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Pyrohydra (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<h2 id=\"pyrohydra\">Pyrohydra</h2>\n\n<h5>Huge Magical Beast (Fire)</h5>\n<p>\n\tThese reddish hydras can breathe jets of fire 10 feet high, 10 feet wide, and 20 feet long. All heads breathe once every 1d4 rounds. Each jet deals 3d6 points of fire damage per head. A successful Reflex save halves the damage. The save DC is 10 + &frac12; hydra’s original number of heads + hydra’s Con modifier.\n</p>\n<p>\n\tFire attacks cannot prevent a pyrohydra’s stump from growing new heads (since a pyrohydra has immunity to fire), but 5 points of cold damage does.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

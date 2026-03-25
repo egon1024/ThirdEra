@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Donkey (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese long-eared, horselike creatures are surefooted and sturdy. The statistics presented here could also describe burros.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a donkey is up to 50 pounds; a medium load, 51-100 pounds; and a heavy load, 101-150 pounds. A donkey can drag 750 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA donkey bites only when it has no way to escape.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDonkeys have a +2 racial bonus on Balance checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

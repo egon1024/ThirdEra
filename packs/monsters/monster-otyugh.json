@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Otyugh (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA typical otyugh has a body 8 feet in diameter and weighs about 500 pounds.\n</p>\n<p>\n\tOtyughs speak Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tAn otyugh attacks living creatures if it feels threatened or if it is hungry; otherwise it is content to remain hidden. Otyughs slash and squeeze opponents with their tentacles, which they also use to drag prey into their mouths.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tAn otyugh deals automatic tentacle damage with a successful grapple check.\n</p>\n\n<h5>Disease (Ex)</h5>\n<p>\n\tFilth fever—bite, Fortitude DC 14, incubation period 1d3 days; damage 1d3 Dex and 1d3 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, an otyugh must hit with a tentacle attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*An otyugh has a +8 racial bonus on Hide checks when in its lair, due to its natural coloration.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

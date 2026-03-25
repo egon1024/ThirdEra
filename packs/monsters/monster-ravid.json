@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Ravid (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tRavids are creatures from the Positive Energy Plane. These bizarre entities imbue creatures with energy by their touch and animate lifeless objects around them. Ravids that make their way to the Material Plane wander about aimlessly, followed by the objects to which they have given life.\n</p>\n<p>\n\tA ravid is about 7 feet long and weighs about 75 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tRavids fight only in self-defense. A ravid itself is not very powerful but is always accompanied by at least one animated object that defends it.\n</p>\n\n<h5>Positive Energy Lash (Su)</h5>\n<p>\n\tA ravid can make a touch attack or hit with a claw or tail slap attack to infuse a target with positive energy. The energy produces an unpleasant tingle in living creatures, and against undead foes (even incorporeal ones) it deals 2d10 points of damage.\n</p>\n\n<h5>Animate Objects (Su)</h5>\n<p>\n\tOnce per round, a random object within 20 feet of a ravid animates as though by the spell animate objects (caster level 20th). These objects defend the ravid to the best of their ability, but the ravid isn’t intelligent enough to employ elaborate tactics with them.\n</p>\n\n<h5>Flight (Su)</h5>\n<p>\n\tA ravid can cease or resume flight as a free action. A ravid that loses this ability falls and can perform only a single action (either a move action or an attack action) each round.\n</p>\n\n<h5>Feats</h5>\n<p>\n\tA ravid has the Multiattack feat even through it does not have the requisite three natural weapons.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

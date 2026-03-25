@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Weasel (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese little mammals are aggressive predators but usually confine themselves to smaller prey. The statistics presented here can also apply to ferrets.\n</p>\n\n<h2>Combat</h2>\n\n<h5>Attach (Ex)</h5>\n<p>\n\tIf a weasel hits with a bite attack, it uses its powerful jaws to latch onto the opponent’s body and automatically deals bite damage each round it remains attached. An attached weasel loses its Dexterity bonus to Armor Class and has an AC of 12. An attached weasel can be struck with a weapon or grappled itself. To remove an attached weasel through grappling, the opponent must achieve a pin against the creature.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tWeasels have a +4 racial bonus on Move Silently checks and a +8 racial bonus on Balance and Climb checks. They use their Dexterity modifier for Climb checks. A weasel can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

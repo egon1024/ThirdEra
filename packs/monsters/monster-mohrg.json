@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Mohrg (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tMohrgs are the animated corpses of mass murderers or similar villains who died without atoning for their crimes. Most mohrgs are 5 to 6 feet tall and weigh about 120 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tLike zombies, mohrgs attack by slamming enemies with their fists. They often catch opponents flat-footed, for they move much faster than zombies.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a mohrg must hit a creature of its size or smaller with its slam attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity.\n</p>\n\n<h5>Paralyzing Touch (Su)</h5>\n<p>\n\tA mohrg lashes out with its tongue in combat. An opponent the tongue touches must succeed on a DC 17 Fortitude save or become paralyzed for 1d4 minutes. The save DC is Charisma-based.\n</p>\n\n<h5>Create Spawn (Su)</h5>\n<p>\n\tCreatures killed by a mohrg rise after 1d4 days as zombies under the morhg’s control. They do not possess any of the abilities they had in life.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

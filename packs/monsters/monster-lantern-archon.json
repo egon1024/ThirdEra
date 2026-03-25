@@ -137,7 +137,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Lantern Archon (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tLantern archons appear as floating balls of light that glow about as brightly as a torch. Only their destruction can extinguish the glow, though they can try to hide it.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA lantern archon has little reason to get within melee range. It usually hovers just close enough to bring the enemy within its aura of menace, then blasts away with its light rays. Lantern archons prefer to concentrate on a single opponent, seeking to reduce enemy numbers quickly.\n</p>\n\n<h5>Aura of Menace (Su)</h5>\n<p>\n\tWill DC 12 negates.\n</p>\n\n<h5>Light Ray (Ex)</h5>\n<p>\n\tA lantern archon’s light rays have a range of 30 feet. This attack overcomes damage reduction of any type.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—aid, detect evil, continual flame. Caster level 3rd.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

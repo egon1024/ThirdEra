@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Shadow (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA shadow can be difficult to see in dark or gloomy areas but stands out starkly in brightly illuminated places.\n</p>\n<p>\n\tA shadow is 5 to 6 feet tall and is weightless. Shadows cannot speak intelligibly.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tShadows lurk in dark places, waiting for living prey to happen by.\n</p>\n\n<h5>Strength Damage (Su)</h5>\n<p>\n\tThe touch of a shadow deals 1d6 points of Strength damage to a living foe. A creature reduced to Strength 0 by a shadow dies. This is a negative energy effect.\n</p>\n\n<h5>Create Spawn (Su)</h5>\n<p>\n\tAny humanoid reduced to Strength 0 by a shadow becomes a shadow under the control of its killer within 1d4 rounds.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tShadows have a +2 racial bonus on Listen and Spot checks and a +4 racial bonus on Search checks. *A shadow gains a +4 racial bonus on Hide checks in areas of shadowy illumination. In brightly lit areas, it takes a -4 penalty on Hide checks.\n</p>\n\n<h2 id=\"greaterShadow\">Greater Shadow</h2>\n<p>\n\tAlthough no more intelligent than an average shadow, a greater shadow is more fearsome because of its increased damage and its hit-and-run tactics.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Strength Damage (Su)</h5>\n<p>\n\tThe touch of a greater shadow deals 1d8 points of Strength damage to a living foe.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

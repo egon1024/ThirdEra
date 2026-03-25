@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Tiefling (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tMany tieflings are indistinguishable from humans. Others have small horns, pointed teeth, red eyes, a whiff of brimstone about them, or even cloven feet. No two tieflings are the same.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tTieflings are sneaky, subtle, and generally conniving. They prefer to strike from ambush and usually avoid a fair fight if they can.\n</p>\n\n<h5>Darkness (Sp)</h5>\n<p>\n\tA tiefling can use darkness once per day (caster level equal to class levels).\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA tiefling has a +2 racial bonus on Bluff and Hide checks.\n</p>\n<p>\n\tThe tiefling warrior presented here had the following ability scores before racial adjustments: Str 13, Dex 11, Con 12, Int 10, Wis 9, Cha 8.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

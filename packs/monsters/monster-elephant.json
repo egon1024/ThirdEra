@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Elephant (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tMassive herbivores of tropical lands, elephants are unpredictable creatures but nevertheless are sometimes used as mounts or beasts of burden.\n</p>\n<p>\n\tThis entry describes an African elephant. Indian elephants are slightly smaller and weaker (Strength 28), but more readily trained (Wisdom 15). These statistics can also represent prehistoric creatures such as mammoths and mastodons.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tElephants tend to charge at threatening creatures.\n</p>\n\n<h5>Trample (Ex)</h5>\n<p>\n\tReflex half DC 25. The save DC is Strength-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

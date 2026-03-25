@@ -138,7 +138,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Wereboar (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA wereboar in humanoid form tends to be a stocky, muscular individual of average height. It dresses in simple garments that are easy to remove, repair, or replace.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tIn any form, wereboars are as ferocious as normal boars. When in hybrid form, they fight with a weapon and their dangerous gore attack.\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tA wereboar can assume the form of a boar or a boar-humanoid hybrid.\n</p>\n\n<h5>Boar Empathy (Ex)</h5>\n<p>\n\tCommunicate with boars and dire boars, and +4 racial bonus on Charisma-based checks against boars and dire boars.\n</p>\n\n<h5>Curse of Lycanthropy (Su)</h5>\n<p>\n\tAny humanoid or giant hit by the wereboar’s gore attack in animal or hybrid form must succeed on a DC 15 Fortitude save or contract lycanthropy.\n</p>\n\n<h5>Ferocity (Ex)</h5>\n<p>\n\tA wereboar is such a tenacious combatant that it continues to fight without penalty even while disabled or dying.\n</p>\n<p>\n\tThe wereboar presented here is a 1st-level human warrior and natural lycanthrope, using the following base ability scores: Str 13, Dex 11, Con 12, Int 10, Wis 9, Cha 8.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

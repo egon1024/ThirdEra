@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Thoqqua (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA thoqqua is about 1 foot in diameter and 4 to 5 feet long. It weighs about 200 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tWhen a thoqqua is disturbed, its first instinct is to attack. Its favored tactic is to spring directly at a foe, either by bursting out of the rock or by coiling up its body and launching itself like a spring. (Treat this as a charge, even though the thoqqua does not need to move 10 feet before attacking.)\n</p>\n\n<h5>Heat (Ex)</h5>\n<p>\n\tMerely touching or being touched by a thoqqua automatically deals 2d6 fire damage.\n</p>\n\n<h5>Burn (Ex)</h5>\n<p>\n\tWhen a thoqqua hits with its slam attack, the opponent must succeed on a DC 12 Reflex save or catch fire. The save DC is Constitution-based. The flame burns for 1d4 rounds if not extinguished sooner. A burning creature can use a full-round action to put out the flame.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

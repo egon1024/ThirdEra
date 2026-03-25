@@ -140,7 +140,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dragonne (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA dragonne possesses huge claws and fangs, and large eyes, usually the color of its scales. A dragonne is about 12 feet long and weighs about 700 pounds.\n</p>\n<p>\n\tDragonnes speak Draconic.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA dragonne’s wings are useful only for short flights, carrying the creature for 10 to 30 minutes at a time. Nevertheless, it uses its wings effectively in battle. If opponents attempt to charge or encircle it, the dragonne simply takes to the air and finds a more defensible position.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a dragonne charges, it can make a full attack in the same round.\n</p>\n\n<h5>Roar (Su)</h5>\n<p>\n\tA dragonne can loose a devastating roar every 1d4 rounds. All creatures except dragonnes within 120 feet must succeed on a DC 15 Will save or become fatigued. Those within 30 feet who fail their saves become exhausted. The save DC is Charisma-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDragonnes have a +4 racial bonus on Listen and Spot checks.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a dragonne is up to 348 pounds; a medium load, 349-699 pounds, and a heavy load, 700-1,050 pounds.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

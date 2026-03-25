@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dretch (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA dretch is about 4 feet tall and weighs about 60 pounds.\n</p>\n<p>\n\tDretches cannot speak but can communicate telepathically.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tDretches are slow, stupid, and not very effective combatants. In one-on-one combat, they rely on their damage reduction to keep them alive. In groups, they depend on sheer numbers to overcome foes and immediately summon other dretches to improve the odds in battle. They flee at the first sign of adversity unless more powerful demons are present to intimidate them into fighting. Dretches’ fear of their greater kin is stronger then even their fear of death.\n</p>\n<p>\n\tA dretch’s natural weapons, as well as any weapons it wields, are treated as chaotic-aligned and evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/day—scare (DC 12), stinking cloud (DC 13). Caster level 2nd. The save DCs are Charisma-based.\n</p>\n\n<h5>Summon Demon (Sp)</h5>\n<p>\n\tOnce per day a dretch can attempt to summon another dretch with a 35% chance of success. This ability is the equivalent of a 1st-level spell.\n</p>\n\n<h5>Telepathy (Su)</h5>\n<p>\n\tDretches can communicate telepathically with creatures within 100 feet that speak Abyssal.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Horse, Light (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe statistics presented here describe smaller breeds of working horses such as quarter horses and Arabians as well as wild horses. These animals are usually ready for useful work by age two. A light horse cannot fight while carrying a rider.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a light horse is up to 150 pounds; a medium load, 151-300 pounds; and a heavy load, 301-450 pounds. A light horse can drag 2,250 pounds.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

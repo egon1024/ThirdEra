@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Pony, War (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tWarponies are bred for strength and aggression, and are similar to light warhorses.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA warpony can fight while carrying a rider, but the rider cannot also attack unless he or she succeeds on a Ride check.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a warpony is up to 100 pounds; a medium load, 101-200 pounds; and a heavy load, 201-300 pounds. A warpony can drag 1,500 pounds.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

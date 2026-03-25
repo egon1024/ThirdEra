@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Shambling Mound (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tShambling mounds, also called shamblers, appear to be heaps of rotting vegetation. They are actually intelligent, carnivorous plants.\n</p>\n<p>\n\tA shambler’s brain and sensory organs are located in its upper body.\n</p>\n<p>\n\tA shambler’s body has an 8-foot girth and is about 6 feet tall when the creature stands erect. It weighs about 3,800 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA shambling mound batters or constricts its opponents with two huge, armlike appendages.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a shambler must hit with both slam attacks. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA shambler deals 2d6+7 points of damage with a successful grapple check.\n</p>\n\n<h5>Immunity to Electricity (Ex)</h5>\n<p>\n\tShamblers take no damage from electricity. Instead, any electricity attack used against a shambler temporarily grants it 1d4 points of Constitution. The shambler loses these points at the rate of 1 per hour.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tShamblers have a +4 racial bonus on Hide, Listen, and Move Silently checks. *They have a +12 racial bonus on Hide checks when in a swampy or forested area.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

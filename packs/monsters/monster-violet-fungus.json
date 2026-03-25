@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Violet Fungus (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<h2 id=\"violetFungus\">Violet Fungus</h2>\n<p>\n\tViolet fungi resemble shriekers and are often found growing among them.\n</p>\n<p>\n\tA violet fungi’s coloration ranges from purple overall to dull gray or violet covered with purple spots.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA violet fungus flails about with its tentacles at living creatures that come within its reach.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 14, initial and secondary damage 1d4 Str and 1d4 Con. The save DC is Constitution-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

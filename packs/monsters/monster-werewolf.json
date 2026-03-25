@@ -138,7 +138,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Werewolf (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tWerewolves in humanoid form have no distinguishing traits.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tIn wolf form, a werewolf can trip just as a normal wolf does. A werewolf in hybrid form usually dispenses with weapon attacks, though it can wield a weapon and use its bite as a secondary natural attack.\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tA werewolf can assume a bipedal hybrid form or the form of a wolf.\n</p>\n\n<h5>Curse of Lycanthropy (Su)</h5>\n<p>\n\tAny humanoid or giant hit by a werewolf’s bite attack in animal or hybrid form must succeed on a DC 15 Fortitude save or contract lycanthropy.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA werewolf in animal form that hits with a bite attack can attempt to trip the opponent (+2 check modifier) as a free action without making a touch attack or provoking an attack of opportunity.\n</p>\n<p>\n\tIf the attempt fails, the opponent cannot react to trip the werewolf.\n</p>\n\n<h5>Wolf Empathy (Ex)</h5>\n<p>\n\tCommunicate with wolves and dire wolves, and +4 racial bonus on Charisma-based checks against wolves and dire wolves.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*A werewolf in hybrid or wolf form gains a +4 racial bonus on Survival checks when tracking by scent.\n</p>\n<p>\n\tThe werewolf presented here is based on a 1st-level human warrior and natural lycanthrope, using the following base ability scores: Str 13, Dex 11, Con 12, Int 10, Wis 9, Cha 8.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Giant Ant (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tGiant ants are among the hardiest and most adaptable vermin. Soldiers and workers are about 6 feet long, while queens can grow to a length of 9 feet.\n</p>\n\n<h5>Acid Sting (Ex)</h5>\n<p>\n\tA giant soldier ant has a stinger and an acid-producing gland in its abdomen. If it successfully grabs an opponent, it can attempt to sting each round (+3 attack bonus). A hit with the sting attack deals 1d4+1 points of piercing damage and 1d4 points of acid damage.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a giant ant must hit with its bite attack. A giant soldier ant that wins the ensuing grapple check establishes a hold and can sting.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*Giant ants have a +4 racial bonus on Survival checks when tracking by scent and a +8 racial bonus on Climb checks. A giant ant can always choose to take 10 on Climb checks, even if rushed or threatened.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

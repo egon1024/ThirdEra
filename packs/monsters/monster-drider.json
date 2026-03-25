@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Drider (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tDriders speak Elven, Common, and Undercommon.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tDriders seldom pass up an opportunity to attack other creatures, especially from ambush. They usually begin with a spell assault and often levitate out of the enemy’s reach.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 16, initial and secondary damage 1d6 Str. The save DC is Constitution based.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/day—dancing lights (DC 13), clairaudience/clairvoyance, darkness, detect good, detect law, detect magic, dispel magic, faerie fire, levitate, suggestion (DC 16). Caster level 6th. The save DCs are Charisma-based.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tDriders cast spells as 6th-level clerics, wizards, or sorcerers. Drider clerics can choose from the following domains: Chaos, Destruction, Evil, and Trickery. The typical spells prepared shown here are for a drider sorcerer.\n</p>\n\n<h6>Typical Sorcerer Spells Known (6/7/6/4, base save DC 13 + spell level)</h6>\n<p>\n\t0—daze, detect magic, ghost sound, mage hand, ray of frost, read magic, resistance; 1st—mage armor, magic missile, ray of enfeeblement, silent image; 2nd— invisibility, web; 3rd—lightning bolt.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA drider has a +4 racial bonus on Hide and Move Silently checks. It has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

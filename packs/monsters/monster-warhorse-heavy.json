@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Warhorse, Heavy (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese animals are similar to heavy horses but are trained and bred for strength and aggression. A heavy warhorse can fight while carrying a rider, but the rider cannot also attack unless he or she succeeds on a Ride check.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a heavy warhorse is up to 300 pounds; a medium load, 301-600 pounds; and a heavy load, 601-900 pounds. A heavy warhorse can drag 4,500 pounds.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

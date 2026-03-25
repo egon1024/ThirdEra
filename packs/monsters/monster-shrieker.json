@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Shrieker (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<h2 id=\"shrieker\">Shrieker</h2>\n<p>\n\tA shrieker is a stationary fungus that emits a loud noise to attract prey or when disturbed. Shriekers live in dark, subterranean places, often in the company of violet fungi, whose poison they are immune to.\n</p>\n<p>\n\tShriekers come in of shades of purple.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA shrieker has no means of attack. Instead, it lures prey to its vicinity by emitting a loud noise.\n</p>\n\n<h5>Shriek (Ex)</h5>\n<p>\n\tMovement or a light source within 10 feet of a shrieker causes the fungus to emit a piercing sound that lasts for 1d3 rounds. The sound attracts nearby creatures that are disposed to investigate it. Some creatures that live near shriekers come to learn that the fungus’s noise means there is food nearby.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

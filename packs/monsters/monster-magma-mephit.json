@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Magma Mephit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tMagma mephits come from the Elemental Plane of Fire. Magma mephits are slow-witted and brutish. Each one is about 4 feet tall and weighs about 60 pounds.\n</p>\n<p>\n\tMagma mephits speak Common and Ignan.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t10-foot cone of magma, damage 1d4 fire, Reflex DC 12 half. Living creatures that fail their saves are tormented by burned skin and seared eyes unless they have immunity to fire or are otherwise protected. This effect imposes a -4 penalty to AC and a -2 penalty on attack rolls for 3 rounds. The save DC is onstitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tOnce per day a magma mephit can use pyrotechnics (DC 14). It can use itself as the fire source without harm. Caster level 6th. The save DC is Charisma-based.\n</p>\n\n<h5>Change Shape (Su)</h5>\n<p>\n\tOnce per hour, a magma mephit can assume the form of a pool of lava 3 feet in diameter and 6 inches deep. The mephit’s damage reduction improves to 20/magic when in this form. The mephit can’t attack while in lava form but can use other spell-like abilities. It can move at a speed of 10 feet, but it can’t run. In this form the mephit can pass through small holes or narrow openings, even mere cracks. The pool’s touch ignites flammable materials such as paper, straw, or dry wood.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tA magma mephit heals only if it is touching magma, lava, or a flame at least as large as a torch.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

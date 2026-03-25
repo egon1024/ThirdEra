@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Gynosphinx (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese sphinxes are the female counterparts of androsphinxes.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tIn close combat, gynosphinxes use their powerful claws to flay the flesh from their enemies. Despite their deadly nature, they prefer to avoid combat whenever possible.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +11 melee, damage 1d6+2.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t3/day—clairaudience/clairvoyance, detect magic, read magic, see invisibility; 1/day—comprehend languages, locate object, dispel magic, remove curse (DC 18), legend lore. Caster level 14th. The save DC is Charisma-based.\n</p>\n<p>\n\tOnce per week a gynosphinx can create a symbol of death, a symbol of fear, a symbol of insanity, a symbol of pain, a symbol of persuasion, a symbol of sleep, and a symbol of stunning as the spells (caster level 18th), except that all save DCs are 22 and each symbol remains a maximum of one week once scribed. The save DCs are Charisma-based.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Mule (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tMules are sterile crossbreeds of donkeys and horses. A mule is similar to a light horse, but slightly stronger and more agile.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA mule’s powerful kick can be dangerous.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a mule is up to 230 pounds; a medium load, 231-460 pounds; and a heavy load, 461-690 pounds. A mule can drag 3,450 pounds.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tMules have a +2 racial bonus on Dexterity checks to avoid slipping or falling.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

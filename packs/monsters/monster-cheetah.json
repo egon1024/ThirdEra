@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Cheetah (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tCheetahs are swift feline predators of the plains. A cheetah is 3 to 5 feet long and weighs 110 to 130 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tCheetahs make sudden sprints to bring down prey.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA cheetah that hits with a claw or bite attack can attempt to trip the opponent (+3 check modifier) as a free action without making a touch attack or provoking an attack of opportunity. If the attempt fails, the opponent cannot react to trip the cheetah.\n</p>\n\n<h5>Sprint (Ex)</h5>\n<p>\n\tOnce per hour, a cheetah can move ten times its normal speed (500 feet) when it makes a charge.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

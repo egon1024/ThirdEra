@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Imp (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tIn its natural form, an imp stands almost 2 feet tall and weighs about 8 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tImps are craven, but not so timid as to pass up an opportunity for a surprise attack using their invisibility and alternate form ability. In its natural form, an imp attacks with the wicked stinger on its tail. It quickly flies out of reach if a foe manages to strike back effectively.\n</p>\n<p>\n\tAn imp’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 13, initial damage 1d4 Dex, secondary damage 2d4 Dex. The save DC is Constitution-based and includes a +2 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—detect good, detect magic, invisibility (self only); 1/day—suggestion (DC 15). Caster level 6th. The save DC is Charisma-based.\n</p>\n<p>\n\tOnce per week an imp can use commune to ask six questions. The ability otherwise works as the spell (caster level 12th).\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tAn imp can assume another form at will as a standard action. Each imp can assume one or two forms from the following list: Small or Medium monstrous spider, raven, rat, and boar.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Lemure (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA lemure is about 5 feet tall and weighs about 100 pounds.\n</p>\n<p>\n\tLemures are mindless and cannot communicate, but they are sensitive to telepathic messages from other devils, typically obeying a devil’s mental commands.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tLemures surge toward anything they meet and try to claw it apart. Only a telepathic command from other devils or the complete destruction of the lemures can make them stop.\n</p>\n<p>\n\tA lemure’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Mindless (Ex)</h5>\n<p>\n\tImmunity to mind-affecting effects (charms, compulsions, phantasms, patterns, and morale effects).\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

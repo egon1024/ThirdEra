@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Hyena (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tHyenas are pack hunters infamous for their cunning and their unnerving vocalizations. The statistics presented here are for a striped hyena, which is about 3 feet long and weighs about 120 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA favorite tactic is to send a few individuals against the foe’s front while the rest of the pack circles and attacks from the flanks or rear.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA hyena that hits with its bite attack can attempt to trip the opponent (+2 check modifier) as a free action without making a touch attack or provoking an attack of opportunity. If the attempt fails, the opponent cannot react to trip the hyena.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*Hyenas have a +4 racial bonus on Hide checks in areas of tall grass or heavy undergrowth.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

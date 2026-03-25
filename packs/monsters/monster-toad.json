@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Toad (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese diminutive amphibians are innocuous and beneficial, since they eat insects.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA toad’s coloration gives it a +4 racial bonus on Hide checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

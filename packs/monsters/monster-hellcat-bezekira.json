@@ -140,7 +140,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Hellcat (Bezekira) (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tWhile its appearance suggests it is incorporeal, a hellcat has a corporeal body and can be harmed by physical attacks.\n</p>\n<p>\n\tHellcats use a natural telepathy to communicate with one another and those they encounter. A hellcat measures about 9 feet long and weighs about 900 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA hellcat can hold its own in combat thanks to sharp claws and wicked fangs. It prefers to leap upon opponents, just as a lion does.\n</p>\n<p>\n\tA hellcat’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a hellcat must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can rake.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a hellcat charges, it can make a full attack, including two rake attacks.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +13 melee, damage 1d8+3.\n</p>\n\n<h5>Invisible in Light (Ex)</h5>\n<p>\n\tA hellcat is Invisible in any area lit well enough for a human to see. In a darkened area, it shows up as a faintly glowing outline visible up to 30 feet away (60 feet if the viewer has low-light vision). Magical darkness smothers the glow and conceals the outline.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tHellcats have a +4 racial bonus on Listen and Move Silently checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

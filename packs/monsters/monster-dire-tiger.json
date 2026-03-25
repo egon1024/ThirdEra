@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dire Tiger (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tDire tigers prey on just about anything that moves. They will patiently stalk a potential meal, striking whenever the creature lets down its guard.\n</p>\n<p>\n\tDire tigers grow to be over 12 feet long and can weigh up to 6,000 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA dire tiger attacks by running at prey, leaping, and clawing and biting as it rakes with its rear claws.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a dire tiger must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can rake.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a dire tiger charges, it can make a full attack, including two rake attacks.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +18 melee, damage 2d4+4.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDire tigers have a +4 racial bonus on Hide and Move Silently checks. *In areas of tall grass or heavy undergrowth, the Hide bonus improves to +8.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

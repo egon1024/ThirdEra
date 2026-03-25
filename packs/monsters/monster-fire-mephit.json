@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Fire Mephit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tFire mephits come from the Elemental Plane of Fire.\n</p>\n<p>\n\tA fire mephit is about 4 feet tall and weighs about 1 pound.\n</p>\n<p>\n\tFire mephits speak Common and Ignan.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t15-foot cone, damage 1d8 fire, Reflex half DC 12. The save DC is Constitution-based and includes a +1 racial adjustment.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/hour—scorching ray (DC 14, caster level 3rd); 1/day—heat metal (DC 14, caster level 6th). The save DC is Charisma-based.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tA fire mephit heals only if it is touching a flame at least as large as a torch.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Octopus (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese bottom-dwelling sea creatures are dangerous only to their prey. If disturbed, they usually try to escape.\n</p>\n\n<h2>Combat</h2>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, an octopus must hit an opponent of any size with its arms attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and automatically deals bite damage.\n</p>\n\n<h5>Ink Cloud (Ex)</h5>\n<p>\n\tAn octopus can emit a cloud of jet-black ink 10 feet high by 10 feet wide by 10 feet long once per minute as a free action. The cloud provides total concealment, which the octopus normally uses to escape a losing fight. All vision within the cloud is obscured.\n</p>\n\n<h5>Jet (Ex)</h5>\n<p>\n\tAn octopus can jet backward once per round as a full-round action, at a speed of 200 feet. It must move in a straight line, but does not provoke attacks of opportunity while jetting.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tAn octopus can change colors, giving it a +4 racial bonus on Hide checks. An octopus also can squeeze and contort its body, giving it a +10 racial bonus on Escape Artist checks. An octopus has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

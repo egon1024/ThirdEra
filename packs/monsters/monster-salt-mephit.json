@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Salt Mephit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tSalt mephits come from the Elemental Plane of Earth.\n</p>\n<p>\n\tSalt mephits are sarcastic creatures who loathe water and moisture of any kind. Each one is about 4 feet tall and weighs about 80 pounds.\n</p>\n<p>\n\tSalt mephits speak Common and Terran.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t10-foot cone of salt crystals, damage 1d4, Reflex DC 13 half. Living creatures that fail their saves are tormented by itching skin and burning eyes. This effect imposes a -4 penalty to AC and a -2 penalty on attack rolls for 3 rounds. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tOnce per hour a salt mephit can use glitterdust (DC 14, caster level 3rd).\n</p>\n<p>\n\tOnce per day it can draw the moisture from an area in a 20-foot radius centered on itself. Living creatures within range take 2d8 points of damage (Fortitude DC 14 half; caster level 6th). This effect is especially devastating to plant creatures and aquatic creatures, which take a -2 penalty on their saving throws. This ability is the equivalent of a 2nd-level spell. The save DCs are Charisma-based.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tA salt mephit heals only if in an arid environment.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

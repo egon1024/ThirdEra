@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dog, Riding (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThis category includes working breeds such as collies, huskies, and St. Bernards.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a riding dog is up to 100 pounds; a medium load, 101-200 pounds; and a heavy load, 201-300 pounds. A riding dog can drag 1,500 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tIf trained for war, these animals can make trip attacks just as wolves do (see the Wolf entry). A riding dog can fight while carrying a rider, but the rider cannot also attack unless he or she succeeds on a Ride check.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tRiding dogs have a +4 racial bonus on Jump checks. *Riding dogs have a +4 racial bonus on Survival checks when tracking by scent.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

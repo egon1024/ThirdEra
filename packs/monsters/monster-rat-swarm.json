@@ -138,7 +138,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Rat Swarm (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<h3>Combat</h3>\n<p>\n\tA rat swarm seeks to surround and attack any warm-blooded prey it encounters. A swarm deals 1d6 points of damage to any creature whose space it occupies at the end of its move.\n</p>\n\n<h5>Disease (Ex)</h5>\n<p>\n\tFilth fever—swarm attack, Fortitude DC 12, incubation period 1d3 days, damage 1d3 Dex and 1d3 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Distraction (Ex)</h5>\n<p>\n\tAny living creature that begins its turn with a swarm in its square must succeed on a DC 12 Fortitude save or be nauseated for 1 round. The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA rat swarm has a +4 racial bonus on Hide and Move Silently checks, and a +8 racial bonus on Balance, Climb, and Swim checks. A rat swarm can always choose to take 10 on all Climb checks, even if rushed or threatened. A rat swarm uses its Dexterity modifier instead of its Strength modifier for Climb and Swim checks. A rat swarm has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

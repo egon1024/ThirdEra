@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Eagle (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThese birds of prey inhabit nearly every terrain and climate, though they all prefer high, secluded nesting spots.\n</p>\n<p>\n\tA typical eagle is about 3 feet long and has a wingspan of about 7 feet. The statistics presented here can describe any similar-sized, diurnal bird of prey.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tEagles dive at prey, raking with their powerful talons.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tEagles have a +8 racial bonus on Spot checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

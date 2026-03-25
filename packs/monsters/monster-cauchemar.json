@@ -135,7 +135,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Cauchemar (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<h2 id=\"cauchemar\">Cauchemar</h2>\n<p>\n\tThe cauchemar is a horrible, especially malevolent version of a nightmare. The sight of one of these great horrors bearing down is enough to shake the heart of the boldest champion.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tThe save DC for the cauchemar’s smoke attack (DC 24) is adjusted for its greater number of Hit Dice and higher Constitution score.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a cauchemar is up to 612 pounds; a medium load, 613-1,224 pounds; and a heavy load, 1,225-1,840 pounds.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

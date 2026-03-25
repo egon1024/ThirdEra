@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Ochre Jelly (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tAn ochre jelly can grow to a diameter of about 15 feet and a thickness of about 6 inches, but can compress its body to fit into cracks as small as 1 inch wide. A typical specimen weighs about 5,600 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tAn ochre jelly attempts to envelop and squeeze its prey.\n</p>\n\n<h5>Acid (Ex)</h5>\n<p>\n\tAn ochre jelly secretes a digestive acid that dissolves only flesh. Any melee hit or constrict attack deals acid damage.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tAn ochre jelly deals automatic slam and acid damage with a successful grapple check.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, an ochre jelly must hit with its slam attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Split (Ex)</h5>\n<p>\n\tSlashing and piercing weapons and electricity attacks deal no damage to an ochre jelly. Instead the creature splits into two identical jellies, each with half of the original’s current hit points (round down). A jelly with 10 hit points or less cannot be further split and dies if reduced to 0 it points.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tAn ochre jelly has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

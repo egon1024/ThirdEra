@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Pseudodragon (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tA pseudodragon has a body about 1 foot long, with a 2-foot tail. It weights about 7 pounds.\n</p>\n<p>\n\tA pseudodragon can communicate telepathically and can also vocalize animal noises.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA pseudodragon can deliver a vicious bite, but its principal weapon is its sting-equipped tail.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 14, initial damage sleep for 1 minute, secondary damage sleep for 1d3 hours. The save DC is Constitution-based and includes a +2 racial bonus.\n</p>\n\n<h5>Blindsense (Ex)</h5>\n<p>\n\tA pseudodragon can locate creatures within 60 feet by nonvisual means (mostly hearing and scent, but also by noticing vibration and other environmental clues). Opponents the pseudodragon can’t actually see still have total concealment against the pseudodragon.\n</p>\n\n<h5>Telepathy (Su)</h5>\n<p>\n\tPseudodragons can communicate telepathically with creatures that speak Common or Sylvan, provided they are within 60 feet.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tPseudodragons have a chameleonlike ability that grants them a +4 racial bonus on Hide checks. *In forests or overgrown areas, this bonus improves to +8.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

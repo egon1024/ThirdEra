@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Ice Mephit (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tIce mephits come from the Elemental Plane of Air.\n</p>\n<p>\n\tIce mephits have a cold, aloof demeanor. Each one is about 4 feet tall and weighs about 30 pounds.\n</p>\n<p>\n\tIce mephits speak Common and Auran.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t10-foot cone of ice shards, damage 1d4 cold, Reflex DC 12 half. Living creatures that fail their saves are tormented by frostbitten skin and frozen eyes unless they have immunity to cold or are otherwise protected. This effect imposes a -4 penalty to AC and a -2 penalty on attack rolls for 3 rounds. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/hour—magic missile (caster level 3rd); 1/day—chill metal (DC 14, caster level 6th). The save DC is Charisma-based.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tAn ice mephit heals only if it is touching a piece of ice of at least Tiny size or if the ambient temperature is 32&deg;F. or below.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

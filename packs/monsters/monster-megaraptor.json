@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Megaraptor (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThis creature is a larger version of the deinonychus, standing about 12 feet tall with a total length of 24 feet. It has the same appearance, habits, and abilities of the smaller version.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a megaraptor charges, it can make a full attack.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA megaraptor has a +8 racial bonus on Hide, Jump, Listen, Spot, and Survival checks.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Centipede Swarm (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<h3>Combat</h3>\n<p>\n\tA centipede swarm seeks to surround and attack any living prey it encounters. A swarm deals 2d6 points of damage to any creature whose space it occupies at the end of its move.\n</p>\n\n<h5>Distraction (Ex)</h5>\n<p>\n\tAny living creature that begins its turn with a centipede swarm in its space must succeed on a DC 13 Fortitude save or be nauseated for 1 round. The save DC is Constitution-based.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 13, initial and secondary damage 1d4 Dex. The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA centipede swarm has a +4 racial bonus on Spot checks and a +8 racial bonus on Climb checks, and uses its Dexterity modifier instead of its Strength modifier for Climb checks. A centipede swarm has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

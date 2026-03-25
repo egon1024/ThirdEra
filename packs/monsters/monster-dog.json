@@ -136,7 +136,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Dog (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe statistics presented here describe a fairly small dog of about 20 to 50 pounds in weight. They also can be used for small wild canines such as coyotes, jackals, and African wild dogs.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tDogs generally hunt in packs, chasing and exhausting prey until they can drag it down.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDogs have a +4 racial bonus on Jump checks. *Dogs have a +4 racial bonus on Survival checks when tracking by scent.\n</p>\n\n<h2>Celestial Dog</h2>\n<p>\n\tThese celestial creatures are commonly summoned by the summon monster I spell.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Smite Evil (Su)</h5>\n<p>\n\tOnce per day a celestial dog can make a normal melee attack to deal 1 point of extra damage against an evil foe.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,

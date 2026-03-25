@@ -132,7 +132,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Rhinoceros (SRD). See d20srd.org for complete description and tactics.</p>",
+    "biography": "<p>\n\tThe rhinoceros is infamous for its bad temper and willingness to charge intruders.\n</p>\n<p>\n\tThe statistics presented here are based on the African black rhino, which is 6 to 14 feet long, 3 to 6 feet high at the shoulder, and weighs up to 6,000 pounds. These statistics can describe any herbivore of similar size and similar natural weapons (antlers, horns, tusks, or the like).\n</p>\n\n<h2>Combat</h2>\n<p>\n\tWhen it is harassed or annoyed, a rhinoceros lowers its head and charges.\n</p>\n\n<h5>Powerful Charge (Ex)</h5>\n<p>\n\tA rhinoceros deals 4d6+24 points of damage when it makes a charge.\n</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
