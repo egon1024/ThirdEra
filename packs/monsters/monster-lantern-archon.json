@@ -83,7 +83,7 @@
           "range": "60 ft."
         }
       ],
-      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities</p><p><strong>Special Qualities:</strong> Aura of menace, damage reduction 10/evil and magic, darkvision 60 ft., immunity to electricity and petrification, magic circle against evil, teleport, tongues</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "specialAbilities": "<!--thirdera-srd-hub-start:archon.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Archon\"><h4>SRD type: Archon</h4><p>\n\tArchons are celestials from a lawful good-aligned plane.\n</p>\n<p>\n\tArchons speak Celestial, Infernal, and Draconic, but can speak with almost any creature because of their tongues ability.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tArchons generally prefer to meet a foe head-on if it is prudent to do so, but if outmatched, they do what they can to even the odds (usually by employing hit-and-run tactics or standing off and engaging a foe with magic before moving into melee).\n</p>\n\n<h5>Archon Traits</h5>\n<p>\n\tAn archon possesses the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li><a href=\"/srd/specialAbilities.htm#darkvision\">Darkvision</a> out to 60 feet and <a href=\"/srd/specialAbilities.htm#lowLightVision\">low-light vision</a>.</li>\n\t<li>Aura of Menace (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): A righteous aura surrounds archons that fight or get angry. Any hostile creature within a 20-foot radius of an archon must succeed on a <a href=\"/srd/combat/combatStatistics.htm#will\">Will save</a> to resist its effects. The save DC varies with the type of archon, is Charisma-based, and includes a +2 racial bonus. Those who fail take a -2 penalty on attacks, AC, and saves for 24 hours or until they successfully hit the archon that generated the aura. A creature that has resisted or broken the effect cannot be affected again by the same archon’s aura for 24 hours.</li>\n\t<li>Immunity to electricity and petrification.</li>\n\t<li>+4 racial bonus on saves against <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li>Magic Circle against Evil (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): A <a class=\"spell\" href=\"/srd/spells/magicCircleAgainstEvil.htm\">magic circle against evil</a> effect always surrounds an archon (caster level equals the archon’s Hit Dice). (The defensive benefits from the circle are not included in an archon’s statistics block.)</li>\n\t<li>Teleport (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): Archons can use <a class=\"spell\" href=\"/srd/spells/teleportGreater.htm\">greater teleport</a> at will, as the spell (caster level 14th), except that the creature can transport only itself and up to 50 pounds of objects.</li>\n\t<li>Tongues (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): All archons can speak with any creature that has a language, as though using a <a class=\"spell\" href=\"/srd/spells/tongues.htm\">tongues</a> spell (caster level 14th). This ability is always active.</li>\n</ul></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Spell-like abilities</p><p><strong>Special Qualities:</strong> Aura of menace, damage reduction 10/evil and magic, darkvision 60 ft., immunity to electricity and petrification, magic circle against evil, teleport, tongues</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "A lawful good-aligned plane",
       "organization": "Solitary, pair, or squad (3-5)",
       "treasure": "None",
@@ -146,7 +146,44 @@
     }
   },
   "items": [],
-  "flags": {},
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "archon.htm",
+        "hubTitle": "Archon",
+        "immunities": [
+          "electricity",
+          "petrification"
+        ],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": true,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [
+          {
+            "bonus": 4,
+            "vs": "poison"
+          }
+        ],
+        "traitBullets": [
+          "Darkvision out to 60 feet and low-light vision.",
+          "Aura of Menace (Su): A righteous aura surrounds archons that fight or get angry. Any hostile creature within a 20-foot radius of an archon must succeed on a Will save to resist its effects. The save DC varies with the type of archon, is Charisma-based, and includes a +2 racial bonus. Those who fail take a -2 penalty on attacks, AC, and saves for 24 hours or until they successfully hit the archon that generated the aura. A creature that has resisted or broken the effect cannot be affected again by the same archon’s aura for 24 hours.",
+          "Immunity to electricity and petrification.",
+          "+4 racial bonus on saves against poison.",
+          "Magic Circle against Evil (Su): A magic circle against evil effect always surrounds an archon (caster level equals the archon’s Hit Dice). (The defensive benefits from the circle are not included in an archon’s statistics block.)",
+          "Teleport (Su): Archons can use greater teleport at will, as the spell (caster level 14th), except that the creature can transport only itself and up to 50 pounds of objects.",
+          "Tongues (Su): All archons can speak with any creature that has a language, as though using a tongues spell (caster level 14th). This ability is always active."
+        ],
+        "languagesNote": null
+      }
+    }
+  },
   "folder": null,
   "sort": 0,
   "prototypeToken": {

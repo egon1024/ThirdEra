@@ -62,11 +62,28 @@
       },
       "naturalAttacks": [
         {
-          "name": "Slam",
+          "name": "Bite",
           "dice": "1d6",
-          "damageType": "bludgeoning",
+          "damageType": "piercing",
           "primary": "true",
-          "reach": ""
+          "reach": "5 ft",
+          "presetAttackBonus": 7
+        },
+        {
+          "name": "Claw",
+          "dice": "1d4",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 5
+        },
+        {
+          "name": "Claw",
+          "dice": "1d4",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 5
         }
       ],
       "damageReduction": {
@@ -84,7 +101,7 @@
           "range": ""
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon / attacks (SRD table):</strong> 2d6 (13); melee attack column +7.</p><p><strong>Special:</strong> Immunity to acid,water breathing</p><p>Imported from d20srd.org dragon tables; verify AC, attacks, and spells in-game.</p>",
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +7, 2× Claw +5.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 2d6 (13)</p><p><strong>Special qualities (by age):</strong> Immunity to acid,water breathing</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
       "environment": "Temperate forests",
       "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
       "treasure": "Triple standard",

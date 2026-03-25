@@ -78,7 +78,7 @@
           "range": "60 ft."
         }
       ],
-      "specialAbilities": "<p><strong>Special Attacks:</strong> Charming gaze, poison, spells</p><p><strong>Special Qualities:</strong> Darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "specialAbilities": "<!--thirdera-srd-hub-start:naga.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Naga\"><h4>SRD type: Naga</h4><p>\n\tAll nagas have long, snakelike bodies covered with glistening scales, and more or less human faces. They range in length from 10 to 20 feet and weigh from 200 to 500 pounds. The eyes of a naga are bright and intelligent, burning with an almost hypnotic inner light.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tNagas favor spells over other forms of combat. Because they are almost always found in the lairs they guard and know well, they can arrange most encounters to suit their wishes.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Charming gaze, poison, spells</p><p><strong>Special Qualities:</strong> Darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Temperate marshes",
       "organization": "Solitary or nest (2-4)",
       "treasure": "Standard",
@@ -141,7 +141,28 @@
     }
   },
   "items": [],
-  "flags": {},
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "naga.htm",
+        "hubTitle": "Naga",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
   "folder": null,
   "sort": 0,
   "prototypeToken": {

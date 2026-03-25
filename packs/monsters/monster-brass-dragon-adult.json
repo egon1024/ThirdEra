@@ -62,11 +62,52 @@
       },
       "naturalAttacks": [
         {
-          "name": "Slam",
+          "name": "Bite",
+          "dice": "2d6",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": "10 ft",
+          "presetAttackBonus": 24
+        },
+        {
+          "name": "Claw",
+          "dice": "1d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        },
+        {
+          "name": "Claw",
+          "dice": "1d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        },
+        {
+          "name": "Wing",
           "dice": "1d6",
           "damageType": "bludgeoning",
-          "primary": "true",
-          "reach": ""
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        },
+        {
+          "name": "Wing",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        },
+        {
+          "name": "Tail slap",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
         }
       ],
       "damageReduction": {
@@ -84,7 +125,7 @@
           "range": ""
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon / attacks (SRD table):</strong> 6d6 (23); melee attack column +24.</p><p><strong>Special:</strong> Suggestion</p><p>Imported from d20srd.org dragon tables; verify AC, attacks, and spells in-game.</p>",
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +24, 2× Claw +22, 2× Wing +22, Tail slap +22.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 6d6 (23)</p><p><strong>Special qualities (by age):</strong> Suggestion</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
       "environment": "Warm deserts",
       "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
       "treasure": "Triple standard",

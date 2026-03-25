@@ -62,11 +62,60 @@
       },
       "naturalAttacks": [
         {
-          "name": "Slam",
-          "dice": "1d6",
-          "damageType": "bludgeoning",
+          "name": "Bite",
+          "dice": "2d8",
+          "damageType": "piercing",
           "primary": "true",
-          "reach": ""
+          "reach": "15 ft",
+          "presetAttackBonus": 34
+        },
+        {
+          "name": "Claw",
+          "dice": "2d6",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 32
+        },
+        {
+          "name": "Claw",
+          "dice": "2d6",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 32
+        },
+        {
+          "name": "Wing",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 32
+        },
+        {
+          "name": "Wing",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 32
+        },
+        {
+          "name": "Tail slap",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 32
+        },
+        {
+          "name": "Crush",
+          "dice": "2d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 32
         }
       ],
       "damageReduction": {
@@ -84,7 +133,7 @@
           "range": ""
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon / attacks (SRD table):</strong> 16d6 (29); melee attack column +34.</p><p><strong>Special:</strong> Plant growth</p><p>Imported from d20srd.org dragon tables; verify AC, attacks, and spells in-game.</p>",
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +34, 2× Claw +32, 2× Wing +32, Tail slap +32, Crush +32.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 16d6 (29)</p><p><strong>Special qualities (by age):</strong> Plant growth</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
       "environment": "Temperate forests",
       "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
       "treasure": "Triple standard",

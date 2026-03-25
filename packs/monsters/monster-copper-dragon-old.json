@@ -64,16 +64,58 @@
         {
           "name": "Bite",
           "dice": "2d8",
-          "damageType": "slashing",
+          "damageType": "piercing",
           "primary": "true",
-          "reach": ""
+          "reach": "15 ft",
+          "presetAttackBonus": 33
         },
         {
           "name": "Claw",
           "dice": "2d6",
           "damageType": "slashing",
           "primary": "false",
-          "reach": ""
+          "reach": "10 ft",
+          "presetAttackBonus": 31
+        },
+        {
+          "name": "Claw",
+          "dice": "2d6",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 31
+        },
+        {
+          "name": "Wing",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 31
+        },
+        {
+          "name": "Wing",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 31
+        },
+        {
+          "name": "Tail slap",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 31
+        },
+        {
+          "name": "Crush",
+          "dice": "2d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 31
         }
       ],
       "damageReduction": {
@@ -91,7 +133,7 @@
           "range": ""
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon (Su):</strong> Line of acid or cone of slow gas (Fort vs. DC 28; slow duration see SRD). 16d4 acid line.</p><p><strong>Skills:</strong> Bluff, Hide, and Jump are class skills.</p><p>Casts as sorcerer of indicated CL; also cleric spells from Chaos, Earth, and Trickery domains as arcane (SRD).</p><p><strong>Spell-like:</strong> 1/day <em>transmute rock to mud</em> or <em>mud to rock</em>. CL 11th.</p>",
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +33, 2× Claw +31, 2× Wing +31, Tail slap +31, Crush +31.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): Line of acid or cone of slow gas (Fort vs. DC 28; slow duration see SRD). 16d4 acid line.</p><p><strong>Special qualities (by age):</strong> —</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p><p><strong>Skills:</strong> Bluff, Hide, and Jump are class skills.</p><p>Casts as sorcerer of indicated CL; also cleric spells from Chaos, Earth, and Trickery domains as arcane (SRD).</p><p><strong>Spell-like:</strong> 1/day <em>transmute rock to mud</em> or <em>mud to rock</em>. CL 11th.</p>",
       "environment": "Warm hills",
       "organization": "See SRD (solitary or clutch to family by age)",
       "treasure": "Triple standard",

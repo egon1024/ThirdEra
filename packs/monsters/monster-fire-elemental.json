@@ -81,7 +81,7 @@
           "range": "60 ft."
         }
       ],
-      "specialAbilities": "<p><strong>Special Attacks:</strong> Burn</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., elemental traits, immunity to fire, vulnerability to cold</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "specialAbilities": "<!--thirdera-srd-hub-start:elemental.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Elemental\"><h4>SRD type: Elemental</h4><p>\n\tElementals are incarnations of the elements that compose existence.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tElementals have varied combat abilities and tactics, but all have the same elemental qualities.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Burn</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., elemental traits, immunity to fire, vulnerability to cold</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Elemental Plane of Fire",
       "organization": "Solitary",
       "treasure": "None",
@@ -144,7 +144,28 @@
     }
   },
   "items": [],
-  "flags": {},
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "elemental.htm",
+        "hubTitle": "Elemental",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
   "folder": null,
   "sort": 0,
   "prototypeToken": {

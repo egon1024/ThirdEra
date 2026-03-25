@@ -81,7 +81,7 @@
           "range": "60 ft."
         }
       ],
-      "specialAbilities": "<p><strong>Special Attacks:</strong> Change size, heat, spell-like abilities</p><p><strong>Special Qualities:</strong> Change shape, darkvision 60 ft., immunity to fire, plane shift, telepathy 100 ft., vulnerability to cold</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "specialAbilities": "<!--thirdera-srd-hub-start:genie.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Genie\"><h4>SRD type: Genie</h4><p>\n\tGenies are humanlike beings who dwell on the elemental planes. They are famous for their strength, guile, and skill with illusion magic.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGenies prefer to outmaneuver and outthink their foes. They are not too proud to flee if it means they’ll live to fight another day. If trapped, they bargain, offering treasure or favors in return for their lives and freedom.\n</p>\n\n<h5><a class=\"spell\" href=\"/srd/spells/planeShift.htm\">Plane Shift</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>)</h5>\n<p>\n\tA genie can enter any of the elemental planes, the Astral Plane, or the Material Plane. This ability transports the genie and up to eight other creatures, provided they all link hands with the genie. It is otherwise similar to the spell of the same name (caster level 13th).\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Change size, heat, spell-like abilities</p><p><strong>Special Qualities:</strong> Change shape, darkvision 60 ft., immunity to fire, plane shift, telepathy 100 ft., vulnerability to cold</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Elemental Plane of Fire",
       "organization": "Solitary, company (2-4), or band (6-15)",
       "treasure": "Standard coins; double goods; standard items",
@@ -144,7 +144,28 @@
     }
   },
   "items": [],
-  "flags": {},
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "genie.htm",
+        "hubTitle": "Genie",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
   "folder": null,
   "sort": 0,
   "prototypeToken": {

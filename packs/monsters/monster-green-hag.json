@@ -78,7 +78,7 @@
           "range": "60 ft."
         }
       ],
-      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities, weakness, mimicry</p><p><strong>Special Qualities:</strong> Darkvision 90 ft., spell resistance 18</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "specialAbilities": "<!--thirdera-srd-hub-start:hag.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Hag\"><h4>SRD type: Hag</h4><p>\n\tAlthough different hags are unique in appearance and mannerism, they have many aspects in common. All take the form of crones whose bent shapes belie their fierce power and swiftness.\n</p>\n<p>\n\tHags speak Giant and Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tHags are tremendously strong. They are naturally resistant to spells and can cast magic of their own. Hags often gather to form coveys. A covey, usually containing one hag of each type, can use powers beyond those of the individual members.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Spell-like abilities, weakness, mimicry</p><p><strong>Special Qualities:</strong> Darkvision 90 ft., spell resistance 18</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Temperate marshes",
       "organization": "Solitary or covey (3 hags of any kind plus 1-8 ogres and 1-4 evil giants)",
       "treasure": "Standard",
@@ -141,7 +141,28 @@
     }
   },
   "items": [],
-  "flags": {},
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "hag.htm",
+        "hubTitle": "Hag",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
   "folder": null,
   "sort": 0,
   "prototypeToken": {

@@ -487,6 +487,7 @@
         <ol class="natural-attacks-compact-list items-list">
           {{#each system.statBlock.naturalAttacks as |atk idx|}}
           <li class="natural-attack-compact flexrow" data-natural-attack-index="{{idx}}">
+            <input type="hidden" name="system.statBlock.naturalAttacks.{{idx}}.presetAttackBonus" value="{{atk.presetAttackBonus}}" data-dtype="Number" />
             <span class="natural-attack-compact-name">{{atk.name}}{{#unless atk.name}}—{{/unless}}</span>
             <span class="natural-attack-compact-total" title="{{#each atk.attackBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber atk.attackBonus}}</span>
             <span class="natural-attack-compact-actions">
@@ -670,6 +671,7 @@
           <ol class="natural-attacks-list items-list">
             {{#each system.statBlock.naturalAttacks as |atk idx|}}
             <li class="natural-attack" data-natural-attack-index="{{idx}}">
+              <input type="hidden" name="system.statBlock.naturalAttacks.{{idx}}.presetAttackBonus" value="{{atk.presetAttackBonus}}" data-dtype="Number" />
               <input type="text" name="system.statBlock.naturalAttacks.{{idx}}.name" value="{{atk.name}}"
                 data-dtype="String" class="natural-attack-name" placeholder="—" title="{{localize 'THIRDERA.NPC.NaturalAttackName'}}" />
               <input type="text" name="system.statBlock.naturalAttacks.{{idx}}.dice" value="{{atk.dice}}"

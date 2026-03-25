@@ -81,7 +81,7 @@
           "range": "60 ft."
         }
       ],
-      "specialAbilities": "<p><strong>Special Attacks:</strong> Breath weapon, spell-like abilities, summon mephit</p><p><strong>Special Qualities:</strong> Damage reduction 5/magic, darkvision 60 ft., fast healing 2</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "specialAbilities": "<!--thirdera-srd-hub-start:mephit.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Mephit\"><h4>SRD type: Mephit</h4><p>\n\tMephits are minor creatures from the elemental planes.\n</p>\n<p>\n\tAll mephits appear as small, winged creatures with more or less humanoid features. While they are often described as impish, their elemental origins are apparent at first glance.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tAll mephits fight by biting and clawing or by using a <a href=\"/srd/specialAbilities.htm#breathWeapon\">breath weapon</a>, the nature and effects of which vary from creature to creature.\n</p>\n<p>\n\tA mephit’s <a href=\"/srd/specialAbilities.htm#naturalWeapons\">natural weapons</a> are treated as magic weapons for the purpose of overcoming <a href=\"/srd/specialAbilities.htm#damageReduction\">damage reduction</a>.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#breathWeapon\">Breath Weapon</a> (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>)</h5>\n<p>\n\tA mephit can use its <a href=\"/srd/specialAbilities.htm#breathWeapon\">breath weapon</a> once every 1d4 rounds as a <a href=\"/srd/combat/actionsInCombat.htm#standardActions\">standard action</a>. See the individual descriptions for details.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Spell-Like Abilities</a></h5>\n<p>\n\tAll mephits have one or more <a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">spell-like abilities</a> (save DC 12 + spell level). See the individual descriptions for details.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> Mephit (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>)</h5>\n<p>\n\tOnce per day, a mephit can attempt to <a href=\"/srd/specialAbilities.htm#summon\">summon</a> another mephit of the same variety, much as though casting a summon monster spell, but with only a 25% chance of success. Roll d%: On a failure, no creature answers the summons that day. A mephit that has just been summoned cannot use its own summon ability for 1 hour. This ability is the equivalent of a 2nd-level spell.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#fastHealing\">Fast Healing</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tMephits heal 2 points of damage each round, provided they are still alive and certain other conditions are met. See the individual descriptions for details.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Breath weapon, spell-like abilities, summon mephit</p><p><strong>Special Qualities:</strong> Damage reduction 5/magic, darkvision 60 ft., fast healing 2</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Elemental Plane of Air",
       "organization": "Solitary (1), gang (2-4 mephits of mixed types), or mob (5-12 mephits of mixed types)",
       "treasure": "Standard",
@@ -144,7 +144,28 @@
     }
   },
   "items": [],
-  "flags": {},
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "mephit.htm",
+        "hubTitle": "Mephit",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
   "folder": null,
   "sort": 0,
   "prototypeToken": {

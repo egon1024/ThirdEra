@@ -60,11 +60,68 @@
       },
       "naturalAttacks": [
         {
-          "name": "Slam",
-          "dice": "1d6",
-          "damageType": "bludgeoning",
+          "name": "Bite",
+          "dice": "4d6",
+          "damageType": "piercing",
           "primary": "true",
-          "reach": ""
+          "reach": "20 ft",
+          "presetAttackBonus": 49
+        },
+        {
+          "name": "Claw",
+          "dice": "2d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 47
+        },
+        {
+          "name": "Claw",
+          "dice": "2d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 47
+        },
+        {
+          "name": "Wing",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 47
+        },
+        {
+          "name": "Wing",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 47
+        },
+        {
+          "name": "Tail slap",
+          "dice": "2d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 47
+        },
+        {
+          "name": "Crush",
+          "dice": "4d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 47
+        },
+        {
+          "name": "Tail sweep",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 47
         }
       ],
       "damageReduction": {
@@ -82,7 +139,7 @@
           "range": ""
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon / attacks (SRD table):</strong> 24d6 (37); melee attack column +49.</p><p><strong>Special:</strong> Control weather</p><p>Imported from d20srd.org dragon tables; verify AC, attacks, and spells in-game.</p>",
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +49, 2× Claw +47, 2× Wing +47, Tail slap +47, Crush +47, Tail sweep +47.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 24d6 (37)</p><p><strong>Special qualities (by age):</strong> Control weather</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
       "environment": "Temperate hills",
       "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
       "treasure": "Triple standard",

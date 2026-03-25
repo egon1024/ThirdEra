@@ -64,16 +64,50 @@
         {
           "name": "Bite",
           "dice": "2d6",
-          "damageType": "slashing",
+          "damageType": "piercing",
           "primary": "true",
-          "reach": ""
+          "reach": "10 ft",
+          "presetAttackBonus": 25
         },
         {
           "name": "Claw",
           "dice": "1d8",
           "damageType": "slashing",
           "primary": "false",
-          "reach": ""
+          "reach": "5 ft",
+          "presetAttackBonus": 23
+        },
+        {
+          "name": "Claw",
+          "dice": "1d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 23
+        },
+        {
+          "name": "Wing",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 23
+        },
+        {
+          "name": "Wing",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 23
+        },
+        {
+          "name": "Tail slap",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 23
         }
       ],
       "damageReduction": {
@@ -91,7 +125,7 @@
           "range": ""
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon (Su):</strong> Line of acid or cone of slow gas (Fort vs. DC 24; slow duration see SRD). 12d4 acid line.</p><p><strong>Skills:</strong> Bluff, Hide, and Jump are class skills.</p><p>Casts as sorcerer of indicated CL; also cleric spells from Chaos, Earth, and Trickery domains as arcane (SRD).</p><p><strong>Spell-like:</strong> 2/day <em>stone shape</em>. CL 7th.</p>",
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +25, 2× Claw +23, 2× Wing +23, Tail slap +23.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): Line of acid or cone of slow gas (Fort vs. DC 24; slow duration see SRD). 12d4 acid line.</p><p><strong>Special qualities (by age):</strong> —</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p><p><strong>Skills:</strong> Bluff, Hide, and Jump are class skills.</p><p>Casts as sorcerer of indicated CL; also cleric spells from Chaos, Earth, and Trickery domains as arcane (SRD).</p><p><strong>Spell-like:</strong> 2/day <em>stone shape</em>. CL 7th.</p>",
       "environment": "Warm hills",
       "organization": "See SRD (solitary or clutch to family by age)",
       "treasure": "Triple standard",
