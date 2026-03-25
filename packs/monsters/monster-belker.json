@@ -4,9 +4,10 @@
   "img": "icons/svg/mystery-man.svg",
   "system": {
     "key": "monsterBelker",
-    "creatureTypeKey": "outsider",
+    "creatureTypeKey": "elemental",
     "subtypeKeys": [
-      "air"
+      "air",
+      "extraplanar"
     ],
     "abilities": {
       "str": {

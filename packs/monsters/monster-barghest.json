@@ -7,8 +7,9 @@
     "creatureTypeKey": "outsider",
     "subtypeKeys": [
       "evil",
-      "goblinoid",
-      "shapechanger"
+      "lawful",
+      "shapechanger",
+      "extraplanar"
     ],
     "abilities": {
       "str": {

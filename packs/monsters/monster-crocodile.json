@@ -1,42 +1,39 @@
 {
-  "name": "Air Mephit",
+  "name": "Crocodile",
   "type": "npc",
   "img": "icons/svg/mystery-man.svg",
   "system": {
-    "key": "monsterAirMephit",
-    "creatureTypeKey": "outsider",
-    "subtypeKeys": [
-      "air",
-      "extraplanar"
-    ],
+    "key": "monsterCrocodile",
+    "creatureTypeKey": "animal",
+    "subtypeKeys": [],
     "abilities": {
       "str": {
-        "value": 10,
+        "value": 19,
         "racial": 0,
         "mod": 0
       },
       "dex": {
-        "value": 17,
+        "value": 12,
         "racial": 0,
         "mod": 0
       },
       "con": {
-        "value": 10,
+        "value": 17,
         "racial": 0,
         "mod": 0
       },
       "int": {
-        "value": 6,
+        "value": 1,
         "racial": 0,
         "mod": 0
       },
       "wis": {
-        "value": 11,
+        "value": 12,
         "racial": 0,
         "mod": 0
       },
       "cha": {
-        "value": 15,
+        "value": 2,
         "racial": 0,
         "mod": 0
       }
@@ -45,28 +42,35 @@
       "type": "",
       "creatureTypeUuid": "",
       "subtypeUuids": [],
-      "cr": "3",
-      "alignment": "Neutral Evil",
-      "size": "Small"
+      "cr": "2",
+      "alignment": "True Neutral",
+      "size": "Medium"
     },
     "statBlock": {
-      "naturalArmor": 1,
+      "naturalArmor": 4,
       "space": "5 ft",
       "reach": "5 ft",
       "movement": {
         "land": 0,
-        "fly": 50,
-        "flyManeuverability": "perfect",
-        "swim": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 30,
         "burrow": 0,
         "climb": 0
       },
       "naturalAttacks": [
         {
-          "name": "Claw",
-          "dice": "1d3",
-          "damageType": "slashing",
+          "name": "Bite",
+          "dice": "1d8",
+          "damageType": "piercing",
           "primary": "true",
+          "reach": ""
+        },
+        {
+          "name": "Tail slap",
+          "dice": "1d12",
+          "damageType": "bludgeoning",
+          "primary": "false",
           "reach": ""
         }
       ],
@@ -74,60 +78,60 @@
         "value": 0,
         "bypass": ""
       },
-      "spellResistance": 12,
+      "spellResistance": 0,
       "senses": [
         {
-          "type": "darkvision",
-          "range": "60 ft."
+          "type": "lowLight",
+          "range": ""
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon (Su):</strong> 15-ft. cone of dust and grit, 1d8 damage and blindness chance.</p><p><strong>Spell-like abilities:</strong> 1/day <em>blur</em>.</p>",
-      "environment": "Elemental Plane of Air",
-      "organization": "Solitary or gang (2-4)",
-      "treasure": "Standard",
-      "advancement": "4-6 HD (Small)",
+      "specialAbilities": "<p><strong>Improved grab (Ex)</strong> with bite. <strong>Hold breath (Ex).</strong> +8 racial Swim; can run while swimming in a straight line. *Hide +4 in water (included in misc).</p>",
+      "environment": "Warm marshes",
+      "organization": "Solitary or colony (6–11)",
+      "treasure": "None",
+      "advancement": "",
       "levelAdjustment": 0
     },
     "attributes": {
       "hp": {
-        "value": 19,
-        "max": 19,
+        "value": 22,
+        "max": 22,
         "temp": 0,
         "nonlethal": 0,
         "stable": false
       },
       "ac": {
         "value": 10,
-        "touch": 14,
-        "flatFooted": 12,
+        "touch": 11,
+        "flatFooted": 14,
         "misc": 0
       },
       "initiative": {
         "bonus": 0
       },
       "speed": {
-        "value": 30
+        "value": 20
       }
     },
     "saves": {
       "fort": {
-        "base": 3,
-        "total": 0
-      },
-      "ref": {
         "base": 6,
         "total": 0
       },
+      "ref": {
+        "base": 4,
+        "total": 0
+      },
       "will": {
-        "base": 3,
+        "base": 2,
         "total": 0
       }
     },
     "combat": {
-      "bab": 3,
+      "bab": 2,
       "grapple": 0,
       "meleeAttack": {
-        "misc": 0,
+        "misc": 4,
         "total": 0
       },
       "rangedAttack": {
@@ -135,7 +139,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Mischievous elemental outsider of cloud and wind.</p>",
+    "biography": "<p>11–12-foot aggressive river predators.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -145,44 +149,15 @@
   },
   "items": [
     {
-      "name": "Weapon Finesse",
+      "name": "Alertness",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "weaponFinesse",
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 0,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": [],
-        "changes": []
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 50
-    },
-    {
-      "name": "Dodge",
-      "type": "feat",
-      "img": "icons/svg/sword.svg",
-      "system": {
-        "description": "",
-        "key": "dodge",
-        "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -198,30 +173,62 @@
         "prerequisiteFeatUuids": [],
         "changes": [
           {
-            "key": "ac",
-            "value": 1
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
           }
         ]
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 0
     },
     {
-      "name": "Bluff",
-      "type": "skill",
+      "name": "Skill Focus",
+      "type": "feat",
       "img": "icons/svg/book.svg",
       "system": {
-        "description": "",
-        "key": "bluff",
-        "ability": "cha",
-        "ranks": 6,
+        "description": "<p>Choose a skill. You are particularly capable at that skill.</p>",
+        "key": "skillFocus",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>+3 on Hide checks (SRD: Skill Focus [Hide]).</p>",
+        "special": "You can gain Skill Focus multiple times. Each time you take the feat, it applies to a new skill.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 2,
         "modifier": {
-          "misc": 0,
+          "misc": 4,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
@@ -230,14 +237,14 @@
       "sort": 101
     },
     {
-      "name": "Hide",
+      "name": "Listen",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "hide",
-        "ability": "dex",
-        "ranks": 3,
+        "description": "<p>SRD skill.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 2,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -252,14 +259,14 @@
       "sort": 102
     },
     {
-      "name": "Listen",
+      "name": "Spot",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "listen",
+        "description": "<p>SRD skill.</p>",
+        "key": "spot",
         "ability": "wis",
-        "ranks": 6,
+        "ranks": 2,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -274,16 +281,16 @@
       "sort": 103
     },
     {
-      "name": "Spot",
+      "name": "Swim",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "spot",
-        "ability": "wis",
-        "ranks": 6,
+        "description": "<p>SRD skill.</p>",
+        "key": "swim",
+        "ability": "str",
+        "ranks": 2,
         "modifier": {
-          "misc": 0,
+          "misc": 8,
           "total": 0
         },
         "trainedOnly": "false",

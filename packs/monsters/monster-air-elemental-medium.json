@@ -6,7 +6,8 @@
     "key": "monsterAirElementalMedium",
     "creatureTypeKey": "elemental",
     "subtypeKeys": [
-      "air"
+      "air",
+      "extraplanar"
     ],
     "abilities": {
       "str": {

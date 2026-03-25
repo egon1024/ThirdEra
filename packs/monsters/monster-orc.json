@@ -5,7 +5,9 @@
   "system": {
     "key": "monsterOrc",
     "creatureTypeKey": "humanoid",
-    "subtypeKeys": [],
+    "subtypeKeys": [
+      "orc"
+    ],
     "abilities": {
       "str": {
         "value": 17,

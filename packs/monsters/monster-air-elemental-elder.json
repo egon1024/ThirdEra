@@ -6,7 +6,8 @@
     "key": "monsterAirElementalElder",
     "creatureTypeKey": "elemental",
     "subtypeKeys": [
-      "air"
+      "air",
+      "extraplanar"
     ],
     "abilities": {
       "str": {

@@ -1,42 +1,41 @@
 {
-  "name": "Air Mephit",
+  "name": "Copper Dragon, Ancient",
   "type": "npc",
   "img": "icons/svg/mystery-man.svg",
   "system": {
-    "key": "monsterAirMephit",
-    "creatureTypeKey": "outsider",
+    "key": "monsterCopperDragonAncient",
+    "creatureTypeKey": "dragon",
     "subtypeKeys": [
-      "air",
-      "extraplanar"
+      "earth"
     ],
     "abilities": {
       "str": {
-        "value": 10,
+        "value": 33,
         "racial": 0,
         "mod": 0
       },
       "dex": {
-        "value": 17,
-        "racial": 0,
-        "mod": 0
-      },
-      "con": {
         "value": 10,
         "racial": 0,
         "mod": 0
       },
+      "con": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
       "int": {
-        "value": 6,
+        "value": 20,
         "racial": 0,
         "mod": 0
       },
       "wis": {
-        "value": 11,
+        "value": 21,
         "racial": 0,
         "mod": 0
       },
       "cha": {
-        "value": 15,
+        "value": 20,
         "racial": 0,
         "mod": 0
       }
@@ -45,86 +44,97 @@
       "type": "",
       "creatureTypeUuid": "",
       "subtypeUuids": [],
-      "cr": "3",
-      "alignment": "Neutral Evil",
-      "size": "Small"
+      "cr": "22",
+      "alignment": "Chaotic Good",
+      "size": "Huge"
     },
     "statBlock": {
-      "naturalArmor": 1,
-      "space": "5 ft",
-      "reach": "5 ft",
+      "naturalArmor": 31,
+      "space": "15 ft",
+      "reach": "10 ft",
       "movement": {
-        "land": 0,
-        "fly": 50,
-        "flyManeuverability": "perfect",
+        "land": 40,
+        "fly": 150,
+        "flyManeuverability": "poor",
         "swim": 0,
         "burrow": 0,
         "climb": 0
       },
       "naturalAttacks": [
         {
-          "name": "Claw",
-          "dice": "1d3",
+          "name": "Bite",
+          "dice": "2d8",
           "damageType": "slashing",
           "primary": "true",
+          "reach": ""
+        },
+        {
+          "name": "Claw",
+          "dice": "2d6",
+          "damageType": "slashing",
+          "primary": "false",
           "reach": ""
         }
       ],
       "damageReduction": {
-        "value": 0,
-        "bypass": ""
+        "value": 15,
+        "bypass": "magic"
       },
-      "spellResistance": 12,
+      "spellResistance": 28,
       "senses": [
         {
           "type": "darkvision",
           "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon (Su):</strong> 15-ft. cone of dust and grit, 1d8 damage and blindness chance.</p><p><strong>Spell-like abilities:</strong> 1/day <em>blur</em>.</p>",
-      "environment": "Elemental Plane of Air",
-      "organization": "Solitary or gang (2-4)",
-      "treasure": "Standard",
-      "advancement": "4-6 HD (Small)",
+      "specialAbilities": "<p><strong>Breath weapon (Su):</strong> Line of acid or cone of slow gas (Fort vs. DC 32; slow duration see SRD). 20d4 acid line.</p><p><strong>Skills:</strong> Bluff, Hide, and Jump are class skills.</p><p>Casts as sorcerer of indicated CL; also cleric spells from Chaos, Earth, and Trickery domains as arcane (SRD).</p><p><strong>Spell-like:</strong> 1/day <em>wall of stone</em>. CL 15th.</p>",
+      "environment": "Warm hills",
+      "organization": "See SRD (solitary or clutch to family by age)",
+      "treasure": "Triple standard",
+      "advancement": "",
       "levelAdjustment": 0
     },
     "attributes": {
       "hp": {
-        "value": 19,
-        "max": 19,
+        "value": 400,
+        "max": 400,
         "temp": 0,
         "nonlethal": 0,
         "stable": false
       },
       "ac": {
         "value": 10,
-        "touch": 14,
-        "flatFooted": 12,
+        "touch": 8,
+        "flatFooted": 39,
         "misc": 0
       },
       "initiative": {
         "bonus": 0
       },
       "speed": {
-        "value": 30
+        "value": 40
       }
     },
     "saves": {
       "fort": {
-        "base": 3,
+        "base": 24,
         "total": 0
       },
       "ref": {
-        "base": 6,
+        "base": 18,
         "total": 0
       },
       "will": {
-        "base": 3,
+        "base": 23,
         "total": 0
       }
     },
     "combat": {
-      "bab": 3,
+      "bab": 32,
       "grapple": 0,
       "meleeAttack": {
         "misc": 0,
@@ -135,7 +145,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Mischievous elemental outsider of cloud and wind.</p>",
+    "biography": "<p>Chaotic good true dragons of warm hills; breath is acid line and slowing gas. Copper dragons enjoy wit and riddles.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -145,77 +155,14 @@
   },
   "items": [
     {
-      "name": "Weapon Finesse",
-      "type": "feat",
-      "img": "icons/svg/sword.svg",
-      "system": {
-        "description": "",
-        "key": "weaponFinesse",
-        "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 0,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": [],
-        "changes": []
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 50
-    },
-    {
-      "name": "Dodge",
-      "type": "feat",
-      "img": "icons/svg/sword.svg",
-      "system": {
-        "description": "",
-        "key": "dodge",
-        "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 0,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": [],
-        "changes": [
-          {
-            "key": "ac",
-            "value": 1
-          }
-        ]
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 51
-    },
-    {
       "name": "Bluff",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>SRD skill.</p>",
         "key": "bluff",
         "ability": "cha",
-        "ranks": 6,
+        "ranks": 26,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -232,18 +179,18 @@
     {
       "name": "Hide",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>SRD skill.</p>",
         "key": "hide",
         "ability": "dex",
-        "ranks": 3,
+        "ranks": 26,
         "modifier": {
           "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
@@ -252,20 +199,20 @@
       "sort": 102
     },
     {
-      "name": "Listen",
+      "name": "Jump",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "listen",
-        "ability": "wis",
-        "ranks": 6,
+        "description": "<p>SRD skill.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 26,
         "modifier": {
           "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
@@ -274,14 +221,14 @@
       "sort": 103
     },
     {
-      "name": "Spot",
+      "name": "Listen",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "spot",
+        "description": "<p>SRD skill.</p>",
+        "key": "listen",
         "ability": "wis",
-        "ranks": 6,
+        "ranks": 26,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -294,6 +241,28 @@
       "flags": {},
       "folder": null,
       "sort": 104
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 26,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
     }
   ],
   "flags": {},

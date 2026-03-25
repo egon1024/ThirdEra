@@ -1,37 +1,34 @@
 {
-  "name": "Air Mephit",
+  "name": "Cloaker",
   "type": "npc",
   "img": "icons/svg/mystery-man.svg",
   "system": {
-    "key": "monsterAirMephit",
-    "creatureTypeKey": "outsider",
-    "subtypeKeys": [
-      "air",
-      "extraplanar"
-    ],
+    "key": "monsterCloaker",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [],
     "abilities": {
       "str": {
-        "value": 10,
+        "value": 21,
         "racial": 0,
         "mod": 0
       },
       "dex": {
-        "value": 17,
+        "value": 16,
         "racial": 0,
         "mod": 0
       },
       "con": {
-        "value": 10,
+        "value": 17,
         "racial": 0,
         "mod": 0
       },
       "int": {
-        "value": 6,
+        "value": 14,
         "racial": 0,
         "mod": 0
       },
       "wis": {
-        "value": 11,
+        "value": 15,
         "racial": 0,
         "mod": 0
       },
@@ -45,28 +42,35 @@
       "type": "",
       "creatureTypeUuid": "",
       "subtypeUuids": [],
-      "cr": "3",
-      "alignment": "Neutral Evil",
-      "size": "Small"
+      "cr": "5",
+      "alignment": "Chaotic Neutral",
+      "size": "Large"
     },
     "statBlock": {
-      "naturalArmor": 1,
-      "space": "5 ft",
-      "reach": "5 ft",
+      "naturalArmor": 7,
+      "space": "10 ft",
+      "reach": "10 ft",
       "movement": {
         "land": 0,
-        "fly": 50,
-        "flyManeuverability": "perfect",
+        "fly": 40,
+        "flyManeuverability": "average",
         "swim": 0,
         "burrow": 0,
         "climb": 0
       },
       "naturalAttacks": [
         {
-          "name": "Claw",
-          "dice": "1d3",
-          "damageType": "slashing",
+          "name": "Tail slap",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
           "primary": "true",
+          "reach": ""
+        },
+        {
+          "name": "Bite",
+          "dice": "1d4",
+          "damageType": "slashing",
+          "primary": "false",
           "reach": ""
         }
       ],
@@ -74,60 +78,60 @@
         "value": 0,
         "bypass": ""
       },
-      "spellResistance": 12,
+      "spellResistance": 0,
       "senses": [
         {
           "type": "darkvision",
           "range": "60 ft."
         }
       ],
-      "specialAbilities": "<p><strong>Breath weapon (Su):</strong> 15-ft. cone of dust and grit, 1d8 damage and blindness chance.</p><p><strong>Spell-like abilities:</strong> 1/day <em>blur</em>.</p>",
-      "environment": "Elemental Plane of Air",
-      "organization": "Solitary or gang (2-4)",
+      "specialAbilities": "<p><strong>Moan, engulf, shadow shift</strong> (see SRD). <strong>Full attack:</strong> Tail +8, bite +3 (reach 5 ft.).</p>",
+      "environment": "Underground",
+      "organization": "Solitary, mob (3–6), or flock (7–12)",
       "treasure": "Standard",
-      "advancement": "4-6 HD (Small)",
+      "advancement": "",
       "levelAdjustment": 0
     },
     "attributes": {
       "hp": {
-        "value": 19,
-        "max": 19,
+        "value": 45,
+        "max": 45,
         "temp": 0,
         "nonlethal": 0,
         "stable": false
       },
       "ac": {
         "value": 10,
-        "touch": 14,
-        "flatFooted": 12,
+        "touch": 12,
+        "flatFooted": 16,
         "misc": 0
       },
       "initiative": {
         "bonus": 0
       },
       "speed": {
-        "value": 30
+        "value": 10
       }
     },
     "saves": {
       "fort": {
-        "base": 3,
+        "base": 5,
         "total": 0
       },
       "ref": {
-        "base": 6,
+        "base": 5,
         "total": 0
       },
       "will": {
-        "base": 3,
+        "base": 7,
         "total": 0
       }
     },
     "combat": {
-      "bab": 3,
+      "bab": 4,
       "grapple": 0,
       "meleeAttack": {
-        "misc": 0,
+        "misc": 4,
         "total": 0
       },
       "rangedAttack": {
@@ -135,7 +139,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Mischievous elemental outsider of cloud and wind.</p>",
+    "biography": "<p>Manta-like lurkers that resemble cloaks until they unfurl; wingspan ~8 ft., ~100 lb. Speak Undercommon.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -145,44 +149,15 @@
   },
   "items": [
     {
-      "name": "Weapon Finesse",
+      "name": "Alertness",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "weaponFinesse",
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 0,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": [],
-        "changes": []
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 50
-    },
-    {
-      "name": "Dodge",
-      "type": "feat",
-      "img": "icons/svg/sword.svg",
-      "system": {
-        "description": "",
-        "key": "dodge",
-        "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -198,30 +173,97 @@
         "prerequisiteFeatUuids": [],
         "changes": [
           {
-            "key": "ac",
-            "value": 1
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
           }
         ]
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 0
     },
     {
-      "name": "Bluff",
-      "type": "skill",
-      "img": "icons/svg/book.svg",
+      "name": "Combat Reflexes",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
-        "key": "bluff",
-        "ability": "cha",
-        "ranks": 6,
+        "description": "<p>You can make additional attacks of opportunity.</p>",
+        "key": "combatReflexes",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 1
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 8
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 0,
         "modifier": {
           "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
@@ -230,14 +272,14 @@
       "sort": 101
     },
     {
-      "name": "Hide",
+      "name": "Listen",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "hide",
-        "ability": "dex",
-        "ranks": 3,
+        "description": "<p>SRD skill.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 4,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -252,20 +294,20 @@
       "sort": 102
     },
     {
-      "name": "Listen",
+      "name": "Move Silently",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
-        "key": "listen",
-        "ability": "wis",
-        "ranks": 6,
+        "description": "<p>SRD skill.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 4,
         "modifier": {
           "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
@@ -278,10 +320,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>SRD skill.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 6,
+        "ranks": 4,
         "modifier": {
           "misc": 0,
           "total": 0

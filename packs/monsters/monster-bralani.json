@@ -6,10 +6,9 @@
     "key": "monsterBralani",
     "creatureTypeKey": "outsider",
     "subtypeKeys": [
-      "air",
       "chaotic",
       "good",
-      "eladrin"
+      "extraplanar"
     ],
     "abilities": {
       "str": {
