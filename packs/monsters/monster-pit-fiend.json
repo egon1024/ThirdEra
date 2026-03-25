@@ -1,0 +1,156 @@
+{
+  "name": "Pit Fiend",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterPitFiend",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar",
+      "lawful"
+    ],
+    "abilities": {
+      "str": {
+        "value": 37,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 27,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 27,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "20",
+      "alignment": "Lawful Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 23,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8+13",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 15,
+        "bypass": "good"
+      },
+      "spellResistance": 32,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Constrict 2d8+26, fear aura, improved grab, spell-like abilities, summon devil</p><p><strong>Special Qualities:</strong> Damage reduction 15/good and silver, darkvision 60 ft., immunity to fire and poison, resistance to acid 10 and cold 10, regeneration 5, see in darkness, spell resistance 32, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful evil-aligned plane",
+      "organization": "Solitary, pair, team (3-4), or troupe (1-2 pit fiends, 2-5 horned devils, and 2-5 barbed devils)",
+      "treasure": "Standard coins; double goods; standard items",
+      "advancement": "19-36 HD (Large); 37-54 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 225,
+        "max": 225,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 17,
+        "flatFooted": 32,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 12
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 19,
+        "total": 0
+      },
+      "ref": {
+        "base": 19,
+        "total": 0
+      },
+      "will": {
+        "base": 21,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 18,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Pit Fiend (SRD). See d20srd.org for complete description and tactics.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

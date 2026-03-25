@@ -1,0 +1,156 @@
+{
+  "name": "Ice Devil (Gelugon)",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterIceDevilGelugon",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar",
+      "lawful"
+    ],
+    "abilities": {
+      "str": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "13",
+      "alignment": "Lawful Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 18,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d6+3",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "good"
+      },
+      "spellResistance": 25,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Fear aura, slow, spell-like abilities, summon devil</p><p><strong>Special Qualities:</strong> Damage reduction 10/good, darkvision 60 ft., immunity to fire and poison, resistance to acid 10 and cold 10, regeneration 5, see in darkness, spell resistance 25, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful evil-aligned plane",
+      "organization": "Solitary, team (2-4), squad (6-10), or troupe (1-2 ice devils, 7-12 bearded devils, and 1-4 bone devils)",
+      "treasure": "Standard coins; double goods; standard items",
+      "advancement": "15-28 HD (Large); 29-42 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 147,
+        "max": 147,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 27,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 5
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 15,
+        "total": 0
+      },
+      "ref": {
+        "base": 14,
+        "total": 0
+      },
+      "will": {
+        "base": 15,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 14,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Ice Devil (Gelugon) (SRD). See d20srd.org for complete description and tactics.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

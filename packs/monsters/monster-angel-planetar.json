@@ -1,0 +1,160 @@
+{
+  "name": "Angel, Planetar",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAngelPlanetar",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "angel",
+      "extraplanar",
+      "good"
+    ],
+    "abilities": {
+      "str": {
+        "value": 25,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "16",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 19,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 90,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d8+10",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "evil"
+      },
+      "spellResistance": 30,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities, spells</p><p><strong>Special Qualities:</strong> Change shape, damage reduction 10/evil, darkvision 60 ft., low-light vision, immunity to acid, cold, and petrification, protective aura, regeneration 10, resistance to electricity 10 and fire 10, spell resistance 30, tongues</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any good-aligned plane",
+      "organization": "Solitary or pair",
+      "treasure": "No coins; double goods; standard items",
+      "advancement": "15-21 HD (Large); 22-42 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 133,
+        "max": 133,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 13,
+        "flatFooted": 28,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 8
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 14,
+        "total": 0
+      },
+      "ref": {
+        "base": 13,
+        "total": 0
+      },
+      "will": {
+        "base": 15,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 14,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Angel, Planetar (SRD). See d20srd.org for complete description and tactics.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

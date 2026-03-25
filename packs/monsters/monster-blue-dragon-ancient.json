@@ -1,0 +1,158 @@
+{
+  "name": "Blue Dragon, Ancient",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterBlueDragonAncient",
+    "creatureTypeKey": "dragon",
+    "subtypeKeys": [
+      "earth"
+    ],
+    "abilities": {
+      "str": {
+        "value": 35,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 25,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "21",
+      "alignment": "Lawful Evil",
+      "size": "Gargantuan"
+    },
+    "statBlock": {
+      "naturalArmor": 32,
+      "space": "20 ft",
+      "reach": "20 ft",
+      "movement": {
+        "land": 0,
+        "fly": 200,
+        "flyManeuverability": "clumsy",
+        "swim": 0,
+        "burrow": 20,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 27,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Breath weapon / attacks (SRD table):</strong> 20d8 (33); melee attack column +41.</p><p><strong>Special:</strong> Veil</p><p>Imported from d20srd.org dragon tables; verify AC, attacks, and spells in-game.</p>",
+      "environment": "Temperate deserts",
+      "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
+      "treasure": "Triple standard",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 445,
+        "max": 445,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 6,
+        "flatFooted": 38,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 25,
+        "total": 0
+      },
+      "ref": {
+        "base": 18,
+        "total": 0
+      },
+      "will": {
+        "base": 23,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 33,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Blue Dragon, Ancient (SRD true dragon). See d20srd.org for full rules.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

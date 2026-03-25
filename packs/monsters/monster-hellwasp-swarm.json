@@ -1,0 +1,160 @@
+{
+  "name": "Hellwasp Swarm",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterHellwaspSwarm",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [
+      "extraplanar",
+      "evil",
+      "swarm"
+    ],
+    "abilities": {
+      "str": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "8",
+      "alignment": "Lawful Evil",
+      "size": "Diminutive"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "10 ft",
+      "reach": "0 ft",
+      "movement": {
+        "land": 0,
+        "fly": 40,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "magic"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Distraction, inhabit, poison</p><p><strong>Special Qualities:</strong> Damage reduction 10/magic, darkvision 60 ft., hive mind, immune to weapon damage, resistance to fire 10, low-light vision, swarm traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A evil-aligned plane",
+      "organization": "Solitary, fright (2-4 swarms), or terror (5-8 swarms)",
+      "treasure": "None",
+      "advancement": "None",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 93,
+        "max": 93,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 20,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 10
+      },
+      "speed": {
+        "value": 5
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 10,
+        "total": 0
+      },
+      "ref": {
+        "base": 14,
+        "total": 0
+      },
+      "will": {
+        "base": 7,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Hellwasp Swarm (SRD). See d20srd.org for complete description and tactics.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}
