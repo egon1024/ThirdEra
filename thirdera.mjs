@@ -40,6 +40,7 @@ import {
 import { registerModifierSourceProviders } from "./module/logic/modifier-aggregation.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 import { fuzzyScore } from "./module/utils/fuzzy.mjs";
+import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-from-size-hooks.mjs";
 import "./module/logic/apply-damage-healing-entry-points.mjs";
 import "./module/logic/spell-save-from-chat.mjs";
 import "./module/logic/concentration-from-chat.mjs";
@@ -120,6 +121,7 @@ Hooks.once("init", async function () {
     // Initialize logic modules
     AuditLog.init();
     initHpAutoIncrease();
+    registerTokenDimensionHooks();
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;

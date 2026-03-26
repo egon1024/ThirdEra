@@ -29,6 +29,8 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 | `module/logic/condition-helpers.mjs` (`getActiveConditionModifiers` only) | `unit/logic/condition-helpers.test.mjs` |
 | `module/logic/derived-conditions.mjs` (`getDerivedHpConditionId`, `getDerivedFrom` only) | `unit/logic/derived-conditions.test.mjs` |
 | `module/logic/monster-pack-keys.mjs` (`resolveMonsterPackNpcKeys`) | `unit/logic/monster-pack-keys.test.mjs` |
+| `module/logic/token-dimensions-from-size.mjs` | `unit/logic/token-dimensions-from-size.test.mjs` |
+| `module/logic/token-dimensions-from-size-hooks.mjs` (handlers + `registerTokenDimensionHooks`) | `unit/logic/token-dimensions-from-size-hooks.test.mjs` |
 | `module/logic/npc-skill-prep.mjs` (`prepareNpcSkillItems`, `buildModifierOnlySkills`, `skillMiscBreakdownLabel`, `resolvedSkillMiscLineLabel`) | `unit/logic/npc-skill-prep.test.mjs` |
 | `module/logic/npc-embedded-skill-identity.mjs` (NPC skill embed identity / dedupe for sheet + create) | `unit/logic/npc-embedded-skill-identity.test.mjs` |
 | `module/utils/fuzzy.mjs` | `unit/utils/fuzzy.test.mjs` |
