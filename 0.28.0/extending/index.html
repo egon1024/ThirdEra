@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Extending - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../css/logo.png">
+  <link href="../css/torillic.css" rel="stylesheet">
+  <link href="../css/single-column.css" rel="stylesheet">
+  <link href="../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="..">Home</a>
+      
+      
+      
+      <a class="" href="../usage/">Usage</a>
+      
+      
+      
+      <a class="current" href="./">Extending</a>
+      
+      
+      
+      <a class="" href="../development/">Development</a>
+      
+      
+      
+      <a class="" href="../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="extending-thirdera">Extending ThirdEra</h1>
+<p>This page is for <strong>extenders</strong>: anyone adding compendiums, modules, or new content to the system without necessarily changing its core code. It explains how the system is structured so you can add races, classes, feats, spells, or third-party packs that work with ThirdEra.</p>
+<h2 id="data-driven-design">Data-driven design</h2>
+<p>ThirdEra does not hardcode game content. Races, classes, skills, feats, spells, weapons, armor, equipment, schools, conditions, creature types, and subtypes are all <strong>item types</strong> with their own schemas. Characters and NPCs are <strong>actor types</strong> with type-specific data (e.g. ability scores and spellcasting for characters; stat block and creature type for NPCs). Derived values (ability modifiers, saves, AC, initiative) are computed on the data models when documents are prepared.</p>
+<p>When you add new content, you use these same item types. The system is designed so that additional compendiums or world items can extend or override content without forking the core code.</p>
+<h2 id="references-between-documents">References between documents</h2>
+<p>References between documents (e.g. “this feat requires that feat”, “this class grants this feature”) must use <strong>document ID or UUID</strong>, not names or keys. That keeps compendium and world documents unambiguous and stable when names or keys change. When you create feats with prerequisites, class features that grant feats, or similar links, store the target document’s ID or UUID.</p>
+<h2 id="compendiums">Compendiums</h2>
+<p>The <strong>source of SRD content</strong> (races, classes, feats, spells, etc.) is compendium packs. A <strong>CompendiumLoader</strong> runs when a world is loaded and creates or updates compendium documents from source data, so content can be revised (e.g. name or key changes) without duplicating entries. Third-party compendiums or modules can provide additional content using the same item types and structure.</p>
+<p>For how to create and manage compendiums (pack definition, JSON layout, loader behavior), see the <strong><a href="../compendium-guide/">Compendium guide</a></strong> on this site.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Configuration that drives sheets and logic (sizes, damage types, movement maneuverability, etc.) lives in <strong>CONFIG.THIRDERA</strong>. The system uses this at runtime; you do not need to modify it to add new races, classes, or items—they are data, not config.</p>
+<h2 id="modifier-system-adding-new-sources">Modifier system (adding new sources)</h2>
+<p>The system uses a <strong>unified modifier pipeline</strong>: conditions, feats, race, and equipped items contribute modifiers through a single aggregation. If you add a new item type or effect that should grant numeric bonuses (e.g. to AC, saves, ability scores, skills), you can plug in without changing core code:</p>
+<ul>
+<li><strong>Register a provider:</strong> Push a function <code>(actor) =&gt; Array&lt;{ label, changes }&gt;</code> to <code>CONFIG.THIRDERA.modifierSourceProviders</code>. See <a href="../development/#modifier-system-modulelogicmodifier-aggregationmjs">Development — Modifier system</a> for the full contract and canonical keys.</li>
+<li><strong>Item method:</strong> Implement <code>getModifierChanges(actor)</code> on your item type returning <code>{ applies, changes }</code>; the built-in item provider will call it and merge when <code>applies</code> is true.</li>
+</ul>
+<p><strong>Natural healing (Take rest):</strong> To grant extra hit points recovered per day of rest, use the canonical modifier key <strong><code>naturalHealingPerDay</code></strong> in <code>changes</code> (same shape as other GMS keys). The <strong>Take rest</strong> dialog sums <code>getActiveModifiers(actor).totals.naturalHealingPerDay</code> with character level and the character’s <strong><code>system.details.naturalHealingBonus</code></strong> field. See <a href="../development/#rest-and-natural-healing">Development — Rest and natural healing</a> and <a href="../usage/characters/#spellcasting">Character sheet — Spellcasting</a>.</p>
+<p><strong>Initiative (combat):</strong> Use the canonical key <strong><code>initiative</code></strong> in feat, condition, or equipped-item <code>changes</code> for flat bonuses or penalties (e.g. Improved Initiative +4, Deafened −4). The character and NPC data models add the aggregated total to Dexterity mod for <code>attributes.initiative.bonus</code>. The package <strong><code>initiative</code></strong> formula in <code>system.json</code> must stay aligned with that field (default: <code>1d20 + @attributes.initiative.bonus</code>); Foundry evaluates <code>@</code> paths from the actor’s roll data (<code>getRollData()</code> → system). See <a href="../development/#initiative-and-combat">Development — Initiative and combat</a>.</p>
+<p>For GM-facing world options (e.g. track currency weight, audit log, first-level full HP), see <strong><a href="../usage/world-configuration/">World configuration</a></strong> in the Usage section.</p>
+<h2 id="changing-the-core-code">Changing the core code</h2>
+<p>If you are working on the repository itself (entry points, file layout, conventions, Foundry v13 behavior), use the <strong><a href="../development/">Development</a></strong> page on this site. It is the single reference for architecture, conventions, and operational notes when contributing to the codebase.</p>
+
+    
+    
+    
+    
+    
+  </main>
+  <script src="../js/version-selector.js"></script>
+  <script src="../search/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,18 @@
+/* Force single-column layout for torillic theme (overrides default 2-column). */
+.torillic-page {
+  column-count: 1;
+  column-width: 100%;
+}
+
+/* No underline on content links (internal and external). */
+.torillic-page a[href] {
+  text-decoration: none;
+}
+
+/* Hide the theme's contents block (TOC) globally. */
+.torillic-page h3:has(~ blockquote.torillic-toc),
+.torillic-page h3:has(~ blockquote.torillic-toc) + blockquote,
+.torillic-page h4:has(+ blockquote.torillic-toc),
+.torillic-page blockquote.torillic-toc {
+  display: none !important;
+}

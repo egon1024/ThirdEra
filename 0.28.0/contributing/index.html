@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Contributing - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../css/logo.png">
+  <link href="../css/torillic.css" rel="stylesheet">
+  <link href="../css/single-column.css" rel="stylesheet">
+  <link href="../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="..">Home</a>
+      
+      
+      
+      <a class="" href="../usage/">Usage</a>
+      
+      
+      
+      <a class="" href="../extending/">Extending</a>
+      
+      
+      
+      <a class="" href="../development/">Development</a>
+      
+      
+      
+      <a class="current" href="./">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="feedback-and-contributions">Feedback and contributions</h1>
+<h2 id="development-approach">Development approach</h2>
+<p>This repository is unapologetically being vibe coded by the author. If that makes you not want to use it that’s your call to make, but I will not be accepting feedback that is primarily criticism of the decision to develop this way, or requests that the development process change. Bug reports and practical feedback from people who use the system are very welcome; feedback that amounts to “you shouldn’t do it this way” is not.</p>
+<h2 id="giving-feedback">Giving feedback</h2>
+<p>If you’ve tried ThirdEra and have feedback, bug reports, or suggestions, please make use of the repository's <a href="https://github.com/egon1024/ThirdEra/issues">GitHub Issues</a> for bugs or feature ideas, but please check existing issues first.</p>
+<p>I welcome reports of what works and what doesn’t, especially from GMs and players running games with the system.</p>
+<h2 id="contributing-code-or-content">Contributing code or content</h2>
+<p>Contributions (pull requests, patches, or compendium content) may be accepted depending on the project’s current priorities. If you want to contribute:</p>
+<ol>
+<li><strong>Open an issue first</strong> - Describe what you’d like to do so maintainers can align with the <a href="../future-plans/">roadmap</a> and avoid duplicate work.</li>
+<li><strong>Follow repository conventions</strong> - Code style, commit messages, and architecture are described in the <a href="../development/">Development</a> page on this site and any other contributor-facing docs. When adding content (e.g. compendiums or new items), see <a href="../extending/">Extending</a> for data-driven design and reference rules. The project uses <strong>document ID/UUID</strong> for references between items; new code should follow that and the existing patterns. <strong>Before opening a PR:</strong> from the repo root, run <code>npm ci</code>, <strong><code>make test</code></strong> (or <strong><code>npm test</code></strong>), and <strong><code>make test-coverage</code></strong> (Node.js 20+); <strong>Validate</strong> runs <strong><code>unit-tests</code></strong> (<strong><code>make test</code></strong>) and a separate <strong><code>coverage</code></strong> job (<strong><code>make test-coverage</code></strong>, which <strong>fails if scoped coverage falls below configured minimums</strong>)—see Development → <strong>Automated unit tests</strong>. <strong>Which modules are covered by unit tests</strong> (and which are Foundry-only for now) is documented in <strong><code>test/README.md</code></strong> at the repository root. Changes to covered logic need new or updated tests (see <code>.cursor/rules/automated-tests-for-logic.mdc</code>).</li>
+<li><strong>Expect review</strong> - Pull requests will be reviewed for consistency with the codebase and the project’s goals. Not every change may be merged; we’ll do our best to communicate why.</li>
+</ol>
+<p>If the README or maintainers state that code contributions are currently paused, that overrides the above; practical feedback and bug reports are still welcome (subject to the development-approach note above).</p>
+<h2 id="where-to-find-conventions">Where to find conventions</h2>
+<ul>
+<li><strong><a href="../extending/">Extending</a></strong> - Adding compendiums and new content (data model, references, config).</li>
+<li><strong><a href="../development/">Development</a></strong> - Architecture, data models, sheets, compendiums, and Foundry v13 notes for contributors.</li>
+<li><strong><a href="../future-plans/">Future plans</a></strong> - Roadmap and planned or possible work.</li>
+<li><strong><a href="https://github.com/egon1024/ThirdEra/">Repository and commit history</a></strong> - For coding style and patterns used in the codebase.</li>
+</ul>
+
+    
+    
+    
+    
+    
+  </main>
+  <script src="../js/version-selector.js"></script>
+  <script src="../search/main.js"></script>
+</body>
+
+</html>
