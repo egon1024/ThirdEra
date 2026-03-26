@@ -1,0 +1,156 @@
+{
+  "name": "Warhorse, Light",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterWarhorseLight",
+    "creatureTypeKey": "animal",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+3",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate plains",
+      "organization": "Domesticated",
+      "treasure": "None",
+      "advancement": "—",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 22,
+        "max": 22,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 13,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 60
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": 4,
+        "total": 0
+      },
+      "will": {
+        "base": 2,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThese animals or similar to light horses but are trained and bred for strength and aggression. They usually are not ready for warfare before age three. A light warhorse can fight while carrying a rider, but the rider cannot also attack unless he or she succeeds on a Ride check.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a light warhorse is up to 230 pounds; a medium load, 231-460 pounds; and a heavy load, 461-690 pounds. A light warhorse can drag 3,450 pounds.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

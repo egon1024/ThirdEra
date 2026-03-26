@@ -1,0 +1,177 @@
+{
+  "name": "Androsphinx",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAndrosphinx",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 25,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "9",
+      "alignment": "Chaotic Good",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 13,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 80,
+        "flyManeuverability": "poor",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "2d4+7",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:sphinx.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Sphinx\"><h4>SRD type: Sphinx</h4><p>\n\tSphinxes are enigmatic creatures with great, feathery wings and leonine bodies. All sphinxes are territorial, but the more intelligent ones can differentiate between deliberate intrusion and temporary or inadvertent trespass.\n</p>\n<p>\n\tA typical sphinx is about 10 feet long and weighs about 800 pounds.\n</p>\n<p>\n\tSphinxes speak Sphinx, Common, and Draconic.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tMost sphinxes fight on the ground, using their wings to help them <a href=\"/srd/specialAbilities.htm#pounce\">pounce</a> much as lions do. If outnumbered by earthbound creatures, a sphinx takes wing and attacks on the fly.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#pounce\">Pounce</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tIf a sphinx <a href=\"/srd/combat/specialAttacks.htm#charge\">charges</a> a foe, it can make a <a href=\"/srd/combat/actionsInCombat.htm#fullAttack\">full attack</a>, including two <a href=\"/srd/specialAbilities.htm#rake\">rake</a> attacks.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#rake\">Rake</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tA sphinx that <a href=\"/srd/specialAbilities.htm#pounce\">pounces</a> onto a creature can make two <a href=\"/srd/specialAbilities.htm#rake\">rake</a> attacks with its hind legs. Each sphinx’s description provides its attack bonus and damage.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Pounce, rake 2d4+3, roar, spells</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm deserts",
+      "organization": "Solitary",
+      "treasure": "Standard",
+      "advancement": "13-18 HD (Large); 19-36 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 114,
+        "max": 114,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 22,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 50
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 12,
+        "total": 0
+      },
+      "ref": {
+        "base": 8,
+        "total": 0
+      },
+      "will": {
+        "base": 7,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThese sphinxes are always male. Androsphinxes are clever and generally good-natured, but they can be savage opponents.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tIn battle, an androsphinx rips apart enemies with its razor-sharp claws. It relies on its natural weapons in a fight, employing its spells for defense or healing.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +18 melee, damage 2d4+3.\n</p>\n\n<h5>Roar (Su)</h5>\n<p>\n\tThree times per day an androsphinx can loose a mighty roar. The first time it does this, all creatures within 500 feet must succeed on a DC 19 Will save or be affected as though by a fear spell for 2d6 rounds.\n</p>\n<p>\n\tIf the sphinx roars a second time during the same encounter, all creatures within 250 feet must succeed on a DC 19 Fortitude save or be paralyzed for 1d4 rounds, and all those within 90 feet are deafened for 2d6 rounds (no save). If it roars a third time during the same encounter, all those within 250 feet must succeed on a DC 19 Fortitude save or take 2d4 points of Strength damage for 2d4 rounds. In addition, any Medium or smaller creature within 90 feet must succeed on a DC 19 Fortitude save or be thrown to the ground and take 2d8 points of damage. The force of this roar is so great that it deals 50 points of damage to any stone or crystalline object within 90 feet. Magic items and held or carried items can avoid damage with a DC 19 Reflex save. Other androsphinxes are immune to these effects. The save DCs are Charisma-based.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tAn androsphinx casts divine spells as a 6th-level cleric from the cleric spell list and from the Good, Healing, and Protection domains.\n</p>\n\n<h6>Typical Cleric Spells Prepared (5/5/5/4; save DC 13 + spell level)</h6>\n<p>\n\t0—cure minor wounds, detect magic, guidance, light, resistance; 1st—divine favor, protection from evil*, shield of faith, remove fear, summon monster I; 2nd—bull’s strength, remove paralysis, resist energy, shield other*, summon monster II; 3rd—cure serious wounds*, daylight, invisibility purge, searing light.\n</p>\n<p>\n\t*Domain spell. Domains: Good and Healing.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "sphinx.htm",
+        "hubTitle": "Sphinx",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "name": "Horned Devil (Cornugon)",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterHornedDevilCornugon",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar",
+      "lawful"
+    ],
+    "abilities": {
+      "str": {
+        "value": 31,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 25,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 25,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "16",
+      "alignment": "Lawful Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 19,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 50,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8+5",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "good"
+      },
+      "spellResistance": 28,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:devil.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Devil\"><h4>SRD type: Devil</h4><p>\n\tDevils are fiends from lawful evil-aligned planes.\n</p>\n<p>\n\tMany devils are surrounded by a <a href=\"/srd/specialAbilities.htm#fearAura\">fear aura</a>, which they use to break up powerful groups and defeat opponents piecemeal. Devils with <a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">spell-like abilities</a> use their illusion abilities to delude and confuse foes as much as possible. A favorite trick is to create illusory reinforcements; enemies can never be entirely sure if a threat is only a figment or real summoned devils joining the fray.\n</p>\n\n<h5>Devil Traits</h5>\n<p>\n\tMost devils possesses the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li><a href=\"/srd/specialAbilities.htm#fireImmunity\">Immunity to fire</a> and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10 and cold 10.</li>\n\t<li>See in Darkness (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): Some devils can see perfectly in darkness of any kind, even that created by a <a class=\"spell\" href=\"/srd/spells/deeperDarkness.htm\">deeper darkness</a> spell.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept when otherwise noted, devils speak Infernal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Fear aura, infernal wound, spell-like abilities, stun, summon devil</p><p><strong>Special Qualities:</strong> Damage reduction 10/good and silver, darkvision 60 ft., immunity to fire and poison, resistance to acid 10 and cold 10, regeneration 5, see in darkness, spell resistance 28, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful evil-aligned plane",
+      "organization": "Solitary, team (2-4), or squad (6-10)",
+      "treasure": "Standard coins; double goods; standard items",
+      "advancement": "16-20 HD (Large); 21-45 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 172,
+        "max": 172,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 16,
+        "flatFooted": 28,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 7
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 16,
+        "total": 0
+      },
+      "ref": {
+        "base": 16,
+        "total": 0
+      },
+      "will": {
+        "base": 15,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 15,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA horned devil is 9 feet tall and weighs about 600 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tHorned devils are bold fighters. They rarely retreat, even against overwhelming odds. They love to fight with their spiked chains, usually singling out the most powerful foes to stun and eliminate quickly.\n</p>\n<p>\n\tA horned devil’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—dispel chaos (DC 21), dispel good (DC 21), magic circle against good, greater teleport (self plus 50 pounds of objects only); persistent image (DC 21) 3/day—fireball (DC 19), lightning bolt (DC 19). Caster level 15th. The save DCs are Charisma-based.\n</p>\n\n<h5>Fear Aura (Su)</h5>\n<p>\n\tA horned devil can radiate a 5-foot-radius fear aura as a free action. A creature in the area must succeed on a DC 23 Will save or be affected as though by a fear spell (caster level 15th). A creature that successfully saves cannot be affected again by the same horned devil’s aura for 24 hours. Other devils are immune to the aura. The save DC is Charisma-based.\n</p>\n\n<h5>Stun (Su)</h5>\n<p>\n\tWhenever a horned devil hits with a spiked chain attack, the opponent must succeed on a DC 27 Fortitude save or be stunned for 1d4 rounds. The save DC is Strength-based. This ability is a function of the horned devil, not of the spiked chain.\n</p>\n\n<h5>Infernal Wound (Su)</h5>\n<p>\n\tThe damage a horned devil deals with its tail attack causes a persistent wound. An injured creature loses 2 additional hit points each round. The wound does not heal naturally and resists healing spells. The continuing hit point loss can be stopped by a DC 24 Heal check, a cure spell, or a heal spell. However, a character attempting to cast a cure spell or a heal spell on a creature damaged by a horned devil’s tail must succeed on a DC 24 caster level check, or the spell has no effect on the injured character. A successful Heal check automatically stops the continuing hit point loss as well as restoring hit points. The check DC is Constitution-based.\n</p>\n\n<h5>Summon Devil (Sp)</h5>\n<p>\n\tOnce per day a horned devil can attempt to summon 2d10 lemures or 1d6 bearded devils with a 50% chance of success, 1d6 barbed devils with a 35% chance of success, or another horned devil with a 20% chance of success. This ability is the equivalent of a 6th-level spell.\n</p>\n\n<h5>Regeneration (Ex)</h5>\n<p>\n\tA horned devil takes normal damage from good-aligned silvered weapons, and from spells or effects with the good descriptor.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "devil.htm",
+        "hubTitle": "Devil",
+        "immunities": [
+          "fire",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": true,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to fire and poison.",
+          "Resistance to acid 10 and cold 10.",
+          "See in Darkness (Su): Some devils can see perfectly in darkness of any kind, even that created by a deeper darkness spell.",
+          "Summon (Sp): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).",
+          "Telepathy."
+        ],
+        "languagesNote": "Except when otherwise noted, devils speak Infernal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

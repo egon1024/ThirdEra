@@ -1,0 +1,181 @@
+{
+  "name": "Clay Golem",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterClayGolem",
+    "creatureTypeKey": "construct",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 25,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "10",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 14,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "adamantine"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:golem.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Golem\"><h4>SRD type: Golem</h4><p>\n\tGolems are magically created automatons of great power. Constructing one involves the employment of mighty magic and elemental forces.\n</p>\n<p>\n\tThe animating force for a golem is a spirit from the Elemental Plane of Earth. The process of creating the golem binds the unwilling spirit to the artificial body and subjects it to the will of the golem’s creator.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tGolems are tenacious in combat and prodigiously strong as well. Being mindless, they do nothing without orders from their creators. They follow instructions explicitly and are incapable of any strategy or tactics. They are emotionless in combat and cannot be provoked.\n</p>\n<p>\n\tA golem’s creator can command it if the golem is within 60 feet and can see and hear its creator. If uncommanded, a golem usually follows its last instruction to the best of its ability, though if attacked it returns the attack. The creator can give the golem a simple command to govern its actions in his or her absence. The golem’s creator can order the golem to obey the commands of another person (who might in turn place the golem under someone else’s control, and so on), but the golem’s creator can always resume control over his creation by commanding the golem to obey him alone.\n</p>\n\n<h5>Immunity to Magic (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tGolems have immunity to most magical and <a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">supernatural</a> effects, except when otherwise noted.\n</p>\n\n<h3>Construction</h3>\n<p>\n\tThe cost to create given for each golem includes the cost of the physical body and all the materials and spell components that are consumed or become a permanent part of the golem. Creating a golem is essentially similar to creating any sort of magic item. However, a golem’s body includes costly material components that may require some extra preparation. The golem’s creator can assemble the body or hire someone else to do the job. The builder must have the appropriate skill, which varies with the golem variety.\n</p>\n<p>\n\tCompleting the golem’s creation drains the appropriate XP from the creator and requires casting any spells on the final day.\n</p>\n<p>\n\tThe creator must cast the spells personally, but they can come from outside sources, such as scrolls.\n</p>\n<p>\n\tThe characteristics of a golem that come from its nature as a magic item (caster level, prerequisite feats and spells, market price, cost to create) are given in summary form at the end of each golem’s description.\n</p>\n<p>\n\tNote: The market price of an advanced golem (a golem with more Hit Dice than the typical golem described in each entry) is increased by 5,000 gp for each additional Hit Die, and increased by an additional 50,000 gp if the golem’s size increases. The XP cost for creating an advanced golem is equal to 1/25 the advanced golem’s market price minus the cost of the special materials required.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Berserk, cursed wound</p><p><strong>Special Qualities:</strong> Construct traits, damage reduction 10/adamantine and bludgeoning, darkvision 60 ft., haste, immunity to magic, low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Solitary or gang (2-4)",
+      "treasure": "None",
+      "advancement": "12-18 HD (Large); 19-33 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 90,
+        "max": 90,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 22,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": -1
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 8,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThis golem has a humanoid body made from clay. A clay golem wears no clothing except for a metal or stiff leather garment around its hips.\n</p>\n<p>\n\tA clay golem golem cannot speak or make any vocal noise. It walks and moves with a slow, clumsy gait. It weighs around 600 pounds.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Berserk (Ex)</h5>\n<p>\n\tWhen a clay golem enters combat, there is a cumulative 1% chance each round that its elemental spirit breaks free and the golem goes berserk. The uncontrolled golem goes on a rampage, attacking the nearest living creature or smashing some object smaller than itself if no creature is within reach, then moving on to spread more destruction. Once a clay golem goes berserk, no known method can reestablish control.\n</p>\n\n<h5>Cursed Wound (Ex)</h5>\n<p>\n\tThe damage a clay golem deals doesn’t heal naturally and resists healing spells. A character attempting to cast a conjuration (healing) spell on a creature damaged by a clay golem must succeed on a DC 26 caster level check, or the spell has no effect on the injured character.\n</p>\n\n<h5>Immunity to Magic (Ex)</h5>\n<p>\n\tA clay golem is immune to any spell or spell-like ability that allows spell resistance. In addition, certain spells and effects function differently against the creature, as noted below.\n</p>\n<p>\n\tA move earth spell drives the golem back 120 feet and deals 3d12 points of damage to it.\n</p>\n<p>\n\tA disintegrate spell slows the golem (as the slow spell) for 1d6 rounds and deals 1d12 points of damage.\n</p>\n<p>\n\tAn earthquake spell cast directly at a clay golem stops it from moving on its next turn and deals 5d10 points of damage. The golem gets no saving throw against any of these effects.\n</p>\n<p>\n\tAny magical attack against a clay golem that deals acid damage heals 1 point of damage for every 3 points of damage it would otherwise deal. If the amount of healing would cause the golem to exceed its full normal hit points, it gains any excess as temporary hit points. For example, a clay golem hit by the breath weapon of a black dragon heals 7 points of damage if the attack would have dealt 22 points of damage. A clay golem golem gets no saving throw against magical attacks that deal acid damage.\n</p>\n\n<h5>Haste (Su)</h5>\n<p>\n\tAfter it has engaged in at least 1 round of combat, a clay golem can haste itself once per day as a free action. The effect lasts 3 rounds and is otherwise the same as the spell.\n</p>\n\n<h3>Construction</h3>\n<p>\n\tA clay golem’s body must be sculpted from a single block of clay weighing at least 1,000 pounds, treated with rare oils and powders worth 1,500 gp. Creating the body requires a DC 15 Craft (sculpting) check or a DC 15 Craft (pottery) check.\n</p>\n<p>\n\tCL 11th; Craft Construct, animate objects, commune, resurrection, caster must be at least 11th level; Price 40,000 gp; Cost 21,500 gp + 1,540 XP.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "golem.htm",
+        "hubTitle": "Golem",
+        "immunities": [
+          "magic (ex) golems have immunity to most magical",
+          "supernatural effects",
+          "except when otherwise noted"
+        ],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

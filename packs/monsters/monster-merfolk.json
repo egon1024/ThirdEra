@@ -1,0 +1,154 @@
+{
+  "name": "Merfolk",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterMerfolk",
+    "creatureTypeKey": "humanoid",
+    "subtypeKeys": [
+      "aquatic"
+    ],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 50,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d8+1",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Amphibious, low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate aquatic",
+      "organization": "Company (2-4), patrol (11-20 plus 2 3rd-level lieutenants and 1 leaderof 3rd-6th level), or band (30-60 plus 1 3rd-level sergeant per 20 adults,5 5th-level lieutenants, 3 7th-level captains, and 10 porpoises)",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 6,
+        "max": 6,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 5
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 1,
+        "total": 0
+      },
+      "will": {
+        "base": -1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA merfolk is about 8 feet long from the top of the head to the end of the tail, and weighs about 400 pounds.\n</p>\n<p>\n\tMerfolk speak Common and Aquan.\n</p>\n<p>\n\tMost merfolk encountered outside their home are warriors; the information in the statistics block is for one of 1st level.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tMerfolk favor heavy crossbows of shell and coral that fire bolts fashioned from blowfish spines, with an underwater range increment of 30 feet. Merfolk often barrage their enemies before closing, when they resort to tridents.\n</p>\n\n<h5>Amphibious (Ex)</h5>\n<p>\n\tMerfolk can breathe both air and water, although they rarely travel more than a few feet from the water’s edge.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA merfolk has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>\n<p>\n\tThe merfolk warrior presented here had the following ability scores before racial adjustments: Str 13, Dex 11, Con 12, Int 10, Wis 9, Cha 8.\n</p>\n\n<h2 id=\"merfolkCharacters\">Merfolk Characters</h2>\n<p>\n\tA merfolk’s favored class is bard.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

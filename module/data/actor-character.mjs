@@ -5,6 +5,7 @@ import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbran
 import { ClassData } from "./item-class.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
 import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
+import { resolvedSkillMiscLineLabel } from "../logic/npc-skill-prep.mjs";
 
 /**
  * Data model for D&D 3.5 Character actors
@@ -522,6 +523,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             // Recalculate total with armor/load penalty and modifier-system skill contributions (Phase 6)
             const abilityMod = this.abilities[sd.ability]?.mod || 0;
             const misc = sd.modifier?.misc || 0;
+            const miscLineLabel = resolvedSkillMiscLineLabel(sd.modifier);
             const skillModKey = sd.key ? `skill.${sd.key}` : null;
             const skillMod = skillModKey ? (mods.totals[skillModKey] ?? 0) : 0;
             const skillModBreakdown = skillModKey ? (mods.breakdown[skillModKey] ?? []) : [];
@@ -532,7 +534,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 { label: "Ability", value: abilityMod },
                 { label: "Ranks", value: ranks }
             ];
-            if (misc !== 0) sd.breakdown.push({ label: "Misc", value: misc });
+            if (misc !== 0) sd.breakdown.push({ label: miscLineLabel, value: misc });
             if (acpPenalty !== 0) {
                 let label = "Armor ACP";
                 if (loadEffects.acp < totalArmorCheckPenalty) {

@@ -1,0 +1,176 @@
+{
+  "name": "Air Elemental",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAirElemental",
+    "creatureTypeKey": "elemental",
+    "subtypeKeys": [
+      "air",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 4,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 100,
+        "flyManeuverability": "perfect",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d4",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:elemental.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Elemental\"><h4>SRD type: Elemental</h4><p>\n\tElementals are incarnations of the elements that compose existence.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tElementals have varied combat abilities and tactics, but all have the same elemental qualities.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Air mastery, whirlwind</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., elemental traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Elemental Plane of Air",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "3 HD (Small)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 9,
+        "max": 9,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 7
+      },
+      "speed": {
+        "value": 100
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 0,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 0,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tAir elementals speak Auran, though they rarely choose to do so.\n</p>\n\n<table id=\"airElementalSizes\" cellspacing=\"0\" class=\"right\">\n\t<caption>Air Elemental Sizes</caption>\n\t<tr>\n\t\t<th rowspan=\"2\">Elemental</th>\n\t\t<th rowspan=\"2\">Height</th>\n\t\t<th rowspan=\"2\">Weight</th>\n\t\t<th colspan=\"3\">Whirlwind</th>\n\t</tr>\n\t<tr>\n\t\t<th>Save DC</th>\n\t\t<th>Damage</th>\n\t\t<th>Height</th>\n\t</tr>\n\t<tr>\n\t\t<td>Small</td>\n\t\t<td align=\"center\">4 ft.</td>\n\t\t<td align=\"center\">1 lb.</td>\n\t\t<td align=\"center\">11</td>\n\t\t<td align=\"center\">1d4</td>\n\t\t<td align=\"center\">10-20 ft.</td>\n\t</tr>\n\t<tr>\n\t\t<td>Medium</td>\n\t\t<td align=\"center\">8 ft.</td>\n\t\t<td align=\"center\">2 lb.</td>\n\t\t<td align=\"center\">13</td>\n\t\t<td align=\"center\">1d6</td>\n\t\t<td align=\"center\">10-30 ft.</td>\n\t</tr>\n\t<tr>\n\t\t<td>Large</td>\n\t\t<td align=\"center\">16 ft.</td>\n\t\t<td align=\"center\">4 lb.</td>\n\t\t<td align=\"center\">16</td>\n\t\t<td align=\"center\">2d6</td>\n\t\t<td align=\"center\">10-40 ft.</td>\n\t</tr>\n\t<tr>\n\t\t<td>Huge</td>\n\t\t<td align=\"center\">32 ft.</td>\n\t\t<td align=\"center\">8 lb.</td>\n\t\t<td align=\"center\">22</td>\n\t\t<td align=\"center\">2d8</td>\n\t\t<td align=\"center\">10-50 ft.</td>\n\t</tr>\n\t<tr>\n\t\t<td>Greater</td>\n\t\t<td align=\"center\">36 ft.</td>\n\t\t<td align=\"center\">10 lb.</td>\n\t\t<td align=\"center\">25</td>\n\t\t<td align=\"center\">2d8</td>\n\t\t<td align=\"center\">10-60 ft.</td>\n\t</tr>\n\t<tr>\n\t\t<td>Elder</td>\n\t\t<td align=\"center\">40 ft.</td>\n\t\t<td align=\"center\">12 lb.</td>\n\t\t<td align=\"center\">28</td>\n\t\t<td align=\"center\">2d8</td>\n\t\t<td align=\"center\">10-60 ft.</td>\n\t</tr>\n</table>\n\n<h3>Combat</h3>\n<p>\n\tTheir rapid speed makes air elementals useful on vast battlefields or in extended aerial combat.\n</p>\n\n<h5>Air Mastery (Ex)</h5>\n<p>\n\tAirborne creatures take a -1 penalty on attack and damage rolls against an air elemental.\n</p>\n\n<h5>Whirlwind (Su)</h5>\n<p>\n\tThe elemental can transform itself into a whirlwind once every 10 minutes and remain in that form for up to 1 round for every 2 HD it has. In this form, the elemental can move through the air or along a surface at its fly speed.\n</p>\n<p>\n\tThe whirlwind is 5 feet wide at the base, up to 30 feet wide at the top, and up to 50 feet tall, depending on the elemental’s size. The elemental controls the exact height, but it must be at least 10 feet.\n</p>\n<p>\n\tThe elemental’s movement while in whirlwind form does not provoke attacks of opportunity, even if the elemental enters the space another creature occupies. Another creature might be caught in the whirlwind if it touches or enters the whirlwind, or if the elemental moves into or through the creature’s space.\n</p>\n<p>\n\tCreatures one or more size categories smaller than the elemental might take damage when caught in the whirlwind (see table for details) and may be lifted into the air. An affected creature must succeed on a Reflex save when it comes into contact with the whirlwind or take the indicated damage. It must also succeed on a second Reflex save or be picked up bodily and held suspended in the powerful winds, automatically taking the indicated damage each round. A creature that can fly is allowed a Reflex save each round to escape the whirlwind. The creature still takes damage but can leave if the save is successful. The DC for saves against the whirlwind’s effects varies with the elemental’s size (see the table). The save DC is Strength based.\n</p>\n<p>\n\tCreatures trapped in the whirlwind cannot move except to go where the elemental carries them or to escape the whirlwind.\n</p>\n<p>\n\tCreatures caught in the whirlwind can otherwise act normally, but must succeed on a Concentration check (DC 15 + spell level) to cast a spell. Creatures caught in the whirlwind take a -4 penalty to Dexterity and a -2 penalty on attack rolls. The elemental can have only as many creatures trapped inside the whirlwind at one time as will fit inside the whirlwind’s volume.\n</p>\n<p>\n\tThe elemental can eject any carried creatures whenever it wishes, depositing them wherever the whirlwind happens to be. A summoned elemental always ejects trapped creatures before returning to its home plane.\n</p>\n<p>\n\tIf the whirlwind’s base touches the ground, it creates a swirling cloud of debris. This cloud is centered on the elemental and has a diameter equal to half the whirlwind’s height. The cloud obscures all vision, including darkvision, beyond 5 feet. Creatures 5 feet away have concealment, while those farther away have total concealment.\n</p>\n<p>\n\tThose caught in the cloud must succeed on a Concentration check (DC 15 + spell level) to cast a spell.\n</p>\n<p>\n\tAn elemental in whirlwind form cannot make slam attacks and does not threaten the area around it.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "elemental.htm",
+        "hubTitle": "Elemental",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

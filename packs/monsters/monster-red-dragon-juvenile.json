@@ -1,0 +1,199 @@
+{
+  "name": "Red Dragon, Juvenile",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterRedDragonJuvenile",
+    "creatureTypeKey": "dragon",
+    "subtypeKeys": [
+      "fire"
+    ],
+    "abilities": {
+      "str": {
+        "value": 29,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "10",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 15,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 150,
+        "flyManeuverability": "poor",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d6",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": "10 ft",
+          "presetAttackBonus": 24
+        },
+        {
+          "name": "Claw",
+          "dice": "1d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        },
+        {
+          "name": "Claw",
+          "dice": "1d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        },
+        {
+          "name": "Wing",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        },
+        {
+          "name": "Wing",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        },
+        {
+          "name": "Tail slap",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 22
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +24, 2× Claw +22, 2× Wing +22, Tail slap +22.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 8d10 (22)</p><p><strong>Special qualities (by age):</strong> Locate object</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
+      "environment": "Warm mountains",
+      "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
+      "treasure": "Triple standard",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 168,
+        "max": 168,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 24,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 14,
+        "total": 0
+      },
+      "ref": {
+        "base": 10,
+        "total": 0
+      },
+      "will": {
+        "base": 12,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 16,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<h3 id=\"redDragon\">Red Dragon </h3>\n<table class=\"statBlock\" cellspacing=\"0\">\n\t<tr>\n\t\t<th>Type:</th>\n\t\t<td>Dragon (Fire)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Environment:</th>\n\t\t<td>Warm mountains</td>\n\t</tr>\n\t<tr>\n\t\t<th>Organization:</th>\n\t\t<td>Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Challenge Rating:</th>\n\t\t<td>Wyrmling 4; very young 5; young 7; juvenile 10; young adult 13; adult 15; mature adult 18; old 20; very old 21; ancient 23; wyrm 24; great wyrm 26</td>\n\t</tr>\n\t<tr>\n\t\t<th>Treasure:</th>\n\t\t<td>Triple standard</td>\n\t</tr>\n\t<tr>\n\t\t<th>Alignment:</th>\n\t\t<td>Always chaotic evil</td>\n\t</tr>\n\t<tr>\n\t\t<th>Advancement:</th>\n\t\t<td>Wyrmling 8-9 HD; very young 11-12 HD; young 14-15 HD; juvenile 17-18 HD; young adult 20-21 HD; adult 23-24 HD; mature adult 26-27 HD; old 29-30 HD; very old 32-33 HD; ancient 35-36 HD; wyrm 38-39 HD; great wyrm 41+ HD</td>\n\t</tr>\n\t<tr>\n\t\t<th>Level Adjustment:</th>\n\t\t<td>Wyrmling +4; very young +5; young +6; others —</td>\n\t</tr>\n</table>\n<p>\n\tThe small scales of a wyrmling red dragon are a bright glossy scarlet, making the dragon easily spotted by predators and hunters, so it stays underground and does not venture outside until it is more able to take care of itself. Toward the end of young age, the scales turn a deeper red, and the glossy texture is replaced by a smooth, dull finish. As the dragon grows older, the scales become large, thick, and as strong as metal. The neck frill and wings are an ash blue or purple-gray toward the edges, becoming darker with age. The pupils of a red dragon fade as it ages; the oldest red dragons have eyes that resemble molten lava orbs.\n</p>\n\n\n\n\n\n<h4>Combat</h4>\n<p>\n\tBecause red dragons are so confident, they seldom pause to appraise an adversary. On spotting a target, they make a snap decision whether to attack, using one of many strategies worked out ahead of time. A red dragon lands to attack small, weak creatures with its claws and bite rather than obliterating them with its breath weapon, so as not to destroy any treasure they might be carrying.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\tA red dragon has one type of breath weapon, a cone of fire.\n</p>\n\n<h5>Locate Object (Sp)</h5>\n<p>\n\tA juvenile or older red dragon can use this ability as the spell of the same name, once per day per age category.\n</p>\n\n<h5>Other Spell-Like Abilities</h5>\n<p>\n\t3/day—suggestion (old or older); 1/day—find the path (ancient or older), discern location (great wyrm).\n</p>\n\n<h5>Skills</h5>\n<p>\n\tAppraise, Bluff, and Jump are considered class skills for red dragons.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

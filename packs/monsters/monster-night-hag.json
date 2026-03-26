@@ -1,0 +1,150 @@
+{
+  "name": "Night Hag",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterNightHag",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "9",
+      "alignment": "Neutral Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 11,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "cold"
+      },
+      "spellResistance": 25,
+      "senses": [],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities, dream haunting</p><p><strong>Special Qualities:</strong> Change shape, damage reduction 10/cold iron and magic, immunity to fire, cold, charm, sleep, and fear, spell resistance 25</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A evil-aligned plane",
+      "organization": "Solitary, mounted (1, on nightmare), or covey (3, on nightmares)",
+      "treasure": "Standard",
+      "advancement": "9-16 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 68,
+        "max": 68,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 21,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 12,
+        "total": 0
+      },
+      "ref": {
+        "base": 9,
+        "total": 0
+      },
+      "will": {
+        "base": 10,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 8,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA night hag is about the same height and weight as a female human.\n</p>\n<p>\n\tNight hags speak Abyssal, Celestial, Common, and Infernal.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tNight hags attack good creatures on sight if the odds of success seem favorable.\n</p>\n<p>\n\tThese creatures rip through armor and flesh with their deadly teeth. They love to use sleep and then strangle those who are overcome by it.\n</p>\n<p>\n\tA night hag’s natural weapons, as well as any weapons it wields, are treated as evil-aligned for the purpose of overcoming damage reduction. Its natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Disease (Ex)</h5>\n<p>\n\tDemon fever—bite, Fortitude DC 18, incubation period 1 day, damage 1d6 Con. Each day after the first, on a failed save, an afflicted creature must immediately succeed on another DC 18 Fortitude save or take 1 point of Constitution drain. The save DC is Constitution based.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—detect chaos, detect evil, detect good, detect law, detect magic, magic missile, ray of enfeeblement, sleep (DC 12). Caster level 8th. A night hag can use etherealness at will (caster level 16th) so long as it possesses its heartstone (see below). The save DCs are Charisma-based.\n</p>\n\n<h5>Dream Haunting (Su)</h5>\n<p>\n\tNight hags can visit the dreams of chaotic or evil individuals by using a special periapt known as a heartstone to become ethereal, then hovering over the creature. Once a hag invades someone’s dreams, it rides on the victim’s back until dawn. The sleeper suffers from tormenting dreams and takes 1 point of Constitution drain upon awakening. Only another ethereal being can stop these nocturnal intrusions, by confronting and defeating the night hag.\n</p>\n\n<h5>Change Shape (Su)</h5>\n<p>\n\tAn night hag can assume the form of any Small or Medium humanoid.\n</p>\n\n<h2 id=\"heartstone\">Heartstone</h2>\n<p>\n\tAll night hags carry a periapt known as a heartstone, which instantly cures any disease contracted by the holder. In addition, a heartstone provides a +2 resistance bonus on all saving throws (this bonus is included in the statistics block). A night hag that loses this charm can no longer use etherealness until it can manufacture another (which takes one month). Creatures other than the hag can benefit from the heartstone’s powers, but the periapt shatters after ten uses (any disease cured or saving throw affected counts as a use) and it does not bestow etherealness to a bearer that is not a night hag. If sold, an intact heartstone brings 1,800 gp.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

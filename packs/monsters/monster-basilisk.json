@@ -1,0 +1,287 @@
+{
+  "name": "Basilisk",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterBasilisk",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 7,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d8",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Petrifying gaze (Su):</strong> Range 30 ft.; Fort DC 13 negates (turn to stone permanently).</p><p><strong>Bite +8</strong> (1d8+3).</p>",
+      "environment": "Warm deserts",
+      "organization": "Solitary or colony (3–6)",
+      "treasure": "Standard",
+      "advancement": "6–10 HD (Medium); 11–15 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 45,
+        "max": 45,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 2,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 1,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>A basilisk is a reptilian monster that petrifies living creatures with a mere gaze. A basilisk usually has a dull brown body with a yellowish underbelly. Some specimens sport a short, curved horn atop the nose. An adult basilisk's body grows to about 6 feet long, not including its tail, which can reach an additional length of 5 to 7 feet. The creature weighs about 300 pounds.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Blind-Fight",
+      "type": "feat",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>You are skilled at fighting opponents you cannot clearly see.</p>",
+        "key": "blindFight",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "",
+        "benefit": "<p>In melee, every time you miss because of concealment, you can reroll your miss chance percentile roll one time to see if you actually hit.</p><p>An invisible attacker gets no advantages related to hitting you in melee. That is, you don't lose your Dexterity bonus to Armor Class, and the attacker doesn't get the usual +2 bonus to hit you. The invisible attacker's bonuses do still apply for ranged attacks, however.</p><p>You take only half the usual penalty to speed for being unable to see. Darkness and poor visibility in general reduces your speed to three-quarters normal, instead of one-half.</p>",
+        "special": "A fighter may select Blind-Fight as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Great Fortitude",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have a knack for avoiding death.</p>",
+        "key": "greatFortitude",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Fortitude saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveFort",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 0,
+        "modifier": {
+          "misc": 8,
+          "total": 0,
+          "miscLabel": "Large (Hide) + MM total (size not auto)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

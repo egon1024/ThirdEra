@@ -1,0 +1,207 @@
+{
+  "name": "Green Dragon, Very Old",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGreenDragonVeryOld",
+    "creatureTypeKey": "dragon",
+    "subtypeKeys": [
+      "air"
+    ],
+    "abilities": {
+      "str": {
+        "value": 33,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "19",
+      "alignment": "Lawful Evil",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 28,
+      "space": "15 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 150,
+        "flyManeuverability": "poor",
+        "swim": 40,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": "15 ft",
+          "presetAttackBonus": 38
+        },
+        {
+          "name": "Claw",
+          "dice": "2d6",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 36
+        },
+        {
+          "name": "Claw",
+          "dice": "2d6",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 36
+        },
+        {
+          "name": "Wing",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 36
+        },
+        {
+          "name": "Wing",
+          "dice": "1d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 36
+        },
+        {
+          "name": "Tail slap",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 36
+        },
+        {
+          "name": "Crush",
+          "dice": "2d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft",
+          "presetAttackBonus": 36
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 25,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +38, 2× Claw +36, 2× Wing +36, Tail slap +36, Crush +36.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 18d6 (30)</p><p><strong>Special qualities (by age):</strong> DR 15/magic</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
+      "treasure": "Triple standard",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 362,
+        "max": 362,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 36,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 22,
+        "total": 0
+      },
+      "ref": {
+        "base": 16,
+        "total": 0
+      },
+      "will": {
+        "base": 20,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 29,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<h3 id=\"greenDragon\">Green Dragon </h3>\n<table class=\"statBlock\" cellspacing=\"0\">\n\t<tr>\n\t\t<th>Type:</th>\n\t\t<td>Dragon (Air)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Environment:</th>\n\t\t<td>Temperate forests</td>\n\t</tr>\n\t<tr>\n\t\t<th>Organization:</th>\n\t\t<td>Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Challenge Rating:</th>\n\t\t<td>Wyrmling 3; very young 4; young 5; juvenile 8; young adult 11; adult 13; mature adult 16; old 18; very old 19; ancient 21; wyrm 22; great wyrm 24</td>\n\t</tr>\n\t<tr>\n\t\t<th>Treasure:</th>\n\t\t<td>Triple standard</td>\n\t</tr>\n\t<tr>\n\t\t<th>Alignment:</th>\n\t\t<td>Always lawful evil</td>\n\t</tr>\n\t<tr>\n\t\t<th>Advancement:</th>\n\t\t<td>Wyrmling 6-7 HD; very young 9-10 HD; young 12-13 HD; juvenile 15-16 HD; young adult 18-19 HD; adult 21-22 HD; mature adult 24-25 HD; old 27-28 HD; very old 30-31 HD; ancient 33-34 HD; wyrm 36-37 HD; great wyrm 39+ HD</td>\n\t</tr>\n\t<tr>\n\t\t<th>Level Adjustment:</th>\n\t\t<td>Wyrmling +5; very young +5; young +5; juvenile +6; others —</td>\n\t</tr>\n</table>\n<p>\n\tA wyrmling green dragon’s scales are thin, very small, and a deep shade of green that appears nearly black. As the dragon ages, the scales grow larger and lighter, turning shades of forest, emerald, and olive green, which helps it blend in with its wooded surroundings.\n</p>\n\n\n\n\n\n<h4>Combat</h4>\n<p>\n\tGreen dragons initiate fights with little or no provocation, picking on creatures of any size. If the target is intriguing or seems formidable, the dragon stalks the creature to determine the best time to strike and the most appropriate tactics to use. If the target appears weak, the dragon makes its presence known quickly—it enjoys evoking terror. Sometimes the dragon elects to control a humanoid creature through intimidation and suggestion. Green dragons especially like to question adventurers to learn more about their society and abilities, what is going on in the countryside, and if there is treasure nearby.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\tA green dragon has one type of breath weapon, a cone of corrosive (acid) gas.\n</p>\n\n<h5>Water Breathing (Ex)</h5>\n<p>\n\tA green dragon can breathe underwater indefinitely and can freely use its breath weapon, spells, and other abilities while submerged.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t3/day—suggestion (adult or older), dominate person (ancient or older); 1/day— plant growth (old or older), command plants (great wyrm).\n</p>\n\n<h5>Skills</h5>\n<p>\n\tBluff, Hide, and Move Silently are considered class skills for green dragons.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

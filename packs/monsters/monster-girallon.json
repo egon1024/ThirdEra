@@ -1,0 +1,160 @@
+{
+  "name": "Girallon",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGirallon",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "6",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 40
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Rend 2d4+9</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm forests",
+      "organization": "Solitary or company (5-8)",
+      "treasure": "None",
+      "advancement": "8-10 HD (Large); 11-21 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 58,
+        "max": 58,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 8,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 7,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tGirallons are savage, magical cousins of the gorilla. When moving on the ground, a girallon walks on its legs and lower arms. An adult girallon is about 8 feet tall, broad-chested, and covered in thick, pure white fur. It weighs about 800 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA solitary girallon usually conceals itself in the branches of a tree or under a pile of leaves and brush, with only its nose showing. When it spots or scents prey, it charges to the attack. A girallon picks up prey that is small enough to carry and withdraws, often vanishing into the trees before the victim’s companions can do anything to retaliate. Against larger foes, a girallon seeks to tear a single opponent to bits as quickly as it can.\n</p>\n\n<h5>Rend (Ex)</h5>\n<p>\n\tA girallon that hits with two or more claw attacks latches onto the opponent’s body and tears the flesh. This attack automatically deals an extra 2d4+9 points of damage.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA girallon has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

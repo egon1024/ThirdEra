@@ -1,0 +1,152 @@
+{
+  "name": "Yrthak",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterYrthak",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "9",
+      "alignment": "True Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 8,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8+5",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "blindsight",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Sonic lance, explosion</p><p><strong>Special Qualities:</strong> Blindsight 120 ft., immunities, vulnerability to sonic</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate mountains",
+      "organization": "Solitary or clutch (2-4)",
+      "treasure": "None",
+      "advancement": "13-16 HD (Huge); 17-36 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 102,
+        "max": 102,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 11,
+        "total": 0
+      },
+      "ref": {
+        "base": 10,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA yrthak is blind. It senses sound and movement by means of a special organ on its long tongue. It emits powerfully focused beams of sound from the protrusion on its head. The creature is a yellowish-green color, with the wings and fin being more yellow and the head and body more green. The teeth are yellow.\n</p>\n<p>\n\tA yrthak is about 20 feet long, with a wingspan of 40 feet. It weighs about 5,000 pounds.\n</p>\n<p>\n\tDespite their intelligence, yrthaks do not speak.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA yrthak prefers to attack from the air, strafing the ground with sonic attacks or snatching up and dropping prey.\n</p>\n\n<h5>Sonic Lance (Su)</h5>\n<p>\n\tOnce every 2 rounds, a yrthak can focus sonic energy in a ray up to 60 feet long. This is a ranged touch attack that deals 6d6 points of damage to a single target.\n</p>\n\n<h5>Explosion (Su)</h5>\n<p>\n\tA yrthak can fire its sonic lance at the ground, a large rock, a stone wall, or the like to create an explosion of shattered stone. This attack deals 2d6 points of piercing damage to all within 10 feet of the effect’s center. This counts as a use of the sonic lance attack and thus is usable only once every 2 rounds, and never on the round following a sonic lance attack.\n</p>\n\n<h5>Blindsight (Ex)</h5>\n<p>\n\tA yrthak can ascertain all foes within 120 feet. Beyond that range it is considered blinded. Yrthaks are invulnerable to gaze attacks, visual effects of spells such as illusions, and other attack forms that rely on sight. A yrthak whose sense of hearing is impaired is effectively blinded, treating all targets as having total concealment.\n</p>\n\n<h5>Immunities</h5>\n<p>\n\tYrthaks have immunity to gaze attacks, visual effects, illusions, and other attack forms that rely on sight.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tYrthaks have a +4 racial bonus on Listen checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

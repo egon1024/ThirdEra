@@ -1,0 +1,156 @@
+{
+  "name": "Remorhaz",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterRemorhaz",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 5,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "True Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 11,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 20,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8+12",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Improved grab, swallow whole</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., heat, low-light vision, tremorsense 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Cold desert",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "8-14 HD (Huge); 15-21 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 73,
+        "max": 73,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 19,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 10,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 7,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA remorhaz is whitish-blue in color but pulses with a reddish glow from the heat its body produces. The creature is a little more than 20 feet long, with a body about 5 feet wide. It weighs about 10,000 pounds.\n</p>\n<p>\n\tRemorhazes cannot speak.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tRemorhazes hide under the snow and ice until they hear movement above them, then attack from below and surprise prey.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a remorhaz must hit an opponent least one size category smaller than itself with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can attempt to swallow the opponent the following round.\n</p>\n\n<h5>Swallow Whole (Ex)</h5>\n<p>\n\tWhen a remorhaz begins its turn with a grappled opponent in its mouth, it can swallow that opponent with a successful grapple check. Once inside, the opponent takes 2d8+12 points of bludgeoning damage plus 8d6 points of fire damage per round from the remorhaz’s gizzard. A swallowed creature can cut its way out by using a light slashing or piercing weapon to deal 25 points of damage to the gizzard (AC 15). Once the creature exits, muscular action closes the hole; another swallowed opponent must cut its own way out. A Huge remorhaz’s interior can hold 2 Large, 4 Medium, 8 Small, 32 Tiny, 128 Diminutive, or 512 Fine or smaller opponents.\n</p>\n\n<h5>Heat (Ex)</h5>\n<p>\n\tAn enraged remorhaz generates heat so intense that anything touching its body takes 8d6 points of fire damage. Creatures striking a remorhaz with natural attacks or unarmed attacks are subject to this damage, but creatures striking with melee weapons do not take damage from the remorhaz’s heat. This heat can melt or char weapons; any weapon that strikes a remorhaz is allowed a DC 18 Fortitude save to avoid destruction. The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tRemorhazes have a +4 racial bonus on Listen checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

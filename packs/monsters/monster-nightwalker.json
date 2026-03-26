@@ -1,0 +1,154 @@
+{
+  "name": "Nightwalker",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterNightwalker",
+    "creatureTypeKey": "undead",
+    "subtypeKeys": [
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 38,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "16",
+      "alignment": "Chaotic Evil",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 22,
+      "space": "15 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 20,
+        "flyManeuverability": "poor",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d6+16",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 15,
+        "bypass": "silver"
+      },
+      "spellResistance": 29,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Crush item, desecrating aura, evil gaze, spell-like abilities, summon undead</p><p><strong>Special Qualities:</strong> Aversion to daylight, damage reduction 15/silver and magic, darkvision 60 ft., immunity to cold, spell resistance 29, telepathy 100 ft., undead traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Plane of Shadow",
+      "organization": "Solitary, pair, or gang (3-4)",
+      "treasure": "Standard",
+      "advancement": "22-31 HD (Huge); 32-42 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 178,
+        "max": 178,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 30,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 11,
+        "total": 0
+      },
+      "ref": {
+        "base": 11,
+        "total": 0
+      },
+      "will": {
+        "base": 19,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 10,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tNightwalkers are human-shaped horrors that haunt the darkness.\n</p>\n<p>\n\tA nightwalker is about 20 feet tall and weighs about 12,000 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tNightwalkers lurk in dark areas where they can almost always surprise the unwary.\n</p>\n<p>\n\tA nightwalker’s natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Crush Item (Su)</h5>\n<p>\n\tA nightwalker can destroy any weapon or item of Large size or smaller (even magic ones, but not artifacts) by picking it up and crushing it between its hands. The nightwalker must make a successful disarm attempt to grab an item held by an opponent. The item is entitled to a DC 34 Fortitude save to resist destruction. The save DC is Strength-based.\n</p>\n\n<h5>Evil Gaze (Su)</h5>\n<p>\n\tFear, 30 feet. A creature that meets the nightwalker’s gaze must succeed on a DC 24 Will save or be paralyzed with fear for 1d8 rounds. Whether or not the save is successful, that creature cannot be affected again by the same nightshade’s gaze for 24 hours. This is a mind-affecting fear effect. The save DC is Charisma-based.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—contagion (DC 18), deeper darkness, detect magic, greater dispel magic, haste, see invisibility, and unholy blight (DC 18); 3/day—confusion (DC 18), hold monster (DC 19), invisibility; 1/day—cone of cold (DC 19), finger of death (DC 21), plane shift (DC 21). Caster level 21st. The save DCs are Charisma-based.\n</p>\n\n<h5>Summon Undead (Su)</h5>\n<p>\n\tA nightwalker can summon undead creatures once per night: 7-12 shadows, 2-5 greater shadows, or 1-2 dread wraiths. The undead arrive in 1d10 rounds and serve for 1 hour or until released.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*When hiding in a dark area, a nightwalker gains a +8 racial bonus on Hide checks.\n</p>\n\n<h3>Tactics Round-By-Round</h3>\n<p>\n\tThe nightwalker is an exceedingly intelligent foe that makes the best use of all its abilities. It favors using its spell-like abilities to divide and disable its enemies, then closing to melee with opponents it has isolated from their allies.\n</p>\n<ul>\n\t<li><em>Prior to combat:</em> The nightwalker keeps its see invisibility power active most of the time. It uses haste and invisibility to prepare for battle.</li>\n\t<li><em>Round 1:</em> Move to within 30 feet to make use of gaze attack and strike with confusion or hold monster, coupled with a quickened unholy blight.</li>\n\t<li><em>Round 2:</em> Hit a spellcaster with finger of death and another quickened unholy blight.</li>\n\t<li><em>Round 3:</em> Move up to engage the enemy and attempt to disarm an enemy fighter.</li>\n\t<li><em>Round 4:</em> Crush the disarmed weapon (or use gaze attack if disarm attempt failed).</li>\n\t<li><em>Round 5:</em> Full attack against the unarmed foe (or on a nearby spellcaster).</li>\n</ul>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

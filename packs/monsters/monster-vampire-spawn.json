@@ -1,0 +1,152 @@
+{
+  "name": "Vampire Spawn",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterVampireSpawn",
+    "creatureTypeKey": "undead",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "silver"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Blood drain, domination, energy drain</p><p><strong>Special Qualities:</strong> +2 turn resistance, damage reduction 5/silver, darkvision 60 ft., fast healing 2, gaseous form, resistance to cold 10 and electricity 10, spider climb, undead traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Solitary or pack (2-5)",
+      "treasure": "Standard",
+      "advancement": "—",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 29,
+        "max": 29,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 13,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 1,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tVampire spawn are undead creatures that come into being when vampires slay mortals. Like their creators, spawn remain bound to their coffins and to the soil of their graves. Vampire spawn appear much as they did in life, although their features are often hardened, with a predatory look.\n</p>\n<p>\n\tVampire spawn speak Common.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tVampire spawn use their inhuman strength when engaging mortals, hammering their foes with powerful blows and dashing them against rocks or walls. They also use their gaseous form and flight abilities to strike where opponents are most vulnerable.\n</p>\n\n<h5>Blood Drain (Ex)</h5>\n<p>\n\tA vampire spawn can suck blood from a living victim with its fangs by making a successful grapple check. If it pins the foe, it drains blood, dealing 1d4 points of Constitution drain each round. On each such successful drain attack, the vampire spawn gains 5 temporary hit pints.\n</p>\n\n<h5>Domination (Su)</h5>\n<p>\n\tA vampire spawn can crush an opponent’s will just by looking onto his or her eyes. This is similar to a gaze attack, except that the vampire must take a standard action, and those merely looking at it are not affected. Anyone the vampire targets must succeed on a DC 14 Will save or fall instantly under the vampire’s influence as though by a dominate person spell from a 5thlevel caster. The ability has a range of 30 feet. The save DC is Charisma-based.\n</p>\n\n<h5>Energy Drain (Su)</h5>\n<p>\n\tLiving creatures hit by a vampire spawn’s slam attack gain one negative level. The DC is 14 for the Fortitude save to remove a negative level. The save DC is Charisma-based. For each such negative level bestowed, the vampire spawn gains 5 temporary hit points.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tA vampire spawn heals 2 points of damage each round so long as it has at least 1 hit point. If reduced to 0 hit points in combat, it automatically assumes gaseous form and attempts to escape. It must reach its coffin home within 2 hours or be utterly destroyed. (It can travel up to nine miles in 2 hours.) Once at rest in its coffin, it is helpless. It regains 1 hit point after 1 hour, then is no longer helpless and resumes healing at the rate of 2 hit points per round.\n</p>\n\n<h5>Gaseous Form (Su)</h5>\n<p>\n\tAs a standard action, a vampire spawn can assume gaseous form at will as the spell (caster level 6th), but it can remain gaseous indefinitely and has a fly speed of 20 feet with perfect maneuverability.\n</p>\n\n<h5>Spider Climb (Ex)</h5>\n<p>\n\tA vampire spawn can climb sheer surfaces as though with a spider climb spell.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tVampire spawn have a +4 racial bonus on Bluff, Hide, Listen, Move Silently, Search, Sense Motive, and Spot checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

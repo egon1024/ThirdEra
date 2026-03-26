@@ -1,0 +1,152 @@
+{
+  "name": "Ettin",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterEttin",
+    "creatureTypeKey": "giant",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "6",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 7,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d6+6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Low-light vision, superior two-weapon fighting</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Cold hills",
+      "organization": "Solitary, gang (2-4), troupe (1-2 plus 1-2 brown bears), band (3-5 plus 1-2 brown bears), or colony (3-5 plus 1-2 brown bears and 7-12 orcs or 9-16 goblins)",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 65,
+        "max": 65,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 18,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 9,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 7,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tEttins, or two-headed giants, are vicious and unpredictable hunters that stalk the night.\n</p>\n<p>\n\tAn ettin never bathes if it can help it, which usually leaves it so grimy and dirty its skin resembles thick, gray hide. Adult ettins are about 13 feet tall and weigh 5,200 pounds. They live about 75 years.\n</p>\n<p>\n\tEttins have no language of their own but speak a pidgin of Orc, Goblin, and Giant. Creatures that can speak any of these languages must succeed on a DC 15 Intelligence check to communicate with an ettin. Check once for each bit of information: If the other creature speaks two of these languages, the DC is 10, and for someone who speaks all three, the DC is 5.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tThough ettins aren’t very intelligent, they are cunning fighters.\n</p>\n<p>\n\tThey prefer to ambush their victims rather than charge into a straight fight, but once the battle has started, an ettin usually fights furiously until all enemies are dead.\n</p>\n\n<h5>Superior Two-Weapon Fighting (Ex)</h5>\n<p>\n\tAn ettin fights with a morningstar or javelin in each hand. Because each of its two heads controls an arm, the ettin does not take a penalty on attack or damage rolls for attacking with two weapons.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tAn ettin’s two heads give it a +2 racial bonus on Listen, Spot, and Search checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

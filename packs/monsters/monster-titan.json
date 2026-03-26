@@ -1,0 +1,155 @@
+{
+  "name": "Titan",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterTitan",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "chaotic",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 43,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 39,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 28,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 24,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "21",
+      "alignment": "Chaotic Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 19,
+      "space": "15 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d6+19",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 15,
+        "bypass": "lawful"
+      },
+      "spellResistance": 32,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Oversized weapon, spell-like abilities</p><p><strong>Special Qualities:</strong> Change shape, damage reduction 15/lawful, darkvision 60 ft., spell resistance 32</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A chaotic good-aligned plane",
+      "organization": "Solitary or pair",
+      "treasure": "Double standard plus +4 half-plate armor and Gargantuan +3 adamantine warhammer",
+      "advancement": "21-30 HD (Huge); 31-60 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 370,
+        "max": 370,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 38,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 26,
+        "total": 0
+      },
+      "ref": {
+        "base": 13,
+        "total": 0
+      },
+      "will": {
+        "base": 21,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 20,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA titan is about 25 feet tall and weighs about 14,000 pounds.\n</p>\n<p>\n\tTitans speak Abyssal, Common, Celestial, Draconic, and Giant.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA titan’s natural weapons, as well as any weapons it wields, are treated as chaotic-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Oversized Weapon (Ex)</h5>\n<p>\n\tA titan wields a great, two-handed warhammer (big enough for Gargantuan creatures) without penalty.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—chain lightning (DC 23), charm monster (DC 21), cure critical wounds (DC 21), fire storm (DC 24), greater dispel magic, hold monster (DC 22), invisibility, invisibility purge, levitate, persistent image (DC 22); 3/day—etherealness, word of chaos (DC 22), summon nature’s ally IX; 1/day—gate, maze, meteor swarm (DC 26). Caster level 20th. The save DCs are Charisma-based.\n</p>\n\n<h5>In addition, titans of good or neutral alignment can use the following additional spell-like abilities</h5>\n<p>\n\tAt will—daylight, holy smite (DC 21), remove curse (DC 21); 1/day—greater restoration. Caster level 20th. The save DCs are Charisma-based.\n</p>\n\n<h5>Titans of evil alignment can use the following additional spell-like abilities</h5>\n<p>\n\tAt will—bestow curse (DC 21), deeper darkness, unholy blight (DC 21); 1/day—crushing hand (DC 26). Caster level 20th. The save DCs are Charisma-based.\n</p>\n\n<h5>Change Shape (Su)</h5>\n<p>\n\tA titan can assume the form of any Small or Medium humanoid. The titan retains its oversized weapon special attack regardless of form.\n</p>\n\n<h2>Tactics Round-By-Round</h2>\n<p>\n\tTitans enjoy combat and usually close with their foes. If that proves ineffective, they swiftly back off and pelt the foe with spell-like abilities and magical effects. Because of a titan’s Quicken Spell-Like Ability feat, it can use chain lightning as a free action, and frequently attacks in melee while lashing out with this ability at the same time.\n</p>\n<ul>\n\t<li><em>Prior to combat:</em> Invisibility purge or invisibility.</li>\n\t<li><em>Round 1:</em> Charge and attempt to sunder the weapon of the most dangerous foe. Hurl chain lightning at opponents standing away from the fight.</li>\n\t<li><em>Round 2:</em> Full attack against the disarmed opponent, and hurl chain lightning at other opponents.</li>\n\t<li><em>Round 3:</em> Back away from first opponent and use maze or meteor swarm on any spellcaster causing trouble.</li>\n\t<li><em>Round 4:</em> Sunder the weapon of the next most effective combatant, or use greater dispel magic on all nearby opponents.</li>\n\t<li><em>Round 5:</em> Full attack against any nearby opponent, or use fire storm.</li>\n</ul>\n<p>\n\tUse another quickened chain lightning if foes seem really dangerous.\n</p>\n<p>\n\tA titan usually reserves its gate and etherealness abilities to escape a fight that is not going well.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

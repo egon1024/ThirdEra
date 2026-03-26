@@ -1,0 +1,267 @@
+{
+  "name": "Camel",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterCamel",
+    "creatureTypeKey": "animal",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 4,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 1,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Bite:</strong> Secondary attack; half Str bonus to damage.</p><p><strong>Carrying capacity:</strong> Light load up to 300 lb.; medium 301–600; heavy 601–900; drag 4,500 lb.</p>",
+      "environment": "Warm deserts",
+      "organization": "Domesticated or herd (6–30)",
+      "treasure": "None",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 19,
+        "max": 19,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 10,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 50
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Camels are known for their ability to travel long distances without food or water. These statistics are for the dromedary (one-humped camel), common in warm deserts.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    },
+    {
+      "name": "Endurance",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have enhanced physical stamina.</p>",
+        "key": "endurance",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You gain a +4 bonus on the following checks and saves: Swim checks made to resist nonlethal damage from exhaustion; Constitution checks made to continue running; Constitution checks made to avoid nonlethal damage from a forced march; Constitution checks made to hold your breath; Constitution checks made to avoid nonlethal damage from starvation or thirst; Fortitude saves made to avoid nonlethal damage from hot or cold environments; and Fortitude saves made to resist damage from suffocation.</p><p>Also, you may sleep in light or medium armor without becoming fatigued.</p>",
+        "special": "A ranger automatically gains Endurance as a bonus feat at 3rd level. He need not select it.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

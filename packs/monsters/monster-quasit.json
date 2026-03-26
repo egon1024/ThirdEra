@@ -1,0 +1,189 @@
+{
+  "name": "Quasit",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterQuasit",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "chaotic",
+      "extraplanar",
+      "evil"
+    ],
+    "abilities": {
+      "str": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "Chaotic Evil",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 50,
+        "flyManeuverability": "perfect",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4-1",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "cold"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:demon.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Demon\"><h4>SRD type: Demon</h4><p>\n\tDemons are a race of creatures native to chaotic evil-aligned planes. They are ferocity personified and will attack any creature just for the sheer fun of it—even other demons.\n</p>\n\n<h5>Demon Traits</h5>\n<p>\n\tMost demons possess the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li>Immunity to electricity and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10, cold 10, and fire 10.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept where otherwise noted, demons speak Abyssal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Poison, spell-like abilities</p><p><strong>Special Qualities:</strong> Alternate form, damage reduction 5/cold iron or good, darkvision 60 ft., fast healing 2, immunity to poison, resistance to fire 10</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A chaotic evil-aligned plane",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "4-6 HD (Tiny)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 13,
+        "max": 13,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 15,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 7
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tIn its natural form, a quasit stands about 1&frac12; feet tall and weighs about 8 pounds.\n</p>\n<p>\n\tQuasits speak Common and Abyssal.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tAlthough quasits thirst for victory and power as other demons do, they are cowards at heart. They typically attack from ambush, using their alternate form ability and invisibility to get within reach, then try to scuttle away. When retreating, they use their cause fear ability to deter pursuit.\n</p>\n<p>\n\tA quasit’s natural weapons, as well as any weapons it wields, are treated as chaotic-aligned and evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 13, initial damage 1d4 Dex, secondary damage 2d4 Dex. The save DC is Constitution-based and includes a +2 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—detect good, detect magic, and invisibility (self only); 1/day—cause fear (as the spell, except that its area is a 30-foot radius from the quasit, save DC 11). Caster level 6th.\n</p>\n<p>\n\tThe save DCs are Charisma-based.\n</p>\n<p>\n\tOnce per week a quasit can use commune to ask six questions. The ability otherwise works as the spell (caster level 12th).\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tA quasit can assume another form at will as a standard action. Each quasit can assume one or two forms from the following list: bat, Small or Medium monstrous centipede, toad, and wolf.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "demon.htm",
+        "hubTitle": "Demon",
+        "immunities": [
+          "electricity",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10,
+          "fire": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to electricity and poison.",
+          "Resistance to acid 10, cold 10, and fire 10.",
+          "Summon (Sp): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.",
+          "Telepathy."
+        ],
+        "languagesNote": "Except where otherwise noted, demons speak Abyssal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

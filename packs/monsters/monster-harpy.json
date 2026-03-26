@@ -1,0 +1,152 @@
+{
+  "name": "Harpy",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterHarpy",
+    "creatureTypeKey": "monstrousHumanoid",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "Chaotic Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 1,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 80,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Captivating song</p><p><strong>Special Qualities:</strong> Darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate marshes",
+      "organization": "Solitary, pair, or flight (7-12)",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 31,
+        "max": 31,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 11,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 2,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 6,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 7,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tHarpies like to entrance hapless travelers with their magical songs and lead them to unspeakable torments. Only when a harpy has finished playing with its new \"toys\" will it release them from suffering by killing and consuming them.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tWhen a harpy engages in battle, it prefers to use Flyby Attack and strike with a melee weapon.\n</p>\n\n<h5>Captivating Song (Su)</h5>\n<p>\n\tThe most insidious ability of the harpy is its song. When a harpy sings, all creatures (other than harpies) within a 300-foot spread must succeed on a DC 16 Will save or become captivated. This is a sonic mind-affecting charm effect. A creature that successfully saves cannot be affected again by the same harpy’s song for 24 hours. The save DC is Charisma-based.\n</p>\n<p>\n\tA captivated victim walks toward the harpy, taking the most direct route available. If the path leads into a dangerous area (through flame, off a cliff, or the like), that creature gets a second saving throw. Captivated creatures can take no actions other than to defend themselves. (Thus, a fighter cannot run away or attack but takes no defensive penalties.) A victim within 5 feet of the harpy stands there and offers no resistance to the monster’s attacks. The effect continues for as long as the harpy sings and for 1 round thereafter. A bard’s countersong ability allows the captivated creature to attempt a new Will save.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tHarpies have a +4 racial bonus on Bluff and Listen checks.\n</p>\n\n<h2 id=\"harpyArcher\">Harpy Archer</h2>\n<p>\n\tA cruel hunter and roaming brigand, the harpy archer has trained as a fighter specializing in ranged combat. Harpy archers often become mercenaries, selling their services to the highest bidder. When not employed, they make ends meet as highway robbers, forcing merchant caravans to pay protection money.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Captivating Song (Su)</h5>\n<p>\n\tWill DC 17 negates.\n</p>\n\n<h5>Possessions</h5>\n<p>\n\t+3 studded leather, +1 frost composite longbow (+1 Str bonus), 10 cold iron arrows, 10 silvered arrows, 5 +2 arrows, lesser bracers of archery, potion of cure moderate wounds, potion of cat’s grace, cloak of resistance +2, ring of protection +1. (Different harpy archers may have different possessions.)\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

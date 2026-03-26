@@ -1,0 +1,160 @@
+{
+  "name": "Dragonne",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterDragonne",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 7,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 30,
+        "flyManeuverability": "poor",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d6+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Pounce, roar</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate deserts",
+      "organization": "Solitary, pair, or pride (5-10)",
+      "treasure": "Double standard",
+      "advancement": "10-12 HD (Large); 13-27 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 76,
+        "max": 76,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 9,
+        "total": 0
+      },
+      "ref": {
+        "base": 8,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 9,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA dragonne possesses huge claws and fangs, and large eyes, usually the color of its scales. A dragonne is about 12 feet long and weighs about 700 pounds.\n</p>\n<p>\n\tDragonnes speak Draconic.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA dragonne’s wings are useful only for short flights, carrying the creature for 10 to 30 minutes at a time. Nevertheless, it uses its wings effectively in battle. If opponents attempt to charge or encircle it, the dragonne simply takes to the air and finds a more defensible position.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a dragonne charges, it can make a full attack in the same round.\n</p>\n\n<h5>Roar (Su)</h5>\n<p>\n\tA dragonne can loose a devastating roar every 1d4 rounds. All creatures except dragonnes within 120 feet must succeed on a DC 15 Will save or become fatigued. Those within 30 feet who fail their saves become exhausted. The save DC is Charisma-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDragonnes have a +4 racial bonus on Listen and Spot checks.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a dragonne is up to 348 pounds; a medium load, 349-699 pounds, and a heavy load, 700-1,050 pounds.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

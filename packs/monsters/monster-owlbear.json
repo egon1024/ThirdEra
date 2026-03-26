@@ -1,0 +1,279 @@
+{
+  "name": "Owlbear",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterOwlbear",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        },
+        {
+          "name": "Bite",
+          "dice": "1d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Full attack:</strong> 2 claws +9 (1d6+5), bite +4 (1d8+2).</p><p><strong>Improved grab (Ex):</strong> Claw hits can start grapple.</p>",
+      "environment": "Temperate forests",
+      "organization": "Solitary, pair, or pack",
+      "treasure": "None",
+      "advancement": "7–10 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 52,
+        "max": 52,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 8,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 2,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 5,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>An owlbear's coat ranges in color from brown-black to yellowish brown; its beak is a dull ivory color. A full-grown male can stand as tall as 8 feet and weigh up to 1,500 pounds. Adventurers who have survived encounters with the creature often speak of the bestial madness they glimpsed in its red-rimmed eyes.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Track",
+      "type": "feat",
+      "img": "icons/svg/footprint.svg",
+      "system": {
+        "description": "<p>You can follow the trails of creatures and characters across most types of terrain.</p>",
+        "key": "track",
+        "type": "General",
+        "prerequisites": "Survival 1 rank",
+        "benefit": "<p>To find tracks or to follow them for 1 hour requires a Survival check. You must make another Survival check every hour to continue following the tracks. The DC depends on the surface and the prevailing conditions.</p>",
+        "special": "A ranger automatically gains Track as a bonus feat at 1st level. He need not select it.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 0,
+        "modifier": {
+          "misc": -1,
+          "total": 0,
+          "miscLabel": "MM / size / racial (not auto on sheet)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

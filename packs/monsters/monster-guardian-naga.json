@@ -1,0 +1,173 @@
+{
+  "name": "Guardian Naga",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGuardianNaga",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "10",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 7,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:naga.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Naga\"><h4>SRD type: Naga</h4><p>\n\tAll nagas have long, snakelike bodies covered with glistening scales, and more or less human faces. They range in length from 10 to 20 feet and weigh from 200 to 500 pounds. The eyes of a naga are bright and intelligent, burning with an almost hypnotic inner light.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tNagas favor spells over other forms of combat. Because they are almost always found in the lairs they guard and know well, they can arrange most encounters to suit their wishes.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Poison, spit, spells</p><p><strong>Special Qualities:</strong> Darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate plains",
+      "organization": "Solitary or nest (2-4)",
+      "treasure": "Standard",
+      "advancement": "12-16 HD (Large); 17-33 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 93,
+        "max": 93,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 11,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 8,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tGuardian nagas speak Celestial and Common.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGuardian nagas usually warn off intruders before attacking. If the warning is ignored, they may begin a spell assault or spit poison.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury or contact, Fortitude DC 19, initial and secondary damage 1d10 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Spit (Ex)</h5>\n<p>\n\tA guardian naga can spit its venom up to 30 feet as a standard action. This is a ranged touch attack with no range increment. Opponents hit by this attack must make successful saves (see above) to avoid the effect.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tGuardian nagas cast spells as 9th-level sorcerers, and can also cast spells from the cleric list and from the Good and Law domains. The cleric spells and domain spells are considered arcane spells for a guardian naga, meaning that the creature does not need a divine focus to cast them.\n</p>\n\n<h6>Typical Spells Known (6/7/7/7/5; save DC 14 + spell level)</h6>\n<p>\n\t0— cure minor wounds, daze, detect magic, light, mage hand, open/close, ray of frost, read magic; 1st—cure light wounds, divine favor, expeditious retreat, mage armor, magic missile; 2nd—detect thoughts, lesser restoration, see invisibility, scorching ray; 3rd—cure serious wounds, dispel magic, lightning bolt; 4th—divine power, greater invisibility.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "naga.htm",
+        "hubTitle": "Naga",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

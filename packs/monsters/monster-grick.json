@@ -1,0 +1,156 @@
+{
+  "name": "Grick",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGrick",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 3,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 5,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 20
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+2",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "magic"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Damage reduction 10/magic, darkvision 60 ft., scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Underground",
+      "organization": "Solitary or cluster (2-4)",
+      "treasure": "1/10 coins; 50% goods; 50% items",
+      "advancement": "3-4 HD (Medium); 5-6 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 9,
+        "max": 9,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 0,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tAn adult grick is about 8 feet long from the tips of its tentacles to the end of its body and weighs some 200 pounds. Its body coloration is uniformly dark, with a pale underbelly.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tGricks attack when hungry or threatened. They hunt by holing up near high-traffic areas, using their natural coloration to blend into convenient shadows. When prey (virtually anything that moves) ventures near, they lash out with their tentacles. A grick’s rubbery body seems to shed blows of any kind. Its jaws are relatively small and weak compared to its body mass, so rather than consume its kill immediately, a grick normally drags its victim back to its lair to be eaten at its leisure.\n</p>\n<p>\n\tA grick’s natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n<p>\n\tMultiple gricks do not fight in concert. Each attacks the prey closest to it, and breaks off the fight as soon as it can drag dead or unconscious prey away.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA grick has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>\n<p>\n\t*Their coloration affords gricks a +8 racial bonus on Hide checks when in natural rocky areas.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

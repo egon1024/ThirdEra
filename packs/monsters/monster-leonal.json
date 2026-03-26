@@ -1,0 +1,159 @@
+{
+  "name": "Leonal",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterLeonal",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "extraplanar",
+      "good"
+    ],
+    "abilities": {
+      "str": {
+        "value": 27,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "12",
+      "alignment": "Neutral Good",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 14,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6+8",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "evil"
+      },
+      "spellResistance": 28,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Roar, pounce, improved grab, rake 1d6+8, spell-like abilities</p><p><strong>Special Qualities:</strong> Damage reduction 10/evil and silver, darkvision 60 ft., immunity to electricity and petrification, lay on hands, low-light vision, protective aura, resistance to cold 10 and sonic 10, speak with animals, spell resistance 28</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A good-aligned plane.",
+      "organization": "Solitary or pride (4-9)",
+      "treasure": "No coins; double goods; standard items",
+      "advancement": "13-18 HD (Medium); 19-36 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 114,
+        "max": 114,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 10,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 60
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 13,
+        "total": 0
+      },
+      "ref": {
+        "base": 11,
+        "total": 0
+      },
+      "will": {
+        "base": 10,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<h2>Combat</h2>\n<p>\n\tLeonals like their battles as straightforward as can be. They begin with a roar to put their foes off balance, then follow up with a frenzy of claw and bite attacks. They closely coordinate with others in their pride, watching one another’s flanks and setting up devastating attacks.\n</p>\n<p>\n\tA leonal’s natural weapons, as well as any weapons it wields, are treated as good-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Roar (Su)</h5>\n<p>\n\tA leonal can roar up to three times per day. Each roar releases a blast in a 60-foot cone that duplicates the effects of a holy word spell and deals an extra 2d6 points of sonic damage (Fortitude DC 20 negates). The save DC is Charisma-based.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a leonal charges a foe, it can make a full attack, including two rake attacks.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a leonal must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can rake.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +20 melee, damage 1d6+8.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—detect thoughts, fireball (DC 15), hold monster (DC 17), wall of force; 3/day—cure critical wounds (DC 16), neutralize poison, remove disease; 1/day—heal (DC 18). Caster level 10th. The save DCs are Charisma-based.\n</p>\n\n<h5>Lay on Hands (Su)</h5>\n<p>\n\tAs the paladin class feature, except that each day, a leonal can heal an amount of damage equal to its full normal hit points.\n</p>\n\n<h5>Protective Aura (Su)</h5>\n<p>\n\tAgainst attacks made or effects created by evil creatures, this ability provides a +4 deflection bonus to AC and a +4 resistance bonus on saving throws to anyone within 20 feet of the leonal. Otherwise, it functions as a magic circle against evil effect and a lesser globe of invulnerability, both with a radius of 20 feet (caster level equals leonal’s HD). (The defensive benefits from the circle are not included in a leonal’s statistics block.)\n</p>\n\n<h5>Speak with Animals (Su)</h5>\n<p>\n\tThis ability works like speak with animals (caster level 8th) but is a free action and does not require sound.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tLeonals have a +4 racial bonus on Balance, Hide, and Move Silently checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

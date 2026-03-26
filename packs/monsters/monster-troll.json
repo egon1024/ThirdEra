@@ -1,0 +1,312 @@
+{
+  "name": "Troll",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterTroll",
+    "creatureTypeKey": "giant",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        },
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Full attack:</strong> 2 claws +9, bite +4.</p><p><strong>Rend (Ex):</strong> If both claws hit, extra 2d6+10.</p><p><strong>Regeneration 5:</strong> Acid and fire deal normal damage.</p>",
+      "environment": "Cold mountains",
+      "organization": "Solitary, gang, or band",
+      "treasure": "Standard",
+      "advancement": "Large to Huge",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 63,
+        "max": 63,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 11,
+        "total": 0
+      },
+      "ref": {
+        "base": 4,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 5,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Trolls walk upright but hunched forward with sagging shoulders. Their gait is uneven, and when they run, their arms dangle and drag along the ground. For all this seeming awkwardness, trolls are very agile.</p><p>A typical adult troll stands 9 feet tall and weighs 500 pounds. Females are slightly larger than males. A troll's rubbery hide is moss green, mottled green and gray, or putrid gray. The hair is usually greenish black or iron gray.</p><p>Trolls speak Giant.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Iron Will",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have a stronger will than normal.</p>",
+        "key": "ironWill",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Will saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveWill",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Track",
+      "type": "feat",
+      "img": "icons/svg/footprint.svg",
+      "system": {
+        "description": "<p>You can follow the trails of creatures and characters across most types of terrain.</p>",
+        "key": "track",
+        "type": "General",
+        "prerequisites": "Survival 1 rank",
+        "benefit": "<p>To find tracks or to follow them for 1 hour requires a Survival check. You must make another Survival check every hour to continue following the tracks. The DC depends on the surface and the prevailing conditions.</p>",
+        "special": "A ranger automatically gains Track as a bonus feat at 1st level. He need not select it.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 52
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

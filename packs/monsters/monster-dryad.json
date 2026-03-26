@@ -1,0 +1,147 @@
+{
+  "name": "Dryad",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterDryad",
+    "creatureTypeKey": "fey",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "cold"
+      },
+      "spellResistance": 0,
+      "senses": [],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities</p><p><strong>Special Qualities:</strong> Damage reduction 5/cold iron, tree dependent, wild empathy</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Solitary or grove (4-7)",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 14,
+        "max": 14,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 13,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 4
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 8,
+        "total": 0
+      },
+      "will": {
+        "base": 6,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA dryad’s delicate features are much like a female elf’s, though her flesh is like bark or fine wood, and her hair is like a canopy of leaves that changes color with the seasons.\n</p>\n<p>\n\tAlthough they are generally solitary, up to seven dryads have been encountered in one place on rare occasions.\n</p>\n<p>\n\tDryads speak Common, Elven, and Sylvan.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tShy, intelligent, and resolute, dryads are as elusive as they are alluring—they avoid physical combat and are rarely seen unless they wish to be. If threatened, or in need of an ally, a dryad uses charm person or suggestion, attempting to gain control of the attacker(s) who could help the most against the rest. Any attack on her tree, however, provokes the dryad into a frenzied defense.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—entangle (DC 13), speak with plants, tree shape; 3/day— charm person (DC 13), deep slumber (DC 15), tree stride; 1/day—suggestion (DC 15). Caster level 6th. The save DCs are Wisdom-based.\n</p>\n\n<h5>Tree Dependent (Su)</h5>\n<p>\n\tEach dryad is mystically bound to a single, enormous oak tree and must never stray more than 300 yards from it. Any who do become ill and die within 4d6 hours. A dryad’s oak does not radiate magic.\n</p>\n\n<h5>Wild Empathy (Ex)</h5>\n<p>\n\tThis power works like the druid’s wild empathy class feature, except that the dryad has a +6 racial bonus on the check.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

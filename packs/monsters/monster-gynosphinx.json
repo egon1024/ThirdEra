@@ -1,0 +1,177 @@
+{
+  "name": "Gynosphinx",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGynosphinx",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "8",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 11,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "poor",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d6+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:sphinx.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Sphinx\"><h4>SRD type: Sphinx</h4><p>\n\tSphinxes are enigmatic creatures with great, feathery wings and leonine bodies. All sphinxes are territorial, but the more intelligent ones can differentiate between deliberate intrusion and temporary or inadvertent trespass.\n</p>\n<p>\n\tA typical sphinx is about 10 feet long and weighs about 800 pounds.\n</p>\n<p>\n\tSphinxes speak Sphinx, Common, and Draconic.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tMost sphinxes fight on the ground, using their wings to help them <a href=\"/srd/specialAbilities.htm#pounce\">pounce</a> much as lions do. If outnumbered by earthbound creatures, a sphinx takes wing and attacks on the fly.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#pounce\">Pounce</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tIf a sphinx <a href=\"/srd/combat/specialAttacks.htm#charge\">charges</a> a foe, it can make a <a href=\"/srd/combat/actionsInCombat.htm#fullAttack\">full attack</a>, including two <a href=\"/srd/specialAbilities.htm#rake\">rake</a> attacks.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#rake\">Rake</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tA sphinx that <a href=\"/srd/specialAbilities.htm#pounce\">pounces</a> onto a creature can make two <a href=\"/srd/specialAbilities.htm#rake\">rake</a> attacks with its hind legs. Each sphinx’s description provides its attack bonus and damage.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Pounce, rake 1d6+2, spell-like abilities</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm deserts",
+      "organization": "Solitary or covey (2-4)",
+      "treasure": "Double standard",
+      "advancement": "9-12 HD (Large); 13-24 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 52,
+        "max": 52,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 20,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 5
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 8,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 8,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThese sphinxes are the female counterparts of androsphinxes.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tIn close combat, gynosphinxes use their powerful claws to flay the flesh from their enemies. Despite their deadly nature, they prefer to avoid combat whenever possible.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +11 melee, damage 1d6+2.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t3/day—clairaudience/clairvoyance, detect magic, read magic, see invisibility; 1/day—comprehend languages, locate object, dispel magic, remove curse (DC 18), legend lore. Caster level 14th. The save DC is Charisma-based.\n</p>\n<p>\n\tOnce per week a gynosphinx can create a symbol of death, a symbol of fear, a symbol of insanity, a symbol of pain, a symbol of persuasion, a symbol of sleep, and a symbol of stunning as the spells (caster level 18th), except that all save DCs are 22 and each symbol remains a maximum of one week once scribed. The save DCs are Charisma-based.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "sphinx.htm",
+        "hubTitle": "Sphinx",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

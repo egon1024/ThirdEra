@@ -1,0 +1,154 @@
+{
+  "name": "Xill",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterXill",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "6",
+      "alignment": "Lawful Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 7,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d4+1",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 21,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Implant, improved grab, paralysis</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., planewalk, spell resistance 21</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Ethereal Plane",
+      "organization": "Solitary or gang (2-5)",
+      "treasure": "Standard",
+      "advancement": "6-8 HD (Medium); 9-15 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 32,
+        "max": 32,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 13,
+        "flatFooted": 17,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 7
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 5,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA xill stands 4 to 5 feet tall and weighs about 100 pounds. Xills speak Infernal.\n</p>\n\n<h2>Combat</h2>\n\n<p>\n\tXills are dangerous opponents, attacking with all four limbs. More civilized ones use weapons, usually fighting with two at a time so as to leave two claws free for grab attacks. Xills typically lie in wait on the Ethereal Plane for suitable prey to happen by, then ambush it using their planewalk ability. They make full use of their Tumble skill in combat: Usually, one or two distract physically powerful enemies by attacking, then assuming a defensive stance while their fellows maneuver to advantage.\n</p>\n\n<h5>Implant (Ex)</h5>\n<p>\n\tAs a standard action, a xill can lay eggs inside a paralyzed creature. The young emerge about 90 days later, literally devouring the host from inside. A remove disease spell rids a victim of the egg, as does a DC 25 Heal check. If the check fails, the healer can try again, but each attempt (successful or not) deals 1d4 points of damage to the patient.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a xill must hit with one or more claw attacks. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. It receives a +2 bonus on the grapple check for each claw that hits. If it wins the grapple check and maintains the hold in the next round, it automatically bites the foe at that time. The bite deals no damage but injects a paralyzing venom.\n</p>\n\n<h5>Paralysis (Ex)</h5>\n<p>\n\tThose bitten by a xill must succeed on a DC 14 Fortitude save or be paralyzed for 1d4 hours. The save DC is Constitution-based.\n</p>\n\n<h5>Planewalk (Su)</h5>\n<p>\n\tThese planar travelers like to slip between the folds of space to attack enemies as though from thin air. They can cross from the Ethereal Plane with a move action but take 2 rounds to cross back, during which time they are immobile. As a xill fades away, it becomes harder to hit: Opponents have a 20% miss chance in the first round and a 50% miss chance in the second. A xill can planewalk with a willing or helpless creature.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

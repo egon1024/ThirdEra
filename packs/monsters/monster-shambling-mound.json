@@ -1,0 +1,156 @@
+{
+  "name": "Shambling Mound",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterShamblingMound",
+    "creatureTypeKey": "plant",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "6",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 11,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 20,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d6+5",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Improved grab, constrict 2d6+7</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., immunity to electricity,low-light vision, plant traits, resistance to fire 10</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate marshes",
+      "organization": "Solitary",
+      "treasure": "1/10th coins; 50% goods; 50% items",
+      "advancement": "9-12 HD (Large); 13-24 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 60,
+        "max": 60,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 20,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 9,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tShambling mounds, also called shamblers, appear to be heaps of rotting vegetation. They are actually intelligent, carnivorous plants.\n</p>\n<p>\n\tA shambler’s brain and sensory organs are located in its upper body.\n</p>\n<p>\n\tA shambler’s body has an 8-foot girth and is about 6 feet tall when the creature stands erect. It weighs about 3,800 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA shambling mound batters or constricts its opponents with two huge, armlike appendages.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a shambler must hit with both slam attacks. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA shambler deals 2d6+7 points of damage with a successful grapple check.\n</p>\n\n<h5>Immunity to Electricity (Ex)</h5>\n<p>\n\tShamblers take no damage from electricity. Instead, any electricity attack used against a shambler temporarily grants it 1d4 points of Constitution. The shambler loses these points at the rate of 1 per hour.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tShamblers have a +4 racial bonus on Hide, Listen, and Move Silently checks. *They have a +12 racial bonus on Hide checks when in a swampy or forested area.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

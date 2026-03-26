@@ -1,0 +1,175 @@
+{
+  "name": "Brass Dragon, Very Young",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterBrassDragonVeryYoung",
+    "creatureTypeKey": "dragon",
+    "subtypeKeys": [
+      "fire"
+    ],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "Chaotic Good",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 150,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 30,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": "5 ft",
+          "presetAttackBonus": 9
+        },
+        {
+          "name": "Claw",
+          "dice": "1d4",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 7
+        },
+        {
+          "name": "Claw",
+          "dice": "1d4",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "5 ft",
+          "presetAttackBonus": 7
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +9, 2× Claw +7.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 2d6 (14)</p><p><strong>Special qualities (by age):</strong> —</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
+      "environment": "Warm deserts",
+      "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
+      "treasure": "Triple standard",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 52,
+        "max": 52,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 17,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 60
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 7,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<h3 id=\"brassDragon\">Brass Dragon </h3>\n<table class=\"statBlock\" cellspacing=\"0\">\n\t<tr>\n\t\t<th>Type:</th>\n\t\t<td>Dragon (Fire)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Environment:</th>\n\t\t<td>Warm deserts</td>\n\t</tr>\n\t<tr>\n\t\t<th>Organization:</th>\n\t\t<td>Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Challenge Rating:</th>\n\t\t<td>Wyrmling 3; very young 4; young 6; juvenile 8; young adult 10; adult 12; mature adult 15; old 17; very old 19; ancient 20; wyrm 21; great wyrm 23</td>\n\t</tr>\n\t<tr>\n\t\t<th>Treasure:</th>\n\t\t<td>Triple standard</td>\n\t</tr>\n\t<tr>\n\t\t<th>Alignment:</th>\n\t\t<td>Always chaotic good</td>\n\t</tr>\n\t<tr>\n\t\t<th>Advancement:</th>\n\t\t<td>Wyrmling 5-6 HD; very young 8-9 HD; young 11-12 HD; juvenile 14-15 HD; young adult 17-18 HD; adult 20-21 HD; mature adult 23-24 HD; old 26-27 HD; very old 29-30 HD; ancient 32-33 HD; wyrm 35-36 HD; great wyrm 38+ HD</td>\n\t</tr>\n\t<tr>\n\t\t<th>Level Adjustment:</th>\n\t\t<td>Wyrmling +2; very young +3; young +4; juvenile +4; others —</td>\n\t</tr>\n</table>\n<p>\n\tAt birth, a brass dragon’s scales are a dull, mottled brown. As the dragon gets older, the scales become more brassy until they reach a warm, burnished appearance. The grand head-plates of a brass dragon are smooth and metallic, and it sports bladed chin horns that grow sharper with age. Wings and frills are mottled green toward the edges, darkening with age. As the dragon grows older, its pupils fade until the eyes resemble molten metal orbs.\n</p>\n\n\n\n\n\n<h4>Combat</h4>\n<p>\n\tBrass dragons would rather talk than fight. If an intelligent creature tries to leave without engaging in conversation, the dragon might force compliance in a fit of pique, using suggestion or a dose of sleep gas. A creature put to sleep may wake to find itself pinned or buried to the neck in the sand until the dragon’s thirst for small talk is slaked. When faced with real danger, younger brass dragons fly out of sight, then hide by burrowing into the sand. Older dragons spurn this ploy but still prefer to have the advantage in combat.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\tA brass dragon has two types of breath weapon, a line of fire and a cone of sleep. Creatures within the cone must succeed on a Will save or fall asleep, regardless of HD, for 1d6 rounds plus 1 round per age category of the dragon.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—speak with animals; 3/day—endure elements (juvenile or older; radius 10 ft. &times; dragon’s age category); 1/day—suggestion (adult or older), control winds (old or older), control weather (ancient or older).\n</p>\n\n<h5>Summon Djinni (Sp)</h5>\n<p>\n\tThis ability, usable by a great wyrm brass dragon, works like a summon monster spell, except that it summons one djinni. This ability is the equivalent of a 7th-level spell.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tBluff, Gather Information, and Survival are considered class skills for brass dragons.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

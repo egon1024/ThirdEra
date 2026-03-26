@@ -1,0 +1,189 @@
+{
+  "name": "Hezrou",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterHezrou",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "chaotic",
+      "extraplanar",
+      "evil"
+    ],
+    "abilities": {
+      "str": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 29,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "11",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 14,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "4d4+5",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "good"
+      },
+      "spellResistance": 19,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:demon.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Demon\"><h4>SRD type: Demon</h4><p>\n\tDemons are a race of creatures native to chaotic evil-aligned planes. They are ferocity personified and will attack any creature just for the sheer fun of it—even other demons.\n</p>\n\n<h5>Demon Traits</h5>\n<p>\n\tMost demons possess the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li>Immunity to electricity and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10, cold 10, and fire 10.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept where otherwise noted, demons speak Abyssal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Spell-like abilities, stench, improved grab, summon demon</p><p><strong>Special Qualities:</strong> Damage reduction 10/good, darkvision 60 ft., immunity to electricity and poison, resistance to acid 10, cold 10, and fire 10, spell resistance 19, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A chaotic evil-aligned plane",
+      "organization": "Solitary or gang (2-4)",
+      "treasure": "Standard",
+      "advancement": "11-15 HD (Large); 16-30 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 138,
+        "max": 138,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 23,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 16,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 9,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 10,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA hezrou can walk both upright and on all fours, but it always fights standing up\n</p>\n<p>\n\tA hezrou is about 8 feet tall and weighs about 750 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tHezrous enjoy melee combat even more than vrocks do. They eagerly press an attack deep into the heart of enemy forces, so their stench can take effect as quickly as possible. They enter most battles by using blasphemy, and follow it with an occasional chaos hammer or unholy blight, depending on the alignment of their opponents.\n</p>\n<p>\n\tA hezrou’s natural weapons, as well as any weapons it wields, are treated as chaotic-aligned and evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a hezrou must hit with both claw attacks. It can then attempt to start a grapple as a free action without provoking an attack of opportunity.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—chaos hammer (DC 18), greater teleport (self plus 50 pounds of objects only), unholy blight (DC 18); 3/day—blasphemy (DC 21), gaseous form. Caster level 13th. The save DCs are Charisma-based.\n</p>\n\n<h5>Stench (Ex)</h5>\n<p>\n\tA hezrou’s skin produces a foul-smelling, toxic liquid whenever it fights. Any living creature (except other demons) within 10 feet must succeed on a DC 24 Fortitude save or be nauseated for as long as it remains within the affected area and for 1d4 rounds afterward. Creatures that successfully save are sickened for as long as they remain in the area. A creature that successfully saves cannot be affected again by the same hezrou’s stench for 24 hours. A delay poison or neutralize poison spell removes either condition from one creature. Creatures that have immunity to poison are unaffected, and creatures resistant to poison receive their normal bonus on their saving throws. The save DC is Constitution-based.\n</p>\n\n<h5>Summon Demon (Sp)</h5>\n<p>\n\tOnce per day a hezrou can attempt to summon 4d10 dretches or another hezrou with a 35% chance of success. This ability is the equivalent of a 4th-level spell.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tHezrous have a +8 racial bonus on Listen and Spot checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "demon.htm",
+        "hubTitle": "Demon",
+        "immunities": [
+          "electricity",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10,
+          "fire": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to electricity and poison.",
+          "Resistance to acid 10, cold 10, and fire 10.",
+          "Summon (Sp): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.",
+          "Telepathy."
+        ],
+        "languagesNote": "Except where otherwise noted, demons speak Abyssal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

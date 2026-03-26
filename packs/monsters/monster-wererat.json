@@ -1,0 +1,179 @@
+{
+  "name": "Wererat",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterWererat",
+    "creatureTypeKey": "humanoid",
+    "subtypeKeys": [
+      "shapechanger"
+    ],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "Lawful Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 2,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:lycanthrope.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Lycanthrope\"><h4>SRD type: Lycanthrope</h4><p>\n\tLycanthropes are <a href=\"/srd/typesSubtypes.htm#humanoidType\">humanoids</a> or <a href=\"/srd/typesSubtypes.htm#giantType\">giants</a> who can transform themselves into animals. In its natural form, a lycanthrope looks like any other members of its kind, though natural lycanthropes and those who have been afflicted for a long time tend to have or acquire features reminiscent of their animal forms. In animal form, a lycanthrope resembles a powerful version of the normal animal, but on close inspection, its eyes (which often glow red in the dark) show a faint spark of unnatural intelligence.\n</p>\n<p>\n\tLycanthropy can be spread like a <a href=\"/srd/specialAbilities.htm#disease\">disease</a>. Sometimes a lycanthrope begins life as a normal humanoid or giant who subsequently contracts lycanthropy after being wounded by a lycanthrope. Such a creature is called an afflicted lycanthrope. Other lycanthropes are born as lycanthropes, and are known as natural lycanthropes.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA lycanthrope in its humanoid (or giant) form uses whatever tactics and weapons are favored by others of its kind, though it tends to be slightly more aggressive. A lycanthrope possesses the senses of its animal form, including <a href=\"/srd/specialAbilities.htm#scent\">scent</a> and <a href=\"/srd/specialAbilities.htm#lowLightVision\">low-light vision</a>, and it has a deep empathy for (and ability to communicate with) animals of its animal form. An afflicted lycanthrope damaged in combat may be overwhelmed by rage, causing it to change to its animal form involuntarily.\n</p>\n<p>\n\tA lycanthrope in animal form fights like the animal it resembles, although its bite carries the disease of lycanthropy. It is preternaturally cunning and strong, and possesses <a href=\"/srd/specialAbilities.htm#damageReduction\">damage reduction</a> that is overcome only by <a href=\"/srd/specialMaterials.htm#silverAlchemical\">silvered</a> weapons.\n</p>\n<p>\n\tFinally, a natural lycanthrope (or an afflicted lycanthrope that has become aware of its affliction) can assume a hybrid form that is a mix of its humanoid and animal forms. A hybrid has hands and can use weapons, but it can also attack with its teeth and claws. A hybrid can spread lycanthropy with its bite, and it has the same <a href=\"/srd/specialAbilities.htm#damageReduction\">damage reduction</a> that its animal form possesses.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Alternate form, rat empathy, low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Solitary, pair, pack (6-10), or troupe (2-5 plus 5-8 dire rats)",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 12,
+        "max": 12,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA wererat in humanoid form tends to be a thin, wiry individual of shorter than average height. The eyes constantly dart around, and the nose and mouth may twitch if he or she is excited. Males often have thin, ragged mustaches.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tIn animal form, wererats avoid combat, preferring to use their dire rat shape for skulking and spying. In hybrid form, a wererat fights with a rapier and light crossbow.\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tA wererat can assume a bipedal hybrid form or the form of a dire rat.\n</p>\n\n<h5>Curse of Lycanthropy (Su)</h5>\n<p>\n\tAny humanoid or giant hit by a wererat’s bite attack in animal or hybrid form must succeed on a DC 15 Fortitude save or contract lycanthropy.\n</p>\n\n<h5>Disease (Ex)</h5>\n<p>\n\tFilth fever; bite, Fortitude DC 12, incubation period 1d3 days, damage 1d3 Dex and 1d3 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Rat Empathy (Ex)</h5>\n<p>\n\tCommunicate with rats and dire rats, and +4 racial bonus on Charisma-based checks against rats and dire rats.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA wererat in rat or hybrid form uses its Dexterity modifier for Climb or Swim checks. It has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>\n<p>\n\tWererats have a +8 racial bonus on Swim checks from their dire rat form.\n</p>\n\n<h5>Feats</h5>\n<p>\n\tWererats gain Weapon Finesse as a bonus feat.\n</p>\n<p>\n\tThe wererat presented here is based on a 1st-level human warrior who is a natural lycanthrope, using the following base ability scores: Str 13, Dex 11, Con 12, Int 10, Wis 9, Cha 8.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "lycanthrope.htm",
+        "hubTitle": "Lycanthrope",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

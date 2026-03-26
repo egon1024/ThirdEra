@@ -1,0 +1,306 @@
+{
+  "name": "Ogre",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterOgre",
+    "creatureTypeKey": "giant",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Attack:</strong> Greatclub +8 melee (2d8+7) or javelin +1 ranged (1d8+5).</p><p><strong>Special:</strong> Darkvision 60 ft.; low-light vision.</p>",
+      "environment": "Temperate hills",
+      "organization": "Solitary, pair, gang, or band",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 2
+    },
+    "attributes": {
+      "hp": {
+        "value": 29,
+        "max": 29,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 1,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 1,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Adult ogres stand 9 to 10 feet tall and weigh 600 to 650 pounds. Their skin color ranges from dull yellow to dull brown. Their clothing consists of poorly cured furs and hides, which add to their naturally repellent odor.</p><p>Ogres speak Giant, and those specimens who boast Intelligence scores of at least 10 also speak Common.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Hide Armor",
+      "type": "armor",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>Hide armor is prepared from animal skin.</p>",
+        "armor": {
+          "type": "medium",
+          "bonus": 3,
+          "maxDex": 4,
+          "checkPenalty": -3,
+          "spellFailure": 20
+        },
+        "size": "Medium",
+        "speed": {
+          "ft30": 20,
+          "ft20": 15
+        },
+        "cost": 15,
+        "weight": 25,
+        "quantity": 1,
+        "equipped": "true",
+        "containerId": ""
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    },
+    {
+      "name": "Toughness",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have enhanced physical stamina.</p>",
+        "key": "toughness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You gain +3 hit points. For every Hit Die beyond 3, you gain an additional +1 hit point. If you have more than 3 Hit Dice, you gain +1 hit points whenever you gain a Hit Die (such as when you gain a level).</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Weapon Focus",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
+        "key": "weaponFocus",
+        "type": "General, Fighter",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
+        "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 1,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "attack",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Climb",
+      "type": "skill",
+      "img": "icons/svg/mountain.svg",
+      "system": {
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
+        "key": "climb",
+        "ability": "str",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

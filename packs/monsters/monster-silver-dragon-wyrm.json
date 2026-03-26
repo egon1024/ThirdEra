@@ -1,0 +1,215 @@
+{
+  "name": "Silver Dragon, Wyrm",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterSilverDragonWyrm",
+    "creatureTypeKey": "dragon",
+    "subtypeKeys": [
+      "cold"
+    ],
+    "abilities": {
+      "str": {
+        "value": 39,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 29,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 28,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 29,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 28,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "24",
+      "alignment": "Lawful Good",
+      "size": "Gargantuan"
+    },
+    "statBlock": {
+      "naturalArmor": 36,
+      "space": "20 ft",
+      "reach": "20 ft",
+      "movement": {
+        "land": 0,
+        "fly": 200,
+        "flyManeuverability": "clumsy",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "4d6",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": "20 ft",
+          "presetAttackBonus": 47
+        },
+        {
+          "name": "Claw",
+          "dice": "2d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 45
+        },
+        {
+          "name": "Claw",
+          "dice": "2d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 45
+        },
+        {
+          "name": "Wing",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 45
+        },
+        {
+          "name": "Wing",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 45
+        },
+        {
+          "name": "Tail slap",
+          "dice": "2d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 45
+        },
+        {
+          "name": "Crush",
+          "dice": "4d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 45
+        },
+        {
+          "name": "Tail sweep",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 45
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 30,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +47, 2× Claw +45, 2× Wing +45, Tail slap +45, Crush +45, Tail sweep +45.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 22d8 (37)</p><p><strong>Special qualities (by age):</strong> DR 20/magic</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
+      "environment": "Temperate mountains",
+      "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
+      "treasure": "Triple standard",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 573,
+        "max": 573,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 6,
+        "flatFooted": 42,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 29,
+        "total": 0
+      },
+      "ref": {
+        "base": 20,
+        "total": 0
+      },
+      "will": {
+        "base": 29,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 37,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<h3 id=\"silverDragon\">Silver Dragon </h3>\n<table class=\"statBlock\" cellspacing=\"0\">\n\t<tr>\n\t\t<th>Type:</th>\n\t\t<td>Dragon (Cold)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Environment:</th>\n\t\t<td>Temperate mountains</td>\n\t</tr>\n\t<tr>\n\t\t<th>Organization:</th>\n\t\t<td>Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Challenge Rating:</th>\n\t\t<td>Wyrmling 4; very young 5; young 7; juvenile 10; young adult 13; adult 15; mature adult 18; old 20; very old 21; ancient 23; wyrm 24; great wyrm 26</td>\n\t</tr>\n\t<tr>\n\t\t<th>Treasure:</th>\n\t\t<td>Triple standard</td>\n\t</tr>\n\t<tr>\n\t\t<th>Alignment:</th>\n\t\t<td>Always lawful good</td>\n\t</tr>\n\t<tr>\n\t\t<th>Advancement:</th>\n\t\t<td>Wyrmling 8-9 HD; very young 11-12 HD; young 14-15 HD; juvenile 17-18 HD; young adult 20-21 HD; adult 23-24 HD; mature adult 26-27 HD; old 29-30 HD; very old 32-33 HD; ancient 35-36 HD; wyrm 38-39 HD; great wyrm 41+ HD</td>\n\t</tr>\n\t<tr>\n\t\t<th>Level Adjustment:</th>\n\t\t<td>Wyrmling +4; very young +4; young +5; others —</td>\n\t</tr>\n</table>\n<p>\n\tA silver wyrmling’s scales are blue-gray with silver highlights. As the dragon approaches adulthood, its color gradually brightens until the individual scales are scarcely visible.\n</p>\n\n\n\n\n\n<h4>Combat</h4>\n<p>\n\tSilver dragons are not violent and avoid combat except when faced with highly evil or aggressive foes. If necessary, they use fog cloud or control weather to blind or confuse opponents before attacking. When angry, they use reverse gravity to fling enemies helplessly into the air, where they can be snatched. Against flying opponents, a silver dragon hides in clouds (creating some with control weather on clear days), then jumps to the attack when it has the advantage.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\tA silver dragon has two types of breath weapon, a cone of cold and a cone of paralyzing gas. Creatures within a cone of paralyzing gas must succeed on a Fortitude save or be paralyzed for 1d6 rounds plus 1 round per age category of the dragon.\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tA silver dragon can assume any animal or humanoid form of Medium size or smaller as a standard action three times per day. The dragon can remain in its animal or humanoid form until it chooses to assume a new one or return to its natural form.\n</p>\n\n<h5>Cloudwalking (Su)</h5>\n<p>\n\tA silver dragon can tread on clouds or fog as though on solid ground. The ability functions continuously but can be negated or resumed at will.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t3/day—fog cloud (adult or older), control winds (old or older); 2/day—feather fall (juvenile or older); 1/day— control weather (ancient or older), reverse gravity (great wyrm).\n</p>\n\n<h5>Skills</h5>\n<p>\n\tBluff, Disguise, and Jump are considered class skills for silver dragons.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

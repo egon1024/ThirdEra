@@ -1,0 +1,260 @@
+{
+  "name": "Displacer Beast",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterDisplacerBeast",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "Lawful Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "10 ft",
+      "reach": "10 ft (15 ft with tentacle)",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Tentacle",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": "15 ft"
+        },
+        {
+          "name": "Bite",
+          "dice": "1d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Displacement (Su):</strong> Total concealment (50% miss); true seeing negates.</p><p><strong>Full attack:</strong> 2 tentacles +10 (1d6+4), bite +5 (1d8+2).</p>",
+      "environment": "Temperate hills",
+      "organization": "Solitary, pair, or pride (6–10)",
+      "treasure": "None",
+      "advancement": "7–10 HD (Large); 11–14 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 51,
+        "max": 51,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 50
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 8,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 1,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>This beast resembles a great cat, except that it has six legs and a pair of long, whiplike tentacles sprouting from its shoulders. Its pelt has a hideous blue-black sheen, and its eyes glow with an awful green balefulness.</p><p>A light-bending glamer continually surrounds a displacer beast, making it difficult to surmise the creature's true location.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Multiattack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>The creature is adept at using its natural weapons in combination.</p>",
+        "key": "multiattack",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>Your secondary natural weapons take a reduced penalty when used together with a primary natural weapon (typically −5, or −2 when the primary is a bite).</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 0,
+        "modifier": {
+          "misc": 10,
+          "total": 0,
+          "miscLabel": "MM / size / racial (not auto on sheet)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

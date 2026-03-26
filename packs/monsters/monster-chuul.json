@@ -1,0 +1,373 @@
+{
+  "name": "Chuul",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterChuul",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [
+      "aquatic"
+    ],
+    "abilities": {
+      "str": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 5,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 10,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 20,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "2d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Constrict</strong> 3d6+5. <strong>Improved grab.</strong> <strong>Paralytic tentacles (Ex):</strong> Fort DC 19 or paralyzed 6 rounds. <strong>Amphibious.</strong> Immune to poison.</p>",
+      "environment": "Temperate marshes",
+      "organization": "Solitary, pair, or pack (3–5)",
+      "treasure": "1/10 coins; 50% goods; standard items",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 93,
+        "max": 93,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 19,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 9,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 8,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 4,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Amphibious lobster-insect horrors; about 8 feet long, 650 lb.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    },
+    {
+      "name": "Blind-Fight",
+      "type": "feat",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>You are skilled at fighting opponents you cannot clearly see.</p>",
+        "key": "blindFight",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "",
+        "benefit": "<p>In melee, every time you miss because of concealment, you can reroll your miss chance percentile roll one time to see if you actually hit.</p><p>An invisible attacker gets no advantages related to hitting you in melee. That is, you don't lose your Dexterity bonus to Armor Class, and the attacker doesn't get the usual +2 bonus to hit you. The invisible attacker's bonuses do still apply for ranged attacks, however.</p><p>You take only half the usual penalty to speed for being unable to see. Darkness and poor visibility in general reduces your speed to three-quarters normal, instead of one-half.</p>",
+        "special": "A fighter may select Blind-Fight as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    },
+    {
+      "name": "Combat Reflexes",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can make additional attacks of opportunity.</p>",
+        "key": "combatReflexes",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 1
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 8
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Swim",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "swim",
+        "ability": "str",
+        "ranks": 4,
+        "modifier": {
+          "misc": 8,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

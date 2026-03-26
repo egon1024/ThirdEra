@@ -1,0 +1,152 @@
+{
+  "name": "Nymph",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterNymph",
+    "creatureTypeKey": "fey",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 20,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "cold"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Blinding beauty, spells, spell-like abilities, stunning glance</p><p><strong>Special Qualities:</strong> Damage reduction 10/cold iron, low-light vision, unearthly grace, wild empathy</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Solitary",
+      "treasure": "Standard",
+      "advancement": "7-12 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 27,
+        "max": 27,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 17,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 12,
+        "total": 0
+      },
+      "will": {
+        "base": 12,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA nymph is about the height and weight of a female elf.\n</p>\n<p>\n\tNymphs speak Sylvan and Common.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Blinding Beauty (Su)</h5>\n<p>\n\tThis ability affects all humanoids within 30 feet of a nymph. Those who look directly at a nymph must succeed on a DC 17 Fortitude save or be blinded permanently as though by the blindness spell. A nymph can suppress or resume this ability as a free action.\n</p>\n<p>\n\tThe save DC is Charisma-based.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/day—dimension door. Caster level 7th.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tA nymph casts divine spells as a 7th-level druid.\n</p>\n\n<h6>Typical Druid Spells Prepared (6/5/4/3/1, save DC 13 + spell level)</h6>\n<p>\n\t0—cure minor wounds, detect magic, flare, guidance, light, resistance; 1st—calm animals, cure light wounds, entangle, longstrider, speak with animals; 2nd—barkskin, heat metal, lesser restoration, tree shape; 3rd— call lightning, cure moderate wounds, protection from energy; 4th—rusting grasp.\n</p>\n\n<h5>Stunning Glance (Su)</h5>\n<p>\n\tAs a standard action, a wrathful nymph can stun a creature within 30 feet with a look. The target creature must succeed on a DC 17 Fortitude save or be stunned for 2d4 rounds. The save DC is Charisma-based.\n</p>\n\n<h5>Unearthly Grace (Su)</h5>\n<p>\n\tA nymph adds her Charisma modifier as a bonus on all her saving throws, and as a deflection bonus to her Armor Class. (The statistics block already reflects these bonuses).\n</p>\n\n<h5>Wild Empathy (Ex)</h5>\n<p>\n\tThis power works like the druid’s wild empathy class feature, except that a nymph has a +6 racial bonus on the check.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA nymph has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. She can always choose to take 10 on a Swim check, even if distracted or endangered. She can use the run action while swimming, provided she swims in a straight line.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

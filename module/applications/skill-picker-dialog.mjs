@@ -5,6 +5,64 @@
 import { fuzzyScore } from "../utils/fuzzy.mjs";
 
 /**
+ * Load every skill Item from an Item compendium without scanning unrelated types when possible.
+ * Order: typed DB query → index + batched `_id__in` → full pack load (last resort).
+ * @param {import("@client/documents/collections/compendium-collection.mjs").default} pack
+ * @returns {Promise<Item[]>}
+ */
+async function loadSkillDocumentsFromItemPack(pack) {
+    const packId = pack.metadata?.id ?? pack.collection ?? "unknown";
+    /** @type {Item[]} */
+    let docs = [];
+
+    try {
+        const queried = await pack.getDocuments({ type: "skill" });
+        if (Array.isArray(queried) && queried.length) return queried;
+    } catch (err) {
+        console.warn(`Third Era | Skill lists: getDocuments({ type: "skill" }) failed for pack "${packId}"`, err);
+    }
+
+    try {
+        await pack.getIndex({ fields: ["type", "name"] });
+        const skillIds = [...pack.index.values()]
+            .filter((row) => row?.type === "skill")
+            .map((row) => row._id)
+            .filter(Boolean);
+        if (skillIds.length) {
+            const chunkSize = 100;
+            for (let i = 0; i < skillIds.length; i += chunkSize) {
+                const slice = skillIds.slice(i, i + chunkSize);
+                const batch = await pack.getDocuments({ _id__in: slice });
+                for (const d of batch) {
+                    if (d.type === "skill") docs.push(d);
+                }
+            }
+            if (docs.length) return docs;
+        }
+    } catch (err) {
+        console.warn(`Third Era | Skill lists: index / batched load failed for pack "${packId}"`, err);
+    }
+
+    try {
+        const all = await pack.getDocuments();
+        docs = all.filter((d) => d.type === "skill");
+        if (all.length > 250 && docs.length) {
+            console.warn(
+                `Third Era | Skill lists: full pack scan for "${packId}" (${all.length} items) — consider a { type: "skill" } query or index fix`
+            );
+        }
+        return docs;
+    } catch (err) {
+        console.warn(`Third Era | Skill lists: could not read Item pack "${packId}"`, err);
+        return [];
+    }
+}
+
+function isItemCompendiumPack(pack) {
+    return String(pack?.documentName ?? "") === "Item";
+}
+
+/**
  * Gather all skill items from world and compendia, dedupe by system.key (world wins), sort by name.
  * Exported for use by actor sheet (modifier-only skills display names).
  * @returns {Promise<Array<{ key: string, name: string }>>}
@@ -18,18 +76,59 @@ export async function getAllSkills() {
     }
     const packs = game.packs?.contents ?? [];
     for (const pack of packs) {
-        if (pack.documentName !== "Item") continue;
+        if (!isItemCompendiumPack(pack)) continue;
         try {
-            const docs = await pack.getDocuments();
-            for (const item of docs) {
-                if (item.type !== "skill") continue;
+            const skillDocs = await loadSkillDocumentsFromItemPack(pack);
+            for (const item of skillDocs) {
                 const key = (item.system?.key ?? "").trim().toLowerCase();
                 if (key && !byKey.has(key)) byKey.set(key, { key: item.system.key, name: item.name });
             }
-        } catch (_) {}
+        } catch (err) {
+            console.warn("Third Era | getAllSkills: pack iteration error", pack?.metadata?.id, err);
+        }
     }
     const list = [...byKey.values()].sort((a, b) => (a.name || "").localeCompare(b.name || "", game.i18n?.lang ?? "en"));
     return list;
+}
+
+/**
+ * All skill Item documents from the world and every Item compendium (one row per document UUID).
+ * Used by the NPC sheet “Add skill” dropdown so GMs can embed any loaded skill by source.
+ * @returns {Promise<Array<{ uuid: string, name: string, key: string, label: string }>>}
+ */
+export async function getNpcSkillAddOptions() {
+    const rows = [];
+    const seenUuid = new Set();
+
+    const worldLabel = game.i18n?.localize?.("THIRDERA.Skills.SourceWorld") ?? "World";
+
+    const pushDoc = (doc, sourceLabel) => {
+        if (!doc || doc.type !== "skill" || seenUuid.has(doc.uuid)) return;
+        seenUuid.add(doc.uuid);
+        const key = (doc.system?.key ?? "").trim();
+        const baseName = doc.name || "Skill";
+        const label = sourceLabel ? `${baseName} — ${sourceLabel}` : baseName;
+        rows.push({ uuid: doc.uuid, name: baseName, key, label });
+    };
+
+    for (const item of game.items?.contents ?? []) {
+        if (item.type === "skill") pushDoc(item, worldLabel);
+    }
+
+    const packs = game.packs?.contents ?? [];
+    for (const pack of packs) {
+        if (!isItemCompendiumPack(pack)) continue;
+        const packTitle = (pack.metadata?.label ?? pack.metadata?.name ?? pack.collection?.id ?? "").trim() || "Compendium";
+        try {
+            const docs = await loadSkillDocumentsFromItemPack(pack);
+            for (const item of docs) pushDoc(item, packTitle);
+        } catch (err) {
+            console.warn("Third Era | getNpcSkillAddOptions: pack iteration error", pack?.metadata?.id, err);
+        }
+    }
+
+    rows.sort((a, b) => (a.label || "").localeCompare(b.label || "", game.i18n?.lang ?? "en", { sensitivity: "base" }));
+    return rows;
 }
 
 export class SkillPickerDialog extends foundry.applications.api.HandlebarsApplicationMixin(

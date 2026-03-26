@@ -1,0 +1,154 @@
+{
+  "name": "Nightwing",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterNightwing",
+    "creatureTypeKey": "undead",
+    "subtypeKeys": [
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 31,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "14",
+      "alignment": "Chaotic Evil",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 18,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 15,
+        "bypass": "silver"
+      },
+      "spellResistance": 27,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Desecrating aura, magic drain, spell-like abilities, summon undead</p><p><strong>Special Qualities:</strong> Aversion to daylight, damage reduction 15/silver and magic, darkvision 60 ft., immunity to cold, spell resistance 27, telepathy 100 ft., undead traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Plane of Shadow",
+      "organization": "Solitary, pair, or flock (3-6)",
+      "treasure": "Standard",
+      "advancement": "18-25 HD (Huge); 26-34 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 144,
+        "max": 144,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 26,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 8
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 9,
+        "total": 0
+      },
+      "ref": {
+        "base": 11,
+        "total": 0
+      },
+      "will": {
+        "base": 17,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 8,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tNightwings are batlike flyers that hunt on the wing.\n</p>\n<p>\n\tA nightwing has a wingspan of about 40 feet and weighs about 4,000 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tNightwings prowl the night sky and dive onto their victims. They are all but invisible, detectable only because of the stars they obscure in their passing.\n</p>\n<p>\n\tA nightwing’s natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Magic Drain (Su)</h5>\n<p>\n\tA nightwing can weaken magic armor, weapons, and shields by making a successful touch attack. The targeted item must succeed on a DC 22 Fortitude save or lose 1 point of its enhancement bonus. The save DC is Charisma-based. An item that loses its entire enhancement bonus becomes merely a masterwork item and loses any special abilities (such as flaming) as well. Casting dispel evil upon the item reverses the effect of the magic drain, provided this occurs within a number of days after the attack equal to the caster’s level and the caster succeeds on a DC 29 caster level check.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—contagion (DC 18), deeper darkness, detect magic, haste, see invisibility, unholy blight (DC 18); 3/day—confusion (DC 18), greater dispel magic, hold monster (DC 19), invisibility; 1/day—cone of cold (DC 19), finger of death (DC 21), plane shift (DC 21). Caster level 17th. The save DCs are Charisma-based.\n</p>\n\n<h5>Summon Undead (Su)</h5>\n<p>\n\tA nightwing can summon undead creatures once per night: 5-12 shadows, 2-4 greater shadows, or 1 dread wraith. The undead arrive in 1d10 rounds and serve for 1 hour or until released.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*When hiding in a dark area or flying in a dark sky, a nightwing gains a +8 racial bonus on Hide checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "name": "Krenshar",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterKrenshar",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Scare</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Solitary, pair, or pride (6-10)",
+      "treasure": "None",
+      "advancement": "3-4 HD (Medium); 5-8 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 11,
+        "max": 11,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 13,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThe krenshar is a strange, catlike carnivore with extremely flexible skin on its head. A typical krenshar measures 4 or 5 feet in length with a long, narrow head. It weighs about 175 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tKrenshars use solitary scouts to drive prey into the waiting clutches of the pride. The scout appears from hiding, uses its scare ability, then chases the fleeing target to join the attack.\n</p>\n\n<h5>Scare (Ex or Su)</h5>\n<p>\n\tAs a standard action, a krenshar can pull the skin back from its head, revealing the musculature and bony structures of its skull. This alone is usually sufficient to scare away foes (treat as a Bluff check with a +3 bonus).\n</p>\n<p>\n\tCombining this scare ability with a loud screech produces an unsettling effect that works like a scare spell from a 3rd-level caster (Will DC 13 partial). A creature that successfully saves cannot be affected again by the same krenshar’s scare ability for 24 hours. The shriek does not affect other krenshars. This is a supernatural, sonic mind-affecting fear effect. The save DC is Charisma-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tKrenshars have a +4 racial bonus on Jump and Move Silently checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

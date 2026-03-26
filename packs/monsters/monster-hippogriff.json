@@ -1,0 +1,160 @@
+{
+  "name": "Hippogriff",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterHippogriff",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 100,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate hills",
+      "organization": "Solitary, pair, or flight (7-12)",
+      "treasure": "None",
+      "advancement": "4-6 HD (Large); 7-9 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 25,
+        "max": 25,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 13,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 50
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 2,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tHippogriffs are aggressive flying creatures that combine features of horses and giant eagles. Voracious omnivores, hippogriffs will hunt humanoids as readily as any other meal. A typical hippogriff is 9 feet long, has a wingspan of 20 feet, and weighs 1,000 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tHippogriffs dive at their prey and strike with their clawed forelegs. When they cannot dive, they slash with claws and beak. Mated pairs and flights of these creatures attack in concert, diving repeatedly to drive away or kill intruders. Hippogriffs fight to the death to defend their nests and their hatchlings, which are prized as aerial mounts and fetch a handsome price in many civilized areas.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tHippogriffs have a +4 racial bonus on Spot checks.\n</p>\n\n<h2 id=\"trainingAHippogriff\">Training A Hippogriff</h2>\n<p>\n\tA hippogriff requires training before it can bear a rider in combat.\n</p>\n<p>\n\tTraining a hippogriff requires six weeks of work and a DC 25 Handle Animal check. Riding a hippogriff requires an exotic saddle. A hippogriff can fight while carrying a rider, but the rider cannot also attack unless he or she succeeds on a Ride check.\n</p>\n<p>\n\tHippogriff eggs are worth 2,000 gp apiece on the open market, while young are worth 3,000 gp each. Professional trainers charge 1,000 gp to rear or train a hippogriff.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a hippogriff is up to 300 pounds; a medium load, 301-600 pounds; and a heavy load, 601-900 pounds.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "name": "Green Hag",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGreenHag",
+    "creatureTypeKey": "monstrousHumanoid",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "Chaotic Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 11,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 30,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d4+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 18,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:hag.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Hag\"><h4>SRD type: Hag</h4><p>\n\tAlthough different hags are unique in appearance and mannerism, they have many aspects in common. All take the form of crones whose bent shapes belie their fierce power and swiftness.\n</p>\n<p>\n\tHags speak Giant and Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tHags are tremendously strong. They are naturally resistant to spells and can cast magic of their own. Hags often gather to form coveys. A covey, usually containing one hag of each type, can use powers beyond those of the individual members.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Spell-like abilities, weakness, mimicry</p><p><strong>Special Qualities:</strong> Darkvision 90 ft., spell resistance 18</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate marshes",
+      "organization": "Solitary or covey (3 hags of any kind plus 1-8 ogres and 1-4 evil giants)",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 49,
+        "max": 49,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 21,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 7,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 9,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tGreen hags are found in desolate swamps and dark forests.\n</p>\n<p>\n\tA green hag is about the same height and weight as a female human.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGreen hags prefer to attack from hiding, usually after distracting foes. They often use darkvision to their advantage by attacking during moonless nights.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—dancing lights, disguise self, ghost sound (DC 12), invisibility, pass without trace, tongues, water breathing. Caster level 9th. The save DC is Charisma-based.\n</p>\n\n<h5>Weakness (Su)</h5>\n<p>\n\tA green hag can weaken a foe by making a special touch attack. The opponent must succeed on a DC 16 Fortitude save or take 2d4 points of Strength damage. The save DC is Charisma-based.\n</p>\n\n<h5>Mimicry (Ex)</h5>\n<p>\n\tA green hag can imitate the sounds of almost any animal found near its lair.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA green hag has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "hag.htm",
+        "hubTitle": "Hag",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

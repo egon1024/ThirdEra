@@ -1,0 +1,152 @@
+{
+  "name": "Monstrous Scorpion",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterMonstrousScorpion",
+    "creatureTypeKey": "vermin",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 3,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 2,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d2-4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Constrict 1d2-4, improved grab, poison</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., tremorsense 60 ft., vermin traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm deserts",
+      "organization": "Colony (8-16)",
+      "treasure": "None",
+      "advancement": "—",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 4,
+        "max": 4,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 0,
+        "total": 0
+      },
+      "will": {
+        "base": 0,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 0,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tMonstrous scorpions are likely to attack any creature that approaches, and they usually charge when attacking prey.\n</p>\n\n<table id=\"monstrousScorpionPoison\" cellspacing=\"0\" class=\"right\">\n\t<caption>Monstrous Scorpion Poison</caption>\n\t<tr>\n\t\t<th align=\"left\">Size</th>\n\t\t<th>Fort DC</th>\n\t\t<th>Damage</th>\n\t</tr>\n\t<tr>\n\t\t<td>Tiny</td>\n\t\t<td align=\"center\">12</td>\n\t\t<td align=\"center\">1 Con</td>\n\t</tr>\n\t<tr>\n\t\t<td>Small</td>\n\t\t<td align=\"center\">12</td>\n\t\t<td align=\"center\">1d2 Con</td>\n\t</tr>\n\t<tr>\n\t\t<td>Medium</td>\n\t\t<td align=\"center\">13</td>\n\t\t<td align=\"center\">1d3 Con</td>\n\t</tr>\n\t<tr>\n\t\t<td>Large</td>\n\t\t<td align=\"center\">14</td>\n\t\t<td align=\"center\">1d4 Con</td>\n\t</tr>\n\t<tr>\n\t\t<td>Huge</td>\n\t\t<td align=\"center\">18</td>\n\t\t<td align=\"center\">1d6 Con</td>\n\t</tr>\n\t<tr>\n\t\t<td>Gargantuan</td>\n\t\t<td align=\"center\">23</td>\n\t\t<td align=\"center\">1d8 Con</td>\n\t</tr>\n\t<tr>\n\t\t<td>Colossal</td>\n\t\t<td align=\"center\">33</td>\n\t\t<td align=\"center\">1d10 Con</td>\n\t</tr>\n</table>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA monstrous scorpion deals automatic claw damage on a successful grapple check.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a monstrous scorpion must hit with a claw attack. A monstrous scorpion can use either its Strength modifier or Dexterity modifier for grapple checks, whichever is better.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tA monstrous scorpion has a poisonous sting. The details vary by the scorpion’s size, as follows. The save DCs are Constitution-based. The indicated damage is initial and secondary damage.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA monstrous scorpion has a +4 racial bonus on Climb, Hide, and Spot checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

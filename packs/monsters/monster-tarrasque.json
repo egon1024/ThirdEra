@@ -1,0 +1,152 @@
+{
+  "name": "Tarrasque",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterTarrasque",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 45,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 35,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 3,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "20",
+      "alignment": "True Neutral",
+      "size": "Colossal"
+    },
+    "statBlock": {
+      "naturalArmor": 30,
+      "space": "30 ft",
+      "reach": "20 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d10+8",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 15,
+        "bypass": "epic"
+      },
+      "spellResistance": 32,
+      "senses": [
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Augmented critical, frightful presence, improved grab, rush, swallow whole</p><p><strong>Special Qualities:</strong> Carapace, damage reduction 15/epic, immunity to fire, poison, disease, energy drain, and ability damage, regeneration 40, scent, spell resistance 32</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "49+ HD (Colossal)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 858,
+        "max": 858,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 5,
+        "flatFooted": 32,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 7
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 38,
+        "total": 0
+      },
+      "ref": {
+        "base": 29,
+        "total": 0
+      },
+      "will": {
+        "base": 20,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 48,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThe tarrasque is 70 feet long and 50 feet tall, and it weighs about 130 tons.\n</p>\n<p>\n\tThe tarrasque cannot speak.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tThe tarrasque attacks with its claws, teeth, horns, and tail.\n</p>\n<p>\n\tThe tarrasque’s natural weapons are treated as epic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Augmented Critical (Ex)</h5>\n<p>\n\tThe tarrasque’s bite threatens a critical hit on a natural attack roll of 18-20, dealing triple damage on a successful critical hit.\n</p>\n\n<h5>Frightful Presence (Su)</h5>\n<p>\n\tThe tarrasque can inspire terror by charging or attacking. Affected creatures must succeed on a DC 36 Will save or become shaken, remaining in that condition as long as they remain with 60 feet of the tarrasque. The save DC is Charisma-based.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, the tarrasque must hit a Huge or smaller opponent with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can try to swallow the foe the following round.\n</p>\n\n<h5>Rush (Ex)</h5>\n<p>\n\tOnce per minute, the normally slow-moving tarrasque can move at a speed of 150 feet.\n</p>\n\n<h5>Swallow Whole (Ex)</h5>\n<p>\n\tThe tarrasque can try to swallow a grabbed opponent of Huge or smaller size by making a successful grapple check. Once inside, the opponent takes 2d8+8 points of crushing damage plus 2d8+6 points of acid damage per round from the tarrasque’s digestive juices. A swallowed creature can cut its way out by dealing 50 points of damage to the tarrasque’s digestive tract (AC 25). Once the creature exits, muscular action closes the hole; another swallowed opponent must cut its own way out. The tarrasque’s gullet can hold 2 Huge, 8 Large, 32 Medium, 128 Small, or 512 Tiny or smaller creatures.\n</p>\n\n<h5>Carapace (Ex)</h5>\n<p>\n\tThe tarrasque’s armorlike carapace is exceptionally tough and highly reflective, deflecting all rays, lines, cones, and even magic missile spells. There is a 30% chance of reflecting any such effect back at the caster; otherwise, it is merely negated. Check for reflection before rolling to overcome the creature’s spell resistance.\n</p>\n\n<h5>Regeneration (Ex)</h5>\n<p>\n\tNo form of attack deals lethal damage to the tarrasque. The tarrasque regenerates even if it fails a saving throw against a disintegrate spell or a death effect. If the tarrasque fails its save against a spell or effect that would kill it instantly (such as those mentioned above), the spell or effect instead deals nonlethal damage equal to the creature’s full normal hit points +10 (or 868 hp). The tarrasque is immune to effects that produce incurable or bleeding wounds, such as mummy rot, a sword with the wounding special ability, or a clay golem’s cursed wound ability.\n</p>\n<p>\n\tThe tarrasque can be slain only by raising its nonlethal damage total to its full normal hit points +10 (or 868 hit points) and using a wish or miracle spell to keep it dead.\n</p>\n<p>\n\tIf the tarrasque loses a limb or body part, the lost portion regrows in 1d6 minutes (the detached piece dies and decays normally). The creature can reattach the severed member instantly by holding it to the stump.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tThe tarrasque has a +8 racial bonus on Listen and Spot checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

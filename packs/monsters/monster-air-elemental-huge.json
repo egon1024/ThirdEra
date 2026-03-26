@@ -1,0 +1,451 @@
+{
+  "name": "Air Elemental, Huge",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAirElementalHuge",
+    "creatureTypeKey": "elemental",
+    "subtypeKeys": [
+      "air",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 29,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "True Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "15 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 100,
+        "flyManeuverability": "perfect",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d8",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "-"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Air mastery (Ex):</strong> Airborne creatures take a -1 penalty on attack and damage rolls against an air elemental.</p><p><strong>Whirlwind (Su):</strong> Reflex DC 22 or take 2d8 damage and be lifted; see SRD elemental rules.</p><p><strong>Attack:</strong> Slam +19 (2d8+4). <strong>Full attack:</strong> 2 slams +19.</p>",
+      "environment": "Elemental Plane of Air",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "17-20 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 136,
+        "max": 136,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 17,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 100
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 9,
+        "total": 0
+      },
+      "ref": {
+        "base": 19,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 9,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Air elementals are incarnations of sentient wind and storm. They speak Auran, though they rarely choose to do so.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Combat Reflexes",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "combatReflexes",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Dodge",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "dodge",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "ac",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Flyby Attack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>The creature can take a move action and another standard action at any point during the move.</p>",
+        "key": "flybyAttack",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 52
+    },
+    {
+      "name": "Mobility",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "mobility",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 53
+    },
+    {
+      "name": "Spring Attack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "springAttack",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 54
+    },
+    {
+      "name": "Weapon Finesse",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "weaponFinesse",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 55
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 11,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 12,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

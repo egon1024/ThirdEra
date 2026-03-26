@@ -1,0 +1,162 @@
+{
+  "name": "Dragon Turtle",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterDragonTurtle",
+    "creatureTypeKey": "dragon",
+    "subtypeKeys": [
+      "aquatic"
+    ],
+    "abilities": {
+      "str": {
+        "value": 27,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "9",
+      "alignment": "True Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 17,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 30,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "4d6+8",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Breath weapon, capsize</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., immunity to fire, sleep, and paralysis, low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate aquatic",
+      "organization": "Solitary",
+      "treasure": "Triple standard",
+      "advancement": "13-24 HD (Huge); 25-36 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 138,
+        "max": 138,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 25,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 13,
+        "total": 0
+      },
+      "ref": {
+        "base": 8,
+        "total": 0
+      },
+      "will": {
+        "base": 9,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tIts rough, deep green shell is much the same color as the deep water the monster favors, and the silver highlights that line the shell resemble light dancing on open water. The turtle’s legs, tail, and head are a lighter green, flecked with golden highlights. An adult dragon turtle can measure from 20 to 30 feet from snout to tail, with a shell from 15 to 25 feet in diameter, and can weigh 8,000 to 32,000 pounds.\n</p>\n<p>\n\tDragon turtles speak Aquan, Draconic, and Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tDragon turtles are fierce fighters and generally attack any creature that threatens their territory or looks like a potential meal.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\tCloud of superheated steam 20 feet high, 25 feet wide, and 50 feet long, once every 1d4 rounds, damage 12d6 fire, Reflex DC 21 half; effective both on the surface and underwater. The save DC is Constitution-based.\n</p>\n\n<h5>Capsize (Ex)</h5>\n<p>\n\tA submerged dragon turtle that surfaces under a boat or ship less than 20 feet long capsizes the vessel 95% of the time. It has a 50% chance to capsize a vessel from 20 to 60 feet long and a 20% chance to capsize one over 60 feet long.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA dragon turtle has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered.\n</p>\n<p>\n\tIt can use the run action while swimming, provided it swims in a straight line.\n</p>\n<p>\n\t*Dragon turtles have a +8 racial bonus on Hide checks when submerged.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

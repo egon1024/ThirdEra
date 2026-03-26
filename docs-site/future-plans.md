@@ -31,12 +31,14 @@ The following order prioritizes playability for playtesters (spell/save flow, in
 
 The **generalized modifier system** (Phases 1–7 complete) provides a single pipeline for any source to apply modifiers to actors: ability scores, skills, AC, saves, attack, speed, etc. Character and NPC both call `getActiveModifiers(actor)` once in `prepareDerivedData`; ability deltas, then AC, speed, saves, attack, and skills use the same modifier bag. Design: [development.md](development.md) (Modifier system). Deferred work: [.cursor/plans/future-features.md](../.cursor/plans/future-features.md) (Generalized modifier system — out of scope).
 
+**Sequencing (non-numeric traits):** Before investing heavily in **spell effects** and **magic items** that grant **senses / vision** (darkvision, blindsense, etc.) or similar **structured** traits, the project intends to add a **structured capability-grant channel** parallel to numeric GMS aggregation—see **[Structured capability grants (senses / vision; parallel to GMS)](../.cursor/plans/future-features.md#structured-capability-grants-senses--vision-parallel-to-gms)** in the internal future-features plan. Numeric bonuses from spells and items continue to use the existing modifier pipeline.
+
 **Current sources:** Conditions (via ActiveEffects), race (abilityAdjustments → ability.\*), feats (optional `system.changes`), and equipped armor/weapons/equipment (optional `system.changes` when equipped). Skill modifiers and breakdowns, including “modifier-only” skills and a shared key UI (e.g. skill picker), are implemented. Extenders can add providers to `CONFIG.THIRDERA.modifierSourceProviders` or implement `getModifierChanges(actor)` on items; see [Development — Modifier system](development.md#modifier-system-modulelogicmodifier-aggregationmjs).
 
 **Planned extensions:**
 
 - **Class features** — When a class feature is granted (actor has the class at the right level), it could contribute `changes`; a provider would resolve active features from levelHistory and feed them into the same aggregation.
-- **Magic items** — All magic item categories below would use the same modifier schema when they grant bonuses.
+- **Magic items** — All magic item categories below would use the same modifier schema when they grant **numeric** bonuses; sense-like grants should align with the structured capability channel when that exists (see sequencing note above).
 
 **Magic item categories (depend on modifier system):**
 

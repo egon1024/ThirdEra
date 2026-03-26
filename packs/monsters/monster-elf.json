@@ -1,0 +1,147 @@
+{
+  "name": "Elf",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterElf",
+    "creatureTypeKey": "humanoid",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> None</p><p><strong>Special Qualities:</strong> Elven traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forest (Half-elf: Temperate forests) (Aquatic: Temperate aquatic) (Gray: Temperate mountains) (Wild: Warm forests) (Wood: Temperate forests)",
+      "organization": "Squad (2-4), company (11-20 plus 2 3rd-level sergeants and 1 leader of 3rd-6th level), or band (30-100 plus 20% noncombatants plus 1 3rd-level sergeant per 10 adults, 5 5th-level lieutenants, and 3 7th-level captains)",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 4,
+        "max": 4,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 2,
+        "total": 0
+      },
+      "ref": {
+        "base": 1,
+        "total": 0
+      },
+      "will": {
+        "base": -1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tElves average 5 feet tall and typically weigh just over 100 pounds. They live on fruits and grains, though they occasionally hunt for fresh meat. Elves prefer colorful clothes, usually with a green-and-gray cloak that blends well with the colors of the forest.\n</p>\n<p>\n\tElves speak Elven, and most also know Common and Sylvan.\n</p>\n<p>\n\tMost elves encountered outside their homes are warriors; the information presented here is for one of 1st level.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tElves are cautious warriors and take time to analyze their opponents and the location of the fight if at all possible, maximizing their advantage by using ambushes, snipers, and camouflage. They prefer to fire from cover and retreat before they are found, repeating this maneuver until all of their enemies are dead.\n</p>\n<p>\n\tThey prefer longbows, shortbows, rapiers, and longswords. In melee, elves are graceful and deadly, using complex maneuvers that are beautiful to observe. Their wizards often use sleep spells during combat because these won’t affect other elves.\n</p>\n\n<h5>Elf Traits (Ex)</h5>\n<p>\n\tElves possess the following racial traits.\n</p>\n<ul>\n\t<li>+2 Dexterity, -2 Constitution.</li>\n\t<li>Medium size.</li>\n\t<li>An elf’s base land speed is 30 feet.</li>\n\t<li>Immunity to sleep spells and effects, and a +2 racial saving throw bonus against enchantment spells or effects. (Not reflected in the saving throw modifiers given here.)</li>\n\t<li>Low-light vision.</li>\n\t<li>Weapon Proficiency: Elves are automatically proficient with the longsword, rapier, longbow, composite longbow, shortbow, and composite shortbow.</li>\n\t<li>+2 racial bonus on Listen, Search, and Spot checks. An elf who merely passes within 5 feet of a secret or concealed door is entitled to a Search check to notice it as if she were actively looking for it.</li>\n\t<li>Automatic Languages: Common, Elven. Bonus Languages: Draconic, Gnoll, Gnome, Goblin, Orc, Sylvan.</li>\n\t<li>Favored Class: Wizard.</li>\n</ul>\n<p>\n\tThe elf warrior presented here had the following ability scores before racial adjustments: Str 13, Dex 11, Con 12, Int 10, Wis 9, Cha 8.\n</p>\n\n<h2 id=\"subraces\">Subraces</h2>\n<p>\n\tThe above information describes the high elf, the most common variety. There are five other major subraces of elf, in addition to half-elves, who share enough elven characteristics to be included here.\n</p>\n\n<h3 id=\"halfElf\">Half-Elf</h3>\n<p>\n\tHalf-elves are not truly an elf subrace, but they are often mistaken for elves. Half-elves usually inherit a good blend of their parents’ physical characteristics.\n</p>\n\n<h5>Half-Elf Traits (Ex)</h5>\n<p>\n\tHalf-elves possess the following racial traits.\n</p>\n<ul>\n\t<li>Medium size.</li>\n\t<li>A half-elf’s base land speed is 30 feet.</li>\n\t<li>Immunity to sleep spells and similar magical effects, and a +2 racial bonus on saving throws against enchantment spells or effects.</li>\n\t<li>Low-light vision.</li>\n\t<li>+1 racial bonus on Listen, Search, and Spot checks. A half-elf does not have the elf’s ability to notice secret doors simply by passing near them.</li>\n\t<li>+2 racial bonus on Diplomacy and Gather Information checks: Half-elves get along naturally with all people. This bonus may not apply in situations or settings where half-elves are viewed with distrust.</li>\n\t<li>Elven Blood: For all effects related to race, a half-elf is considered an elf. Half-elves, for example, are just as vulnerable to special effects that affect elves as their elf ancestors are, and they can use magic items that are only usable by elves.</li>\n\t<li>Automatic Languages: Common, Elven. Bonus Languages: Any (other than secret languages, such as Druidic).</li>\n\t<li>Favored Class: Any. When determining whether a multiclass half-elf takes an experience point penalty for multiclassing, her highest-level class does not count.</li>\n</ul>\n\n<h3 id=\"aquaticElf\">Aquatic Elf</h3>\n<p>\n\tAlso called sea elves, these creatures are waterbreathing cousins to land-dwelling elves.\n</p>\n<p>\n\tAquatic elves fight underwater with tridents, spears, and nets.\n</p>\n\n<h5>Aquatic Elf Traits (Ex)</h5>\n<p>\n\tThese traits are in <strong>addition</strong> to the high elf traits, except where noted.\n</p>\n<ul>\n\t<li>+2 Dexterity, -2 Intelligence. These adjustments replace the high elf’s ability score adjustments.</li>\n\t<li>An aquatic elf has the aquatic subtype.</li>\n\t<li>An aquatic elf has a swim speed of 40 feet.</li>\n\t<li>Gills: Aquatic elves can survive out of the water for 1 hour per point of Constitution (after that, refer to the suffocation rules).</li>\n\t<li>Superior Low-Light Vision: Aquatic elves can see four times as far as a human in starlight, moonlight, torchlight, and similar conditions of low illumination. This trait replaces the high elf’s low-light vision.</li>\n\t<li>Favored Class: Fighter. This trait replaces the high elf’s favored class.</li>\n</ul>\n\n<h3 id=\"drow\">Drow </h3>\n<p>\n\tAlso known as dark elves, drow are a depraved and evil subterranean offshoot.\n</p>\n<p>\n\tWhite is the most common hair color among drow, but almost any pale shade is possible. Drow tend to be smaller and thinner than other sorts of elves, and their eyes are often a vivid red.\n</p>\n<p>\n\tDrow usually coat their arrows with a potent venom.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tAn opponent hit by a drow’s poisoned weapon must succeed on a DC 13 Fortitude save or fall unconscious. After 1 minute, the subject must succeed on another DC 13 Fortitude save or remain unconscious for 2d4 hours. A typical drow carries 1d4-1 doses of drow knockout poison. Drow typically coat arrows and crossbow bolts with this poison, but it can also be applied to a melee weapon. Note that drow have no special ability to apply poison without risking being poisoned themselves. Since this poison is not a magical effect, drow and other elves are susceptible to it.\n</p>\n\n<h5>Drow Traits (Ex)</h5>\n<p>\n\tThese traits are in <strong>addition</strong> to the high elf traits, except where noted.\n</p>\n<ul>\n\t<li>+2 Intelligence, +2 Charisma.</li>\n\t<li>Darkvision out to 120 feet. This trait replaces the high elf’s low-light vision.</li>\n\t<li>Spell resistance equal to 11 + class levels.</li>\n\t<li>+2 racial bonus on Will saves against spells and spell-like abilities.</li>\n\t<li>Spell-Like Abilities: Drow can use the following spell-like abilities once per day: dancing lights, darkness, faerie fire. Caster level equals the drow’s class levels.</li>\n\t<li>Weapon Proficiency: A drow is automatically proficient with the hand crossbow, the rapier, and the short sword. This trait replaces the high elf’s weapon proficiency.</li>\n\t<li>Automatic Languages: Common, Elven, Undercommon. Bonus Languages: Abyssal, Aquan, Draconic, Drow Sign Language, Gnome, Goblin. This trait replaces the high elf’s automatic and bonus languages.</li>\n\t<li>Light Blindness: Abrupt exposure to bright light (such as sunlight or a daylight spell) blinds drow for 1 round. On subsequent rounds, they are dazzled as long as they remain in the affected area.</li>\n\t<li>Favored Class: Wizard (male) or cleric (female). This trait replaces the high elf’s favored class.</li>\n\t<li>Level adjustment +2.</li>\n</ul>\n<p>\n\tThe drow warrior presented here had the following ability scores before racial adjustments: Str 13, Dex 11, Con 12, Int 10, Wis 9, Cha 8.\n</p>\n\n<h5>Challenge Rating</h5>\n<p>\n\tDrow with levels in NPC classes have a CR equal to their character level. Drow with levels in PC classes have a CR equal to their character level +1.\n</p>\n\n<h3 id=\"grayElf\">Gray Elf</h3>\n<p>\n\tTaller and grander in physical appearance than others of their race, gray elves have a reputation for being aloof and arrogant (even by elven standards). They have either silver hair and amber eyes or pale golden hair and violet eyes. They prefer clothing of white, silver, yellow, or gold, with cloaks of deep blue or purple.\n</p>\n\n<h5>Gray Elf Traits (Ex)</h5>\n<p>\n\tThese traits are in <strong>addition</strong> to the high elf traits.\n</p>\n<ul>\n\t<li>+2 Intelligence, -2 Strength.</li>\n</ul>\n\n<h3 id=\"wildElf\">Wild Elf</h3>\n<p>\n\tWild elves are barbaric and tribal. Wild elves’ hair color ranges from black to light brown, lightening to silvery white with age. They dress in simple clothing of animal skins and basic plant weaves.\n</p>\n\n<h5>Wild Elf Traits (Ex)</h5>\n<p>\n\tThese traits are in <strong>addition</strong> to the high elf traits, except where noted.\n</p>\n<ul>\n\t<li>+2 Dexterity, -2 Intelligence. These adjustments replace the high elf’s ability score adjustments.</li>\n\t<li>Favored Class: Sorcerer. This trait replaces the high elf’s favored class.</li>\n</ul>\n\n<h3 id=\"woodElf\">Wood Elf</h3>\n<p>\n\tTheir hair color ranges from yellow to a coppery red, and they are more muscular than other elves. Their clothing is in dark shades of green and earth tones to better blend in with their natural surroundings.\n</p>\n\n<h5>Wood Elf Traits (Ex)</h5>\n<p>\n\tThese traits are in <strong>addition</strong> to the high elf traits, except where noted.\n</p>\n<ul>\n\t<li>+2 Strength, -2 Intelligence.</li>\n\t<li>Favored Class: Ranger. This trait replaces the high elf’s favored class.</li>\n</ul>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

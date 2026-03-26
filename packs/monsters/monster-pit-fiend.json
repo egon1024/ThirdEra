@@ -1,0 +1,189 @@
+{
+  "name": "Pit Fiend",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterPitFiend",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar",
+      "lawful"
+    ],
+    "abilities": {
+      "str": {
+        "value": 37,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 27,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 27,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "20",
+      "alignment": "Lawful Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 23,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8+13",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 15,
+        "bypass": "good"
+      },
+      "spellResistance": 32,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:devil.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Devil\"><h4>SRD type: Devil</h4><p>\n\tDevils are fiends from lawful evil-aligned planes.\n</p>\n<p>\n\tMany devils are surrounded by a <a href=\"/srd/specialAbilities.htm#fearAura\">fear aura</a>, which they use to break up powerful groups and defeat opponents piecemeal. Devils with <a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">spell-like abilities</a> use their illusion abilities to delude and confuse foes as much as possible. A favorite trick is to create illusory reinforcements; enemies can never be entirely sure if a threat is only a figment or real summoned devils joining the fray.\n</p>\n\n<h5>Devil Traits</h5>\n<p>\n\tMost devils possesses the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li><a href=\"/srd/specialAbilities.htm#fireImmunity\">Immunity to fire</a> and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10 and cold 10.</li>\n\t<li>See in Darkness (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): Some devils can see perfectly in darkness of any kind, even that created by a <a class=\"spell\" href=\"/srd/spells/deeperDarkness.htm\">deeper darkness</a> spell.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept when otherwise noted, devils speak Infernal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Constrict 2d8+26, fear aura, improved grab, spell-like abilities, summon devil</p><p><strong>Special Qualities:</strong> Damage reduction 15/good and silver, darkvision 60 ft., immunity to fire and poison, resistance to acid 10 and cold 10, regeneration 5, see in darkness, spell resistance 32, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful evil-aligned plane",
+      "organization": "Solitary, pair, team (3-4), or troupe (1-2 pit fiends, 2-5 horned devils, and 2-5 barbed devils)",
+      "treasure": "Standard coins; double goods; standard items",
+      "advancement": "19-36 HD (Large); 37-54 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 225,
+        "max": 225,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 17,
+        "flatFooted": 32,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 12
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 19,
+        "total": 0
+      },
+      "ref": {
+        "base": 19,
+        "total": 0
+      },
+      "will": {
+        "base": 21,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 18,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA pit fiend often wraps its wings around itself like a grotesque cloak, and appears wreathed in flames.\n</p>\n<p>\n\tA pit fiend is 12 feet tall and weighs 800 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tPit fiends are wily and resourceful fighters, using invisibility to gain the upper hand and biting at foes seemingly able to see them. They don’t hesitate to blanket an area with fireballs, and can call down the wrath of an inferno with meteor swarm.\n</p>\n<p>\n\tA pit fiend’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA pit fiend deals 2d8+26 points of damage with a successful grapple check.\n</p>\n\n<h5>Disease (Su)</h5>\n<p>\n\tA creature struck by a pit fiend’s bite attack must succeed on a DC 27 Fortitude save or be infected with a vile disease known as devil chills (incubation period 1d4 days, damage 1d4 Str). The save DC is Constitution-based.\n</p>\n\n<h5>Fear Aura (Su)</h5>\n<p>\n\tA pit fiend can radiate a 20-foot-radius fear aura as a free action. A creature in the area must succeed on a DC 27 Will save or be affected as though by a fear spell (caster level 18th). A creature that successfully saves cannot be affected again by the same pit fiend’s aura for 24 hours. Other devils are immune to the aura. The save DC is Charisma-based.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a pit fiend must hit with its tail slap attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity.\n</p>\n<p>\n\tIf it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 27, initial damage 1d6 Con, secondary damage death. The save DC is Constitution-based.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—blasphemy (DC 25), create undead, fireball (DC 21), greater dispel magic, greater teleport (self plus 50 pounds of objects only), invisibility, magic circle against good, mass hold monster (DC 27), persistent image (DC 23), power word stun, unholy aura (DC 26); 1/day—meteor swarm (DC 27). Caster level 18th. The save DCs are Charisma-based.\n</p>\n<p>\n\tOnce per year a pit fiend can use wish as the spell (caster level 20th).\n</p>\n\n<h5>Summon Devil (Sp)</h5>\n<p>\n\tTwice per day a pit fiend can automatically summon 2 lemures, bone devils, or bearded devils, or 1 erinyes, horned devil, or ice devil. This ability is the equivalent of an 8th-level spell.\n</p>\n\n<h5>Regeneration (Ex)</h5>\n<p>\n\tA pit fiend takes normal damage from good-aligned silvered weapons, and from spells or effects with the good descriptor.\n</p>\n\n<h3>Tactics Round-By-Round</h3>\n<p>\n\tA pit fiend typically opens combat by using its spell-like abilities, attempting to neutralize dangerous opponents before entering melee.\n</p>\n<ul>\n\t<li><em>Prior to combat:</em> Unholy aura; activate fear aura, summon devil.</li>\n\t<li><em>Round 1:</em> Quickened fireball and mass hold monster if facing three or more visible, active opponents; otherwise power word stun against unarmored opponent (preferably a spellcaster).</li>\n\t<li><em>Round 2:</em> Meteor swarm against as many foes as possible, approach worst-injured enemy.</li>\n\t<li><em>Round 3:</em> Full attack against injured enemy.</li>\n\t<li><em>Round 4:</em> Continue melee against injured enemy, or power word stun against annoying spellcaster.</li>\n\t<li><em>Round 5:</em> Repeat from round 1, or greater teleport to safety if endangered.</li>\n</ul>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "devil.htm",
+        "hubTitle": "Devil",
+        "immunities": [
+          "fire",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": true,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to fire and poison.",
+          "Resistance to acid 10 and cold 10.",
+          "See in Darkness (Su): Some devils can see perfectly in darkness of any kind, even that created by a deeper darkness spell.",
+          "Summon (Sp): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).",
+          "Telepathy."
+        ],
+        "languagesNote": "Except when otherwise noted, devils speak Infernal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

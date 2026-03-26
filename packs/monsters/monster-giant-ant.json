@@ -1,0 +1,152 @@
+{
+  "name": "Giant Ant",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGiantAnt",
+    "creatureTypeKey": "vermin",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 7,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 20
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Improved grab</p><p><strong>Special Qualities:</strong> Scent, vermin traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate plains",
+      "organization": "Gang (2-6) or crew (6-11 plus 1 giant ant soldier)",
+      "treasure": "None",
+      "advancement": "3-4 HD (Medium); 5-6 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 9,
+        "max": 9,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 17,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 50
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 0,
+        "total": 0
+      },
+      "will": {
+        "base": 0,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tGiant ants are among the hardiest and most adaptable vermin. Soldiers and workers are about 6 feet long, while queens can grow to a length of 9 feet.\n</p>\n\n<h5>Acid Sting (Ex)</h5>\n<p>\n\tA giant soldier ant has a stinger and an acid-producing gland in its abdomen. If it successfully grabs an opponent, it can attempt to sting each round (+3 attack bonus). A hit with the sting attack deals 1d4+1 points of piercing damage and 1d4 points of acid damage.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a giant ant must hit with its bite attack. A giant soldier ant that wins the ensuing grapple check establishes a hold and can sting.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*Giant ants have a +4 racial bonus on Survival checks when tracking by scent and a +8 racial bonus on Climb checks. A giant ant can always choose to take 10 on Climb checks, even if rushed or threatened.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

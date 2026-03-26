@@ -1,0 +1,325 @@
+{
+  "name": "Griffon",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGriffon",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 5,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 80,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        },
+        {
+          "name": "Claw",
+          "dice": "1d4",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Pounce (Ex):</strong> Dive or charge and full attack, including two rake attacks (1d6+2 each).</p><p><strong>Full attack:</strong> Bite +11 (2d6+4) and 2 claws +8 (1d4+2).</p>",
+      "environment": "Temperate hills",
+      "organization": "Solitary, pair, or pride (6–10)",
+      "treasure": "None",
+      "advancement": "8–10 HD (Large); 11–21 HD (Huge)",
+      "levelAdjustment": 3
+    },
+    "attributes": {
+      "hp": {
+        "value": 59,
+        "max": 59,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 7,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 1,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Griffons are powerful, majestic creatures with the characteristics of both lions and eagles. From nose to tail, an adult griffon can measure as much as 8 feet. Neither males nor females are endowed with a mane. A pair of broad, golden wings emerge from the creature's back and span 25 feet or more. A griffon weighs about 500 pounds.</p><p>A griffon cannot speak, but understands Common.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Iron Will",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have a stronger will than normal.</p>",
+        "key": "ironWill",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Will saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveWill",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Weapon Focus",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
+        "key": "weaponFocus",
+        "type": "General, Fighter",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
+        "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 1,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "attack",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Jump",
+      "type": "skill",
+      "img": "icons/svg/jump.svg",
+      "system": {
+        "description": "<p>You can make running or standing jumps.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 10,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 8,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Survival",
+      "type": "skill",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
+        "key": "survival",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

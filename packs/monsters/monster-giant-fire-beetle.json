@@ -1,0 +1,152 @@
+{
+  "name": "Giant Fire Beetle",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGiantFireBeetle",
+    "creatureTypeKey": "vermin",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1/3",
+      "alignment": "True Neutral",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., vermin traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm plains",
+      "organization": "Cluster (2-5) or colony (6-11)",
+      "treasure": "None",
+      "advancement": "2-3 HD (Small)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 4,
+        "max": 4,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 2,
+        "total": 0
+      },
+      "ref": {
+        "base": 0,
+        "total": 0
+      },
+      "will": {
+        "base": 0,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 0,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThese luminous nocturnal insects are prized by miners and adventurers. They have two glands, one above each eye, that produce a red glow. The glands’ luminosity persists for 1d6 days after removal from the beetle, illuminating a roughly circular area with a 10-foot radius. Giant fire beetles are about 2 feet long.\n</p>\n\n<h2>Celestial Giant Fire Beetle</h2>\n<p>\n\tThese celestial creatures are commonly summoned by the summon monster I spell.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Smite Evil (Su)</h5>\n<p>\n\tOnce per day a celestial giant fire beetle can make a normal melee attack to deal 1 point of extra damage against an evil foe.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

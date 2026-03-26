@@ -1,0 +1,152 @@
+{
+  "name": "Grig",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGrig",
+    "creatureTypeKey": "fey",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 5,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "Neutral Good",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 2,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 40,
+        "flyManeuverability": "poor",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "cold"
+      },
+      "spellResistance": 17,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities, fiddle</p><p><strong>Special Qualities:</strong> Damage reduction 5/cold iron, low-light vision, spell resistance 17</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Gang (2-4), band (6-11), or tribe (20-80)",
+      "treasure": "No coins; 50% goods; 50% items",
+      "advancement": "1-3 HD (Tiny)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 2,
+        "max": 2,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 16,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 4
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 1,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 0,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tGrigs can leap great distances. They have light blue skin, forest-green hair, and brown hairy legs, and usually wear tunics or brightly colored vests with buttons made from tiny gems. A grig stands 1&frac12; feet tall and weighs about 1 pound.\n</p>\n<p>\n\tGrigs speak Sylvan. Some also speak Common.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGrigs are fierce by sprite standards, attacking opponents fearlessly with bow and dagger.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t3/day—disguise self, entangle (DC 13), invisibility (self only), pyrotechnics (DC 14), ventriloquism (DC 13). Caster level 9th. The save DCs are Charisma-based.\n</p>\n\n<h5>Fiddle (Su)</h5>\n<p>\n\tOne grig in each band carries a tiny, grig-sized fiddle. When the fiddler plays, any nonsprite within 30 feet of the instrument must succeed on a DC 12 Will save or be affected as though by irresistible dance for as long as the playing continues. The save DC is Charisma-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tGrigs have a +8 racial bonus on Jump checks. *They also have a +5 racial bonus on Move Silently checks in a forest setting.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

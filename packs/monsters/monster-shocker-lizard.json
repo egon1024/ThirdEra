@@ -1,0 +1,156 @@
+{
+  "name": "Shocker Lizard",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterShockerLizard",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "True Neutral",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 20,
+        "burrow": 0,
+        "climb": 20
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Stunning shock, lethal shock</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., electricity sense, immunity to electricity, low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm marshes",
+      "organization": "Solitary, pair, clutch (3-5), or colony (6-11)",
+      "treasure": "1/10 coins; 50% goods; 50% items",
+      "advancement": "3-4 HD (Small); 5-6 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 13,
+        "max": 13,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 13,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA shocker lizard has a pale gray or blue underside, shading to a darker hue on its back. It has blue-black markings along its back and tail. A shocker lizard is about 1 foot tall at the shoulder and weighs about 25 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA shocker lizard relies on its electricity abilities in combat. A lizard tends to bite only after its shock has rendered an opponent unconscious or when the shock seems to have no effect at all. A solitary lizard flees once it delivers its shocks, but if other shocker lizards are nearby, they all home in on their comrade’s discharges and attempt to administer their shocks to the foe.\n</p>\n\n<h5>Stunning Shock (Su)</h5>\n<p>\n\tOnce per round, a shocker lizard can deliver an electrical shock to a single opponent within 5 feet. This attack deals 2d8 points of nonlethal damage to living opponents (Reflex DC 12 half). The save DC is Constitution-based.\n</p>\n\n<h5>Lethal Shock (Su)</h5>\n<p>\n\tWhenever two or more shocker lizards are within 20 feet of each other, they can work together to create a lethal shock. This effect has a radius of 20 feet, centered on any one contributing lizard. The shock deals 2d8 points of electricity damage for each lizard contributing to it, to a maximum of 12d8. A Reflex save (DC 10 + number of lizards contributing) reduces the damage by half.\n</p>\n\n<h5>Electricity Sense (Ex)</h5>\n<p>\n\tShocker lizards automatically detect any electrical discharges within 100 feet.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tShocker lizards have a +4 racial bonus on Hide checks due to their coloration. Shocker lizards have a +2 racial bonus on Listen and Spot checks.\n</p>\n<p>\n\tShocker lizards use their Dexterity modifier instead of their Strength modifier for Climb and Jump checks.\n</p>\n<p>\n\tA shocker lizard has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>\n<p>\n\tA shocker lizard has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

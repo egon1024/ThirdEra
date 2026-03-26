@@ -1,0 +1,152 @@
+{
+  "name": "Giant Bombardier Beetle",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGiantBombardierBeetle",
+    "creatureTypeKey": "vermin",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+1",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Acid spray</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., vermin traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm forests",
+      "organization": "Cluster (2-5) or click (6-11)",
+      "treasure": "None",
+      "advancement": "3-4 HD (Medium); 5-6 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 13,
+        "max": 13,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 0,
+        "total": 0
+      },
+      "will": {
+        "base": 0,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThese creatures feed primarily on carrion and offal, gathering heaps of the stuff in which to build nests and lay eggs. A giant bombardier beetle is about 6 feet long. Giant bombardier beetles normally attack only to defend themselves, their nests, or their eggs.\n</p>\n\n<h5>Acid Spray (Ex)</h5>\n<p>\n\tWhen attacked or disturbed, the creature can release a 10-foot cone of acidic vapor once per round. Those within the cone must succeed on a DC 13 Fortitude save or take 1d4+2 points of acid damage. The save DC is Constitution-based.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

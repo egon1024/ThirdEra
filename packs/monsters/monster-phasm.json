@@ -1,0 +1,154 @@
+{
+  "name": "Phasm",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterPhasm",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [
+      "shapechanger"
+    ],
+    "abilities": {
+      "str": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d3+1",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Alternate form, amorphous, resilient, scent, telepathy 100 ft., tremorsense 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Underground",
+      "organization": "Solitary",
+      "treasure": "Standard",
+      "advancement": "15-21 HD (Huge); 22-45 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 97,
+        "max": 97,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 11,
+        "total": 0
+      },
+      "ref": {
+        "base": 11,
+        "total": 0
+      },
+      "will": {
+        "base": 11,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 11,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA phasm is an amorphous creature that can assume the guise of almost any other creature or object. A phasm in its natural form is about 5 feet in diameter and 2 feet high at the center. Swirls of color indicate sensory organs. In this form, a phasm slithers about like an ooze and can attack with a pseudopod. It weighs about 400 pounds.\n</p>\n<p>\n\tPhasms can speak Common but prefer telepathic communication.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tWhen faced with potential danger, a phasm is equally likely to retreat, parley, or attack, as its fancy strikes.\n</p>\n<p>\n\tIf pursued or harassed, a phasm transforms into the most fearsome creature it knows and attacks. When seriously hurt, it changes to some fast or agile form and tries to escape.\n</p>\n\n<h5>Amorphous (Ex)</h5>\n<p>\n\tA phasm in its natural form has immunity to poison, sleep, paralysis, polymorph, and stunning effects. It is not subject to critical hits and, having no clear front or back, cannot be flanked.\n</p>\n\n<h5>Resilient (Ex)</h5>\n<p>\n\tA phasm has a +4 racial bonus on Fortitude and Reflex saves (included in the statistics block).\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tA phasm can assume any form of Large size or smaller as a standard action. A phasm can remain in its alternate form until it chooses to assume a new one or return to its natural form.\n</p>\n\n<h5>Tremorsense (Ex)</h5>\n<p>\n\tA phasm can automatically sense the location of anything within 60 feet that is in contact with the ground, so long as it is touching the ground itself.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*When using shapechange, a phasm gains a +10 circumstance bonus on Disguise checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

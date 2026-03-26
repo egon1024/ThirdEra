@@ -1,0 +1,167 @@
+{
+  "name": "Bat Swarm",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterBatSwarm",
+    "creatureTypeKey": "animal",
+    "subtypeKeys": [
+      "swarm"
+    ],
+    "abilities": {
+      "str": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 4,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "True Neutral",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 40,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "blindsense",
+          "range": "20 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:swarm.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Swarm\"><h4>SRD type: Swarm</h4><p>\n\tSwarms are dense masses of Fine, Diminutive, or Tiny creatures that would not be particularly dangerous in small groups, but can be terrible foes when gathered in sufficient numbers. For game purposes a swarm is defined as a single creature with a space of 10 feet—gigantic hordes are actually composed of dozens of swarms in close proximity. A swarm has a single pool of Hit Dice and hit points, a single initiative modifier, a single speed, and a single Armor Class. It makes <a href=\"/srd/combat/combatStatistics.htm#savingThrows\">saving throws</a> as a single creature.\n</p>\n<p>\n\tMany different creatures can mass as swarms; bat swarms, centipede swarms, hellwasp swarms, locust swarms, rat swarms, and spider swarms are described here. The swarm’s type varies with the nature of the component creature (most are <a href=\"/srd/typesSubtypes.htm#animalType\">animals</a> or <a href=\"/srd/typesSubtypes.htm#verminType\">vermin</a>), but all swarms have the swarm subtype.\n</p>\n<p>\n\tA swarm of Tiny creatures consists of 300 nonflying creatures or 1,000 flying creatures. A swarm of Diminutive creatures consists of 1,500 nonflying creatures or 5,000 flying creatures. A swarm of Fine creatures consists of 10,000 creatures, whether they are flying or not. Swarms of nonflying creatures include many more creatures than could normally fit in a 10-foot square based on their normal space, because creatures in a swarm are packed tightly together and generally crawl over each other and their prey when moving or attacking. Larger swarms are represented by multiples of single swarms. A large swarm is completely shapeable, though it usually remains contiguous.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tIn order to attack, a single swarm moves into opponents’ spaces, which provokes an <a href=\"/srd/combat/attacksOfOpportunity.htm\">attack of opportunity</a>. It can occupy the same space as a creature of any size, since it crawls all over its prey, but remains a creature with a 10-foot space. Swarms never make attacks of opportunity, but they can provoke attacks of opportunity.\n</p>\n<p>\n\tUnlike other creatures with a 10-foot space, a swarm is shapeable. It can occupy any four contiguous squares, and it can squeeze through any space large enough to contain one of its component creatures.\n</p></section><!--thirdera-srd-hub-end-->\n<p>Distraction and swarm damage.</p>",
+      "environment": "Temperate",
+      "organization": "Cluster",
+      "treasure": "None",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 13,
+        "max": 13,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 5
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Swarm of bats.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "swarm.htm",
+        "hubTitle": "Swarm",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": true
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

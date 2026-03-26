@@ -1,0 +1,156 @@
+{
+  "name": "Phase Spider",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterPhaseSpider",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 20
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Poison</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., ethereal jaunt, low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm hills",
+      "organization": "Solitary or cluster (2-5)",
+      "treasure": "None",
+      "advancement": "6-8 HD (Large); 9-15 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 42,
+        "max": 42,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 7
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 2,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 5,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tPhase spiders are aggressive predators that can move quickly from the Ethereal Plane to attack opponents on the Material Plane.\n</p>\n<p>\n\tA typical phase spider’s body is 8 feet long. It weighs about 700 pounds.\n</p>\n<p>\n\tPhase spiders cannot speak.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tPhase spiders dwell and hunt on the Material Plane. Once a spider locates prey, however, it shifts to the Ethereal Plane to attack, attempting to catch its victim flat-footed. The spider shifts in, bites its victim, and retreats quickly back to the Ethereal Plane.\n</p>\n\n<h5>Ethereal Jaunt (Su)</h5>\n<p>\n\tA phase spider can shift from the Ethereal Plane to the Material Plane as a free action, and shift back again as a move action (or during a move action). The ability is otherwise identical with ethereal jaunt (caster level 15th).\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 17, initial and secondary damage 1d8 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA phase spider has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

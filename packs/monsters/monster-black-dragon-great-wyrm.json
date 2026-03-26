@@ -1,0 +1,213 @@
+{
+  "name": "Black Dragon, Great Wyrm",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterBlackDragonGreatWyrm",
+    "creatureTypeKey": "dragon",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 37,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 27,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "22",
+      "alignment": "Chaotic Evil",
+      "size": "Gargantuan"
+    },
+    "statBlock": {
+      "naturalArmor": 36,
+      "space": "20 ft",
+      "reach": "20 ft",
+      "movement": {
+        "land": 0,
+        "fly": 200,
+        "flyManeuverability": "clumsy",
+        "swim": 60,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "4d6",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": "20 ft",
+          "presetAttackBonus": 46
+        },
+        {
+          "name": "Claw",
+          "dice": "2d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 44
+        },
+        {
+          "name": "Claw",
+          "dice": "2d8",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 44
+        },
+        {
+          "name": "Wing",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 44
+        },
+        {
+          "name": "Wing",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 44
+        },
+        {
+          "name": "Tail slap",
+          "dice": "2d8",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 44
+        },
+        {
+          "name": "Crush",
+          "dice": "4d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 44
+        },
+        {
+          "name": "Tail sweep",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "15 ft",
+          "presetAttackBonus": 44
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 28,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +46, 2× Claw +44, 2× Wing +44, Tail slap +44, Crush +44, Tail sweep +44.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 24d4 (36)</p><p><strong>Special qualities (by age):</strong> Charm reptiles</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
+      "environment": "Warm marshes",
+      "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
+      "treasure": "Triple standard",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 536,
+        "max": 536,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 6,
+        "flatFooted": 42,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 60
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 28,
+        "total": 0
+      },
+      "ref": {
+        "base": 20,
+        "total": 0
+      },
+      "will": {
+        "base": 25,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 37,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<h3 id=\"blackDragon\">Black Dragon </h3>\n\n<table class=\"statBlock\" cellspacing=\"0\">\n\t<tr>\n\t\t<th>Type:</th>\n\t\t<td>Dragon (Water)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Environment:</th>\n\t\t<td>Warm marshes</td>\n\t</tr>\n\t<tr>\n\t\t<th>Organization:</th>\n\t\t<td>Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)</td>\n\t</tr>\n\t<tr>\n\t\t<th>Challenge Rating:</th>\n\t\t<td>Wyrmling 3; very young 4; young 5; juvenile 7; young adult 9; adult 11; mature adult 14; old 16; very old 18; ancient 19; wyrm 20; great wyrm 22</td>\n\t</tr>\n\t<tr>\n\t\t<th>Treasure:</th>\n\t\t<td>Triple standard</td>\n\t</tr>\n\t<tr>\n\t\t<th>Alignment:</th>\n\t\t<td>Always chaotic evil</td>\n\t</tr>\n\t<tr>\n\t\t<th>Advancement:</th>\n\t\t<td>Wyrmling 5-6 HD; very young 8-9 HD; young 11-12 HD; juvenile 14-15 HD; young adult 17-18 HD; adult 20-21 HD; mature adult 23-24 HD; old 26-27 HD; very old 29-30 HD; ancient 32-33 HD; wyrm 35-36 HD; great wyrm 38+ HD</td>\n\t</tr>\n\t<tr>\n\t\t<th>Level Adjustment:</th>\n\t\t<td>Wyrmling +3; very young +3; young +3; juvenile +4; others —</td>\n\t</tr>\n</table>\n<p>\n\tBlack dragon are sometimes known as skull dragons because of their skeletal faces. Adding to the skeletal impression is the gradual deterioration of the hide around the base of the horn and the cheekbones. This deterioration increases with age and does not harm the dragon. On hatching, a black dragon’s scales are thin, small, and glossy. As the dragon ages, they become larger, thicker, and duller, helping it camouflage itself in swamps and marshes.\n</p>\n<p>\n\tBlack dragons are especially fond of coins. Older dragons sometimes capture and question humanoids about stockpiles of gold, silver, and platinum coins before killing them.\n</p>\n\n\n\n\n\n<h4>Combat</h4>\n<p>\n\tBlack dragons prefer to ambush their targets, using their surroundings as cover. When fighting in heavily forested swamps and marshes, they try to stay in the water or on the ground; trees and leafy canopies limit their aerial maneuverability. When outmatched, a black dragon attempts to fly out of sight, so as not to leave tracks, and hide in a deep pond or bog.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\tA black dragon has one type of breath weapon, a line of acid.\n</p>\n\n<h5>Water Breathing (Ex)</h5>\n<p>\n\tA black dragon can breathe underwater indefinitely and can freely use its breath weapon, spells, and other abilities while submerged.\n</p>\n\n<h5>Corrupt Water (Sp)</h5>\n<p>\n\tOnce per day an adult or older black dragon can stagnate 10 cubic feet of water, making it become still, foul, and unable to support animal life. The ability spoils liquids containing water. Magic items (such as potions) and items in a creature’s possession must succeed on a Will save (DC equal to that of the dragon’s frightful presence) or become fouled. This ability is the equivalent of a 1st-level spell. Its range is equal to that of the dragon’s frightful presence.\n</p>\n\n<h5>Charm Reptiles (Sp)</h5>\n<p>\n\tA great wyrm black dragon can use this ability three times per day. It works as a mass charm spell that affects only reptilian animals. The dragon can communicate with any charmed reptiles as though casting a speak with animals spell. This ability is the equivalent of a 1st-level spell.\n</p>\n\n<h5>Other Spell-Like Abilities</h5>\n<p>\n\t3/day—darkness (juvenile or older; radius 10 feet per age category), insect plague (ancient or older); 1/day—plant growth (old or older).\n</p>\n\n<h5>Skills</h5>\n<p>\n\tHide, Move Silently, and Swim are considered class skills for black dragons.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

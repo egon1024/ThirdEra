@@ -1,0 +1,152 @@
+{
+  "name": "Viper Snake",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterViperSnake",
+    "creatureTypeKey": "animal",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 4,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1/3",
+      "alignment": "True Neutral",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 2,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 15,
+        "burrow": 0,
+        "climb": 15
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Poison</p><p><strong>Special Qualities:</strong> Scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate marshes",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "—",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 1,
+        "max": 1,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 15,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 7
+      },
+      "speed": {
+        "value": 15
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 2,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 0,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThese creatures range widely in size. They are not particularly aggressive, but will often lash out with a bite attack before attempting to retreat.\n</p>\n\n<table cellspacing=\"0\" class=\"right\">\n<caption>Viper Poison</caption>\n\t<tr>\n\t\t<th>Size</th>\n\t\t<th>Fort DC</th>\n\t</tr>\n\t<tr>\n\t\t<td>Tiny</td>\n\t\t<td align=\"center\">10</td>\n\t</tr>\n\t<tr>\n\t\t<td>Small</td>\n\t\t<td align=\"center\">10</td>\n\t</tr>\n\t<tr>\n\t\t<td>Medium</td>\n\t\t<td align=\"center\">11</td>\n\t</tr>\n\t<tr>\n\t\t<td>Large</td>\n\t\t<td align=\"center\">11</td>\n\t</tr>\n\t<tr>\n\t\t<td>Huge</td>\n\t\t<td align=\"center\">14</td>\n\t</tr>\n</table>\n\n<h3>Combat</h3>\n<p>\n\tViper snakes rely on their venomous bite to kill prey and defend themselves.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tA viper snake has a poisonous bite that deals initial and secondary damage of 1d6 Con. The save DC varies by the snake’s size, as shown on the table below. The save DCs are Constitution-based.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "name": "Copper Dragon, Wyrmling",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterCopperDragonWyrmling",
+    "creatureTypeKey": "dragon",
+    "subtypeKeys": [
+      "earth"
+    ],
+    "abilities": {
+      "str": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "Chaotic Good",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "2-1/2 ft",
+      "reach": "0 ft",
+      "movement": {
+        "land": 40,
+        "fly": 100,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": "5 ft",
+          "presetAttackBonus": 7
+        },
+        {
+          "name": "Claw",
+          "dice": "1d3",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "",
+          "presetAttackBonus": 5
+        },
+        {
+          "name": "Claw",
+          "dice": "1d3",
+          "damageType": "slashing",
+          "primary": "false",
+          "reach": "",
+          "presetAttackBonus": 5
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +7, 2× Claw +5.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): Line of acid or cone of slow gas (Fort vs. DC 13; slow duration see SRD). 2d4 acid line.</p><p><strong>Special qualities (by age):</strong> —</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p><p><strong>Skills:</strong> Bluff, Hide, and Jump are class skills.</p><p>Casts as sorcerer of indicated CL; also cleric spells from Chaos, Earth, and Trickery domains as arcane (SRD).</p><p><strong>Breath (Su):</strong> Line of acid or cone of slow gas (Fort negates slow; see SRD). Spider climb on stone (Ex).</p>",
+      "environment": "Warm hills",
+      "organization": "See SRD (solitary or clutch to family by age)",
+      "treasure": "Triple standard",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 37,
+        "max": 37,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 4,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 5,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Chaotic good true dragons of warm hills; breath is acid line and slowing gas. Copper dragons enjoy wit and riddles.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Bluff",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "bluff",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Jump",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>SRD skill.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

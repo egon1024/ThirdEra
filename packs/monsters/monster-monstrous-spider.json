@@ -1,0 +1,152 @@
+{
+  "name": "Monstrous Spider",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterMonstrousSpider",
+    "creatureTypeKey": "vermin",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 3,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 10
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Poison, web</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., tremorsense 60 ft., vermin traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Colony (8-16)",
+      "treasure": "None",
+      "advancement": "—",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 2,
+        "max": 2,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 15,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 2,
+        "total": 0
+      },
+      "ref": {
+        "base": 3,
+        "total": 0
+      },
+      "will": {
+        "base": 0,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 0,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tAll monstrous spiders are aggressive predators that use their poisonous bites to subdue or kill prey.\n</p>\n<p>\n\tMonstrous spiders come in two general types: hunters and web-spinners. Hunters rove about, while web-spinners usually attempt to trap prey. Hunting spiders can spin webs to use as lairs, but cannot use their webs as weapons the way web-spinners can. A hunting spider has a base land speed 10 feet faster than the figures given in the statistics blocks.\n</p>\n\n<table id=\"monstrousSpiderPoison\" cellspacing=\"0\" class=\"right\">\n\t<caption>Monstrous Spider Poison</caption>\n\t<tr>\n\t\t<th align=\"left\">Size</th>\n\t\t<th>Fort DC</th>\n\t\t<th>Damage</th>\n\t</tr>\n\t<tr>\n\t\t<td>Tiny</td>\n\t\t<td align=\"center\">10</td>\n\t\t<td align=\"center\">1d2 Str</td>\n\t</tr>\n\t<tr>\n\t\t<td>Small</td>\n\t\t<td align=\"center\">10</td>\n\t\t<td align=\"center\">1d3 Str</td>\n\t</tr>\n\t<tr>\n\t\t<td>Medium</td>\n\t\t<td align=\"center\">12</td>\n\t\t<td align=\"center\">1d4 Str</td>\n\t</tr>\n\t<tr>\n\t\t<td>Large</td>\n\t\t<td align=\"center\">13</td>\n\t\t<td align=\"center\">1d6 Str</td>\n\t</tr>\n\t<tr>\n\t\t<td>Huge</td>\n\t\t<td align=\"center\">16</td>\n\t\t<td align=\"center\">1d8 Str</td>\n\t</tr>\n\t<tr>\n\t\t<td>Gargantuan</td>\n\t\t<td align=\"center\">20</td>\n\t\t<td align=\"center\">2d6 Str</td>\n\t</tr>\n\t<tr>\n\t\t<td>Colossal</td>\n\t\t<td align=\"center\">28</td>\n\t\t<td align=\"center\">2d8 Str</td>\n\t</tr>\n</table>\n\n<table id=\"monstrousSpiderWebs\" cellspacing=\"0\" class=\"right\">\n\t<caption>Monstrous Spider Webs</caption>\n\t<tr>\n\t\t<th>Size</th>\n\t\t<th>Escape<br /></br>Artist DC</th>\n\t\t<th>Break<br /></br>DC</th>\n\t\t<th>Hit<br /></br>Points</th>\n\t</tr>\n\t<tr>\n\t\t<td>Tiny</td>\n\t\t<td align=\"center\">10</td>\n\t\t<td align=\"center\">14</td>\n\t\t<td align=\"center\">2</td>\n\t</tr>\n\t<tr>\n\t\t<td>Small</td>\n\t\t<td align=\"center\">10</td>\n\t\t<td align=\"center\">14</td>\n\t\t<td align=\"center\">4</td>\n\t</tr>\n\t<tr>\n\t\t<td>Medium</td>\n\t\t<td align=\"center\">12</td>\n\t\t<td align=\"center\">16</td>\n\t\t<td align=\"center\">6</td>\n\t</tr>\n\t<tr>\n\t\t<td>Large</td>\n\t\t<td align=\"center\">13</td>\n\t\t<td align=\"center\">17</td>\n\t\t<td align=\"center\">12</td>\n\t</tr>\n\t<tr>\n\t\t<td>Huge</td>\n\t\t<td align=\"center\">16</td>\n\t\t<td align=\"center\">20</td>\n\t\t<td align=\"center\">14</td>\n\t</tr>\n\t<tr>\n\t\t<td>Gargantuan</td>\n\t\t<td align=\"center\">20</td>\n\t\t<td align=\"center\">24</td>\n\t\t<td align=\"center\">16</td>\n\t</tr>\n\t<tr>\n\t\t<td>Colossal</td>\n\t\t<td align=\"center\">28</td>\n\t\t<td align=\"center\">32</td>\n\t\t<td align=\"center\">18</td>\n\t</tr>\n</table>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tA monstrous spider has a poisonous bite. The details vary by the spider’s size, as shown on the table below. The save DCs are Constitution-based. The indicated damage is initial and secondary damage.\n</p>\n\n<h5>Web (Ex)</h5>\n<p>\n\tBoth types of monstrous spiders often wait in their webs or in trees, then lower themselves silently on silk strands and leap onto prey passing beneath. A single strand is strong enough to support the spider and one creature of the same size. Web-spinners can throw a web eight times per day. This is similar to an attack with a net but has a maximum range of 50 feet, with a range increment of 10 feet, and is effective against targets up to one size category larger than the spider. An entangled creature can escape with a successful Escape Artist check or burst it with a Strength check. Both are standard actions whose DCs are given in the table below. The check DCs are Constitution-based, and the Strength check DC includes a +4 racial bonus.\n</p>\n<p>\n\tWeb-spinners often create sheets of sticky webbing from 5 to 60 feet square, depending on the size of the spider. They usually position these sheets to snare flying creatures but can also try to trap prey on the ground. Approaching creatures must succeed on a DC 20 Spot check to notice a web; otherwise they stumble into it and become trapped as though by a successful web attack. Attempts to escape or burst the webbing gain a +5 bonus if the trapped creature has something to walk on or grab while pulling free. Each 5-foot section has the hit points given on the table, and sheet webs have damage reduction 5/—.\n</p>\n<p>\n\tA monstrous spider can move across its own web at its climb speed and can pinpoint the location of any creature touching its web.\n</p>\n\n<h5>Tremorsense (Ex)</h5>\n<p>\n\tA monstrous spider can detect and pinpoint any creature or object within 60 feet in contact with the ground, or within any range in contact with the spider’s webs.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tMonstrous spiders have a +4 racial bonus on Hide and Spot checks and a +8 racial bonus on Climb checks. A monstrous spider can always choose to take 10 on Climb checks, even if rushed or threatened. Monstrous spiders use either their Strength or Dexterity modifier for Climb checks, whichever is higher.\n</p>\n<p>\n\t*Hunting spiders have a +10 racial bonus on Jump checks and a +8 racial bonus on Spot checks. Web-spinning spiders have a +8 racial bonus on Hide and Move Silently checks when using their webs.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

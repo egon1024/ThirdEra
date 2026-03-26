@@ -1,0 +1,154 @@
+{
+  "name": "Triton",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterTriton",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "native"
+    ],
+    "abilities": {
+      "str": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 40,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d8+1",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities</p><p><strong>Special Qualities:</strong> Darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate aquatic",
+      "organization": "Company (2-5), squad (6-11), or band (20-80)",
+      "treasure": "Standard",
+      "advancement": "4-9 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 16,
+        "max": 16,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 5
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 3,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA triton has silvery skin that fades into silver-blue scales on the lower half of its body. A triton’s hair is deep blue or blue-green.\n</p>\n<p>\n\tA triton is about the same size and weight as a human. Tritons speak Common and Aquan.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tThe reclusive tritons prefer to avoid combat, but they fiercely defend their homes. They attack with either melee or ranged weapons as the circumstances warrant. When encountered outside their lair, they are 90% likely to be mounted on friendly sea creatures such as porpoises.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/day—summon nature’s ally IV. Caster level 7th. Tritons often choose water elementals for their companions.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA triton has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "name": "Formian",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterFormian",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "lawful",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "Lawful Neutral",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+1",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Cure serious wounds, hive mind, immunity to poison, petrification, and cold, make whole, resistance to electricity 10, fire 10, and sonic 10</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful-aligned plane",
+      "organization": "Team (2-4) or crew (7-18)",
+      "treasure": "None",
+      "advancement": "2-3 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 5,
+        "max": 5,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 13,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 4,
+        "total": 0
+      },
+      "will": {
+        "base": 2,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA formian resembles a cross between an ant and a centaur. All formians are covered in a brownish-red carapace; size and appearance differs for each variety.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tFormians are generally aggressive, seeking to subdue all they encounter. If they perceive even the slightest threat to their hive-city or to their queen, they attack immediately and fight to the death. Any formian also attacks immediately if ordered to do so by a superior.\n</p>\n\n<h5>Hive Mind (Ex)</h5>\n<p>\n\tAll formians within 50 miles of their queen are in constant communication. If one is aware of a particular danger, they all are. If one in a group is not flat-footed, none of them are. No formian in a group is considered flanked unless all of them are.\n</p>\n\n<h2 id=\"worker\">Worker</h2>\n<p>\n\tWhile workers cannot speak, they can convey simple concepts (such as danger) by body movements. Through the hive mind, however, they can communicate just fine—although their intelligence still limits the concepts that they can grasp.\n</p>\n<p>\n\tA worker is about 3 feet long and about 2&frac12; feet high at the front. It weighs about 60 pounds. Its hands are suitable only for manual labor.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tFormian workers fight only to defend their hive-cities, using their mandibled bite.\n</p>\n<p>\n\tA formian worker’s natural weapons, as well as any weapons it wields, are treated as lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Cure Serious Wounds (Sp)</h5>\n<p>\n\tEight workers together can heal a creature’s wounds as though using the cure serious wounds spell (caster level 7th). This is a full-round action for all eight workers.\n</p>\n\n<h5>Make Whole (Sp)</h5>\n<p>\n\tThree workers together can repair an object as though using the make whole spell (caster level 7th). This is a full-round action for all three workers.\n</p>\n\n<h2 id=\"warrior\">Warrior</h2>\n<p>\n\tWarriors communicate through the hive mind to convey battle plans and make reports to their commanders. They cannot speak otherwise.\n</p>\n<p>\n\tA warrior is about is about 5 feet long and about 4&frac12; feet high at the front. It weighs about 180 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tWarriors are wicked combatants, using claws, bite, and a poisonous sting all at once. Through the hive mind, they attack with coordinated and extremely efficient tactics.\n</p>\n<p>\n\tA formian warrior’s natural weapons, as well as any weapons it wields, are treated as lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 14, initial and secondary damage 1d6 Str. The save DC is Constitution-based.\n</p>\n\n<h2 id=\"taskmaster\">Taskmaster</h2>\n<p>\n\tThese formians communicate only telepathically and derive sustenance from the mental energies of those they dominate.\n</p>\n<p>\n\tA taskmaster is about the same size as a warrior.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tTaskmasters rely on their dominated slaves to fight for them if at all possible. If necessary, though, they can defend themselves with claws and a poison sting.\n</p>\n<p>\n\tA formian taskmaster’s natural weapons, as well as any weapons it wields, are treated as lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Dominate Monster (Su)</h5>\n<p>\n\tA taskmaster can use a dominate monster ability as the spell from a 10th-level caster (Will DC 17 negates), although the subject may be of any kind and may be up to Large size. Creatures that successfully save cannot be affected by the same taskmaster’s dominate monster ability for 24 hours. A single taskmaster can dominate up to four subjects at a time. The save DC is Charisma-based.\n</p>\n\n<h5>Dominated Creature (Ex)</h5>\n<p>\n\tA taskmaster is never encountered alone. One dominated nonformian creature always accompanies it (choose or determine randomly any creature of CR 4).\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 15, initial and secondary damage 1d6 Str. The save DC is Constitution-based.\n</p>\n\n<h2 id=\"myrmarch\">Myrmarch</h2>\n<p>\n\tMyrmarchs are the elite of formian society. Much more than those beneath them, these creatures are individuals, with goals, desires, and creative thought.\n</p>\n<p>\n\tA myrmarch is about is about 7 feet long and about 5&frac12; feet high at the front. It weighs about 1,500 pounds. Its claws are capable of fine manipulation, like human hands. Each myrmarch wears a bronze helm to signify its position (the more elaborate the helm, the more prestigious the position).\n</p>\n<p>\n\tMyrmarchs speak Formian and Common.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tMyrmarchs’ claws are like hands and thus serve no combat purpose.\n</p>\n<p>\n\tMyrmarchs occasionally employ javelins for ranged attacks, coated with poison from their own stingers.\n</p>\n<p>\n\tThey fight intelligently, aiding those under them (if any such are present) and commanding them through the hive mind. If chaotic creatures are present, however, a myrmarch is singleminded in its quest to destroy them.\n</p>\n<p>\n\tA formian myrmarch’s natural weapons, as well as any weapons it wields, are treated as lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 20, initial and secondary damage 2d6 Dex. The save DC is Constitution-based.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—charm monster (DC 17), clairaudience/clairvoyance, detect chaos, detect thoughts (DC 15), magic circle against chaos, greater teleport; 1/day—dictum (DC 20), order’s wrath (DC 17). Caster level 12th. The save DCs are Charisma-based.\n</p>\n\n<h2 id=\"queen\">Queen</h2>\n<p>\n\tThe formian queen cannot move. With her telepathic abilities, though, she can send instructions to and get reports from any formian within her range.\n</p>\n<p>\n\tShe is about 10 feet long, perhaps 4 feet high, and weighs about 3,500 pounds.\n</p>\n<p>\n\tThe queen speaks Formian and Common, although she can communicate with any creature telepathically.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tThe queen does not fight. She has no ability to move. If necessary, a team of workers and myrmarchs (or dominated slaves) haul her enormous bulk to where she needs to go. This sort of occurrence is very rare, however, and most of the time the queen remains within her well-defended chambers.\n</p>\n<p>\n\tDespite her utter lack of physical activity, the queen can cast spells and use spell-like abilities to great effect in her own defense as well as the defense of the hive-city.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tThe queen casts arcane spells as a 17th-level sorcerer.\n</p>\n\n<h6>Typical Sorcerer Spells Known (6/8/7/7/7/7/6/6/4, base save DC 15 + spell level)</h6>\n<p>\n\t0—acid splash, arcane mark, daze, detect magic, light, mage hand, read magic, resistance, touch of fatigue; 1st—comprehend languages, identify, mage armor, magic missile, shield; 2nd— hypnotic pattern, invisibility, protection from arrows, resist energy, scorching ray; 3rd—dispel magic, heroism, nondetection, slow; 4th— confusion, detect scrying, black tentacles, scrying; 5th—cone of cold, dismissal, teleport, wall of force; 6th—analyze dweomer, geas/quest, repulsion; 7th—summon monster VII, vision, waves of exhaustion; 8th—prismatic wall, temporal stasis.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—calm emotions (DC 17), charm monster (DC 19), clairaudience/clairvoyance, detect chaos, detect thoughts, dictum (DC 22), divination, hold monster (DC 20), magic circle against chaos, order’s wrath (DC 19), shield of law (DC 23), true seeing. Caster level 17th. The save DCs are Charisma-based.\n</p>\n\n<h5>Telepathy (Su)</h5>\n<p>\n\tThe queen can communicate telepathically with any intelligent creature within 50 miles whose presence she is aware of.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

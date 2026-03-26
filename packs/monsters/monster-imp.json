@@ -1,0 +1,189 @@
+{
+  "name": "Imp",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterImp",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar",
+      "lawful"
+    ],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "Lawful Evil",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 50,
+        "flyManeuverability": "perfect",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "good"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:devil.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Devil\"><h4>SRD type: Devil</h4><p>\n\tDevils are fiends from lawful evil-aligned planes.\n</p>\n<p>\n\tMany devils are surrounded by a <a href=\"/srd/specialAbilities.htm#fearAura\">fear aura</a>, which they use to break up powerful groups and defeat opponents piecemeal. Devils with <a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">spell-like abilities</a> use their illusion abilities to delude and confuse foes as much as possible. A favorite trick is to create illusory reinforcements; enemies can never be entirely sure if a threat is only a figment or real summoned devils joining the fray.\n</p>\n\n<h5>Devil Traits</h5>\n<p>\n\tMost devils possesses the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li><a href=\"/srd/specialAbilities.htm#fireImmunity\">Immunity to fire</a> and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10 and cold 10.</li>\n\t<li>See in Darkness (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): Some devils can see perfectly in darkness of any kind, even that created by a <a class=\"spell\" href=\"/srd/spells/deeperDarkness.htm\">deeper darkness</a> spell.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept when otherwise noted, devils speak Infernal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Poison, spell-like abilities</p><p><strong>Special Qualities:</strong> Alternate form, damage reduction 5/good or silver, darkvision 60 ft., fast healing 2, immunity to poison, resistance to fire 5</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful evil-aligned plane",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "4-6 HD (Tiny)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 13,
+        "max": 13,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 15,
+        "flatFooted": 17,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tIn its natural form, an imp stands almost 2 feet tall and weighs about 8 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tImps are craven, but not so timid as to pass up an opportunity for a surprise attack using their invisibility and alternate form ability. In its natural form, an imp attacks with the wicked stinger on its tail. It quickly flies out of reach if a foe manages to strike back effectively.\n</p>\n<p>\n\tAn imp’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 13, initial damage 1d4 Dex, secondary damage 2d4 Dex. The save DC is Constitution-based and includes a +2 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—detect good, detect magic, invisibility (self only); 1/day—suggestion (DC 15). Caster level 6th. The save DC is Charisma-based.\n</p>\n<p>\n\tOnce per week an imp can use commune to ask six questions. The ability otherwise works as the spell (caster level 12th).\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tAn imp can assume another form at will as a standard action. Each imp can assume one or two forms from the following list: Small or Medium monstrous spider, raven, rat, and boar.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "devil.htm",
+        "hubTitle": "Devil",
+        "immunities": [
+          "fire",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": true,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to fire and poison.",
+          "Resistance to acid 10 and cold 10.",
+          "See in Darkness (Su): Some devils can see perfectly in darkness of any kind, even that created by a deeper darkness spell.",
+          "Summon (Sp): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).",
+          "Telepathy."
+        ],
+        "languagesNote": "Except when otherwise noted, devils speak Infernal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

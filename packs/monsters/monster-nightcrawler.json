@@ -1,0 +1,154 @@
+{
+  "name": "Nightcrawler",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterNightcrawler",
+    "creatureTypeKey": "undead",
+    "subtypeKeys": [
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 48,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "18",
+      "alignment": "Chaotic Evil",
+      "size": "Gargantuan"
+    },
+    "statBlock": {
+      "naturalArmor": 29,
+      "space": "20 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 60,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 15,
+        "bypass": "silver"
+      },
+      "spellResistance": 31,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Desecrating aura, energy drain, spell-like abilities, poison, summon undead, swallow whole</p><p><strong>Special Qualities:</strong> Aversion to daylight, damage reduction 15/silver and magic, darkvision 60 ft., immunity to cold, spell resistance 31, telepathy 100 ft, tremorsense 60 ft., undead traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Plane of Shadow",
+      "organization": "Solitary or pair",
+      "treasure": "Standard",
+      "advancement": "26-50 HD (Colossal)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 212,
+        "max": 212,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 6,
+        "flatFooted": 35,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 4
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 12,
+        "total": 0
+      },
+      "ref": {
+        "base": 10,
+        "total": 0
+      },
+      "will": {
+        "base": 23,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA nightcrawler is a massive behemoth similar to a purple worm, though utterly black in color.\n</p>\n<p>\n\tA nightcrawler measures about 7 feet in diameter and is 100 feet long from its toothy maw to the tip of its stinging tail. It weighs about 55,000 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA nightcrawler attacks by burrowing through the ground and emerging to strike.\n</p>\n<p>\n\tA nightcrawler’s natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Energy Drain (Su)</h5>\n<p>\n\tLiving creatures inside a nightcrawler’s gizzard gain one negative level each round. The DC is 26 for the Fortitude save to remove a negative level. The save DC is Charisma-based.\n</p>\n<p>\n\tFor each such negative level bestowed, the nightcrawler gains 5 temporary hit points.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a nightcrawler must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can try to swallow the opponent in the following round.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 22, initial and secondary damage 2d6 Str. The save DC is Constitution-based.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—contagion (DC 18), deeper darkness, detect magic, greater dispel magic, haste, invisibility, see invisibility, unholy blight (DC 18); 3/day—cone of cold (DC 19), confusion (DC 18), hold monster (DC 19); 1/day—finger of death (DC 21), mass hold monster (DC 23), plane shift (DC 21). Caster level 25th. The save DCs are Charisma-based.\n</p>\n\n<h5>Summon Undead (Su)</h5>\n<p>\n\tA nightcrawler can summon undead creatures once per night: 9-16 shadows, 3-6 greater shadows, or 2-4 dread wraiths. The undead arrive in 1d10 rounds and serve for 1 hour or until released.\n</p>\n\n<h5>Swallow Whole (Ex)</h5>\n<p>\n\tA nightcrawler can try to swallow a grabbed opponent of Huge or smaller size by making a successful grapple check. Once inside, the opponent takes 2d8+12 points of bludgeoning damage plus 12 points of acid damage per round from the nightcrawler’s gizzard and is subject to the creature’s energy drain. A swallowed creature can cut its way out by using a light slashing or piercing weapon to deal 35 points of damage to the gizzard (AC 21). Once the creature exits, muscular action closes the hole; another swallowed opponent must cut its own way out. A nightcrawler’s interior can hold 2 Huge, 8 Large, 32 Medium, 128 Small, 512 Tiny or smaller opponents.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

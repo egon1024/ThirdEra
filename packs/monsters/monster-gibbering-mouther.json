@@ -1,0 +1,152 @@
+{
+  "name": "Gibbering Mouther",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGibberingMouther",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 4,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 8,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 20,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "bludgeoning"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Gibbering, spittle, improved grab, blood drain, swallow whole, ground manipulation</p><p><strong>Special Qualities:</strong> Amorphous, damage reduction 5/bludgeoning, darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Underground",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "5-12 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 42,
+        "max": 42,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 18,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 10
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 4,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA gibbering mouther is a horrible creature seemingly drawn from a lunatic’s nightmares. Although not evil, it thirsts after bodily fluids and seems to prefer the blood of intelligent creatures.\n</p>\n<p>\n\tA gibbering mouther is about 3 feet across and 3 to 4 feet high. It weighs about 200 pounds.\n</p>\n<p>\n\tGibbering mouthers can speak Common, but seldom say anything other than gibberish.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA gibbering mouther attacks by shooting out strings of protoplasmic flesh, each ending in one or more eyes and a mouth that bites at the enemy. A mouther can send out a total of six such members in any round.\n</p>\n\n<h5>Gibbering (Su)</h5>\n<p>\n\tAs soon as a mouther spots something edible, it begins a constant gibbering as a free action. All creatures (other than mouthers) within a 60-foot spread must succeed on a DC 13 Will save or be affected as though by a confusion spell for 1d2 rounds. This is a sonic mind-affecting compulsion effect. A creature that successfully saves cannot be affected by the same gibbering mouther’s gibbering for 24 hours. The save DC is Charisma-based.\n</p>\n\n<h5>Spittle (Ex)</h5>\n<p>\n\tAs a free action every round, a gibbering mouther fires a stream of spittle at one opponent within 30 feet. The mouther makes a ranged touch attack; if it hits, it deals 1d4 points of acid damage, and the target must succeed on a DC 18 Fortitude save or be blinded for 1d4 rounds. Eyeless creatures are immune to the blinding effect, but are still subject to the acid damage. The save DC is Constitution-based.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a gibbering mouther must hit with a bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity.\n</p>\n\n<h5>Swallow Whole (Ex)</h5>\n<p>\n\tThe gibbering mouther can attempt to swallow a grappled opponent of Medium or smaller size by making a successful grapple check. (The gibbering mouther doesn’t actually “swallow” the opponent—it engulfs it within its amorphous form—but the effect is essentially the same.) Once inside, the gibbering mouther can use its blood drain ability. A swallowed creature can cut its way out by dealing 5 points of damage to the gibbering mouther (same AC).\n</p>\n<p>\n\tThe gibbering mouther’s body can hold 1 Medium, 2 Small, 8 Tiny, 32 Diminutive, or 128 Fine creatures.\n</p>\n\n<h5>Blood Drain (Ex)</h5>\n<p>\n\tA swallowed opponent automatically takes 1d4 points of Constitution damage each round.\n</p>\n\n<h5>Ground Manipulation (Su)</h5>\n<p>\n\tAt will, as a standard action, a gibbering mouther can cause stone and earth in all adjacent squares to become a morass akin to quicksand. Softening earth, sand, or the like takes 1 round, while stone takes 2 rounds. Anyone other than the mouther in that area must take a move-equivalent action to avoid becoming mired (treat as being pinned).\n</p>\n\n<h5>Amorphous (Ex)</h5>\n<p>\n\tA gibbering mouther is not subject to critical hits. It cannot be flanked.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tThanks to their multiple eyes, gibbering mouthers have a +4 racial bonus on Spot checks.\n</p>\n<p>\n\tA gibbering mouther has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It always can choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

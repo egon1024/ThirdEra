@@ -1,0 +1,156 @@
+{
+  "name": "Lillend",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterLillend",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "chaotic",
+      "extraplanar",
+      "good"
+    ],
+    "abilities": {
+      "str": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "Chaotic Good",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 70,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d6+2",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Constrict 2d6+5, improved grab, spells, spell-like abilities</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., immunity to poison, resistance to fire 10</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A chaos-aligned plane",
+      "organization": "Solitary or covey (2-4)",
+      "treasure": "Standard",
+      "advancement": "8-10 HD (Large); 11-21 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 45,
+        "max": 45,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 10,
+        "total": 0
+      },
+      "will": {
+        "base": 8,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 7,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA typical lillend’s coils are 20 feet long. The creature weighs about 3,800 pounds. A few lillends have male torsos.\n</p>\n<p>\n\tLillends speak Celestial, Infernal, Abyssal, and Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tLillends are generally peaceful unless they intend vengeance against someone they believe guilty of harming, or even threatening, a favored art form, artwork, or artist. Then they become implacable foes. They use their spells and spell-like abilities to confuse and weaken opponents before entering combat. A covey of lillends usually discusses strategy before a battle.\n</p>\n<p>\n\tA lillend’s natural weapons, as well as any weapons it wields, are treated as chaotic-aligned and good-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA lillend deals 2d6+5 points of damage with a successful grapple check. Constricting uses the entire lower portion of its body, so it cannot take any move actions when constricting, though it can still attack with its sword.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a lillend must hit with its tail slap attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tA lillend casts arcane spells as a 6th-level bard.\n</p>\n\n<h6>Typical Bard Spells Known (3/4/3; save DC 14 + spell level)</h6>\n<p>\n\t0— dancing lights, daze, detect magic, lullaby, mage hand, read magic; 1st— charm person, cure light wounds, identify, sleep; 2nd—hold person, invisibility, sound burst.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t3/day—darkness, hallucinatory terrain (DC 18), knock, light; 1/day—charm person (DC 15), speak with animals, speak with plants. Caster level 10th. The save DCs are Charisma-based.\n</p>\n<p>\n\tA lillend also has the bardic music ability as a 6th-level bard.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tLillends have a +4 racial bonus on Survival checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

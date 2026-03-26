@@ -1,0 +1,155 @@
+{
+  "name": "Rast",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterRast",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "extraplanar",
+      "fire"
+    ],
+    "abilities": {
+      "str": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 3,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+2",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Paralyzing gaze, improved grab, blood drain</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., flight, immunity to fire, vulnerability to cold</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Elemental Plane of Fire",
+      "organization": "Solitary, pair, or cluster (3-6)",
+      "treasure": "None",
+      "advancement": "5-6 HD (Medium); 7-12 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 25,
+        "max": 25,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 5
+      },
+      "speed": {
+        "value": 5
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 4,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA rast has anywhere from ten to fifteen claws, though it can only use four at once.\n</p>\n<p>\n\tA rast has a body about the size of a large dog’s, with a head almost as large as the body. It weighs about 200 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tRasts paralyze as many of their foes as possible, then attack any that are still moving. A rast can claw or bite, but cannot do both during the same round.\n</p>\n\n<h5>Paralyzing Gaze (Su)</h5>\n<p>\n\tParalysis for 1d6 rounds, 30 feet, Fortitude DC 13 negates. The save DC is Charisma-based.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a rast must hit with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity.\n</p>\n\n<h5>Blood Drain (Ex)</h5>\n<p>\n\tA rast drains blood from a grabbed opponent, dealing 1 point of Constitution damage each round it maintains the hold.\n</p>\n\n<h5>Flight (Su)</h5>\n<p>\n\tA rast can cease or resume flight as a free action. A rast that loses this ability falls and can perform only a single action (either a move action or an attack action) each round.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

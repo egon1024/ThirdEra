@@ -1,0 +1,175 @@
+{
+  "name": "Janni",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterJanni",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "native"
+    ],
+    "abilities": {
+      "str": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 1,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 15,
+        "flyManeuverability": "perfect",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:genie.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Genie\"><h4>SRD type: Genie</h4><p>\n\tGenies are humanlike beings who dwell on the elemental planes. They are famous for their strength, guile, and skill with illusion magic.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGenies prefer to outmaneuver and outthink their foes. They are not too proud to flee if it means they’ll live to fight another day. If trapped, they bargain, offering treasure or favors in return for their lives and freedom.\n</p>\n\n<h5><a class=\"spell\" href=\"/srd/spells/planeShift.htm\">Plane Shift</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>)</h5>\n<p>\n\tA genie can enter any of the elemental planes, the Astral Plane, or the Material Plane. This ability transports the genie and up to eight other creatures, provided they all link hands with the genie. It is otherwise similar to the spell of the same name (caster level 13th).\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Change size, spell-like abilities</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., elemental endurance, plane shift, resistance to fire 10, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm deserts",
+      "organization": "Solitary, company (2-4), or band (6-15)",
+      "treasure": "Standard",
+      "advancement": "7-9 HD (Medium); 10-18 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 33,
+        "max": 33,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 7,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThe jann (singular janni) are the weakest of the genies. Jann are formed out of all four elements and must therefore spend most of their time on the Material Plane.\n</p>\n<p>\n\tJann speak Common, one elemental language (Aquan, Auran, Ignan, or Terran) and one alignment language (Abyssal, Celestial, or Infernal).\n</p>\n\n<h3>Combat</h3>\n<p>\n\tJann are physically strong and courageous, and do not take kindly to insult or injury. If they meet a foe they cannot defeat in a standup fight, they use flight and invisibility to regroup and maneuver to a more advantageous position.\n</p>\n\n<h5>Change Size (Sp)</h5>\n<p>\n\tTwice per day, a janni can magically change a creature’s size. This works just like an enlarge person or reduce person spell (the janni chooses when using the ability), except that the ability can work on the janni. A DC 13 Fortitude save negates the effect. The save DC is Charisma-based. This is the equivalent of a 2nd-level spell.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t3/day—invisibility (self only), speak with animals. Caster level 12th. Once per day a janni can create food and water (caster level 7th) and can use ethereal jaunt (caster level 12th) for 1 hour. The save DCs are Charisma-based.\n</p>\n\n<h5>Elemental Endurance (Ex)</h5>\n<p>\n\tJann can survive on the Elemental Planes of Air, Earth, Fire, or Water for up to 48 hours. Failure to return to the Material Plane before that time expires causes a janni to take 1 point of damage per additional hour spent on the elemental plane, until it dies or returns to the Material Plane.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "genie.htm",
+        "hubTitle": "Genie",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

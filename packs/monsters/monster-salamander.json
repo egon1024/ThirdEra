@@ -1,0 +1,155 @@
+{
+  "name": "Salamander",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterSalamander",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "extraplanar",
+      "fire"
+    ],
+    "abilities": {
+      "str": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "True Neutral",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 7,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Constrict 1d4 plus 1d6 fire, heat, improved grab</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., immunity to fire, vulnerability to cold</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Elemental Plane of Fire",
+      "organization": "Solitary, pair, or cluster (3-5)",
+      "treasure": "Standard (nonflammables only)",
+      "advancement": "4-6 HD (Small)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 26,
+        "max": 26,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 18,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 6,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 4,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tSalamanders speak Ignan. Some average salamanders and all nobles also speak Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tIf a salamander has damage reduction, its natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA salamander deals automatic tail slap damage (including fire damage) with a successful grapple check. A noble salamander can constrict multiple creatures simultaneously, provided they are all at least two sizes smaller than it.\n</p>\n\n<h5>Heat (Ex)</h5>\n<p>\n\tA salamander generates so much heat that its mere touch deals additional fire damage. Salamanders’ metallic weapons also conduct this heat.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a salamander must hit a creature of up to one size larger than itself with its tail slap attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t(Noble salamanders only) 3/day—burning hands (DC 13), fireball (DC 15), flaming sphere (DC 14), wall of fire (DC 16); 1/day—dispel magic, summon monster VII (Huge fire elemental). Caster level 15th. The save DCs are Charisma-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tSalamanders have a +4 racial bonus on Craft (blacksmithing) checks.\n</p>\n\n<h5>Feats</h5>\n<p>\n\tSalamanders have the Multiattack feat even though they do not have the requisite three natural weapons.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

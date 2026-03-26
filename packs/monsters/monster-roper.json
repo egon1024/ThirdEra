@@ -1,0 +1,156 @@
+{
+  "name": "Roper",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterRoper",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "12",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 14,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d6+6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 30,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Drag, strands, weakness</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., immunity to electricity, low-light vision, resistance to cold 10, spell resistance 30, vulnerability to fire</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Underground",
+      "organization": "Solitary, pair, or cluster (3-6)",
+      "treasure": "No coins; 50% goods (stone only); no items",
+      "advancement": "11-15 HD (Large); 16-30 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 85,
+        "max": 85,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 23,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 5
+      },
+      "speed": {
+        "value": 10
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 10,
+        "total": 0
+      },
+      "ref": {
+        "base": 8,
+        "total": 0
+      },
+      "will": {
+        "base": 8,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 10,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA roper stands some 9 feet tall and tapers from 3 or 4 feet in diameter at the base to 1 foot across at the top. It weighs 2,200 pounds. A roper’s coloration and temperature change to match the features of the surrounding cave.\n</p>\n<p>\n\tRopers speak Terran and Undercommon.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA roper hunts by standing very still and imitating a bit of rock. This tactic often allows it to attack with surprise. When prey comes within reach, it lashes out with its strands. In melee, it bites adjacent opponents with its powerful maw.\n</p>\n\n<h5>Drag (Ex)</h5>\n<p>\n\tIf a roper hits with a strand attack, the strand latches onto the opponent’s body. This deals no damage but drags the stuck opponent 10 feet closer each subsequent round (provoking no attack of opportunity) unless that creature breaks free, which requires a DC 23 Escape Artist check or a DC 19 Strength check. The check DCs are Strength-based, and the Escape Artist DC includes a +4 racial bonus. A roper can draw in a creature within 10 feet of itself and bite with a +4 attack bonus in the same round. A strand has 10 hit points and can be attacked by making a successful sunder attempt. However, attacking a roper’s strand does not provoke an attack of opportunity. If the strand is currently attached to a target, the roper takes a -4 penalty on its opposed attack roll to resist the sunder attempt. Severing a strand deals no damage to a roper.\n</p>\n\n<h5>Strands (Ex)</h5>\n<p>\n\tMost encounters with a roper begin when it fires strong, sticky strands. The creature can have up to six strands at once, and they can strike up to 50 feet away (no range increment). If a strand is severed, the roper can extrude a new one on its next turn as a free action.\n</p>\n\n<h5>Weakness (Ex)</h5>\n<p>\n\tA roper’s strands can sap an opponent’s strength. Anyone grabbed by a strand must succeed on a DC 18 Fortitude save or take 2d8 points of Strength damage. The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*Ropers have a +8 racial bonus on Hide checks in stony or icy areas.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

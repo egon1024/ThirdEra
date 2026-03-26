@@ -1,0 +1,156 @@
+{
+  "name": "Achaierai",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAchaierai",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar",
+      "lawful"
+    ],
+    "abilities": {
+      "str": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "Lawful Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 10,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d6+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 19,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Black cloud</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., spell resistance 19</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful-aligned plane",
+      "organization": "Solitary or flock (5-8)",
+      "treasure": "Double standard",
+      "advancement": "7-12 HD (Large); 13-18 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 39,
+        "max": 39,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 19,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 50
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 7,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tAchaierais are massive, 15-foot-tall flightless birds that inhabit lawful planes of battle and are only occasionally encountered elsewhere.\n</p>\n<p>\n\tAchaierais speak Infernal. They weigh about 750 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tIn close combat, an achaierai lashes out with two of its four legs and snaps with its powerful beak. It makes frequent use of its Spring Attack feat to strike quickly and then retreat out of range before an enemy can counterattack.\n</p>\n<p>\n\tAn achaierai’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawfulaligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Black Cloud (Ex)</h5>\n<p>\n\tUp to three times per day an achaierai can release a choking, toxic black cloud.\n</p>\n<p>\n\tThose other than achaierai within 10 feet instantly take 2d6 points of damage. They must also succeed on a DC 15 Fortitude save or be affected for 3 hours as though by an insanity spell (caster level 16th). The save DC is Constitution-based.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "name": "Delver",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterDelver",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 27,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "9",
+      "alignment": "True Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 15,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 10,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Corrosive slime</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., immunity to acid, stone shape, tremorsense 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Underground",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "16-30 HD (Huge); 31-45 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 145,
+        "max": 145,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 23,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 5
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 12,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 11,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 11,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA delver is about 15 feet long and 10 feet wide. It weighs about 6,000 pounds.\n</p>\n<p>\n\tDelvers speak Terran and Undercommon.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA delver prefers to fight from its tunnel, which it uses to protect its flanks while lashing out with its flippers.\n</p>\n<p>\n\tA delver expecting trouble may honeycomb an area with tunnels, leaving most closed with layers of stone 1 or 2 inches thick.\n</p>\n<p>\n\tThe delver can quickly dissolve the stone cover and pop up to attack unexpectedly.\n</p>\n\n<h5>Corrosive Slime (Ex)</h5>\n<p>\n\tA delver produces a mucuslike slime that contains a highly corrosive substance. The slime is particularly effective against stone. A delver’s mere touch deals 2d6 points of acid damage to organic creatures or objects. Against metallic creatures or objects, a delver’s slime deals 4d8 points of damage, and against stony creatures (including earth elementals) or objects it deals 8d10 points of damage. A slam attack by a delver leaves a patch of slime that deals 2d6 points of damage on contact and another 2d6 points of damage in each of the next 2 rounds. A large quantity (at least a quart) of water or weak acid, such as vinegar, washes off the slime. An opponent’s armor and clothing dissolve and become useless immediately unless the wearer succeeds on a DC 22 Reflex save. Weapons that strike a delver also dissolve immediately unless the wielder succeeds on a DC 22 Reflex save. A creature attacking a delver with natural weapons takes damage from its slime each time an attack hits unless the creature succeeds on a DC 22 Reflex save. These save DCs are Constitution-based.\n</p>\n\n<h5>Stone Shape (Ex)</h5>\n<p>\n\tA delver can alter its slime to temporarily soften stone instead of dissolving it. Once every 10 minutes, a delver can soften and shape up to 25 cubic feet of stone, as a stone shape spell (caster level 15th).\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

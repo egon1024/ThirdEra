@@ -1,0 +1,300 @@
+{
+  "name": "Aboleth",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAboleth",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [
+      "aquatic"
+    ],
+    "abilities": {
+      "str": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "Lawful Evil",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 19,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 60,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Tentacle",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "false",
+          "reach": "10 ft"
+        },
+        {
+          "name": "Tail slap",
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": "10 ft"
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Enslave (Su):</strong> Three/day dominated target (Will DC 17).</p><p><strong>Mucus cloud (Ex):</strong> Underwater cloud that impairs breathing.</p><p><strong>Tail slap +12</strong> (2d6+8).</p>",
+      "environment": "Underground",
+      "organization": "Solitary, brood (2-4), or city (7-12)",
+      "treasure": "Double standard",
+      "advancement": "9-16 HD (Huge); 17-24 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 84,
+        "max": 84,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 19,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 10
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 8,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 8,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Ancient aquatic masterminds with enslaving slime and psychic dominance.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Iron Will",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "ironWill",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveWill",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 13,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 13,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Swim",
+      "type": "skill",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "",
+        "key": "swim",
+        "ability": "str",
+        "ranks": 8,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

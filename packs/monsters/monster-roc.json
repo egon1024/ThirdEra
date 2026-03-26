@@ -1,0 +1,152 @@
+{
+  "name": "Roc",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterRoc",
+    "creatureTypeKey": "animal",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 34,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 24,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "9",
+      "alignment": "True Neutral",
+      "size": "Gargantuan"
+    },
+    "statBlock": {
+      "naturalArmor": 9,
+      "space": "20 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 80,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d6+12",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm mountains",
+      "organization": "Solitary or pair",
+      "treasure": "None",
+      "advancement": "19-32 HD (Gargantuan); 33-54 (Colossal)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 207,
+        "max": 207,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 18,
+        "total": 0
+      },
+      "ref": {
+        "base": 13,
+        "total": 0
+      },
+      "will": {
+        "base": 9,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 13,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA roc’s plumage is either dark brown or golden from head to tail. These enormous creatures are 30 feet long from the beak to the base of the tail, with wingspans as wide as 80 feet. A roc weighs about 8,000 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA roc attacks from the air, swooping earthward to snatch prey in its powerful talons and carry it off for itself and its young to devour. A solitary roc is typically hunting and will attack any Medium or larger creature that appears edible. A mated pair of rocs attack in concert, fighting to the death to defend their nests or hatchlings.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tRocs have a +4 racial bonus on Spot checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "name": "Vargouille",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterVargouille",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 5,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "Neutral Evil",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 30,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Shriek, kiss, poison</p><p><strong>Special Qualities:</strong> Darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "An evil-aligned plane",
+      "organization": "Cluster (2-5) or mob (6-11)",
+      "treasure": "None",
+      "advancement": "2-3 HD (Small)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 5,
+        "max": 5,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 11,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 3,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA vargouille is slightly larger than a human head, about 18 inches high, with a wingspan of 4 feet. It weighs about 10 pounds.\n</p>\n<p>\n\tVargouilles speak Infernal.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tVargouilles attack by biting with their jagged teeth. Their special attacks make them even more dangerous. A vargouille’s natural weapons, as well as any weapons it wields, are treated as evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Shriek (Su)</h5>\n<p>\n\tInstead of biting, a vargouille can open its distended mouth and let out a terrible shriek. Those within 60 feet (except other vargouilles) who hear the shriek and can clearly see the creature must succeed on a DC 12 Fortitude save or be paralyzed with fear for 2d4 rounds or until the monster attacks them, goes out of range, or leaves their sight. A paralyzed creature is susceptible to the vargouille’s kiss (see below). A creature that successfully saves cannot be affected again by the same vargouille’s shriek for 24 hours. The shriek is a mind-affecting fear effect. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Kiss (Su)</h5>\n<p>\n\tA vargouille can kiss a paralyzed target with a successful melee touch attack. An affected opponent must succeed on a DC 15 Fortitude save or begin a terrible transformation that turns the creature into a vargouille within 24 hours (and often much sooner; roll 1d6 separately for each phase of the transformation).\n</p>\n<p>\n\tFirst, over a period of 1d6 hours, all the victim’s hair falls out. Within another 1d6 hours thereafter, the ears grow into leathery wings, tentacles sprout on the chin and scalp, and the teeth become long, pointed fangs. During the next 1d6 hours, the victim takes Intelligence drain and Charisma drain equal to 1 point per hour (to a minimum of 3). The transformation is complete 1d6 hours later, when the head breaks free of the body (which promptly dies) and becomes a vargouille. This transformation is interrupted by sunlight, and even a daylight spell can delay death, but to reverse the transformation requires remove disease. The save DC is Constitution-based and includes a +4 racial bonus.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 12 or be unable to heal the vargouille’s bite damage naturally or magically. A neutralize poison or heal spell removes the effect, while delay poison allows magical healing. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

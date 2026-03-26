@@ -1,0 +1,250 @@
+{
+  "name": "Bebilith",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterBebilith",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "chaotic",
+      "evil",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 31,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 24,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "10",
+      "alignment": "Chaotic Evil",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 13,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 20
+      },
+      "naturalAttacks": [],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "good"
+      },
+      "spellResistance": 21,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:demon.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Demon\"><h4>SRD type: Demon</h4><p>\n\tDemons are a race of creatures native to chaotic evil-aligned planes. They are ferocity personified and will attack any creature just for the sheer fun of it—even other demons.\n</p>\n\n<h5>Demon Traits</h5>\n<p>\n\tMost demons possess the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li>Immunity to electricity and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10, cold 10, and fire 10.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept where otherwise noted, demons speak Abyssal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p>Web, poison, and armor-ripping rend.</p>",
+      "environment": "Abyss",
+      "organization": "Solitary",
+      "treasure": "Standard",
+      "advancement": "13-24 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 168,
+        "max": 168,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 24,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 16,
+        "total": 0
+      },
+      "ref": {
+        "base": 9,
+        "total": 0
+      },
+      "will": {
+        "base": 11,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Demonic spider hunter.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Great Fortitude",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "greatFortitude",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveFort",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    }
+  ],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "demon.htm",
+        "hubTitle": "Demon",
+        "immunities": [
+          "electricity",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10,
+          "fire": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to electricity and poison.",
+          "Resistance to acid 10, cold 10, and fire 10.",
+          "Summon (Sp): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.",
+          "Telepathy."
+        ],
+        "languagesNote": "Except where otherwise noted, demons speak Abyssal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

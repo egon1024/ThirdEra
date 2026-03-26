@@ -1,0 +1,155 @@
+{
+  "name": "Xorn",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterXorn",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "extraplanar",
+      "earth"
+    ],
+    "abilities": {
+      "str": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "True Neutral",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 12,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 20,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8+2",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "bludgeoning"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> All-around vision, earth glide, damage reduction 5/bludgeoning, darkvision 60 ft., immunity to cold and fire, resistance to electricity 10, tremorsense 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Elemental Plane of Earth",
+      "organization": "Solitary, pair, or cluster (3-5)",
+      "treasure": "None",
+      "advancement": "4-6 HD (Small)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 22,
+        "max": 22,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 23,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 3,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tMinor xorns are about 3 feet tall and wide and weigh about 120 pounds. Average xorns are about 5 feet tall and wide, weighing about 600 pounds. Elder xorns are about 8 feet tall and wide and weigh about 9,000 pounds.\n</p>\n<p>\n\tXorns speak Common and Terran.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tXorns do not attack fleshly beings except to defend themselves or their property, since they cannot digest meat. Xorns are indifferent to creatures of the Material Plane—with the sole exception of anyone carrying a significant amount of precious metals or minerals, which xorns eat. They can smell food up to 20 feet away. A xorn can be quite aggressive when seeking food, especially on the Material Plane, where such sustenance is harder to find than it is on its native plane.\n</p>\n<p>\n\tA xorn’s favorite mode of attack is to wait just beneath a stone surface until a foe comes within reach, then emerge suddenly. Groups of xorns often send one of their number to the surface to negotiate for food while the remainder position themselves for a surprise attack.\n</p>\n\n<h5>All-Around Vision (Ex)</h5>\n<p>\n\tA xorn’s symmetrically placed eyes allow it to look in any direction, providing a +4 racial bonus on Spot and Search checks. A xorn can’t be flanked.\n</p>\n\n<h5>Earth Glide (Ex)</h5>\n<p>\n\tA xorn can glide through stone, dirt, or almost any other sort of earth except metal as easily as a fish swims through water. Its burrowing leaves behind no tunnel or hole, nor does it create any ripple or other signs of its presence. A move earth spell cast on an area containing a burrowing xorn flings the xorn back 30 feet, stunning the creature for 1 round unless it succeeds on a DC 15 Fortitude save.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

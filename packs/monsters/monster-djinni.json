@@ -1,0 +1,176 @@
+{
+  "name": "Djinni",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterDjinni",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "air",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "Chaotic Good",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "perfect",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d8+4",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:genie.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Genie\"><h4>SRD type: Genie</h4><p>\n\tGenies are humanlike beings who dwell on the elemental planes. They are famous for their strength, guile, and skill with illusion magic.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGenies prefer to outmaneuver and outthink their foes. They are not too proud to flee if it means they’ll live to fight another day. If trapped, they bargain, offering treasure or favors in return for their lives and freedom.\n</p>\n\n<h5><a class=\"spell\" href=\"/srd/spells/planeShift.htm\">Plane Shift</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>)</h5>\n<p>\n\tA genie can enter any of the elemental planes, the Astral Plane, or the Material Plane. This ability transports the genie and up to eight other creatures, provided they all link hands with the genie. It is otherwise similar to the spell of the same name (caster level 13th).\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Air mastery, spell-like abilities, whirlwind</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., immunity to acid, plane shift, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Elemental Plane of Air",
+      "organization": "Solitary, company (2-4), or band (6-15)",
+      "treasure": "Standard",
+      "advancement": "8-10 HD (Large); 11-21 (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 45,
+        "max": 45,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 13,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 8
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 9,
+        "total": 0
+      },
+      "will": {
+        "base": 7,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 7,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThe djinn (singular djinni) are genies from the Elemental Plane of Air.\n</p>\n<p>\n\tA djinni is about 10&frac12; feet tall and weighs about 1,000 pounds.\n</p>\n<p>\n\tDjinn speak Auran, Celestial, Common, and Ignan.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tDjinn disdain physical combat, preferring to use their magical powers and aerial abilities against foes. A djinni overmatched in combat usually takes flight and becomes a whirlwind to harass those who follow.\n</p>\n\n<h5>Air Mastery (Ex)</h5>\n<p>\n\tAirborne creatures take a -1 penalty on attack and damage rolls against a djinni.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—invisibility (self only); 1/day— create food and water, create wine (as create water, but wine instead), major creation (created vegetable matter is permanent), persistent image (DC 17), wind walk. Once per day, a djinni can assume gaseous form (as the spell) for up to 1 hour. Caster level 20th. The save DCs are Charisma-based.\n</p>\n\n<h5>Whirlwind (Su)</h5>\n<p>\n\tA djinni can transform itself into a whirlwind once every 10 minutes and remain in that form for up to 7 rounds. In this form, it can move through the air or along a surface at its fly speed.\n</p>\n<p>\n\tThe whirlwind is 5 feet wide at the base, up to 30 feet wide at the top and up to 50 feet tall. The djinni controls the exact height, but it must be at least 10 feet.\n</p>\n<p>\n\tA djinni’s movement while in whirlwind form does not provoke attacks of opportunity, even if the djinni enters the space another creature occupies. Another creature might be caught in the whirlwind if it touches or enters the whirlwind, or if the djinni moves into or through the creature’s space.\n</p>\n<p>\n\tCreatures one or more size categories smaller than the djinni might take damage when caught in the whirlwind and be lifted into the air. An affected creature must succeed on a DC 20 Reflex save when it comes into contact with the whirlwind or take 3d6 points of damage. It must also succeed on a second DC 20 Reflex save or be picked up bodily and held suspended in the powerful winds, automatically taking 1d8 points of damage each round. A creature with a fly speed is allowed a DC 20 Reflex save each round to escape the whirlwind. The creature still takes damage but can leave if the save is successful. The save DC is Strength-based and includes a +3 racial adjustment.\n</p>\n<p>\n\tCreatures trapped in the whirlwind cannot move except to go where the djinni carries them or to escape the whirlwind. Creatures caught in the whirlwind can otherwise act normally, but must make a Concentration check (DC 15 + spell level) to cast a spell. Creatures caught in the whirlwind take a -4 penalty to Dexterity and a -2 penalty on attack rolls. The djinni can have only as many trapped inside a whirlwind at one time as will fit inside the whirlwind’s volume.\n</p>\n<p>\n\tThe djinni can eject any carried creatures whenever it wishes, depositing them wherever the whirlwind happens to be.\n</p>\n<p>\n\tIf the whirlwind’s base touches the ground, it creates a swirling cloud of debris. This cloud is centered on the djinni and has a diameter equal to half the whirlwind’s height. The cloud obscures all vision, including darkvision, beyond 5 feet. Creatures 5 feet away have concealment, while those farther away have total concealment.\n</p>\n<p>\n\tThose caught in the cloud must succeed on a Concentration check (DC 15 + spell level) to cast a spell.\n</p>\n<p>\n\tA djinni in whirlwind form cannot make melee attacks and does not threaten the area around it.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "genie.htm",
+        "hubTitle": "Genie",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "name": "Glabrezu",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGlabrezu",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "chaotic",
+      "extraplanar",
+      "evil"
+    ],
+    "abilities": {
+      "str": {
+        "value": 31,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 31,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "13",
+      "alignment": "Chaotic Evil",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 19,
+      "space": "15 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8+10",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "good"
+      },
+      "spellResistance": 21,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:demon.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Demon\"><h4>SRD type: Demon</h4><p>\n\tDemons are a race of creatures native to chaotic evil-aligned planes. They are ferocity personified and will attack any creature just for the sheer fun of it—even other demons.\n</p>\n\n<h5>Demon Traits</h5>\n<p>\n\tMost demons possess the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li>Immunity to electricity and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10, cold 10, and fire 10.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept where otherwise noted, demons speak Abyssal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Improved grab, spell-like abilities, summon demon</p><p><strong>Special Qualities:</strong> Damage reduction 10/good, darkvision 60 ft., immunity to electricity and poison, resistance to acid 10, cold 10, and fire 10, spell resistance 21, telepathy 100 ft., true seeing</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A chaotic evil-aligned plane",
+      "organization": "Solitary or troupe (1 glabrezu, 1 succubus, and 2-5 vrocks)",
+      "treasure": "Standard coins; double goods; standard items",
+      "advancement": "13-18 HD (Huge); 19-36 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 174,
+        "max": 174,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 27,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 18,
+        "total": 0
+      },
+      "ref": {
+        "base": 8,
+        "total": 0
+      },
+      "will": {
+        "base": 11,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 12,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tLike succubi, glabrezu tempt victims into ruin, but they lure their prey with power or wealth rather than passion.\n</p>\n<p>\n\tGlabrezu have penetrating violet eyes, and their skin color ranges from deep russet to pitch black. A glabrezu stands about 15 feet tall and weighs about 5,500 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGlabrezu prefer subterfuge to combat. However, if their attempts to entice or deceive fail, these enormous demons attack with a vengeance. They follow a confusion attack with melee attacks, hoping to finish off wounded foes with chaos hammer or unholy blight.\n</p>\n<p>\n\tA glabrezu’s natural weapons, as well as any weapons it wields, are treated as chaotic-aligned and evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a glabrezu must hit a Medium or smaller opponent with a pincer attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—chaos hammer (DC 19), confusion (DC 19), dispel magic, mirror image, reverse gravity (DC 22), greater teleport (self plus 50 pounds of objects only), unholy blight (DC 19); 1/day—power word stun. Caster level 14th. The save DCs are Charisma-based.\n</p>\n<p>\n\tOnce per month, a glabrezu can fulfill a wish for a mortal humanoid. The demon can use this ability to offer a mortal whatever he or she desires—but unless the wish is used to create pain and suffering in the world, the glabrezu demands either terrible evil acts or great sacrifice as compensation.\n</p>\n\n<h5>Summon Demon (Sp)</h5>\n<p>\n\tOnce per day a glabrezu can attempt to summon 4d10 dretches or 1d2 vrocks with a 50% chance of success, or another glabrezu with a 20% chance of success. This ability is the equivalent of a 4th-level spell.\n</p>\n\n<h5>True Seeing (Su)</h5>\n<p>\n\tGlabrezu continuously use true seeing as the spell (caster level 14th).\n</p>\n\n<h5>Skills</h5>\n<p>\n\tGlabrezu have a +8 racial bonus on Listen and Spot checks.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "demon.htm",
+        "hubTitle": "Demon",
+        "immunities": [
+          "electricity",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10,
+          "fire": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to electricity and poison.",
+          "Resistance to acid 10, cold 10, and fire 10.",
+          "Summon (Sp): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.",
+          "Telepathy."
+        ],
+        "languagesNote": "Except where otherwise noted, demons speak Abyssal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

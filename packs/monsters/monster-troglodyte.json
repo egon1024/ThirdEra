@@ -1,0 +1,154 @@
+{
+  "name": "Troglodyte",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterTroglodyte",
+    "creatureTypeKey": "humanoid",
+    "subtypeKeys": [
+      "reptilian"
+    ],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "Chaotic Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Stench</p><p><strong>Special Qualities:</strong> Darkvision 90 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Underground",
+      "organization": "Clutch (2-5), squad (6-11 plus 1-2 monitor lizards), or band (20-80 plus 20% noncombatants plus 3-13 monitor lizards)",
+      "treasure": "50% coins; 50% goods; 50% items",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 13,
+        "max": 13,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": -1
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": -1,
+        "total": 0
+      },
+      "will": {
+        "base": 0,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA troglodyte stands about 5 feet tall and weighs about 150 pounds.\n</p>\n<p>\n\tTroglodytes speak Draconic.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tHalf of a group of troglodytes are armed only with claws and teeth; the rest carry one or two javelins and clubs. They normally conceal themselves, launch a volley of javelins, then close to attack. If the battle goes against them, they retreat and attempt to hide.\n</p>\n\n<h5>Stench (Ex)</h5>\n<p>\n\tWhen a troglodyte is angry or frightened, it secretes an oily, musk-like chemical that nearly every form of animal life finds offensive. All living creatures (except troglodytes) within 30 feet of a troglodyte must succeed on a DC 13 Fortitude save or be sickened for 10 rounds. The save DC is Constitution-based. Creatures that successfully save cannot be affected by the same troglodyte’s stench for 24 hours. A delay poison or neutralize poison spell removes the effect from the sickened creature. Creatures with immunity to poison are unaffected, and creatures resistant to poison receive their normal bonus on their saving throws.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tThe skin of a troglodyte changes color somewhat, allowing it to blend in with its surroundings like a chameleon and providing a +4 racial bonus on Hide checks. *In rocky or underground settings, this bonus improves to +8.\n</p>\n\n<h2 id=\"troglodyteCharacters\">Troglodyte Characters</h2>\n<p>\n\tTroglodyte characters possess the following racial traits.\n</p>\n<ul>\n\t<li>-2 Dexterity, +4 Constitution, -2 Intelligence.</li>\n\t<li>Medium size.</li>\n\t<li>A troglodyte’s base land speed is 30 feet.</li>\n\t<li>Darkvision out to 90 feet.</li>\n\t<li>Racial Hit Dice: A troglodyte begins with two levels of humanoid, which provide 2d8 Hit Dice, a base attack bonus of +1, and base saving throw bonuses of Fort +3, Ref +0, and Will +0.</li>\n\t<li>Racial Skills: A troglodyte’s humanoid levels give it skill points equal to 5 &times; (2 + Int modifier, minimum 1). Its class skills are Hide and Listen. Troglodytes have a +4 racial bonus on Hide checks (+8 in rocky or underground surroundings).</li>\n\t<li>Racial Feats: A troglodyte’s humanoid levels give it one feat. A troglodyte receives Multiattack as a bonus feat.</li>\n\t<li>+6 natural armor bonus.</li>\n\t<li>Natural Weapons: 2 claws (1d4) and bite (1d4).</li>\n\t<li>Special Attacks (see above): Stench.</li>\n\t<li>Automatic Languages: Draconic. Bonus Languages: Common, Giant, Goblin, Orc.</li>\n\t<li>Favored Class: Cleric.</li>\n\t<li>Level adjustment +2.</li>\n</ul>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

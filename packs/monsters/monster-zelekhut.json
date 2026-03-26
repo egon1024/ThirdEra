@@ -1,0 +1,159 @@
+{
+  "name": "Zelekhut",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterZelekhut",
+    "creatureTypeKey": "construct",
+    "subtypeKeys": [
+      "extraplanar",
+      "lawful"
+    ],
+    "abilities": {
+      "str": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "9",
+      "alignment": "Lawful Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 10,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 40,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "chaotic"
+      },
+      "spellResistance": 20,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities</p><p><strong>Special Qualities:</strong> Construct traits, damage reduction 10/chaotic, darkvision 60 ft., fast healing 5, low-light vision, spell resistance 20</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful-aligned plane",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "9-16 HD (Large); 17-24 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 74,
+        "max": 74,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 27,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 35
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tZelekhuts are charged with hunting down those who would deny justice—especially those who flee to escape punishment. Expert trackers, they use a combination of natural skill and magic to find fugitives wherever they may hide.\n</p>\n<p>\n\tA zelekhut may initially appear rather non-threatening—but when it is about to enter combat, it can cause two spiked chains to spring forth from its forearms as a free action. In similar fashion, it can cause a pair of golden metallic wings to emerge from its back. Retracting the chains or the wings is also a free action.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tOnce it has found its fugitive, a zelekhut uses its speed and its spell-like abilities to cover the most likely escape routes. Then it immobilizes any defenders while attempting to protect any innocent bystanders. Finally, it apprehends the fugitive with its spiked chains, tripping or disarming the foe as needed.\n</p>\n<p>\n\tA zelekhut’s natural weapons, as well as any weapons it wields, are treated as lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—clairaudience/clairvoyance, dimensional anchor, dispel magic, fear (DC 16), hold person (DC 15), locate creature, true seeing; 3/day—hold monster (DC 17), mark of justice; 1/week— lesser geas (DC 16). Caster level 8th. The save DCs are Charisma-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA zelekhut has a +4 racial bonus on Search and Sense Motive checks.\n</p>\n\n<h5>Feats</h5>\n<p>\n\tDue to its centaur-like construction, a zelekhut qualifies for feats as if it had the Mounted Combat feat.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "name": "Air Mephit",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAirMephit",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "air",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "Neutral Evil",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 1,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 50,
+        "flyManeuverability": "perfect",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d3",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 12,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:mephit.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Mephit\"><h4>SRD type: Mephit</h4><p>\n\tMephits are minor creatures from the elemental planes.\n</p>\n<p>\n\tAll mephits appear as small, winged creatures with more or less humanoid features. While they are often described as impish, their elemental origins are apparent at first glance.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tAll mephits fight by biting and clawing or by using a <a href=\"/srd/specialAbilities.htm#breathWeapon\">breath weapon</a>, the nature and effects of which vary from creature to creature.\n</p>\n<p>\n\tA mephit’s <a href=\"/srd/specialAbilities.htm#naturalWeapons\">natural weapons</a> are treated as magic weapons for the purpose of overcoming <a href=\"/srd/specialAbilities.htm#damageReduction\">damage reduction</a>.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#breathWeapon\">Breath Weapon</a> (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>)</h5>\n<p>\n\tA mephit can use its <a href=\"/srd/specialAbilities.htm#breathWeapon\">breath weapon</a> once every 1d4 rounds as a <a href=\"/srd/combat/actionsInCombat.htm#standardActions\">standard action</a>. See the individual descriptions for details.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Spell-Like Abilities</a></h5>\n<p>\n\tAll mephits have one or more <a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">spell-like abilities</a> (save DC 12 + spell level). See the individual descriptions for details.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> Mephit (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>)</h5>\n<p>\n\tOnce per day, a mephit can attempt to <a href=\"/srd/specialAbilities.htm#summon\">summon</a> another mephit of the same variety, much as though casting a summon monster spell, but with only a 25% chance of success. Roll d%: On a failure, no creature answers the summons that day. A mephit that has just been summoned cannot use its own summon ability for 1 hour. This ability is the equivalent of a 2nd-level spell.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#fastHealing\">Fast Healing</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tMephits heal 2 points of damage each round, provided they are still alive and certain other conditions are met. See the individual descriptions for details.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Breath weapon (Su):</strong> 15-ft. cone of dust and grit, 1d8 damage and blindness chance.</p><p><strong>Spell-like abilities:</strong> 1/day <em>blur</em>.</p>",
+      "environment": "Elemental Plane of Air",
+      "organization": "Solitary or gang (2-4)",
+      "treasure": "Standard",
+      "advancement": "4-6 HD (Small)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 19,
+        "max": 19,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Mischievous elemental outsider of cloud and wind.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Weapon Finesse",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "weaponFinesse",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Dodge",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "dodge",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "ac",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Bluff",
+      "type": "skill",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "",
+        "key": "bluff",
+        "ability": "cha",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    }
+  ],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "mephit.htm",
+        "hubTitle": "Mephit",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

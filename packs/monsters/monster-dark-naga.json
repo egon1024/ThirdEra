@@ -1,0 +1,173 @@
+{
+  "name": "Dark Naga",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterDarkNaga",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "8",
+      "alignment": "Lawful Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+1",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:naga.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Naga\"><h4>SRD type: Naga</h4><p>\n\tAll nagas have long, snakelike bodies covered with glistening scales, and more or less human faces. They range in length from 10 to 20 feet and weigh from 200 to 500 pounds. The eyes of a naga are bright and intelligent, burning with an almost hypnotic inner light.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tNagas favor spells over other forms of combat. Because they are almost always found in the lairs they guard and know well, they can arrange most encounters to suit their wishes.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Poison, spells</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., detect thoughts, guarded thoughts, immunity to poison, resistance to charm</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate hills",
+      "organization": "Solitary or nest (2-4)",
+      "treasure": "Standard",
+      "advancement": "10-13 HD (Large); 14-27 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 58,
+        "max": 58,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 8,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tDark nagas speak Common and Infernal.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tDark nagas prefer to fight from an elevated position where they get a good view of the battlefield while also staying out of reach.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 16 or lapse into a nightmare-haunted sleep for 2d4 minutes. The save DC is Constitution-based.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tDark nagas cast spells as 7th-level sorcerers.\n</p>\n\n<h5>Typical Sorcerer Spells Known (6/7/7/5; save DC 13 + spell level)</h5>\n<p>\n\t0—daze, detect magic, light, mage hand, open/close, ray of frost, read magic; 1st—expeditious retreat, magic missile, ray of enfeeblement, shield, silent image; 2nd—cat’s grace, invisibility, scorching ray; 3rd—displacement, lightning bolt.\n</p>\n\n<h5>Resistance to Charm</h5>\n<p>\n\tDark nagas have a +2 racial bonus on saving throws against all charm effects (not included in the statistics block).\n</p>\n\n<h5>Detect Thoughts (Su)</h5>\n<p>\n\tA dark naga can continuously use detect thoughts as the spell (caster level 9th; Will DC 15 negates). This ability is always active. The save DC is Charisma-based.\n</p>\n\n<h5>Guarded Thoughts (Ex)</h5>\n<p>\n\tDark nagas are immune to any form of mind reading.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "naga.htm",
+        "hubTitle": "Naga",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

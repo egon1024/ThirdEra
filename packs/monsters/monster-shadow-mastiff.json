@@ -1,0 +1,158 @@
+{
+  "name": "Shadow Mastiff",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterShadowMastiff",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 4,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "Neutral Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Bay, trip</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., shadow blend, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Plane of Shadow",
+      "organization": "Solitary, pair, or pack (5-12)",
+      "treasure": "None",
+      "advancement": "5-6 HD (Medium); 7-12 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 30,
+        "max": 30,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 13,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 5
+      },
+      "speed": {
+        "value": 50
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 4,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThis creature has the body of a large dog, with a smooth black coat and a mouth full of sharp teeth.\n</p>\n<p>\n\tA shadow mastiff is slightly more than 2 feet high at the shoulder and weighs about 200 pounds.\n</p>\n<p>\n\tShadow mastiffs cannot speak, but they understand Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tShadow mastiffs prefer fighting in shadows or dark conditions, which gives them a great advantage.\n</p>\n<p>\n\tIf a magical light source negates the shadows around them, shadow mastiffs are cunning enough to either move out of the light or back off and break up the opposition with their baying. They have been known to seize and carry off items enspelled with daylight spells.\n</p>\n\n<h5>Bay (Su)</h5>\n<p>\n\tWhen a shadow mastiff howls or barks, all creatures except evil outsiders within a 300-foot spread must succeed on a DC 13 Will save or become panicked for 2d4 rounds. This is a sonic mind-affecting fear effect. Whether or not the save is successful, an affected creature is immune to the same mastiff’s bay for 24 hours. The save DC is Charisma-based.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA shadow mastiff that hits with its bite attack can attempt to trip the opponent as a free action (+3 check modifier) without making a touch attack or provoking an attack of opportunity. If the attempt fails, the opponent cannot react to trip the shadow mastiff.\n</p>\n\n<h5>Shadow Blend (Su)</h5>\n<p>\n\tIn any condition of illumination other than full daylight, a shadow mastiff can disappear into the shadows, giving it total concealment. Artificial illumination, even a light or continual flame spell, does not negate this ability. A daylight spell, however, will.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*A shadow mastiff has a +4 racial bonus on Survival checks when tracking by scent.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

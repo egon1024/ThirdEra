@@ -1,0 +1,173 @@
+{
+  "name": "Gelatinous Cube",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGelatinousCube",
+    "creatureTypeKey": "ooze",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "blindsight",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:ooze.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Ooze\"><h4>SRD type: Ooze</h4><p>\n\t<a href=\"/srd/typesSubtypes.htm#oozeType\">Oozes</a> are amorphous creatures that live only to eat. They inhabit underground areas throughout the world, scouring caverns, ruins, and dungeons in search of organic matter—living or dead.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tOozes attack any creatures they encounter. They lash out with pseudopods or simply engulf opponents with their bodies, which secrete acids that help them catch or digest their prey.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#blindsightAndBlindsense\">Blindsight</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tAn ooze’s entire body is a primitive sensory organ that can ascertain prey by scent and vibration within 60 feet.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Acid, engulf, paralysis</p><p><strong>Special Qualities:</strong> Blindsight 60 ft., immunity to electricity, ooze traits, transparent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Underground",
+      "organization": "Solitary",
+      "treasure": "1/10th coins, 50% goods (no nonmetal or nonstone), 50% items (no nonmetal or nonstone)",
+      "advancement": "5-12 HD (Large); 13-24 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 54,
+        "max": 54,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 4,
+        "flatFooted": 4,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": -5
+      },
+      "speed": {
+        "value": 15
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 9,
+        "total": 0
+      },
+      "ref": {
+        "base": -4,
+        "total": 0
+      },
+      "will": {
+        "base": -4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThe nearly transparent gelatinous cube travels slowly along dungeon corridors and cave floors, absorbing carrion, creatures, and trash. Inorganic material remains trapped and visible inside the cube’s body.\n</p>\n<p>\n\tA typical gelatinous cube is 10 feet on a side and weighs about 15,000 pounds, though much larger specimens are not unknown.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA gelatinous cube attacks by slamming its body into its prey. It is capable of lashing out with a pseudopod, but usually engulfs foes.\n</p>\n\n<h5>Acid (Ex)</h5>\n<p>\n\tA gelatinous cube’s acid does not harm metal or stone.\n</p>\n\n<h5>Engulf (Ex)</h5>\n<p>\n\tAlthough it moves slowly, a gelatinous cube can simply mow down Large or smaller creatures as a standard action. It cannot make a slam attack during a round in which it engulfs. The gelatinous cube merely has to move over the opponents, affecting as many as it can cover. Opponents can make opportunity attacks against the cube, but if they do so they are not entitled to a saving throw. Those who do not attempt attacks of opportunity must succeed on a DC 13 Reflex save or be engulfed; on a success, they are pushed back or aside (opponent’s choice) as the cube moves forward. Engulfed creatures are subject to the cube’s paralysis and acid, and are considered to be grappled and trapped within its body. The save DC is Strength-based and includes a +1 racial bonus.\n</p>\n\n<h5>Paralysis (Ex)</h5>\n<p>\n\tA gelatinous cube secretes an anesthetizing slime. A target hit by a cube’s melee or engulf attack must succeed on a DC 20 Fortitude save or be paralyzed for 3d6 rounds. The cube can automatically engulf a paralyzed opponent. The save DC is Constitution-based.\n</p>\n\n<h5>Transparent (Ex)</h5>\n<p>\n\tGelatinous cubes are hard to see, even under ideal conditions, and it takes a DC 15 Spot check to notice one. Creatures who fail to notice a cube and walk into it are automatically engulfed.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "ooze.htm",
+        "hubTitle": "Ooze",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": true,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

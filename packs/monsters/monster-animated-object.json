@@ -1,0 +1,156 @@
+{
+  "name": "Animated Object",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAnimatedObject",
+    "creatureTypeKey": "construct",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d3-1",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> See text</p><p><strong>Special Qualities:</strong> Construct traits, darkvision 60 ft., low-light vision; also see text</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Group (4)",
+      "treasure": "None",
+      "advancement": "—",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 2,
+        "max": 2,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 0,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": -5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 0,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tAnimated objects come in all sizes, shapes, and colors. They owe their existence as creatures to spells such as animate objects or similar supernatural abilities.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tAnimated objects fight only as directed by the animator. They follow orders without question and to the best of their abilities. Since they do not need to breathe and never tire, they can be extremely capable minions.\n</p>\n<p>\n\tAn animated object can have one or more of the following special abilities, depending on its form.\n</p>\n\n<h5>Blind (Ex)</h5>\n<p>\n\tA sheetlike animated object such as a carpet or tapestry can grapple an opponent up to three sizes larger than itself. The object makes a normal grapple check. If it wins, it wraps itself around the opponent’s head, causing that creature to be blinded until removed.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA flexible animated object such as a rope, vine, or rug deals damage equal to its slam damage value plus 1&frac12; times its Strength bonus with a successful grapple check against a creature up to one size larger than itself.\n</p>\n<p>\n\tAn object of at least Large size can make constriction attacks against multiple creatures at once, if they all are at least two sizes smaller than the object and can fit under it.\n</p>\n\n<h5>Hardness (Ex)</h5>\n<p>\n\tAn animated object has the same hardness it had before it was animated.\n</p>\n\n<h5>Improved Speed (Ex)</h5>\n<p>\n\tThe base land speed given in the statistics block assume that an animated object lurches, rocks, or slithers along.\n</p>\n<p>\n\tObjects with two legs (statues, ladders) or a similar shape that allows faster movement have a +10 foot bonus to speed. Objects with multiple legs (tables, chairs) have a +20 foot bonus to speed. Wheeled objects have a +40 foot bonus to speed.\n</p>\n<p>\n\tObjects might have additional modes of movement. A wooden object can float and has a swim speed equal to half its land speed. A rope or similar sinuous object has a climb speed equal to half its land speed. A sheetlike object can fly (clumsy maneuverability) at half its normal speed.\n</p>\n\n<h5>Trample (Ex)</h5>\n<p>\n\tAn animated object of at least Large size and with a hardness of at least 10 can trample creatures two or more sizes smaller than itself, dealing damage equal to the object’s slam damage + 1&frac12; times its Strength bonus. Opponents who do not make attacks of opportunity against the object can attempt Reflex saves (DC 10 + &frac12; object’s HD + object’s Str modifier) to halve the damage.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

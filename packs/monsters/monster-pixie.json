@@ -1,0 +1,152 @@
+{
+  "name": "Pixie",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterPixie",
+    "creatureTypeKey": "fey",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "Neutral Good",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 1,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6-2",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "cold"
+      },
+      "spellResistance": 15,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Spell-like abilities, special arrows</p><p><strong>Special Qualities:</strong> Damage reduction 10/cold iron, greater invisibility, low-light vision, spell resistance 15</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Gang (2-4), band (6-11), or tribe (20-80)",
+      "treasure": "No coins; 50% goods; 50% items",
+      "advancement": "2-3 HD (Small)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 3,
+        "max": 3,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 15,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 4
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 0,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 0,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tPixies wear bright clothing, often including a cap and shoes with curled and pointed toes.\n</p>\n<p>\n\tA pixie stands about 2&frac12; feet tall and weighs about 30 pounds.\n</p>\n<p>\n\tPixies speak Sylvan and Common, and may know other languages as well.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tThe normally carefree pixies ferociously attack evil creatures and unwanted intruders. They take full advantage of their invisibility and other abilities to harass and drive away opponents.\n</p>\n\n<h5>Greater Invisibility (Su)</h5>\n<p>\n\tA pixie remains invisible even when it attacks. This ability is constant, but the pixie can suppress or resume it as a free action.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/day—lesser confusion (DC 14), dancing lights, detect chaos, detect good, detect evil, detect law, detect thoughts (DC 15), dispel magic, entangle (DC 14), permanent image (DC 19; visual and auditory elements only). Caster level 8th. The save DCs are Charisma-based.\n</p>\n<p>\n\tOne pixie in ten can use irresistible dance (caster level 8th) once per day.\n</p>\n\n<h5>Special Arrows (Ex)</h5>\n<p>\n\tPixies sometimes employ arrows that deal no damage but can erase memory or put a creature to sleep.\n</p>\n\n<h5>Memory Loss</h5>\n<p>\n\tAn opponent struck by this arrow must succeed on a DC 15 Will save or lose all memory. The save DC is Charisma-based and includes a +2 racial bonus. The subject retains skills, languages, and class abilities but forgets everything else until he or she receives a heal spell or memory restoration with limited wish, wish, or miracle.\n</p>\n\n<h5>Sleep</h5>\n<p>\n\tAny opponent struck by this arrow, regardless of Hit Dice, must succeed on a DC 15 Fortitude save or be affected as though by a sleep spell. The save DC is Charisma-based and includes a +2 racial bonus.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

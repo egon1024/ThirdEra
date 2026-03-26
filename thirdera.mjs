@@ -39,6 +39,8 @@ import {
 } from "./module/logic/derived-conditions.mjs";
 import { registerModifierSourceProviders } from "./module/logic/modifier-aggregation.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
+import { fuzzyScore } from "./module/utils/fuzzy.mjs";
+import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-from-size-hooks.mjs";
 import "./module/logic/apply-damage-healing-entry-points.mjs";
 import "./module/logic/spell-save-from-chat.mjs";
 import "./module/logic/concentration-from-chat.mjs";
@@ -119,6 +121,7 @@ Hooks.once("init", async function () {
     // Initialize logic modules
     AuditLog.init();
     initHpAutoIncrease();
+    registerTokenDimensionHooks();
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;
@@ -222,6 +225,7 @@ Hooks.once("init", async function () {
             lowLight: "Low-light vision",
             scent: "Scent",
             blindsight: "Blindsight",
+            blindsense: "Blindsense",
             tremorsense: "Tremorsense"
         },
         /** Treasure presets for NPC/monster reference (Phase F). Custom text allowed via sheet. */
@@ -1078,3 +1082,50 @@ function _addSpellListButton(html) {
     });
     headerActions.appendChild(btn);
 }
+
+function ensureMonsterFuzzyStyle() {
+    if (document.getElementById("thirdera-monster-fuzzy-style")) return;
+    const style = document.createElement("style");
+    style.id = "thirdera-monster-fuzzy-style";
+    style.textContent = ".thirdera-fuzzy-force-show{display:flex !important;}";
+    document.head.appendChild(style);
+}
+
+/**
+ * Add fuzzy search behavior to the monster compendium window.
+ * Foundry default search remains active for other compendiums.
+ */
+Hooks.on("renderCompendium", (app, html) => {
+    const root = app?.element?.jquery ? app.element[0] : app?.element ?? html?.[0] ?? html;
+    const isMonsterPack = String(app?.id ?? "") === "compendium-thirdera_thirdera_monsters";
+    if (!isMonsterPack || !root?.querySelector) return;
+    ensureMonsterFuzzyStyle();
+    const searchInput = root.querySelector('input[name="search"]') ?? root.querySelector(".header-search input");
+    if (!searchInput || searchInput.dataset.thirderaMonsterFuzzyBound === "true") return;
+    searchInput.dataset.thirderaMonsterFuzzyBound = "true";
+    const applyMonsterFuzzyFilter = () => {
+        const query = String(searchInput.value ?? "").trim();
+        const rows = root.querySelectorAll("li.directory-item, li.compendium-entry, li.document");
+        for (const row of rows) {
+            const name = String((row.querySelector(".entry-name, .document-name, h4, a")?.textContent ?? "")).trim();
+            if (!query) {
+                row.classList.remove("hidden");
+                row.classList.remove("thirdera-fuzzy-force-show");
+                row.hidden = false;
+                row.setAttribute("aria-hidden", "false");
+                row.style.display = "";
+                continue;
+            }
+            const score = fuzzyScore(query, name);
+            row.classList.toggle("hidden", !score.matched);
+            row.classList.toggle("thirdera-fuzzy-force-show", score.matched);
+            row.hidden = !score.matched;
+            row.setAttribute("aria-hidden", score.matched ? "false" : "true");
+            row.style.display = score.matched ? "" : "none";
+        }
+    };
+    searchInput.addEventListener("input", applyMonsterFuzzyFilter);
+    searchInput.addEventListener("keyup", applyMonsterFuzzyFilter);
+    applyMonsterFuzzyFilter();
+});
+

@@ -1,0 +1,154 @@
+{
+  "name": "Gargoyle",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGargoyle",
+    "creatureTypeKey": "monstrousHumanoid",
+    "subtypeKeys": [
+      "earth"
+    ],
+    "abilities": {
+      "str": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "Chaotic Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 4,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d4+2",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "magic"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Damage reduction 10/magic, darkvision 60 ft., freeze</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Solitary, pair, or wing (5-16)",
+      "treasure": "Standard",
+      "advancement": "5-6 HD (Medium); 7-12 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 37,
+        "max": 37,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 4,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tGargoyles often appear to be winged stone statues, for they can perch indefinitely without moving and use this disguise to surprise their foes. They require no food, water, or air, but often eat their fallen foes out of fondness for inflicting pain.\n</p>\n<p>\n\tGargoyles speak Common and Terran.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tGargoyles either remain still, then suddenly attack, or dive onto their prey.\n</p>\n<p>\n\tA gargoyle’s natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Freeze (Ex)</h5>\n<p>\n\tA gargoyle can hold itself so still it appears to be a statue. An observer must succeed on a DC 20 Spot check to notice the gargoyle is really alive.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tGargoyles have a +2 racial bonus on Hide, Listen, and Spot checks. *The Hide bonus increases by +8 when a gargoyle is concealed against a background of stone.\n</p>\n\n<h2 id=\"kapoacinth\">Kapoacinth</h2>\n<p>\n\tThese cousins of the gargoyle have the aquatic subtype. They have a base land speed of 40 feet and a swim speed of 60 feet (no fly speed) and are found only in aquatic environments.\n</p>\n\n<h2 id=\"gargoylesAsCharacters\">Gargoyles As Characters</h2>\n<p>\n\tGargoyle characters possess the following racial traits.\n</p>\n<ul>\n\t<li>+4 Strength, +4 Dexterity, +8 Constitution, -4 Intelligence, -4 Charisma.</li>\n\t<li>Medium size.</li>\n\t<li>A gargoyle’s base land speed is 40 feet. It also has a fly speed of 60 feet (average).</li>\n\t<li>Darkvision out to 60 feet.</li>\n\t<li>Racial Hit Dice: A gargoyle begins with four levels of monstrous humanoid, which provide 4d8 Hit Dice, a base attack bonus of +4, and base saving throw bonuses of Fort +1, Ref +4, and Will +4.</li>\n\t<li>Racial Skills: A gargoyle’s monstrous humanoid levels give it skill points equal to 7 &times; (2 + Int modifier). Its class skills are Hide, Listen, and Spot. A gargoyle has a +2 racial bonus on Hide, Listen, and Spot checks, and an additional +8 bonus on Hide checks when it is concealed against a background of stone.</li>\n\t<li>Racial Feats: A gargoyle’s monstrous humanoid levels give it two feats.</li>\n\t<li>+4 natural armor bonus.</li>\n\t<li>Special Qualities (see above): Damage reduction 10/magic, freeze.</li>\n\t<li>Automatic Languages: Common. Bonus Languages: Auran, Dwarven, Elven, Gnome, Halfling, Giant, Terran.</li>\n\t<li>Favored Class: Fighter.</li>\n\t<li>Level adjustment +5.</li>\n</ul>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

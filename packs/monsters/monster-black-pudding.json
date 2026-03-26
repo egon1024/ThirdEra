@@ -1,0 +1,160 @@
+{
+  "name": "Black Pudding",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterBlackPudding",
+    "creatureTypeKey": "ooze",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "7",
+      "alignment": "True Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [],
+      "specialAbilities": "<!--thirdera-srd-hub-start:ooze.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Ooze\"><h4>SRD type: Ooze</h4><p>\n\t<a href=\"/srd/typesSubtypes.htm#oozeType\">Oozes</a> are amorphous creatures that live only to eat. They inhabit underground areas throughout the world, scouring caverns, ruins, and dungeons in search of organic matter—living or dead.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tOozes attack any creatures they encounter. They lash out with pseudopods or simply engulf opponents with their bodies, which secrete acids that help them catch or digest their prey.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#blindsightAndBlindsense\">Blindsight</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tAn ooze’s entire body is a primitive sensory organ that can ascertain prey by scent and vibration within 60 feet.\n</p></section><!--thirdera-srd-hub-end-->\n<p>Acid, constrict, improved grab, split.</p>",
+      "environment": "Underground",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 115,
+        "max": 115,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 6,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 12,
+        "total": 0
+      },
+      "ref": {
+        "base": 3,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 10,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Acidic ooze.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "ooze.htm",
+        "hubTitle": "Ooze",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": true,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

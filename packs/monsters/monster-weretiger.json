@@ -1,0 +1,179 @@
+{
+  "name": "Weretiger",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterWeretiger",
+    "creatureTypeKey": "humanoid",
+    "subtypeKeys": [
+      "shapechanger"
+    ],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 2,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:lycanthrope.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Lycanthrope\"><h4>SRD type: Lycanthrope</h4><p>\n\tLycanthropes are <a href=\"/srd/typesSubtypes.htm#humanoidType\">humanoids</a> or <a href=\"/srd/typesSubtypes.htm#giantType\">giants</a> who can transform themselves into animals. In its natural form, a lycanthrope looks like any other members of its kind, though natural lycanthropes and those who have been afflicted for a long time tend to have or acquire features reminiscent of their animal forms. In animal form, a lycanthrope resembles a powerful version of the normal animal, but on close inspection, its eyes (which often glow red in the dark) show a faint spark of unnatural intelligence.\n</p>\n<p>\n\tLycanthropy can be spread like a <a href=\"/srd/specialAbilities.htm#disease\">disease</a>. Sometimes a lycanthrope begins life as a normal humanoid or giant who subsequently contracts lycanthropy after being wounded by a lycanthrope. Such a creature is called an afflicted lycanthrope. Other lycanthropes are born as lycanthropes, and are known as natural lycanthropes.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA lycanthrope in its humanoid (or giant) form uses whatever tactics and weapons are favored by others of its kind, though it tends to be slightly more aggressive. A lycanthrope possesses the senses of its animal form, including <a href=\"/srd/specialAbilities.htm#scent\">scent</a> and <a href=\"/srd/specialAbilities.htm#lowLightVision\">low-light vision</a>, and it has a deep empathy for (and ability to communicate with) animals of its animal form. An afflicted lycanthrope damaged in combat may be overwhelmed by rage, causing it to change to its animal form involuntarily.\n</p>\n<p>\n\tA lycanthrope in animal form fights like the animal it resembles, although its bite carries the disease of lycanthropy. It is preternaturally cunning and strong, and possesses <a href=\"/srd/specialAbilities.htm#damageReduction\">damage reduction</a> that is overcome only by <a href=\"/srd/specialMaterials.htm#silverAlchemical\">silvered</a> weapons.\n</p>\n<p>\n\tFinally, a natural lycanthrope (or an afflicted lycanthrope that has become aware of its affliction) can assume a hybrid form that is a mix of its humanoid and animal forms. A hybrid has hands and can use weapons, but it can also attack with its teeth and claws. A hybrid can spread lycanthropy with its bite, and it has the same <a href=\"/srd/specialAbilities.htm#damageReduction\">damage reduction</a> that its animal form possesses.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Alternate form, tiger empathy, low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm forests",
+      "organization": "Solitary or pair",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 50,
+        "max": 50,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 17,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 4
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 8,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 5,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tWeretigers in humanoid form tend to be sleekly muscular, taller than average, and very agile.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tWeretigers can assume a hybrid form as well as an animal form. In tiger form, they can pounce and grab just as normal tigers do. In hybrid form, they rely on their deadly claws.\n</p>\n\n<h5>Alternate Form (Su)</h5>\n<p>\n\tA weretiger can assume a bipedal hybrid form or the form of a tiger.\n</p>\n\n<h5>Curse of Lycanthropy (Su)</h5>\n<p>\n\tAny humanoid or giant hit by a weretiger’s bite attack in animal or hybrid form must succeed on a DC 15 Fortitude save or contract lycanthropy.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a weretiger in tiger form must hit with a claw or bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can rake.\n</p>\n\n<h5>Pounce (Ex)</h5>\n<p>\n\tIf a weretiger in tiger form charges an opponent, it can make a full attack, including two rake attacks.\n</p>\n\n<h5>Rake (Ex)</h5>\n<p>\n\tAttack bonus +9 melee, damage 1d8+3.\n</p>\n\n<h5>Tiger Empathy (Ex)</h5>\n<p>\n\tCommunicate with tigers and dire tigers, and +4 racial bonus on Charisma-based checks against tigers and dire tigers.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tIn any form, weretigers have a +4 bonus on Balance, Hide, and Move Silently checks. *In areas of tall grass or heavy undergrowth, the Hide bonus improves to +8 in the tiger form.\n</p>\n<p>\n\tThe weretiger presented here is a 1st-level human warrior and natural lycanthrope, using the following base ability scores: Str 13, Dex 11, Con 12, Int 10, Wis 9, Cha 8.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "lycanthrope.htm",
+        "hubTitle": "Lycanthrope",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

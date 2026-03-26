@@ -7,7 +7,8 @@ import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } f
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
 import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
-import { getAllSkills } from "../applications/skill-picker-dialog.mjs";
+import { getAllSkills, getNpcSkillAddOptions } from "../applications/skill-picker-dialog.mjs";
+import { dedupeNpcEmbeddedSkillItemsForDisplay, npcActorWouldDuplicateSkillEmbed } from "../logic/npc-embedded-skill-identity.mjs";
 import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
 import { TakeRestDialog } from "../applications/take-rest-dialog.mjs";
 
@@ -180,6 +181,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
     }
 
+    /** Rank inputs on Attributes → Skills (active primary + subtab). */
+    static #getActiveSkillRankInputs(element) {
+        const skillsPanel = element?.querySelector?.(".tab.abilities.active .subtab.active[data-tab=\"skills\"]");
+        if (!skillsPanel) return [];
+        return Array.from(skillsPanel.querySelectorAll("input.skill-ranks-input[data-skill-item-id]"));
+    }
+
     /** @override */
     async _processSubmitData(event, form, submitData, options = {}) {
         if (this.actor.type === "character" && this.actor.isToken) {
@@ -232,6 +240,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         await super._preRender(context, options);
         const focused = this.element?.querySelector(":focus");
         this._focusedInputName = focused?.name || null;
+        // Skill rank inputs have no `name`; preserve which one had focus for re-render (see _onRender).
+        if (focused?.matches?.("input.skill-ranks-input[data-skill-item-id]") && focused.dataset.skillItemId) {
+            this._preRenderSkillRankFocusId = focused.dataset.skillItemId;
+        } else {
+            this._preRenderSkillRankFocusId = null;
+        }
         // When the sheet re-renders (form submit, add/remove condition, etc.), preserve scroll position
         // so the sheet does not jump to top. See .cursor/rules/sheet-ux-scroll-focus.mdc.
         // The scrollable element is .sheet-body .tab.active (overflow-y: auto), not .sheet-body (overflow: hidden).
@@ -251,8 +265,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             if (input) input.focus();
             this._focusedInputName = null;
         }
-        // Restore scroll after form-driven re-render (submitOnChange). Do this synchronously so the
-        // next paint shows the correct position and we avoid a visible flicker (jump-to-top then back).
+        // Restore scroll before refocusing skill ranks (focus can scroll the field into view).
         // Target .sheet-body .tab.active (the element that actually scrolls for both character and NPC sheets).
         if (this._formUpdateScrollRestore != null) {
             const scrollTop = this._formUpdateScrollRestore;
@@ -260,7 +273,33 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             const spellsContent = this.element?.querySelector(".tab.spells.active .spells-tab-content");
             const tabActive = this.element?.querySelector(".sheet-body .tab.active");
             const scrollContainer = spellsContent ?? tabActive ?? this.element?.querySelector(".sheet-body");
-            if (scrollContainer) scrollContainer.scrollTop = scrollTop;
+            if (scrollContainer) {
+                scrollContainer.scrollTop = scrollTop;
+                requestAnimationFrame(() => {
+                    scrollContainer.scrollTop = scrollTop;
+                });
+            }
+        }
+        // Skill ranks: restore focus + selection after embedded item update (no `name` on input).
+        const skillRankRestoreId = this._focusRestoreNpcSkillRankItemId ?? this._preRenderSkillRankFocusId;
+        this._focusRestoreNpcSkillRankItemId = null;
+        this._preRenderSkillRankFocusId = null;
+        if (skillRankRestoreId) {
+            this._npcSkillRankClickTarget = null;
+            this._npcSkillTabDirection = null;
+            const element = this.element;
+            // Run after scroll restore’s rAF so scrollTop is applied before focus scrolls the field into view.
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    const input = element?.querySelector(
+                        `input.skill-ranks-input[data-skill-item-id="${CSS.escape(skillRankRestoreId || "")}"]`
+                    );
+                    if (input) {
+                        input.focus();
+                        input.select();
+                    }
+                });
+            });
         }
         // Restore focus to the "next" spell input after re-render (e.g. user tabbed from previous field).
         if (this._focusRestoreSpellInput) {
@@ -306,8 +345,68 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
         });
 
-        // Attach change listeners for skill rank inputs (embedded items, not form-bound)
-        this.element.querySelectorAll("input[data-skill-item-id]").forEach(input => {
+        // Attributes → Skills: rank inputs (no `name`; not form-bound). Select-all on focus, Tab ring, scroll/focus restore.
+        const abilitiesTab = this.element.querySelector(".tab.abilities");
+        if (abilitiesTab && !abilitiesTab.dataset.thirderaSkillRankMousedownBound) {
+            abilitiesTab.dataset.thirderaSkillRankMousedownBound = "1";
+            abilitiesTab.addEventListener("mousedown", (event) => {
+                const target = event.target?.closest?.("input.skill-ranks-input[data-skill-item-id]");
+                if (target?.dataset?.skillItemId) {
+                    this._npcSkillRankClickTarget = target.dataset.skillItemId;
+                } else {
+                    this._npcSkillRankClickTarget = null;
+                    this._npcSkillTabDirection = null;
+                }
+            });
+        }
+        this.element.querySelectorAll("input.skill-ranks-input[data-skill-item-id]").forEach((input) => {
+            input.addEventListener("keydown", (event) => {
+                const rankInputs = ThirdEraActorSheet.#getActiveSkillRankInputs(this.element);
+                if (event.key !== "Tab" || rankInputs.length === 0) return;
+                const activeIndex = rankInputs.indexOf(event.currentTarget);
+                if (activeIndex < 0) return;
+                this._npcSkillRankClickTarget = null;
+                if (event.shiftKey) {
+                    if (activeIndex === 0) {
+                        const last = rankInputs[rankInputs.length - 1];
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                        requestAnimationFrame(() => {
+                            const el = this.element?.querySelector(
+                                `input.skill-ranks-input[data-skill-item-id="${CSS.escape(last.dataset.skillItemId || "")}"]`
+                            );
+                            if (el) {
+                                el.focus();
+                                el.select();
+                            }
+                        });
+                        return;
+                    }
+                    this._npcSkillTabDirection = -1;
+                    return;
+                }
+                if (activeIndex !== rankInputs.length - 1) {
+                    this._npcSkillTabDirection = 1;
+                    return;
+                }
+                const first = rankInputs[0];
+                event.preventDefault();
+                event.currentTarget.blur();
+                requestAnimationFrame(() => {
+                    const el = this.element?.querySelector(
+                        `input.skill-ranks-input[data-skill-item-id="${CSS.escape(first.dataset.skillItemId || "")}"]`
+                    );
+                    if (el) {
+                        el.focus();
+                        el.select();
+                    }
+                });
+            });
+            input.addEventListener("focus", (event) => {
+                requestAnimationFrame(() => {
+                    if (document.activeElement === event.target) event.target.select();
+                });
+            });
             input.addEventListener("change", async (event) => {
                 const itemId = event.target.dataset.skillItemId;
                 const skill = this.actor.items.get(itemId);
@@ -315,9 +414,76 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 const maxRanks = parseFloat(event.target.dataset.skillMaxRanks) || 999;
                 let value = parseFloat(event.target.value) || 0;
                 value = Math.max(0, Math.min(value, maxRanks));
-                // Round to nearest 0.5
                 value = Math.round(value * 2) / 2;
+
+                const rankInputs = ThirdEraActorSheet.#getActiveSkillRankInputs(this.element);
+                const currentIndex = rankInputs.indexOf(event.currentTarget);
+                const activeEl = document.activeElement;
+                const activeRankId = activeEl?.matches?.("input.skill-ranks-input[data-skill-item-id]")
+                    ? activeEl.dataset.skillItemId
+                    : null;
+                const clicked = this._npcSkillRankClickTarget;
+                this._npcSkillRankClickTarget = null;
+                const isClickOnOther = clicked && clicked !== itemId;
+
+                if (rankInputs.length > 0 && currentIndex >= 0) {
+                    if (activeRankId && activeRankId !== itemId) {
+                        // Tab / click already moved focus to another rank (change runs after focus moves).
+                        this._focusRestoreNpcSkillRankItemId = activeRankId;
+                        this._npcSkillTabDirection = null;
+                    } else if (isClickOnOther) {
+                        this._focusRestoreNpcSkillRankItemId = clicked;
+                        this._npcSkillTabDirection = null;
+                    } else if (this._npcSkillTabDirection != null) {
+                        const direction = this._npcSkillTabDirection;
+                        this._npcSkillTabDirection = null;
+                        const len = rankInputs.length;
+                        const nextIndex = direction > 0
+                            ? (currentIndex + 1) % len
+                            : (currentIndex - 1 + len) % len;
+                        const targetInput = rankInputs[nextIndex];
+                        this._focusRestoreNpcSkillRankItemId = targetInput?.dataset?.skillItemId ?? null;
+                    } else {
+                        this._focusRestoreNpcSkillRankItemId = null;
+                    }
+                } else {
+                    this._focusRestoreNpcSkillRankItemId = null;
+                }
+
                 await skill.update({ "system.ranks": value });
+            });
+        });
+
+        this.element.querySelectorAll("input.skill-misc-input[data-skill-item-id]").forEach((input) => {
+            input.addEventListener("change", async (event) => {
+                const itemId = event.target.dataset.skillItemId;
+                const skill = this.actor.items.get(itemId);
+                if (!skill || skill.type !== "skill") return;
+                const raw = String(event.target.value ?? "").trim();
+                const v = parseInt(raw, 10);
+                const n = Number.isFinite(v) ? v : 0;
+                await skill.update({ "system.modifier.misc": n });
+            });
+        });
+        this.element.querySelectorAll("input.skill-misc-label-input[data-skill-item-id]").forEach((input) => {
+            input.addEventListener("change", async (event) => {
+                const itemId = event.target.dataset.skillItemId;
+                const skill = this.actor.items.get(itemId);
+                if (!skill || skill.type !== "skill") return;
+                await skill.update({ "system.modifier.miscLabel": String(event.target.value ?? "") });
+            });
+        });
+
+        // NPC sheet: class-skill toggle (system.npcClassSkill)
+        this.element.querySelectorAll("input.npc-skill-class-skill-checkbox[data-skill-item-id]").forEach((input) => {
+            input.addEventListener("change", async (event) => {
+                event.stopPropagation();
+                const itemId = event.target.dataset.skillItemId;
+                const skill = this.actor.items.get(itemId);
+                if (!skill || skill.type !== "skill") return;
+                await skill.update({ "system.npcClassSkill": !!event.target.checked });
+                await this.actor.prepareData();
+                await this.render();
             });
         });
 
@@ -370,6 +536,43 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 if (current.includes(uuid)) return;
                 await this.actor.update({ "system.details.subtypeUuids": [...current, uuid] });
                 event.target.value = "";
+            });
+        }
+
+        // NPC Skills: add skill from world/compendium dropdown (change + reset; not form-bound)
+        const npcAddSkillSelect = this.element.querySelector(".npc-add-skill-select");
+        if (npcAddSkillSelect && this.actor.type === "npc") {
+            npcAddSkillSelect.addEventListener("change", async (event) => {
+                event.stopPropagation();
+                const uuid = event.target.value?.trim();
+                event.target.value = "";
+                if (!uuid) return;
+                try {
+                    const doc = await foundry.utils.fromUuid(uuid);
+                    if (!doc || doc.type !== "skill") {
+                        ui.notifications.warn(game.i18n.localize("THIRDERA.Skills.AddSkillInvalid"));
+                        return;
+                    }
+                    const itemDataProbe = { type: "skill", name: doc.name, system: doc.system ?? {} };
+                    if (npcActorWouldDuplicateSkillEmbed(this.actor.items, itemDataProbe)) {
+                        ui.notifications.info(
+                            game.i18n.format("THIRDERA.Skills.AddSkillDuplicate", {
+                                name: doc.name,
+                                actor: this.actor.name
+                            })
+                        );
+                        return;
+                    }
+                    const itemData = doc.toObject();
+                    if (itemData._id != null) delete itemData._id;
+                    itemData.system = foundry.utils.mergeObject(itemData.system ?? {}, { npcClassSkill: true });
+                    await this.actor.createEmbeddedDocuments("Item", [itemData]);
+                    await this.actor.prepareData();
+                    await this.render();
+                } catch (err) {
+                    console.error("Third Era | Failed to add skill from dropdown:", err);
+                    ui.notifications.error(game.i18n.localize("THIRDERA.Skills.AddSkillFailed"));
+                }
             });
         }
 
@@ -612,7 +815,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         } catch (_) {}
 
         // Prepare items
-        const items = this._prepareItems(safeItemList);
+        const items = this._prepareItems(safeItemList, actor.type);
 
         // Add CONFIG data
         const config = {
@@ -1372,7 +1575,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             skillPointBudget: systemData.skillPointBudget || { available: 0, spent: 0, remaining: 0 },
             // Phase 6: modifier-only skills (skill bonuses from items/feats/conditions when actor has no skill item)
             modifierOnlySkills: await (async () => {
-                if (actor.type !== "character" || !systemData.modifierOnlySkills?.length) return [];
+                if ((actor.type !== "character" && actor.type !== "npc") || !systemData.modifierOnlySkills?.length) return [];
                 const allSkills = await getAllSkills();
                 const nameByKey = new Map(allSkills.map((s) => [(s.key ?? "").toLowerCase(), s.name]));
                 const humanize = (k) => (k && k.length) ? (k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()) : k;
@@ -1380,6 +1583,21 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     ...entry,
                     displayName: nameByKey.get((entry.key || "").toLowerCase()) ?? humanize(entry.key)
                 }));
+            })(),
+            /** NPC sheet: world + compendium skills for “Add skill” (excludes keys already on the actor) */
+            npcSkillAddOptions: await (async () => {
+                if (actor.type !== "npc") return [];
+                const opts = await getNpcSkillAddOptions();
+                const existingKeys = new Set(
+                    (actor.items ?? [])
+                        .filter((i) => i.type === "skill" && (i.system?.key ?? "").trim())
+                        .map((i) => (i.system.key || "").toLowerCase())
+                );
+                return opts.filter((o) => {
+                    const k = (o.key ?? "").trim().toLowerCase();
+                    if (!k) return true;
+                    return !existingKeys.has(k);
+                });
             })(),
             grantedSkills: systemData.grantedSkills || [],
             grantedFeatures,
@@ -1420,9 +1638,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     /**
      * Organize and classify Items for the character sheet
      * @param {Collection} items  The actor's items
+     * @param {string} [actorType]  When `"npc"`, embedded skills are de-duplicated for display by skill identity
      * @returns {Object}          Organized items by type
      */
-    _prepareItems(items) {
+    _prepareItems(items, actorType = "") {
         const weapons = [];
         const armor = [];
         const equipment = [];
@@ -1546,6 +1765,11 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         skills.sort((a, b) => a.name.localeCompare(b.name));
         classFeatures.sort((a, b) => a.name.localeCompare(b.name));
         feats.sort((a, b) => a.name.localeCompare(b.name));
+
+        if (actorType === "npc" && skills.length > 0) {
+            skills.splice(0, skills.length, ...dedupeNpcEmbeddedSkillItemsForDisplay(skills));
+            skills.sort((a, b) => a.name.localeCompare(b.name));
+        }
 
         return { 
             weapons, 
@@ -1982,6 +2206,23 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     );
                 }
                 return false;
+            }
+        }
+
+        // NPC: do not embed a second copy of the same skill (sidebar drop onto sheet body)
+        if (item.type === "skill" && this.actor.type === "npc") {
+            const grantedZone = event.target?.closest?.("[data-drop-zone='granted-skills']");
+            if (!grantedZone) {
+                const probe = item.toObject?.() ?? { type: item.type, name: item.name, system: item.system ?? {} };
+                if (npcActorWouldDuplicateSkillEmbed(this.actor.items, probe)) {
+                    ui.notifications.info(
+                        game.i18n.format("THIRDERA.Skills.AddSkillDuplicate", {
+                            name: item.name,
+                            actor: this.actor.name
+                        })
+                    );
+                    return false;
+                }
             }
         }
 

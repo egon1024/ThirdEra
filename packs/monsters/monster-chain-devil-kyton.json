@@ -1,0 +1,189 @@
+{
+  "name": "Chain Devil (Kyton)",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterChainDevilKyton",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar",
+      "lawful"
+    ],
+    "abilities": {
+      "str": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "6",
+      "alignment": "Lawful Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 8,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "silver"
+      },
+      "spellResistance": 18,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:devil.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Devil\"><h4>SRD type: Devil</h4><p>\n\tDevils are fiends from lawful evil-aligned planes.\n</p>\n<p>\n\tMany devils are surrounded by a <a href=\"/srd/specialAbilities.htm#fearAura\">fear aura</a>, which they use to break up powerful groups and defeat opponents piecemeal. Devils with <a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">spell-like abilities</a> use their illusion abilities to delude and confuse foes as much as possible. A favorite trick is to create illusory reinforcements; enemies can never be entirely sure if a threat is only a figment or real summoned devils joining the fray.\n</p>\n\n<h5>Devil Traits</h5>\n<p>\n\tMost devils possesses the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li><a href=\"/srd/specialAbilities.htm#fireImmunity\">Immunity to fire</a> and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10 and cold 10.</li>\n\t<li>See in Darkness (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): Some devils can see perfectly in darkness of any kind, even that created by a <a class=\"spell\" href=\"/srd/spells/deeperDarkness.htm\">deeper darkness</a> spell.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept when otherwise noted, devils speak Infernal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Dancing chains, unnerving gaze</p><p><strong>Special Qualities:</strong> Damage reduction 5/silver or good, darkvision 60 ft., immunity to cold, regeneration 2, spell resistance 18</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A lawful evil-aligned plane",
+      "organization": "Solitary, gang (2-4), band (6-10), or mob (11-20)",
+      "treasure": "Standard",
+      "advancement": "9-16 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 52,
+        "max": 52,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 18,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 8,
+        "total": 0
+      },
+      "ref": {
+        "base": 8,
+        "total": 0
+      },
+      "will": {
+        "base": 6,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 8,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tKytons are humanlike devils, wrapped in chains instead of clothing. A chain devil is 6 feet tall and weighs about 300 pounds, chains included.\n</p>\n<p>\n\tChain devils speak Infernal and Common.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA chain devil attacks by flailing away with the spiked chains that serve as its clothing, armor, and weapons.\n</p>\n<p>\n\tA chain devil’s natural weapons, as well as any weapons it wields, are treated as evil-aligned and lawful-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Dancing Chains (Su)</h5>\n<p>\n\tA chain devil’s most awesome attack is its ability to control up to four chains within 20 feet as a standard action, making the chains dance or move as it wishes. In addition, a chain devil can increase these chains’ length by up to 15 feet and cause them to sprout razor-edged barbs. These chains attack as effectively as the devil itself. If a chain is in another creature’s possession, the creature can attempt a DC 15 Will save to break the chain devil’s power over that chain. If the save is successful, the kyton cannot attempt to control that particular chain again for 24 hours or until the chain leaves the creature’s possession. The save DC is Charisma-based.\n</p>\n<p>\n\tA chain devil can climb chains it controls at its normal speed without making Climb checks.\n</p>\n\n<h5>Unnerving Gaze (Su)</h5>\n<p>\n\tRange 30 ft., Will DC 15 negates. A chain devil can make its face resemble one of an opponent’s departed loved ones or bitter enemies. Those who fail their saves take a -2 penalty on attack rolls for 1d3 rounds. The save DC is Charisma-based.\n</p>\n\n<h5>Regeneration (Ex)</h5>\n<p>\n\tChain devils take normal damage from silvered weapons, good-aligned weapons, and spells or effects with the good descriptor. A chain devil that loses a piece of its body regrows it in 2d6&times;10 minutes. Holding the severed member against the stump enables it to reattach instantly.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tChain devils have a +8 racial bonus on Craft checks involving metalwork.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "devil.htm",
+        "hubTitle": "Devil",
+        "immunities": [
+          "fire",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": true,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to fire and poison.",
+          "Resistance to acid 10 and cold 10.",
+          "See in Darkness (Su): Some devils can see perfectly in darkness of any kind, even that created by a deeper darkness spell.",
+          "Summon (Sp): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).",
+          "Telepathy."
+        ],
+        "languagesNote": "Except when otherwise noted, devils speak Infernal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

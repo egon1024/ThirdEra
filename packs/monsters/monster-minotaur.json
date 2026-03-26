@@ -1,0 +1,378 @@
+{
+  "name": "Minotaur",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterMinotaur",
+    "creatureTypeKey": "monstrousHumanoid",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Gore",
+          "dice": "1d8",
+          "damageType": "piercing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Natural cunning (Ex):</strong> Immune to maze; never lost in mazes; +4 vs. bull rush and trip.</p><p><strong>Powerful charge (Ex):</strong> Gore after charge for 4d6+6.</p><p><strong>Attack:</strong> Greataxe +9/+4 (3d6+6) or gore +9 (1d8+4).</p>",
+      "environment": "Underground",
+      "organization": "Solitary, pair, or band",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 2
+    },
+    "attributes": {
+      "hp": {
+        "value": 45,
+        "max": 45,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 9,
+        "flatFooted": 9,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 9,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>A minotaur stands more than 7 feet tall and weighs about 700 pounds.</p><p>Minotaurs speak Giant.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Power Attack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
+        "key": "powerAttack",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Str 13",
+        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Track",
+      "type": "feat",
+      "img": "icons/svg/footprint.svg",
+      "system": {
+        "description": "<p>You can follow the trails of creatures and characters across most types of terrain.</p>",
+        "key": "track",
+        "type": "General",
+        "prerequisites": "Survival 1 rank",
+        "benefit": "<p>To find tracks or to follow them for 1 hour requires a Survival check. You must make another Survival check every hour to continue following the tracks. The DC depends on the surface and the prevailing conditions.</p>",
+        "special": "A ranger automatically gains Track as a bonus feat at 1st level. He need not select it.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Weapon Focus",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
+        "key": "weaponFocus",
+        "type": "General, Fighter",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
+        "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 1,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "attack",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 52
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 0,
+        "modifier": {
+          "misc": 7,
+          "total": 0,
+          "miscLabel": "MM / size / racial (not auto on sheet)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Intimidate",
+      "type": "skill",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can use this skill to frighten opponents or to get them to act in a way that benefits you.</p>",
+        "key": "intimidate",
+        "ability": "cha",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
+        "ability": "int",
+        "ranks": 9,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": false
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Survival",
+      "type": "skill",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
+        "key": "survival",
+        "ability": "wis",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

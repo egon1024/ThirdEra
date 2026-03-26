@@ -38,6 +38,14 @@ export class ThirdEraItem extends Item {
             this.updateSource({ "system.key": foundry.utils.randomID() });
         }
 
+        // NPC-embedded skills: default per-skill "class skill" toggle (sheet + npc-skill-prep)
+        if (data.type === "skill" && parentActor?.type === "npc") {
+            if (!data.system) data.system = {};
+            if (data.system.npcClassSkill === undefined) {
+                data.system.npcClassSkill = true;
+            }
+        }
+
         // Auto-generate conditionId for condition items (schema allows blank; we fill before persist)
         if (data.type === "condition") {
             const raw = data.system?.conditionId;

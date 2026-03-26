@@ -1,0 +1,156 @@
+{
+  "name": "Stirge",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterStirge",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 3,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 19,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 40,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Attach, blood drain</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Warm marshes",
+      "organization": "Colony (2-4), flock (5-8), or storm (9-14)",
+      "treasure": "None",
+      "advancement": "—",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 5,
+        "max": 5,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 16,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 4
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 2,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA stirge’s coloration ranges from rust-red to reddish-brown, with a dirty yellow underside. The proboscis is pink at the tip, fading to gray at its base.\n</p>\n<p>\n\tA stirge’s body is about 1 foot long, with a wingspan of about 2 feet. It weighs about 1 pound.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA stirge attacks by landing on a victim, finding a vulnerable spot, and plunging its proboscis into the flesh. This is a touch attack and can target only Small or larger creatures.\n</p>\n\n<h5>Attach (Ex)</h5>\n<p>\n\tIf a stirge hits with a touch attack, it uses its eight pincers to latch onto the opponent’s body. An attached stirge is effectively grappling its prey. The stirge loses its Dexterity bonus to AC and has an AC of 12, but holds on with great tenacity. Stirges have a +12 racial bonus on grapple checks (already figured into the Base Attack/Grapple entry above).\n</p>\n<p>\n\tAn attached stirge can be struck with a weapon or grappled itself. To remove an attached stirge through grappling, the opponent must achieve a pin against the stirge.\n</p>\n\n<h5>Blood Drain (Ex)</h5>\n<p>\n\tA stirge drains blood, dealing 1d4 points of Constitution damage in any round when it begins its turn attached to a victim. Once it has dealt 4 points of Constitution damage, it detaches and flies off to digest the meal. If its victim dies before the stirge’s appetite has been sated, the stirge detaches and seeks a new target.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

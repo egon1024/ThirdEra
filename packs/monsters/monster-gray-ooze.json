@@ -1,0 +1,173 @@
+{
+  "name": "Gray Ooze",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterGrayOoze",
+    "creatureTypeKey": "ooze",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "4",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "blindsight",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:ooze.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Ooze\"><h4>SRD type: Ooze</h4><p>\n\t<a href=\"/srd/typesSubtypes.htm#oozeType\">Oozes</a> are amorphous creatures that live only to eat. They inhabit underground areas throughout the world, scouring caverns, ruins, and dungeons in search of organic matter—living or dead.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tOozes attack any creatures they encounter. They lash out with pseudopods or simply engulf opponents with their bodies, which secrete acids that help them catch or digest their prey.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#blindsightAndBlindsense\">Blindsight</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tAn ooze’s entire body is a primitive sensory organ that can ascertain prey by scent and vibration within 60 feet.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Acid, constrict 1d6+1 plus 1d6 acid, improved grab</p><p><strong>Special Qualities:</strong> Blindsight 60 ft., immunity to cold and fire, ooze traits, transparent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Cold marshes",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "4-6 HD (Medium); 7-9 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 31,
+        "max": 31,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 5,
+        "flatFooted": 5,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": -5
+      },
+      "speed": {
+        "value": 10
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 6,
+        "total": 0
+      },
+      "ref": {
+        "base": -4,
+        "total": 0
+      },
+      "will": {
+        "base": -4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA gray ooze can grow to a diameter of up to 10 feet and a thickness of about 6 inches. A typical specimen weighs about 700 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA gray ooze strikes like a snake, slamming opponents with its body.\n</p>\n\n<h5>Acid (Ex)</h5>\n<p>\n\tA gray ooze secretes a digestive acid that quickly dissolves organic material and metal, but not stone. Any melee hit or constrict attack deals acid damage. Armor or clothing dissolves and becomes useless immediately unless it succeeds on a DC 16 Reflex save. A metal or wooden weapon that strikes a gray ooze also dissolves immediately unless it succeeds on a DC 16 Reflex save. The save DCs are Constitution-based.\n</p>\n<p>\n\tThe ooze’s acidic touch deals 16 points of damage per round to wooden or metal objects, but the ooze must remain in contact with the object for 1 full round to deal this damage.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA gray ooze deals automatic slam and acid damage with a successful grapple check. The opponent’s clothing and armor take a -4 penalty on Reflex saves against the acid.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a gray ooze must hit with its slam attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Transparent (Ex)</h5>\n<p>\n\tA gray ooze is hard to identify, even under ideal conditions, and it takes a DC 15 Spot check to notice one. Creatures who fail to notice a gray ooze and walk into it are automatically hit with a melee attack for slam and acid damage.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "ooze.htm",
+        "hubTitle": "Ooze",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": true,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "name": "Azer",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAzer",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "fire",
+      "lawful",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "Lawful Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 2,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 13,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Heat (Ex):</strong> Metallic weapon strikes deal extra fire damage.</p><p><strong>Immunity:</strong> Fire.</p>",
+      "environment": "Elemental Plane of Fire",
+      "organization": "Solitary, pair, or squad (3-12)",
+      "treasure": "Standard",
+      "advancement": "3-6 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 16,
+        "max": 16,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 3,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Dwarf-like brass-skinned smiths from the Elemental Plane of Fire.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Scale Mail",
+      "type": "armor",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "",
+        "armor": {
+          "type": "medium",
+          "bonus": 4,
+          "maxDex": 4,
+          "checkPenalty": -4,
+          "spellFailure": 20
+        },
+        "size": "Medium",
+        "speed": {
+          "ft30": 30,
+          "ft20": 20
+        },
+        "cost": 0,
+        "weight": 0,
+        "quantity": 1,
+        "equipped": "true",
+        "containerId": ""
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    },
+    {
+      "name": "Warhammer",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "damage": {
+          "dice": "1d8",
+          "type": "bludgeoning"
+        },
+        "critical": {
+          "range": 20,
+          "multiplier": 2
+        },
+        "range": 0,
+        "properties": {
+          "melee": "melee",
+          "handedness": "oneHanded",
+          "size": "Medium",
+          "proficiency": "martial"
+        },
+        "cost": 0,
+        "weight": 0,
+        "quantity": 1,
+        "equipped": "true",
+        "containerId": ""
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 1
+    },
+    {
+      "name": "Power Attack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "",
+        "key": "powerAttack",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Climb",
+      "type": "skill",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "",
+        "key": "climb",
+        "ability": "str",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Craft (armorsmithing)",
+      "type": "skill",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "",
+        "key": "craft-armorsmithing",
+        "ability": "int",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "name": "Frost Worm",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterFrostWorm",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [
+      "cold"
+    ],
+    "abilities": {
+      "str": {
+        "value": 26,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "12",
+      "alignment": "True Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 10,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 10,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Trill, cold, breath weapon</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., death throes, immunity to cold, low-light vision, vulnerability to fire</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Cold plains",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "15-21 HD (Huge); 22-42 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 147,
+        "max": 147,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 8,
+        "flatFooted": 18,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 4
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 14,
+        "total": 0
+      },
+      "ref": {
+        "base": 9,
+        "total": 0
+      },
+      "will": {
+        "base": 6,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 14,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA frost worn cannot burrow through stone, but can manage ice and frozen earth. When moving through such hard materials it leaves behind a usable tunnel about 5 feet in diameter.\n</p>\n<p>\n\tA frost worm is about 40 feet long, 5 feet in diameter, and weighs about 8,000 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tFrost worms lurk under the snow, waiting for prey to come near.\n</p>\n<p>\n\tThey begin an attack with a trill and then set upon helpless prey with their bite.\n</p>\n\n<h5>Trill (Su)</h5>\n<p>\n\tA frost worm can emit a noise that forces its prey to stand motionless. This sonic mind-affecting compulsion affects all creatures other than frost worms within a 100-foot radius. Creatures must succeed on a DC 17 Will save or be stunned for as long as the worm trills and for 1d4 rounds thereafter, even if they are attacked. However, if attacked or violently shaken (a full-round action), a victim is allowed another saving throw. Once a creature has resisted or broken the effect, it cannot be affected again by that same frost worm’s trill for 24 hours. The effect’s caster level is 14th. The save DC is Charisma-based.\n</p>\n\n<h5>Cold (Ex)</h5>\n<p>\n\tA frost worm’s body generates intense cold, causing opponents to take an extra 1d8 points of cold damage every time the creature succeeds on a bite attack. Creatures attacking a frost worm unarmed or with natural weapons take this same cold damage each time one of their attacks hits.\n</p>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t30-foot cone, once per hour, damage 15d6 cold, Reflex DC 22 half. Opponents held motionless by the frost worm’s trill get no saving throw. The save DC is Constitution-based.\n</p>\n\n<h5>Death Throes (Ex)</h5>\n<p>\n\tWhen killed, a frost worm turns to ice and shatters in an explosion that deals 12d6 points of cold damage and 8d6 points of piercing damage to everything within 100 feet (Reflex half DC 22). The save DC is Constitution-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*A frost worm, due to its coloration and its affinity for burying itself in the snow, has a +10 racial bonus on Hide checks in its native environment.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

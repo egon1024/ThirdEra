@@ -1,0 +1,176 @@
+{
+  "name": "Cauchemar",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterCauchemar",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "evil",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 31,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 24,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "11",
+      "alignment": "Neutral Evil",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 16,
+      "space": "15 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 90,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d6+5",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:nightmare.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Nightmare\"><h4>SRD type: Nightmare</h4><table class=\"statBlock\" cellspacing=\"0\">\n\t<tr class=\"colHead\">\n\t\t<th></th>\n\t\t<th>Nightmare</th>\n\t\t<th>Nightmare, Cauchemar</th>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#sizeAndType\">Size/Type</a>:</th>\n\t\t<td><a href=\"/srd/combat/movementPositionAndDistance.htm#bigandLittleCreaturesInCombat\">Large</a> <a href=\"/srd/typesSubtypes.htm#outsiderType\">Outsider</a> (<a href=\"/srd/typesSubtypes.htm#evilSubtype\">Evil</a>, <a href=\"/srd/typesSubtypes.htm#extraplanarSubtype\">Extraplanar</a>)</td>\n\t\t<td><a href=\"/srd/combat/movementPositionAndDistance.htm#bigandLittleCreaturesInCombat\">Huge</a> <a href=\"/srd/typesSubtypes.htm#outsiderType\">Outsider</a> (<a href=\"/srd/typesSubtypes.htm#evilSubtype\">Evil</a>, <a href=\"/srd/typesSubtypes.htm#extraplanarSubtype\">Extraplanar</a>)</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#hitDice\">Hit Dice</a>:</th>\n\t\t<td><a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">6d8+18</a> (45 hp)</td>\n\t\t<td><a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">15d8+105</a> (172 hp)</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#initiative\">Initiative</a>:</th>\n\t\t<td><a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+6</a></td>\n\t\t<td><a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+6</a></td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#speed\">Speed</a>:</th>\n\t\t<td>40 ft. (8 squares), <a href=\"/srd/specialAbilities.htm#fly\">fly</a> 90 ft. (good)</td>\n\t\t<td>40 ft. (8 squares), fly 90 ft. (good)</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#armorClass\">Armor Class</a>:</th>\n\t\t<td>24 (-1 size, +2 Dex, +13 natural), touch 11, <a href=\"/srd/conditionSummary.htm#flatFooted\">flat-footed</a> 22</td>\n\t\t<td>26 (-2 size, +2 Dex, +16 natural), touch 10, <a href=\"/srd/conditionSummary.htm#flatFooted\">flat-footed</a> 24</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#baseAttackGrapple\">Base Attack/Grapple</a>:</th>\n\t\t<td><a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+6</a>/<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+14</a></td>\n\t\t<td><a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+15</a>/<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+33</a></td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#attack\">Attack</a>:</th>\n\t\t<td>Hoof <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+9</a> melee (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">1d8+4</a> plus <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">1d4</a> fire)</td>\n\t\t<td>Hoof <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+23</a> melee (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">2d6+10</a> plus <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">1d4</a> fire)</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#fullAttack\">Full Attack</a>:</th>\n\t\t<td>2 hooves <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+9</a> melee (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">1d8+4</a> plus <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">1d4</a> fire) and <a href=\"/srd/specialAbilities.htm#bite\">bite</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+4</a> melee (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">1d8+2</a>)</td>\n\t\t<td>2 hooves <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+23</a> melee (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">2d6+10</a> plus <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">1d4</a> fire) and <a href=\"/srd/specialAbilities.htm#bite\">bite</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+18</a> melee (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">2d6+5</a>)</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#spaceReach\">Space/Reach</a>:</th>\n\t\t<td>10 ft./5 ft.</td>\n\t\t<td>15 ft./10 ft.</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#specialAttacksAndSpecialQualities\">Special Attacks</a>:</th>\n\t\t<td>Flaming hooves, smoke</td>\n\t\t<td>Flaming hooves, smoke</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#specialAttacksAndSpecialQualities\">Special Qualities</a>:</th>\n\t\t<td><a class=\"spell\" href=\"/srd/spells/astralProjection.htm\">Astral projection</a>, <a href=\"/srd/specialAbilities.htm#darkvision\">darkvision</a> 60 ft., <a class=\"spell\" href=\"/srd/spells/etherealness.htm\">etherealness</a></td>\n\t\t<td><a class=\"spell\" href=\"/srd/spells/astralProjection.htm\">Astral projection</a>, <a href=\"/srd/specialAbilities.htm#darkvision\">darkvision</a> 60 ft., <a class=\"spell\" href=\"/srd/spells/etherealness.htm\">etherealness</a></td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#saves\">Saves</a>:</th>\n\t\t<td>Fort <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+8</a>, Ref <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+7</a>, Will <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+6</a></td>\n\t\t<td>Fort <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+16</a>, Ref <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+11</a>, Will <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+10</a></td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#abilities\">Abilities</a>:</th>\n\t\t<td>Str 18, Dex 15, Con 16, Int 13, Wis 13, Cha 12</td>\n\t\t<td>Str 31, Dex 14, Con 24, Int 16, Wis 12, Cha 12</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#skills\">Skills</a>:</th>\n\t\t<td><a href=\"/srd/skills/concentration.htm\">Concentration</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+12</a>, <a href=\"/srd/skills/diplomacy.htm\">Diplomacy</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+3</a>, <a href=\"/srd/skills/intimidate.htm\">Intimidate</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+10</a>, <a href=\"/srd/skills/knowledge.htm\">Knowledge</a> (the planes) <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+10</a>, <a href=\"/srd/skills/listen.htm\">Listen</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+12</a>, <a href=\"/srd/skills/moveSilently.htm\">Move Silently</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+11</a>, <a href=\"/srd/skills/search.htm\">Search</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+10</a>, <a href=\"/srd/skills/senseMotive.htm\">Sense Motive</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+10</a>, <a href=\"/srd/skills/spot.htm\">Spot</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+12</a>, <a href=\"/srd/skills/survival.htm\">Survival</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+10</a> (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+12</a> on other planes and following tracks)</td>\n\t\t<td><a href=\"/srd/skills/bluff.htm\">Bluff</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+19</a>, <a href=\"/srd/skills/concentration.htm\">Concentration</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+25</a>, <a href=\"/srd/skills/diplomacy.htm\">Diplomacy</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+5</a>, <a href=\"/srd/skills/disguise.htm\">Disguise</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+1</a> (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+3</a> acting), <a href=\"/srd/skills/intimidate.htm\">Intimidate</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+21</a>, <a href=\"/srd/skills/knowledge.htm\">Knowledge</a> (arcana) <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+21</a>, <a href=\"/srd/skills/knowledge.htm\">Knowledge</a> (the planes) <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+21</a>, <a href=\"/srd/skills/listen.htm\">Listen</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+21</a>, <a href=\"/srd/skills/moveSilently.htm\">Move Silently</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+20</a>, <a href=\"/srd/skills/search.htm\">Search</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+21</a>, <a href=\"/srd/skills/senseMotive.htm\">Sense Motive</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+19</a>, <a href=\"/srd/skills/spot.htm\">Spot</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+21</a>, <a href=\"/srd/skills/survival.htm\">Survival</a> <a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+19</a> (<a href=\"#\" class=\"diceRoller\" title=\"Roll the dice!\">+21</a> on other planes and following tracks)</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#feats\">Feats</a>:</th>\n\t\t<td><a href=\"/srd/feats.htm#alertness\">Alertness</a>, <a href=\"/srd/feats.htm#improvedInitiative\">Improved Initiative</a>, <a href=\"/srd/feats.htm#run\">Run</a></td>\n\t\t<td><a href=\"/srd/feats.htm#alertness\">Alertness</a>, <a href=\"/srd/feats.htm#cleave\">Cleave</a>, <a href=\"/srd/feats.htm#improvedInitiative\">Improved Initiative</a>, <a href=\"/srd/feats.htm#powerAttack\">Power Attack</a>, <a href=\"/srd/feats.htm#run\">Run</a>, <a href=\"/srd/feats.htm#track\">Track</a></td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#environment\">Environment</a>:</th>\n\t\t<td>A evil-aligned plane</td>\n\t\t<td>A neutral evil plane</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#organization\">Organization</a>:</th>\n\t\t<td>Solitary Solitary</td>\n\t\t<td>Solitary</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#challengeRating\">Challenge Rating</a>:</th>\n\t\t<td>5</td>\n\t\t<td>11</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#treasure\">Treasure</a>:</th>\n\t\t<td>None</td>\n\t\t<td>None</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#alignment\">Alignment</a>:</th>\n\t\t<td>Always neutral evil</td>\n\t\t<td>Always neutral evil</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#advancement\">Advancement</a>:</th>\n\t\t<td>7-10 HD (Large); 11-18 HD (Huge)</td>\n\t\t<td>—</td>\n\t</tr>\n\t<tr>\n\t\t<th><a href=\"/srd/monsters/intro.htm#levelAdjustment\">Level Adjustment</a>:</th>\n\t\t<td>+4 (cohort)</td>\n\t\t<td>+4 (cohort)</td>\n\t</tr>\n</table>\n<p>\n\tA nightmare is about the size of a light war horse.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tA nightmare can fight while carrying a rider, but the rider cannot also fight unless he or she succeeds on a <a href=\"/srd/skills/ride.htm\">Ride</a> check.\n</p>\n<p>\n\tA nightmare’s <a href=\"/srd/specialAbilities.htm#naturalWeapons\">natural weapons</a>, as well as any weapons it wields, are treated as evil-aligned for the purpose of overcoming <a href=\"/srd/specialAbilities.htm#damageReduction\">damage reduction</a>.\n</p>\n\n<h5>Flaming Hooves (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>)</h5>\n<p>\n\tA blow from a nightmare’s hooves sets combustible materials alight.\n</p>\n\n<h5>Smoke (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>)</h5>\n<p>\n\tDuring the excitement of battle, a nightmare snorts and neighs with rage. This snorting fills a 15-foot cone with a hot, sulfurous smoke that chokes and blinds opponents. Anyone in the cone must succeed on a DC 16 <a href=\"/srd/combat/combatStatistics.htm#fortitude\">Fortitude save</a> or take a -2 penalty on all attack and damage rolls until 1d6 minutes after leaving the cone. The cone lasts 1 round, and the nightmare uses it once as a <a href=\"/srd/combat/actionsInCombat.htm#freeActions\">free action</a> during its turn each round. The save DC is Constitution-based.\n</p>\n<p>\n\tBecause of the smoke it gives off, a nightmare has <a href=\"/srd/combat/combatModifiers.htm#concealment\">concealment</a> against creatures 5 feet away and <a href=\"/srd/combat/combatModifiers.htm#totalConcealment\">total concealment</a> against creatures 10 feet or farther away. The smoke does not obscure the nightmare’s vision at all.\n</p>\n\n<h5><a class=\"spell\" href=\"/srd/spells/astralProjection.htm\">Astral Projection</a> and <a class=\"spell\" href=\"/srd/spells/etherealness.htm\">Etherealness</a> (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>)</h5>\n<p>\n\tThese abilities function just like the spells of the same names (caster level 20th); a nightmare can use either at will.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a nightmare is up to 300 pounds; a medium load, 301-600 pounds; and a heavy load, 601-900 pounds.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>SRD variant notes (cauchemar):</strong></p><h3>Combat</h3>\n<h5>Carrying Capacity</h5>\n<p>The cauchemar is a horrible, especially malevolent version of a nightmare. The sight of one of these great horrors bearing down is enough to shake the heart of the boldest champion.</p>\n<p>The save DC for the cauchemar’s smoke attack (DC 24) is adjusted for its greater number of Hit Dice and higher Constitution score.</p>\n<p>A light load for a cauchemar is up to 612 pounds; a medium load, 613-1,224 pounds; and a heavy load, 1,225-1,840 pounds.</p>\n<p><strong>Special Attacks:</strong> Flaming hooves, smoke</p><p><strong>Special Qualities:</strong> Astral projection, darkvision 60 ft., etherealness</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A neutral evil plane",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "—",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 172,
+        "max": 172,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 24,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 16,
+        "total": 0
+      },
+      "ref": {
+        "base": 11,
+        "total": 0
+      },
+      "will": {
+        "base": 10,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 15,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<h2 id=\"cauchemar\">Cauchemar</h2>\n<p>\n\tThe cauchemar is a horrible, especially malevolent version of a nightmare. The sight of one of these great horrors bearing down is enough to shake the heart of the boldest champion.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tThe save DC for the cauchemar’s smoke attack (DC 24) is adjusted for its greater number of Hit Dice and higher Constitution score.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a cauchemar is up to 612 pounds; a medium load, 613-1,224 pounds; and a heavy load, 1,225-1,840 pounds.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "nightmare.htm",
+        "hubTitle": "Nightmare",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

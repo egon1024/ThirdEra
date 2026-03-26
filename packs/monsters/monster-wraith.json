@@ -1,0 +1,154 @@
+{
+  "name": "Wraith",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterWraith",
+    "creatureTypeKey": "undead",
+    "subtypeKeys": [
+      "incorporeal"
+    ],
+    "abilities": {
+      "str": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "Lawful Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Constitution drain, create spawn</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., daylight powerlessness, incorporeal traits, +2 turn resistance, undead traits, unnatural aura</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Solitary, gang (2-5), or pack (6-11)",
+      "treasure": "None",
+      "advancement": "6-10 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 32,
+        "max": 32,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 15,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 7
+      },
+      "speed": {
+        "value": 60
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 1,
+        "total": 0
+      },
+      "ref": {
+        "base": 4,
+        "total": 0
+      },
+      "will": {
+        "base": 6,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tWraiths are incorporeal creatures born of evil and darkness. In some cases, the grim silhouette of a wraith might appear armored or outfitted with weapons. This appearance does not affect the creature’s AC or combat abilities but only reflects the shape it had in life.\n</p>\n<p>\n\tA wraith is about as tall as a human, while a dread wraith is roughly the size of an ogre. Since both are incorporeal, they are weightless.\n</p>\n<p>\n\tWraiths speak Common and Infernal.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tBoth the wraith and the dread wraith share the following abilities.\n</p>\n\n<h5>Unnatural Aura (Su)</h5>\n<p>\n\tAnimals, whether wild or domesticated, can sense the unnatural presence of a wraith at a distance of 30 feet. They will not willingly approach nearer than that and panic if forced to do so; they remain panicked as long as they are within that range.\n</p>\n\n<h5>Daylight Powerlessness (Ex)</h5>\n<p>\n\tWraiths are utterly powerless in natural sunlight (not merely a daylight spell) and flee from it.\n</p>\n\n<h2 id=\"wraithSpecialAttacks\">Wraith</h2>\n\n<h5>Constitution Drain (Su)</h5>\n<p>\n\tLiving creatures hit by a wraith’s incorporeal touch attack must succeed on a DC 14 Fortitude save or take 1d6 points of Constitution drain. The save DC is Charisma-based. On each such successful attack, the wraith gains 5 temporary hit points.\n</p>\n\n<h5>Create Spawn (Su)</h5>\n<p>\n\tAny humanoid slain by a wraith becomes a wraith in 1d4 rounds. Its body remains intact and inanimate, but its spirit is torn free from its corpse and transformed. Spawn are under the command of the wraith that created them and remain enslaved until its death. They do not possess any of the abilities they had in life.\n</p>\n\n<h2 id=\"dreadWraith\">Dread Wraith</h2>\n<p>\n\tThe oldest and most malevolent wraiths lurk in the depths of forgotten temples and other forsaken places. They can sense the approach of living creatures, and hunger for them. Despite its size, the dread wraith possesses unearthly quickness, and makes use of its Spring Attack feat and natural reach to strike with deadly effect and melt back into the shadows—or the walls.\n</p>\n\n<h5>Lifesense (Su)</h5>\n<p>\n\tA dread wraith notices and locates living creatures within 60 feet, just as if it possessed the blindsight ability. It also senses the strength of their life force automatically, as if it had cast deathwatch.\n</p>\n\n<h5>Constitution Drain (Su)</h5>\n<p>\n\tLiving creatures hit by a dread wraith’s incorporeal touch attack must succeed on a DC 25 Fortitude save or take 1d8 points of Constitution drain. The save DC is Charisma-based. On each such successful attack, the dread wraith gains 5 temporary hit points.\n</p>\n\n<h5>Create Spawn (Su)</h5>\n<p>\n\tAny humanoid slain by a dread wraith becomes a wraith in 1d4 rounds. Its body remains intact and inanimate, but its spirit is torn free from its corpse and transformed. Spawn are under the command of the wraith that created them and remain enslaved until its death. They do not possess any of the abilities they had in life.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

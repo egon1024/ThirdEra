@@ -1,0 +1,326 @@
+{
+  "name": "Hobgoblin",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterHobgoblin",
+    "creatureTypeKey": "humanoid",
+    "subtypeKeys": [
+      "goblinoid"
+    ],
+    "abilities": {
+      "str": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1/2",
+      "alignment": "Lawful Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [],
+      "specialAbilities": "<p><strong>Attack:</strong> Longsword +2 melee (1d8+1/19–20) or javelin +2 ranged (1d6+1).</p><p><strong>Special:</strong> Darkvision 60 ft.</p>",
+      "environment": "Warm hills",
+      "organization": "Gang, band, warband, or tribe",
+      "treasure": "Standard",
+      "advancement": "By character class",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 6,
+        "max": 6,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 14,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 3,
+        "total": 0
+      },
+      "ref": {
+        "base": 0,
+        "total": 0
+      },
+      "will": {
+        "base": -1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>Hobgoblins are larger cousins of goblins. Hobgoblins' hair color ranges from dark reddish-brown to dark gray. They have dark orange or red-orange skin. Large males have blue or red noses. Hobgoblins' eyes are yellowish or dark brown, while their teeth are yellow. Their garments tend to be brightly colored, often blood red with black-tinted leather. Their weaponry is kept polished and in good repair. Hobgoblins speak Goblin and Common. Most hobgoblins encountered outside their homes are warriors; the information in the statistics block is for one of 1st level.</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [
+    {
+      "name": "Studded Leather",
+      "type": "armor",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>Studded leather armor is made from tough but flexible leather reinforced with close-set metal rivets or spikes.</p>",
+        "armor": {
+          "type": "light",
+          "bonus": 3,
+          "maxDex": 5,
+          "checkPenalty": -1,
+          "spellFailure": 15
+        },
+        "size": "Medium",
+        "speed": {
+          "ft30": 30,
+          "ft20": 20
+        },
+        "cost": 25,
+        "weight": 20,
+        "quantity": 1,
+        "equipped": "true",
+        "containerId": ""
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 0
+    },
+    {
+      "name": "Light Shield",
+      "type": "armor",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>A light shield is a small shield strapped to your forearm.</p>",
+        "armor": {
+          "type": "shield",
+          "bonus": 1,
+          "maxDex": null,
+          "checkPenalty": -1,
+          "spellFailure": 5
+        },
+        "size": "Medium",
+        "speed": {
+          "ft30": 30,
+          "ft20": 20
+        },
+        "cost": 3,
+        "weight": 5,
+        "quantity": 1,
+        "equipped": "true",
+        "containerId": ""
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 1
+    },
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 0,
+        "modifier": {
+          "misc": 4,
+          "total": 0,
+          "miscLabel": "MM / size / racial (not auto on sheet)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": false
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": false
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 0,
+        "modifier": {
+          "misc": 4,
+          "total": 0,
+          "miscLabel": "MM / size / racial (not auto on sheet)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": false
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": false
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    }
+  ],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

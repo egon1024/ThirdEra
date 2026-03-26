@@ -1,0 +1,160 @@
+{
+  "name": "Unicorn",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterUnicorn",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 24,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "Chaotic Good",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d8+8",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., magic circle against evil, spell-like abilities, immunity to poison, charm, and compulsion, low-light vision, scent, wild empathy</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Solitary, pair, or grace (3-6)",
+      "treasure": "None",
+      "advancement": "5-8 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 42,
+        "max": 42,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 60
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 9,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 6,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 4,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA unicorn has deep sea-blue, violet, brown, or fiery gold eyes. Males sport a white beard.\n</p>\n<p>\n\tA typical adult unicorn grows to 8 feet in length, stands 5 feet high at the shoulder, and weighs 1,200 pounds. Females are slightly smaller and slimmer than males.\n</p>\n<p>\n\tUnicorns speak Sylvan and Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tUnicorns normally attack only when defending themselves or their forests. They either charge, impaling foes with their horns like lances, or strike with their hooves. The horn is a +3 magic weapon, though its power fades if removed from the unicorn.\n</p>\n\n<h5>Magic Circle against Evil (Su)</h5>\n<p>\n\tThis ability continuously duplicates the effect of the spell. A unicorn cannot suppress this ability.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tUnicorns can use detect evil at will as a free action.\n</p>\n<p>\n\tOnce per day a unicorn can use greater teleport to move anywhere within its home. It cannot teleport beyond the forest boundaries nor back from outside.\n</p>\n<p>\n\tA unicorn can use cure light wounds three times per day and cure moderate wounds once per day (caster level 5th) by touching a wounded creature with its horn. Once per day it can use neutralize poison (DC 21, caster level 8th) with a touch of its horn. The save DC is Charisma-based.\n</p>\n\n<h5>Wild Empathy (Ex)</h5>\n<p>\n\tThis power works like the druid’s wild empathy class feature, except that a unicorn has a +6 racial bonus on the check.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tUnicorns have a +4 racial bonus on Move Silently checks. *Unicorns have a +3 competence bonus on Survival checks within the boundaries of their forest.\n</p>\n\n<h2 id=\"celestialCharger\">Celestial Charger</h2>\n<p>\n\tThe celestial charger described here is an 8 HD celestial unicorn with seven levels of cleric.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tThe save DC for this celestial charger’s neutralize poison ability (DC 20) is adjusted for its greater Hit Dice and altered Charisma score.\n</p>\n<p>\n\tA celestial charger’s natural weapons are treated as magic weapons for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Smite Evil (Su)</h5>\n<p>\n\tOnce per day a celestial charger can make a normal melee attack to deal 15 points of extra damage against an evil foe.\n</p>\n\n<h6>Cleric Spells Prepared (6/7/6/5/4; save DC 18 + spell level)</h6>\n<p>\n\t0—detect magic, detect poison (2), light, virtue (2); 1st—bless (2), calm animals*, obscuring mist, remove fear, sanctuary, shield of faith; 2nd—aid* (2), animal messenger, lesser restoration, remove paralysis, shield other; 3rd—prayer, protection from energy, remove curse, searing light (2); 4th—air walk, divine power, holy smite*, restoration.\n</p>\n<p>\n\t*Domain spell. Domains: Animal and Good.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

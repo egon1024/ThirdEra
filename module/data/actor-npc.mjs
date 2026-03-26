@@ -2,6 +2,7 @@ const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringFie
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
+import { prepareNpcSkillItems, buildModifierOnlySkills } from "../logic/npc-skill-prep.mjs";
 
 /**
  * Data model for D&D 3.5 NPC actors
@@ -10,6 +11,9 @@ import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
 export class NPCData extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
+            /** Stable id for compendium matching and migrations (e.g. monster-goblin). */
+            key: new StringField({ required: true, blank: true, initial: "" }),
+
             // Ability Scores (base + optional racial adjustment; effective and mod derived)
             abilities: new SchemaField({
                 str: new SchemaField({
@@ -73,7 +77,9 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                         dice: new StringField({ required: true, blank: true, initial: "1d4" }),
                         damageType: new StringField({ required: true, blank: true, initial: "bludgeoning" }),
                         primary: new StringField({ required: true, blank: false, initial: "true", choices: () => ({ "true": "Primary", "false": "Secondary" }) }),
-                        reach: new StringField({ required: true, blank: true, initial: "" })
+                        reach: new StringField({ required: true, blank: true, initial: "" }),
+                        /** When set, attack roll uses this total instead of derived melee ± secondary penalty (e.g. SRD dragon Multiattack). */
+                        presetAttackBonus: new NumberField({ required: false, nullable: true, integer: true, initial: null })
                     }),
                     { required: true, initial: [] }
                 ),
@@ -261,6 +267,11 @@ export class NPCData extends foundry.abstract.TypeDataModel {
         const effectiveMaxDex = getEffectiveMaxDex(this, loadEffects.maxDex);
         applyMaxDex(this, effectiveMaxDex);
 
+        // Skills: ability + ranks + misc + ACP + GMS skill.<key> (no skill points / max ranks)
+        prepareNpcSkillItems(this.parent, mods, loadEffects);
+        const skillItems = this.parent.items.filter((i) => i.type === "skill");
+        this.modifierOnlySkills = buildModifierOnlySkills(mods, skillItems);
+
         // Calculate initiative (Dex + generalized modifier-system contributions)
         const initiativeMod = mods.totals.initiative ?? 0;
         this.attributes.initiative.bonus = this.abilities.dex.mod + initiativeMod;
@@ -322,18 +333,24 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             ...(mods.breakdown.attackRanged ?? [])
         ];
 
-        // Natural attacks (Phase C): primary = full attack bonus + full Str to damage; secondary = -5 attack, half Str to damage
+        // Natural attacks (Phase C): primary = full melee bonus + full Str to damage; secondary = −5 attack & half Str unless presetAttackBonus is set (then attack total is explicit, e.g. dragons).
         const naturalAttacks = this.statBlock?.naturalAttacks ?? [];
         const strMod = this.abilities.str.mod;
         const meleeTotal = this.combat.meleeAttack.total;
         for (let i = 0; i < naturalAttacks.length; i++) {
             const atk = naturalAttacks[i];
             const isPrimary = atk.primary === "true";
-            atk.attackBonus = meleeTotal + (isPrimary ? 0 : -5);
-            atk.attackBreakdown = [
-                { label: "Melee", value: meleeTotal },
-                ...(isPrimary ? [] : [{ label: "Secondary", value: -5 }])
-            ];
+            const preset = atk.presetAttackBonus;
+            if (preset != null && preset !== "" && Number.isFinite(Number(preset))) {
+                atk.attackBonus = Number(preset);
+                atk.attackBreakdown = [{ label: "Stat block", value: atk.attackBonus }];
+            } else {
+                atk.attackBonus = meleeTotal + (isPrimary ? 0 : -5);
+                atk.attackBreakdown = [
+                    { label: "Melee", value: meleeTotal },
+                    ...(isPrimary ? [] : [{ label: "Secondary", value: -5 }])
+                ];
+            }
             const damageStrMod = isPrimary ? strMod : Math.floor(strMod / 2);
             atk.damageMod = damageStrMod;
             const dice = (atk.dice || "").trim() || "1d4";

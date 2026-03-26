@@ -1,0 +1,173 @@
+{
+  "name": "Ochre Jelly",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterOchreJelly",
+    "creatureTypeKey": "ooze",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 1,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "5",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 10
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "blindsight",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:ooze.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Ooze\"><h4>SRD type: Ooze</h4><p>\n\t<a href=\"/srd/typesSubtypes.htm#oozeType\">Oozes</a> are amorphous creatures that live only to eat. They inhabit underground areas throughout the world, scouring caverns, ruins, and dungeons in search of organic matter—living or dead.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tOozes attack any creatures they encounter. They lash out with pseudopods or simply engulf opponents with their bodies, which secrete acids that help them catch or digest their prey.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#blindsightAndBlindsense\">Blindsight</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tAn ooze’s entire body is a primitive sensory organ that can ascertain prey by scent and vibration within 60 feet.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Acid, constrict 2d4+3 plus 1d4 acid, improved grab</p><p><strong>Special Qualities:</strong> Blindsight 60 ft., split, ooze traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate marshes",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "7-9 HD (Large); 10-18 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 69,
+        "max": 69,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 4,
+        "flatFooted": 4,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": -5
+      },
+      "speed": {
+        "value": 10
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 8,
+        "total": 0
+      },
+      "ref": {
+        "base": -3,
+        "total": 0
+      },
+      "will": {
+        "base": -3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 4,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tAn ochre jelly can grow to a diameter of about 15 feet and a thickness of about 6 inches, but can compress its body to fit into cracks as small as 1 inch wide. A typical specimen weighs about 5,600 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tAn ochre jelly attempts to envelop and squeeze its prey.\n</p>\n\n<h5>Acid (Ex)</h5>\n<p>\n\tAn ochre jelly secretes a digestive acid that dissolves only flesh. Any melee hit or constrict attack deals acid damage.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tAn ochre jelly deals automatic slam and acid damage with a successful grapple check.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, an ochre jelly must hit with its slam attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Split (Ex)</h5>\n<p>\n\tSlashing and piercing weapons and electricity attacks deal no damage to an ochre jelly. Instead the creature splits into two identical jellies, each with half of the original’s current hit points (round down). A jelly with 10 hit points or less cannot be further split and dies if reduced to 0 it points.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tAn ochre jelly has a +8 racial bonus on Climb checks and can always choose to take 10 on a Climb check, even if rushed or threatened.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "ooze.htm",
+        "hubTitle": "Ooze",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": true,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

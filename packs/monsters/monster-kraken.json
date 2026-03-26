@@ -1,0 +1,158 @@
+{
+  "name": "Kraken",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterKraken",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [
+      "aquatic"
+    ],
+    "abilities": {
+      "str": {
+        "value": 34,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 29,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 21,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "12",
+      "alignment": "True Neutral",
+      "size": "Gargantuan"
+    },
+    "statBlock": {
+      "naturalArmor": 14,
+      "space": "20 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 20,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6+6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Improved grab, constrict 2d8+12 or 1d6+6</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., ink cloud, jet, low-light vision, spell-like abilities</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate aquatic",
+      "organization": "Solitary",
+      "treasure": "Triple standard",
+      "advancement": "21-32 HD (Gargantuan); 33-60 HD (Colossal)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 290,
+        "max": 290,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 6,
+        "flatFooted": 20,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 4
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 21,
+        "total": 0
+      },
+      "ref": {
+        "base": 12,
+        "total": 0
+      },
+      "will": {
+        "base": 13,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 20,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tSix of the beast’s tentacles are shorter arms about 30 feet long; the remaining two are nearly 60 feet long and covered with barbs. Its beaklike mouth is located where the tentacles meet the lower portion of its body.\n</p>\n<p>\n\tKrakens speak Common and Aquan.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tKrakens strike their opponents with their barbed tentacles, then grab and crush with their arms or drag victims into their huge jaws. An opponent can make sunder attempts against a kraken’s tentacles or arms as if they were weapons. A kraken’s tentacles have 20 hit points, and its arms have 10 hit points. If a kraken is currently grappling a target with one tentacle or arm, it usually uses another limb to make its attack of opportunity against the sunder attempt. Severing a kraken’s tentacle or arm deals damage to the kraken equal to half the limb’s full normal hit points. A kraken usually withdraws from combat if it loses both tentacles or three of its arms. A kraken regrows severed limbs in 1d10+10 days.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, the kraken must hit with an arm or tentacle attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can constrict.\n</p>\n\n<h5>Constrict (Ex)</h5>\n<p>\n\tA kraken deals automatic arm or tentacle damage with a successful grapple check.\n</p>\n\n<h5>Jet (Ex)</h5>\n<p>\n\tA kraken can jet backward once per round as a full-round action, at a speed of 280 feet. It must move in a straight line, but does not provoke attacks of opportunity while jetting.\n</p>\n\n<h5>Ink Cloud (Ex)</h5>\n<p>\n\tA kraken can emit a cloud of jet-black ink in an 80-foot spread once per minute as a free action. The cloud provides total concealment, which the kraken normally uses to escape a fight that is going badly. Creatures within the cloud are considered to be in darkness.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/day—control weather, control winds, dominate animal (DC 18), resist energy. Caster level 9th. The save DC is Charisma-based.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA kraken has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

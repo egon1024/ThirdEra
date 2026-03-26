@@ -1,0 +1,152 @@
+{
+  "name": "Tendriculos",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterTendriculos",
+    "creatureTypeKey": "plant",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 28,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 9,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 22,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 3,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 3,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "6",
+      "alignment": "True Neutral",
+      "size": "Huge"
+    },
+    "statBlock": {
+      "naturalArmor": 9,
+      "space": "15 ft",
+      "reach": "15 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "2d8+9",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Improved grab, paralysis, swallow whole</p><p><strong>Special Qualities:</strong> Low-light vision, plant traits, regeneration 10</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Solitary",
+      "treasure": "1/10th coins; 50% goods; 50% items",
+      "advancement": "10-16 HD (Huge); 17-27 HD (Gargantuan)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 94,
+        "max": 94,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 7,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": -1
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 12,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA tendriculos can rear up to a height of 15 feet. It weighs about 3,500 pounds.\n</p>\n<p>\n\tAnimals and other plant creatures are unnerved by the presence of a tendriculos; they avoid it and any place it has been within the last 24 hours.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tProwling deep forests or waiting in vegetated areas (looking like nothing more than a small hillock), a tendriculos attacks savagely, showing no fear. It attempts to swallow as much flesh as it can, as quickly as it can.\n</p>\n\n<h5>Improved Grab (Ex)</h5>\n<p>\n\tTo use this ability, a tendriculos must hit a creature at least one size smaller than itself with its bite attack. It can then attempt to start a grapple as a free action without provoking an attack of opportunity. If it wins the grapple check, it establishes a hold and can try to swallow the opponent in the following round. A tendriculos can also use its improved grab ability on a tendril attack. If it wins the grapple check, it establishes a hold, picks up the opponent, and transfers it to the mouth as a free action, automatically dealing bite damage.\n</p>\n\n<h5>Swallow Whole/Paralysis (Ex)</h5>\n<p>\n\tA tendriculos can try to swallow a grabbed opponent by making a successful grapple check. Once inside the plant’s mass, the opponent must succeed on a DC 20 Fortitude save or be paralyzed for 3d6 rounds by the tendriculos’s digestive juices, taking 2d6 points of acid damage per round. A new save is required each round inside the plant. The save DC is Constitution-based. A swallowed creature that avoids paralysis can climb out of the mass with a successful grapple check. This returns it to the plant’s maw, where another successful grapple check is needed to get free. A swallowed creature can also cut its way out by using a light slashing or piercing weapon to deal 25 points of damage to the tendriculos’s interior (AC 14). Once the creature exits, the plant’s regenerative capacity closes the hole; another swallowed opponent must cut its own way out. A Huge tendriculos’s interior can hold 2 Large, 8 Medium, 32 Small, 128 Tiny, or 512 Diminutive or smaller opponents.\n</p>\n\n<h5>Regeneration (Ex)</h5>\n<p>\n\tBludgeoning weapons and acid deal normal damage to a tendriculos. A tendriculos that loses part of its body mass can regrow it in 1d6 minutes. Holding the severed portion against the mass enables it to reattach instantly.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

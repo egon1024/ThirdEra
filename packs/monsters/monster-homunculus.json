@@ -1,0 +1,156 @@
+{
+  "name": "Homunculus",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterHomunculus",
+    "creatureTypeKey": "construct",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 7,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Tiny"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 50,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Poison</p><p><strong>Special Qualities:</strong> Construct traits, darkvision 60 ft., low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Solitary",
+      "treasure": "None",
+      "advancement": "3-6 HD (Tiny)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 11,
+        "max": 11,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 0,
+        "total": 0
+      },
+      "ref": {
+        "base": 4,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA homunculus is a miniature servant created by a wizard. These creatures are weak combatants but make effective spies, messengers, and scouts. A homunculus’s creator determines its precise features. Homunculi are little more than tools designed to carry out assigned tasks. They are extensions of their creators, sharing the same alignment and basic nature. A homunculus cannot speak, but the process of creating one links it telepathically with its creator.\n</p>\n<p>\n\tIt knows what its master knows and can convey to him or her everything it sees and hears, out to a distance of 1,500 feet. A homunculus never travels beyond this range willingly, though it can be removed forcibly. If this occurs, the creature does everything in its power to regain contact with its master. An attack that destroys a homunculus deals 2d10 points of damage to its master.\n</p>\n<p>\n\tIf the creature’s master is slain, the homunculus also dies, and its body swiftly melts away into a pool of ichor.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tHomunculi land on their victims and bite with their venomous fangs.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 13, initial damage sleep for 1 minute, secondary damage sleep for another 5d6 minutes. The save DC is Constitution-based and includes a +2 racial bonus.\n</p>\n\n<h2>Construction</h2>\n<p>\n\tA homunculus is shaped from a mixture of clay, ashes, mandrake root, spring water, and one pint of the creator’s own blood. The materials cost 50 gp. The creature’s master may assemble the body or hire someone else to do the job. Creating the body requires a DC 12 Craft (sculpting) check or a DC 12 Craft (pottery) check.\n</p>\n<p>\n\tAfter the body is sculpted, it is animated through an extended magical ritual that requires a specially prepared laboratory or workroom, similar to an alchemist’s laboratory and costing 500 gp to establish. If the creator is personally constructing the creature’s body, the building and ritual can be performed together.\n</p>\n<p>\n\tA homunculus with more than 2 Hit Dice can be created, but each additional Hit Die adds +2,000 gp to the cost to create.\n</p>\n<p>\n\tCraft Construct, arcane eye, mirror image, mending, caster must be at least 4th level; Price — (never sold); Cost 1,050 gp + 78 XP.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

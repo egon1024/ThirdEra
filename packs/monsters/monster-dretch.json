@@ -1,0 +1,189 @@
+{
+  "name": "Dretch",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterDretch",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "chaotic",
+      "extraplanar",
+      "evil"
+    ],
+    "abilities": {
+      "str": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 5,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "2",
+      "alignment": "Chaotic Evil",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 5,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6+1",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "cold"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:demon.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Demon\"><h4>SRD type: Demon</h4><p>\n\tDemons are a race of creatures native to chaotic evil-aligned planes. They are ferocity personified and will attack any creature just for the sheer fun of it—even other demons.\n</p>\n\n<h5>Demon Traits</h5>\n<p>\n\tMost demons possess the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li>Immunity to electricity and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10, cold 10, and fire 10.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept where otherwise noted, demons speak Abyssal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Spell-like abilities, summon demon</p><p><strong>Special Qualities:</strong> Damage reduction 5/cold iron or good, darkvision 60 ft., immunity to electricity and poison, resistance to acid 10, cold 10, and fire 10, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "A chaotic evil-aligned plane",
+      "organization": "Solitary, pair, gang (3-5), crowd (6-15), or mob (10-40)",
+      "treasure": "None",
+      "advancement": "3-6 HD (Small)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 13,
+        "max": 13,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 0
+      },
+      "speed": {
+        "value": 20
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 3,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 2,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA dretch is about 4 feet tall and weighs about 60 pounds.\n</p>\n<p>\n\tDretches cannot speak but can communicate telepathically.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tDretches are slow, stupid, and not very effective combatants. In one-on-one combat, they rely on their damage reduction to keep them alive. In groups, they depend on sheer numbers to overcome foes and immediately summon other dretches to improve the odds in battle. They flee at the first sign of adversity unless more powerful demons are present to intimidate them into fighting. Dretches’ fear of their greater kin is stronger then even their fear of death.\n</p>\n<p>\n\tA dretch’s natural weapons, as well as any weapons it wields, are treated as chaotic-aligned and evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\t1/day—scare (DC 12), stinking cloud (DC 13). Caster level 2nd. The save DCs are Charisma-based.\n</p>\n\n<h5>Summon Demon (Sp)</h5>\n<p>\n\tOnce per day a dretch can attempt to summon another dretch with a 35% chance of success. This ability is the equivalent of a 1st-level spell.\n</p>\n\n<h5>Telepathy (Su)</h5>\n<p>\n\tDretches can communicate telepathically with creatures within 100 feet that speak Abyssal.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "demon.htm",
+        "hubTitle": "Demon",
+        "immunities": [
+          "electricity",
+          "poison"
+        ],
+        "energyResistance": {
+          "acid": 10,
+          "cold": 10,
+          "fire": 10
+        },
+        "traitFlags": {
+          "telepathy": true,
+          "summon": true,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [
+          "Immunity to electricity and poison.",
+          "Resistance to acid 10, cold 10, and fire 10.",
+          "Summon (Sp): Many demons share the ability to summon others of their kind (the success chance and type of demon summoned are noted in each monster description). Demons are often reluctant to use this power until in obvious peril or extreme circumstances.",
+          "Telepathy."
+        ],
+        "languagesNote": "Except where otherwise noted, demons speak Abyssal, Celestial, and Draconic."
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

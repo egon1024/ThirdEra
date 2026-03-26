@@ -1,0 +1,156 @@
+{
+  "name": "Porpoise",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterPorpoise",
+    "creatureTypeKey": "animal",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 2,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "1",
+      "alignment": "True Neutral",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 2,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 80,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d4",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "blindsight",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Blindsight 120 ft., hold breath, low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate aquatic",
+      "organization": "Solitary, pair, or school (3-20)",
+      "treasure": "None",
+      "advancement": "3-4 HD (Medium); 5-6 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 11,
+        "max": 11,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 13,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 80
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 1,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tPorpoises are mammals that tend to be playful, friendly, and helpful. A typical porpoise is 4 to 6 feet long and weighs 110 to 160 pounds. The statistics presented here can describe any small whale of similar size.\n</p>\n\n<h2>Combat</h2>\n\n<h5>Blindsight (Ex)</h5>\n<p>\n\tPorpoises can \"see\" by emitting high-frequency sounds, inaudible to most other creatures, that allow them to locate objects and creatures within 120 feet. A silence spell negates this and forces the porpoise to rely on its vision, which is approximately as good as a human’s.\n</p>\n\n<h5>Hold Breath (Ex)</h5>\n<p>\n\tA porpoise can hold its breath for a number of rounds equal to 6 &times; its Constitution score before it risks drowning.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tA porpoise has a +8 racial bonus on any Swim check to perform some special action or avoid a hazard. It can always choose to take 10 on a Swim check, even if distracted or endangered. It can use the run action while swimming, provided it swims in a straight line. *A porpoise has a +4 racial bonus on Spot and Listen checks. These bonuses are lost if its blindsight is negated.\n</p>\n\n<h2>Celestial Porpoise</h2>\n<p>\n\tThese celestial creatures are commonly summoned by the summon monster I spell.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Smite Evil (Su)</h5>\n<p>\n\tOnce per day a celestial porpoise can make a normal melee attack to deal 2 points of extra damage against an evil foe.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

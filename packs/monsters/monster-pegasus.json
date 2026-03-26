@@ -1,0 +1,160 @@
+{
+  "name": "Pegasus",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterPegasus",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 16,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 120,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision, scent, spell-like abilities</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate forests",
+      "organization": "Solitary, pair, or herd (6-10)",
+      "treasure": "None",
+      "advancement": "5-8 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 34,
+        "max": 34,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 11,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 60
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 4,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tThe pegasus is a magnificent winged horse that sometimes serves the cause of good. Though highly prized as aerial steeds, pegasi are wild and shy creatures not easily tamed.\n</p>\n<p>\n\tA typical pegasus stands 6 feet high at the shoulder, weighs 1,500 pounds, and has a wingspan of 20 feet. Pegasi cannot speak, but they understand Common.\n</p>\n\n<h2>Combat</h2>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—detect good and detect evil within a 60-foot radius. Caster level 5th.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tPegasi have a +4 racial bonus on Listen and Spot checks.\n</p>\n\n<h2 id=\"trainingAPegasus\">Training A Pegasus</h2>\n<p>\n\tAlthough intelligent, a pegasus requires training before it can bear a rider in combat. To be trained, a pegasus must have a friendly attitude toward the trainer (this can be achieved through a successful Diplomacy check). Training a friendly pegasus requires six weeks of work and a DC 25 Handle Animal check. Riding a pegasus requires an exotic saddle. A pegasus can fight while carrying a rider, but the rider cannot also attack unless he or she succeeds on a Ride check.\n</p>\n<p>\n\tPegasus eggs are worth 2,000 gp each on the open market, while young are worth 3,000 gp per head. Pegasi mature at the same rate as horses. Professional trainers charge 1,000 gp to rear or train a pegasus, which serves a good or neutral master with absolute faithfulness for life.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a pegasus is up to 300 pounds; a medium load, 301-600 pounds; and a heavy load, 601-900 pounds.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

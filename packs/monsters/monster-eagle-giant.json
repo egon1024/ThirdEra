@@ -1,0 +1,152 @@
+{
+  "name": "Eagle, Giant",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterEagleGiant",
+    "creatureTypeKey": "magicalBeast",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 3,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 80,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Low-light vision, evasion</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate mountains",
+      "organization": "Solitary, pair, or eyrie (5-12)",
+      "treasure": "None",
+      "advancement": "5-8 HD (Large); 9-12 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 26,
+        "max": 26,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 12,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 3
+      },
+      "speed": {
+        "value": 10
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 7,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 4,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA typical giant eagle stands about 10 feet tall, has a wingspan of up to 20 feet, and resembles its smaller cousins in nearly every way except size. It weighs about 500 pounds.\n</p>\n<p>\n\tGiant eagles speak Common and Auran.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tA giant eagle typically attacks from a great height, diving earthward at tremendous speed. When it cannot dive, it uses its powerful talons and slashing beak to strike at its target’s head and eyes.\n</p>\n<p>\n\tA solitary giant eagle is typically hunting or patrolling in the vicinity of its nest and generally ignores creatures that do not appear threatening. A mated pair attacks in concert, making repeated diving attacks to drive away intruders, and fights to the death to defend their nest or hatchlings.\n</p>\n\n<h5>Evasion (Ex)</h5>\n<p>\n\tWith a successful Reflex save against an attack that allows a Reflex save for half damage, a giant eagle takes no damage.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tGiant eagles have a +4 racial bonus on Spot checks.\n</p>\n\n<h2 id=\"trainingAGiantEagle\">Training A Giant Eagle</h2>\n<p>\n\tAlthough intelligent, a giant eagle requires training before it can bear a rider in combat. To be trained, a giant eagle must have a friendly attitude toward the trainer (this can be achieved through a successful Diplomacy check). Training a friendly giant eagle requires six weeks of work and a DC 25 Handle Animal check.\n</p>\n<p>\n\tRiding a giant eagle requires an exotic saddle. A giant eagle can fight while carrying a rider, but the rider cannot also attack unless he or she succeeds on a Ride check.\n</p>\n<p>\n\tGiant eagle eggs are worth 2,500 gp apiece on the open market, while chicks are worth 4,000 gp each. Professional trainers charge 1,000 gp to rear or train a giant eagle.\n</p>\n\n<h5>Carrying Capacity</h5>\n<p>\n\tA light load for a giant eagle is up to 300 pounds; a medium load, 301-600 pounds; and a heavy load, 601-900 pounds.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

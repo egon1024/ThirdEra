@@ -1,0 +1,176 @@
+{
+  "name": "Salt Mephit",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterSaltMephit",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "earth",
+      "extraplanar"
+    ],
+    "abilities": {
+      "str": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 8,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 11,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "True Neutral",
+      "size": "Small"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 40,
+        "flyManeuverability": "average",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Claw",
+          "dice": "1d3+3",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 5,
+        "bypass": "magic"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:mephit.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Mephit\"><h4>SRD type: Mephit</h4><p>\n\tMephits are minor creatures from the elemental planes.\n</p>\n<p>\n\tAll mephits appear as small, winged creatures with more or less humanoid features. While they are often described as impish, their elemental origins are apparent at first glance.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tAll mephits fight by biting and clawing or by using a <a href=\"/srd/specialAbilities.htm#breathWeapon\">breath weapon</a>, the nature and effects of which vary from creature to creature.\n</p>\n<p>\n\tA mephit’s <a href=\"/srd/specialAbilities.htm#naturalWeapons\">natural weapons</a> are treated as magic weapons for the purpose of overcoming <a href=\"/srd/specialAbilities.htm#damageReduction\">damage reduction</a>.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#breathWeapon\">Breath Weapon</a> (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>)</h5>\n<p>\n\tA mephit can use its <a href=\"/srd/specialAbilities.htm#breathWeapon\">breath weapon</a> once every 1d4 rounds as a <a href=\"/srd/combat/actionsInCombat.htm#standardActions\">standard action</a>. See the individual descriptions for details.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Spell-Like Abilities</a></h5>\n<p>\n\tAll mephits have one or more <a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">spell-like abilities</a> (save DC 12 + spell level). See the individual descriptions for details.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> Mephit (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>)</h5>\n<p>\n\tOnce per day, a mephit can attempt to <a href=\"/srd/specialAbilities.htm#summon\">summon</a> another mephit of the same variety, much as though casting a summon monster spell, but with only a 25% chance of success. Roll d%: On a failure, no creature answers the summons that day. A mephit that has just been summoned cannot use its own summon ability for 1 hour. This ability is the equivalent of a 2nd-level spell.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#fastHealing\">Fast Healing</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tMephits heal 2 points of damage each round, provided they are still alive and certain other conditions are met. See the individual descriptions for details.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Breath weapon, spell-like abilities, summon mephit</p><p><strong>Special Qualities:</strong> Damage reduction 5/magic, darkvision 60 ft., fast healing 2</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Elemental Plane of Earth",
+      "organization": "Solitary (1), gang (2-4 mephits of mixed types), or mob (5-12 mephits of mixed types)",
+      "treasure": "Standard",
+      "advancement": "4-6 HD (Small); 7-9 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 19,
+        "max": 19,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 16,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": -1
+      },
+      "speed": {
+        "value": 30
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 4,
+        "total": 0
+      },
+      "ref": {
+        "base": 2,
+        "total": 0
+      },
+      "will": {
+        "base": 3,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tSalt mephits come from the Elemental Plane of Earth.\n</p>\n<p>\n\tSalt mephits are sarcastic creatures who loathe water and moisture of any kind. Each one is about 4 feet tall and weighs about 80 pounds.\n</p>\n<p>\n\tSalt mephits speak Common and Terran.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Breath Weapon (Su)</h5>\n<p>\n\t10-foot cone of salt crystals, damage 1d4, Reflex DC 13 half. Living creatures that fail their saves are tormented by itching skin and burning eyes. This effect imposes a -4 penalty to AC and a -2 penalty on attack rolls for 3 rounds. The save DC is Constitution-based and includes a +1 racial bonus.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tOnce per hour a salt mephit can use glitterdust (DC 14, caster level 3rd).\n</p>\n<p>\n\tOnce per day it can draw the moisture from an area in a 20-foot radius centered on itself. Living creatures within range take 2d8 points of damage (Fortitude DC 14 half; caster level 6th). This effect is especially devastating to plant creatures and aquatic creatures, which take a -2 penalty on their saving throws. This ability is the equivalent of a 2nd-level spell. The save DCs are Charisma-based.\n</p>\n\n<h5>Fast Healing (Ex)</h5>\n<p>\n\tA salt mephit heals only if in an arid environment.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "mephit.htm",
+        "hubTitle": "Mephit",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

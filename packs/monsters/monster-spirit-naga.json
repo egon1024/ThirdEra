@@ -1,0 +1,173 @@
+{
+  "name": "Spirit Naga",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterSpiritNaga",
+    "creatureTypeKey": "aberration",
+    "subtypeKeys": [],
+    "abilities": {
+      "str": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 18,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "9",
+      "alignment": "Chaotic Evil",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 6,
+      "space": "10 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 0,
+        "flyManeuverability": "",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:naga.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Naga\"><h4>SRD type: Naga</h4><p>\n\tAll nagas have long, snakelike bodies covered with glistening scales, and more or less human faces. They range in length from 10 to 20 feet and weigh from 200 to 500 pounds. The eyes of a naga are bright and intelligent, burning with an almost hypnotic inner light.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tNagas favor spells over other forms of combat. Because they are almost always found in the lairs they guard and know well, they can arrange most encounters to suit their wishes.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Charming gaze, poison, spells</p><p><strong>Special Qualities:</strong> Darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Temperate marshes",
+      "organization": "Solitary or nest (2-4)",
+      "treasure": "Standard",
+      "advancement": "10-13 HD (Large); 14-27 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 76,
+        "max": 76,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 10,
+        "flatFooted": 15,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 1
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 7,
+        "total": 0
+      },
+      "ref": {
+        "base": 6,
+        "total": 0
+      },
+      "will": {
+        "base": 9,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 6,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tSpirit nagas speak Abyssal and Common.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tSpirit nagas meet foes boldly so as to use their gaze attacks to best effect. They quickly slither forward to bite foes that avert their eyes.\n</p>\n\n<h5>Charming Gaze (Su)</h5>\n<p>\n\tAs charm person, 30 feet, Will DC 19 negates. The save DC is Charisma-based.\n</p>\n\n<h5>Poison (Ex)</h5>\n<p>\n\tInjury, Fortitude DC 18, initial and secondary damage 1d8 Con. The save DC is Constitution-based.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tSpirit nagas cast spells as 7th-level sorcerers, and can also cast spells from the cleric spell list and from the Chaos and Evil domains as arcane spells. The cleric spells and domain spells are considered arcane spells for a spirit naga, meaning that the creature does not need a divine focus to cast them.\n</p>\n\n<h6>Typical Spells Known (6/7/7/5; save DC 13 + spell level)</h6>\n<p>\n\t0—cure minor wounds, daze, detect magic, mage hand, open/close, ray of frost, read magic; 1st—charm person, cure light wounds, divine favor, magic missile, shield of faith; 2nd—cat’s grace, invisibility, summon swarm; 3rd—displacement, fireball.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "naga.htm",
+        "hubTitle": "Naga",
+        "immunities": [],
+        "energyResistance": {},
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": false,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [],
+        "traitBullets": [],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

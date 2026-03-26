@@ -1,4 +1,4 @@
-const { NumberField, SchemaField, StringField, HTMLField } = foundry.data.fields;
+const { BooleanField, NumberField, SchemaField, StringField, HTMLField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Skill items
@@ -15,12 +15,17 @@ export class SkillData extends foundry.abstract.TypeDataModel {
 
             modifier: new SchemaField({
                 misc: new NumberField({ required: true, integer: true, initial: 0, label: "Misc Modifier" }),
-                total: new NumberField({ required: true, integer: false, initial: 0, label: "Total Modifier" })
+                total: new NumberField({ required: true, integer: false, initial: 0, label: "Total Modifier" }),
+                /** Shown in skill total tooltip instead of generic "Misc" (e.g. size, racial, synergy). */
+                miscLabel: new StringField({ required: false, blank: true, initial: "", label: "Misc modifier label" })
             }),
 
             trainedOnly: new StringField({ required: true, blank: false, initial: "false", label: "Trained Only" }),
             armorCheckPenalty: new StringField({ required: true, blank: false, initial: "false", label: "Armor Check Penalty Applies" }),
-            exclusive: new StringField({ required: true, blank: false, initial: "false", label: "Exclusive (Class Skill Only)" })
+            exclusive: new StringField({ required: true, blank: false, initial: "false", label: "Exclusive (Class Skill Only)" }),
+
+            /** When embedded on an NPC, treat as a class skill for sheet badge/styling (default true). Ignored on PCs (class rules apply). */
+            npcClassSkill: new BooleanField({ required: true, initial: true, label: "NPC: class skill" })
         };
     }
 }

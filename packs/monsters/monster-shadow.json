@@ -1,0 +1,154 @@
+{
+  "name": "Shadow",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterShadow",
+    "creatureTypeKey": "undead",
+    "subtypeKeys": [
+      "incorporeal"
+    ],
+    "abilities": {
+      "str": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 0,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 12,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 13,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "Chaotic Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 0,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 40,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "1d6",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 0,
+        "bypass": ""
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Create spawn, strength damage</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., incorporeal traits, +2 turn resistance, undead traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any",
+      "organization": "Solitary, gang (2-5), or swarm (6-11)",
+      "treasure": "None",
+      "advancement": "4-9 HD (Medium)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 19,
+        "max": 19,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 13,
+        "flatFooted": 11,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 2
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 1,
+        "total": 0
+      },
+      "ref": {
+        "base": 3,
+        "total": 0
+      },
+      "will": {
+        "base": 4,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 1,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA shadow can be difficult to see in dark or gloomy areas but stands out starkly in brightly illuminated places.\n</p>\n<p>\n\tA shadow is 5 to 6 feet tall and is weightless. Shadows cannot speak intelligibly.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tShadows lurk in dark places, waiting for living prey to happen by.\n</p>\n\n<h5>Strength Damage (Su)</h5>\n<p>\n\tThe touch of a shadow deals 1d6 points of Strength damage to a living foe. A creature reduced to Strength 0 by a shadow dies. This is a negative energy effect.\n</p>\n\n<h5>Create Spawn (Su)</h5>\n<p>\n\tAny humanoid reduced to Strength 0 by a shadow becomes a shadow under the control of its killer within 1d4 rounds.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tShadows have a +2 racial bonus on Listen and Spot checks and a +4 racial bonus on Search checks. *A shadow gains a +4 racial bonus on Hide checks in areas of shadowy illumination. In brightly lit areas, it takes a -4 penalty on Hide checks.\n</p>\n\n<h2 id=\"greaterShadow\">Greater Shadow</h2>\n<p>\n\tAlthough no more intelligent than an average shadow, a greater shadow is more fearsome because of its increased damage and its hit-and-run tactics.\n</p>\n\n<h3>Combat</h3>\n\n<h5>Strength Damage (Su)</h5>\n<p>\n\tThe touch of a greater shadow deals 1d8 points of Strength damage to a living foe.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

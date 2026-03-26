@@ -1,0 +1,159 @@
+{
+  "name": "Yeth Hound",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterYethHound",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "extraplanar",
+      "evil"
+    ],
+    "abilities": {
+      "str": {
+        "value": 17,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 15,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 6,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 14,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 10,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "3",
+      "alignment": "Neutral Evil",
+      "size": "Medium"
+    },
+    "statBlock": {
+      "naturalArmor": 8,
+      "space": "5 ft",
+      "reach": "5 ft",
+      "movement": {
+        "land": 0,
+        "fly": 60,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Bite",
+          "dice": "1d8+4",
+          "damageType": "slashing",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 10,
+        "bypass": "silver"
+      },
+      "spellResistance": 0,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<p><strong>Special Attacks:</strong> Bay, trip</p><p><strong>Special Qualities:</strong> Damage reduction 10/silver, darkvision 60 ft., flight, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "An evil-aligned plane",
+      "organization": "Solitary, pair, or pack (6-11)",
+      "treasure": "None",
+      "advancement": "4-6 HD (Medium); 7-9 HD (Large)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 19,
+        "max": 19,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 12,
+        "flatFooted": 18,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 6
+      },
+      "speed": {
+        "value": 40
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 5,
+        "total": 0
+      },
+      "ref": {
+        "base": 5,
+        "total": 0
+      },
+      "will": {
+        "base": 5,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 3,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA yeth hound stands 5 feet tall at the shoulder and weighs about 400 pounds.\n</p>\n<p>\n\tYeth hounds cannot speak, but understand Infernal.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tYeth hounds hunt only at night. They fear the sun and never venture out in daylight, even if their lives depend on it.\n</p>\n<p>\n\tA yeth hound’s natural weapons, as well as any weapons it wields, are treated as evil-aligned for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Bay (Su)</h5>\n<p>\n\tWhen a yeth hound howls or barks, all creatures except other evil outsiders within a 300-foot spread must succeed on a DC 11 Will save or become panicked for 2d4 rounds. This is a sonic mind-affecting fear effect. Whether or not the save is successful, an affected creature is immune to the same hound’s bay for 24 hours. The save DC is Charisma-based.\n</p>\n\n<h5>Trip (Ex)</h5>\n<p>\n\tA yeth hound that hits with its bite attack can attempt to trip the opponent (+3 check modifier) as a free action without making a touch attack or provoking an attack of opportunity. If the attempt fails, the opponent cannot react to trip the yeth hound.\n</p>\n\n<h5>Flight (Su)</h5>\n<p>\n\tA yeth hound can cease or resume flight as a free action.\n</p>\n\n<h5>Skills</h5>\n<p>\n\t*A yeth hound has a +4 racial bonus on Survival checks when tracking by scent.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

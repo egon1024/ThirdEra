@@ -1,0 +1,200 @@
+{
+  "name": "Angel, Solar",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "monsterAngelSolar",
+    "creatureTypeKey": "outsider",
+    "subtypeKeys": [
+      "angel",
+      "extraplanar",
+      "good"
+    ],
+    "abilities": {
+      "str": {
+        "value": 28,
+        "racial": 0,
+        "mod": 0
+      },
+      "dex": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "con": {
+        "value": 20,
+        "racial": 0,
+        "mod": 0
+      },
+      "int": {
+        "value": 23,
+        "racial": 0,
+        "mod": 0
+      },
+      "wis": {
+        "value": 25,
+        "racial": 0,
+        "mod": 0
+      },
+      "cha": {
+        "value": 25,
+        "racial": 0,
+        "mod": 0
+      }
+    },
+    "details": {
+      "type": "",
+      "creatureTypeUuid": "",
+      "subtypeUuids": [],
+      "cr": "23",
+      "alignment": "True Neutral",
+      "size": "Large"
+    },
+    "statBlock": {
+      "naturalArmor": 21,
+      "space": "10 ft",
+      "reach": "10 ft",
+      "movement": {
+        "land": 0,
+        "fly": 150,
+        "flyManeuverability": "good",
+        "swim": 0,
+        "burrow": 0,
+        "climb": 0
+      },
+      "naturalAttacks": [
+        {
+          "name": "Slam",
+          "dice": "2d8+13",
+          "damageType": "bludgeoning",
+          "primary": "true",
+          "reach": ""
+        }
+      ],
+      "damageReduction": {
+        "value": 15,
+        "bypass": "epic"
+      },
+      "spellResistance": 32,
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "specialAbilities": "<!--thirdera-srd-hub-start:angel.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Angel\"><h4>SRD type: Angel</h4><p>\n\tAngels are a race of celestials, beings who live on the good-aligned Outer Planes.\n</p>\n<p>\n\tAngels can be of any good <a href=\"/srd/description.htm#alignment\">alignment</a>. Regardless of their alignment, angels never lie, cheat, or steal. They are impeccably honorable in all their dealings and often prove the most trustworthy and diplomatic of all the celestials.\n</p>\n<p>\n\tAll angels are blessed with comely looks, though their actual appearances vary widely.\n</p>\n<p>\n\tAngels speak Celestial, Infernal, and Draconic, though they can speak with almost any creature because of their <a class=\"spell\" href=\"/srd/spells/tongues.htm\">tongues</a> ability.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tIn combat, most angels make full use of their mobility and their ability to attack at a distance.\n</p>\n\n<h5>Angel Traits</h5>\n<p>\n\tAn angel possesses the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li><a href=\"/srd/specialAbilities.htm#darkvision\">Darkvision</a> out to 60 feet and <a href=\"/srd/specialAbilities.htm#lowLightVision\">low-light vision</a>.</li>\n\t<li>Immunity to acid, cold, and petrification.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to electricity 10 and fire 10.</li>\n\t<li>+4 racial bonus on saves against <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li>Protective Aura (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): Against attacks made or effects created by evil creatures, this ability provides a +4 <a href=\"/srd/theBasics.htm#deflectionBonus\">deflection bonus</a> to AC and a +4 <a href=\"/srd/theBasics.htm#resistanceBonus\">resistance bonus</a> on <a href=\"/srd/combat/combatStatistics.htm#savingThrows\">saving throws</a> to anyone within 20 feet of the angel. Otherwise, it functions as a <a class=\"spell\" href=\"/srd/spells/magicCircleAgainstEvil.htm\">magic circle against evil</a> effect and a <a class=\"spell\" href=\"/srd/spells/globeOfInvulnerabilityLesser.htm\">lesser globe of invulnerability</a>, both with a radius of 20 feet (caster level equals angel’s HD). This aura can be dispelled, but the angel can create it again as a <a href=\"/srd/combat/actionsInCombat.htm#freeActions\">free action</a> on its next turn. (The defensive benefits from the circle are not included in an angel’s statistics block.)</li>\n\t<li>Tongues (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): All angels can speak with any creature that has a language, as though using a <a class=\"spell\" href=\"/srd/spells/tongues.htm\">tongues</a> spell (caster level equal to angel’s Hit Dice). This ability is always active.</li>\n</ul></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Spell-like abilities, spells</p><p><strong>Special Qualities:</strong> Change shape, damage reduction 15/epic and evil, darkvision 60 ft., low-light vision, immunity to acid, cold, and petrification, protective aura, regeneration 15, resistance to electricity 10 and fire 10, spell resistance 32, tongues</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "environment": "Any good-aligned plane",
+      "organization": "Solitary or pair",
+      "treasure": "No coins; double goods; standard items",
+      "advancement": "23-33 HD (Large); 34-66 HD (Huge)",
+      "levelAdjustment": 0
+    },
+    "attributes": {
+      "hp": {
+        "value": 209,
+        "max": 209,
+        "temp": 0,
+        "nonlethal": 0,
+        "stable": false
+      },
+      "ac": {
+        "value": 10,
+        "touch": 14,
+        "flatFooted": 30,
+        "misc": 0
+      },
+      "initiative": {
+        "bonus": 9
+      },
+      "speed": {
+        "value": 50
+      }
+    },
+    "saves": {
+      "fort": {
+        "base": 18,
+        "total": 0
+      },
+      "ref": {
+        "base": 18,
+        "total": 0
+      },
+      "will": {
+        "base": 20,
+        "total": 0
+      }
+    },
+    "combat": {
+      "bab": 22,
+      "grapple": 0,
+      "meleeAttack": {
+        "misc": 0,
+        "total": 0
+      },
+      "rangedAttack": {
+        "misc": 0,
+        "total": 0
+      }
+    },
+    "biography": "<p>\n\tA solar has a deep and commanding voice, and stands about 9 feet tall. It weighs about 500 pounds.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tSolars are puissant champions of good. Only the most powerful fiends approach their power.\n</p>\n<p>\n\tEven more fearsome than their +5 dancing greatswords are their +2 composite longbows that create any sort of slaying arrow when drawn.\n</p>\n<p>\n\tA solar’s natural weapons, as well as any weapons it wields, are treated as good-aligned and epic for the purpose of overcoming damage reduction.\n</p>\n\n<h5>Change Shape (Su)</h5>\n<p>\n\tA solar can assume the form of any Small or Medium humanoid.\n</p>\n\n<h5>Regeneration (Ex)</h5>\n<p>\n\tA solar takes normal damage from epic evil-aligned weapons, and from spells or effects with the evil descriptor.\n</p>\n\n<h5>Spell-Like Abilities</h5>\n<p>\n\tAt will—aid, animate objects, commune, continual flame, dimensional anchor, greater dispel magic, holy smite (DC 21), imprisonment (DC 26), invisibility (self only), lesser restoration (DC 19), remove curse (DC 20), remove disease (DC 20), remove fear (DC 18), resist energy, summon monster VII, speak with dead (DC 20), waves of fatigue; 3/day—blade barrier (DC 23), earthquake (DC 25), heal (DC 23), mass charm monster (DC 25), permanency, resurrection, waves of exhaustion; 1/day—greater restoration (DC 24), power word blind, power word kill, power word stun, prismatic spray (DC 24), wish. Caster level 20th. The save DCs are Charisma-based.\n</p>\n\n<h5>The following abilities are always active on a solar’s person, as the spells (caster level 20th)</h5>\n<p>\n\tdetect evil, detect snares and pits, discern lies (DC 21), see invisibility, true seeing. They can be dispelled, but the solar can reactivate them as a free action.\n</p>\n\n<h5>Spells</h5>\n<p>\n\tSolars can cast divine spells as 20th-level clerics. A solar has access to two of the following domains: Air, Destruction, Good, Law, or War (plus any others from its deity). The save DCs are Wisdom-based.\n</p>\n\n<h6>Typical Cleric Spells Prepared (6/8/8/8/7/7/6/6/5/5; save DC 17 + spell level)</h6>\n<p>\n\t0—create water, detect magic, guidance (2), resistance (2); 1st—bless (2), cause fear, divine favor (2), entropic shield, obscuring mist*, shield of faith; 2nd—align weapon, bear’s endurance (2), bull’s strength (2), consecrate, eagle’s splendor, spiritual weapon*; 3rd—daylight, invisibility purge, magic circle against evil, magic vestment*, prayer (2), protection from energy, wind wall; 4th—death ward (2), dismissal (2), divine power*, neutralize poison (2); 5th—break enchantment, control winds*, dispel evil, plane shift, righteous might (2), symbol of sleep; 6th—banishment, chain lightning*, heroes’ feast, mass cure moderate wounds, undeath to death, word of recall; 7th—control weather*, destruction, dictum, ethereal jaunt, holy word, regenerate; 8th—fire storm, holy aura, mass cure critical wounds (2), whirlwind*; 9th— etherealness, elemental swarm (air)*, mass heal, miracle, storm of vengeance.\n</p>\n<p>\n\t*Domain spell. Domains: Air and War.\n</p>",
+    "currency": {
+      "pp": 0,
+      "gp": 0,
+      "sp": 0,
+      "cp": 0
+    }
+  },
+  "items": [],
+  "flags": {
+    "thirdera": {
+      "srdHubTraits": {
+        "hubPath": "angel.htm",
+        "hubTitle": "Angel",
+        "immunities": [
+          "acid",
+          "cold",
+          "and petrification"
+        ],
+        "energyResistance": {
+          "electricity": 10,
+          "fire": 10
+        },
+        "traitFlags": {
+          "telepathy": false,
+          "summon": false,
+          "tongues": true,
+          "seeInDarkness": false,
+          "planeShift": false,
+          "blindsight": false,
+          "swarmSubtype": false
+        },
+        "saveRacialBonuses": [
+          {
+            "bonus": 4,
+            "vs": "poison"
+          }
+        ],
+        "traitBullets": [
+          "Darkvision out to 60 feet and low-light vision.",
+          "Immunity to acid, cold, and petrification.",
+          "Resistance to electricity 10 and fire 10.",
+          "+4 racial bonus on saves against poison.",
+          "Protective Aura (Su): Against attacks made or effects created by evil creatures, this ability provides a +4 deflection bonus to AC and a +4 resistance bonus on saving throws to anyone within 20 feet of the angel. Otherwise, it functions as a magic circle against evil effect and a lesser globe of invulnerability, both with a radius of 20 feet (caster level equals angel’s HD). This aura can be dispelled, but the angel can create it again as a free action on its next turn. (The defensive benefits from the circle are not included in an angel’s statistics block.)",
+          "Tongues (Su): All angels can speak with any creature that has a language, as though using a tongues spell (caster level equal to angel’s Hit Dice). This ability is always active."
+        ],
+        "languagesNote": null
+      }
+    }
+  },
+  "folder": null,
+  "sort": 0,
+  "prototypeToken": {
+    "texture": {
+      "src": "icons/svg/mystery-man.svg"
+    }
+  }
+}

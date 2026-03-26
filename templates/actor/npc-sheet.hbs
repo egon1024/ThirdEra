@@ -90,6 +90,8 @@
           data-tab="details">{{localize 'THIRDERA.TabDetails'}}</a>
         <a class="item {{#if (eq tabs.abilities 'scores')}}active{{/if}}" data-action="changeTab" data-group="abilities"
           data-tab="scores">Scores & Saves</a>
+        <a class="item {{#if (eq tabs.abilities 'skills')}}active{{/if}}" data-action="changeTab" data-group="abilities"
+          data-tab="skills">Skills</a>
         <a class="item {{#if (eq tabs.abilities 'feats')}}active{{/if}}" data-action="changeTab" data-group="abilities"
           data-tab="feats">Feats</a>
         <a class="item {{#if (eq tabs.abilities 'features')}}active{{/if}}" data-action="changeTab"
@@ -203,6 +205,111 @@
           </li>
           {{/each}}
         </ol>
+      </div>
+
+      {{!-- Skills Subtab (NPC: ranks + GMS; no skill point budget) --}}
+      <div class="subtab {{#if (eq tabs.abilities 'skills')}}active{{/if}}" data-group="abilities" data-tab="skills">
+        <p class="npc-skills-hint form-header">{{localize "THIRDERA.Skills.NpcSkillsHintPart1"}}<abbr class="npc-skills-acp-abbr" title="{{localize "THIRDERA.Skills.AcpTooltip"}}">ACP</abbr>{{localize "THIRDERA.Skills.NpcSkillsHintPart2"}}</p>
+        <div class="npc-skills-add flexrow">
+          <label class="npc-skills-add-label" for="npc-add-skill-select">{{localize "THIRDERA.Skills.AddSkill"}}</label>
+          <div class="npc-skills-add-select-wrap">
+            <select id="npc-add-skill-select" class="npc-add-skill-select" data-tooltip-direction="DOWN"
+              aria-label="{{localize 'THIRDERA.Skills.AddSkill'}}">
+              <option value="">{{localize "THIRDERA.Skills.AddSkillPlaceholder"}}</option>
+              {{#each npcSkillAddOptions}}
+              <option value="{{this.uuid}}">{{this.label}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <div class="skills-list-column-header" role="presentation">
+          <div class="skills-list-column-header-spacer">
+            <span class="skills-header-skill-col-label">{{localize "THIRDERA.Skills.HeaderSkillName"}}</span>
+          </div>
+          <div class="skills-list-column-header-controls skill-sheet-controls-grid">
+            <span class="skill-col-hdr skill-col-hdr-ranks">{{localize "THIRDERA.Skills.HeaderRanks"}}</span>
+            <span class="skill-col-hdr skill-col-hdr-misc">{{localize "THIRDERA.Skills.HeaderMisc"}}</span>
+            <span class="skill-col-hdr skill-col-hdr-label">{{localize "THIRDERA.Skills.HeaderMiscLabel"}}</span>
+            <abbr class="skill-col-hdr skill-col-hdr-acp" title="{{localize 'THIRDERA.Skills.AcpTooltip'}}">ACP</abbr>
+            <span class="skill-col-hdr skill-col-hdr-total">{{localize "THIRDERA.Skills.HeaderTotal"}}</span>
+            <span class="skill-col-hdr skill-col-hdr-icon-gap" aria-hidden="true"></span>
+          </div>
+        </div>
+        <ol class="items-list skills-list">
+          {{#each skills as |item id|}}
+          <li
+            class="item skill-sheet-row {{#if item.system.isForbidden}}skill-forbidden{{else}}{{#if item.system.isClassSkill}}class-skill{{else}}cross-class-skill{{/if}}{{/if}}"
+            data-item-id="{{item._id}}" {{#if item.system.isForbidden}}title="{{item.system.forbiddenReason}}"
+            {{else}}draggable="true" data-drag-type="skillCheck" {{/if}}>
+            <div class="item-name">
+              <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
+              <h4>{{item.name}}</h4>
+              {{#if item.system.isForbidden}}<span class="skill-forbidden-indicator"
+                title="{{item.system.forbiddenReason}}"><i class="fas fa-ban"></i></span>
+              {{else}}{{#if item.system.isGranted}}<span class="granted-skill-indicator"
+                title="GM-Granted">G</span>{{else}}
+              <div class="npc-skill-class-column">
+                <label class="npc-skill-class-toggle" title="{{localize 'THIRDERA.Skills.NpcClassSkillToggle'}}">
+                  <input type="checkbox" class="npc-skill-class-skill-checkbox" data-skill-item-id="{{item._id}}"
+                    {{#unless (eq item.system.npcClassSkill false)}}checked{{/unless}} />
+                  <span class="npc-skill-class-toggle-text">{{localize "THIRDERA.Skills.NpcClassSkillShort"}}</span>
+                </label>
+                {{#if item.system.isClassSkill}}<span class="class-skill-indicator npc-skill-class-badge"
+                  title="{{localize 'THIRDERA.Skills.classSkill'}}">C</span>{{else}}<span class="cross-class-skill-indicator npc-skill-class-badge"
+                  title="{{localize 'THIRDERA.Skills.crossClassSkill'}}">CC</span>{{/if}}
+              </div>
+              {{/if}}{{/if}}
+            </div>
+            <div class="item-controls{{#unless item.system.isForbidden}} skill-sheet-controls-grid{{/unless}}">
+              {{#if item.system.isForbidden}}
+              <span class="skill-forbidden-label">Forbidden</span>
+              {{else}}
+              <input type="number" step="0.5" min="0" max="{{item.system.maxRanks}}" data-skill-item-id="{{item._id}}"
+                data-skill-max-ranks="{{item.system.maxRanks}}" value="{{item.system.ranks}}" class="skill-ranks-input"
+                title="Max: {{item.system.maxRanks}}" />
+              <input type="number" step="1" data-skill-item-id="{{item._id}}" value="{{item.system.modifier.misc}}"
+                class="skill-misc-input" data-dtype="Number"
+                title="{{localize 'THIRDERA.Skills.MiscModifierHint'}}" />
+              <input type="text" data-skill-item-id="{{item._id}}" value="{{item.system.modifier.miscLabel}}"
+                class="skill-misc-label-input" placeholder="{{localize 'THIRDERA.Skills.MiscLabelPlaceholder'}}"
+                title="{{localize 'THIRDERA.Skills.MiscLabelHint'}}" />
+              {{#if item.system.armorPenalty}}<span class="skill-acp"
+                title="Armor Check Penalty">{{item.system.armorPenalty}}</span>{{else}}<span
+                class="skill-acp skill-acp--empty" aria-hidden="true"></span>{{/if}}
+              <span class="skill-total" title="{{item.system.modifier.breakdown_formatted}}">{{signedNumber
+                item.system.modifier.total}}</span>
+              <a class="skill-check" data-action="skillCheck" title="Roll Skill"><i class="fas fa-dice-d20"></i></a>
+              {{/if}}
+              <a class="item-delete" data-action="deleteItem" title="Delete Item"><i class="fas fa-trash"></i></a>
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+        {{#if modifierOnlySkills.length}}
+        <div class="modifier-only-skills-section">
+          <h4 class="form-header">{{localize "THIRDERA.Skills.ModifierOnlySkills"}}</h4>
+          <div class="skills-list-column-header skills-list-column-header--modifier-only" role="presentation" aria-hidden="true">
+            <div class="skills-list-column-header-spacer"></div>
+            <div class="skills-list-column-header-controls skill-sheet-controls-grid skill-sheet-controls-grid--modifier">
+              <span class="skill-col-hdr skill-col-hdr-total">{{localize "THIRDERA.Skills.HeaderTotal"}}</span>
+              <span class="skill-col-hdr skill-col-hdr-icon-gap skill-col-hdr-icon-gap--single" aria-hidden="true"></span>
+            </div>
+          </div>
+          <ol class="items-list modifier-only-skills-list">
+            {{#each modifierOnlySkills as |entry|}}
+            <li class="item skill-sheet-row" data-skill-key="{{entry.key}}">
+              <div class="item-name">
+                <h4>{{entry.displayName}}</h4>
+              </div>
+              <div class="item-controls skill-sheet-controls-grid skill-sheet-controls-grid--modifier">
+                <span class="skill-total" title="{{#each entry.breakdown}}{{this.label}}: {{signedNumber this.value}}{{#unless @last}}&#10;{{/unless}}{{/each}}">{{signedNumber entry.total}}</span>
+                <a class="skill-check" data-action="skillCheckByKey" data-skill-key="{{entry.key}}" title="{{localize "THIRDERA.Skills.RollSkill"}}"><i class="fas fa-dice-d20"></i></a>
+              </div>
+            </li>
+            {{/each}}
+          </ol>
+        </div>
+        {{/if}}
       </div>
 
       {{!-- Feats Subtab (parity with PC sheet; granted entries from classes / derived data when present) --}}
@@ -380,6 +487,7 @@
         <ol class="natural-attacks-compact-list items-list">
           {{#each system.statBlock.naturalAttacks as |atk idx|}}
           <li class="natural-attack-compact flexrow" data-natural-attack-index="{{idx}}">
+            <input type="hidden" name="system.statBlock.naturalAttacks.{{idx}}.presetAttackBonus" value="{{atk.presetAttackBonus}}" data-dtype="Number" />
             <span class="natural-attack-compact-name">{{atk.name}}{{#unless atk.name}}—{{/unless}}</span>
             <span class="natural-attack-compact-total" title="{{#each atk.attackBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber atk.attackBonus}}</span>
             <span class="natural-attack-compact-actions">
@@ -563,6 +671,7 @@
           <ol class="natural-attacks-list items-list">
             {{#each system.statBlock.naturalAttacks as |atk idx|}}
             <li class="natural-attack" data-natural-attack-index="{{idx}}">
+              <input type="hidden" name="system.statBlock.naturalAttacks.{{idx}}.presetAttackBonus" value="{{atk.presetAttackBonus}}" data-dtype="Number" />
               <input type="text" name="system.statBlock.naturalAttacks.{{idx}}.name" value="{{atk.name}}"
                 data-dtype="String" class="natural-attack-name" placeholder="—" title="{{localize 'THIRDERA.NPC.NaturalAttackName'}}" />
               <input type="text" name="system.statBlock.naturalAttacks.{{idx}}.dice" value="{{atk.dice}}"

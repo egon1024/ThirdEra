@@ -2,6 +2,7 @@
 .PHONY: test test-coverage
 
 test:
+	node --check module/logic/compendium-loader.mjs
 	npm test
 
 test-coverage:
