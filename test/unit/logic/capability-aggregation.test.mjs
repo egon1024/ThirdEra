@@ -1,0 +1,160 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+    CGS_CAPABILITY_CATEGORY_IDS,
+    collectCapabilityContributions,
+    createEmptyCapabilityGrants,
+    getActiveCapabilityGrants,
+    registerCapabilitySourceProviders
+} from "../../../module/logic/capability-aggregation.mjs";
+
+describe("createEmptyCapabilityGrants", () => {
+    it("includes every registered category with stable empty shape", () => {
+        const empty = createEmptyCapabilityGrants();
+        for (const id of CGS_CAPABILITY_CATEGORY_IDS) {
+            expect(empty).toHaveProperty(id);
+        }
+        expect(empty.senses.rows).toEqual([]);
+        expect(empty.senseSuppressions.grants).toEqual([]);
+        expect(empty.spellGrants.rows).toEqual([]);
+    });
+
+    it("returns a fresh object each call", () => {
+        const a = createEmptyCapabilityGrants();
+        const b = createEmptyCapabilityGrants();
+        expect(a).not.toBe(b);
+        expect(a.senses).not.toBe(b.senses);
+    });
+});
+
+describe("collectCapabilityContributions", () => {
+    it("concatenates provider results in registration order", () => {
+        const providers = [
+            () => [{ label: "A", grants: [{ category: "sense", senseType: "darkvision" }] }],
+            () => [{ label: "B", grants: [] }]
+        ];
+        const out = collectCapabilityContributions({}, providers);
+        expect(out.map(c => c.label)).toEqual(["A", "B"]);
+        expect(out[0].grants).toHaveLength(1);
+    });
+
+    it("accepts { contributions } wrapper shape", () => {
+        const providers = [
+            () => ({
+                contributions: [{ label: "Pack", grants: [{ category: "immunity", tag: "fire" }] }]
+            })
+        ];
+        const out = collectCapabilityContributions({}, providers);
+        expect(out).toHaveLength(1);
+        expect(out[0].label).toBe("Pack");
+        expect(out[0].grants[0].tag).toBe("fire");
+    });
+
+    it("continues after a provider throws", () => {
+        const warn = vi.fn();
+        const providers = [
+            () => {
+                throw new Error("boom");
+            },
+            () => [{ label: "OK", grants: [{ category: "sense", senseType: "lowLight" }] }]
+        ];
+        const out = collectCapabilityContributions({}, providers, { warn });
+        expect(out).toHaveLength(1);
+        expect(out[0].label).toBe("OK");
+        expect(warn).toHaveBeenCalledTimes(1);
+    });
+
+    it("skips invalid contribution entries", () => {
+        const providers = [
+            () => [null, { grants: [] }, { label: "X", grants: [{ category: "featGrant", featUuid: "u1" }] }]
+        ];
+        const out = collectCapabilityContributions({}, providers);
+        expect(out.map(c => c.label)).toEqual(["X"]);
+    });
+});
+
+describe("getActiveCapabilityGrants", () => {
+    let prevConfig;
+
+    beforeEach(() => {
+        prevConfig = globalThis.CONFIG;
+        globalThis.CONFIG = { THIRDERA: { capabilitySourceProviders: [] } };
+    });
+
+    afterEach(() => {
+        globalThis.CONFIG = prevConfig;
+        vi.restoreAllMocks();
+    });
+
+    it("returns stable empty categories for empty actor and no providers", () => {
+        const cgs = getActiveCapabilityGrants({});
+        expect(cgs.senses.rows).toEqual([]);
+        expect(cgs.skillGrants.rows).toEqual([]);
+        for (const id of CGS_CAPABILITY_CATEGORY_IDS) {
+            expect(cgs).toHaveProperty(id);
+        }
+    });
+
+    it("uses injected providers and still returns Phase-1 empty merge", () => {
+        const cgs = getActiveCapabilityGrants(
+            {},
+            {
+                providers: [
+                    () => [{ label: "P", grants: [{ category: "sense", senseType: "darkvision", range: "60" }] }]
+                ]
+            }
+        );
+        expect(cgs.senses.rows).toEqual([]);
+    });
+
+    it("isolates provider errors when using CONFIG registry", () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+        CONFIG.THIRDERA.capabilitySourceProviders = [
+            () => {
+                throw new Error("fail");
+            },
+            () => [{ label: "Fine", grants: [] }]
+        ];
+        expect(() => getActiveCapabilityGrants({})).not.toThrow();
+        expect(warn).toHaveBeenCalled();
+        warn.mockRestore();
+    });
+});
+
+describe("registerCapabilitySourceProviders", () => {
+    let prevConfig;
+
+    beforeEach(() => {
+        prevConfig = globalThis.CONFIG;
+    });
+
+    afterEach(() => {
+        globalThis.CONFIG = prevConfig;
+    });
+
+    it("sets frozen capabilityGrantCategoryIds and ensures provider array", () => {
+        globalThis.CONFIG = {
+            THIRDERA: {
+                capabilitySourceProviders: []
+            }
+        };
+        registerCapabilitySourceProviders();
+        expect(CONFIG.THIRDERA.capabilityGrantCategoryIds).toEqual(CGS_CAPABILITY_CATEGORY_IDS);
+        expect(Object.isFrozen(CONFIG.THIRDERA.capabilityGrantCategoryIds)).toBe(true);
+        expect(Array.isArray(CONFIG.THIRDERA.capabilitySourceProviders)).toBe(true);
+    });
+
+    it("no-ops when CONFIG.THIRDERA is missing", () => {
+        globalThis.CONFIG = {};
+        expect(() => registerCapabilitySourceProviders()).not.toThrow();
+    });
+
+    it("replaces non-array capabilitySourceProviders with an empty array", () => {
+        globalThis.CONFIG = {
+            THIRDERA: {
+                capabilitySourceProviders: null
+            }
+        };
+        registerCapabilitySourceProviders();
+        expect(CONFIG.THIRDERA.capabilitySourceProviders).toEqual([]);
+    });
+});

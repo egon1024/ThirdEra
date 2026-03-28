@@ -38,6 +38,7 @@ import {
     removeDerivedFlatFooted
 } from "./module/logic/derived-conditions.mjs";
 import { registerModifierSourceProviders } from "./module/logic/modifier-aggregation.mjs";
+import { registerCapabilitySourceProviders } from "./module/logic/capability-aggregation.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 import { fuzzyScore } from "./module/utils/fuzzy.mjs";
 import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-from-size-hooks.mjs";
@@ -307,7 +308,11 @@ Hooks.once("init", async function () {
         /** Canonical modifier keys for the unified modifier system. See module/logic/modifier-aggregation.mjs and docs-site/development.md. */
         modifierKeys: null,
         /** Registry of modifier-source providers: (actor) => Array<{ label, changes }>. Populated at init by modifier-aggregation. */
-        modifierSourceProviders: []
+        modifierSourceProviders: [],
+        /** Frozen list of CGS output category keys. Set at init by capability-aggregation. */
+        capabilityGrantCategoryIds: null,
+        /** Registry of capability grant providers: (actor) => contributions[]. Phase 1: empty; later phases add built-ins. */
+        capabilitySourceProviders: []
     };
 
     // Register World Settings
@@ -421,6 +426,7 @@ Hooks.once("init", async function () {
 
     // Register modifier-source providers after CONFIG.THIRDERA exists
     registerModifierSourceProviders();
+    registerCapabilitySourceProviders();
 
     console.log("Third Era | System initialized");
 });
