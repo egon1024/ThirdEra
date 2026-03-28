@@ -146,6 +146,10 @@
             <label for="system.details.spellResistance" class="details-label">{{localize 'THIRDERA.NPC.SpellResistance'}}</label>
             <input type="number" id="system.details.spellResistance" name="system.details.spellResistance" value="{{system.details.spellResistance}}" data-dtype="Number" min="0" step="1" class="details-input details-input--compact-number" />
           </div>
+          <div class="details-cgs-senses">
+            {{> "systems/thirdera/templates/partials/cgs-merged-senses.hbs"}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs"}}
+          </div>
         </div>
       </div>
 

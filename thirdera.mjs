@@ -39,6 +39,10 @@ import {
 } from "./module/logic/derived-conditions.mjs";
 import { registerModifierSourceProviders } from "./module/logic/modifier-aggregation.mjs";
 import { registerCapabilitySourceProviders } from "./module/logic/capability-aggregation.mjs";
+import {
+    cgsActorCgsGrantsSensesProvider,
+    cgsNpcStatBlockSensesProvider
+} from "./module/logic/cgs-actor-capability-providers.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 import { fuzzyScore } from "./module/utils/fuzzy.mjs";
 import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-from-size-hooks.mjs";
@@ -420,6 +424,8 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/scaling-table.hbs",
         "systems/thirdera/templates/partials/spell-search.hbs",
         "systems/thirdera/templates/partials/mechanical-effects-table.hbs",
+        "systems/thirdera/templates/partials/cgs-merged-senses.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs",
         "systems/thirdera/templates/apps/skill-picker-dialog.hbs"
     ]);
@@ -427,6 +433,10 @@ Hooks.once("init", async function () {
     // Register modifier-source providers after CONFIG.THIRDERA exists
     registerModifierSourceProviders();
     registerCapabilitySourceProviders();
+    CONFIG.THIRDERA.capabilitySourceProviders.push(
+        cgsNpcStatBlockSensesProvider,
+        cgsActorCgsGrantsSensesProvider
+    );
 
     console.log("Third Era | System initialized");
 });

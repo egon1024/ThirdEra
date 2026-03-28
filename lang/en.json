@@ -18,6 +18,13 @@
         },
         "Attributes": "Attributes",
         "TabDetails": "Details",
+        "CGS": {
+            "MergedSenses": "Merged senses",
+            "MergedSensesHint": "All sense lines after merging sources (display only).",
+            "Mechanics": "CGS Mechanics",
+            "MechanicsHint": "Edit actor-level senses here; on NPCs they merge with legacy stat block senses until content is migrated.",
+            "SenseTypePlaceholder": "— choose sense —"
+        },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",
             "Item": "Third Era Item Sheet"

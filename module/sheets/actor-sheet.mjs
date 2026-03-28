@@ -11,6 +11,7 @@ import { getAllSkills, getNpcSkillAddOptions } from "../applications/skill-picke
 import { dedupeNpcEmbeddedSkillItemsForDisplay, npcActorWouldDuplicateSkillEmbed } from "../logic/npc-embedded-skill-identity.mjs";
 import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
 import { TakeRestDialog } from "../applications/take-rest-dialog.mjs";
+import { normalizeNpcStatBlockNaturalAttackPresetBonuses } from "../logic/npc-stat-block-submit-normalize.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -75,8 +76,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             naturalAttackRollDamage: ThirdEraActorSheet.#onNaturalAttackRollDamage,
             openDescriptionEditor: ThirdEraActorSheet.#onOpenDescriptionEditor,
             openSpecialAbilitiesEditor: ThirdEraActorSheet.#onOpenSpecialAbilitiesEditor,
-            addSense: ThirdEraActorSheet.#onAddSense,
-            removeSense: ThirdEraActorSheet.#onRemoveSense,
+            addCgsSense: ThirdEraActorSheet.#onAddCgsSense,
+            removeCgsSense: ThirdEraActorSheet.#onRemoveCgsSense,
             configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
             editImage: ThirdEraActorSheet.#onEditImage,
             editTokenImage: ThirdEraActorSheet.#onEditTokenImage,
@@ -186,6 +187,25 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const skillsPanel = element?.querySelector?.(".tab.abilities.active .subtab.active[data-tab=\"skills\"]");
         if (!skillsPanel) return [];
         return Array.from(skillsPanel.querySelectorAll("input.skill-ranks-input[data-skill-item-id]"));
+    }
+
+    /**
+     * Foundry validates in `_prepareSubmitData` before `_processSubmitData`. Nullable number hiddens submit ""
+     * for `presetAttackBonus`; normalize first or validation throws (e.g. when any field triggers submitOnChange).
+     * Mirrors {@link foundry.applications.api.DocumentSheetV2#_prepareSubmitData}.
+     * @override
+     */
+    _prepareSubmitData(event, form, formData, updateData) {
+        const submitData = this._processFormData(event, form, formData);
+        if (updateData) {
+            foundry.utils.mergeObject(submitData, updateData, { performDeletions: true });
+            foundry.utils.mergeObject(submitData, updateData, { performDeletions: false });
+        }
+        if (this.actor.type === "npc") {
+            normalizeNpcStatBlockNaturalAttackPresetBonuses(submitData);
+        }
+        this.actor.validate({ changes: submitData, clean: true, fallback: false });
+        return submitData;
     }
 
     /** @override */
@@ -4705,33 +4725,31 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
-     * Add a sense entry to the NPC stat block (Phase E).
+     * Add a sense row to CGS Mechanics (system.cgsGrants.senses); merges into derived merged senses.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static async #onAddSense(event, target) {
-        if (this.actor.type !== "npc") return;
-        const senses = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
-        senses.push({ type: "darkvision", range: "" });
-        await this.actor.update({ "system.statBlock.senses": senses });
+    static async #onAddCgsSense(event, target) {
+        const senses = foundry.utils.duplicate(this.actor.system.cgsGrants?.senses ?? []);
+        senses.push({ type: "", range: "" });
+        await this.actor.update({ "system.cgsGrants.senses": senses });
     }
 
     /**
-     * Remove a sense entry from the NPC stat block (Phase E).
+     * Remove a sense row from CGS Mechanics.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static async #onRemoveSense(event, target) {
-        if (this.actor.type !== "npc") return;
+    static async #onRemoveCgsSense(event, target) {
         const row = target?.closest?.("[data-sense-index]");
         const idx = parseInt(row?.dataset?.senseIndex, 10);
         if (Number.isNaN(idx)) return;
-        const senses = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
+        const senses = foundry.utils.duplicate(this.actor.system.cgsGrants?.senses ?? []);
         if (idx < 0 || idx >= senses.length) return;
         senses.splice(idx, 1);
-        await this.actor.update({ "system.statBlock.senses": senses });
+        await this.actor.update({ "system.cgsGrants.senses": senses });
     }
 
     /**

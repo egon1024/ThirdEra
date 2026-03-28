@@ -487,7 +487,7 @@
         <ol class="natural-attacks-compact-list items-list">
           {{#each system.statBlock.naturalAttacks as |atk idx|}}
           <li class="natural-attack-compact flexrow" data-natural-attack-index="{{idx}}">
-            <input type="hidden" name="system.statBlock.naturalAttacks.{{idx}}.presetAttackBonus" value="{{atk.presetAttackBonus}}" data-dtype="Number" />
+            {{!-- presetAttackBonus: only submit from Stat block tab hidden (duplicate name skipped by FormDataExtended; first was winning with empty string) --}}
             <span class="natural-attack-compact-name">{{atk.name}}{{#unless atk.name}}—{{/unless}}</span>
             <span class="natural-attack-compact-total" title="{{#each atk.attackBreakdown}}{{label}}: {{signedNumber value}}&#10;{{/each}}">{{signedNumber atk.attackBonus}}</span>
             <span class="natural-attack-compact-actions">
@@ -724,28 +724,8 @@
               data-dtype="Number" class="details-input" min="0" step="1" />
           </div>
 
-          <h4 class="items-header">{{localize 'THIRDERA.NPC.Senses'}}</h4>
-          {{#if system.statBlock.senses}}
-          {{#if system.statBlock.senses.length}}
-          <ol class="senses-list items-list">
-            {{#each system.statBlock.senses as |sense idx|}}
-            <li class="sense flexrow" data-sense-index="{{idx}}">
-              <select name="system.statBlock.senses.{{idx}}.type" class="details-input sense-type">
-                {{#each @root.config.senseTypes as |label key|}}
-                <option value="{{key}}" {{#if (eq key sense.type)}}selected{{/if}}>{{label}}</option>
-                {{/each}}
-              </select>
-              <input type="text" name="system.statBlock.senses.{{idx}}.range" value="{{sense.range}}"
-                data-dtype="String" class="details-input sense-range" placeholder="{{localize 'THIRDERA.NPC.SenseRange'}}" />
-              <a class="sense-remove" data-action="removeSense" data-sense-index="{{idx}}" title="{{localize 'THIRDERA.NPC.RemoveSense'}}"><i class="fas fa-trash"></i></a>
-            </li>
-            {{/each}}
-          </ol>
-          {{/if}}
-          {{/if}}
-          <div class="senses-add">
-            <a class="sense-add-btn" data-action="addSense" title="{{localize 'THIRDERA.NPC.AddSense'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddSense'}}</a>
-          </div>
+          {{> "systems/thirdera/templates/partials/cgs-merged-senses.hbs"}}
+          {{> "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs"}}
 
           <h4 class="items-header">{{localize 'THIRDERA.NPC.OtherSpecialAbilities'}}</h4>
           <div class="special-abilities-editor-box editor-box">

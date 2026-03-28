@@ -3,7 +3,11 @@ import {
     CGS_CAPABILITY_CATEGORY_IDS,
     collectCapabilityContributions,
     createEmptyCapabilityGrants,
+    formatMergedSenseLabel,
     getActiveCapabilityGrants,
+    mergeCapabilityGrantContributions,
+    mergeSenseRows,
+    normalizeSenseRangeKey,
     registerCapabilitySourceProviders
 } from "../../../module/logic/capability-aggregation.mjs";
 
@@ -23,6 +27,84 @@ describe("createEmptyCapabilityGrants", () => {
         const b = createEmptyCapabilityGrants();
         expect(a).not.toBe(b);
         expect(a.senses).not.toBe(b.senses);
+    });
+});
+
+describe("normalizeSenseRangeKey", () => {
+    it("trims and normalizes whitespace case", () => {
+        expect(normalizeSenseRangeKey("  60   FT  ")).toBe("60 ft");
+        expect(normalizeSenseRangeKey(null)).toBe("");
+    });
+});
+
+describe("formatMergedSenseLabel", () => {
+    it("uses injected labels and appends range", () => {
+        expect(formatMergedSenseLabel("darkvision", "60 ft", { senseTypeLabels: { darkvision: "Darkvision" } })).toBe(
+            "Darkvision 60 ft"
+        );
+        expect(formatMergedSenseLabel("darkvision", "", { senseTypeLabels: { darkvision: "Darkvision" } })).toBe(
+            "Darkvision"
+        );
+    });
+});
+
+describe("mergeSenseRows", () => {
+    it("dedupes by senseType and normalized range and merges sources", () => {
+        const rows = mergeSenseRows(
+            [
+                {
+                    senseType: "darkvision",
+                    range: "60 ft",
+                    _source: { label: "Stat block" }
+                },
+                {
+                    senseType: "darkvision",
+                    range: "60 FT",
+                    _source: { label: "CGS Mechanics", sourceRef: { kind: "actorCgsGrants" } }
+                },
+                { senseType: "lowLight", range: "", _source: { label: "Race" } }
+            ],
+            { senseTypeLabels: { darkvision: "Darkvision", lowLight: "Low-light vision" } }
+        );
+        expect(rows).toHaveLength(2);
+        const dv = rows.find(r => r.senseType === "darkvision");
+        expect(dv?.sources).toHaveLength(2);
+        expect(dv?.sources.map(s => s.label).sort()).toEqual(["CGS Mechanics", "Stat block"]);
+        expect(rows.find(r => r.senseType === "lowLight")?.sources).toEqual([{ label: "Race" }]);
+    });
+
+    it("keeps distinct ranges separate", () => {
+        const rows = mergeSenseRows(
+            [
+                { senseType: "darkvision", range: "60 ft", _source: { label: "A" } },
+                { senseType: "darkvision", range: "120 ft", _source: { label: "B" } }
+            ],
+            { senseTypeLabels: { darkvision: "Darkvision" } }
+        );
+        expect(rows).toHaveLength(2);
+    });
+});
+
+describe("mergeCapabilityGrantContributions", () => {
+    it("merges sense grants and collects senseSuppression", () => {
+        const merged = mergeCapabilityGrantContributions(
+            [
+                {
+                    label: "Blindness",
+                    grants: [{ category: "senseSuppression", scope: "allVision" }]
+                },
+                {
+                    label: "Block",
+                    grants: [{ category: "sense", senseType: "darkvision", range: "60" }]
+                }
+            ],
+            { senseTypeLabels: { darkvision: "Darkvision" } }
+        );
+        expect(merged.senses.rows).toHaveLength(1);
+        expect(merged.senses.rows[0].senseType).toBe("darkvision");
+        expect(merged.senses.rows[0].sources[0].label).toBe("Block");
+        expect(merged.senseSuppressions.grants).toHaveLength(1);
+        expect(merged.senseSuppressions.grants[0].scope).toBe("allVision");
     });
 });
 
@@ -94,16 +176,19 @@ describe("getActiveCapabilityGrants", () => {
         }
     });
 
-    it("uses injected providers and still returns Phase-1 empty merge", () => {
+    it("uses injected providers and merges sense contributions", () => {
         const cgs = getActiveCapabilityGrants(
             {},
             {
                 providers: [
                     () => [{ label: "P", grants: [{ category: "sense", senseType: "darkvision", range: "60" }] }]
-                ]
+                ],
+                senseTypeLabels: { darkvision: "Darkvision" }
             }
         );
-        expect(cgs.senses.rows).toEqual([]);
+        expect(cgs.senses.rows).toHaveLength(1);
+        expect(cgs.senses.rows[0].senseType).toBe("darkvision");
+        expect(cgs.senses.rows[0].sources[0].label).toBe("P");
     });
 
     it("isolates provider errors when using CONFIG registry", () => {

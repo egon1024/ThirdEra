@@ -1,0 +1,20 @@
+<h4 class="items-header">{{localize 'THIRDERA.CGS.MergedSenses'}}</h4>
+<p class="notes cgs-hint">{{localize 'THIRDERA.CGS.MergedSensesHint'}}</p>
+{{#if system.cgs}}
+{{#if system.cgs.senses.rows.length}}
+<ul class="cgs-merged-senses items-list">
+  {{#each system.cgs.senses.rows as |row|}}
+  <li>
+    <span class="cgs-merged-sense-label">{{row.label}}</span>
+    {{#if row.sources.length}}
+    <span class="cgs-sources detail">({{#each row.sources as |s|}}{{s.label}}{{#unless @last}}, {{/unless}}{{/each}})</span>
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>
+{{else}}
+<p class="cgs-merged-senses-empty">—</p>
+{{/if}}
+{{else}}
+<p class="cgs-merged-senses-empty">—</p>
+{{/if}}

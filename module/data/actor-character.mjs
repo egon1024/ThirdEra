@@ -4,6 +4,7 @@ import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
 import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
 import { resolvedSkillMiscLineLabel } from "../logic/npc-skill-prep.mjs";
 
@@ -165,7 +166,25 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             }),
 
             // Spell shortlist for full-list prepared casters (cleric, druid): classItemId -> spell item IDs to show in "Ready to cast"
-            spellShortlistByClass: new ObjectField({ initial: {}, label: "Spell Shortlist by Class" })
+            spellShortlistByClass: new ObjectField({ initial: {}, label: "Spell Shortlist by Class" }),
+
+            /** Actor-level CGS authoring (senses, …); merged into derived system.cgs */
+            cgsGrants: new SchemaField(
+                {
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({
+                                required: true,
+                                blank: true,
+                                initial: ""
+                            }),
+                            range: new StringField({ required: true, blank: true, initial: "" })
+                        }),
+                        { required: true, initial: [] }
+                    )
+                },
+                { required: false }
+            )
         };
     }
 
@@ -174,6 +193,11 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         // Foundry's schema migrateSource only walks keys that already exist on disk, so missing nested
         // required fields never get defaults. Same backfill runs from preUpdate hooks on live documents.
         backfillCharacterSystemSourceInPlace(source);
+        if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
+            source.cgsGrants = { senses: [] };
+        } else if (!Array.isArray(source.cgsGrants.senses)) {
+            source.cgsGrants.senses = [];
+        }
         return super.migrateData(source);
     }
 
@@ -775,5 +799,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             capacity,
             load
         };
+
+        this.cgs = getActiveCapabilityGrants(this.parent);
     }
 }

@@ -1,6 +1,7 @@
 const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
+import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
 import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
 import { prepareNpcSkillItems, buildModifierOnlySkills } from "../logic/npc-skill-prep.mjs";
 
@@ -161,6 +162,24 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             // Biography/Description
             biography: new HTMLField({ required: true, blank: true }),
 
+            /** Actor-level CGS authoring (senses, …); merged into derived system.cgs */
+            cgsGrants: new SchemaField(
+                {
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({
+                                required: true,
+                                blank: true,
+                                initial: ""
+                            }),
+                            range: new StringField({ required: true, blank: true, initial: "" })
+                        }),
+                        { required: true, initial: [] }
+                    )
+                },
+                { required: false }
+            ),
+
             // Currency
             currency: new SchemaField({
                 pp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Platinum (pp)" }),
@@ -169,6 +188,16 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 cp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Copper (cp)" })
             })
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
+            source.cgsGrants = { senses: [] };
+        } else if (!Array.isArray(source.cgsGrants.senses)) {
+            source.cgsGrants.senses = [];
+        }
+        return super.migrateData(source);
     }
 
     /**
@@ -410,5 +439,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                     return `${s.label.toLowerCase()} ${s.value} ft`;
                 })
                 .join(", ");
+
+        this.cgs = getActiveCapabilityGrants(this.parent);
     }
 }
