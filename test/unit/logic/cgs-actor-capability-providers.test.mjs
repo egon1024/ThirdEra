@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { getActiveCapabilityGrants } from "../../../module/logic/capability-aggregation.mjs";
 import {
     cgsActorCgsGrantsSensesProvider,
     cgsNpcStatBlockSensesProvider
@@ -52,5 +53,30 @@ describe("cgsActorCgsGrantsSensesProvider", () => {
         });
         expect(out[0].grants[0]).toMatchObject({ category: "sense", senseType: "lowLight" });
         expect(out[0].sourceRef?.uuid).toBe("Actor.x");
+    });
+});
+
+describe("CGS NPC providers + merge (integration)", () => {
+    it("merges stat block and cgsGrants with dedupe and two sources", () => {
+        const actor = {
+            type: "npc",
+            uuid: "Actor.npc1",
+            system: {
+                statBlock: {
+                    senses: [{ type: "darkvision", range: "60 ft" }]
+                },
+                cgsGrants: {
+                    senses: [{ type: "darkvision", range: "60 ft" }]
+                }
+            }
+        };
+        const providers = [cgsNpcStatBlockSensesProvider, cgsActorCgsGrantsSensesProvider];
+        const cgs = getActiveCapabilityGrants(actor, {
+            providers,
+            senseTypeLabels: { darkvision: "Darkvision" }
+        });
+        expect(cgs.senses.rows).toHaveLength(1);
+        expect(cgs.senses.rows[0].senseType).toBe("darkvision");
+        expect(cgs.senses.rows[0].sources.map(s => s.label).sort()).toEqual(["CGS Mechanics", "Stat block"]);
     });
 });

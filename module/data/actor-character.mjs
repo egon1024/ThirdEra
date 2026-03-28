@@ -800,6 +800,10 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             load
         };
 
-        this.cgs = getActiveCapabilityGrants(this.parent);
+        const senseTypeLabels =
+            typeof CONFIG !== "undefined" && CONFIG?.THIRDERA?.senseTypes && typeof CONFIG.THIRDERA.senseTypes === "object"
+                ? CONFIG.THIRDERA.senseTypes
+                : {};
+        this.cgs = getActiveCapabilityGrants(this.parent, { senseTypeLabels });
     }
 }

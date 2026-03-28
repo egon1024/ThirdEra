@@ -23,6 +23,8 @@
             "MergedSensesHint": "All sense lines after merging sources (display only).",
             "Mechanics": "CGS Mechanics",
             "MechanicsHint": "Edit actor-level senses here; on NPCs they merge with legacy stat block senses until content is migrated.",
+            "LegacyStatBlockSenses": "Stat block senses (legacy)",
+            "LegacyStatBlockSensesHint": "Stored on the NPC stat block (e.g. imported monsters). Merged senses above combine these with CGS Mechanics.",
             "SenseTypePlaceholder": "— choose sense —"
         },
         "SheetLabels": {

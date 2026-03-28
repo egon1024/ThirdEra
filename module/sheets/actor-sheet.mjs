@@ -78,6 +78,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             openSpecialAbilitiesEditor: ThirdEraActorSheet.#onOpenSpecialAbilitiesEditor,
             addCgsSense: ThirdEraActorSheet.#onAddCgsSense,
             removeCgsSense: ThirdEraActorSheet.#onRemoveCgsSense,
+            addLegacyStatBlockSense: ThirdEraActorSheet.#onAddLegacyStatBlockSense,
+            removeLegacyStatBlockSense: ThirdEraActorSheet.#onRemoveLegacyStatBlockSense,
             configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
             editImage: ThirdEraActorSheet.#onEditImage,
             editTokenImage: ThirdEraActorSheet.#onEditTokenImage,
@@ -4750,6 +4752,36 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (idx < 0 || idx >= senses.length) return;
         senses.splice(idx, 1);
         await this.actor.update({ "system.cgsGrants.senses": senses });
+    }
+
+    /**
+     * Add a row to legacy NPC stat block senses (system.statBlock.senses); merges into derived CGS.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onAddLegacyStatBlockSense(event, target) {
+        if (this.actor.type !== "npc") return;
+        const current = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
+        current.push({ type: "", range: "" });
+        await this.actor.update({ "system.statBlock.senses": current });
+    }
+
+    /**
+     * Remove a legacy stat block sense row by index.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onRemoveLegacyStatBlockSense(event, target) {
+        if (this.actor.type !== "npc") return;
+        const row = target?.closest?.("[data-legacy-sense-index]");
+        const idx = parseInt(row?.dataset?.legacySenseIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const senses = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
+        if (idx < 0 || idx >= senses.length) return;
+        senses.splice(idx, 1);
+        await this.actor.update({ "system.statBlock.senses": senses });
     }
 
     /**

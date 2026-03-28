@@ -1,0 +1,25 @@
+{{!-- NPC only: edit system.statBlock.senses (compendium / pre-CGS content); merged readout is cgs-merged-senses.hbs --}}
+<h4 class="items-header">{{localize 'THIRDERA.CGS.LegacyStatBlockSenses'}}</h4>
+<p class="notes cgs-hint">{{localize 'THIRDERA.CGS.LegacyStatBlockSensesHint'}}</p>
+{{#if system.statBlock.senses}}
+{{#if system.statBlock.senses.length}}
+<ol class="senses-list items-list cgs-legacy-statblock-senses">
+  {{#each system.statBlock.senses as |sense idx|}}
+  <li class="sense flexrow" data-legacy-sense-index="{{idx}}">
+    <select name="system.statBlock.senses.{{idx}}.type" class="details-input sense-type">
+      <option value="">{{localize 'THIRDERA.CGS.SenseTypePlaceholder'}}</option>
+      {{#each @root.config.senseTypes as |label key|}}
+      <option value="{{key}}" {{#if (eq key sense.type)}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+    <input type="text" name="system.statBlock.senses.{{idx}}.range" value="{{sense.range}}"
+      data-dtype="String" class="details-input sense-range" placeholder="{{localize 'THIRDERA.NPC.SenseRange'}}" />
+    <a class="sense-remove" data-action="removeLegacyStatBlockSense" data-legacy-sense-index="{{idx}}" title="{{localize 'THIRDERA.NPC.RemoveSense'}}"><i class="fas fa-trash"></i></a>
+  </li>
+  {{/each}}
+</ol>
+{{/if}}
+{{/if}}
+<div class="senses-add">
+  <a class="sense-add-btn" data-action="addLegacyStatBlockSense" title="{{localize 'THIRDERA.NPC.AddSense'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddSense'}}</a>
+</div>
