@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+    applySenseSuppressions,
     CGS_CAPABILITY_CATEGORY_IDS,
     collectCapabilityContributions,
     createEmptyCapabilityGrants,
@@ -18,6 +19,8 @@ describe("createEmptyCapabilityGrants", () => {
             expect(empty).toHaveProperty(id);
         }
         expect(empty.senses.rows).toEqual([]);
+        expect(empty.senses.sensesUnionRows).toEqual([]);
+        expect(empty.senses.suppressed).toEqual([]);
         expect(empty.senseSuppressions.grants).toEqual([]);
         expect(empty.spellGrants.rows).toEqual([]);
     });
@@ -86,7 +89,7 @@ describe("mergeSenseRows", () => {
 });
 
 describe("mergeCapabilityGrantContributions", () => {
-    it("merges sense grants and collects senseSuppression", () => {
+    it("Stage B: allVision suppression removes senses from effective rows; union + raw grants kept", () => {
         const merged = mergeCapabilityGrantContributions(
             [
                 {
@@ -100,11 +103,40 @@ describe("mergeCapabilityGrantContributions", () => {
             ],
             { senseTypeLabels: { darkvision: "Darkvision" } }
         );
-        expect(merged.senses.rows).toHaveLength(1);
-        expect(merged.senses.rows[0].senseType).toBe("darkvision");
-        expect(merged.senses.rows[0].sources[0].label).toBe("Block");
+        expect(merged.senses.rows).toHaveLength(0);
+        expect(merged.senses.sensesUnionRows).toHaveLength(1);
+        expect(merged.senses.sensesUnionRows[0].senseType).toBe("darkvision");
+        expect(merged.senses.suppressed).toHaveLength(1);
+        expect(merged.senses.suppressed[0].senseType).toBe("darkvision");
+        expect(merged.senses.suppressed[0].suppressingSources.map(s => s.label)).toEqual(["Blindness"]);
         expect(merged.senseSuppressions.grants).toHaveLength(1);
         expect(merged.senseSuppressions.grants[0].scope).toBe("allVision");
+    });
+});
+
+describe("applySenseSuppressions", () => {
+    it("partial scope only suppresses listed sense types", () => {
+        const stageA = mergeSenseRows(
+            [
+                { senseType: "darkvision", range: "60 ft", _source: { label: "Race" } },
+                { senseType: "scent", range: "", _source: { label: "Monster" } }
+            ],
+            { senseTypeLabels: { darkvision: "Darkvision", scent: "Scent" } }
+        );
+        const grants = [
+            {
+                category: "senseSuppression",
+                scope: { senseTypes: ["darkvision"] },
+                _suppressingSource: { label: "Gloom" }
+            }
+        ];
+        const { effectiveRows, suppressedSenseRows } = applySenseSuppressions(stageA, grants, {
+            senseTypeLabels: { darkvision: "Darkvision", scent: "Scent" }
+        });
+        expect(effectiveRows).toHaveLength(1);
+        expect(effectiveRows[0].senseType).toBe("scent");
+        expect(suppressedSenseRows).toHaveLength(1);
+        expect(suppressedSenseRows[0].senseType).toBe("darkvision");
     });
 });
 

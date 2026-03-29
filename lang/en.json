@@ -27,7 +27,10 @@
             "MechanicsHint": "Edit actor-level senses here; on NPCs they merge with legacy stat block senses until content is migrated.",
             "LegacyStatBlockSenses": "Stat block senses (legacy)",
             "LegacyStatBlockSensesHint": "Stored on the NPC stat block (e.g. imported monsters). Merged senses above combine these with CGS Mechanics.",
-            "SenseTypePlaceholder": "— choose sense —"
+            "SenseTypePlaceholder": "— choose sense —",
+            "SuppressedSenses": "Suppressed senses",
+            "SuppressedSensesHint": "These sense lines are granted but currently negated by an active condition or other effect (e.g. blindness). “Suppressing” lists what removed them from merged senses.",
+            "SuppressingSourcesSummary": "Suppressing"
         },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",

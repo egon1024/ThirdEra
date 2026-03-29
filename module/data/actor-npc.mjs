@@ -444,6 +444,10 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             typeof CONFIG !== "undefined" && CONFIG?.THIRDERA?.senseTypes && typeof CONFIG.THIRDERA.senseTypes === "object"
                 ? CONFIG.THIRDERA.senseTypes
                 : {};
-        this.cgs = getActiveCapabilityGrants(this.parent, { senseTypeLabels });
+        const allVisionSenseTypeKeys = Object.keys(senseTypeLabels).map(k => String(k).trim()).filter(Boolean);
+        this.cgs = getActiveCapabilityGrants(this.parent, {
+            senseTypeLabels,
+            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined
+        });
     }
 }

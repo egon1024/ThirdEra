@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
     enrichCgsMergedSenseRowsForProvenance,
+    enrichCgsSuppressedSenseRowsForProvenance,
     extractCgsSourceLinkUuid,
     planCgsSourceDisplay
 } from "../../../module/logic/cgs-provenance-display.mjs";
@@ -176,5 +177,27 @@ describe("enrichCgsMergedSenseRowsForProvenance", () => {
         expect(out[0].sources).toHaveLength(2);
         expect(out[0].sources[0].showLabel).toBe(true);
         expect(out[0].sources[1].linkUuid).toBe("Item.race");
+    });
+});
+
+describe("enrichCgsSuppressedSenseRowsForProvenance", () => {
+    it("plans sense and suppressing sources", () => {
+        const rows = [
+            {
+                senseLabel: "Darkvision 60 ft.",
+                sources: [{ label: "Stat block", sourceRef: { kind: "statBlock" } }],
+                suppressingSources: [{ label: "Blinded", sourceRef: { kind: "conditionItem", uuid: "Item.blind" } }]
+            }
+        ];
+        const out = enrichCgsSuppressedSenseRowsForProvenance(rows, {
+            isGM: true,
+            user: {},
+            sheetActor: { uuid: "Actor.1", testUserPermission: () => true },
+            resolveUuid: () => null
+        });
+        expect(out).toHaveLength(1);
+        expect(out[0].senseLabel).toBe("Darkvision 60 ft.");
+        expect(out[0].senseSources[0].showLabel).toBe(true);
+        expect(out[0].suppressingSources[0].linkUuid).toBe("Item.blind");
     });
 });

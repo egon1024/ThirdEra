@@ -93,3 +93,21 @@ export function enrichCgsMergedSenseRowsForProvenance(rows, ctx) {
         sources: Array.isArray(row?.sources) ? row.sources.map((s) => planCgsSourceDisplay(s, ctx)) : []
     }));
 }
+
+/**
+ * Phase 5a: suppressed sense rows (Stage B) — original sources + suppressing condition/item sources.
+ *
+ * @param {Array<{ senseLabel?: string, sources?: CgsProvenanceSourceEntry[], suppressingSources?: CgsProvenanceSourceEntry[] }> | null | undefined} rows
+ * @param {Parameters<typeof planCgsSourceDisplay>[1]} ctx
+ * @returns {Array<{ senseLabel: string, senseSources: CgsProvenanceSourcePlan[], suppressingSources: CgsProvenanceSourcePlan[] }>}
+ */
+export function enrichCgsSuppressedSenseRowsForProvenance(rows, ctx) {
+    if (!Array.isArray(rows)) return [];
+    return rows.map((row) => ({
+        senseLabel: typeof row?.senseLabel === "string" ? row.senseLabel : "",
+        senseSources: Array.isArray(row?.sources) ? row.sources.map((s) => planCgsSourceDisplay(s, ctx)) : [],
+        suppressingSources: Array.isArray(row?.suppressingSources)
+            ? row.suppressingSources.map((s) => planCgsSourceDisplay(s, ctx))
+            : []
+    }));
+}

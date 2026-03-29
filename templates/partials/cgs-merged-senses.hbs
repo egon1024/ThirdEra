@@ -21,3 +21,32 @@
 {{else}}
 <p class="cgs-merged-senses-empty">—</p>
 {{/if}}
+{{#if cgsSuppressedSensesProvenance.length}}
+<h5 class="cgs-suppressed-senses-header">{{localize 'THIRDERA.CGS.SuppressedSenses'}}</h5>
+<p class="notes cgs-hint">{{localize 'THIRDERA.CGS.SuppressedSensesHint'}}</p>
+<ul class="cgs-suppressed-senses items-list">
+  {{#each cgsSuppressedSensesProvenance as |row|}}
+  <li class="cgs-suppressed-sense-row">
+    <span class="cgs-merged-sense-label">{{row.senseLabel}}</span>
+    {{#if row.senseSourceDisplays.length}}
+    <details class="cgs-provenance">
+      <summary class="cgs-provenance-summary">{{localize 'THIRDERA.CGS.ProvenanceSourcesSummary'}}</summary>
+      <ul class="cgs-provenance-source-list">
+        {{#each row.senseSourceDisplays as |h|}}
+        <li class="cgs-provenance-source-item">{{{h}}}</li>
+        {{/each}}
+      </ul>
+    </details>
+    {{/if}}
+    <details class="cgs-provenance cgs-provenance-suppressing">
+      <summary class="cgs-provenance-summary">{{localize 'THIRDERA.CGS.SuppressingSourcesSummary'}}</summary>
+      <ul class="cgs-provenance-source-list">
+        {{#each row.suppressingSourceDisplays as |h|}}
+        <li class="cgs-provenance-source-item">{{{h}}}</li>
+        {{/each}}
+      </ul>
+    </details>
+  </li>
+  {{/each}}
+</ul>
+{{/if}}

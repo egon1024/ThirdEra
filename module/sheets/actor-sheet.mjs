@@ -12,7 +12,10 @@ import { dedupeNpcEmbeddedSkillItemsForDisplay, npcActorWouldDuplicateSkillEmbed
 import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
 import { TakeRestDialog } from "../applications/take-rest-dialog.mjs";
 import { normalizeNpcStatBlockNaturalAttackPresetBonuses } from "../logic/npc-stat-block-submit-normalize.mjs";
-import { enrichCgsMergedSenseRowsForProvenance } from "../logic/cgs-provenance-display.mjs";
+import {
+    enrichCgsMergedSenseRowsForProvenance,
+    enrichCgsSuppressedSenseRowsForProvenance
+} from "../logic/cgs-provenance-display.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -1641,6 +1644,32 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }));
         })();
 
+        /** @type {Array<{ senseLabel: string, senseSourceDisplays: unknown[], suppressingSourceDisplays: unknown[] }>} */
+        const cgsSuppressedSensesProvenance = (() => {
+            const rows = systemData.cgs?.senses?.suppressed;
+            if (!Array.isArray(rows) || rows.length === 0) return [];
+            const resolveUuid = (uuid) => {
+                try {
+                    return typeof foundry?.utils?.fromUuidSync === "function" ? foundry.utils.fromUuidSync(uuid) : null;
+                } catch {
+                    return null;
+                }
+            };
+            const planned = enrichCgsSuppressedSenseRowsForProvenance(rows, {
+                isGM: game.user?.isGM === true,
+                user: game.user,
+                sheetActor: actor,
+                resolveUuid
+            });
+            return planned.map((row) => ({
+                senseLabel: row.senseLabel,
+                senseSourceDisplays: row.senseSources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p)),
+                suppressingSourceDisplays: row.suppressingSources.map((p) =>
+                    ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p)
+                )
+            }));
+        })();
+
         return {
             ...context,
             actor,
@@ -1732,7 +1761,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             // Phase 2: Apply damage/healing — show "Apply to this token" when actor has a token in the scene
             hasTokenInScene: (actor.getActiveTokens?.()?.length ?? 0) > 0,
             // Phase 4: permission-aware provenance for merged CGS senses (display side)
-            cgsMergedSensesProvenance
+            cgsMergedSensesProvenance,
+            // Phase 5a: suppressed senses (Stage B) + suppressing sources
+            cgsSuppressedSensesProvenance
         };
     }
 

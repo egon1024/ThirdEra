@@ -26,7 +26,8 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 | `module/logic/feat-prerequisites.mjs` (`actorHasFeatByUuid`, `meetsFeatPrerequisites` with stubbed `foundry` / `game` / `CONFIG`) | `unit/logic/feat-prerequisites.test.mjs` |
 | `module/logic/modifier-aggregation.mjs` (`isCanonicalModifierKey`, `getActiveModifiers` with stubbed `CONFIG`) | `unit/logic/modifier-aggregation.test.mjs` |
 | `module/logic/rest-healing.mjs` (`computeRestHealing` with mocked `getActiveModifiers`) | `unit/logic/rest-healing.test.mjs` |
-| `module/logic/condition-helpers.mjs` (`getActiveConditionModifiers` only) | `unit/logic/condition-helpers.test.mjs` |
+| `module/logic/condition-helpers.mjs` (`getActiveConditionModifiers`, `getActorEffectsList`, `getEffectStatusIds`) | `unit/logic/condition-helpers.test.mjs` |
+| `module/logic/cgs-conditions-capability-provider.mjs` | `unit/logic/cgs-conditions-capability-provider.test.mjs` |
 | `module/logic/derived-conditions.mjs` (`getDerivedHpConditionId`, `getDerivedFrom` only) | `unit/logic/derived-conditions.test.mjs` |
 | `module/logic/monster-pack-keys.mjs` (`resolveMonsterPackNpcKeys`) | `unit/logic/monster-pack-keys.test.mjs` |
 | `module/logic/token-dimensions-from-size.mjs` | `unit/logic/token-dimensions-from-size.test.mjs` |

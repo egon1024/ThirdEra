@@ -2,6 +2,8 @@
  * Helpers for applying condition mechanical effects (Phase 2).
  * Resolves active condition effects on an actor to condition items and aggregates
  * their "changes" into modifiers for AC, speed, saves, and attack.
+ *
+ * Phase 5a: shared effect listing / status id extraction for modifier and CGS condition providers.
  */
 
 /** Condition change keys we interpret. Values are numbers except acLoseDex (1 = true). */
@@ -59,6 +61,43 @@ export function getConditionItemsMapSync() {
 }
 
 /**
+ * Status IDs from an effect (Set, Array, or plain source). Used by modifier and CGS condition providers.
+ *
+ * @param {Object} effect ActiveEffect document or plain effect object
+ * @returns {string[]}
+ */
+export function getEffectStatusIds(effect) {
+    if (!effect) return [];
+    const s = effect.statuses;
+    if (s instanceof Set) return Array.from(s);
+    if (Array.isArray(s)) return s;
+    const src = effect._source ?? effect.toObject?.() ?? effect;
+    const raw = src?.statuses;
+    if (Array.isArray(raw)) return raw;
+    if (raw instanceof Set) return Array.from(raw);
+    const legacyId = effect.flags?.core?.statusId ?? effect.getFlag?.("core", "statusId");
+    if (legacyId) return [legacyId];
+    return [];
+}
+
+/**
+ * Effect objects for condition resolution: embedded collection or actor source during data prep.
+ *
+ * @param {unknown} actor
+ * @returns {unknown[]}
+ */
+export function getActorEffectsList(actor) {
+    const fromDoc = actor?.effects ?? [];
+    const docIsCollection = fromDoc && typeof fromDoc.size === "number" && typeof fromDoc.entries === "function";
+    const docList = docIsCollection ? Array.from(fromDoc) : (Array.isArray(fromDoc) ? fromDoc : []);
+    if (docList.length > 0) return docList;
+    const src = actor?._source ?? actor?.toObject?.() ?? {};
+    const fromSource = src?.effects;
+    const sourceList = Array.isArray(fromSource) ? fromSource : [];
+    return sourceList.length > 0 ? sourceList : docList;
+}
+
+/**
  * Aggregate condition modifiers from an actor's active effects.
  * Effects must have statuses that match condition IDs; we look up condition items (world + compendium)
  * and sum their changes. Uses world-only condition map so this is safe to call from prepareDerivedData.
@@ -80,11 +119,17 @@ export function getActiveConditionModifiers(actor, conditionMap) {
         attackRangedBreakdown: []
     };
 
-    const effects = actor.effects ?? [];
+    const effects = getActorEffectsList(actor);
     for (const effect of effects) {
         const statuses = effect.statuses;
-        if (!statuses || statuses.size === 0) continue;
-        for (const statusId of statuses) {
+        const statusList =
+            statuses instanceof Set
+                ? Array.from(statuses)
+                : Array.isArray(statuses)
+                  ? statuses
+                  : getEffectStatusIds(effect);
+        if (!statusList.length) continue;
+        for (const statusId of statusList) {
             const conditionId = String(statusId).toLowerCase().trim();
             const conditionItem = conditionMap.get(conditionId);
             if (!conditionItem) continue;

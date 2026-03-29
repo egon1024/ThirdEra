@@ -8,7 +8,7 @@
  * @see docs-site/development.md (Modifier system)
  */
 
-import { getConditionItemsMapSync } from "./condition-helpers.mjs";
+import { getActorEffectsList, getConditionItemsMapSync, getEffectStatusIds } from "./condition-helpers.mjs";
 
 // ---------------------------------------------------------------------------
 // Canonical modifier key set
@@ -164,46 +164,6 @@ export function getActiveModifiers(actor) {
     }
 
     return { totals, breakdown };
-}
-
-// ---------------------------------------------------------------------------
-// Conditions provider (adapter: effects → condition items → contributions)
-// ---------------------------------------------------------------------------
-
-/**
- * Get status IDs from an effect (Set, Array, or source object).
- * Foundry stores statuses as a Set on the document; during data prep or from source we may see an array.
- *
- * @param {Object} effect  ActiveEffect document or plain effect object
- * @returns {string[]}
- */
-function getEffectStatusIds(effect) {
-    if (!effect) return [];
-    const s = effect.statuses;
-    if (s instanceof Set) return Array.from(s);
-    if (Array.isArray(s)) return s;
-    const src = effect._source ?? effect.toObject?.() ?? effect;
-    const raw = src?.statuses;
-    if (Array.isArray(raw)) return raw;
-    if (raw instanceof Set) return Array.from(raw);
-    const legacyId = effect.flags?.core?.statusId ?? effect.getFlag?.("core", "statusId");
-    if (legacyId) return [legacyId];
-    return [];
-}
-
-/**
- * Get the list of effect objects to use for condition resolution.
- * During data prep the document may expose effects differently; use both document collection and source.
- */
-function getActorEffectsList(actor) {
-    const fromDoc = actor?.effects ?? [];
-    const docIsCollection = fromDoc && typeof fromDoc.size === "number" && typeof fromDoc.entries === "function";
-    const docList = docIsCollection ? Array.from(fromDoc) : (Array.isArray(fromDoc) ? fromDoc : []);
-    if (docList.length > 0) return docList;
-    const src = actor?._source ?? actor?.toObject?.() ?? {};
-    const fromSource = src?.effects;
-    const sourceList = Array.isArray(fromSource) ? fromSource : [];
-    return sourceList.length > 0 ? sourceList : docList;
 }
 
 // ---------------------------------------------------------------------------
