@@ -46,10 +46,18 @@ import {
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 import { fuzzyScore } from "./module/utils/fuzzy.mjs";
 import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-from-size-hooks.mjs";
+import {
+    createDefaultCgsRefreshDeps,
+    refreshCapabilityGrantsForActor,
+    resolveParentActorForItem,
+    registerCgsCapabilityRefreshHooks
+} from "./module/logic/cgs-refresh-hooks.mjs";
 import "./module/logic/apply-damage-healing-entry-points.mjs";
 import "./module/logic/spell-save-from-chat.mjs";
 import "./module/logic/concentration-from-chat.mjs";
 import "./module/logic/spell-sr-from-chat.mjs";
+
+const cgsRefreshDeps = createDefaultCgsRefreshDeps();
 
 /**
  * Initialize HP auto-increase system
@@ -127,6 +135,7 @@ Hooks.once("init", async function () {
     AuditLog.init();
     initHpAutoIncrease();
     registerTokenDimensionHooks();
+    registerCgsCapabilityRefreshHooks();
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;
@@ -659,7 +668,6 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
     if (document.type === "condition") {
         const conditionId = (document.system?.conditionId ?? "").trim().toLowerCase();
         if (conditionId && game.actors) {
-            const actorIdsWithCondition = new Set();
             for (const actor of game.actors) {
                 const effects = actor.effects ?? [];
                 const has = effects.some((e) => {
@@ -668,23 +676,7 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
                     if (Array.isArray(s)) return s.includes(conditionId);
                     return false;
                 });
-                if (has) {
-                    actorIdsWithCondition.add(actor.id);
-                    await actor.prepareData();
-                }
-            }
-            const instances = foundry.applications?.instances;
-            if (instances) {
-                const actorFromApp = (app) => {
-                    const a = app.actor ?? app.document;
-                    return a && typeof a.effects !== "undefined" && a.id ? a : null;
-                };
-                for (const app of instances.values()) {
-                    const actor = actorFromApp(app);
-                    if (!actor || !actorIdsWithCondition.has(actor.id)) continue;
-                    await actor.prepareData();
-                    if (app.rendered) await app.render({ force: true });
-                }
+                if (has) await refreshCapabilityGrantsForActor(actor, cgsRefreshDeps);
             }
         }
         return;
@@ -707,17 +699,7 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
         }
     }
     if (document.type === "feat" && actor) {
-        await actor.prepareData();
-        const instances = foundry.applications?.instances;
-        if (instances) {
-            for (const app of instances.values()) {
-                const appActor = app.actor ?? app.document;
-                if (appActor?.id === actor.id && app.rendered) {
-                    await app.render({ force: true });
-                    break;
-                }
-            }
-        }
+        await refreshCapabilityGrantsForActor(actor, cgsRefreshDeps);
         return;
     }
     // Armor, weapon, equipment: when an owned item is updated, refresh the actor so AC and other derived stats update.
@@ -734,7 +716,6 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
             }
         }
         // Fallback: world item (uuid "Item.xxx") — find any actor that has an item with this id.
-        let foundByScan = false;
         const actorsToCheck = [...(game.actors?.contents ?? game.actors ?? [])];
         if (typeof canvas !== "undefined" && canvas.scene?.tokens) {
             for (const token of canvas.scene.tokens) {
@@ -747,7 +728,6 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
                 const hasItem = a.items?.get(document.id);
                 if (hasItem) {
                     armorActor = a;
-                    foundByScan = true;
                     break;
                 }
             }
@@ -796,21 +776,18 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
             for (const item of matching) {
                 await item.update({ system: systemData });
             }
-            await a.prepareData();
-            const instances = foundry.applications?.instances;
-            if (instances) {
-                for (const app of instances.values()) {
-                    const appActor = app.actor ?? app.document;
-                    if (appActor?.id === a.id && app.rendered) {
-                        await app.render({ force: true });
-                        break;
-                    }
-                }
-            }
+            await refreshCapabilityGrantsForActor(a, cgsRefreshDeps);
         }
         return;
     }
-    if (document.type !== "spell") return;
+    if (document.type !== "spell") {
+        const skipCgsParentRefresh = new Set(["condition", "feat", "armor", "weapon", "equipment"]);
+        if (!skipCgsParentRefresh.has(document.type)) {
+            const pa = await resolveParentActorForItem(document, cgsRefreshDeps);
+            if (pa) await refreshCapabilityGrantsForActor(pa, cgsRefreshDeps);
+        }
+        return;
+    }
     await populateCompendiumCache();
     const instances = foundry.applications?.instances;
     if (!instances) return;
