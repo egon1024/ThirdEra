@@ -7,8 +7,11 @@
  * Does not modify ability score rows. Bump RACE_STOCK_DELTA_REV when adding new stock rows for a future release.
  */
 
-/** Increment when adding new stock delta rows so documents with older flags receive another merge pass. */
-export const RACE_STOCK_DELTA_REV = 1;
+/**
+ * Increment when adding new stock delta rows **or** when existing worlds need another merge pass
+ * (e.g. compendium `system.changes` was cleared while `raceStockDeltaRev` stayed at the previous value).
+ */
+export const RACE_STOCK_DELTA_REV = 2;
 
 /**
  * SRD-aligned extra `system.changes` rows (skills, saves, Small Hide), keyed by exact default race **name**.
@@ -130,7 +133,29 @@ export function getRaceStockDeltaRevOnDoc(doc, utils = foundry?.utils) {
 }
 
 /**
+ * True when this item is the Races compendium entry or clearly originated from it (embedded / import).
+ * Used to self-heal missing bundled `system.changes` rows after `raceStockDeltaRev` is already current,
+ * without touching homebrew races named "Elf" etc. in the world.
+ *
+ * @param {object} doc - Item-like
+ * @param {typeof foundry.utils} [utils]
+ * @returns {boolean}
+ */
+export function raceDocLinkedToThirderaRacesStock(doc, utils = foundry?.utils) {
+    const pack = String(doc?.pack ?? "").trim();
+    if (pack === "thirdera.thirdera_races") return true;
+    const uuid = String(doc?.uuid ?? "");
+    if (uuid.includes("thirdera.thirdera_races")) return true;
+    const sourceFromFlags = utils?.getProperty?.(doc?.flags, "core.sourceId");
+    const sourceId = String(sourceFromFlags ?? doc?.flags?.core?.sourceId ?? doc?.sourceId ?? "");
+    if (sourceId.includes("thirdera.thirdera_races")) return true;
+    return false;
+}
+
+/**
  * Apply stock delta merge to one race document if needed; updates flags.thirdera.raceStockDeltaRev.
+ * When the revision flag is already current but a compendium-linked stock race is still missing bundled
+ * rows (e.g. legacy data or a failed merge), merges again without bumping homebrew-only races.
  *
  * @param {Item} doc - Foundry Item (race)
  * @param {object} [opts]
@@ -140,20 +165,27 @@ export function getRaceStockDeltaRevOnDoc(doc, utils = foundry?.utils) {
 export async function applyRaceStockDeltaToDocument(doc, opts = {}) {
     const utils = opts.utils ?? foundry?.utils;
     if (!doc || doc.type !== "race") return "skipped";
-    const rev = getRaceStockDeltaRevOnDoc(doc, utils);
-    if (rev >= RACE_STOCK_DELTA_REV) return "skipped";
 
+    const rev = getRaceStockDeltaRevOnDoc(doc, utils);
     const delta = getRaceStockDeltaRowsForName(doc.name);
     const current = doc.system?.changes;
     const merged = mergeRaceStockDeltaIntoChanges(current, delta);
     const dataChanged = !raceMechanicalChangesEqual(merged, current);
 
+    const needsFlagBump = rev < RACE_STOCK_DELTA_REV;
+    const allowSelfHeal =
+        raceDocLinkedToThirderaRacesStock(doc, utils) && delta.length > 0 && rev >= RACE_STOCK_DELTA_REV && dataChanged;
+
+    if (!needsFlagBump && !dataChanged) return "skipped";
+    if (!needsFlagBump && dataChanged && !allowSelfHeal) return "skipped";
+
     try {
         if (dataChanged) {
-            await doc.update({
-                system: { changes: merged },
-                flags: { thirdera: { raceStockDeltaRev: RACE_STOCK_DELTA_REV } }
-            });
+            const payload = { system: { changes: merged } };
+            if (needsFlagBump) {
+                payload.flags = { thirdera: { raceStockDeltaRev: RACE_STOCK_DELTA_REV } };
+            }
+            await doc.update(payload);
             return "updated";
         }
         await doc.update({
@@ -196,7 +228,6 @@ export async function migrateAllRaceStockDeltas(deps) {
         const docs = await pack.getDocuments();
         for (const doc of docs) {
             if (doc.type !== "race") continue;
-            if (getRaceStockDeltaRevOnDoc(doc) >= RACE_STOCK_DELTA_REV) continue;
             const result = await applyRaceStockDeltaToDocument(doc);
             if (result === "updated") compendiumUpdated++;
             else if (result === "unchanged") compendiumUnchanged++;
@@ -206,7 +237,6 @@ export async function migrateAllRaceStockDeltas(deps) {
     let worldUpdated = 0;
     let worldUnchanged = 0;
     for (const item of game.items?.filter?.((i) => i.type === "race") ?? []) {
-        if (getRaceStockDeltaRevOnDoc(item) >= RACE_STOCK_DELTA_REV) continue;
         const result = await applyRaceStockDeltaToDocument(item);
         if (result === "updated") worldUpdated++;
         else if (result === "unchanged") worldUnchanged++;
@@ -217,7 +247,6 @@ export async function migrateAllRaceStockDeltas(deps) {
     for (const actor of game.actors ?? []) {
         const races = actor.items?.filter?.((i) => i.type === "race") ?? [];
         for (const item of races) {
-            if (getRaceStockDeltaRevOnDoc(item) >= RACE_STOCK_DELTA_REV) continue;
             const result = await applyRaceStockDeltaToDocument(item);
             if (result === "updated") actorsUpdated++;
             else if (result === "unchanged") actorsUnchanged++;

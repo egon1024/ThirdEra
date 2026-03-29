@@ -30,6 +30,8 @@ export class CompendiumLoader {
      * Packs where **existing** compendium documents are not overwritten from `packs/*.json` on world load.
      * Without this, every `ready` would `updateDocuments` from disk and erase GM edits (e.g. extra
      * `system.changes` on races). New entries from newly added JSON files are still **created**.
+     * When adding racial `changes` to JSON, keep `race-srd-changes-merge.mjs` in sync and bump `RACE_STOCK_DELTA_REV`
+     * if worlds need a re-merge; `test/unit/data/race-pack-stock-changes.test.mjs` guards pack JSON against regressions.
      */
     static PACKS_SKIP_JSON_REFRESH_FOR_EXISTING = new Set([
         "thirdera.thirdera_races"

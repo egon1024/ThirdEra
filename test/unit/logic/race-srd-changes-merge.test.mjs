@@ -5,7 +5,8 @@ import {
     mergeRaceStockDeltaIntoChanges,
     raceMechanicalChangesEqual,
     normalizeMechanicalChangeRow,
-    getRaceStockDeltaRevOnDoc
+    getRaceStockDeltaRevOnDoc,
+    raceDocLinkedToThirderaRacesStock
 } from "../../../module/logic/race-srd-changes-merge.mjs";
 
 describe("race-srd-changes-merge", () => {
@@ -77,5 +78,28 @@ describe("race-srd-changes-merge", () => {
         const doc = { flags: { thirdera: { raceStockDeltaRev: 2 } } };
         expect(getRaceStockDeltaRevOnDoc(doc, utils)).toBe(2);
         expect(getRaceStockDeltaRevOnDoc({ flags: {} }, utils)).toBe(0);
+    });
+
+    it("raceDocLinkedToThirderaRacesStock is true for pack id, uuid, or compendium sourceId", () => {
+        const utils = {
+            getProperty: (obj, path) => {
+                if (!obj || typeof path !== "string") return undefined;
+                return path.split(".").reduce((o, key) => (o != null ? o[key] : undefined), obj);
+            }
+        };
+        expect(raceDocLinkedToThirderaRacesStock({ pack: "thirdera.thirdera_races" }, utils)).toBe(true);
+        expect(
+            raceDocLinkedToThirderaRacesStock(
+                { uuid: "Compendium.thirdera.thirdera_races.Item.abc123" },
+                utils
+            )
+        ).toBe(true);
+        expect(
+            raceDocLinkedToThirderaRacesStock(
+                { flags: { core: { sourceId: "Compendium.thirdera.thirdera_races.Item.xyz" } } },
+                utils
+            )
+        ).toBe(true);
+        expect(raceDocLinkedToThirderaRacesStock({ name: "Elf", pack: "", uuid: "Item.x" }, utils)).toBe(false);
     });
 });
