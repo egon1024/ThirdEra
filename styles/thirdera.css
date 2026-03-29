@@ -5492,6 +5492,43 @@
   border: none !important;
 }
 
+/* CGS merged senses — expandable provenance (Phase 4) */
+.thirdera .cgs-merged-sense-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+}
+
+.thirdera .cgs-provenance {
+  flex: 1 1 100%;
+  margin: 0.15rem 0 0 0;
+  border-left: 2px solid var(--color-text-faint, #aaa);
+  padding-left: 0.5rem;
+}
+
+.thirdera .cgs-provenance-summary {
+  cursor: pointer;
+  font-size: var(--font-size-note, 12px);
+  color: var(--color-text-muted, #666);
+  list-style: none;
+}
+
+.thirdera .cgs-provenance-summary::-webkit-details-marker {
+  display: none;
+}
+
+.thirdera .cgs-provenance-source-list {
+  margin: 0.25em 0 0 1em;
+  padding: 0;
+  font-size: var(--font-size-note, 12px);
+}
+
+.thirdera .cgs-provenance-unknown {
+  color: var(--color-text-muted, #666);
+  font-style: italic;
+}
+
 }
 
 /* Spell List button in Items directory header — dark icon on light background (outside .thirdera) */

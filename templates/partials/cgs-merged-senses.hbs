@@ -1,20 +1,23 @@
 <h4 class="items-header">{{localize 'THIRDERA.CGS.MergedSenses'}}</h4>
 <p class="notes cgs-hint">{{localize 'THIRDERA.CGS.MergedSensesHint'}}</p>
-{{#if system.cgs}}
-{{#if system.cgs.senses.rows.length}}
+{{#if cgsMergedSensesProvenance.length}}
 <ul class="cgs-merged-senses items-list">
-  {{#each system.cgs.senses.rows as |row|}}
-  <li>
-    <span class="cgs-merged-sense-label">{{row.label}}</span>
-    {{#if row.sources.length}}
-    <span class="cgs-sources detail">({{#each row.sources as |s|}}{{s.label}}{{#unless @last}}, {{/unless}}{{/each}})</span>
+  {{#each cgsMergedSensesProvenance as |row|}}
+  <li class="cgs-merged-sense-row">
+    <span class="cgs-merged-sense-label">{{row.senseLabel}}</span>
+    {{#if row.sourceDisplays.length}}
+    <details class="cgs-provenance">
+      <summary class="cgs-provenance-summary">{{localize 'THIRDERA.CGS.ProvenanceSourcesSummary'}}</summary>
+      <ul class="cgs-provenance-source-list">
+        {{#each row.sourceDisplays as |h|}}
+        <li class="cgs-provenance-source-item">{{{h}}}</li>
+        {{/each}}
+      </ul>
+    </details>
     {{/if}}
   </li>
   {{/each}}
 </ul>
-{{else}}
-<p class="cgs-merged-senses-empty">—</p>
-{{/if}}
 {{else}}
 <p class="cgs-merged-senses-empty">—</p>
 {{/if}}

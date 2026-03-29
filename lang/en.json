@@ -20,7 +20,9 @@
         "TabDetails": "Details",
         "CGS": {
             "MergedSenses": "Merged senses",
-            "MergedSensesHint": "All sense lines after merging sources (display only).",
+            "MergedSensesHint": "Derived sense lines (display only). Open “Sources” on each line to see contributing origins; links open the document when you have permission.",
+            "ProvenanceSourcesSummary": "Sources",
+            "ProvenanceUnknownSource": "Unknown source",
             "Mechanics": "CGS Mechanics",
             "MechanicsHint": "Edit actor-level senses here; on NPCs they merge with legacy stat block senses until content is migrated.",
             "LegacyStatBlockSenses": "Stat block senses (legacy)",

@@ -12,6 +12,7 @@ import { dedupeNpcEmbeddedSkillItemsForDisplay, npcActorWouldDuplicateSkillEmbed
 import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
 import { TakeRestDialog } from "../applications/take-rest-dialog.mjs";
 import { normalizeNpcStatBlockNaturalAttackPresetBonuses } from "../logic/npc-stat-block-submit-normalize.mjs";
+import { enrichCgsMergedSenseRowsForProvenance } from "../logic/cgs-provenance-display.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -817,6 +818,49 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         }
     }
 
+    /**
+     * Build one provenance line for merged CGS senses (Phase 4): Foundry content-link when allowed, else escaped label.
+     * @param {{ showLabel: boolean, linkUuid: string | null, useLabel: string }} plan
+     * @returns {unknown} Handlebars.SafeString when Handlebars is available
+     */
+    static buildCgsProvenanceSourceHtml(plan) {
+        const HB = globalThis.Handlebars;
+        const esc = (t) => (HB?.Utils?.escapeExpression ? HB.Utils.escapeExpression(String(t)) : String(t));
+        const unknown =
+            typeof game !== "undefined" && game.i18n?.localize
+                ? game.i18n.localize("THIRDERA.CGS.ProvenanceUnknownSource")
+                : "Unknown source";
+        const isGM = game?.user?.isGM === true;
+        const user = game?.user;
+
+        if (!plan.showLabel) {
+            return new HB.SafeString(`<span class="cgs-provenance-unknown">${esc(unknown)}</span>`);
+        }
+
+        const resolveUuidSync = (uuid) => {
+            try {
+                return typeof foundry?.utils?.fromUuidSync === "function" ? foundry.utils.fromUuidSync(uuid) : null;
+            } catch {
+                return null;
+            }
+        };
+
+        const doc = plan.linkUuid ? resolveUuidSync(plan.linkUuid) : null;
+        const canLink =
+            doc &&
+            (isGM || doc.testUserPermission?.(user, "OBSERVER")) &&
+            typeof doc.toAnchor === "function";
+
+        if (canLink) {
+            try {
+                return new HB.SafeString(doc.toAnchor({ name: plan.useLabel }).outerHTML);
+            } catch {
+                // fall through to plain label
+            }
+        }
+        return new HB.SafeString(`<span class="cgs-provenance-label">${esc(plan.useLabel)}</span>`);
+    }
+
     /** @override */
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
@@ -1574,6 +1618,29 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
 
+        /** @type {Array<{ senseLabel: string, sourceDisplays: unknown[] }>} */
+        const cgsMergedSensesProvenance = (() => {
+            const rows = systemData.cgs?.senses?.rows;
+            if (!Array.isArray(rows) || rows.length === 0) return [];
+            const resolveUuid = (uuid) => {
+                try {
+                    return typeof foundry?.utils?.fromUuidSync === "function" ? foundry.utils.fromUuidSync(uuid) : null;
+                } catch {
+                    return null;
+                }
+            };
+            const planned = enrichCgsMergedSenseRowsForProvenance(rows, {
+                isGM: game.user?.isGM === true,
+                user: game.user,
+                sheetActor: actor,
+                resolveUuid
+            });
+            return planned.map((row) => ({
+                senseLabel: row.senseLabel,
+                sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+            }));
+        })();
+
         return {
             ...context,
             actor,
@@ -1663,7 +1730,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             selectedSubtypes,
             enriched,
             // Phase 2: Apply damage/healing — show "Apply to this token" when actor has a token in the scene
-            hasTokenInScene: (actor.getActiveTokens?.()?.length ?? 0) > 0
+            hasTokenInScene: (actor.getActiveTokens?.()?.length ?? 0) > 0,
+            // Phase 4: permission-aware provenance for merged CGS senses (display side)
+            cgsMergedSensesProvenance
         };
     }
 
