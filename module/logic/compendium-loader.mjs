@@ -28,14 +28,12 @@ function getStableKey(doc) {
 export class CompendiumLoader {
     /**
      * Packs where **existing** compendium documents are not overwritten from `packs/*.json` on world load.
-     * Without this, every `ready` would `updateDocuments` from disk and erase GM edits (e.g. extra
-     * `system.changes` on races). New entries from newly added JSON files are still **created**.
+     * Add a `pack.collection` id here only when in-compendium GM edits must survive reload (none by default).
+     * The **Races** pack refreshes from JSON like every other mapped pack; use world Items for durable homebrew races.
      * When adding racial `changes` to JSON, keep `race-srd-changes-merge.mjs` in sync and bump `RACE_STOCK_DELTA_REV`
-     * if worlds need a re-merge; `test/unit/data/race-pack-stock-changes.test.mjs` guards pack JSON against regressions.
+     * if worlds need a re-merge for **embedded** / world race copies; `test/unit/data/race-pack-stock-changes.test.mjs` guards pack JSON.
      */
-    static PACKS_SKIP_JSON_REFRESH_FOR_EXISTING = new Set([
-        "thirdera.thirdera_races"
-    ]);
+    static PACKS_SKIP_JSON_REFRESH_FOR_EXISTING = new Set();
 
     /**
      * File mappings for each compendium pack

@@ -30,7 +30,9 @@
             "SenseTypePlaceholder": "— choose sense —",
             "SuppressedSenses": "Suppressed senses",
             "SuppressedSensesHint": "These sense lines are granted but currently negated by an active condition or other effect (e.g. blindness). “Suppressing” lists what removed them from merged senses.",
-            "SuppressingSourcesSummary": "Suppressing"
+            "SuppressingSourcesSummary": "Suppressing",
+            "RaceItemSenses": "Structured senses (CGS)",
+            "RaceItemSensesHint": "These rows are what you edit on the sheet; they are stored as system.cgsGrants.senses on the race item. Numeric bonuses stay under Mechanical effects. For advanced CGS entries (not simple senses), authors can still use system.cgsGrants.grants in JSON; if grants are non-empty they take precedence over this list. If both grants and this list are empty, built-in stock senses still apply for standard compendium race ids when the item keeps a matching sourceId."
         },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",

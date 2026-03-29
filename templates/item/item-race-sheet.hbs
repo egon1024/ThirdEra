@@ -46,6 +46,10 @@
 
             {{> "systems/thirdera/templates/partials/mechanical-effects-table.hbs" headerKey="THIRDERA.FeatModifiers" hintKey="THIRDERA.FeatModifiersHint" showLabel=true addButtonKey="THIRDERA.FeatAddModifier" changeKeyOptions=changeKeyOptions system=system}}
 
+            <h3 class="form-header">{{localize "THIRDERA.CGS.RaceItemSenses"}}</h3>
+            <p class="notes">{{localize "THIRDERA.CGS.RaceItemSensesHint"}}</p>
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs" hideMechanicsTitle=true}}
+
             <h3 class="form-header">{{localize "THIRDERA.RaceOtherRacialTraits"}}</h3>
             <div class="editor-box race-other-racial-traits-editor">
                 <prose-mirror name="system.otherRacialTraits" data-document-u-u-i-d="{{item.uuid}}" value="{{system.otherRacialTraits}}"

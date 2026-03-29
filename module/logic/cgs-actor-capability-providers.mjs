@@ -1,5 +1,6 @@
 /**
  * Built-in CGS source providers for actor system data (Phase 2 — senses).
+ * Phase 5b embedded item grants: [`cgs-embedded-item-grants-provider.mjs`](cgs-embedded-item-grants-provider.mjs).
  * Registered from thirdera.mjs after registerCapabilitySourceProviders().
  *
  * @see .cursor/plans/cgs-implementation.md

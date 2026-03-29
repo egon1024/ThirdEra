@@ -8,7 +8,7 @@ ThirdEra is a **Foundry VTT game system** implementing D&D 3.5 Edition using the
 
 There is no build step, bundler, or package manager **for the system at runtime**. The system is plain ES modules + CSS + Handlebars templates, loaded directly by Foundry VTT at runtime.
 
-**Automated unit tests** use a **dev-only** toolchain ([`package.json`](../package.json) + **Vitest**) for logic that can run in Node. Tests live under `test/` and **complement** in-world checks (F5 reload, optional scenarios under gitignored `docs/testing/` when present). Optional in-Foundry testing (e.g. **Quench**) is described in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Roadmap: [.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md).
+**Automated unit tests** use a **dev-only** toolchain ([`package.json`](../package.json) + **Vitest**) for logic that can run in Node. Tests live under `test/` and **complement** in-world checks (F5 reload, optional scenarios under gitignored `docs/testing/` when present). Roadmap and planned work are summarized on **[Future plans](future-plans.md)**.
 
 ## Development Setup
 
@@ -35,7 +35,7 @@ There is no build step, bundler, or package manager **for the system at runtime*
 
 **Layout:** Tests live under `test/unit/`, grouped to mirror code: `test/unit/logic/` → `module/logic/`, `test/unit/utils/` → `module/utils/`, `test/unit/data/` → `module/data/` helpers. Use the `*.test.mjs` (or `*.spec.mjs`) suffix. **`test/README.md`** lists **which production files are covered** and **which are intentionally out of scope** for Node (Foundry-only). The system’s `esmodules` entry is unchanged; `node_modules/` is dev-only and gitignored.
 
-**Policy:** Changes to behavioral logic under `module/logic/`, `module/utils/`, and pure `module/data/*_helpers.mjs` should include new or updated tests where practical, **`make test`** must pass, and **`make test-coverage`** must pass **including coverage thresholds**. See [.cursor/rules/automated-tests-for-logic.mdc](../.cursor/rules/automated-tests-for-logic.mdc). Pull request validation uses the **Validate** workflow: **`unit-tests`** (`npm ci` + **`make test`**), **`coverage`** (`npm ci` + **`make test-coverage`**), **`lint`** (placeholder until configured), and **`static-validation`** (JSON, `node --check` on `.mjs`, template paths).
+**Policy:** Changes to behavioral logic under `module/logic/`, `module/utils/`, and pure `module/data/*_helpers.mjs` should include new or updated tests where practical, **`make test`** must pass, and **`make test-coverage`** must pass **including coverage thresholds** (see **`test/README.md`** at the repository root for scope and exceptions). Pull request validation uses the **Validate** workflow: **`unit-tests`** (`npm ci` + **`make test`**), **`coverage`** (`npm ci` + **`make test-coverage`**), **`lint`** (placeholder until configured), and **`static-validation`** (JSON, `node --check` on `.mjs`, template paths).
 
 ## Architecture
 
@@ -141,7 +141,7 @@ Every meaningful change must consider **upgrade from the previous release versio
 
 ### Modifier system (`module/logic/modifier-aggregation.mjs`)
 
-A **unified modifier pipeline** aggregates contributions from conditions, feats, race, equipped items, and future sources into one **modifier bag** per actor. Design and deferred work: [.cursor/plans/future-features.md](../.cursor/plans/future-features.md) (Generalized modifier system — out of scope).
+A **unified modifier pipeline** aggregates contributions from conditions, feats, race, equipped items, and future sources into one **modifier bag** per actor. Extensions, magic-item categories, and sequencing for non-numeric traits are summarized on **[Future plans](future-plans.md#generalized-modifier-system-and-magic-items)**.
 
 - **Canonical keys:** `CONFIG.THIRDERA.modifierKeys` lists allowed keys (e.g. `ac`, `acLoseDex`, `speedMultiplier`, `saveFort`/`saveRef`/`saveWill`, `attack`/`attackMelee`/`attackRanged`, `naturalHealingPerDay`, **`initiative`**, `ability.str` … `ability.cha`, `skill.<skillKey>`). Only these keys are applied. The **`initiative`** total is summed with Dexterity modifier into `attributes.initiative.bonus` (used by the system initiative formula in `system.json`). The **`naturalHealingPerDay`** total is added to character level and to `actor.system.details.naturalHealingBonus` when computing daily natural healing in the **Take rest** flow (`getRestHealingAmount` in `module/logic/rest-healing.mjs`).
 - **Ability and skill keys:** Condition items (and later feats/equipped items) can use `ability.str`, `ability.dex`, etc. and `skill.<skillKey>` (e.g. `skill.hide`) in their `changes` array. The aggregator outputs per-key totals and breakdowns; character `prepareDerivedData` applies ability deltas to each ability’s **effective** (with breakdown), then recomputes **mod** before any other step uses ability mod. Skill modifiers from the bag are applied in the skill loop; modifier-only skills (no ranks) appear in an "Other skill modifiers" block with roll.

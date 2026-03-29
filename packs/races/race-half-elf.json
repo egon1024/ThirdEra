@@ -36,6 +36,10 @@
     ],
     "excludedSkills": [],
     "favoredClass": "Any",
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "lowLight", "range": "" }]
+    },
     "otherRacialTraits": "<ul>\n<li><strong>Immunity</strong> to magic sleep effects.</li>\n<li><strong>Saves:</strong> +2 racial bonus on saving throws vs enchantment spells and effects.</li>\n<li><strong>Low-light vision.</strong></li>\n<li><strong>Elven blood:</strong> counted as both elf and human for effects related to race.</li>\n<li><strong>Languages:</strong> Common and Elven; bonus: any (except secret languages), as for high Intelligence.</li>\n<li><strong>Favored class:</strong> any class.</li>\n</ul>"
   },
   "flags": {},

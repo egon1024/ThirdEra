@@ -46,6 +46,7 @@ import {
     cgsNpcStatBlockSensesProvider
 } from "./module/logic/cgs-actor-capability-providers.mjs";
 import { cgsConditionsCapabilityProvider } from "./module/logic/cgs-conditions-capability-provider.mjs";
+import { cgsEmbeddedItemGrantsProvider } from "./module/logic/cgs-embedded-item-grants-provider.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 import { fuzzyScore } from "./module/utils/fuzzy.mjs";
 import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-from-size-hooks.mjs";
@@ -449,7 +450,8 @@ Hooks.once("init", async function () {
     CONFIG.THIRDERA.capabilitySourceProviders.push(
         cgsNpcStatBlockSensesProvider,
         cgsActorCgsGrantsSensesProvider,
-        cgsConditionsCapabilityProvider
+        cgsConditionsCapabilityProvider,
+        cgsEmbeddedItemGrantsProvider
     );
 
     console.log("Third Era | System initialized");

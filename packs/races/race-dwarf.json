@@ -21,6 +21,10 @@
     ],
     "excludedSkills": [],
     "favoredClass": "Fighter",
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "darkvision", "range": "60 ft" }]
+    },
     "otherRacialTraits": "<ul>\n<li><strong>Darkvision</strong> 60 ft.</li>\n<li><strong>Stonecunning:</strong> +2 racial bonus on checks to notice unusual stonework; automatic Search check within 10 ft. as if actively searching.</li>\n<li><strong>Stability:</strong> +4 on checks to resist bull rush or trip when standing on the ground.</li>\n<li><strong>Saves:</strong> +2 racial bonus on saving throws against poison, spells, and spell-like abilities.</li>\n<li><strong>Combat:</strong> +1 racial bonus on attack rolls against orcs, half-orcs, and goblinoids; +4 dodge bonus to AC against giants.</li>\n<li><strong>Skills:</strong> +2 racial bonus on Appraise checks related to stone or metal; +2 on Craft checks related to stone or metal.</li>\n<li><strong>Weapon familiarity:</strong> treat dwarven waraxes and dwarven urgroshes as martial weapons, not exotic.</li>\n<li><strong>Speed in armor/load:</strong> base speed is not reduced when wearing medium or heavy armor or carrying a medium or heavy load (when it would otherwise apply).</li>\n<li><strong>Languages:</strong> Common and Dwarven; bonus: Giant, Gnome, Goblin, Orc, Terran, Undercommon.</li>\n</ul>"
   },
   "flags": {},

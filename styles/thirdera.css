@@ -505,30 +505,28 @@
   min-width: 0;
 }
 
-/* PC header: other racial traits */
-.thirdera .race-other-traits-header-block {
-  margin-top: 8px;
-  padding-top: 8px;
+/* PC sheet Description tab: other racial traits (read-only from race item) */
+.thirdera .race-other-traits-description-block {
+  margin-top: 12px;
+  padding-top: 12px;
   border-top: 1px solid var(--color-border-divider);
-  max-height: 9rem;
-  overflow-y: auto;
 }
-.thirdera .race-other-traits-header-block .form-header {
-  margin: 0 0 4px 0;
+.thirdera .race-other-traits-description-block .form-header {
+  margin: 0 0 6px 0;
   padding: 0;
   border: none;
-  font-size: var(--font-size-note);
+  font-size: var(--font-size-label);
   font-weight: var(--font-weight-bold);
   line-height: 1.2;
   color: var(--color-text-primary);
 }
-.thirdera .race-other-traits-header-block .race-other-traits-summary {
-  font-size: var(--font-size-note);
-  line-height: 1.35;
+.thirdera .race-other-traits-description-block .race-other-traits-summary {
+  font-size: var(--font-size-body);
+  line-height: 1.45;
 }
-.thirdera .race-other-traits-header-block .race-other-traits-summary ul {
+.thirdera .race-other-traits-description-block .race-other-traits-summary ul {
   margin: 0;
-  padding-left: 1.1rem;
+  padding-left: 1.25rem;
 }
 
 /* XP progress block (character header, top right) */

@@ -28,6 +28,7 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 | `module/logic/rest-healing.mjs` (`computeRestHealing` with mocked `getActiveModifiers`) | `unit/logic/rest-healing.test.mjs` |
 | `module/logic/condition-helpers.mjs` (`getActiveConditionModifiers`, `getActorEffectsList`, `getEffectStatusIds`) | `unit/logic/condition-helpers.test.mjs` |
 | `module/logic/cgs-conditions-capability-provider.mjs` | `unit/logic/cgs-conditions-capability-provider.test.mjs` |
+| `module/logic/cgs-embedded-item-grants-provider.mjs` | `unit/logic/cgs-embedded-item-grants-provider.test.mjs` (includes `CGS invariant: grants follow sources` — no actor orphan revocation) |
 | `module/logic/derived-conditions.mjs` (`getDerivedHpConditionId`, `getDerivedFrom` only) | `unit/logic/derived-conditions.test.mjs` |
 | `module/logic/monster-pack-keys.mjs` (`resolveMonsterPackNpcKeys`) | `unit/logic/monster-pack-keys.test.mjs` |
 | `module/logic/token-dimensions-from-size.mjs` | `unit/logic/token-dimensions-from-size.test.mjs` |
@@ -48,7 +49,7 @@ These modules are **intentionally excluded** from Node unit tests until logic is
 - **`module/documents/`**, **`module/sheets/`**, **`module/applications/`**, **`thirdera.mjs`** — Document/sheet/UI layer; future Quench or E2E.
 - **`module/data/*`** (TypeDataModels) — Depend on `foundry.data.fields` at import time.
 
-When you change a **covered** module, add or update tests in the matching `test/unit/**` file. Policy: [`.cursor/rules/automated-tests-for-logic.mdc`](../.cursor/rules/automated-tests-for-logic.mdc).
+When you change a **covered** module, add or update tests in the matching `test/unit/**` file. Policy: [Development — Automated unit tests](../docs-site/development.md#automated-unit-tests) (published summary); maintainer detail may also exist in workspace automation rules when present.
 
 ## Commands
 

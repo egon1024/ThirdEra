@@ -10,6 +10,10 @@
     "changes": [],
     "excludedSkills": [],
     "favoredClass": "Any",
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    },
     "otherRacialTraits": "<ul>\n<li><strong>Extra feat:</strong> one bonus feat at 1st level.</li>\n<li><strong>Skill points:</strong> +4 at 1st level and +1 per level thereafter (before Intelligence).</li>\n<li><strong>Favored class:</strong> any class.</li>\n<li><strong>Languages:</strong> Common; bonus languages may include any non-secret language.</li>\n</ul>"
   },
   "flags": {},

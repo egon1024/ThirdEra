@@ -4,13 +4,13 @@ This page lists planned or possible work. Priorities can change. If you want to 
 
 ## In progress or explicitly planned
 
-- **Automated testing framework** — Vitest, **`make test`** / **`make test-coverage`**, CI in **Validate**; **import-safe** coverage under `test/unit/` with an explicit matrix in **`test/README.md`** (repo root). Optional **Quench** (in-Foundry) in [.cursor/plans/future-features.md](../.cursor/plans/future-features.md). Scope: **[.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md)** (section 2). No replacement for manual in-world verification.
+- **Automated testing framework** — Vitest, **`make test`** / **`make test-coverage`**, CI in **Validate**; **import-safe** coverage under `test/unit/` with an explicit matrix in **`test/README.md`** (repo root). Optional **Quench** (in-Foundry) remains under consideration (see **Under consideration** below). No replacement for manual in-world verification.
 - **Equipment compendium** — Complete or refine the Equipment pack. The [Compendium guide](compendium-guide.md) lists it as “Incomplete.”
 - **Feat prerequisites by UUID** — Ensure all feat prerequisites use document ID/UUID (not name or key), per the project’s [item-references rule](development.md#item-references). The script `scripts/apply-feat-prerequisites.mjs` is related.
 
 ## Combat workflow / support
 
-The goal is smoother at-table combat for playtesting without full rules automation. **For the current ordered development priorities** (including automated testing first, then remaining spell/combat items), use **[.cursor/STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md)** section 2 as the source of truth; the numbered list below is a **product** roadmap snapshot and may lag individual shipped features.
+The goal is smoother at-table combat for playtesting without full rules automation. **For current maintainer priorities** (ordering of automation vs. spell/combat work), open a **[GitHub issue](https://github.com/egon1024/ThirdEra/issues)** or check recent releases—the numbered list below is a **product** roadmap snapshot and may lag individual shipped features.
 
 The following order prioritizes playability for playtesters (spell/save flow, initiative, concentration), then character build depth (prestige classes), then higher-level combat (iterative attacks).
 
@@ -29,9 +29,9 @@ The following order prioritizes playability for playtesters (spell/save flow, in
 
 ## Generalized modifier system and magic items
 
-The **generalized modifier system** (Phases 1–7 complete) provides a single pipeline for any source to apply modifiers to actors: ability scores, skills, AC, saves, attack, speed, etc. Character and NPC both call `getActiveModifiers(actor)` once in `prepareDerivedData`; ability deltas, then AC, speed, saves, attack, and skills use the same modifier bag. Design: [development.md](development.md) (Modifier system). Deferred work: [.cursor/plans/future-features.md](../.cursor/plans/future-features.md) (Generalized modifier system — out of scope).
+The **generalized modifier system** (Phases 1–7 complete) provides a single pipeline for any source to apply modifiers to actors: ability scores, skills, AC, saves, attack, speed, etc. Character and NPC both call `getActiveModifiers(actor)` once in `prepareDerivedData`; ability deltas, then AC, speed, saves, attack, and skills use the same modifier bag. Design: [development.md](development.md) (Modifier system). Further extension ideas appear under **Planned extensions** and **Magic item categories** on this page.
 
-**Sequencing (non-numeric traits):** Before investing heavily in **spell effects** and **magic items** that grant **senses / vision** (darkvision, blindsense, etc.) or similar **structured** traits, the project intends to add a **structured capability-grant channel** parallel to numeric GMS aggregation—see **[Structured capability grants (senses / vision; parallel to GMS)](../.cursor/plans/future-features.md#structured-capability-grants-senses--vision-parallel-to-gms)** in the internal future-features plan. Numeric bonuses from spells and items continue to use the existing modifier pipeline.
+**Sequencing (non-numeric traits):** Before investing heavily in **spell effects** and **magic items** that grant **senses / vision** (darkvision, blindsense, etc.) or similar **structured** traits, the project intends to add a **structured capability-grant channel** (identity and provenance for typed grants) parallel to numeric GMS aggregation—not synthetic numeric modifier keys. Numeric bonuses from spells and items continue to use the existing modifier pipeline.
 
 **Current sources:** Conditions (via ActiveEffects), race (optional `system.changes`, same as feats), feats (optional `system.changes`), and equipped armor/weapons/equipment (optional `system.changes` when equipped). Skill modifiers and breakdowns, including “modifier-only” skills and a shared key UI (e.g. skill picker), are implemented. Extenders can add providers to `CONFIG.THIRDERA.modifierSourceProviders` or implement `getModifierChanges(actor)` on items; see [Development — Modifier system](development.md#modifier-system-modulelogicmodifier-aggregationmjs).
 
@@ -59,6 +59,6 @@ The **generalized modifier system** (Phases 1–7 complete) provides a single pi
 - **Losing more than half hit points** — Rules for having lost more than half your HP (e.g. disabled when at 0, or half-HP–based effects); support in sheet and automation where useful.
 - **Party XP calculator** — A tool to automatically calculate and award XP for a party (e.g. by CR/EL, or from encounter totals divided by party size).
 - **Foundry V14** — Document whether the system is “v13 only” or “v13 with V14 in mind.” Pack names are already V14-friendly; a short compatibility checklist could be added when relevant.
-- **Linting** — ESLint or similar could be added alongside or after the automated testing effort if stricter PR checks are desired. (Automated tests are now an explicit next priority; see **In progress or explicitly planned** above and [STATE-OF-WORK.md](../.cursor/STATE-OF-WORK.md).)
+- **Linting** — ESLint or similar could be added alongside or after the automated testing effort if stricter PR checks are desired. (Automated tests are now an explicit next priority; see **In progress or explicitly planned** above.)
 - **Third-party modules** — Document how to build and ship a module that extends ThirdEra, or add a module template, when the need arises.
 - **Changelog** — Release notes are currently PR-driven. Optionally add a `CHANGELOG.md` or a “What’s new” page in the docs.

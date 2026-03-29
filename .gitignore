@@ -117,7 +117,10 @@ dist
 # MkDocs build output (docs-site)
 site/
 
-# Optional local dev docs (e.g. testing checklists, compendium guide) — not committed; state and plans live in .cursor/
+# Cursor workspace (often a symlink to a private maintainer repo; not part of the public ThirdEra tree)
+.cursor/
+
+# Optional local dev docs (e.g. testing checklists, compendium guide) — not committed
 docs/
 
 # Docusaurus cache and generated files

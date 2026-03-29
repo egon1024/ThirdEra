@@ -1,4 +1,4 @@
-const { NumberField, StringField, HTMLField, BooleanField, SchemaField, ArrayField } = foundry.data.fields;
+const { ArrayField, BooleanField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Equipment/Gear items
@@ -29,7 +29,29 @@ export class EquipmentData extends foundry.abstract.TypeDataModel {
             freeRetrieval: new StringField({ required: true, blank: false, initial: "false", label: "Free Retrieval" }),
 
             // Track which container this item is in (if any)
-            containerId: new StringField({ required: true, blank: true, initial: "", label: "Container ID" })
+            containerId: new StringField({ required: true, blank: true, initial: "", label: "Container ID" }),
+
+            /** CGS grants while this gear is equipped (mirrors `changes` + GMS). */
+            cgsGrants: new SchemaField(
+                {
+                    grants: new ArrayField(new ObjectField(), {
+                        required: true,
+                        initial: [],
+                        label: "CGS grants"
+                    })
+                },
+                { required: false, label: "CGS grants" }
+            )
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
+            source.cgsGrants = { grants: [] };
+        } else if (!Array.isArray(source.cgsGrants.grants)) {
+            source.cgsGrants.grants = [];
+        }
+        return super.migrateData(source);
     }
 }

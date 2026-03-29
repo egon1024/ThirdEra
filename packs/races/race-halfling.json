@@ -61,6 +61,10 @@
     ],
     "excludedSkills": [],
     "favoredClass": "Rogue",
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    },
     "otherRacialTraits": "<ul>\n<li><strong>Saves:</strong> +2 morale bonus on saving throws against fear.</li>\n<li><strong>Thrown weapons &amp; slings:</strong> +1 racial bonus on attack rolls; stones and sling bullets are treated as one size larger for range increments and wind effects.</li>\n<li><strong>Size in combat:</strong> +1 size bonus to AC against larger opponents; +1 size bonus on attack rolls against larger opponents.</li>\n<li><strong>Languages:</strong> Common and Halfling; bonus: Dwarven, Elven, Gnome, Goblin, Orc.</li>\n</ul>"
   },
   "flags": {},

@@ -1,7 +1,8 @@
 /**
  * Merge bundled SRD racial skill/save/hide modifiers into existing race items without replacing documents.
- * Compendium races skip full JSON refresh (see CompendiumLoader.PACKS_SKIP_JSON_REFRESH_FOR_EXISTING); this
- * migration appends missing stock rows so existing worlds pick up new GMS rows safely.
+ * The Races **compendium** is refreshed from `packs/races/*.json` on load (CompendiumLoader); this pass still
+ * appends missing stock rows where needed (compendium, world race Items, races embedded on actors) so embedded
+ * copies and edge cases pick up new GMS rows without relying on JSON alone.
  *
  * Rules: append a stock row only if no existing change row has the same modifier key (any value).
  * Does not modify ability score rows. Bump RACE_STOCK_DELTA_REV when adding new stock rows for a future release.

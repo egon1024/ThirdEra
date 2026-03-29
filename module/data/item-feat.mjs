@@ -1,4 +1,4 @@
-const { StringField, HTMLField, NumberField, SchemaField, ArrayField } = foundry.data.fields;
+const { ArrayField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Feat items
@@ -45,7 +45,29 @@ export class FeatData extends foundry.abstract.TypeDataModel {
                 key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
                 value: new NumberField({ required: true, initial: 0, label: "Value" }),
                 label: new StringField({ required: false, blank: true, initial: "", label: "Label" })
-            }), { required: false, initial: [], label: "Mechanical effects" })
+            }), { required: false, initial: [], label: "Mechanical effects" }),
+
+            /** Optional structured CGS grants (senses, …) while numeric bonuses use `changes` (GMS). */
+            cgsGrants: new SchemaField(
+                {
+                    grants: new ArrayField(new ObjectField(), {
+                        required: true,
+                        initial: [],
+                        label: "CGS grants"
+                    })
+                },
+                { required: false, label: "CGS grants" }
+            )
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
+            source.cgsGrants = { grants: [] };
+        } else if (!Array.isArray(source.cgsGrants.grants)) {
+            source.cgsGrants.grants = [];
+        }
+        return super.migrateData(source);
     }
 }

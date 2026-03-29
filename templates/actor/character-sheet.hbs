@@ -53,12 +53,6 @@
             </div>
           </div>
         </div>
-        {{#if raceOtherTraitsEnriched}}
-        <div class="race-other-traits-header-block">
-          <h3 class="form-header">{{localize "THIRDERA.RaceOtherRacialTraits"}}</h3>
-          <div class="race-other-traits-summary prose">{{{raceOtherTraitsEnriched}}}</div>
-        </div>
-        {{/if}}
       </div>
       {{#if xpHeaderTotalLabel}}
       <div class="header-xp">
@@ -107,6 +101,12 @@
           {{{enriched.biography}}}
         </prose-mirror>
       </div>
+      {{#if raceOtherTraitsEnriched}}
+      <div class="race-other-traits-description-block">
+        <h3 class="form-header">{{localize "THIRDERA.RaceOtherRacialTraits"}}</h3>
+        <div class="race-other-traits-summary prose">{{{raceOtherTraitsEnriched}}}</div>
+      </div>
+      {{/if}}
     </div>
 
     {{!-- Attributes Tab (formerly Abilities) --}}

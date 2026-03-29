@@ -67,7 +67,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             chooseSkillForModifier: ThirdEraItemSheet.onChooseSkillForModifier,
             editImage: ThirdEraItemSheet.onEditImage,
             addPrerequisiteFeat: ThirdEraItemSheet.onAddPrerequisiteFeat,
-            removePrerequisiteFeat: ThirdEraItemSheet.onRemovePrerequisiteFeat
+            removePrerequisiteFeat: ThirdEraItemSheet.onRemovePrerequisiteFeat,
+            addCgsSense: ThirdEraItemSheet.onAddCgsSense,
+            removeCgsSense: ThirdEraItemSheet.onRemoveCgsSense
         }
     };
 
@@ -290,7 +292,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             spellListAccessTypes: CONFIG.THIRDERA?.spellListAccessTypes || {},
             castingAbilities: CONFIG.THIRDERA?.castingAbilities || {},
             spellListKeys: CONFIG.THIRDERA?.spellListKeys || {},
-            spellResistanceChoices: CONFIG.THIRDERA?.spellResistanceChoices || {}
+            spellResistanceChoices: CONFIG.THIRDERA?.spellResistanceChoices || {},
+            senseTypes: CONFIG.THIRDERA?.senseTypes || {}
         };
 
         // Enrich HTML description and other fields
@@ -2281,5 +2284,29 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (!uuid) return;
         const uuids = (this.document.system.prerequisiteFeatUuids ?? []).filter((u) => u !== uuid);
         await this.document.update({ "system.prerequisiteFeatUuids": uuids });
+    }
+
+    /** Add a CGS sense row on race items (`system.cgsGrants.senses`). */
+    static async onAddCgsSense(_event, target) {
+        if (this.document?.type !== "race") return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const senses = foundry.utils.duplicate(this.document.system.cgsGrants?.senses ?? []);
+        senses.push({ type: "", range: "" });
+        await this.document.update({ "system.cgsGrants.senses": senses });
+    }
+
+    /** Remove a CGS sense row on race items by `data-sense-index`. */
+    static async onRemoveCgsSense(_event, target) {
+        if (this.document?.type !== "race") return;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const row = target?.closest?.("[data-sense-index]");
+        const idx = parseInt(row?.dataset?.senseIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const senses = foundry.utils.duplicate(this.document.system.cgsGrants?.senses ?? []);
+        if (idx < 0 || idx >= senses.length) return;
+        senses.splice(idx, 1);
+        await this.document.update({ "system.cgsGrants.senses": senses });
     }
 }

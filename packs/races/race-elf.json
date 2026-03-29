@@ -36,6 +36,10 @@
     ],
     "excludedSkills": [],
     "favoredClass": "Wizard",
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "lowLight", "range": "" }]
+    },
     "otherRacialTraits": "<ul>\n<li><strong>Immunity</strong> to magic sleep effects.</li>\n<li><strong>Saves:</strong> +2 racial bonus on saving throws vs enchantment spells and effects.</li>\n<li><strong>Low-light vision.</strong></li>\n<li><strong>Weapon proficiency:</strong> longswords, rapiers, longbows (including composite), and shortbows (including composite).</li>\n<li><strong>Languages:</strong> Common and Elven; bonus: Draconic, Gnoll, Gnome, Goblin, Orc, Sylvan.</li>\n</ul>"
   },
   "flags": {},
