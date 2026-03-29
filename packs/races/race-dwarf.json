@@ -7,14 +7,10 @@
     "description": "<p>Dwarves are a stout and hardy race, known for their skill in warfare, their ability to withstand physical and magical punishment, their knowledge of the earth's secrets, their hard work, and their capacity for drinking ale.</p>",
     "size": "Medium",
     "speed": 20,
-    "abilityAdjustments": {
-      "str": 0,
-      "dex": 0,
-      "con": 2,
-      "int": 0,
-      "wis": 0,
-      "cha": -2
-    },
+    "changes": [
+      { "key": "ability.con", "value": 2, "label": "" },
+      { "key": "ability.cha", "value": -2, "label": "" }
+    ],
     "excludedSkills": [],
     "favoredClass": "Fighter"
   },

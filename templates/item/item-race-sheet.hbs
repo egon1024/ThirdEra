@@ -44,15 +44,7 @@
                 <input type="text" name="system.favoredClass" value="{{system.favoredClass}}" placeholder="Any, Wizard, etc." />
             </div>
 
-            <h3 class="form-header">Ability Adjustments</h3>
-            <div class="ability-adjustments">
-                {{#each config.abilityScores as |label key|}}
-                <div class="ability-adj-entry">
-                    <label>{{label}}</label>
-                    <input type="number" name="system.abilityAdjustments.{{key}}" value="{{lookup ../system.abilityAdjustments key}}" data-dtype="Number" />
-                </div>
-                {{/each}}
-            </div>
+            {{> "systems/thirdera/templates/partials/mechanical-effects-table.hbs" headerKey="THIRDERA.FeatModifiers" hintKey="THIRDERA.FeatModifiersHint" showLabel=true addButtonKey="THIRDERA.FeatAddModifier" changeKeyOptions=changeKeyOptions system=system}}
 
             <h3 class="form-header">Excluded Skills</h3>
             <p class="hint">Drag skill items here to mark them as forbidden for this race.</p>

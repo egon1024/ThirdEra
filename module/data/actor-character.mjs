@@ -5,7 +5,7 @@ import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbran
 import { ClassData } from "./item-class.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
 import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
-import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
+import { getActiveModifiers, sumChangeValuesForModifierKey } from "../logic/modifier-aggregation.mjs";
 import { resolvedSkillMiscLineLabel } from "../logic/npc-skill-prep.mjs";
 
 /**
@@ -221,7 +221,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             ability.effective = ability.value;
         }
 
-        // Single modifier aggregation (conditions, race, future: feats, equipment); apply ability deltas
+        // Single modifier aggregation (conditions, feats, race via system.changes, equipment); apply ability deltas
         const mods = getActiveModifiers(this.parent);
         for (const [key, ability] of Object.entries(this.abilities)) {
             const delta = mods.totals[`ability.${key}`] ?? 0;
@@ -231,9 +231,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 ? ability.modifierBreakdown.map(b => `${b.label}: ${b.value >= 0 ? "+" : ""}${b.value}`).join("\n")
                 : "";
             ability.mod = Math.floor((ability.effective - 10) / 2);
-            // Display: racial column shows sum of contributions from actor's race (for sheet UI)
+            // Display: racial column from race item changes only (not breakdown labels — row labels may differ from race.name)
             ability.racial = race
-                ? (mods.breakdown[`ability.${key}`] ?? []).filter(b => b.label === race.name).reduce((s, b) => s + b.value, 0)
+                ? sumChangeValuesForModifierKey(race.system?.changes, `ability.${key}`)
                 : 0;
         }
 

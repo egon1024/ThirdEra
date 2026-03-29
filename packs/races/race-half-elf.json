@@ -7,14 +7,7 @@
     "description": "<p>Half-elves combine human versatility with elven grace.</p>",
     "size": "Medium",
     "speed": 30,
-    "abilityAdjustments": {
-      "str": 0,
-      "dex": 0,
-      "con": 0,
-      "int": 0,
-      "wis": 0,
-      "cha": 0
-    },
+    "changes": [],
     "excludedSkills": [],
     "favoredClass": "Any"
   },

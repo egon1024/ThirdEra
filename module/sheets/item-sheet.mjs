@@ -3,6 +3,7 @@
  * @extends {foundry.applications.sheets.ItemSheetV2}
  */
 import { addDomainSpellsToActor, getSpellsForDomain } from "../logic/domain-spells.mjs";
+import { getSystemChangesFromForm } from "../logic/mechanical-effects-form.mjs";
 import { SkillPickerDialog } from "../applications/skill-picker-dialog.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
@@ -157,13 +158,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 ev.stopImmediatePropagation();
             }, true);
         }
-        // Mechanical effects table: save on blur and Enter (condition, feat, armor, weapon, equipment)
+        // Mechanical effects table: save on blur and Enter (condition, feat, race, armor, weapon, equipment)
         if (partId === "sheet") {
             const root = this.element;
-            // #region agent log
-            const keyTypeSelectsCount = root?.querySelectorAll?.(".mechanical-effects-key-type")?.length ?? -1;
-            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:_attachPartListeners", message: "sheet part listeners", data: { partId, docType: this.document?.type, hasRoot: !!root, keyTypeSelectsCount }, timestamp: Date.now() }) }).catch(() => {});
-            // #endregion
             const fields = root?.querySelectorAll?.(".mechanical-effects-field");
             if (fields?.length) {
                 fields.forEach((el) => {
@@ -193,15 +190,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                     select.addEventListener("change", async () => {
                         const row = select.closest(".mechanical-effects-row");
                         const keyInput = row?.querySelector?.(".mechanical-effects-key-input");
-                        const val = select.value;
-                        // #region agent log
-                        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:keyType change", message: "change", data: { selectValue: val, hasKeyInput: !!keyInput, valueUndefined: select.value === undefined }, timestamp: Date.now() }) }).catch(() => {});
-                        // #endregion
                         if (!keyInput || select.value === undefined) return;
                         if (select.value === "skill") {
-                            // #region agent log
-                            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:opening picker", message: "entering skill branch", data: {}, timestamp: Date.now() }) }).catch(() => {});
-                            // #endregion
                             const idx = parseInt(row?.dataset?.changeIndex ?? select.dataset?.changeIndex, 10);
                             const prevKey = keyInput.value || "";
                             const dialog = new SkillPickerDialog({
@@ -216,6 +206,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                                         updates[idx] = { ...updates[idx], key: `skill.${skillKey}` };
                                         await doc.update({ "system.changes": updates }, { render: false });
                                         if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+                                        else if (doc.type === "race" && !doc.actor && doc.uuid) await this._syncWorldRaceToActorCopies();
                                         else if (doc.type !== "condition") {
                                             if (doc.actor) {
                                                 const actor = doc.actor;
@@ -232,14 +223,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                                     select.value = prevKey ? (prevKey.startsWith("skill.") ? "skill" : prevKey) : "";
                                 }
                             });
-                            // #region agent log
-                            try {
-                                await dialog.render(true);
-                                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:after render", message: "dialog.render done", data: {}, timestamp: Date.now() }) }).catch(() => {});
-                            } catch (e) {
-                                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "5e07f8" }, body: JSON.stringify({ sessionId: "5e07f8", location: "item-sheet.mjs:dialog render err", message: String(e?.message || e), data: { stack: e?.stack?.slice?.(0, 200) }, timestamp: Date.now() }) }).catch(() => {});
-                            }
-                            // #endregion
+                            await dialog.render(true);
                             return;
                         }
                         keyInput.value = select.value;
@@ -545,6 +529,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (item.type === "feat") {
             systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
         }
+        if (item.type === "race") {
+            systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
+        }
         if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
             systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
         }
@@ -596,10 +583,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             availableFeatsForPrereq,
             availableFeats,
             autoGrantedFeatsForDisplay,
-            // Key options for mechanical effects table (condition, feat, armor, weapon, equipment)
-            changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
+            // Key options for mechanical effects table (condition, feat, race, armor, weapon, equipment)
+            changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "race" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
-            modifierChangeKeys: (item.type === "feat" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
+            modifierChangeKeys: (item.type === "feat" || item.type === "race" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
         };
     }
 
@@ -649,7 +636,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
-     * When an owned item (feat, armor, weapon, equipment) is updated from this sheet, refresh the actor
+     * When an owned item (feat, race, armor, weapon, equipment) is updated from this sheet, refresh the actor
      * so the character sheet shows new modifiers and item-derived stats (AC, etc.) immediately.
      */
     async _onOwnedItemDocumentUpdate() {
@@ -695,11 +682,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const resolvedOwner = doc && (doc.actor ?? doc.parent);
         const resolvedOwnerFromUuid = doc?.uuid && game?.actors ? (() => { const p = String(doc.uuid).split("."); return p[0] === "Actor" && p[1] ? game.actors.get(p[1]) ?? null : null; })() : null;
         const owner = resolvedOwner ?? resolvedOwnerFromUuid;
-        // #region agent log
-        if (doc && typesThatAffectActor.includes(doc.type)) {
-            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_onRender", message: "armor/equip sheet render", data: { itemType: doc.type, itemId: doc.id, itemName: doc.name, hasOwner: !!owner, docActorId: doc.actor?.id, docParentId: doc.parent?.id, docUuid: doc.uuid, willRegisterListener: !!owner && !this._featUpdateListenerBound }, timestamp: Date.now() }) }).catch(() => {});
-        }
-        // #endregion
         if (doc && typesThatAffectActor.includes(doc.type) && owner && !this._featUpdateListenerBound) {
             this._featUpdateHandler = this._onOwnedItemDocumentUpdate.bind(this);
             doc.on?.("update", this._featUpdateHandler);
@@ -1305,6 +1287,17 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
         }
 
+        // Mechanical effects: rebuild system.changes from the live form so submitOnChange (e.g. Description / ProseMirror)
+        // cannot wipe rows when default expansion omits nested system.changes.* fields (race/feat/condition/item gear).
+        const typesWithMechanicalChanges = ["condition", "feat", "race", "armor", "weapon", "equipment"];
+        if (typesWithMechanicalChanges.includes(this.document?.type) && form && form.nodeName === "FORM") {
+            const fromForm = getSystemChangesFromForm(form);
+            if (fromForm !== undefined) {
+                data.system = data.system || {};
+                data.system.changes = fromForm;
+            }
+        }
+
         return data;
     }
 
@@ -1360,6 +1353,56 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
+     * When this sheet's document is a world race (no parent), sync to actors that have this race embedded.
+     */
+    async _syncWorldRaceToActorCopies() {
+        if (this.document?.type !== "race" || !this.document?.uuid) return;
+        const actor = this.document?.actor ?? this.document?.parent ?? this.document?.collection?.parent;
+        if (actor) return;
+        const docUuid = this.document.uuid;
+        const docName = (this.document.name ?? "").trim();
+        const actorList = game.actors?.contents ?? Array.from(game.actors?.values?.() ?? []);
+        const hasRaceNamed = (a, name) => {
+            const items = a.items?.contents ?? Array.from(a.items?.values?.() ?? []);
+            return items.some((it) => it.type === "race" && (it.name ?? "").trim() === name);
+        };
+        const getMatchingRaceItems = (a) => {
+            const items = a.items?.contents ?? Array.from(a.items?.values?.() ?? []);
+            return items.filter((it) => it.type === "race" && (it.sourceId === docUuid || (docName && (it.name ?? "").trim() === docName)));
+        };
+        let actorsToRefresh = actorList.filter((a) => a.items?.some?.((it) => it.type === "race" && it.sourceId === docUuid));
+        if (actorsToRefresh.length === 0 && docName) {
+            actorsToRefresh = actorList.filter((a) => hasRaceNamed(a, docName));
+        }
+        if (actorsToRefresh.length === 0 && docName) {
+            const instances = foundry.applications?.instances;
+            if (instances) {
+                for (const app of instances.values()) {
+                    const doc = app.document;
+                    if (doc?.documentName === "Actor" && hasRaceNamed(doc, docName)) {
+                        actorsToRefresh.push(doc);
+                    }
+                }
+            }
+        }
+        const fullDoc = this.document.toObject();
+        delete fullDoc._id;
+        const changes = this.document.system.changes ?? [];
+        for (const a of actorsToRefresh) {
+            const itemsToUpdate = getMatchingRaceItems(a);
+            for (const item of itemsToUpdate) {
+                const payload = { ...fullDoc };
+                payload["==system"] = this.document.system.toObject();
+                delete payload.system;
+                await item.update(payload);
+                await item.update({ "system.changes": changes });
+            }
+            if (typeof a.prepareData === "function") await a.prepareData();
+            if (a.sheet?.rendered) await a.sheet.render({ force: true });
+        }
+    }
+
+    /**
      * When this sheet's document is a world armor/weapon/equipment (no parent), sync its system data
      * to every actor that has this item (by sourceId or name+type) and refresh their sheets.
      */
@@ -1371,9 +1414,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (owner) return;
         const docUuid = doc.uuid;
         const docName = (doc.name ?? "").trim();
-        // #region agent log
-        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:entry", message: "sync entry", data: { docType: doc.type, docId: doc.id, docName, docUuid, armorBonus: doc.system?.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
-        // #endregion
         const seenIds = new Set();
         const actorList = [];
         const add = (a) => { if (a?.id && !seenIds.has(a.id)) { seenIds.add(a.id); actorList.push(a); } };
@@ -1392,9 +1432,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 }
             }
         }
-        // #region agent log
-        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:actorList", message: "actor list built", data: { rawListLength: rawList.length, actorListLength: actorList.length, actorIds: actorList.map((a) => a.id), actorNames: actorList.map((a) => a.name) }, timestamp: Date.now() }) }).catch(() => {});
-        // #endregion
         // Prefer actor document from an open Actor sheet (items populated); game.actors reference can have empty items in this context.
         const instances = foundry.applications?.instances;
         const actorListToUse = !instances ? actorList : actorList.map((a) => {
@@ -1409,19 +1446,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             const c = a.items;
             if (Array.isArray(c)) return c;
             try {
-                // #region agent log (first call per actor list only, for Victor)
-                if (a.id === "NOJtMp7r5VH8g8AP") {
-                    const hasContents = typeof c.contents !== "undefined";
-                    const contentsArr = hasContents && Array.isArray(c.contents);
-                    const contentsLen = contentsArr ? c.contents.length : "n/a";
-                    const hasValues = typeof c.values === "function";
-                    let valuesLen = "n/a";
-                    if (hasValues) try { valuesLen = Array.from(c.values()).length; } catch (e) { valuesLen = "err"; }
-                    const hasIterator = typeof c[Symbol.iterator] === "function";
-                    const cstr = Object.prototype.toString.call(c);
-                    fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:getItemsArray", message: "Victor items collection probe", data: { actorId: a.id, hasContents, contentsArr, contentsLen, hasValues, valuesLen, hasIterator, collectionType: cstr }, hypothesisId: "getItemsArray", timestamp: Date.now() }) }).catch(() => {});
-                }
-                // #endregion
                 if (typeof c.contents !== "undefined" && Array.isArray(c.contents)) return c.contents;
                 if (typeof c.values === "function") return Array.from(c.values());
                 if (typeof c[Symbol.iterator] === "function") {
@@ -1439,9 +1463,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 for (const x of c) out.push(x);
                 return out;
             } catch (e) {
-                // #region agent log
-                if (a.id === "NOJtMp7r5VH8g8AP") fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:getItemsArray", message: "getItemsArray threw", data: { actorId: a.id, err: String(e && e.message) }, hypothesisId: "getItemsArray", timestamp: Date.now() }) }).catch(() => {});
-                // #endregion
                 return [];
             }
         };
@@ -1485,23 +1506,12 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
         }
         const systemData = doc.system?.toObject?.() ?? doc.system ?? {};
-        // #region agent log
-        const sampleForItems = actorListToUse.slice(0, 6).map((a) => {
-            const items = getItemsArray(a);
-            const armors = items.filter((it) => (it.type === "armor" || it._source?.type === "armor" || (it.system && "armor" in it.system)));
-            return { actorId: a.id, actorName: a.name, itemCount: items.length, armorCount: armors.length, armors: armors.slice(0, 3).map((it) => ({ id: it.id, name: it.name, sourceId: it.sourceId, bonus: it.system?.armor?.bonus })) };
-        });
-        fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:match", message: "match result", data: { actorsToRefreshLength: actorsToRefresh.length, actorsToRefreshIds: actorsToRefresh.map((a) => a.id), docId: doc.id, sampleForItems }, timestamp: Date.now() }) }).catch(() => {});
-        // #endregion
         for (const a of actorsToRefresh) {
             const itemsToUpdate = getMatchingItems(a);
             for (const item of itemsToUpdate) {
                 const payload = { ...systemData };
                 if (item.system?.equipped !== undefined && item.system?.equipped !== null) payload.equipped = item.system.equipped;
                 if (item.system?.containerId !== undefined && item.system?.containerId !== null) payload.containerId = item.system.containerId;
-                // #region agent log
-                fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_syncWorldItemToActorCopies:update", message: "updating embedded item", data: { actorId: a.id, itemId: item.id, newBonus: systemData.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
-                // #endregion
                 await item.update({ system: payload });
             }
             if (typeof a.prepareData === "function") await a.prepareData();
@@ -1526,11 +1536,19 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
             return;
         }
+        if (doc?.type === "race") {
+            if (!actor && doc.uuid) {
+                await this._syncWorldRaceToActorCopies();
+                return;
+            }
+            if (actor && typeof actor.prepareData === "function") {
+                await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            }
+            return;
+        }
         // Armor/weapon/equipment: sync world item to actor copies or refresh owning actor
         if (doc && ["armor", "weapon", "equipment"].includes(doc.type)) {
-            // #region agent log
-            fetch("http://127.0.0.1:7244/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", { method: "POST", headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "c8b01b" }, body: JSON.stringify({ sessionId: "c8b01b", location: "item-sheet.mjs:_processSubmitData", message: "armor/equip submit", data: { itemType: doc.type, itemId: doc.id, hasActor: !!actor, docUuid: doc.uuid, willCallSync: !actor && !!doc.uuid, armorBonus: doc.system?.armor?.bonus }, timestamp: Date.now() }) }).catch(() => {});
-            // #endregion
             if (!actor && doc.uuid) {
                 await this._syncWorldItemToActorCopies();
                 return;
@@ -1883,7 +1901,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
-     * Add a blank mechanical effect row. Unified handler for condition, feat, armor, weapon, equipment.
+     * Add a blank mechanical effect row. Unified handler for condition, feat, race, armor, weapon, equipment.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
@@ -1892,7 +1910,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         event?.preventDefault?.();
         event?.stopPropagation?.();
         const doc = this.document;
-        const typesWithChanges = ["condition", "feat", "armor", "weapon", "equipment"];
+        const typesWithChanges = ["condition", "feat", "race", "armor", "weapon", "equipment"];
         if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -1900,6 +1918,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         current.push({ key: "", value: 0, label: "" });
         await doc.update({ "system.changes": current }, { render: false });
         if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+        else if (doc.type === "race" && !doc.actor && doc.uuid) await this._syncWorldRaceToActorCopies();
         else if (doc.type !== "condition") {
             if (doc.actor) {
                 const actor = doc.actor;
@@ -1913,7 +1932,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
-     * Remove a mechanical effect row. Unified handler for condition, feat, armor, weapon, equipment.
+     * Remove a mechanical effect row. Unified handler for condition, feat, race, armor, weapon, equipment.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element (must have data-index)
      * @this {ThirdEraItemSheet}
@@ -1922,7 +1941,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         event?.preventDefault?.();
         event?.stopPropagation?.();
         const doc = this.document;
-        const typesWithChanges = ["condition", "feat", "armor", "weapon", "equipment"];
+        const typesWithChanges = ["condition", "feat", "race", "armor", "weapon", "equipment"];
         if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -1932,6 +1951,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         current.splice(index, 1);
         await doc.update({ "system.changes": current }, { render: false });
         if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+        else if (doc.type === "race" && !doc.actor && doc.uuid) await this._syncWorldRaceToActorCopies();
         else if (doc.type !== "condition") {
             if (doc.actor) {
                 // Use the actor that owns this item so prepareData sees the updated doc in its items
@@ -1969,6 +1989,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                     updates[idx] = { ...updates[idx], key: `skill.${skillKey}` };
                     await doc.update({ "system.changes": updates }, { render: false });
                     if (doc.type === "feat") await this._syncWorldFeatToActorCopies();
+                    else if (doc.type === "race" && !doc.actor && doc.uuid) await this._syncWorldRaceToActorCopies();
                     else if (doc.type !== "condition") {
                         if (doc.actor) {
                             const actor = doc.actor;

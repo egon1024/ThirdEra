@@ -7,14 +7,10 @@
     "description": "<p>Elves are a magical people of otherworldly grace, living in the world but not entirely part of it.</p>",
     "size": "Medium",
     "speed": 30,
-    "abilityAdjustments": {
-      "str": 0,
-      "dex": 2,
-      "con": -2,
-      "int": 0,
-      "wis": 0,
-      "cha": 0
-    },
+    "changes": [
+      { "key": "ability.dex", "value": 2, "label": "" },
+      { "key": "ability.con", "value": -2, "label": "" }
+    ],
     "excludedSkills": [],
     "favoredClass": "Wizard"
   },

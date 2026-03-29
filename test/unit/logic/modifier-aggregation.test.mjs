@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     getActiveModifiers,
-    isCanonicalModifierKey
+    isCanonicalModifierKey,
+    itemsModifierProvider,
+    sumChangeValuesForModifierKey
 } from "../../../module/logic/modifier-aggregation.mjs";
 
 describe("isCanonicalModifierKey", () => {
@@ -32,6 +34,34 @@ describe("isCanonicalModifierKey", () => {
 
     it("trims whitespace", () => {
         expect(isCanonicalModifierKey("  ac  ")).toBe(true);
+    });
+});
+
+describe("sumChangeValuesForModifierKey", () => {
+    it("returns 0 for missing or non-array changes", () => {
+        expect(sumChangeValuesForModifierKey(undefined, "ability.dex")).toBe(0);
+        expect(sumChangeValuesForModifierKey(null, "ability.dex")).toBe(0);
+        expect(sumChangeValuesForModifierKey({}, "ability.dex")).toBe(0);
+    });
+
+    it("sums matching ability rows and ignores other keys", () => {
+        const changes = [
+            { key: "ability.dex", value: 2 },
+            { key: "ability.con", value: -2 },
+            { key: "ability.dex", value: 1, label: "Custom row label" }
+        ];
+        expect(sumChangeValuesForModifierKey(changes, "ability.dex")).toBe(3);
+        expect(sumChangeValuesForModifierKey(changes, "ability.con")).toBe(-2);
+    });
+
+    it("returns 0 for non-canonical keys", () => {
+        expect(sumChangeValuesForModifierKey([{ key: "bogus", value: 5 }], "bogus")).toBe(0);
+    });
+
+    it("skips NaN", () => {
+        expect(
+            sumChangeValuesForModifierKey([{ key: "ability.str", value: NaN }, { key: "ability.str", value: 2 }], "ability.str")
+        ).toBe(2);
     });
 });
 
@@ -172,5 +202,37 @@ describe("getActiveModifiers", () => {
         ];
         const bag = getActiveModifiers({});
         expect(bag.breakdown.ac[0].label).toBe("Dodge bonus");
+    });
+
+    it("itemsModifierProvider applies race system.changes with item name as default label", () => {
+        const actor = {
+            items: [
+                {
+                    type: "race",
+                    name: "Elf",
+                    system: {
+                        changes: [
+                            { key: "ability.dex", value: 2 },
+                            { key: "ability.con", value: -2, label: "Racial" }
+                        ]
+                    }
+                }
+            ]
+        };
+        CONFIG.THIRDERA.modifierSourceProviders = [itemsModifierProvider];
+        const bag = getActiveModifiers(actor);
+        expect(bag.totals["ability.dex"]).toBe(2);
+        expect(bag.totals["ability.con"]).toBe(-2);
+        expect(bag.breakdown["ability.dex"][0].label).toBe("Elf");
+        expect(bag.breakdown["ability.con"][0].label).toBe("Racial");
+    });
+
+    it("itemsModifierProvider skips race with empty changes", () => {
+        const actor = {
+            items: [{ type: "race", name: "Human", system: { changes: [] } }]
+        };
+        CONFIG.THIRDERA.modifierSourceProviders = [itemsModifierProvider];
+        const bag = getActiveModifiers(actor);
+        expect(bag.totals["ability.str"] ?? 0).toBe(0);
     });
 });

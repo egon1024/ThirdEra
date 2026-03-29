@@ -1,3 +1,5 @@
+import { legacyAbilityAdjustmentsToChanges } from "../logic/race-legacy-migration.mjs";
+
 const { HTMLField, NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
 
 /**
@@ -12,14 +14,12 @@ export class RaceData extends foundry.abstract.TypeDataModel {
             size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes, label: "Size" }),
             speed: new NumberField({ required: true, integer: true, min: 0, initial: 30, label: "Base Land Speed" }),
 
-            abilityAdjustments: new SchemaField({
-                str: new NumberField({ required: true, integer: true, initial: 0, label: "Strength" }),
-                dex: new NumberField({ required: true, integer: true, initial: 0, label: "Dexterity" }),
-                con: new NumberField({ required: true, integer: true, initial: 0, label: "Constitution" }),
-                int: new NumberField({ required: true, integer: true, initial: 0, label: "Intelligence" }),
-                wis: new NumberField({ required: true, integer: true, initial: 0, label: "Wisdom" }),
-                cha: new NumberField({ required: true, integer: true, initial: 0, label: "Charisma" })
-            }),
+            /** Numeric modifiers (GMS); same shape as feats/conditions. */
+            changes: new ArrayField(new SchemaField({
+                key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
+                value: new NumberField({ required: true, initial: 0, label: "Value" }),
+                label: new StringField({ required: false, blank: true, initial: "", label: "Label" })
+            }), { required: false, initial: [], label: "Mechanical effects" }),
 
             excludedSkills: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: false, label: "Skill Key" }),
@@ -28,5 +28,21 @@ export class RaceData extends foundry.abstract.TypeDataModel {
 
             favoredClass: new StringField({ required: true, blank: true, initial: "", label: "Favored Class" })
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        const hadLegacy = source.abilityAdjustments != null && typeof source.abilityAdjustments === "object";
+        if (hadLegacy) {
+            const existing = Array.isArray(source.changes) ? source.changes : [];
+            if (existing.length === 0) {
+                source.changes = legacyAbilityAdjustmentsToChanges(source.abilityAdjustments);
+            }
+            delete source.abilityAdjustments;
+        }
+        if (!Array.isArray(source.changes)) {
+            source.changes = [];
+        }
+        return super.migrateData(source);
     }
 }

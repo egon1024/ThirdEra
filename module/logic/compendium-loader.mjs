@@ -27,6 +27,15 @@ function getStableKey(doc) {
 
 export class CompendiumLoader {
     /**
+     * Packs where **existing** compendium documents are not overwritten from `packs/*.json` on world load.
+     * Without this, every `ready` would `updateDocuments` from disk and erase GM edits (e.g. extra
+     * `system.changes` on races). New entries from newly added JSON files are still **created**.
+     */
+    static PACKS_SKIP_JSON_REFRESH_FOR_EXISTING = new Set([
+        "thirdera.thirdera_races"
+    ]);
+
+    /**
      * File mappings for each compendium pack
      */
     static FILE_MAPPINGS = {
@@ -1049,6 +1058,9 @@ export class CompendiumLoader {
                 }
                 const existing = existingByKey.get(key);
                 if (existing) {
+                    if (CompendiumLoader.PACKS_SKIP_JSON_REFRESH_FOR_EXISTING.has(pack.collection)) {
+                        continue;
+                    }
                     // Update existing document: use existing.id so the client can find the document.
                     // Do not spread docData._id — JSON _ids can differ from the collection's ids and cause "id does not exist".
                     const { _id: _omit, ...rest } = docData;

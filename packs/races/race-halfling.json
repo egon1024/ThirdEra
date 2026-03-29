@@ -7,14 +7,10 @@
     "description": "<p>Halflings are an affable and cheerful people. They cherish the bonds of family and friendship as well as the comforts of hearth and home, harboring few dreams of gold or glory.</p>",
     "size": "Small",
     "speed": 20,
-    "abilityAdjustments": {
-      "str": -2,
-      "dex": 2,
-      "con": 0,
-      "int": 0,
-      "wis": 0,
-      "cha": 0
-    },
+    "changes": [
+      { "key": "ability.str", "value": -2, "label": "" },
+      { "key": "ability.dex", "value": 2, "label": "" }
+    ],
     "excludedSkills": [],
     "favoredClass": "Rogue"
   },

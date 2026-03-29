@@ -2,7 +2,7 @@ const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringFie
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
-import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
+import { getActiveModifiers, sumChangeValuesForModifierKey } from "../logic/modifier-aggregation.mjs";
 import { prepareNpcSkillItems, buildModifierOnlySkills } from "../logic/npc-skill-prep.mjs";
 
 /**
@@ -209,7 +209,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             ability.effective = ability.value;
         }
 
-        // Single modifier aggregation (conditions, race, feats, equipped items); apply ability deltas
+        // Single modifier aggregation (conditions, feats, race via system.changes, equipped items); apply ability deltas
         const mods = getActiveModifiers(this.parent);
         const race = this.parent.items.find(i => i.type === "race");
         for (const [key, ability] of Object.entries(this.abilities)) {
@@ -221,7 +221,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 : "";
             ability.mod = Math.floor((ability.effective - 10) / 2);
             ability.racial = race
-                ? (mods.breakdown[`ability.${key}`] ?? []).filter(b => b.label === race.name).reduce((s, b) => s + b.value, 0)
+                ? sumChangeValuesForModifierKey(race.system?.changes, `ability.${key}`)
                 : 0;
         }
 

@@ -12,6 +12,10 @@ Compendiums in Foundry VTT are collections of pre-made game content (items, acto
 
 **Critical Understanding**: Foundry VTT stores compendium content in **LevelDB database files** (`.db` files) within the `packs/` directory, NOT as individual JSON files. The JSON files in `packs/` are source files that must be programmatically imported into the compendiums.
 
+### Races pack and in-world edits
+
+On each world load, the system’s **CompendiumLoader** refreshes most packs from `packs/*.json` so compendium content tracks system updates. The **Races** pack is an exception: **existing** race documents in the compendium are **not** overwritten from JSON after they first exist, so GMs can add mechanical effects (`system.changes`) or other edits in the compendium without losing them on reload. **New** race JSON files added in a release are still **created** when missing from the pack. If you need to reset a race to match the current system JSON, remove that entry from the compendium (or replace it from a fresh import workflow) and reload the world so the loader can create it again.
+
 ### Compendium Pack Definition (`system.json`)
 
 Each compendium pack must be declared in `system.json` under the `"packs"` array:
@@ -319,7 +323,7 @@ To clear another pack (e.g. `packs/races`), use the same pattern: delete `*.ldb`
 ## Current Compendium Status
 
 ### Complete
-- **Races**: 7 items (all SRD races)
+- **Races**: 7 items (all SRD races). Numeric racial modifiers use **`system.changes`** (same entries as feats/conditions: `ability.str` … `ability.cha`, `skill.<key>`, saves, etc.); legacy `abilityAdjustments` in old worlds is migrated on load.
 - **Classes**: 11 items (all SRD base classes)
 - **Skills**: 36 items (all SRD skills)
 - **Feats**: 86 items (all SRD feats - General, Fighter Bonus, Metamagic, Item Creation)
