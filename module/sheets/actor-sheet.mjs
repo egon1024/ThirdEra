@@ -839,6 +839,15 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         // Prepare items
         const items = this._prepareItems(safeItemList, actor.type);
 
+        let raceOtherTraitsEnriched = "";
+        const raceItem = items.race;
+        if (actor.type === "character" && raceItem && String(raceItem.system?.otherRacialTraits ?? "").trim()) {
+            raceOtherTraitsEnriched = await foundry.applications.ux.TextEditor.enrichHTML(raceItem.system.otherRacialTraits, {
+                async: true,
+                relativeTo: raceItem
+            });
+        }
+
         // Add CONFIG data
         const config = {
             abilityScores: CONFIG.THIRDERA?.AbilityScores || {},
@@ -1571,6 +1580,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             system: systemData,
             items: actor.items ?? safeItemList,
             ...items,
+            raceOtherTraitsEnriched,
             classes: classesWithDomains,
             ...config,
             config,

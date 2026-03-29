@@ -7,9 +7,36 @@
     "description": "<p>Half-elves combine human versatility with elven grace.</p>",
     "size": "Medium",
     "speed": 30,
-    "changes": [],
+    "changes": [
+      {
+        "key": "skill.listen",
+        "value": 1,
+        "label": "SRD racial"
+      },
+      {
+        "key": "skill.search",
+        "value": 1,
+        "label": "SRD racial"
+      },
+      {
+        "key": "skill.spot",
+        "value": 1,
+        "label": "SRD racial"
+      },
+      {
+        "key": "skill.diplomacy",
+        "value": 2,
+        "label": "SRD racial"
+      },
+      {
+        "key": "skill.gatherInformation",
+        "value": 2,
+        "label": "SRD racial"
+      }
+    ],
     "excludedSkills": [],
-    "favoredClass": "Any"
+    "favoredClass": "Any",
+    "otherRacialTraits": "<ul>\n<li><strong>Immunity</strong> to magic sleep effects.</li>\n<li><strong>Saves:</strong> +2 racial bonus on saving throws vs enchantment spells and effects.</li>\n<li><strong>Low-light vision.</strong></li>\n<li><strong>Elven blood:</strong> counted as both elf and human for effects related to race.</li>\n<li><strong>Languages:</strong> Common and Elven; bonus: any (except secret languages), as for high Intelligence.</li>\n<li><strong>Favored class:</strong> any class.</li>\n</ul>"
   },
   "flags": {},
   "folder": null,

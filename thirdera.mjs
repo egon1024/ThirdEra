@@ -30,6 +30,8 @@ import { ThirdEraActorSheet } from "./module/sheets/actor-sheet.mjs";
 import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
+import { migrateAllRaceStockDeltas } from "./module/logic/race-srd-changes-merge.mjs";
+import { migrateAllRaceQualitativeTraits } from "./module/logic/race-qualitative-traits-stock.mjs";
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
 import {
     syncDerivedFlatFootedCondition,
@@ -601,6 +603,33 @@ Hooks.once("ready", async function () {
     
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
+    // Merge bundled SRD skill/save/hide rows into existing race items (compendium + world + actors); does not replace documents.
+    try {
+        const raceDelta = await migrateAllRaceStockDeltas({ game });
+        if (!raceDelta.skipped && (raceDelta.compendiumUpdated + raceDelta.worldUpdated + raceDelta.actorsUpdated) > 0) {
+            console.log(
+                "Third Era | Race SRD mechanical rows merged (existing items preserved): " +
+                    `compendium ${raceDelta.compendiumUpdated} updated, ` +
+                    `world ${raceDelta.worldUpdated} updated, ` +
+                    `embedded ${raceDelta.actorsUpdated} updated`
+            );
+        }
+    } catch (e) {
+        console.warn("Third Era | Race stock delta migration error:", e);
+    }
+    try {
+        const raceQual = await migrateAllRaceQualitativeTraits({ game });
+        if (!raceQual.skipped && (raceQual.compendiumUpdated + raceQual.worldUpdated + raceQual.actorsUpdated) > 0) {
+            console.log(
+                "Third Era | Race qualitative traits (reference HTML) merged into empty fields: " +
+                    `compendium ${raceQual.compendiumUpdated} updated, ` +
+                    `world ${raceQual.worldUpdated} updated, ` +
+                    `embedded ${raceQual.actorsUpdated} updated`
+            );
+        }
+    } catch (e) {
+        console.warn("Third Era | Race qualitative traits migration error:", e);
+    }
     // Resolve compendium index img paths so thumbnails work from /game.
     applyCompendiumImageRouteFix();
     // Build CONFIG.statusEffects from condition items so Token HUD and toggleStatusEffect work

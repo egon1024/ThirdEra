@@ -46,6 +46,14 @@
 
             {{> "systems/thirdera/templates/partials/mechanical-effects-table.hbs" headerKey="THIRDERA.FeatModifiers" hintKey="THIRDERA.FeatModifiersHint" showLabel=true addButtonKey="THIRDERA.FeatAddModifier" changeKeyOptions=changeKeyOptions system=system}}
 
+            <h3 class="form-header">{{localize "THIRDERA.RaceOtherRacialTraits"}}</h3>
+            <div class="editor-box race-other-racial-traits-editor">
+                <prose-mirror name="system.otherRacialTraits" data-document-u-u-i-d="{{item.uuid}}" value="{{system.otherRacialTraits}}"
+                    toggled="false">
+                    {{{enriched.otherRacialTraits}}}
+                </prose-mirror>
+            </div>
+
             <h3 class="form-header">Excluded Skills</h3>
             <p class="hint">Drag skill items here to mark them as forbidden for this race.</p>
             {{#if excludedSkillsForDisplay.length}}

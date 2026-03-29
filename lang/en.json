@@ -57,6 +57,7 @@
             "ref": "Ref",
             "will": "Will"
         },
+        "RaceOtherRacialTraits": "Other racial traits",
         "ItemTypes": {
             "weapon": "Weapon",
             "armor": "Armor",

@@ -298,7 +298,14 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             description: await foundry.applications.ux.TextEditor.enrichHTML(systemData.description, { async: true, relativeTo: item }),
             materialDescription: await foundry.applications.ux.TextEditor.enrichHTML(systemData.components?.materialDescription || "<ul><li></li></ul>", { async: true, relativeTo: item }),
             benefit: systemData.benefit ? await foundry.applications.ux.TextEditor.enrichHTML(systemData.benefit, { async: true, relativeTo: item }) : "",
-            special: systemData.special ? await foundry.applications.ux.TextEditor.enrichHTML(systemData.special, { async: true, relativeTo: item }) : ""
+            special: systemData.special ? await foundry.applications.ux.TextEditor.enrichHTML(systemData.special, { async: true, relativeTo: item }) : "",
+            otherRacialTraits:
+                item.type === "race" && systemData.otherRacialTraits
+                    ? await foundry.applications.ux.TextEditor.enrichHTML(systemData.otherRacialTraits, {
+                          async: true,
+                          relativeTo: item
+                      })
+                    : ""
         };
 
         // Prepare spells per day table - ensure we have entries for all 20 levels

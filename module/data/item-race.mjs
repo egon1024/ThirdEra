@@ -26,7 +26,10 @@ export class RaceData extends foundry.abstract.TypeDataModel {
                 name: new StringField({ required: false, blank: true, label: "Skill Name" })
             }), { label: "Excluded Skills" }),
 
-            favoredClass: new StringField({ required: true, blank: true, initial: "", label: "Favored Class" })
+            favoredClass: new StringField({ required: true, blank: true, initial: "", label: "Favored Class" }),
+
+            /** Traits such as vision, immunities, weapon familiarity, languages, and spell-like abilities. */
+            otherRacialTraits: new HTMLField({ required: false, blank: true, initial: "", label: "Other racial traits" })
         };
     }
 
@@ -42,6 +45,9 @@ export class RaceData extends foundry.abstract.TypeDataModel {
         }
         if (!Array.isArray(source.changes)) {
             source.changes = [];
+        }
+        if (typeof source.otherRacialTraits !== "string") {
+            source.otherRacialTraits = source.otherRacialTraits == null ? "" : String(source.otherRacialTraits);
         }
         return super.migrateData(source);
     }

@@ -8,11 +8,35 @@
     "size": "Small",
     "speed": 20,
     "changes": [
-      { "key": "ability.str", "value": -2, "label": "" },
-      { "key": "ability.con", "value": 2, "label": "" }
+      {
+        "key": "ability.str",
+        "value": -2,
+        "label": ""
+      },
+      {
+        "key": "ability.con",
+        "value": 2,
+        "label": ""
+      },
+      {
+        "key": "skill.listen",
+        "value": 2,
+        "label": "SRD racial"
+      },
+      {
+        "key": "skill.craft-alchemy",
+        "value": 2,
+        "label": "SRD racial"
+      },
+      {
+        "key": "skill.hide",
+        "value": 4,
+        "label": "SRD Small size"
+      }
     ],
     "excludedSkills": [],
-    "favoredClass": "Bard"
+    "favoredClass": "Bard",
+    "otherRacialTraits": "<ul>\n<li><strong>Low-light vision.</strong></li>\n<li><strong>Saves:</strong> +2 racial bonus on saving throws against illusions.</li>\n<li><strong>Illusions you cast:</strong> +1 to the DC for saves against your illusion spells.</li>\n<li><strong>Weapon familiarity:</strong> treat gnome hooked hammers as martial weapons.</li>\n<li><strong>Combat:</strong> +4 dodge bonus to AC against giants.</li>\n<li><strong>Spell-like ability:</strong> 1/day—<em>speak with animals</em> (burrowing mammal only, duration 1 minute; caster level 1st, save DC 10 + Cha mod).</li>\n<li><strong>Languages:</strong> Common, Gnome, and Sylvan; bonus: Draconic, Dwarven, Elven, Giant, Goblin, Orc.</li>\n</ul>"
   },
   "flags": {},
   "folder": null,

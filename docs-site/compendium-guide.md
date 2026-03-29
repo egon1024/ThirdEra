@@ -16,6 +16,10 @@ Compendiums in Foundry VTT are collections of pre-made game content (items, acto
 
 On each world load, the system’s **CompendiumLoader** refreshes most packs from `packs/*.json` so compendium content tracks system updates. The **Races** pack is an exception: **existing** race documents in the compendium are **not** overwritten from JSON after they first exist, so GMs can add mechanical effects (`system.changes`) or other edits in the compendium without losing them on reload. **New** race JSON files added in a release are still **created** when missing from the pack. If you need to reset a race to match the current system JSON, remove that entry from the compendium (or replace it from a fresh import workflow) and reload the world so the loader can create it again.
 
+**SRD race mechanical rows (GMS):** On **ready**, the GM client runs a one-way **merge** (`module/logic/race-srd-changes-merge.mjs`) that appends missing bundled skill/save/hide `system.changes` rows to **existing** race items (Races compendium, world race items, and races **embedded on actors**) when `flags.thirdera.raceStockDeltaRev` is below the current revision. It does **not** remove or replace documents, does **not** add a row if that modifier **key** already appears in `changes` (so custom values for the same key are left alone), and does **not** touch ability-score rows. When the bundled revision is bumped in a future release, worlds pick up the next batch the same way.
+
+**Other racial traits (HTML):** Stock races ship **`system.otherRacialTraits`** for vision, immunities, weapon familiarity, languages, spell-like abilities, and similar traits that are **not** represented as numeric `system.changes` rows. The field is edited on the race sheet (Details) and summarized on the **character** sheet header. On **ready**, the GM client runs `module/logic/race-qualitative-traits-stock.mjs`: when `flags.thirdera.raceQualitativeTraitsRev` is below the bundled revision, empty fields are filled from stock text keyed by default race **names**, and known obsolete bundled wording may be replaced (see `isStaleBundledQualitativeTraitsHtml` in that module). Custom text is otherwise left as-is while the flag is advanced. Keep the stock map aligned with `packs/races/*.json` when editing shipped prose.
+
 ### Compendium Pack Definition (`system.json`)
 
 Each compendium pack must be declared in `system.json` under the `"packs"` array:
@@ -323,7 +327,7 @@ To clear another pack (e.g. `packs/races`), use the same pattern: delete `*.ldb`
 ## Current Compendium Status
 
 ### Complete
-- **Races**: 7 items (all SRD races). Numeric racial modifiers use **`system.changes`** (same entries as feats/conditions: `ability.str` … `ability.cha`, `skill.<key>`, saves, etc.); legacy `abilityAdjustments` in old worlds is migrated on load.
+- **Races**: 7 items (all SRD races). Numeric racial modifiers use **`system.changes`** (same entries as feats/conditions: `ability.str` … `ability.cha`, `skill.<key>`, saves, etc.); legacy `abilityAdjustments` in old worlds is migrated on load. Shipped data includes **unconditional** SRD racial skill and save adjustments where they map to a single canonical key (e.g. elf +2 Listen/Search/Spot, halfling +1 Fort/Ref/Will and +2 Climb/Jump/Listen/Move Silently, Small races’ +4 Hide). Situational bonuses (dwarf vs poison/spells, elf vs enchantment, attack vs favored enemies, thrown-only attacks, stone-only Craft/Appraise, etc.) are **not** encoded as flat `changes` rows so the bag is not overstated—handle those at the table or in future structured grants (CGS). **`system.otherRacialTraits`** holds rich text for additional racial qualities (vision, languages, immunities, etc.); see the Races pack section above.
 - **Classes**: 11 items (all SRD base classes)
 - **Skills**: 36 items (all SRD skills)
 - **Feats**: 86 items (all SRD feats - General, Fighter Bonus, Metamagic, Item Creation)
