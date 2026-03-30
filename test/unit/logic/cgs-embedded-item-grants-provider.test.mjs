@@ -27,10 +27,23 @@ describe("cgsContributionFromRaceItem", () => {
 });
 
 describe("cgsContributionFromOwnedItem", () => {
-    it("returns null when grants missing or empty", () => {
+    it("returns null when grants missing or empty and no senses", () => {
         expect(cgsContributionFromOwnedItem(null, "X")).toBe(null);
         expect(cgsContributionFromOwnedItem({ name: "A", system: {} }, "X")).toBe(null);
         expect(cgsContributionFromOwnedItem({ name: "A", system: { cgsGrants: { grants: [] } } }, "X")).toBe(null);
+    });
+
+    it("uses mapped senses when grants empty", () => {
+        const c = cgsContributionFromOwnedItem(
+            {
+                name: "Magic Helm",
+                uuid: "Actor.1.Item.h",
+                system: { cgsGrants: { grants: [], senses: [{ type: "darkvision", range: "30 ft" }] } }
+            },
+            "Equipment"
+        );
+        expect(c?.grants).toEqual([{ category: "sense", senseType: "darkvision", range: "30 ft" }]);
+        expect(c?.label).toBe("Magic Helm");
     });
 
     it("builds label and item sourceRef with uuid", () => {
@@ -92,6 +105,22 @@ describe("cgsEmbeddedItemGrantsProvider", () => {
         const out = cgsEmbeddedItemGrantsProvider(actor);
         expect(out).toHaveLength(1);
         expect(out[0].label).toBe("Cloak");
+    });
+
+    it("feat contributes senses from cgsGrants.senses when grants empty", () => {
+        const actor = {
+            items: [
+                {
+                    type: "feat",
+                    name: "Keen Nose",
+                    uuid: "Item.f1",
+                    system: { cgsGrants: { grants: [], senses: [{ type: "scent", range: "15 ft" }] } }
+                }
+            ]
+        };
+        const out = cgsEmbeddedItemGrantsProvider(actor);
+        expect(out).toHaveLength(1);
+        expect(out[0].grants[0]).toMatchObject({ category: "sense", senseType: "scent", range: "15 ft" });
     });
 
     it("weapon only when primary or offhand", () => {

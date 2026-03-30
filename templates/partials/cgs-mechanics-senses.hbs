@@ -1,11 +1,10 @@
 {{#unless hideMechanicsTitle}}
 <h4 class="items-header">{{localize 'THIRDERA.CGS.Mechanics'}}</h4>
-<p class="notes cgs-hint">{{localize 'THIRDERA.CGS.MechanicsHint'}}</p>
 {{/unless}}
-{{#if system.cgsGrants.senses}}
-{{#if system.cgsGrants.senses.length}}
+{{!-- Single #with + #each: avoid double #if on senses (empty [] / HB truthiness); keep indexed names for form merge. --}}
+{{#with system.cgsGrants}}
 <ol class="senses-list items-list cgs-mechanics-senses">
-  {{#each system.cgsGrants.senses as |sense idx|}}
+  {{#each senses as |sense idx|}}
   <li class="sense flexrow" data-sense-index="{{idx}}">
     <select name="system.cgsGrants.senses.{{idx}}.type" class="details-input sense-type">
       <option value="">{{localize 'THIRDERA.CGS.SenseTypePlaceholder'}}</option>
@@ -15,12 +14,11 @@
     </select>
     <input type="text" name="system.cgsGrants.senses.{{idx}}.range" value="{{sense.range}}"
       data-dtype="String" class="details-input sense-range" placeholder="{{localize 'THIRDERA.NPC.SenseRange'}}" />
-    <a class="sense-remove" data-action="removeCgsSense" data-sense-index="{{idx}}" title="{{localize 'THIRDERA.NPC.RemoveSense'}}"><i class="fas fa-trash"></i></a>
+    <button type="button" class="sense-remove" data-action="removeCgsSense" data-sense-index="{{idx}}" title="{{localize 'THIRDERA.NPC.RemoveSense'}}" aria-label="{{localize 'THIRDERA.NPC.RemoveSense'}}"><i class="fas fa-trash"></i></button>
   </li>
   {{/each}}
 </ol>
-{{/if}}
-{{/if}}
+{{/with}}
 <div class="senses-add">
-  <a class="sense-add-btn" data-action="addCgsSense" title="{{localize 'THIRDERA.NPC.AddSense'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddSense'}}</a>
+  <button type="button" class="sense-add-btn" data-action="addCgsSense" title="{{localize 'THIRDERA.NPC.AddSense'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddSense'}}</button>
 </div>

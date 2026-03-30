@@ -8,6 +8,7 @@
  * @see .cursor/plans/cgs-phased-implementation.md (Phase 5b)
  */
 
+import { getEffectiveOwnedItemCgsGrants } from "./cgs-owned-item-grants.mjs";
 import { getEffectiveRaceCgsGrants } from "./cgs-stock-race-grants.mjs";
 
 /**
@@ -38,9 +39,8 @@ function cgsContributionFromGrants(item, defaultLabel, grants) {
  * @returns {{ label: string, grants: unknown[], sourceRef: Record<string, unknown> } | null}
  */
 export function cgsContributionFromOwnedItem(item, defaultLabel) {
-    const sys = item?.system;
-    const grants = sys?.cgsGrants?.grants;
-    return cgsContributionFromGrants(item, defaultLabel, Array.isArray(grants) ? grants : []);
+    const grants = getEffectiveOwnedItemCgsGrants(item);
+    return cgsContributionFromGrants(item, defaultLabel, grants);
 }
 
 /**

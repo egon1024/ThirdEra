@@ -19,24 +19,22 @@
         "Attributes": "Attributes",
         "TabDetails": "Details",
         "CGS": {
-            "MergedSenses": "Merged senses",
-            "MergedSensesHint": "Derived sense lines (display only). Open “Sources” on each line to see contributing origins; links open the document when you have permission.",
+            "MergedSenses": "Senses",
             "ProvenanceSourcesSummary": "Sources",
             "ProvenanceUnknownSource": "Unknown source",
-            "Mechanics": "CGS Mechanics",
-            "MechanicsHint": "Edit actor-level senses here; on NPCs they merge with legacy stat block senses until content is migrated.",
-            "LegacyStatBlockSenses": "Stat block senses (legacy)",
-            "LegacyStatBlockSensesHint": "Stored on the NPC stat block (e.g. imported monsters). Merged senses above combine these with CGS Mechanics.",
+            "Mechanics": "Capability grants",
+            "LegacyStatBlockSenses": "Stat block senses",
             "SenseTypePlaceholder": "— choose sense —",
             "SuppressedSenses": "Suppressed senses",
-            "SuppressedSensesHint": "These sense lines are granted but currently negated by an active condition or other effect (e.g. blindness). “Suppressing” lists what removed them from merged senses.",
             "SuppressingSourcesSummary": "Suppressing",
-            "RaceItemSenses": "Structured senses (CGS)",
-            "RaceItemSensesHint": "These rows are what you edit on the sheet; they are stored as system.cgsGrants.senses on the race item. Numeric bonuses stay under Mechanical effects. For advanced CGS entries (not simple senses), authors can still use system.cgsGrants.grants in JSON; if grants are non-empty they take precedence over this list. If both grants and this list are empty, built-in stock senses still apply for standard compendium race ids when the item keeps a matching sourceId."
+            "CapabilityGrantsItemSection": "Capability grants"
         },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",
             "Item": "Third Era Item Sheet"
+        },
+        "ItemSheet": {
+            "SenseEditNotAllowed": "This item cannot be edited. Unlock the compendium pack if it is locked, or ensure you have owner permission on the document."
         },
         "AbilityScores": {
             "str": "Strength",

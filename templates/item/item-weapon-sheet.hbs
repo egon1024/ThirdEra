@@ -97,6 +97,9 @@
                 <input type="text" name="system.quantity" value="{{system.quantity}}" data-dtype="Number" />
             </div>
 
+            <h3 class="form-header">{{localize "THIRDERA.CGS.CapabilityGrantsItemSection"}}</h3>
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs" hideMechanicsTitle=true}}
+
             {{> "systems/thirdera/templates/partials/mechanical-effects-table.hbs" headerKey="THIRDERA.FeatModifiers" hintKey="THIRDERA.ItemModifiersHint" showLabel=true addButtonKey="THIRDERA.FeatAddModifier" changeKeyOptions=changeKeyOptions system=system}}
         </div>
     </section>

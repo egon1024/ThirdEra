@@ -61,7 +61,7 @@ export function cgsActorCgsGrantsSensesProvider(actor) {
     if (grants.length === 0) return [];
     return [
         {
-            label: "CGS Mechanics",
+            label: "Capability grants",
             sourceRef: { kind: "actorCgsGrants", uuid: actor.uuid },
             grants
         }

@@ -3,6 +3,10 @@
  * @extends {foundry.applications.sheets.ItemSheetV2}
  */
 import { addDomainSpellsToActor, getSpellsForDomain } from "../logic/domain-spells.mjs";
+import {
+    buildSystemUpdateSourceChangesFromReturnedItem,
+    staleSheetItemDocNeedsSystemResync
+} from "../logic/cgs-stale-item-sheet-sync.mjs";
 import { getSystemChangesFromForm } from "../logic/mechanical-effects-form.mjs";
 import { SkillPickerDialog } from "../applications/skill-picker-dialog.mjs";
 
@@ -2286,27 +2290,152 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         await this.document.update({ "system.prerequisiteFeatUuids": uuids });
     }
 
-    /** Add a CGS sense row on race items (`system.cgsGrants.senses`). */
-    static async onAddCgsSense(_event, target) {
-        if (this.document?.type !== "race") return;
-        const tab = target.closest(".tab");
-        if (tab) this._preservedScrollTop = tab.scrollTop;
-        const senses = foundry.utils.duplicate(this.document.system.cgsGrants?.senses ?? []);
-        senses.push({ type: "", range: "" });
-        await this.document.update({ "system.cgsGrants.senses": senses });
+    /** Item types that edit `system.cgsGrants.senses` on the item sheet (Phase 5b). */
+    static #itemTypesWithCgsSensesUi = new Set(["race", "feat", "armor", "weapon", "equipment"]);
+
+    /**
+     * Build a plain `{ grants, senses }` for `system.cgsGrants` from the live item model (duplicate, not references).
+     * @param {Item} doc
+     * @param {Array<{ type: string, range: string }>} senses
+     * @returns {{ grants: unknown[], senses: Array<{ type: string, range: string }> }}
+     */
+    static #plainCgsGrantsClone(doc, senses) {
+        return {
+            grants: foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []),
+            senses: foundry.utils.duplicate(senses)
+        };
     }
 
-    /** Remove a CGS sense row on race items by `data-sense-index`. */
-    static async onRemoveCgsSense(_event, target) {
-        if (this.document?.type !== "race") return;
+    /**
+     * Default row for a new CGS sense (first configured sense type, empty range).
+     */
+    static #defaultNewCgsSenseRow() {
+        const st = globalThis.CONFIG?.THIRDERA?.senseTypes;
+        if (st && typeof st === "object") {
+            const keys = Object.keys(st);
+            if (keys.length) return { type: keys[0], range: "" };
+        }
+        return { type: "", range: "" };
+    }
+
+    /**
+     * Persist `system.cgsGrants` via a targeted `document.update` (plain duplicate of grants + senses).
+     * Uses `diff: false` so the client does not replace the payload with a dry-run diff only (Foundry default
+     * `diff: true` was followed by server round-trip that left `_source.system.cgsGrants.senses` empty).
+     * Uses plain `system.cgsGrants` (not `==cgsGrants`): Item TypeDataModel.migrateData used to inject an empty
+     * sibling `cgsGrants` when only `==cgsGrants` was present, which overwrote the replacement in merge order.
+     * Compendium: resolves `game.packs.get(pack).get(id)` so the update runs on the cached pack instance; if that
+     * differs from `sheet.document`, syncs the sheet copy with `updateSource({ system })` from the returned document
+     * then `prepareData()` so nested TypeDataModel (`system`) is re-initialized — not only `_source` merge.
+     * Runs `CONFIG.Item.dataModels[type].migrateDataSafe` on the `system` slice before update so nested CGS migrates
+     * without sending top-level `type` (avoids Foundry treating `type` as a schema diff that clears `system`).
+     * @param {ThirdEraItemSheet} sheet
+     * @param {{ grants: unknown[], senses: unknown[] }} cgsPayload
+     */
+    static async #applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload) {
+        const sheetDoc = sheet.document;
+        const plain = foundry.utils.duplicate(cgsPayload);
+        let liveDoc = sheetDoc;
+        if (sheetDoc.pack) {
+            const pack = game.packs.get(sheetDoc.pack);
+            const fromPack = pack?.get(sheetDoc.id, { strict: false });
+            if (fromPack) liveDoc = fromPack;
+        }
+        const systemPart = { cgsGrants: plain };
+        const dm = globalThis.CONFIG?.Item?.dataModels?.[sheetDoc.type];
+        if (dm && typeof dm.migrateDataSafe === "function") {
+            dm.migrateDataSafe(systemPart);
+        }
+
+        const returned = await liveDoc.update({ system: systemPart }, { render: false, diff: false });
+
+        if (returned && staleSheetItemDocNeedsSystemResync(sheetDoc, returned)) {
+            sheetDoc.updateSource(
+                buildSystemUpdateSourceChangesFromReturnedItem(returned, {
+                    clone: (o) => foundry.utils.deepClone(o)
+                })
+            );
+            if (typeof sheetDoc.prepareData === "function") {
+                await sheetDoc.prepareData();
+            }
+        }
+    }
+
+    /**
+     * Add a sense row under `system.cgsGrants.senses`.
+     */
+    static async onAddCgsSense(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) {
+            return;
+        }
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const doc = this.document;
+        const tab = target.closest(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const newRow = ThirdEraItemSheet.#defaultNewCgsSenseRow();
+        senses.push(newRow);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsGrantsClone(doc, senses);
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /** Remove a sense row by `data-sense-index` on the row or control. */
+    static async onRemoveCgsSense(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const doc = this.document;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
         const row = target?.closest?.("[data-sense-index]");
         const idx = parseInt(row?.dataset?.senseIndex, 10);
         if (Number.isNaN(idx)) return;
-        const senses = foundry.utils.duplicate(this.document.system.cgsGrants?.senses ?? []);
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
         if (idx < 0 || idx >= senses.length) return;
         senses.splice(idx, 1);
-        await this.document.update({ "system.cgsGrants.senses": senses });
+        const cgsPayload = ThirdEraItemSheet.#plainCgsGrantsClone(doc, senses);
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /**
+     * After mutating `system.cgsGrants.senses`, match mechanical-effect sync (feat/race/world gear).
+     * @param {ThirdEraItemSheet} sheet
+     */
+    static async #afterCgsSensesMutation(sheet) {
+        const doc = sheet.document;
+        if (doc.type === "feat") await sheet._syncWorldFeatToActorCopies();
+        else if (doc.type === "race" && !doc.actor && doc.uuid) await sheet._syncWorldRaceToActorCopies();
+        else if (doc.type !== "condition") {
+            if (doc.actor) {
+                const actor = doc.actor;
+                if (typeof actor.prepareData === "function") await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+            } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
+                await sheet._syncWorldItemToActorCopies();
+            }
+        }
     }
 }

@@ -77,6 +77,6 @@ describe("CGS NPC providers + merge (integration)", () => {
         });
         expect(cgs.senses.rows).toHaveLength(1);
         expect(cgs.senses.rows[0].senseType).toBe("darkvision");
-        expect(cgs.senses.rows[0].sources.map(s => s.label).sort()).toEqual(["CGS Mechanics", "Stat block"]);
+        expect(cgs.senses.rows[0].sources.map(s => s.label).sort()).toEqual(["Capability grants", "Stat block"]);
     });
 });

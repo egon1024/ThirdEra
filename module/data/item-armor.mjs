@@ -1,3 +1,5 @@
+import { migrateDataCgsGrants } from "./cgs-grants-migrate-helpers.mjs";
+
 const { ArrayField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
 
 /**
@@ -46,21 +48,24 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
                     grants: new ArrayField(new ObjectField(), {
                         required: true,
                         initial: [],
-                        label: "CGS grants"
-                    })
+                        label: "Capability grants"
+                    }),
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({ required: true, blank: true, initial: "", label: "Sense type" }),
+                            range: new StringField({ required: true, blank: true, initial: "", label: "Range" })
+                        }),
+                        { required: false, initial: [], label: "Senses" }
+                    )
                 },
-                { required: false, label: "CGS grants" }
+                { required: false, label: "Capability grants" }
             )
         };
     }
 
     /** @override */
     static migrateData(source) {
-        if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
-            source.cgsGrants = { grants: [] };
-        } else if (!Array.isArray(source.cgsGrants.grants)) {
-            source.cgsGrants.grants = [];
-        }
+        migrateDataCgsGrants(source);
         return super.migrateData(source);
     }
 }

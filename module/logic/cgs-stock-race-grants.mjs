@@ -7,6 +7,8 @@
  * `sourceId` / `uuid` / `id`, not by display name.
  */
 
+import { mapCgsSensesRowsToSenseGrants } from "./cgs-owned-item-grants.mjs";
+
 /** @type {Readonly<Record<string, ReadonlyArray<{ category: string, senseType: string, range: string }>>>} */
 export const STOCK_RACE_CGS_GRANTS_BY_DOC_ID = Object.freeze({
     "race-dwarf": Object.freeze([{ category: "sense", senseType: "darkvision", range: "60 ft" }]),
@@ -54,19 +56,8 @@ export function getEffectiveRaceCgsGrants(item) {
     if (Array.isArray(rawGrants) && rawGrants.length > 0) {
         return /** @type {Array<{ category: string, senseType: string, range: string }>} */ (rawGrants.slice());
     }
-    const senses = cg.senses;
-    if (Array.isArray(senses) && senses.length > 0) {
-        /** @type {Array<{ category: string, senseType: string, range: string }>} */
-        const fromSenses = [];
-        for (const s of senses) {
-            if (!s || typeof s !== "object") continue;
-            const st = typeof /** @type {{ type?: string }} */ (s).type === "string" ? s.type.trim() : "";
-            if (!st) continue;
-            const range = typeof /** @type {{ range?: string }} */ (s).range === "string" ? s.range : "";
-            fromSenses.push({ category: "sense", senseType: st, range });
-        }
-        if (fromSenses.length > 0) return fromSenses;
-    }
+    const fromSenses = mapCgsSensesRowsToSenseGrants(cg.senses);
+    if (fromSenses.length > 0) return fromSenses;
     const docId = extractPackRaceDocId(item);
     if (!docId) return [];
     const stock = STOCK_RACE_CGS_GRANTS_BY_DOC_ID[docId];

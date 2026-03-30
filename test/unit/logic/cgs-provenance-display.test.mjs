@@ -48,7 +48,7 @@ describe("planCgsSourceDisplay", () => {
 
     it("actorCgsGrants is visible when user may observe the sheet actor", () => {
         const plan = planCgsSourceDisplay(
-            { label: "CGS Mechanics", sourceRef: { kind: "actorCgsGrants", uuid: "Actor.1" } },
+            { label: "Capability grants", sourceRef: { kind: "actorCgsGrants", uuid: "Actor.1" } },
             {
                 isGM: false,
                 user: observerUser,
@@ -56,12 +56,12 @@ describe("planCgsSourceDisplay", () => {
                 resolveUuid: () => null
             }
         );
-        expect(plan).toEqual({ showLabel: true, linkUuid: "Actor.1", useLabel: "CGS Mechanics" });
+        expect(plan).toEqual({ showLabel: true, linkUuid: "Actor.1", useLabel: "Capability grants" });
     });
 
     it("actorCgsGrants hides when user cannot observe the sheet actor", () => {
         const plan = planCgsSourceDisplay(
-            { label: "CGS Mechanics", sourceRef: { kind: "actorCgsGrants", uuid: "Actor.1" } },
+            { label: "Capability grants", sourceRef: { kind: "actorCgsGrants", uuid: "Actor.1" } },
             {
                 isGM: false,
                 user: observerUser,

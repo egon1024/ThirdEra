@@ -4837,7 +4837,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
-     * Add a sense row to CGS Mechanics (system.cgsGrants.senses); merges into derived merged senses.
+     * Add a sense row to actor capability grants (system.cgsGrants.senses); merges into derived senses.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
@@ -4849,7 +4849,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     }
 
     /**
-     * Remove a sense row from CGS Mechanics.
+     * Remove a sense row from actor capability grants.
      * @param {PointerEvent} event   The originating click event
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}

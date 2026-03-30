@@ -53,6 +53,7 @@ import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-fro
 import {
     createDefaultCgsRefreshDeps,
     refreshCapabilityGrantsForActor,
+    refreshCapabilityGrantDependentsFromItem,
     resolveParentActorForItem,
     registerCgsCapabilityRefreshHooks
 } from "./module/logic/cgs-refresh-hooks.mjs";
@@ -714,6 +715,10 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
         }
         return;
     }
+    if (document.type === "race") {
+        await refreshCapabilityGrantDependentsFromItem(document, cgsRefreshDeps);
+        return;
+    }
     // Resolve parent actor: (1) document.parent/actor/collection.parent, (2) parse UUID "Actor.actorId.Item.itemId", or (3) resolve via fromUuid (embedded doc may have .parent).
     let actor = null;
     if (document.type === "feat") {
@@ -814,7 +819,7 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
         return;
     }
     if (document.type !== "spell") {
-        const skipCgsParentRefresh = new Set(["condition", "feat", "armor", "weapon", "equipment"]);
+        const skipCgsParentRefresh = new Set(["condition", "feat", "armor", "weapon", "equipment", "race"]);
         if (!skipCgsParentRefresh.has(document.type)) {
             const pa = await resolveParentActorForItem(document, cgsRefreshDeps);
             if (pa) await refreshCapabilityGrantsForActor(pa, cgsRefreshDeps);

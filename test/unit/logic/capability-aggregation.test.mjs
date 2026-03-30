@@ -63,7 +63,7 @@ describe("mergeSenseRows", () => {
                 {
                     senseType: "darkvision",
                     range: "60 FT",
-                    _source: { label: "CGS Mechanics", sourceRef: { kind: "actorCgsGrants" } }
+                    _source: { label: "Capability grants", sourceRef: { kind: "actorCgsGrants" } }
                 },
                 { senseType: "lowLight", range: "", _source: { label: "Race" } }
             ],
@@ -72,7 +72,7 @@ describe("mergeSenseRows", () => {
         expect(rows).toHaveLength(2);
         const dv = rows.find(r => r.senseType === "darkvision");
         expect(dv?.sources).toHaveLength(2);
-        expect(dv?.sources.map(s => s.label).sort()).toEqual(["CGS Mechanics", "Stat block"]);
+        expect(dv?.sources.map(s => s.label).sort()).toEqual(["Capability grants", "Stat block"]);
         expect(rows.find(r => r.senseType === "lowLight")?.sources).toEqual([{ label: "Race" }]);
     });
 

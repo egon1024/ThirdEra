@@ -1,5 +1,4 @@
 <h4 class="items-header">{{localize 'THIRDERA.CGS.MergedSenses'}}</h4>
-<p class="notes cgs-hint">{{localize 'THIRDERA.CGS.MergedSensesHint'}}</p>
 {{#if cgsMergedSensesProvenance.length}}
 <ul class="cgs-merged-senses items-list">
   {{#each cgsMergedSensesProvenance as |row|}}
@@ -23,7 +22,6 @@
 {{/if}}
 {{#if cgsSuppressedSensesProvenance.length}}
 <h5 class="cgs-suppressed-senses-header">{{localize 'THIRDERA.CGS.SuppressedSenses'}}</h5>
-<p class="notes cgs-hint">{{localize 'THIRDERA.CGS.SuppressedSensesHint'}}</p>
 <ul class="cgs-suppressed-senses items-list">
   {{#each cgsSuppressedSensesProvenance as |row|}}
   <li class="cgs-suppressed-sense-row">
