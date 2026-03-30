@@ -379,6 +379,15 @@ Hooks.once("init", async function () {
         default: true
     });
 
+    game.settings.register("thirdera", "reimportCompendiumJsonEachLoad", {
+        name: "THIRDERA.Settings.ReimportCompendiumJsonEachLoad.Name",
+        hint: "THIRDERA.Settings.ReimportCompendiumJsonEachLoad.Hint",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     // Register data models
     CONFIG.Actor.dataModels = {
         character: CharacterData,

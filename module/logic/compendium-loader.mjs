@@ -865,11 +865,11 @@ export class CompendiumLoader {
         // Only run if we're the GM
         if (!game.user.isGM) return;
 
-        // Wait a bit for compendiums to be fully registered
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
         // Debug: log all available packs
         console.log("Third Era | Available packs:", Array.from(game.packs.keys()));
+
+        let packsLoadedFromJson = 0;
+        let packsSkippedPopulated = 0;
 
         for (const [packName, fileList] of Object.entries(CompendiumLoader.FILE_MAPPINGS)) {
             // Try multiple ways to find the pack
@@ -894,10 +894,20 @@ export class CompendiumLoader {
 
             // Load JSON files (will update existing items or create new ones)
             try {
-                await CompendiumLoader.loadPackFromJSON(pack, fileList);
+                const ran = await CompendiumLoader.loadPackFromJSON(pack, fileList);
+                if (ran) packsLoadedFromJson++;
+                else packsSkippedPopulated++;
             } catch (error) {
                 console.error(`Third Era | Error loading compendium ${packName}:`, error);
             }
+        }
+
+        if (packsSkippedPopulated > 0) {
+            console.log(
+                `Third Era | Compendium JSON: skipped ${packsSkippedPopulated} pack(s) that already have index entries; ` +
+                    `ran JSON load for ${packsLoadedFromJson} pack(s). ` +
+                    `Enable \"Re-import compendium JSON on each load\" in system settings to force a full refresh from pack JSON.`
+            );
         }
     }
 
@@ -905,8 +915,18 @@ export class CompendiumLoader {
      * Load a compendium pack from JSON files
      * @param {CompendiumCollection} pack - The compendium pack to populate
      * @param {string[]} fileList - List of JSON file names to load
+     * @returns {Promise<boolean>} True if JSON was fetched and processed; false if skipped (pack already populated and setting does not force reimport)
      */
     static async loadPackFromJSON(pack, fileList) {
+        const forceReimport =
+            typeof game !== "undefined" && game.settings?.get?.("thirdera", "reimportCompendiumJsonEachLoad") === true;
+        if (!forceReimport) {
+            await pack.getIndex();
+            if (pack.index.size > 0) {
+                return false;
+            }
+        }
+
         // Normalize the path - remove any existing systems/thirdera/ prefix to avoid duplication
         let normalizedPath = pack.metadata.path;
         if (normalizedPath.startsWith('systems/thirdera/')) {
@@ -1034,7 +1054,7 @@ export class CompendiumLoader {
             const DocumentClass = pack.documentClass;
             if (!DocumentClass) {
                 console.error(`Third Era | Could not determine document class for pack ${pack.collection}`);
-                return;
+                return true;
             }
 
             // Get existing documents from the compendium; match by stable key (not name)
@@ -1112,5 +1132,6 @@ export class CompendiumLoader {
                 console.log(`Third Era | Processed ${documents.length} documents in ${pack.collection}`);
             }
         }
+        return true;
     }
 }
