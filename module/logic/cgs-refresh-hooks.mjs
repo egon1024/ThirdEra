@@ -164,7 +164,9 @@ export async function rerenderThirderaActorSheetsForActor(actorId, deps) {
         const appActor = app.actor ?? doc;
         if (appActor?.id !== actorId) continue;
         if (doc?.documentName === "Actor" && sys === "thirdera" && app.rendered) {
-            await app.render({ force: true });
+            // Do not use render({ force: true }): ApplicationV2 schedules bringToFront and steals z-order
+            // from overlapping windows (e.g. world item sheet editing CGS while actor sheet is open).
+            await app.render();
         }
     }
 }

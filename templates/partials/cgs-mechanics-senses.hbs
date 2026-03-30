@@ -1,9 +1,11 @@
+<div class="cgs-item-grants-panel">
 {{#unless hideMechanicsTitle}}
 <h4 class="items-header">{{localize 'THIRDERA.CGS.Mechanics'}}</h4>
 {{/unless}}
 {{!-- Single #with + #each: avoid double #if on senses (empty [] / HB truthiness); keep indexed names for form merge. --}}
+{{!-- Do not use `items-list` here: that class is for actor inventory rows and can disturb paint/stacking on item sheets. --}}
 {{#with system.cgsGrants}}
-<ol class="senses-list items-list cgs-mechanics-senses">
+<ol class="senses-list cgs-mechanics-senses">
   {{#each senses as |sense idx|}}
   <li class="sense flexrow" data-sense-index="{{idx}}">
     <select name="system.cgsGrants.senses.{{idx}}.type" class="details-input sense-type">
@@ -21,4 +23,5 @@
 {{/with}}
 <div class="senses-add">
   <button type="button" class="sense-add-btn" data-action="addCgsSense" title="{{localize 'THIRDERA.NPC.AddSense'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddSense'}}</button>
+</div>
 </div>

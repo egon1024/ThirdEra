@@ -1,9 +1,10 @@
 /**
  * Shared cgsGrants normalization for Item TypeDataModel.migrateData.
  *
- * When an update uses Foundry's force-replacement key `==cgsGrants`, we must NOT also set plain `cgsGrants`:
- * ClientDatabaseBackend runs migrateData on the diff before merge; a spurious empty `cgsGrants` is merged after
- * `==cgsGrants` and wipes senses (SchemaField#_updateDiff iteration order).
+ * When an update uses Foundry's force-replacement key `==cgsGrants`, we must NOT also set plain `cgsGrants`
+ * (merge-order hazard). Foundry runs TypeDataModel.migrateData on the **update diff** only; if plain `cgsGrants`
+ * is injected when the key was absent, a partial update like `{ equipped: "true" }` gains empty `cgsGrants` and
+ * wipes stored senses. Only normalize plain `cgsGrants` when that key is present on the migrate payload.
  *
  * @param {object} source - system subtree passed to migrateData
  * @param {{ senses?: boolean }} [options] - `senses: false` for condition items (grants only)
@@ -20,6 +21,8 @@ export function migrateDataCgsGrants(source, options = {}) {
         }
         return;
     }
+
+    if (!("cgsGrants" in source)) return;
 
     if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
         source.cgsGrants = withSenses ? { grants: [], senses: [] } : { grants: [] };

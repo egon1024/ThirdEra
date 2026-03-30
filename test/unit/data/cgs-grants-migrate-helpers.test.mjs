@@ -22,8 +22,14 @@ describe("migrateDataCgsGrants", () => {
         expect(source["==cgsGrants"].senses).toEqual([]);
     });
 
-    it("initializes plain cgsGrants when absent", () => {
-        const source = {};
+    it("does not add plain cgsGrants when the key is absent (partial Item.system update safe)", () => {
+        const source = { equipped: "true" };
+        migrateDataCgsGrants(source);
+        expect("cgsGrants" in source).toBe(false);
+    });
+
+    it("initializes plain cgsGrants when the key is present but nullish", () => {
+        const source = { cgsGrants: null };
         migrateDataCgsGrants(source);
         expect(source.cgsGrants).toEqual({ grants: [], senses: [] });
     });
@@ -35,9 +41,9 @@ describe("migrateDataCgsGrants", () => {
         expect("senses" in source["==cgsGrants"]).toBe(false);
     });
 
-    it("with senses:false, initializes { grants: [] } when cgsGrants missing", () => {
-        const source = {};
+    it("with senses:false, does not add cgsGrants when the key is absent", () => {
+        const source = { conditionId: "foo" };
         migrateDataCgsGrants(source, { senses: false });
-        expect(source.cgsGrants).toEqual({ grants: [] });
+        expect("cgsGrants" in source).toBe(false);
     });
 });

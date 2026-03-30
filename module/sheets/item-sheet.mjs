@@ -217,7 +217,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                                             if (doc.actor) {
                                                 const actor = doc.actor;
                                                 if (typeof actor.prepareData === "function") await actor.prepareData();
-                                                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                                                if (actor.sheet?.rendered) await actor.sheet.render();
                                             } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
                                                 await this._syncWorldItemToActorCopies();
                                             }
@@ -660,7 +660,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const actor = actorDirect ?? actorFromUuid;
         if (actor && typeof actor.prepareData === "function") {
             await actor.prepareData();
-            if (actor.sheet?.rendered) actor.sheet.render({ force: true });
+            // ApplicationV2: render({ force: true }) schedules maximize().then(bringToFront) without awaiting it,
+            // so the actor sheet can end up above an open item sheet (same for all actor re-renders from this module).
+            if (actor.sheet?.rendered) await actor.sheet.render();
         }
     }
 
@@ -1362,7 +1364,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 await item.update({ "system.changes": changes });
             }
             if (typeof a.prepareData === "function") await a.prepareData();
-            if (a.sheet?.rendered) await a.sheet.render({ force: true });
+            if (a.sheet?.rendered) await a.sheet.render();
         }
     }
 
@@ -1412,7 +1414,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 await item.update({ "system.changes": changes });
             }
             if (typeof a.prepareData === "function") await a.prepareData();
-            if (a.sheet?.rendered) await a.sheet.render({ force: true });
+            if (a.sheet?.rendered) await a.sheet.render();
         }
     }
 
@@ -1529,7 +1531,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 await item.update({ system: payload });
             }
             if (typeof a.prepareData === "function") await a.prepareData();
-            if (a.sheet?.rendered) await a.sheet.render({ force: true });
+            if (a.sheet?.rendered) await a.sheet.render();
         }
     }
 
@@ -1546,7 +1548,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
             if (actor && typeof actor.prepareData === "function") {
                 await actor.prepareData();
-                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                if (actor.sheet?.rendered) await actor.sheet.render();
             }
             return;
         }
@@ -1557,7 +1559,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
             if (actor && typeof actor.prepareData === "function") {
                 await actor.prepareData();
-                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                if (actor.sheet?.rendered) await actor.sheet.render();
             }
             return;
         }
@@ -1569,7 +1571,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             }
             if (actor && typeof actor.prepareData === "function") {
                 await actor.prepareData();
-                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                if (actor.sheet?.rendered) await actor.sheet.render();
             }
         }
         // After a macrotask, force the subschool select to show the document value (wins over any stale re-render)
@@ -1937,7 +1939,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             if (doc.actor) {
                 const actor = doc.actor;
                 if (typeof actor.prepareData === "function") await actor.prepareData();
-                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                if (actor.sheet?.rendered) await actor.sheet.render();
             } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
                 await this._syncWorldItemToActorCopies();
             }
@@ -1971,7 +1973,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 // Use the actor that owns this item so prepareData sees the updated doc in its items
                 const actor = doc.actor;
                 if (typeof actor.prepareData === "function") await actor.prepareData();
-                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                if (actor.sheet?.rendered) await actor.sheet.render();
             } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
                 await this._syncWorldItemToActorCopies();
             }
@@ -2008,7 +2010,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                         if (doc.actor) {
                             const actor = doc.actor;
                             if (typeof actor.prepareData === "function") await actor.prepareData();
-                            if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                            if (actor.sheet?.rendered) await actor.sheet.render();
                         } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
                             await this._syncWorldItemToActorCopies();
                         }
@@ -2432,7 +2434,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             if (doc.actor) {
                 const actor = doc.actor;
                 if (typeof actor.prepareData === "function") await actor.prepareData();
-                if (actor.sheet?.rendered) await actor.sheet.render({ force: true });
+                if (actor.sheet?.rendered) await actor.sheet.render();
             } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
                 await sheet._syncWorldItemToActorCopies();
             }

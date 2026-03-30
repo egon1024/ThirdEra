@@ -622,6 +622,21 @@
 .thirdera .sheet-body {
   flex: 1;
   overflow: hidden;
+  /* Critical for flex + scroll: default min-height:auto prevents shrinking; clip/overlay bugs follow. */
+  min-height: 0;
+}
+
+/* Foundry v13: `body.game .app .flexcol > * { flex: 1 }` forces every direct form child to grow equally.
+   That overrides `.sheet-tabs { flex: 0 }` and steals height from `.sheet-body`, breaking the tab scrollport
+   and making panels appear to slide under each other after submitOnChange. */
+form.thirdera.sheet.flexcol > .sheet-header,
+form.thirdera.sheet.flexcol > .sheet-tabs {
+  flex: 0 0 auto;
+}
+
+form.thirdera.sheet.flexcol > .sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .thirdera .sheet-body .tab {
@@ -1551,6 +1566,28 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 12px;
+}
+
+/* Item sheets: CGS block precedes `.mechanical-effects-section`; later siblings paint on top when scrolled —
+   pin modifiers/table below the CGS block in the stacking order. */
+.thirdera.sheet.item .sheet-body .tab .cgs-item-grants-block {
+  position: relative;
+  z-index: 5;
+  isolation: isolate;
+  /* Opaque backdrop so later siblings never show through when scroll/stacking glitches. */
+  background: var(--color-bg-parchment);
+  padding-bottom: 4px;
+}
+.thirdera.sheet.item .sheet-body .tab .cgs-item-grants-block .cgs-item-grants-panel {
+  position: relative;
+  z-index: auto;
+}
+.thirdera.sheet.item .sheet-body .tab .mechanical-effects-section {
+  position: relative;
+  z-index: 0;
+}
+.thirdera.sheet.item .sheet-body .tab .mechanical-effects-table thead {
+  position: static;
 }
 
 .thirdera .senses-list {

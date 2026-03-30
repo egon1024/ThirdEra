@@ -126,7 +126,7 @@ describe("refreshCapabilityGrantsForActor", () => {
         });
         await refreshCapabilityGrantsForActor(actor, deps);
         expect(prepareData).toHaveBeenCalledOnce();
-        expect(render).toHaveBeenCalledWith({ force: true });
+        expect(render).toHaveBeenCalledWith();
         expect(token.refresh).toHaveBeenCalledOnce();
     });
 

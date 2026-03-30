@@ -811,8 +811,12 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
                 if (byName.length > 0) matching = byName;
                 else if (equippedArmor.length === 1) matching = equippedArmor;
             }
-            for (const item of matching) {
-                await item.update({ system: systemData });
+            // World/pack items: push template system onto matching embedded copies. Embedded updates must not run this
+            // (redundant; matching-by-name can also hit unrelated rows).
+            if (!document.isEmbedded) {
+                for (const item of matching) {
+                    await item.update({ system: systemData });
+                }
             }
             await refreshCapabilityGrantsForActor(a, cgsRefreshDeps);
         }
