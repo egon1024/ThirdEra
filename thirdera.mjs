@@ -47,6 +47,7 @@ import {
 } from "./module/logic/cgs-actor-capability-providers.mjs";
 import { cgsConditionsCapabilityProvider } from "./module/logic/cgs-conditions-capability-provider.mjs";
 import { cgsEmbeddedItemGrantsProvider } from "./module/logic/cgs-embedded-item-grants-provider.mjs";
+import { cgsGrantedClassFeatureGrantsProvider } from "./module/logic/cgs-granted-class-feature-grants-provider.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 import { fuzzyScore } from "./module/utils/fuzzy.mjs";
 import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-from-size-hooks.mjs";
@@ -54,6 +55,7 @@ import {
     createDefaultCgsRefreshDeps,
     refreshCapabilityGrantsForActor,
     refreshCapabilityGrantDependentsFromItem,
+    refreshCapabilityGrantDependentsFromWorldFeatureItem,
     resolveParentActorForItem,
     registerCgsCapabilityRefreshHooks
 } from "./module/logic/cgs-refresh-hooks.mjs";
@@ -452,7 +454,8 @@ Hooks.once("init", async function () {
         cgsNpcStatBlockSensesProvider,
         cgsActorCgsGrantsSensesProvider,
         cgsConditionsCapabilityProvider,
-        cgsEmbeddedItemGrantsProvider
+        cgsEmbeddedItemGrantsProvider,
+        cgsGrantedClassFeatureGrantsProvider
     );
 
     console.log("Third Era | System initialized");
@@ -721,7 +724,7 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
     }
     // Resolve parent actor: (1) document.parent/actor/collection.parent, (2) parse UUID "Actor.actorId.Item.itemId", or (3) resolve via fromUuid (embedded doc may have .parent).
     let actor = null;
-    if (document.type === "feat") {
+    if (document.type === "feat" || document.type === "feature") {
         actor = document.parent ?? document.actor ?? document.collection?.parent ?? null;
         if (!actor && document.uuid && typeof game !== "undefined" && game.actors) {
             const parts = String(document.uuid).split(".");
@@ -736,8 +739,12 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
             }
         }
     }
-    if (document.type === "feat" && actor) {
+    if ((document.type === "feat" || document.type === "feature") && actor) {
         await refreshCapabilityGrantsForActor(actor, cgsRefreshDeps);
+        return;
+    }
+    if (document.type === "feature" && !document.isEmbedded) {
+        await refreshCapabilityGrantDependentsFromWorldFeatureItem(document, cgsRefreshDeps);
         return;
     }
     // Armor, weapon, equipment: when an owned item is updated, refresh the actor so AC and other derived stats update.
@@ -823,7 +830,7 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
         return;
     }
     if (document.type !== "spell") {
-        const skipCgsParentRefresh = new Set(["condition", "feat", "armor", "weapon", "equipment", "race"]);
+        const skipCgsParentRefresh = new Set(["condition", "feat", "feature", "armor", "weapon", "equipment", "race"]);
         if (!skipCgsParentRefresh.has(document.type)) {
             const pa = await resolveParentActorForItem(document, cgsRefreshDeps);
             if (pa) await refreshCapabilityGrantsForActor(pa, cgsRefreshDeps);

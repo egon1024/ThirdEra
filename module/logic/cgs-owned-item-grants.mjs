@@ -1,5 +1,5 @@
 /**
- * Resolve effective CGS grant payloads for owned items (feat, armor, equipment, weapon).
+ * Resolve effective CGS grant payloads for owned items (feat, class feature, armor, equipment, weapon).
  * Precedence: non-empty `system.cgsGrants.grants` → rows in `system.cgsGrants.senses` mapped to sense grants.
  * No stock fallback (races use {@link ./cgs-stock-race-grants.mjs}).
  *

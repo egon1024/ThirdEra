@@ -61,6 +61,33 @@ export function createEmptyCapabilityGrants() {
 }
 
 /**
+ * Clone a senseSuppression grant for the merge pipeline. Must not throw — a thrown clone would abort
+ * actor.prepareDerivedData and block all actor sheets.
+ *
+ * @param {object} g
+ * @returns {Record<string, unknown>}
+ */
+function cloneSenseSuppressionGrantForMerge(g) {
+    try {
+        if (typeof structuredClone === "function") return structuredClone(g);
+    } catch (_) {
+        /* non-cloneable / DOM-linked objects */
+    }
+    try {
+        const dup = globalThis.foundry?.utils?.duplicate;
+        if (typeof dup === "function") return dup(g);
+    } catch (_) {
+        /* ignore */
+    }
+    try {
+        return JSON.parse(JSON.stringify(g));
+    } catch (_) {
+        /* ignore */
+    }
+    return { ...g };
+}
+
+/**
  * Normalize range for dedupe keys (trim, lowercase, collapse whitespace).
  *
  * @param {unknown} range
@@ -339,8 +366,7 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
                     _source: baseSource
                 });
             } else if (cat === "senseSuppression") {
-                const entry =
-                    typeof structuredClone === "function" ? structuredClone(g) : { ...g };
+                const entry = cloneSenseSuppressionGrantForMerge(g);
                 entry._suppressingSource = baseSource;
                 out.senseSuppressions.grants.push(entry);
             }
@@ -368,15 +394,21 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
  * @returns {CapabilityGrantsResult}
  */
 export function getActiveCapabilityGrants(actor, deps = {}) {
-    const providers =
-        deps.providers ??
-        (typeof globalThis.CONFIG !== "undefined" && globalThis.CONFIG?.THIRDERA?.capabilitySourceProviders) ??
-        [];
-    const contributions = collectCapabilityContributions(actor, providers, { warn: deps.warn });
-    return mergeCapabilityGrantContributions(contributions, {
-        senseTypeLabels: deps.senseTypeLabels,
-        allVisionSenseTypeKeys: deps.allVisionSenseTypeKeys
-    });
+    const warn = deps.warn ?? (typeof console !== "undefined" && console.warn?.bind?.(console)) ?? (() => {});
+    try {
+        const providers =
+            deps.providers ??
+            (typeof globalThis.CONFIG !== "undefined" && globalThis.CONFIG?.THIRDERA?.capabilitySourceProviders) ??
+            [];
+        const contributions = collectCapabilityContributions(actor, providers, { warn: deps.warn });
+        return mergeCapabilityGrantContributions(contributions, {
+            senseTypeLabels: deps.senseTypeLabels,
+            allVisionSenseTypeKeys: deps.allVisionSenseTypeKeys
+        });
+    } catch (e) {
+        warn("ThirdEra | getActiveCapabilityGrants failed:", e);
+        return createEmptyCapabilityGrants();
+    }
 }
 
 /**

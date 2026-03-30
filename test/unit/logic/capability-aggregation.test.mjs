@@ -237,6 +237,19 @@ describe("getActiveCapabilityGrants", () => {
     });
 });
 
+describe("mergeCapabilityGrantContributions senseSuppression cloning", () => {
+    it("does not throw when senseSuppression payload is not structuredCloneable (circular)", () => {
+        const g = { category: "senseSuppression", scope: { senseTypes: ["darkvision"] } };
+        g.self = g;
+        expect(() =>
+            mergeCapabilityGrantContributions([{ label: "Cond", grants: [g] }], {
+                senseTypeLabels: { darkvision: "Darkvision" },
+                allVisionSenseTypeKeys: ["darkvision"]
+            })
+        ).not.toThrow();
+    });
+});
+
 describe("registerCapabilitySourceProviders", () => {
     let prevConfig;
 

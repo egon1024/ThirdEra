@@ -546,6 +546,18 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (item.type === "race") {
             systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
         }
+        if (item.type === "feature") {
+            const plain =
+                typeof systemData?.toObject === "function"
+                    ? systemData.toObject(false)
+                    : { ...(systemData || {}) };
+            const cg = systemData?.cgsGrants;
+            plain.cgsGrants = {
+                grants: foundry.utils.duplicate(cg?.grants ?? []),
+                senses: foundry.utils.duplicate(cg?.senses ?? [])
+            };
+            systemForContext = plain;
+        }
         if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
             systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
         }
@@ -2293,7 +2305,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /** Item types that edit `system.cgsGrants.senses` on the item sheet (Phase 5b). */
-    static #itemTypesWithCgsSensesUi = new Set(["race", "feat", "armor", "weapon", "equipment"]);
+    static #itemTypesWithCgsSensesUi = new Set(["race", "feat", "feature", "armor", "weapon", "equipment"]);
 
     /**
      * Build a plain `{ grants, senses }` for `system.cgsGrants` from the live item model (duplicate, not references).

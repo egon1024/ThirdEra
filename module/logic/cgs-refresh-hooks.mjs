@@ -113,6 +113,52 @@ export function collectActorsWithEmbeddedItemId(worldItemId, actors) {
 }
 
 /**
+ * PCs whose embedded class items list this world feature id in `system.features[].featItemId` (Phase 5c CGS).
+ *
+ * @param {string} featureWorldId - World Item id (as stored on class feature rows)
+ * @param {Iterable<Actor>} actors
+ * @returns {Actor[]}
+ */
+export function collectActorsReferencingWorldFeatureItemId(featureWorldId, actors) {
+    if (!featureWorldId) return [];
+    const hits = [];
+    const seen = new Set();
+    for (const actor of actors) {
+        if (actor?.type !== "character" || !actor.id || seen.has(actor.id)) continue;
+        const items = getActorEmbeddedItemsArray(actor);
+        const hasClassRef = items.some((it) => {
+            if (it?.type !== "class") return false;
+            const feats = it.system?.features;
+            if (!Array.isArray(feats)) return false;
+            return feats.some((f) => {
+                const id = typeof f?.featItemId === "string" ? f.featItemId.trim() : "";
+                return id === featureWorldId;
+            });
+        });
+        if (hasClassRef) {
+            seen.add(actor.id);
+            hits.push(actor);
+        }
+    }
+    return hits;
+}
+
+/**
+ * When a world (sidebar) class-feature Item is updated, refresh PCs that grant it via a class table row.
+ *
+ * @param {Item} itemDoc
+ * @param {CgsRefreshDeps} deps
+ */
+export async function refreshCapabilityGrantDependentsFromWorldFeatureItem(itemDoc, deps) {
+    if (itemDoc?.type !== "feature" || itemDoc.isEmbedded || !itemDoc.id) return;
+    const actors = gatherActorsForCgsScan(deps);
+    const targets = collectActorsReferencingWorldFeatureItemId(itemDoc.id, actors);
+    for (const a of targets) {
+        await refreshCapabilityGrantsForActor(a, deps);
+    }
+}
+
+/**
  * @param {object} flatChanges from flattenObject(changes)
  * @returns {boolean}
  */

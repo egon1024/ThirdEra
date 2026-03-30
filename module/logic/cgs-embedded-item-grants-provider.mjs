@@ -1,5 +1,5 @@
 /**
- * CGS contributions from embedded race, feat, and equipped armor/equipment/weapon (Phase 5b).
+ * CGS contributions from embedded race, feat, class feature, and equipped armor/equipment/weapon (Phase 5b–5c).
  * Apply rules mirror {@link itemsModifierProvider} in modifier-aggregation.mjs.
  *
  * Items expose optional `system.cgsGrants.grants` (same discriminated shape as conditions).
@@ -74,6 +74,11 @@ export function cgsEmbeddedItemGrantsProvider(actor) {
         }
         if (type === "feat") {
             const c = cgsContributionFromOwnedItem(item, "Feat");
+            if (c) out.push(c);
+            continue;
+        }
+        if (type === "feature") {
+            const c = cgsContributionFromOwnedItem(item, "Class feature");
             if (c) out.push(c);
             continue;
         }

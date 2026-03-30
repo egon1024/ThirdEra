@@ -64,6 +64,25 @@ describe("cgsContributionFromOwnedItem", () => {
 });
 
 describe("cgsEmbeddedItemGrantsProvider", () => {
+    it("includes embedded class feature items when they have grants", () => {
+        const actor = {
+            items: [
+                {
+                    type: "feature",
+                    name: "Trap Sense",
+                    uuid: "Actor.1.Item.cf1",
+                    system: {
+                        cgsGrants: { grants: [{ category: "sense", senseType: "tremorsense", range: "10 ft" }] }
+                    }
+                }
+            ]
+        };
+        const out = cgsEmbeddedItemGrantsProvider(actor);
+        expect(out).toHaveLength(1);
+        expect(out[0].label).toBe("Trap Sense");
+        expect(out[0].grants[0]).toMatchObject({ category: "sense", senseType: "tremorsense", range: "10 ft" });
+    });
+
     it("includes race and feat always when they have grants", () => {
         const actor = {
             items: [

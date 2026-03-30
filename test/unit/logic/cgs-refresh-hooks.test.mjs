@@ -3,6 +3,7 @@ import {
     CGS_CAPABILITY_REFRESH_HOOK_NAMES,
     actorUpdateTouchesCgsStoredFields,
     collectActorsReferencingCompendiumItemUuid,
+    collectActorsReferencingWorldFeatureItemId,
     collectActorsWithEmbeddedItemId,
     gatherActorsForCgsScan,
     getActorEmbeddedItemsArray,
@@ -52,6 +53,30 @@ describe("collectActorsReferencingCompendiumItemUuid", () => {
         };
         const a2 = { id: "2", items: { contents: [{ sourceId: "other" }] } };
         expect(collectActorsReferencingCompendiumItemUuid(uuid, [a1, a2]).map((a) => a.id)).toEqual(["1"]);
+    });
+});
+
+describe("collectActorsReferencingWorldFeatureItemId", () => {
+    it("finds characters whose embedded class lists featItemId", () => {
+        const cls = {
+            type: "class",
+            system: {
+                features: [{ level: 1, featItemId: "featDocId", featName: "A", featKey: "a" }]
+            }
+        };
+        const pc = { id: "p1", type: "character", items: { contents: [cls] } };
+        const other = { id: "p2", type: "character", items: { contents: [] } };
+        expect(collectActorsReferencingWorldFeatureItemId("featDocId", [pc, other]).map((a) => a.id)).toEqual(["p1"]);
+        expect(collectActorsReferencingWorldFeatureItemId("missing", [pc])).toEqual([]);
+    });
+
+    it("ignores non-character actors", () => {
+        const npc = {
+            id: "n1",
+            type: "npc",
+            items: { contents: [{ type: "class", system: { features: [{ featItemId: "x" }] } }] }
+        };
+        expect(collectActorsReferencingWorldFeatureItemId("x", [npc])).toEqual([]);
     });
 });
 
