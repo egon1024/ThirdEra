@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getCgsSpellGrantCastTotal, incrementCgsSpellGrantCastsMap } from "../../../module/logic/cgs-spell-grant-cast.mjs";
+import {
+    getCgsSpellGrantCastTotal,
+    incrementCgsSpellGrantCastsMap,
+    shouldUseCgsGrantCastMapForCast
+} from "../../../module/logic/cgs-spell-grant-cast.mjs";
 
 describe("getCgsSpellGrantCastTotal", () => {
     it("returns 0 when missing map or spell uuid", () => {
@@ -45,5 +49,29 @@ describe("incrementCgsSpellGrantCastsMap", () => {
         const out = incrementCgsSpellGrantCastsMap(prev, "k");
         expect(prev.k).toBe(1);
         expect(out.k).toBe(2);
+    });
+});
+
+describe("shouldUseCgsGrantCastMapForCast", () => {
+    const rowAtWill = { spellUuid: "u", atWill: true };
+    const rowPerDay = { spellUuid: "u", usesPerDay: 1 };
+    const rowPlain = { spellUuid: "u" };
+
+    it("is false without a grant row or SLA-style row", () => {
+        expect(shouldUseCgsGrantCastMapForCast(true, true, null)).toBe(false);
+        expect(shouldUseCgsGrantCastMapForCast(true, true, rowPlain)).toBe(false);
+    });
+
+    it("is true for RTC panel when row is SLA-style", () => {
+        expect(shouldUseCgsGrantCastMapForCast(false, true, rowAtWill)).toBe(true);
+        expect(shouldUseCgsGrantCastMapForCast(false, true, rowPerDay)).toBe(true);
+    });
+
+    it("is true for explicit viaCgsGrant when row is SLA-style", () => {
+        expect(shouldUseCgsGrantCastMapForCast(true, false, rowPerDay)).toBe(true);
+    });
+
+    it("is false for RTC without viaCgsGrant when row is not SLA-style", () => {
+        expect(shouldUseCgsGrantCastMapForCast(false, true, rowPlain)).toBe(false);
     });
 });

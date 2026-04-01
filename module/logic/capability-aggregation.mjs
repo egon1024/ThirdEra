@@ -16,6 +16,8 @@
  * @see .cursor/plans/cgs-phased-implementation.md
  */
 
+import { normalizeCgsSpellGrantUsesPerDay } from "./cgs-spell-grant-prep.mjs";
+
 // ---------------------------------------------------------------------------
 // Registered output categories (stable keys on getActiveCapabilityGrants result)
 // ---------------------------------------------------------------------------
@@ -210,8 +212,7 @@ export function mergeSpellGrantRows(atoms) {
 
         const existing = map.get(su);
         if (!existing) {
-            const ud = a.usesPerDay;
-            const uses = typeof ud === "number" && Number.isFinite(ud) ? ud : undefined;
+            const uses = normalizeCgsSpellGrantUsesPerDay(a.usesPerDay);
             const cl = a.casterLevel;
             const casterLevel = typeof cl === "number" && Number.isFinite(cl) ? cl : undefined;
             const cid = typeof a.classItemId === "string" ? a.classItemId.trim() : "";
@@ -228,9 +229,9 @@ export function mergeSpellGrantRows(atoms) {
         } else {
             existing.sources.push(sourceEntry);
             if (!existing.label && typeof a.label === "string" && a.label.trim()) existing.label = a.label.trim();
-            const ud = a.usesPerDay;
-            if (typeof ud === "number" && Number.isFinite(ud)) {
-                existing.usesPerDay = (existing.usesPerDay ?? 0) + ud;
+            const udn = normalizeCgsSpellGrantUsesPerDay(a.usesPerDay);
+            if (udn !== undefined) {
+                existing.usesPerDay = (existing.usesPerDay ?? 0) + udn;
             }
             if (a.atWill === true) existing.atWill = true;
             const cl = a.casterLevel;
@@ -448,8 +449,7 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
             } else if (cat === "spellGrant") {
                 const spellUuid = typeof g.spellUuid === "string" ? g.spellUuid.trim() : "";
                 if (!spellUuid) continue;
-                const ud = g.usesPerDay;
-                const usesPerDay = typeof ud === "number" && Number.isFinite(ud) ? ud : undefined;
+                const usesPerDay = normalizeCgsSpellGrantUsesPerDay(g.usesPerDay);
                 const cl = g.casterLevel;
                 const casterLevel = typeof cl === "number" && Number.isFinite(cl) ? cl : undefined;
                 const classItemIdRaw = g.classItemId;

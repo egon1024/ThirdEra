@@ -1296,6 +1296,11 @@
             {{/if}}
             {{/if}}
           </div>
+          {{#if hasAnySpellcasting}}
+          {{#if rtcGlobalCgsGrants.hasCgsGrantReadySpellsForRtcSection}}
+            {{> "systems/thirdera/templates/partials/spells-ready-cgs-grant-global-section.hbs" rtcGlobal=rtcGlobalCgsGrants}}
+          {{/if}}
+          {{/if}}
           {{#each readyToCastByClass as |classData|}}
             {{#if classData.hasSpellcasting}}
               <div class="spellcasting-class">

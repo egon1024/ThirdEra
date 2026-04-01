@@ -59,12 +59,18 @@
             "ReadyToCastCapabilityGrantsAria": "Capability-granted spells for this casting class (shown first), separate from class spell slots and preparation.",
             "ReadyToCastCapabilityGrantsHeadingTitle": "Spells listed here come from feats, features, items, or other capability grants—not from your prepared or spontaneous class list.",
             "ReadyToCastCapabilityGrantsSubheading": "These still use this class for DC and caster level where applicable. They are not spells you readied from your class list.",
+            "ReadyToCastCapabilityGrantsGlobalTitle": "Capability grants (not tied to a class roster)",
+            "ReadyToCastCapabilityGrantsGlobalAria": "Capability-granted spells with no class roster link, separate from class spell slots.",
+            "ReadyToCastCapabilityGrantsGlobalSubheading": "These come from equipment, race, or other grants without a class item id. DC and caster level use your spellcasting class when the system needs a class context.",
             "GrantCastCountHint": "Uses today counted for this granted spell or spell-like ability (separate from class slots and the spell item’s general cast count).",
             "GrantCastsToday": "Grant uses today:",
             "GrantCastAtWillShort": "At will (grant)",
             "CastFromGrant": "Cast (grant)",
             "CastFromGrantTooltip": "Cast using the capability grant channel (SLA uses/day or at-will), not class spell slots.",
-            "CastMessageFromCapabilityGrant": "Cast via capability grant (not class spell slots)."
+            "CastMessageFromCapabilityGrant": "Cast via capability grant (not class spell slots).",
+            "RtcGrantCastTrackedOnActor": "Casts for this at-will or per-day grant are tracked on the actor (capability grant channel), not on the spell item’s Cast field.",
+            "RtcGrantSourcesLine": "Grant sources for this section:",
+            "RtcGrantSourcesLineTitle": "Items, feats, or features contributing these spells (DC/caster level still use the class shown in the heading)."
         },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",

@@ -18,13 +18,16 @@ import {
     enrichCgsSuppressedSenseRowsForProvenance
 } from "../logic/cgs-provenance-display.mjs";
 import { getCgsSpellGrantCastTotal } from "../logic/cgs-spell-grant-cast.mjs";
+import { getMergedSpellGrantRowsForActor } from "../logic/cgs-spell-grant-rows.mjs";
 import {
     buildCgsGrantedSpellsByLevelForKnownTab,
     collectOrphanCgsGrantOnlyEmbedItemIds,
     cgsSpellGrantIsSlaStyle,
     findActorSpellItemMatchingGrantUuid,
+    findMergedSpellGrantRowForActorSpell,
     formatCgsSpellGrantUsesHint,
     mapCgsSpellGrantReadySpellIdsByClass,
+    mapCgsUnscopedSpellGrantReadySpellIds,
     resolveSpellGrantCastClassItemId
 } from "../logic/cgs-spell-grant-prep.mjs";
 
@@ -1503,13 +1506,37 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             if (s.id) spellById.set(s.id, s);
         }
 
-        const cgsSpellGrantRows = Array.isArray(systemData.cgs?.spellGrants?.rows) ? systemData.cgs.spellGrants.rows : [];
+        const cgsSpellGrantRows = getMergedSpellGrantRowsForActor(actor);
         const cgsReadyIdsByClass = mapCgsSpellGrantReadySpellIdsByClass(
             cgsSpellGrantRows,
             items.spells,
-            spellcastingByClass,
-            { hasLevelForClass: (sys, key) => SpellData.hasLevelForClass(sys, key) }
+            spellcastingByClass
         );
+        const cgsUnscopedReadyIds = mapCgsUnscopedSpellGrantReadySpellIds(cgsSpellGrantRows, items.spells);
+        const spellGrantCastClassDeps = {
+            hasLevelForClass: (sys, key) => SpellData.hasLevelForClass(sys, key)
+        };
+        const enrichCgsRtcSpellRow = (spell) => {
+            if (!spell?.id) return spell;
+            const spellItem = spellById.get(spell.id);
+            if (!spellItem) return spell;
+            const row = findMergedSpellGrantRowForActorSpell(spellItem, cgsSpellGrantRows);
+            const rtcCastClassItemId = resolveSpellGrantCastClassItemId(
+                row && typeof row === "object" ? row : null,
+                spellItem,
+                spellcastingByClass,
+                spellGrantCastClassDeps
+            );
+            const base = { ...spell, rtcCastClassItemId };
+            if (!row || !cgsSpellGrantIsSlaStyle(row)) return base;
+            const su = typeof row.spellUuid === "string" ? row.spellUuid.trim() : "";
+            if (!su) return base;
+            return {
+                ...base,
+                cgsRtcUseGrantCastMap: true,
+                cgsRtcGrantCastCount: getCgsSpellGrantCastTotal(systemData, su)
+            };
+        };
 
         // Mark each spell in Known with inShortlist for full-list prepared casters (for toggle UI)
         for (const classData of knownSpellsByClass) {
@@ -1538,7 +1565,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     cgsGrantReadySpellsByLevel: emptyByLevel,
                     cgsGrantRtcLevels: [],
                     hasCgsGrantReadySpellsForRtcSection: false,
-                    rtcLevelVisible: rtcLv
+                    rtcLevelVisible: rtcLv,
+                    cgsRtcGrantSourceSummary: ""
                 };
             }
             const shortlistIds = new Set(spellShortlistByClass[classData.classItemId] || []);
@@ -1646,6 +1674,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 spellsByLevel[levelKey] = normalReady;
                 cgsGrantReadySpellsByLevel[levelKey] = cgsGrantSpells;
             }
+            for (let lv = 0; lv <= 9; lv++) {
+                const lk = String(lv);
+                cgsGrantReadySpellsByLevel[lk] = (cgsGrantReadySpellsByLevel[lk] || []).map(enrichCgsRtcSpellRow);
+            }
             const spd = classData.spellsPerDay || {};
             /** @type {Record<string, boolean>} */
             const rtcLevelVisible = {};
@@ -1664,6 +1696,29 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 const spells = cgsGrantReadySpellsByLevel[lk] || [];
                 if (spells.length) cgsGrantRtcLevels.push({ levelKey: lk, spells });
             }
+            let cgsRtcGrantSourceSummary = "";
+            {
+                const labels = new Set();
+                for (const lvl of cgsGrantRtcLevels) {
+                    for (const sp of lvl.spells || []) {
+                        if (!sp?.id) continue;
+                        const wit = spellById.get(sp.id);
+                        if (!wit) continue;
+                        const mrow = findMergedSpellGrantRowForActorSpell(wit, cgsSpellGrantRows);
+                        const srcs = mrow?.sources;
+                        if (!Array.isArray(srcs)) continue;
+                        for (const s of srcs) {
+                            const lab = typeof s?.label === "string" ? s.label.trim() : "";
+                            if (lab) labels.add(lab);
+                        }
+                    }
+                }
+                if (labels.size > 0) {
+                    cgsRtcGrantSourceSummary = [...labels].sort((a, b) =>
+                        a.localeCompare(b, undefined, { sensitivity: "base" })
+                    ).join(", ");
+                }
+            }
             const result = {
                 ...classData,
                 spellsByLevel,
@@ -1671,6 +1726,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 rtcLevelVisible,
                 cgsGrantRtcLevels,
                 hasCgsGrantReadySpellsForRtcSection: cgsGrantRtcLevels.length > 0,
+                cgsRtcGrantSourceSummary,
                 domainSpellsByLevel: classData.domainSpellsByLevel || {},
                 domainSpellSlots: classData.domainSpellSlots || {}
             };
@@ -1697,6 +1753,63 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             return result;
         });
+
+        /** Ready-to-cast: grants with no merged `classItemId` (equipment, race, etc.) — own section, not under a class header. */
+        const rtcGlobalByLevel = Object.fromEntries(Array.from({ length: 10 }, (_, i) => [String(i), []]));
+        for (const id of cgsUnscopedReadyIds) {
+            const spellItem = spellById.get(id);
+            if (!spellItem) continue;
+            const raw = spellItem.system?.level ?? 0;
+            const levelKey = String(Math.min(9, Math.max(0, Number(raw))));
+            const sys = spellItem.system || {};
+            rtcGlobalByLevel[levelKey].push({
+                id: spellItem.id,
+                name: spellItem.name,
+                img: spellItem.img,
+                system: { ...sys, cast: sys.cast ?? 0, prepared: sys.prepared ?? 0 },
+                isCgsGrant: true
+            });
+        }
+        for (const lk of Object.keys(rtcGlobalByLevel)) {
+            rtcGlobalByLevel[lk].sort(spellNameSort);
+        }
+        /** @type {{ levelKey: string, spells: unknown[] }[]} */
+        const cgsGrantRtcLevelsGlobal = [];
+        for (let level = 0; level <= 9; level++) {
+            const lk = String(level);
+            const rawSpells = rtcGlobalByLevel[lk] || [];
+            if (rawSpells.length) {
+                cgsGrantRtcLevelsGlobal.push({ levelKey: lk, spells: rawSpells.map(enrichCgsRtcSpellRow) });
+            }
+        }
+        let cgsRtcGrantSourceSummaryGlobal = "";
+        {
+            const labels = new Set();
+            for (const lvl of cgsGrantRtcLevelsGlobal) {
+                for (const sp of lvl.spells || []) {
+                    if (!sp?.id) continue;
+                    const wit = spellById.get(sp.id);
+                    if (!wit) continue;
+                    const mrow = findMergedSpellGrantRowForActorSpell(wit, cgsSpellGrantRows);
+                    const srcs = mrow?.sources;
+                    if (!Array.isArray(srcs)) continue;
+                    for (const s of srcs) {
+                        const lab = typeof s?.label === "string" ? s.label.trim() : "";
+                        if (lab) labels.add(lab);
+                    }
+                }
+            }
+            if (labels.size > 0) {
+                cgsRtcGrantSourceSummaryGlobal = [...labels].sort((a, b) =>
+                    a.localeCompare(b, undefined, { sensitivity: "base" })
+                ).join(", ");
+            }
+        }
+        const rtcGlobalCgsGrants = {
+            cgsGrantRtcLevels: cgsGrantRtcLevelsGlobal,
+            hasCgsGrantReadySpellsForRtcSection: cgsGrantRtcLevelsGlobal.length > 0,
+            cgsRtcGrantSourceSummary: cgsRtcGrantSourceSummaryGlobal
+        };
 
         // For Manually added section: which classes can receive "Add to ready", and which manually-added spells are already in a shortlist
         const spellcastingClassesForShortlist = knownSpellsByClass
@@ -2004,6 +2117,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             organizedSpells,
             knownSpellsByClass,
             readyToCastByClass,
+            rtcGlobalCgsGrants,
             hasAnySpellcasting,
             hasPreparedSpellcasting,
             manuallyAddedSpellsByLevel,

@@ -109,6 +109,14 @@ describe("mergeSpellGrantRows", () => {
         expect(rows[0].sources.map((s) => s.label).sort()).toEqual(["Feat A", "Feat B"]);
         expect(rows[0].usesPerDay).toBe(3);
     });
+
+    it("accepts string usesPerDay from item JSON", () => {
+        const rows = mergeSpellGrantRows([
+            { spellUuid: "Compendium.x.spells.Item.abc", usesPerDay: "2", _source: { label: "Ring" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].usesPerDay).toBe(2);
+    });
 });
 
 describe("mergeCapabilityGrantContributions", () => {
@@ -133,6 +141,17 @@ describe("mergeCapabilityGrantContributions", () => {
         expect(r.atWill).toBe(true);
         expect(r.usesPerDay).toBe(1);
         expect(r.sources[0].label).toBe("Magic trick");
+    });
+
+    it("merges string usesPerDay from grants into numeric row", () => {
+        const merged = mergeCapabilityGrantContributions([
+            {
+                label: "Wand",
+                grants: [{ category: "spellGrant", spellUuid: "Compendium.pack.spells.Item.w", usesPerDay: "3" }]
+            }
+        ]);
+        expect(merged.spellGrants.rows).toHaveLength(1);
+        expect(merged.spellGrants.rows[0].usesPerDay).toBe(3);
     });
 
     it("Stage B: allVision suppression removes senses from effective rows; union + raw grants kept", () => {

@@ -7,6 +7,8 @@ import {
     findMergedSpellGrantRowForActorSpell,
     formatCgsSpellGrantUsesHint,
     mapCgsSpellGrantReadySpellIdsByClass,
+    mapCgsUnscopedSpellGrantReadySpellIds,
+    normalizeCgsSpellGrantUsesPerDay,
     resolveSpellGrantCastClassItemId
 } from "../../../module/logic/cgs-spell-grant-prep.mjs";
 
@@ -76,6 +78,21 @@ describe("findMergedSpellGrantRowForActorSpell", () => {
     });
 });
 
+describe("normalizeCgsSpellGrantUsesPerDay", () => {
+    it("coerces numeric strings and truncates numbers", () => {
+        expect(normalizeCgsSpellGrantUsesPerDay("3")).toBe(3);
+        expect(normalizeCgsSpellGrantUsesPerDay(" 2 ")).toBe(2);
+        expect(normalizeCgsSpellGrantUsesPerDay(2.7)).toBe(2);
+    });
+
+    it("returns undefined for invalid or negative", () => {
+        expect(normalizeCgsSpellGrantUsesPerDay(undefined)).toBeUndefined();
+        expect(normalizeCgsSpellGrantUsesPerDay("")).toBeUndefined();
+        expect(normalizeCgsSpellGrantUsesPerDay("x")).toBeUndefined();
+        expect(normalizeCgsSpellGrantUsesPerDay(-1)).toBeUndefined();
+    });
+});
+
 describe("cgsSpellGrantIsSlaStyle", () => {
     it("is true for at-will", () => {
         expect(cgsSpellGrantIsSlaStyle({ atWill: true })).toBe(true);
@@ -83,6 +100,10 @@ describe("cgsSpellGrantIsSlaStyle", () => {
 
     it("is true for uses per day", () => {
         expect(cgsSpellGrantIsSlaStyle({ usesPerDay: 3 })).toBe(true);
+    });
+
+    it("is true when usesPerDay is a numeric string (item / form data)", () => {
+        expect(cgsSpellGrantIsSlaStyle({ usesPerDay: "1" })).toBe(true);
     });
 
     it("is false for grants that only reference a spell without SLA limits", () => {
@@ -100,47 +121,39 @@ describe("mapCgsSpellGrantReadySpellIdsByClass", () => {
         const map = mapCgsSpellGrantReadySpellIdsByClass(
             [{ spellUuid: "Compendium.spells.Item.a", classItemId: "cClr" }],
             spellItems,
-            spellcastingByClass,
-            { hasLevelForClass: () => true }
+            spellcastingByClass
         );
         expect(map.get("cClr")?.has("s1")).toBe(true);
         expect(map.get("cWiz")?.has("s1")).toBe(false);
     });
 
-    it("assigns to first class whose list includes the spell when no classItemId", () => {
+    it("does not assign to any class when merged row has no classItemId", () => {
         const spellItems = [{ type: "spell", id: "s1", uuid: "U1", system: { level: 0 } }];
         const spellcastingByClass = [
             { classItemId: "cWiz", spellListKey: "sorcererWizard", hasSpellcasting: true },
             { classItemId: "cClr", spellListKey: "cleric", hasSpellcasting: true }
         ];
-        const map = mapCgsSpellGrantReadySpellIdsByClass(
-            [{ spellUuid: "U1" }],
-            spellItems,
-            spellcastingByClass,
-            {
-                hasLevelForClass: (sys, key) => key === "sorcererWizard"
-            }
-        );
-        expect(map.get("cWiz")?.has("s1")).toBe(true);
+        const map = mapCgsSpellGrantReadySpellIdsByClass([{ spellUuid: "U1" }], spellItems, spellcastingByClass);
+        expect(map.get("cWiz")?.has("s1")).toBe(false);
         expect(map.get("cClr")?.has("s1")).toBe(false);
     });
 
-    it("falls back to first spellcasting class when no list matches", () => {
+    it("unscoped map collects spell ids when row has no classItemId", () => {
         const spellItems = [{ type: "spell", id: "s1", uuid: "U1", system: { level: 2 } }];
-        const spellcastingByClass = [
-            { classItemId: "first", spellListKey: "bard", hasSpellcasting: true },
-            { classItemId: "second", spellListKey: "cleric", hasSpellcasting: true }
-        ];
-        const map = mapCgsSpellGrantReadySpellIdsByClass(
-            [{ spellUuid: "U1" }],
-            spellItems,
-            spellcastingByClass,
-            { hasLevelForClass: () => false }
-        );
-        expect(map.get("first")?.has("s1")).toBe(true);
+        const unscoped = mapCgsUnscopedSpellGrantReadySpellIds([{ spellUuid: "U1" }], spellItems);
+        expect(unscoped.has("s1")).toBe(true);
     });
 
-    it("resolves spell by sourceId when grant spellUuid is compendium doc but item uuid is actor-scoped", () => {
+    it("unscoped map skips rows with explicit classItemId", () => {
+        const spellItems = [{ type: "spell", id: "s1", uuid: "U1", system: {} }];
+        const unscoped = mapCgsUnscopedSpellGrantReadySpellIds(
+            [{ spellUuid: "U1", classItemId: "cWiz" }],
+            spellItems
+        );
+        expect(unscoped.has("s1")).toBe(false);
+    });
+
+    it("resolves spell by sourceId for unscoped rows (no class map entry)", () => {
         const compUuid = "Compendium.thirdera.spells.Item.acidFog";
         const spellItems = [
             {
@@ -152,10 +165,10 @@ describe("mapCgsSpellGrantReadySpellIdsByClass", () => {
             }
         ];
         const spellcastingByClass = [{ classItemId: "cWiz", spellListKey: "sorcererWizard", hasSpellcasting: true }];
-        const map = mapCgsSpellGrantReadySpellIdsByClass([{ spellUuid: compUuid }], spellItems, spellcastingByClass, {
-            hasLevelForClass: () => true
-        });
-        expect(map.get("cWiz")?.has("embedded")).toBe(true);
+        const map = mapCgsSpellGrantReadySpellIdsByClass([{ spellUuid: compUuid }], spellItems, spellcastingByClass);
+        expect(map.get("cWiz")?.has("embedded")).toBe(false);
+        const unscoped = mapCgsUnscopedSpellGrantReadySpellIds([{ spellUuid: compUuid }], spellItems);
+        expect(unscoped.has("embedded")).toBe(true);
     });
 });
 
@@ -302,5 +315,10 @@ describe("formatCgsSpellGrantUsesHint", () => {
                 k === "THIRDERA.CGS.SpellGrantUsesPerDay" ? "{n}/day" : k
             )
         ).toBe("3/day");
+        expect(
+            formatCgsSpellGrantUsesHint({ usesPerDay: "2" }, (k) =>
+                k === "THIRDERA.CGS.SpellGrantUsesPerDay" ? "{n}/day" : k
+            )
+        ).toBe("2/day");
     });
 });

@@ -1,0 +1,44 @@
+{{!-- Ready to cast: CGS grants with no classItemId (equipment, etc.). Expects rtcGlobal with cgsGrantRtcLevels, hasCgsGrantReadySpellsForRtcSection --}}
+{{#if rtcGlobal.hasCgsGrantReadySpellsForRtcSection}}
+<section class="rtc-class-capability-grants-sheet rtc-class-capability-grants-sheet--global" role="region" aria-label="{{localize 'THIRDERA.CGS.ReadyToCastCapabilityGrantsGlobalAria'}}">
+  <div class="rtc-class-capability-grants-sheet-header">
+    <h5 class="rtc-class-capability-grants-sheet-title" title="{{localize 'THIRDERA.CGS.ReadyToCastCapabilityGrantsHeadingTitle'}}">
+      {{localize "THIRDERA.CGS.ReadyToCastCapabilityGrantsGlobalTitle"}}
+    </h5>
+    <p class="rtc-capability-grants-hint">{{localize "THIRDERA.CGS.ReadyToCastCapabilityGrantsGlobalSubheading"}}</p>
+    {{#if rtcGlobal.cgsRtcGrantSourceSummary}}
+    <p class="rtc-capability-grants-sources" title="{{localize 'THIRDERA.CGS.RtcGrantSourcesLineTitle'}}">{{localize "THIRDERA.CGS.RtcGrantSourcesLine"}} <strong>{{rtcGlobal.cgsRtcGrantSourceSummary}}</strong></p>
+    {{/if}}
+  </div>
+  {{#each rtcGlobal.cgsGrantRtcLevels as |levelRow|}}
+  <div class="rtc-cgs-grant-level-subsection">
+    <h6 class="rtc-cgs-grant-level-title">{{#if (eq levelRow.levelKey "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal levelRow.levelKey}} Level{{/if}}</h6>
+    <ol class="items-list spells-list spells-list--capability-grants">
+      {{#each levelRow.spells as |spell|}}
+      <li class="item flexrow spell-item spell-item--cgs-grant" data-item-id="{{spell.id}}" data-class-item-id="{{spell.rtcCastClassItemId}}" data-spell-level="{{levelRow.levelKey}}" data-cgs-rtc-capability-grant="true">
+        <div class="item-name">
+          {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
+          <h4>
+            <a class="spell-name-link" data-action="editItem" draggable="true" data-drag-type="spellCast" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>
+            <span class="cgs-grant-channel-badge cgs-grant-channel-badge--rtc" title="{{localize 'THIRDERA.CGS.GrantChannelBadgeTooltipRtc'}}">{{localize "THIRDERA.CGS.GrantChannelBadge"}}</span>
+          </h4>
+        </div>
+        <div class="spell-tracking">
+          <div class="cast-tracking" title="{{#if spell.cgsRtcUseGrantCastMap}}{{localize 'THIRDERA.CGS.RtcGrantCastTrackedOnActor'}}{{else}}{{localize 'THIRDERA.Spells.CastHint'}}{{/if}}">
+            <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
+            {{#if spell.cgsRtcUseGrantCastMap}}
+            <input type="number" class="spell-tracking-input" min="0" readonly tabindex="-1" value="{{spell.cgsRtcGrantCastCount}}" title="{{localize 'THIRDERA.CGS.RtcGrantCastTrackedOnActor'}}" />
+            {{else}}
+            <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.cast}}" data-item-id="{{spell.id}}" data-spell-field="cast" />
+            {{/if}}
+          </div>
+          <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{spell.rtcCastClassItemId}}" data-spell-level="{{levelRow.levelKey}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+        </div>
+        <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
+      </li>
+      {{/each}}
+    </ol>
+  </div>
+  {{/each}}
+</section>
+{{/if}}

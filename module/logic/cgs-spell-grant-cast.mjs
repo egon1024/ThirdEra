@@ -3,6 +3,23 @@
  * Separate from embedded spell `system.cast` (class slots / preparation).
  */
 
+import { cgsSpellGrantIsSlaStyle } from "./cgs-spell-grant-prep.mjs";
+
+/**
+ * Whether this cast should use `system.cgsSpellGrantCasts` (and per-day / at-will grant rules), not `spellItem.system.cast`.
+ * True when the spell matches an SLA-style merged grant row and the cast is explicitly from CGS UI (Known grant row or RTC capability panel).
+ *
+ * @param {boolean} viaCgsGrant
+ * @param {boolean} fromCgsRtcCapabilityGrant
+ * @param {unknown} cgsGrantRow — merged row or null
+ * @returns {boolean}
+ */
+export function shouldUseCgsGrantCastMapForCast(viaCgsGrant, fromCgsRtcCapabilityGrant, cgsGrantRow) {
+    if (!cgsGrantRow || typeof cgsGrantRow !== "object") return false;
+    if (!cgsSpellGrantIsSlaStyle(cgsGrantRow)) return false;
+    return viaCgsGrant === true || fromCgsRtcCapabilityGrant === true;
+}
+
 /**
  * @param {unknown} actorSystem — `actor.system`
  * @param {string} spellUuid — merged row `spellUuid`

@@ -93,6 +93,30 @@ export function collectOrphanCgsGrantOnlyEmbedItemIds(spellItems, spellGrantRows
 }
 
 /**
+ * Normalize `usesPerDay` from item/JSON data (numbers or numeric strings from forms).
+ *
+ * @param {unknown} v
+ * @returns {number|undefined} finite non-negative integer, or undefined if absent/invalid
+ */
+export function normalizeCgsSpellGrantUsesPerDay(v) {
+    if (v == null) return undefined;
+    if (typeof v === "number" && Number.isFinite(v)) {
+        const t = Math.trunc(v);
+        return t >= 0 ? t : undefined;
+    }
+    if (typeof v === "string") {
+        const s = v.trim();
+        if (s === "") return undefined;
+        const n = Number(s);
+        if (Number.isFinite(n)) {
+            const t = Math.trunc(n);
+            return t >= 0 ? t : undefined;
+        }
+    }
+    return undefined;
+}
+
+/**
  * Grant is limited like an SLA (at-will or N/day), not “spell known” using normal spell slots / preparation counts.
  *
  * @param {unknown} row — merged spell grant row
@@ -101,9 +125,7 @@ export function collectOrphanCgsGrantOnlyEmbedItemIds(spellItems, spellGrantRows
 export function cgsSpellGrantIsSlaStyle(row) {
     if (!row || typeof row !== "object") return false;
     if (/** @type {{ atWill?: boolean }} */ (row).atWill === true) return true;
-    const n = /** @type {{ usesPerDay?: number }} */ (row).usesPerDay;
-    if (typeof n === "number" && Number.isFinite(n)) return true;
-    return false;
+    return normalizeCgsSpellGrantUsesPerDay(/** @type {{ usesPerDay?: unknown }} */ (row).usesPerDay) !== undefined;
 }
 
 /**
@@ -112,11 +134,9 @@ export function cgsSpellGrantIsSlaStyle(row) {
  * @param {unknown[]} spellGrantRows — `actor.system.cgs.spellGrants.rows` after merge
  * @param {unknown[]} spellItems — actor items with `type === "spell"`
  * @param {Array<{ classItemId?: string, spellListKey?: string, hasSpellcasting?: boolean }>} spellcastingByClass
- * @param {{ hasLevelForClass: (spellSystem: unknown, spellListKey: string) => boolean }} deps
- * @returns {Map<string, Set<string>>} classItemId → Set of spell item ids (`item.id`)
+ * @returns {Map<string, Set<string>>} classItemId → Set of spell item ids (`item.id`). Rows **without** `classItemId` are omitted here; use {@link mapCgsUnscopedSpellGrantReadySpellIds}.
  */
-export function mapCgsSpellGrantReadySpellIdsByClass(spellGrantRows, spellItems, spellcastingByClass, deps) {
-    const has = deps.hasLevelForClass;
+export function mapCgsSpellGrantReadySpellIdsByClass(spellGrantRows, spellItems, spellcastingByClass) {
     /** @type {Map<string, Set<string>>} */
     const classToIds = new Map();
     const classes = Array.isArray(spellcastingByClass) ? spellcastingByClass : [];
@@ -138,27 +158,37 @@ export function mapCgsSpellGrantReadySpellIdsByClass(spellGrantRows, spellItems,
         if (explicit) {
             const s = classToIds.get(explicit);
             if (s) s.add(itemId);
-            continue;
-        }
-
-        let matched = false;
-        for (const sc of classes) {
-            if (!sc?.hasSpellcasting) continue;
-            const cid = typeof sc.classItemId === "string" ? sc.classItemId.trim() : "";
-            const slk = typeof sc.spellListKey === "string" ? sc.spellListKey : "";
-            if (!cid || !has(spellItem.system, slk)) continue;
-            const s = classToIds.get(cid);
-            if (s) s.add(itemId);
-            matched = true;
-            break;
-        }
-        if (!matched) {
-            const first = classes.find((c) => c?.hasSpellcasting);
-            const fid = typeof first?.classItemId === "string" ? first.classItemId.trim() : "";
-            if (fid) classToIds.get(fid)?.add(itemId);
         }
     }
     return classToIds;
+}
+
+/**
+ * Embedded spell item ids for merged grant rows that do **not** set `classItemId` (equipment, race, etc.).
+ * Shown under a global Ready-to-cast capability section, not under a class header.
+ *
+ * @param {unknown[]} spellGrantRows
+ * @param {unknown[]} spellItems
+ * @returns {Set<string>}
+ */
+export function mapCgsUnscopedSpellGrantReadySpellIds(spellGrantRows, spellItems) {
+    /** @type {Set<string>} */
+    const out = new Set();
+    for (const row of spellGrantRows || []) {
+        if (!row || typeof row !== "object") continue;
+        const explicit = typeof /** @type {{ classItemId?: string }} */ (row).classItemId === "string"
+            ? /** @type {{ classItemId?: string }} */ (row).classItemId.trim()
+            : "";
+        if (explicit) continue;
+        const su = typeof /** @type {{ spellUuid?: string }} */ (row).spellUuid === "string"
+            ? /** @type {{ spellUuid?: string }} */ (row).spellUuid.trim()
+            : "";
+        if (!su) continue;
+        const spellItem = findActorSpellItemMatchingGrantUuid(spellItems, su);
+        const itemId = spellItem && typeof /** @type {{ id?: string }} */ (spellItem).id === "string" ? spellItem.id.trim() : "";
+        if (itemId) out.add(itemId);
+    }
+    return out;
 }
 
 /**
@@ -289,8 +319,8 @@ export function formatCgsSpellGrantUsesHint(row, localize) {
         const k = "THIRDERA.CGS.SpellGrantAtWill";
         return typeof localize === "function" && localize(k) !== k ? localize(k) : "At will";
     }
-    const n = row.usesPerDay;
-    if (typeof n === "number" && Number.isFinite(n)) {
+    const n = normalizeCgsSpellGrantUsesPerDay(row.usesPerDay);
+    if (n !== undefined) {
         const k = "THIRDERA.CGS.SpellGrantUsesPerDay";
         const t = typeof localize === "function" ? localize(k) : k;
         return t.includes("{n}") ? t.replace("{n}", String(n)) : `${n}/day`;

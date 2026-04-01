@@ -4,10 +4,14 @@ import {
     backfillCharacterSystemSourceInPlace
 } from "../logic/character-system-source-backfill.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
-import { incrementCgsSpellGrantCastsMap } from "../logic/cgs-spell-grant-cast.mjs";
 import {
-    cgsSpellGrantIsSlaStyle,
-    findMergedSpellGrantRowForActorSpell
+    incrementCgsSpellGrantCastsMap,
+    shouldUseCgsGrantCastMapForCast
+} from "../logic/cgs-spell-grant-cast.mjs";
+import { getMergedSpellGrantRowsForActor } from "../logic/cgs-spell-grant-rows.mjs";
+import {
+    findMergedSpellGrantRowForActorSpell,
+    normalizeCgsSpellGrantUsesPerDay
 } from "../logic/cgs-spell-grant-prep.mjs";
 import { filterNpcSkillItemDataForCreate } from "../logic/npc-embedded-skill-identity.mjs";
 import { parseSaveType } from "../logic/spell-save-helpers.mjs";
@@ -429,7 +433,7 @@ export class ThirdEraActor extends Actor {
      * @param {number|string} options.spellLevel  Spell level 0-9 for this class
      * @param {Actor[]|string[]} [options.targetActors]  Optional targets (Actor docs or actor UUIDs); stored on message for Roll save
      * @param {boolean} [options.viaCgsGrant]  When true and the spell matches an SLA-style CGS row, use `system.cgsSpellGrantCasts` instead of `spellItem.system.cast`
-     * @param {boolean} [options.fromCgsRtcCapabilityGrant]  When true (Cast from CGS RTC panel), skip prepared/slot-remaining warnings meant for normal class spellcasting
+     * @param {boolean} [options.fromCgsRtcCapabilityGrant]  When true (Cast from CGS RTC panel): skip class prepared/slot warnings; also use the same SLA-style `cgsSpellGrantCasts` path when the merged grant is at-will or has `usesPerDay`
      * @returns {Promise<boolean>}   True if cast was applied and message posted
      *
      * Chat message `flags.thirdera.spellCast` includes (for consumers such as concentration / SR UI):
@@ -492,10 +496,12 @@ export class ThirdEraActor extends Actor {
         const slotsAtLevel = spellsPerDay[level] ?? spellsPerDay[String(level)] ?? 0;
         const domainSlotsAtLevel = classData.domainSpellSlots?.[level] ?? classData.domainSpellSlots?.[String(level)] ?? 0;
 
-        const cgsRowsRaw = systemData.cgs?.spellGrants?.rows;
-        const cgsGrantRow = findMergedSpellGrantRowForActorSpell(spellItem, Array.isArray(cgsRowsRaw) ? cgsRowsRaw : []);
-        const cgsSlaStyle = cgsGrantRow ? cgsSpellGrantIsSlaStyle(cgsGrantRow) : false;
-        const viaGrant = viaCgsGrant === true;
+        const cgsGrantRow = findMergedSpellGrantRowForActorSpell(spellItem, getMergedSpellGrantRowsForActor(this));
+        const useCgsGrantCastMap = shouldUseCgsGrantCastMapForCast(
+            viaCgsGrant,
+            fromCgsRtcCapabilityGrant,
+            cgsGrantRow
+        );
         const skipClassSlotCastWarnings = fromCgsRtcCapabilityGrant === true;
 
         if (isDomainSpell) {
@@ -511,11 +517,11 @@ export class ThirdEraActor extends Actor {
             if (wouldExceed) {
                 ui.notifications.warn(game.i18n.format("THIRDERA.Spells.NoSlotsRemaining", { spell: spellItem.name }));
             }
-        } else if (viaGrant && cgsSlaStyle && cgsGrantRow) {
+        } else if (useCgsGrantCastMap) {
             const grantUuid = typeof cgsGrantRow.spellUuid === "string" ? cgsGrantRow.spellUuid.trim() : "";
             if (cgsGrantRow.atWill !== true && grantUuid) {
-                const cap = cgsGrantRow.usesPerDay;
-                if (typeof cap === "number" && Number.isFinite(cap) && cap > 0) {
+                const cap = normalizeCgsSpellGrantUsesPerDay(cgsGrantRow.usesPerDay);
+                if (cap !== undefined && cap > 0) {
                     const used = Number(systemData.cgsSpellGrantCasts?.[grantUuid] ?? 0) || 0;
                     if (used >= cap) {
                         ui.notifications.warn(
@@ -548,7 +554,7 @@ export class ThirdEraActor extends Actor {
             }
         }
 
-        if (viaGrant && cgsSlaStyle && cgsGrantRow) {
+        if (useCgsGrantCastMap) {
             const grantUuid = typeof cgsGrantRow.spellUuid === "string" ? cgsGrantRow.spellUuid.trim() : "";
             if (grantUuid) {
                 const prev =
@@ -598,10 +604,9 @@ export class ThirdEraActor extends Actor {
             }
         }
 
-        const grantSourceLine =
-            viaGrant && cgsSlaStyle
-                ? `<p class="cast-grant-source">${game.i18n.localize("THIRDERA.CGS.CastMessageFromCapabilityGrant")}</p>`
-                : "";
+        const grantSourceLine = useCgsGrantCastMap
+            ? `<p class="cast-grant-source">${game.i18n.localize("THIRDERA.CGS.CastMessageFromCapabilityGrant")}</p>`
+            : "";
 
         const content = `<div class="thirdera cast-message">
   <p><strong>${actorName}</strong> ${castsLabel} <strong>${spellName}</strong>.</p>
@@ -625,7 +630,7 @@ export class ThirdEraActor extends Actor {
             classItemId,
             casterLevel,
             srKey: srKey || "",
-            viaCgsGrant: viaGrant && cgsSlaStyle === true
+            viaCgsGrant: useCgsGrantCastMap
         };
         if (targetActorUuids.length > 0) {
             spellCastFlags.targetActorUuids = targetActorUuids;

@@ -455,6 +455,7 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/cgs-mechanics-spell-grants.hbs",
         "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs",
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs",
+        "systems/thirdera/templates/partials/spells-ready-cgs-grant-global-section.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs",
         "systems/thirdera/templates/apps/skill-picker-dialog.hbs"
     ]);
