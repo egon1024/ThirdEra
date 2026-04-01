@@ -452,6 +452,9 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/cgs-merged-senses.hbs",
         "systems/thirdera/templates/partials/cgs-legacy-statblock-senses.hbs",
         "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-spell-grants.hbs",
+        "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs",
+        "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs",
         "systems/thirdera/templates/apps/skill-picker-dialog.hbs"
     ]);

@@ -111,3 +111,15 @@ export function enrichCgsSuppressedSenseRowsForProvenance(rows, ctx) {
             : []
     }));
 }
+
+/**
+ * Phase 5d: spell grant row sources → provenance plans (sheet builds HTML via buildCgsProvenanceSourceHtml).
+ *
+ * @param {CgsProvenanceSourceEntry[] | null | undefined} sources
+ * @param {Parameters<typeof planCgsSourceDisplay>[1]} ctx
+ * @returns {CgsProvenanceSourcePlan[]}
+ */
+export function enrichCgsSpellGrantRowSourcesForProvenance(sources, ctx) {
+    if (!Array.isArray(sources)) return [];
+    return sources.map((s) => planCgsSourceDisplay(s, ctx));
+}

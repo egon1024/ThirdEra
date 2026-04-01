@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
     enrichCgsMergedSenseRowsForProvenance,
+    enrichCgsSpellGrantRowSourcesForProvenance,
     enrichCgsSuppressedSenseRowsForProvenance,
     extractCgsSourceLinkUuid,
     planCgsSourceDisplay
@@ -199,5 +200,23 @@ describe("enrichCgsSuppressedSenseRowsForProvenance", () => {
         expect(out[0].senseLabel).toBe("Darkvision 60 ft.");
         expect(out[0].senseSources[0].showLabel).toBe(true);
         expect(out[0].suppressingSources[0].linkUuid).toBe("Item.blind");
+    });
+});
+
+describe("enrichCgsSpellGrantRowSourcesForProvenance", () => {
+    it("maps each source through planCgsSourceDisplay", () => {
+        const ctx = {
+            isGM: true,
+            user: {},
+            sheetActor: { uuid: "Actor.1", testUserPermission: () => true },
+            resolveUuid: () => null
+        };
+        const out = enrichCgsSpellGrantRowSourcesForProvenance(
+            [{ label: "SLA", sourceRef: { kind: "item", uuid: "Item.feat" } }],
+            ctx
+        );
+        expect(out).toHaveLength(1);
+        expect(out[0].useLabel).toBe("SLA");
+        expect(out[0].linkUuid).toBe("Item.feat");
     });
 });

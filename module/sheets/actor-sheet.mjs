@@ -14,8 +14,19 @@ import { TakeRestDialog } from "../applications/take-rest-dialog.mjs";
 import { normalizeNpcStatBlockNaturalAttackPresetBonuses } from "../logic/npc-stat-block-submit-normalize.mjs";
 import {
     enrichCgsMergedSenseRowsForProvenance,
+    enrichCgsSpellGrantRowSourcesForProvenance,
     enrichCgsSuppressedSenseRowsForProvenance
 } from "../logic/cgs-provenance-display.mjs";
+import { getCgsSpellGrantCastTotal } from "../logic/cgs-spell-grant-cast.mjs";
+import {
+    buildCgsGrantedSpellsByLevelForKnownTab,
+    collectOrphanCgsGrantOnlyEmbedItemIds,
+    cgsSpellGrantIsSlaStyle,
+    findActorSpellItemMatchingGrantUuid,
+    formatCgsSpellGrantUsesHint,
+    mapCgsSpellGrantReadySpellIdsByClass,
+    resolveSpellGrantCastClassItemId
+} from "../logic/cgs-spell-grant-prep.mjs";
 
 /**
  * Actor sheet for Third Era characters and NPCs using ApplicationV2
@@ -60,8 +71,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             rollHitDie: ThirdEraActorSheet.#onRollHitDie,
             removeFromContainer: ThirdEraActorSheet.#onRemoveFromContainer,
             castSpell: ThirdEraActorSheet.#onCastSpell,
+            castCgsGrantedSpell: ThirdEraActorSheet.#onCastCgsGrantedSpell,
             removeDomain: ThirdEraActorSheet.#onRemoveDomain,
             addPlaceholderSpell: ThirdEraActorSheet.#onAddPlaceholderSpell,
+            addCgsGrantSpellToActor: ThirdEraActorSheet.#onAddCgsGrantSpellToActor,
             addToShortlist: ThirdEraActorSheet.#onAddToShortlist,
             addToShortlistFromSelect: ThirdEraActorSheet.#onAddToShortlistFromSelect,
             removeFromShortlist: ThirdEraActorSheet.#onRemoveFromShortlist,
@@ -819,6 +832,56 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
             });
         }
+
+    }
+
+    /**
+     * Drop CGS-only embedded spells when merged grant rows no longer reference them; embed spells for active grant rows when missing (editable sheet).
+     * @param {{ suppressRender?: boolean }} [options] — When true (e.g. called from `_prepareContext`), skip `render()`; the current prepare pass will reflect changes.
+     */
+    async #syncCgsGrantSpellEmbedsWithActor(options = {}) {
+        const suppressRender = options.suppressRender === true;
+        if (!this.isEditable || this._cgsGrantEmbedSyncRunning) return;
+        const actor = this.actor;
+        if (!actor) return;
+        this._cgsGrantEmbedSyncRunning = true;
+        try {
+            const rows = Array.isArray(actor.system?.cgs?.spellGrants?.rows) ? actor.system.cgs.spellGrants.rows : [];
+            let spellItems = actor.items.filter((i) => i.type === "spell");
+            const orphanIds = collectOrphanCgsGrantOnlyEmbedItemIds(spellItems, rows);
+            let mutated = false;
+            if (orphanIds.length) {
+                await actor.deleteEmbeddedDocuments("Item", orphanIds);
+                mutated = true;
+            }
+            if (mutated) await actor.prepareData();
+            spellItems = actor.items.filter((i) => i.type === "spell");
+            const seenUuids = new Set();
+            /** @type {string[]} */
+            const toEmbed = [];
+            for (const row of rows) {
+                if (!row || typeof row !== "object") continue;
+                const su = typeof row.spellUuid === "string" ? row.spellUuid.trim() : "";
+                if (!su || seenUuids.has(su)) continue;
+                seenUuids.add(su);
+                if (!findActorSpellItemMatchingGrantUuid(spellItems, su)) toEmbed.push(su);
+            }
+            for (const uuid of toEmbed) {
+                const created = await actor.addSpell(uuid, { embeddedAsCgsGrantOnly: true });
+                if (created) {
+                    mutated = true;
+                    spellItems = actor.items.filter((i) => i.type === "spell");
+                }
+            }
+            if (mutated) {
+                await actor.prepareData();
+                if (!suppressRender) await this.render();
+            }
+        } catch (err) {
+            console.warn("Third Era | CGS grant spell embed sync:", err);
+        } finally {
+            this._cgsGrantEmbedSyncRunning = false;
+        }
     }
 
     /**
@@ -870,6 +933,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Get actor document and system data (guard against uninitialized document)
         const actor = this.document;
+        await this.#syncCgsGrantSpellEmbedsWithActor({ suppressRender: true });
         const systemData = actor?.system ?? {};
         const abilities = systemData?.abilities ?? {};
         const dexData = abilities?.dex ?? { effective: 10, value: 10 };
@@ -1438,6 +1502,15 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         for (const s of items.spells) {
             if (s.id) spellById.set(s.id, s);
         }
+
+        const cgsSpellGrantRows = Array.isArray(systemData.cgs?.spellGrants?.rows) ? systemData.cgs.spellGrants.rows : [];
+        const cgsReadyIdsByClass = mapCgsSpellGrantReadySpellIdsByClass(
+            cgsSpellGrantRows,
+            items.spells,
+            spellcastingByClass,
+            { hasLevelForClass: (sys, key) => SpellData.hasLevelForClass(sys, key) }
+        );
+
         // Mark each spell in Known with inShortlist for full-list prepared casters (for toggle UI)
         for (const classData of knownSpellsByClass) {
             if (classData.spellListAccess !== "full" || classData.preparationType !== "prepared") continue;
@@ -1456,21 +1529,82 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         }
         const readyToCastByClass = organizedSpells.map((classData) => {
-            if (!classData.hasSpellcasting) return { ...classData, spellsByLevel: classData.spellsByLevel };
+            if (!classData.hasSpellcasting) {
+                const emptyByLevel = Object.fromEntries(Array.from({ length: 10 }, (_, i) => [String(i), []]));
+                const rtcLv = Object.fromEntries(Array.from({ length: 10 }, (_, i) => [String(i), false]));
+                return {
+                    ...classData,
+                    spellsByLevel: classData.spellsByLevel,
+                    cgsGrantReadySpellsByLevel: emptyByLevel,
+                    cgsGrantRtcLevels: [],
+                    hasCgsGrantReadySpellsForRtcSection: false,
+                    rtcLevelVisible: rtcLv
+                };
+            }
             const shortlistIds = new Set(spellShortlistByClass[classData.classItemId] || []);
+            const cgsReadyIds = cgsReadyIdsByClass.get(classData.classItemId) ?? new Set();
             const isFullListPrepared = (classData.spellListAccess === "full" && classData.preparationType === "prepared");
             const isPreparedCaster = (classData.preparationType === "prepared");
+            /** Level bucket (string 0–9) for Ready merge of capability-granted spells not on the class Known roster row */
+            const cgsGrantLevelKeyOnThisClass = (spellItem) => {
+                if (!spellItem?.system) return null;
+                const slk = classData.spellListKey;
+                if (typeof slk === "string" && SpellData.hasLevelForClass(spellItem.system, slk)) {
+                    return String(SpellData.getLevelForClass(spellItem.system, slk));
+                }
+                const raw = spellItem.system?.level ?? 0;
+                return String(Math.min(9, Math.max(0, Number(raw))));
+            };
+            const appendCgsReadySpellsNotOnClassRanks = (ready, levelKey) => {
+                for (const cgsId of cgsReadyIds) {
+                    if (ready.some((x) => x.id === cgsId)) continue;
+                    const spellItem = spellById.get(cgsId);
+                    if (!spellItem) continue;
+                    const lk = cgsGrantLevelKeyOnThisClass(spellItem);
+                    if (lk !== levelKey) continue;
+                    const sys = spellItem.system || {};
+                    ready.push({
+                        id: spellItem.id,
+                        name: spellItem.name,
+                        img: spellItem.img,
+                        system: { ...sys, cast: sys.cast ?? 0, prepared: sys.prepared ?? 0 },
+                        isCgsGrant: true
+                    });
+                }
+            };
             const spellsByLevel = {};
+            /** @type {Record<string, unknown[]>} */
+            const cgsGrantReadySpellsByLevel = {};
             for (let level = 0; level <= 9; level++) {
                 const levelKey = String(level);
                 const spells = classData.spellsByLevel[levelKey] || [];
                 let ready;
                 if (isFullListPrepared) {
-                    ready = spells.filter((s) => !s._isPlaceholder && shortlistIds.has(s.id));
+                    ready = spells
+                        .filter(
+                            (s) =>
+                                !s._isPlaceholder &&
+                                s.id &&
+                                (shortlistIds.has(s.id) || cgsReadyIds.has(s.id))
+                        )
+                        .map((s) => ({ ...s, isCgsGrant: cgsReadyIds.has(s.id) }));
+                    appendCgsReadySpellsNotOnClassRanks(ready, levelKey);
+                    ready.sort(spellNameSort);
                 } else if (isPreparedCaster) {
-                    ready = spells.filter((s) => !s._isPlaceholder && (s.system?.prepared ?? 0) > 0);
+                    ready = spells
+                        .filter(
+                            (s) =>
+                                !s._isPlaceholder &&
+                                s.id &&
+                                ((s.system?.prepared ?? 0) > 0 || cgsReadyIds.has(s.id))
+                        )
+                        .map((s) => ({ ...s, isCgsGrant: cgsReadyIds.has(s.id) }));
+                    appendCgsReadySpellsNotOnClassRanks(ready, levelKey);
+                    ready.sort(spellNameSort);
                 } else {
-                    ready = spells.filter((s) => !s._isPlaceholder);
+                    ready = spells
+                        .filter((s) => !s._isPlaceholder)
+                        .map((s) => ({ ...s, isCgsGrant: cgsReadyIds.has(s.id) }));
                     // Merge shortlisted manually-added spells into this class's ready list (spontaneous only)
                     for (const shortlistId of shortlistIds) {
                         if (!manuallyAddedIds.has(shortlistId)) continue;
@@ -1485,16 +1619,58 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                             name: spellItem.name,
                             img: spellItem.img,
                             system: { ...sys, cast: sys.cast ?? 0, prepared: sys.prepared ?? 0 },
-                            inShortlist: true
+                            inShortlist: true,
+                            isCgsGrant: cgsReadyIds.has(spellItem.id)
+                        });
+                    }
+                    for (const cgsId of cgsReadyIds) {
+                        if (ready.some((x) => x.id === cgsId)) continue;
+                        const spellItem = spellById.get(cgsId);
+                        if (!spellItem) continue;
+                        const rawLevel = spellItem.system?.level ?? 0;
+                        const spellLevel = Math.min(9, Math.max(0, Number(rawLevel)));
+                        if (String(spellLevel) !== levelKey) continue;
+                        const sys = spellItem.system || {};
+                        ready.push({
+                            id: spellItem.id,
+                            name: spellItem.name,
+                            img: spellItem.img,
+                            system: { ...sys, cast: sys.cast ?? 0, prepared: sys.prepared ?? 0 },
+                            isCgsGrant: true
                         });
                     }
                     ready.sort(spellNameSort);
                 }
-                spellsByLevel[levelKey] = ready;
+                const cgsGrantSpells = ready.filter((s) => s.isCgsGrant);
+                const normalReady = ready.filter((s) => !s.isCgsGrant);
+                spellsByLevel[levelKey] = normalReady;
+                cgsGrantReadySpellsByLevel[levelKey] = cgsGrantSpells;
+            }
+            const spd = classData.spellsPerDay || {};
+            /** @type {Record<string, boolean>} */
+            const rtcLevelVisible = {};
+            for (let level = 0; level <= 9; level++) {
+                const lk = String(level);
+                const n = (spellsByLevel[lk] || []).length;
+                const c = (cgsGrantReadySpellsByLevel[lk] || []).length;
+                const hasSlots = Number(spd[lk] ?? 0) > 0;
+                // Hide a spell-level band when it would only hold CGS grants — those render in the class RTC capability section below.
+                rtcLevelVisible[lk] = n > 0 || (hasSlots && !(n === 0 && c > 0));
+            }
+            /** @type {{ levelKey: string, spells: unknown[] }[]} */
+            const cgsGrantRtcLevels = [];
+            for (let level = 0; level <= 9; level++) {
+                const lk = String(level);
+                const spells = cgsGrantReadySpellsByLevel[lk] || [];
+                if (spells.length) cgsGrantRtcLevels.push({ levelKey: lk, spells });
             }
             const result = {
                 ...classData,
                 spellsByLevel,
+                cgsGrantReadySpellsByLevel,
+                rtcLevelVisible,
+                cgsGrantRtcLevels,
+                hasCgsGrantReadySpellsForRtcSection: cgsGrantRtcLevels.length > 0,
                 domainSpellsByLevel: classData.domainSpellsByLevel || {},
                 domainSpellSlots: classData.domainSpellSlots || {}
             };
@@ -1537,6 +1713,99 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                     manuallyAddedInShortlist[spellId].push({ classItemId, className });
                 }
             }
+        }
+        /** For Known-tab rows (e.g. capability grants): spell item id → classes that already have it on the shortlist */
+        const spellShortlistMembershipBySpellId = {};
+        for (const [classItemId, list] of Object.entries(spellShortlistByClass)) {
+            const arr = Array.isArray(list) ? list : [];
+            const className = classByName.get(classItemId) ?? classItemId;
+            for (const spellId of arr) {
+                if (!spellShortlistMembershipBySpellId[spellId]) spellShortlistMembershipBySpellId[spellId] = [];
+                spellShortlistMembershipBySpellId[spellId].push({ classItemId, className });
+            }
+        }
+
+        const cgsGrantedSpellsRaw = buildCgsGrantedSpellsByLevelForKnownTab(cgsSpellGrantRows, items.spells, {
+            fromUuidSync: (uuid) => {
+                try {
+                    return typeof foundry?.utils?.fromUuidSync === "function" ? foundry.utils.fromUuidSync(uuid) : null;
+                } catch {
+                    return null;
+                }
+            }
+        });
+        const resolveCgsSpellGrantUuid = (uuid) => {
+            try {
+                return typeof foundry?.utils?.fromUuidSync === "function" ? foundry.utils.fromUuidSync(uuid) : null;
+            } catch {
+                return null;
+            }
+        };
+        const cgsSpellGrantProvCtx = {
+            isGM: game.user?.isGM === true,
+            user: game.user,
+            sheetActor: actor,
+            resolveUuid: resolveCgsSpellGrantUuid
+        };
+        const localizeCgsSpell = (k) => (typeof game?.i18n?.localize === "function" ? game.i18n.localize(k) : k);
+        /** @type {Record<string, Array<{ spellDisplay: Record<string, unknown>, usesHint: string, sourceDisplays: unknown[], castClassItemId: string, castSpellLevel: string, showCgsPreparedCountControl: boolean, cgsIsSlaStyle: boolean, cgsGrantCastCount: number, cgsGrantUsesPerDayCap?: number }>>} */
+        const cgsGrantedSpellsByLevel = {};
+        let hasCgsGrantedSpells = false;
+        const hasLevel = (sys, key) => SpellData.hasLevelForClass(sys, key);
+        for (let lv = 0; lv <= 9; lv++) {
+            const lk = String(lv);
+            const arr = cgsGrantedSpellsRaw.byLevel[lk] || [];
+            const out = [];
+            for (const e of arr) {
+                const sid = e.spellDisplay?.id;
+                const grantRow = e.row && typeof e.row === "object" ? e.row : null;
+                const cgsIsSlaStyle = cgsSpellGrantIsSlaStyle(grantRow);
+                const su = typeof e.spellDisplay?.spellUuid === "string" ? e.spellDisplay.spellUuid.trim() : "";
+                const cgsGrantCastCount = su ? getCgsSpellGrantCastTotal(systemData, su) : 0;
+                const capRaw = grantRow && typeof grantRow === "object" ? grantRow.usesPerDay : undefined;
+                const cgsGrantUsesPerDayCap =
+                    typeof capRaw === "number" && Number.isFinite(capRaw) && capRaw > 0 ? capRaw : undefined;
+                const plans = enrichCgsSpellGrantRowSourcesForProvenance(e.row?.sources, cgsSpellGrantProvCtx);
+                let castClassItemId = "";
+                let castSpellLevel = lk;
+                if (sid) {
+                    const spellItem = getActorItem(sid);
+                    castClassItemId = resolveSpellGrantCastClassItemId(e.row, spellItem, spellcastingByClass, {
+                        hasLevelForClass: hasLevel
+                    });
+                    if (castClassItemId && spellItem) {
+                        const sc = spellcastingByClass.find((c) => c.classItemId === castClassItemId);
+                        const slk = typeof sc?.spellListKey === "string" ? sc.spellListKey : "";
+                        if (slk && hasLevel(spellItem.system, slk)) {
+                            castSpellLevel = String(SpellData.getLevelForClass(spellItem.system, slk));
+                        }
+                    }
+                }
+                const scCast = castClassItemId ? spellcastingByClass.find((c) => c.classItemId === castClassItemId) : null;
+                const prep = String(scCast?.preparationType ?? "none").trim();
+                const access = String(scCast?.spellListAccess ?? "none").trim();
+                /** Non–full-list, non-spontaneous casters: same Prepared counter as class Known rows (includes preparationType still "none" on some world classes). */
+                const showCgsPreparedCountControl = !!(
+                    sid &&
+                    castClassItemId &&
+                    scCast?.hasSpellcasting &&
+                    prep !== "spontaneous" &&
+                    access !== "full"
+                );
+                out.push({
+                    spellDisplay: e.spellDisplay,
+                    usesHint: formatCgsSpellGrantUsesHint(e.row, localizeCgsSpell),
+                    sourceDisplays: plans.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p)),
+                    castClassItemId,
+                    castSpellLevel,
+                    showCgsPreparedCountControl,
+                    cgsIsSlaStyle,
+                    cgsGrantCastCount,
+                    cgsGrantUsesPerDayCap
+                });
+            }
+            cgsGrantedSpellsByLevel[lk] = out;
+            if (out.length > 0) hasCgsGrantedSpells = true;
         }
 
         // Compute encumbrance display info
@@ -1739,8 +2008,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             hasPreparedSpellcasting,
             manuallyAddedSpellsByLevel,
             hasManuallyAddedSpells,
+            cgsGrantedSpellsByLevel,
+            hasCgsGrantedSpells,
+            /** Cast from CGS-granted rows only on Ready to cast (not on Known / Available granted section). */
+            cgsGrantedSpellsSuppressCastOnKnownTab: true,
             spellcastingClassesForShortlist,
             manuallyAddedInShortlist,
+            spellShortlistMembershipBySpellId,
             editable: this.isEditable,
             // Token image for header (only when sheet is for world actor, not a token)
             showTokenImage: !actor.isToken,
@@ -5071,6 +5345,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (!itemId || !classItemId) return;
         const item = this.actor.items.get(itemId);
         if (!item || item.type !== "spell") return;
+        const fromCgsRtcCapabilityGrant = Boolean(target.closest("[data-cgs-rtc-capability-grant]"));
         const controlled = game.canvas?.tokens?.controlled ?? [];
         const targetActors = [];
         const seen = new Set();
@@ -5084,14 +5359,48 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const scrollContainer = this.element?.querySelector(".tab.spells.active .spells-tab-content")
             ?? this.element?.querySelector(".sheet-body .tab.active");
         this._preservedSpellScrollTop = scrollContainer?.scrollTop ?? this.element?.querySelector(".sheet-body")?.scrollTop ?? 0;
-        await this.actor.castSpell(item, { classItemId, spellLevel, targetActors: targetActors.length > 0 ? targetActors : undefined });
+        await this.actor.castSpell(item, {
+            classItemId,
+            spellLevel,
+            targetActors: targetActors.length > 0 ? targetActors : undefined,
+            fromCgsRtcCapabilityGrant
+        });
     }
 
     /**
-     * Reset all spell cast counts to 0 for this character (e.g. after rest, prayer, meditation, or study).
+     * Cast an SLA-style spell from the **Granted spells** row (capability grant), not class spell slots.
      * @param {PointerEvent} event
-     * @param {HTMLElement} target   Element with data-action="resetSpellUsage"
+     * @param {HTMLElement} target
      */
+    static async #onCastCgsGrantedSpell(event, target) {
+        const btn = target.closest("[data-action='castCgsGrantedSpell']") || target;
+        const itemId = btn.dataset?.itemId?.trim();
+        const classItemId = btn.dataset?.classItemId?.trim();
+        const spellLevel = btn.dataset?.spellLevel;
+        if (!itemId || !classItemId) return;
+        const item = this.actor.items.get(itemId);
+        if (!item || item.type !== "spell") return;
+        const controlled = game.canvas?.tokens?.controlled ?? [];
+        const targetActors = [];
+        const seen = new Set();
+        for (const token of controlled) {
+            const actor = token.actor;
+            if (actor && !seen.has(actor.id)) {
+                targetActors.push(actor);
+                seen.add(actor.id);
+            }
+        }
+        const scrollContainer = this.element?.querySelector(".tab.spells.active .spells-tab-content")
+            ?? this.element?.querySelector(".sheet-body .tab.active");
+        this._preservedSpellScrollTop = scrollContainer?.scrollTop ?? this.element?.querySelector(".sheet-body")?.scrollTop ?? 0;
+        await this.actor.castSpell(item, {
+            classItemId,
+            spellLevel,
+            targetActors: targetActors.length > 0 ? targetActors : undefined,
+            viaCgsGrant: true
+        });
+    }
+
     /**
      * Open Take rest dialog (characters only): natural healing and optional spell resets.
      * @param {PointerEvent} event
@@ -5115,21 +5424,36 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         return list.some((sc) => sc.hasSpellcasting && sc.preparationType === "prepared");
     }
 
+    /**
+     * Reset embedded spell `system.cast` and CGS SLA grant counters (`system.cgsSpellGrantCasts`).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target   Element with data-action="resetSpellUsage"
+     */
     static async #onResetSpellUsage(event, target) {
         const toReset = this.actor.items.filter(
             i => i.type === "spell" && (i.system?.cast ?? 0) !== 0
         );
-        if (toReset.length === 0) {
+        const cg = this.actor.system?.cgsSpellGrantCasts;
+        const anyCgs = cg && typeof cg === "object" && Object.values(cg).some((v) => (Number(v) || 0) !== 0);
+        if (toReset.length === 0 && !anyCgs) {
             ui.notifications.info(game.i18n.localize("THIRDERA.Spells.ResetCastCountsNoChange"));
             return;
         }
         for (const item of toReset) {
             await item.update({ "system.cast": 0 });
         }
+        if (anyCgs) {
+            await this.actor.update({ "system.cgsSpellGrantCasts": {} });
+        }
         await this.render();
-        ui.notifications.info(
-            game.i18n.format("THIRDERA.Spells.ResetCastCountsDone", { count: toReset.length })
-        );
+        const parts = [];
+        if (toReset.length > 0) {
+            parts.push(game.i18n.format("THIRDERA.Spells.ResetCastCountsDone", { count: toReset.length }));
+        }
+        if (anyCgs) {
+            parts.push(game.i18n.localize("THIRDERA.Spells.ResetCgsGrantCastsDone"));
+        }
+        ui.notifications.info(parts.join(" "));
     }
 
     /**
@@ -5224,6 +5548,39 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             console.warn("Third Era | Failed to add placeholder spell:", err);
             ui.notifications.error(`Could not add ${spellName}. Check the console.`);
         }
+    }
+
+    /**
+     * Embed the compendium/world spell for a CGS grant so prepare/cast/sheet tracking can use item ids.
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     */
+    static async #onAddCgsGrantSpellToActor(event, target) {
+        const actionEl = target.closest("[data-action='addCgsGrantSpellToActor']") || target;
+        const spellUuid = (actionEl.dataset?.spellUuid || "").trim();
+        if (!spellUuid) return;
+        const spellItems = this.actor.items.filter((i) => i.type === "spell");
+        if (findActorSpellItemMatchingGrantUuid(spellItems, spellUuid)) {
+            await this.actor.prepareData();
+            await this.render();
+            return;
+        }
+        try {
+            const created = await this.actor.addSpell(spellUuid, { embeddedAsCgsGrantOnly: true });
+            if (created) {
+                const nm = created.name || game.i18n.localize("THIRDERA.ItemTypes.spell");
+                ui.notifications.info(
+                    game.i18n.format("THIRDERA.CGS.AddGrantSpellToActorDone", { name: nm })
+                );
+            } else {
+                ui.notifications.warn(game.i18n.localize("THIRDERA.CGS.AddGrantSpellToActorFailed"));
+            }
+        } catch (err) {
+            console.warn("ThirdEra | addCgsGrantSpellToActor:", err);
+            ui.notifications.error(game.i18n.localize("THIRDERA.CGS.AddGrantSpellToActorFailed"));
+        }
+        await this.actor.prepareData();
+        await this.render();
     }
 
     /**

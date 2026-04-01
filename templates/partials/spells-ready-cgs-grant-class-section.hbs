@@ -1,0 +1,58 @@
+{{!-- Ready to cast: one panel per spellcasting class for CGS-granted spells (not class shortlist / preparation). Expects: classData with cgsGrantRtcLevels, hasCgsGrantReadySpellsForRtcSection --}}
+{{#if classData.hasCgsGrantReadySpellsForRtcSection}}
+<section class="rtc-class-capability-grants-sheet" role="region" aria-label="{{localize 'THIRDERA.CGS.ReadyToCastCapabilityGrantsAria'}}">
+  <div class="rtc-class-capability-grants-sheet-header">
+    <h5 class="rtc-class-capability-grants-sheet-title" title="{{localize 'THIRDERA.CGS.ReadyToCastCapabilityGrantsHeadingTitle'}}">
+      {{localize "THIRDERA.CGS.ReadyToCastCapabilityGrantsClassTitle"}}
+      <span class="rtc-class-capability-grants-class-name">— {{classData.className}}</span>
+    </h5>
+    <p class="rtc-capability-grants-hint">{{localize "THIRDERA.CGS.ReadyToCastCapabilityGrantsSubheading"}}</p>
+  </div>
+  {{#each classData.cgsGrantRtcLevels as |levelRow|}}
+  <div class="rtc-cgs-grant-level-subsection">
+    <h6 class="rtc-cgs-grant-level-title">{{#if (eq levelRow.levelKey "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal levelRow.levelKey}} Level{{/if}}</h6>
+    <ol class="items-list spells-list spells-list--capability-grants">
+      {{#each levelRow.spells as |spell|}}
+      {{!-- Nested {{#each}} sets context to each spell; use ../../classData for the spellcasting-class row (not spell.classData). --}}
+      <li class="item flexrow spell-item spell-item--cgs-grant" data-item-id="{{spell.id}}" data-class-item-id="{{../../classData.classItemId}}" data-spell-level="{{levelRow.levelKey}}" data-cgs-rtc-capability-grant="true">
+        <div class="item-name">
+          {{#if spell.img}}<div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{spell.name}}"></i></div>{{/if}}
+          <h4>
+            <a class="spell-name-link" data-action="editItem" draggable="true" data-drag-type="spellCast" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{spell.name}}</a>
+            <span class="cgs-grant-channel-badge cgs-grant-channel-badge--rtc" title="{{localize 'THIRDERA.CGS.GrantChannelBadgeTooltipRtc'}}">{{localize "THIRDERA.CGS.GrantChannelBadge"}}</span>
+          </h4>
+        </div>
+        {{#if (eq ../../classData.preparationType "prepared")}}
+          <div class="spell-tracking">
+            <div class="prepared-tracking" title="{{localize 'THIRDERA.Spells.PreparedHint'}}">
+              <label>{{localize "THIRDERA.Spells.Prepared"}}:</label>
+              <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.prepared}}" data-item-id="{{spell.id}}" data-spell-field="prepared" />
+            </div>
+            <div class="cast-tracking" title="{{localize 'THIRDERA.Spells.CastHint'}}">
+              <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
+              <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.cast}}" data-item-id="{{spell.id}}" data-spell-field="cast" />
+            </div>
+            <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{../../classData.classItemId}}" data-spell-level="{{levelRow.levelKey}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+          </div>
+          {{#if (eq ../../classData.spellListAccess "full")}}
+          <div class="item-controls"><a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{../../classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a></div>
+          {{else}}
+          <div class="item-controls"><a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
+          {{/if}}
+        {{else}}
+          <div class="spell-tracking">
+            <div class="cast-tracking" title="{{localize 'THIRDERA.Spells.CastHint'}}">
+              <label>{{localize "THIRDERA.Spells.Cast"}}:</label>
+              <input type="number" class="spell-tracking-input" min="0" value="{{spell.system.cast}}" data-item-id="{{spell.id}}" data-spell-field="cast" />
+            </div>
+            <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{spell.id}}" data-class-item-id="{{../../classData.classItemId}}" data-spell-level="{{levelRow.levelKey}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+          </div>
+          <div class="item-controls">{{#if spell.inShortlist}}<a class="item-control remove-from-ready" data-action="removeFromShortlist" data-item-id="{{spell.id}}" data-class-item-id="{{../../classData.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a>{{/if}}<a class="item-edit" data-action="editItem"><i class="fas fa-edit"></i></a></div>
+        {{/if}}
+      </li>
+      {{/each}}
+    </ol>
+  </div>
+  {{/each}}
+</section>
+{{/if}}

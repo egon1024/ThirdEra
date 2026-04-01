@@ -4,10 +4,12 @@
  *
  * Phase 2: senses Stage A (union + dedupe). Phase 5a: Stage B `applySenseSuppressions` — `senses.rows` are
  * **effective**; `senses.sensesUnionRows` = pre-suppression union; `senses.suppressed` explains removed rows.
+ * Phase 5d: `spellGrants.rows` via `mergeSpellGrantRows` (dedupe by `spellUuid`, merged sources + optional meta).
  *
  * @typedef {{ label: string, grants: unknown[], sourceRef?: Record<string, unknown> }} CapabilityContribution
  * @typedef {{ label: string, sourceRef?: Record<string, unknown> }} CgsSourceEntry
  * @typedef {{ senseType: string, range: string, label: string, sources: CgsSourceEntry[] }} MergedSenseRow
+ * @typedef {{ spellUuid: string, sources: CgsSourceEntry[], label?: string, usesPerDay?: number, atWill?: boolean, casterLevel?: number, classItemId?: string }} MergedSpellGrantRow
  * @typedef {Record<string, { rows?: unknown[], grants?: unknown[] }>} CapabilityGrantsResult
  *
  * @see .cursor/plans/cgs-implementation.md
@@ -187,6 +189,78 @@ export function dedupeCgsSourceEntries(sources) {
 }
 
 /**
+ * Merge spell / SLA grants: dedupe by spell document UUID; accumulate sources and merge optional metadata.
+ *
+ * @param {Array<{ spellUuid: string, label?: string, usesPerDay?: number, atWill?: boolean, casterLevel?: number, classItemId?: string, _source: CgsSourceEntry }>} atoms
+ * @returns {MergedSpellGrantRow[]}
+ */
+export function mergeSpellGrantRows(atoms) {
+    if (!Array.isArray(atoms) || atoms.length === 0) return [];
+    /** @type {Map<string, { spellUuid: string, sources: CgsSourceEntry[], label?: string, usesPerDay?: number, atWill: boolean, casterLevel?: number, classItemId?: string }>} */
+    const map = new Map();
+    for (const a of atoms) {
+        if (!a || typeof a !== "object") continue;
+        const su = typeof a.spellUuid === "string" ? a.spellUuid.trim() : "";
+        if (!su) continue;
+        const src = a._source && typeof a._source === "object" ? a._source : { label: "Unknown source" };
+        const label = typeof src.label === "string" ? src.label : "Unknown source";
+        /** @type {CgsSourceEntry} */
+        const sourceEntry = { label };
+        if (src.sourceRef && typeof src.sourceRef === "object") sourceEntry.sourceRef = src.sourceRef;
+
+        const existing = map.get(su);
+        if (!existing) {
+            const ud = a.usesPerDay;
+            const uses = typeof ud === "number" && Number.isFinite(ud) ? ud : undefined;
+            const cl = a.casterLevel;
+            const casterLevel = typeof cl === "number" && Number.isFinite(cl) ? cl : undefined;
+            const cid = typeof a.classItemId === "string" ? a.classItemId.trim() : "";
+            const gl = typeof a.label === "string" ? a.label.trim() : "";
+            map.set(su, {
+                spellUuid: su,
+                sources: [sourceEntry],
+                ...(gl ? { label: gl } : {}),
+                ...(uses !== undefined ? { usesPerDay: uses } : {}),
+                atWill: a.atWill === true,
+                ...(casterLevel !== undefined ? { casterLevel } : {}),
+                ...(cid ? { classItemId: cid } : {})
+            });
+        } else {
+            existing.sources.push(sourceEntry);
+            if (!existing.label && typeof a.label === "string" && a.label.trim()) existing.label = a.label.trim();
+            const ud = a.usesPerDay;
+            if (typeof ud === "number" && Number.isFinite(ud)) {
+                existing.usesPerDay = (existing.usesPerDay ?? 0) + ud;
+            }
+            if (a.atWill === true) existing.atWill = true;
+            const cl = a.casterLevel;
+            if (typeof cl === "number" && Number.isFinite(cl)) {
+                existing.casterLevel =
+                    existing.casterLevel === undefined ? cl : Math.max(existing.casterLevel, cl);
+            }
+            if (!existing.classItemId) {
+                const cid = typeof a.classItemId === "string" ? a.classItemId.trim() : "";
+                if (cid) existing.classItemId = cid;
+            }
+        }
+    }
+    return [...map.values()].map((row) => {
+        const mergedSources = dedupeCgsSourceEntries(row.sources);
+        /** @type {MergedSpellGrantRow} */
+        const out = {
+            spellUuid: row.spellUuid,
+            sources: mergedSources
+        };
+        if (row.label) out.label = row.label;
+        if (row.usesPerDay !== undefined) out.usesPerDay = row.usesPerDay;
+        if (row.atWill) out.atWill = true;
+        if (row.casterLevel !== undefined) out.casterLevel = row.casterLevel;
+        if (row.classItemId) out.classItemId = row.classItemId;
+        return out;
+    });
+}
+
+/**
  * Stage B: remove sense rows whose type is covered by active `senseSuppression` grants (union of scopes).
  * `suppressionGrants` entries are raw grants with `_suppressingSource` from merge (contribution provenance).
  *
@@ -345,6 +419,8 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
     const out = createEmptyCapabilityGrants();
     /** @type {Array<{ senseType: string, range?: string, label?: string, _source: CgsSourceEntry }>} */
     const senseAtoms = [];
+    /** @type {Array<{ spellUuid: string, label?: string, usesPerDay?: number, atWill?: boolean, casterLevel?: number, classItemId?: string, _source: CgsSourceEntry }>} */
+    const spellGrantAtoms = [];
 
     for (const c of contributions) {
         const srcLabel = typeof c.label === "string" ? c.label : "";
@@ -369,9 +445,29 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
                 const entry = cloneSenseSuppressionGrantForMerge(g);
                 entry._suppressingSource = baseSource;
                 out.senseSuppressions.grants.push(entry);
+            } else if (cat === "spellGrant") {
+                const spellUuid = typeof g.spellUuid === "string" ? g.spellUuid.trim() : "";
+                if (!spellUuid) continue;
+                const ud = g.usesPerDay;
+                const usesPerDay = typeof ud === "number" && Number.isFinite(ud) ? ud : undefined;
+                const cl = g.casterLevel;
+                const casterLevel = typeof cl === "number" && Number.isFinite(cl) ? cl : undefined;
+                const classItemIdRaw = g.classItemId;
+                const classItemId = typeof classItemIdRaw === "string" ? classItemIdRaw.trim() : "";
+                spellGrantAtoms.push({
+                    spellUuid,
+                    label: typeof g.label === "string" ? g.label : undefined,
+                    ...(usesPerDay !== undefined ? { usesPerDay } : {}),
+                    ...(g.atWill === true ? { atWill: true } : {}),
+                    ...(casterLevel !== undefined ? { casterLevel } : {}),
+                    ...(classItemId ? { classItemId } : {}),
+                    _source: baseSource
+                });
             }
         }
     }
+
+    out.spellGrants.rows = mergeSpellGrantRows(spellGrantAtoms);
 
     const sensesUnionRows = mergeSenseRows(senseAtoms, deps);
     const { effectiveRows, suppressedSenseRows } = applySenseSuppressions(

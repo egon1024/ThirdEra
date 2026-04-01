@@ -168,6 +168,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             // Spell shortlist for full-list prepared casters (cleric, druid): classItemId -> spell item IDs to show in "Ready to cast"
             spellShortlistByClass: new ObjectField({ initial: {}, label: "Spell Shortlist by Class" }),
 
+            /** Casts today via CGS grant Cast (SLA-style), keyed by merged `spellUuid` — separate from spell item `system.cast` */
+            cgsSpellGrantCasts: new ObjectField({ required: false, initial: {}, label: "CGS Spell Grant Casts" }),
+
             /** Actor-level CGS authoring (senses, …); merged into derived system.cgs */
             cgsGrants: new SchemaField(
                 {
@@ -197,6 +200,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             source.cgsGrants = { senses: [] };
         } else if (!Array.isArray(source.cgsGrants.senses)) {
             source.cgsGrants.senses = [];
+        }
+        if (!source.cgsSpellGrantCasts || typeof source.cgsSpellGrantCasts !== "object") {
+            source.cgsSpellGrantCasts = {};
         }
         return super.migrateData(source);
     }

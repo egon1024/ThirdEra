@@ -157,7 +157,7 @@ export class TakeRestDialog extends foundry.applications.api.HandlebarsApplicati
             }
         }
 
-        // 2) Reset cast counts
+        // 2) Reset cast counts (embedded spells + CGS SLA grant counters)
         if (resetCast) {
             const toReset = actor.items.filter(
                 (i) => i.type === "spell" && (i.system?.cast ?? 0) !== 0
@@ -170,6 +170,15 @@ export class TakeRestDialog extends foundry.applications.api.HandlebarsApplicati
                 summaryParts.push(
                     game.i18n.format("THIRDERA.Rest.ChatSummaryResetCast", { count: toReset.length })
                 );
+            }
+            const cg = actor.system?.cgsSpellGrantCasts;
+            if (cg && typeof cg === "object") {
+                const anyCgs = Object.values(cg).some((v) => (Number(v) || 0) !== 0);
+                if (anyCgs) {
+                    await actor.update({ "system.cgsSpellGrantCasts": {} });
+                    changed = true;
+                    summaryParts.push(game.i18n.localize("THIRDERA.Rest.ChatSummaryResetCgsGrantCasts"));
+                }
             }
         }
 

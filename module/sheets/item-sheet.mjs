@@ -9,6 +9,7 @@ import {
 } from "../logic/cgs-stale-item-sheet-sync.mjs";
 import { getSystemChangesFromForm } from "../logic/mechanical-effects-form.mjs";
 import { SkillPickerDialog } from "../applications/skill-picker-dialog.mjs";
+import { buildSpellGrantSheetRowsFromGrants } from "../logic/cgs-spell-grant-item-sheet.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -73,7 +74,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addPrerequisiteFeat: ThirdEraItemSheet.onAddPrerequisiteFeat,
             removePrerequisiteFeat: ThirdEraItemSheet.onRemovePrerequisiteFeat,
             addCgsSense: ThirdEraItemSheet.onAddCgsSense,
-            removeCgsSense: ThirdEraItemSheet.onRemoveCgsSense
+            removeCgsSense: ThirdEraItemSheet.onRemoveCgsSense,
+            addCgsSpellGrant: ThirdEraItemSheet.onAddCgsSpellGrant,
+            removeCgsSpellGrant: ThirdEraItemSheet.onRemoveCgsSpellGrant
         }
     };
 
@@ -163,6 +166,20 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 ev.preventDefault();
                 ev.stopImmediatePropagation();
             }, true);
+        }
+        if (partId === "sheet" && ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) {
+            const formCgs = this.element?.tagName === "FORM" ? this.element : this.element?.querySelector?.("form");
+            formCgs?.addEventListener(
+                "change",
+                (ev) => {
+                    const el = ev.target;
+                    if (!el?.classList?.contains?.("cgs-spell-grant-field")) return;
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                    ThirdEraItemSheet.onCgsSpellGrantFieldChange(this, el).catch(() => {});
+                },
+                true
+            );
         }
         // Mechanical effects table: save on blur and Enter (condition, feat, race, armor, weapon, equipment)
         if (partId === "sheet") {
@@ -561,6 +578,25 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
             systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
         }
+        const grantsForSpellUi = Array.isArray(systemForContext?.cgsGrants?.grants)
+            ? systemForContext.cgsGrants.grants
+            : Array.isArray(systemData?.cgsGrants?.grants)
+              ? systemData.cgsGrants.grants
+              : [];
+        /** @type {ReturnType<typeof buildSpellGrantSheetRowsFromGrants>} */
+        let cgsSpellGrantRows = [];
+        if (ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(item.type)) {
+            const spellNameForUuid = (uuid) => {
+                try {
+                    const d = foundry.utils.fromUuidSync(uuid);
+                    return (d?.name && String(d.name)) || "";
+                } catch (_) {
+                    return "";
+                }
+            };
+            cgsSpellGrantRows = buildSpellGrantSheetRowsFromGrants(grantsForSpellUi, { spellNameForUuid });
+        }
+
         if (item.type === "class") {
             const rawSystem = item._source?.system ?? item.toObject?.()?.system;
             const systemPlain = (rawSystem && typeof rawSystem === "object")
@@ -612,7 +648,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             // Key options for mechanical effects table (condition, feat, race, armor, weapon, equipment)
             changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "race" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
-            modifierChangeKeys: (item.type === "feat" || item.type === "race" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {}
+            modifierChangeKeys: (item.type === "feat" || item.type === "race" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
+            cgsSpellGrantRows
         };
     }
 
@@ -886,8 +923,15 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             });
         });
 
-        // Enable drag-and-drop for class, race, spell, school, and domain item sheets
-        if (this.document.type === "class" || this.document.type === "race" || this.document.type === "spell" || this.document.type === "school" || this.document.type === "domain") {
+        // Drag-and-drop: class/race/spell/school/domain (existing); feat/feature/armor/weapon/equipment for CGS spell-grant rows.
+        const dropSheetTypes =
+            this.document.type === "class" ||
+            this.document.type === "race" ||
+            this.document.type === "spell" ||
+            this.document.type === "school" ||
+            this.document.type === "domain" ||
+            ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document.type);
+        if (dropSheetTypes) {
             const DragDropImpl = foundry.applications?.ux?.DragDrop?.implementation;
             if (DragDropImpl) {
                 new DragDropImpl({
@@ -953,7 +997,56 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             const doc = await foundry.utils.fromUuid(data.uuid);
             if (doc?.documentName === "Item") droppedItem = doc;
         }
-        if (!droppedItem) return;
+        if (!droppedItem) {
+            return;
+        }
+
+        const spellGrantDropRow = event.target.closest?.("[data-cgs-spell-grant-drop]");
+        const spellGrantPanel = event.target.closest?.(".cgs-spell-grants-panel");
+        const inCgsItemUi = ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document.type);
+        const spellDropOnGrantUi =
+            inCgsItemUi && droppedItem.type === "spell" && (spellGrantDropRow || spellGrantPanel);
+        if (spellDropOnGrantUi) {
+            if (!this.isEditable) {
+                ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+                return;
+            }
+            const doc = this.document;
+            const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+            const spellUuid = (droppedItem.uuid ?? "").trim();
+            if (!spellUuid) {
+                return;
+            }
+
+            if (spellGrantDropRow) {
+                const idx = parseInt(spellGrantDropRow.dataset.cgsSpellGrantIndex, 10);
+                if (Number.isNaN(idx)) {
+                    return;
+                }
+                const row = grants[idx];
+                if (!row || row.category !== "spellGrant") {
+                    ui.notifications?.warn?.(game.i18n.localize("THIRDERA.CGS.SpellGrantDropWrongRow"));
+                    return;
+                }
+                grants[idx] = { ...grants[idx], category: "spellGrant", spellUuid };
+            } else {
+                grants.push({ category: "spellGrant", spellUuid });
+            }
+
+            const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+            const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+            const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+            try {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+                await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+                await this.render(true);
+            } catch (err) {
+                const msg = err instanceof Error ? err.message : String(err);
+                ui.notifications?.error?.(msg);
+            }
+            return;
+        }
 
         // Handle school drops on spell or school sheets
         if (droppedItem.type === "school" && (this.document.type === "spell" || this.document.type === "school")) {
@@ -2308,15 +2401,15 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     static #itemTypesWithCgsSensesUi = new Set(["race", "feat", "feature", "armor", "weapon", "equipment"]);
 
     /**
-     * Build a plain `{ grants, senses }` for `system.cgsGrants` from the live item model (duplicate, not references).
+     * Build a plain `{ grants, senses }` for `system.cgsGrants` (duplicate, not references).
      * @param {Item} doc
-     * @param {Array<{ type: string, range: string }>} senses
-     * @returns {{ grants: unknown[], senses: Array<{ type: string, range: string }> }}
+     * @param {{ grants?: unknown[], senses?: unknown[] }} [overrides]  If omitted, pulls current doc slices for that key.
+     * @returns {{ grants: unknown[], senses: unknown[] }}
      */
-    static #plainCgsGrantsClone(doc, senses) {
+    static #plainCgsPayload(doc, overrides = {}) {
         return {
-            grants: foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []),
-            senses: foundry.utils.duplicate(senses)
+            grants: foundry.utils.duplicate(overrides.grants ?? doc.system?.cgsGrants?.grants ?? []),
+            senses: foundry.utils.duplicate(overrides.senses ?? doc.system?.cgsGrants?.senses ?? [])
         };
     }
 
@@ -2394,7 +2487,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
         const newRow = ThirdEraItemSheet.#defaultNewCgsSenseRow();
         senses.push(newRow);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsGrantsClone(doc, senses);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { senses });
         try {
             await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
@@ -2423,11 +2516,124 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
         if (idx < 0 || idx >= senses.length) return;
         senses.splice(idx, 1);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsGrantsClone(doc, senses);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { senses });
         try {
             await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /** Add a `spellGrant` row to `system.cgsGrants.grants` (same item types as CGS senses UI). */
+    static async onAddCgsSpellGrant(event, _target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const doc = this.document;
+        const tab = event?.target?.closest?.(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        grants.push({ category: "spellGrant", spellUuid: "" });
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /** Remove one `spellGrant` row by `data-cgs-spell-grant-index` (full grants-array index). */
+    static async onRemoveCgsSpellGrant(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const doc = this.document;
+        const tab = target?.closest?.(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const row = target?.closest?.("[data-cgs-spell-grant-index]");
+        const idx = parseInt(row?.dataset?.cgsSpellGrantIndex ?? target?.dataset?.cgsSpellGrantIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const g = grants[idx];
+        if (!g || g.category !== "spellGrant") return;
+        grants.splice(idx, 1);
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /**
+     * Persist a field on one spellGrant row (inputs have no `name`; avoids submitOnChange clobbering `grants`).
+     * @param {ThirdEraItemSheet} sheet
+     * @param {HTMLElement} el
+     */
+    static async onCgsSpellGrantFieldChange(sheet, el) {
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(sheet.document?.type)) return;
+        if (!sheet.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const field = el.dataset?.spellGrantField;
+        const rowEl = el.closest("[data-cgs-spell-grant-index]");
+        const idx = parseInt(rowEl?.dataset?.cgsSpellGrantIndex, 10);
+        if (!field || Number.isNaN(idx)) return;
+        const doc = sheet.document;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const g = grants[idx];
+        if (!g || g.category !== "spellGrant") return;
+
+        if (el.type === "checkbox" && field === "atWill") {
+            if (el.checked) {
+                g.atWill = true;
+                delete g.usesPerDay;
+            } else {
+                delete g.atWill;
+            }
+        } else if (field === "usesPerDay" || field === "casterLevel") {
+            const raw = String(el.value ?? "").trim();
+            if (raw === "" || raw === "-") {
+                delete g[field];
+            } else {
+                const n = Number(raw);
+                if (Number.isFinite(n)) g[field] = field === "usesPerDay" ? Math.max(0, Math.trunc(n)) : n;
+                else delete g[field];
+            }
+        } else if (field === "classItemId" || field === "label") {
+            const s = String(el.value ?? "").trim();
+            if (s) g[field] = s;
+            else delete g[field];
+        }
+
+        const tab = rowEl?.closest?.(".tab");
+        if (tab) sheet._preservedScrollTop = tab.scrollTop;
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(sheet);
+            await sheet.render(true);
         } catch (err) {
             const msg = err instanceof Error ? err.message : String(err);
             ui.notifications?.error?.(msg);

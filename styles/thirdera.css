@@ -1576,12 +1576,186 @@ form.thirdera.sheet.flexcol > .sheet-body {
   isolation: isolate;
   /* Opaque backdrop so later siblings never show through when scroll/stacking glitches. */
   background: var(--color-bg-parchment);
-  padding-bottom: 4px;
+  padding-bottom: 12px;
 }
 .thirdera.sheet.item .sheet-body .tab .cgs-item-grants-block .cgs-item-grants-panel {
   position: relative;
   z-index: auto;
 }
+
+/* Item sheet: spell / SLA grant rows (capability grants) */
+.thirdera.sheet.item .cgs-spell-grants-panel {
+  margin-top: 10px;
+  padding-bottom: 12px;
+}
+.thirdera.sheet.item .cgs-item-grants-block .cgs-spell-grants-panel .notes {
+  margin: 4px 0 8px 0;
+}
+.thirdera.sheet.item .cgs-spell-grants-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* Editable row: grid — row1: spell | fields | delete; row2: drop hint full width under spell+fields. */
+.thirdera.sheet.item .cgs-spell-grant-row:not(.cgs-spell-grant-row-readonly) {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) minmax(0, 2.6fr) auto;
+  grid-template-rows: auto auto;
+  gap: 8px 12px;
+  align-items: start;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+.thirdera.sheet.item .cgs-spell-grant-row-readonly {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+.thirdera.sheet.item .cgs-spell-grant-row:last-child {
+  border-bottom: none;
+}
+.thirdera.sheet.item .cgs-spell-grant-row:not(.cgs-spell-grant-row-readonly) .cgs-spell-grant-spell {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  align-self: start;
+}
+.thirdera.sheet.item .cgs-spell-grant-row-readonly .cgs-spell-grant-spell {
+  flex: 0 1 auto;
+  max-width: min(280px, 100%);
+  gap: 3px;
+}
+.thirdera.sheet.item .cgs-spell-grant-fields {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.thirdera.sheet.item .cgs-spell-grant-line-primary,
+.thirdera.sheet.item .cgs-spell-grant-line-secondary {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 10px;
+}
+.thirdera.sheet.item .cgs-spell-grant-line-secondary {
+  width: 100%;
+}
+/* At will: hide uses/day (still cleared on save when checked). */
+.thirdera.sheet.item .cgs-spell-grant-fields:has(.cgs-spell-grant-atwill input[data-spell-grant-field="atWill"]:checked) .cgs-spell-grant-uses {
+  display: none;
+}
+.thirdera.sheet.item .cgs-spell-grant-name {
+  font-weight: var(--font-weight-bold, 600);
+  line-height: 1.25;
+  word-break: break-word;
+}
+.thirdera.sheet.item .cgs-spell-grant-row:not(.cgs-spell-grant-row-readonly) .cgs-spell-grant-drop-hint {
+  /* Under spell + field columns only; column 3 stays for delete */
+  grid-column: 1 / 3;
+  grid-row: 2;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8em;
+  line-height: 1.25;
+  opacity: 0.85;
+  border: none;
+}
+.thirdera.sheet.item .cgs-spell-grant-field-label {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  margin-bottom: 2px;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.thirdera.sheet.item .cgs-spell-grant-atwill {
+  flex: 0 0 auto;
+  margin: 0;
+}
+.thirdera.sheet.item .cgs-spell-grant-atwill .cgs-spell-grant-field-label {
+  white-space: normal;
+}
+.thirdera.sheet.item .cgs-spell-grant-atwill input[type="checkbox"] {
+  margin: 0;
+  align-self: flex-start;
+}
+.thirdera.sheet.item .cgs-spell-grant-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  min-width: 0;
+}
+.thirdera.sheet.item .cgs-spell-grant-stack-narrow {
+  flex: 0 0 auto;
+  width: auto;
+}
+/* Must beat .cgs-spell-grant-stack .details-input { width: 100% } so number fields stay compact */
+.thirdera.sheet.item .cgs-spell-grant-stack.cgs-spell-grant-stack-narrow .details-input {
+  width: 5.5ch;
+  min-width: 4.5ch;
+  max-width: 8ch;
+  flex: 0 0 auto;
+  padding: 1px 4px;
+  min-height: 1.45rem;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+.thirdera.sheet.item .cgs-spell-grant-stack .details-input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.thirdera.sheet.item .cgs-spell-grant-fields .cgs-spell-grant-label-field .details-input {
+  width: 100%;
+  max-width: min(180px, 100%);
+  padding: 2px 6px;
+  min-height: 1.45rem;
+  line-height: 1.2;
+}
+.thirdera.sheet.item .cgs-spell-grant-stack-grow {
+  flex: 1 1 140px;
+  min-width: 100px;
+}
+.thirdera.sheet.item .cgs-spell-grant-line-secondary .cgs-spell-grant-stack-grow {
+  flex: 1 1 min(140px, 100%);
+  max-width: min(220px, 100%);
+}
+.thirdera.sheet.item .cgs-spell-grant-stack-grow .cgs-spell-grant-field-label {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+.thirdera.sheet.item .cgs-spell-grant-row:not(.cgs-spell-grant-row-readonly) button.cgs-spell-grant-remove {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  padding: 6px 8px;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+}
+.thirdera.sheet.item .cgs-spell-grants-add {
+  margin-top: 8px;
+}
+
 .thirdera.sheet.item .sheet-body .tab .mechanical-effects-section {
   position: relative;
   z-index: 0;
@@ -3013,6 +3187,12 @@ form.thirdera.sheet.flexcol > .sheet-body {
 .chat-message .flavor-text .thirdera-roll-outcome--failure {
   color: var(--color-level-error, #ce0707);
   font-weight: var(--font-weight-bold, 600);
+}
+.chat-message .flavor-text .cast-grant-source {
+  font-size: 0.85em;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  margin: 0.25em 0 0;
 }
 
 /* Checkbox groups — labels inline with checkboxes */
@@ -4756,6 +4936,122 @@ form.thirdera.sheet.flexcol > .sheet-body {
   font-size: var(--font-size-value);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
+}
+
+.thirdera .tab.spells .spellcasting-header.spellcasting-header--compact {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .tab.spells .cgs-granted-spells-known .cgs-granted-spell-ready-controls {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.thirdera .tab.spells .cgs-granted-spells-known .cgs-granted-spell-cast {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.thirdera .tab.spells .cgs-granted-spells-known .cgs-grant-channel-badge {
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  background: var(--color-bg-option, rgba(0, 0, 0, 0.08));
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+}
+
+/* Ready to cast: capability-grant rows (same list as class spells, visually grouped) */
+.thirdera .tab.spells .spells-ready .spell-item.spell-item--cgs-grant {
+  border-left: 3px solid var(--color-border-highlight, var(--color-primary, #6b6b8a));
+  padding-left: 8px;
+  margin-left: 2px;
+  background: var(--color-bg-option, rgba(0, 0, 0, 0.04));
+}
+
+.thirdera .tab.spells .spells-ready .cgs-grant-channel-badge--rtc {
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  background: var(--color-bg-option, rgba(0, 0, 0, 0.1));
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+}
+
+/* RTC: capability-grant panel directly under class header, above normal ready lists */
+.thirdera .tab.spells .spells-ready .rtc-class-capability-grants-sheet {
+  margin-top: 8px;
+  margin-bottom: 14px;
+  padding: 12px 12px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border-highlight, var(--color-border-divider));
+  background: var(--color-bg-option, rgba(0, 0, 0, 0.07));
+}
+
+.thirdera .tab.spells .spells-ready .rtc-class-capability-grants-sheet-header {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border-divider);
+}
+
+.thirdera .tab.spells .spells-ready .rtc-class-capability-grants-sheet-title {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.thirdera .tab.spells .spells-ready .rtc-class-capability-grants-class-name {
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
+}
+
+.thirdera .tab.spells .spells-ready .rtc-capability-grants-hint {
+  margin: 0;
+  font-size: var(--font-size-note);
+  color: var(--color-text-secondary);
+  line-height: 1.35;
+}
+
+.thirdera .tab.spells .spells-ready .rtc-cgs-grant-level-subsection {
+  margin-top: 10px;
+}
+
+.thirdera .tab.spells .spells-ready .rtc-class-capability-grants-sheet-header + .rtc-cgs-grant-level-subsection {
+  margin-top: 0;
+}
+
+.thirdera .tab.spells .spells-ready .rtc-cgs-grant-level-title {
+  margin: 0 0 6px;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+}
+
+.thirdera .tab.spells .spells-ready .spells-list--capability-grants {
+  margin-top: 4px;
+}
+
+.thirdera .tab.spells .cgs-granted-spells-known .cgs-grant-cast-meta {
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.thirdera .tab.spells .cgs-granted-spells-known .cast-spell-btn--cgs-grant {
+  border-color: var(--color-border-highlight, var(--color-border-divider));
 }
 
 .thirdera .tab.spells .spellcasting-info {

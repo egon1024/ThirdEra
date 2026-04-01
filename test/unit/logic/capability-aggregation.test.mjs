@@ -7,6 +7,7 @@ import {
     formatMergedSenseLabel,
     getActiveCapabilityGrants,
     mergeCapabilityGrantContributions,
+    mergeSpellGrantRows,
     mergeSenseRows,
     normalizeSenseRangeKey,
     registerCapabilitySourceProviders
@@ -88,7 +89,52 @@ describe("mergeSenseRows", () => {
     });
 });
 
+describe("mergeSpellGrantRows", () => {
+    it("dedupes by spellUuid and merges sources", () => {
+        const rows = mergeSpellGrantRows([
+            {
+                spellUuid: "Compendium.x.spells.Item.abc",
+                usesPerDay: 1,
+                _source: { label: "Feat A" }
+            },
+            {
+                spellUuid: "Compendium.x.spells.Item.abc",
+                usesPerDay: 2,
+                atWill: false,
+                _source: { label: "Feat B", sourceRef: { kind: "item", uuid: "Item.y" } }
+            }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].spellUuid).toBe("Compendium.x.spells.Item.abc");
+        expect(rows[0].sources.map((s) => s.label).sort()).toEqual(["Feat A", "Feat B"]);
+        expect(rows[0].usesPerDay).toBe(3);
+    });
+});
+
 describe("mergeCapabilityGrantContributions", () => {
+    it("merges spellGrant category into spellGrants.rows", () => {
+        const merged = mergeCapabilityGrantContributions([
+            {
+                label: "Magic trick",
+                sourceRef: { kind: "item", uuid: "Item.feat1" },
+                grants: [
+                    {
+                        category: "spellGrant",
+                        spellUuid: "Compendium.pack.spells.Item.zzz",
+                        usesPerDay: 1,
+                        atWill: true
+                    }
+                ]
+            }
+        ]);
+        expect(merged.spellGrants.rows).toHaveLength(1);
+        const r = merged.spellGrants.rows[0];
+        expect(r.spellUuid).toBe("Compendium.pack.spells.Item.zzz");
+        expect(r.atWill).toBe(true);
+        expect(r.usesPerDay).toBe(1);
+        expect(r.sources[0].label).toBe("Magic trick");
+    });
+
     it("Stage B: allVision suppression removes senses from effective rows; union + raw grants kept", () => {
         const merged = mergeCapabilityGrantContributions(
             [

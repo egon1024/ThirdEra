@@ -1068,6 +1068,9 @@
         {{!-- Known / Available panel: roster only, no prepared/cast; Add to ready for full-list --}}
         <div class="subtab spells-known {{#if (eq tabs.spells 'known')}}active{{/if}}" data-group="spells" data-tab="known">
           {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-known-search" inputName="spellKnownSearch" placeholderKey="THIRDERA.Spells.SearchPlaceholder" noResultsKey="THIRDERA.Spells.SearchNoResults"}}
+          {{#if hasCgsGrantedSpells}}
+          {{> "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs"}}
+          {{/if}}
           {{!-- Manually added spells: not on any class list or domain; e.g. dropped without class assignment --}}
           {{#if hasManuallyAddedSpells}}
             <div class="spellcasting-class manually-added-spells">
@@ -1304,8 +1307,9 @@
                     <span class="spell-dc">Spell DC: {{classData.baseSpellDC}} + spell level</span>
                   </div>
                 </div>
+                {{> "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs" classData=classData}}
                 {{#each classData.spellsByLevel as |spells spellLevel|}}
-                  {{#if (or spells.length (gt (lookup classData.spellsPerDay spellLevel) 0))}}
+                  {{#if (lookup classData.rtcLevelVisible spellLevel)}}
                     <div class="spell-level-group{{#if (lookup classData.spellsKnownOverLimit spellLevel)}} spell-level-over-limit{{/if}}">
                       <div class="spell-level-header">
                         <h5>{{#if (eq spellLevel "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal spellLevel}} Level{{/if}}</h5>
