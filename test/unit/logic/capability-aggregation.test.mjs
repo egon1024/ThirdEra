@@ -7,6 +7,9 @@ import {
     formatMergedSenseLabel,
     getActiveCapabilityGrants,
     mergeCapabilityGrantContributions,
+    mergeDamageReductionRows,
+    mergeEnergyResistanceRows,
+    mergeImmunityRows,
     mergeSpellGrantRows,
     mergeSenseRows,
     normalizeSenseRangeKey,
@@ -119,6 +122,144 @@ describe("mergeSpellGrantRows", () => {
     });
 });
 
+describe("mergeImmunityRows (Phase 5e)", () => {
+    it("dedupes by tag and merges sources", () => {
+        const rows = mergeImmunityRows([
+            { tag: "fire", _source: { label: "Red dragon" } },
+            { tag: "fire", _source: { label: "Ring of fire immunity", sourceRef: { kind: "item", uuid: "Item.ring1" } } },
+            { tag: "poison", _source: { label: "Construct type" } }
+        ], { immunityTagLabels: { fire: "Fire", poison: "Poison" } });
+        expect(rows).toHaveLength(2);
+        const fire = rows.find(r => r.tag === "fire");
+        expect(fire).toBeDefined();
+        expect(fire?.sources).toHaveLength(2);
+        expect(fire?.sources.map(s => s.label).sort()).toEqual(["Red dragon", "Ring of fire immunity"]);
+        expect(fire?.label).toBe("Fire");
+        const poison = rows.find(r => r.tag === "poison");
+        expect(poison?.label).toBe("Poison");
+    });
+
+    it("uses tag as label fallback when no labels provided", () => {
+        const rows = mergeImmunityRows([
+            { tag: "customImmunity", _source: { label: "Mystery" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].tag).toBe("customImmunity");
+        expect(rows[0].label).toBe("customImmunity");
+    });
+
+    it("returns empty array for empty input", () => {
+        expect(mergeImmunityRows([])).toEqual([]);
+        expect(mergeImmunityRows(null)).toEqual([]);
+    });
+
+    it("skips invalid atoms", () => {
+        const rows = mergeImmunityRows([
+            null,
+            { tag: "", _source: { label: "Empty tag" } },
+            { tag: "sleep", _source: { label: "Elf racial" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].tag).toBe("sleep");
+    });
+});
+
+describe("mergeEnergyResistanceRows (Phase 5e)", () => {
+    it("dedupes by energyType and takes MAX value", () => {
+        const rows = mergeEnergyResistanceRows([
+            { energyType: "fire", amount: 10, _source: { label: "Armor" } },
+            { energyType: "fire", amount: 20, _source: { label: "Ring", sourceRef: { kind: "item", uuid: "Item.ring2" } } },
+            { energyType: "cold", amount: 5, _source: { label: "Racial" } }
+        ], { energyTypeLabels: { fire: "Fire", cold: "Cold" } });
+        expect(rows).toHaveLength(2);
+        const fire = rows.find(r => r.energyType === "fire");
+        expect(fire).toBeDefined();
+        expect(fire?.amount).toBe(20);
+        expect(fire?.sources).toHaveLength(2);
+        expect(fire?.label).toBe("Fire 20");
+        const cold = rows.find(r => r.energyType === "cold");
+        expect(cold?.amount).toBe(5);
+        expect(cold?.label).toBe("Cold 5");
+    });
+
+    it("accumulates sources even when lower amount", () => {
+        const rows = mergeEnergyResistanceRows([
+            { energyType: "acid", amount: 30, _source: { label: "High" } },
+            { energyType: "acid", amount: 10, _source: { label: "Low" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].amount).toBe(30);
+        expect(rows[0].sources).toHaveLength(2);
+    });
+
+    it("returns empty array for empty input", () => {
+        expect(mergeEnergyResistanceRows([])).toEqual([]);
+    });
+
+    it("skips invalid atoms", () => {
+        const rows = mergeEnergyResistanceRows([
+            null,
+            { energyType: "", amount: 10, _source: { label: "No type" } },
+            { energyType: "sonic", amount: 15, _source: { label: "Valid" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].energyType).toBe("sonic");
+    });
+});
+
+describe("mergeDamageReductionRows (Phase 5e)", () => {
+    it("keeps all DR rows with distinct value+bypass combinations", () => {
+        const rows = mergeDamageReductionRows([
+            { value: 10, bypass: "magic", _source: { label: "Stoneskin" } },
+            { value: 5, bypass: "silver", _source: { label: "Lycanthrope" } },
+            { value: 10, bypass: "adamantine", _source: { label: "Golem" } }
+        ], { drBypassLabels: { magic: "Magic", silver: "Silver", adamantine: "Adamantine" } });
+        expect(rows).toHaveLength(3);
+        expect(rows.map(r => `${r.value}/${r.bypass}`).sort()).toEqual(["10/adamantine", "10/magic", "5/silver"]);
+    });
+
+    it("merges sources for same value+bypass (case-insensitive key, preserves first bypass)", () => {
+        const rows = mergeDamageReductionRows([
+            { value: 10, bypass: "magic", _source: { label: "Spell A" } },
+            { value: 10, bypass: "MAGIC", _source: { label: "Spell B" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].sources).toHaveLength(2);
+        expect(rows[0].label).toBe("10/magic");
+    });
+
+    it("uses bypass as label when not in drBypassLabels", () => {
+        const rows = mergeDamageReductionRows([
+            { value: 15, bypass: "epic", _source: { label: "Epic DR" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].label).toBe("15/epic");
+    });
+
+    it("handles empty bypass as '—'", () => {
+        const rows = mergeDamageReductionRows([
+            { value: 5, bypass: "", _source: { label: "Universal DR" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].bypass).toBe("");
+        expect(rows[0].label).toBe("5/—");
+    });
+
+    it("skips zero or negative values", () => {
+        const rows = mergeDamageReductionRows([
+            { value: 0, bypass: "magic", _source: { label: "Zero" } },
+            { value: -5, bypass: "silver", _source: { label: "Negative" } },
+            { value: 10, bypass: "cold iron", _source: { label: "Valid" } }
+        ]);
+        expect(rows).toHaveLength(1);
+        expect(rows[0].value).toBe(10);
+    });
+
+    it("returns empty array for empty input", () => {
+        expect(mergeDamageReductionRows([])).toEqual([]);
+    });
+});
+
 describe("mergeCapabilityGrantContributions", () => {
     it("merges spellGrant category into spellGrants.rows", () => {
         const merged = mergeCapabilityGrantContributions([
@@ -176,6 +317,80 @@ describe("mergeCapabilityGrantContributions", () => {
         expect(merged.senses.suppressed[0].suppressingSources.map(s => s.label)).toEqual(["Blindness"]);
         expect(merged.senseSuppressions.grants).toHaveLength(1);
         expect(merged.senseSuppressions.grants[0].scope).toBe("allVision");
+    });
+
+    it("merges immunity grants into immunities.rows (Phase 5e)", () => {
+        const merged = mergeCapabilityGrantContributions([
+            {
+                label: "Construct traits",
+                grants: [
+                    { category: "immunity", tag: "poison" },
+                    { category: "immunity", tag: "sleep" },
+                    { category: "immunity", tag: "paralysis" }
+                ]
+            },
+            {
+                label: "Ring of poison immunity",
+                grants: [{ category: "immunity", tag: "poison" }]
+            }
+        ], { immunityTagLabels: { poison: "Poison", sleep: "Sleep effects", paralysis: "Paralysis" } });
+        expect(merged.immunities.rows).toHaveLength(3);
+        const poison = merged.immunities.rows.find(r => r.tag === "poison");
+        expect(poison).toBeDefined();
+        expect(poison?.sources).toHaveLength(2);
+        expect(poison?.label).toBe("Poison");
+    });
+
+    it("merges energyResistance grants into energyResistance.rows with MAX (Phase 5e)", () => {
+        const merged = mergeCapabilityGrantContributions([
+            {
+                label: "Dragon heritage",
+                grants: [{ category: "energyResistance", energyType: "fire", amount: 10 }]
+            },
+            {
+                label: "Greater ring",
+                grants: [{ category: "energyResistance", energyType: "fire", amount: 30 }]
+            }
+        ], { energyTypeLabels: { fire: "Fire" } });
+        expect(merged.energyResistance.rows).toHaveLength(1);
+        expect(merged.energyResistance.rows[0].energyType).toBe("fire");
+        expect(merged.energyResistance.rows[0].amount).toBe(30);
+        expect(merged.energyResistance.rows[0].sources).toHaveLength(2);
+    });
+
+    it("merges damageReduction grants into damageReduction.rows (Phase 5e)", () => {
+        const merged = mergeCapabilityGrantContributions([
+            {
+                label: "Stoneskin spell",
+                grants: [{ category: "damageReduction", value: 10, bypass: "adamantine" }]
+            },
+            {
+                label: "Barbarian DR",
+                grants: [{ category: "damageReduction", value: 5, bypass: "" }]
+            }
+        ]);
+        expect(merged.damageReduction.rows).toHaveLength(2);
+        const stone = merged.damageReduction.rows.find(r => r.bypass === "adamantine");
+        expect(stone?.value).toBe(10);
+        const barb = merged.damageReduction.rows.find(r => r.bypass === "");
+        expect(barb?.value).toBe(5);
+    });
+
+    it("handles mixed grant categories in one contribution", () => {
+        const merged = mergeCapabilityGrantContributions([
+            {
+                label: "Fire elemental",
+                grants: [
+                    { category: "immunity", tag: "fire" },
+                    { category: "energyResistance", energyType: "cold", amount: 0 },
+                    { category: "sense", senseType: "darkvision", range: "60 ft" }
+                ]
+            }
+        ]);
+        expect(merged.immunities.rows).toHaveLength(1);
+        expect(merged.immunities.rows[0].tag).toBe("fire");
+        expect(merged.energyResistance.rows).toHaveLength(0);
+        expect(merged.senses.rows).toHaveLength(1);
     });
 });
 

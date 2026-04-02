@@ -123,3 +123,19 @@ export function enrichCgsSpellGrantRowSourcesForProvenance(sources, ctx) {
     if (!Array.isArray(sources)) return [];
     return sources.map((s) => planCgsSourceDisplay(s, ctx));
 }
+
+/**
+ * Phase 5e: typed defense rows (immunities, energy resistance, damage reduction) → provenance plans.
+ * Each merged row has `.label` and `.sources[]`; same shape as senses.
+ *
+ * @param {Array<{ label?: string, sources?: CgsProvenanceSourceEntry[] }> | null | undefined} rows
+ * @param {Parameters<typeof planCgsSourceDisplay>[1]} ctx
+ * @returns {Array<{ label: string, sources: CgsProvenanceSourcePlan[] }>}
+ */
+export function enrichCgsTypedDefenseRowsForProvenance(rows, ctx) {
+    if (!Array.isArray(rows)) return [];
+    return rows.map((row) => ({
+        label: typeof row?.label === "string" ? row.label : "",
+        sources: Array.isArray(row?.sources) ? row.sources.map((s) => planCgsSourceDisplay(s, ctx)) : []
+    }));
+}

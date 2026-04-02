@@ -10,6 +10,11 @@ import {
 import { getSystemChangesFromForm } from "../logic/mechanical-effects-form.mjs";
 import { SkillPickerDialog } from "../applications/skill-picker-dialog.mjs";
 import { buildSpellGrantSheetRowsFromGrants } from "../logic/cgs-spell-grant-item-sheet.mjs";
+import {
+    buildDamageReductionSheetRowsFromGrants,
+    buildEnergyResistanceSheetRowsFromGrants,
+    buildImmunitySheetRowsFromGrants
+} from "../logic/cgs-typed-defense-item-sheet.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -76,7 +81,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addCgsSense: ThirdEraItemSheet.onAddCgsSense,
             removeCgsSense: ThirdEraItemSheet.onRemoveCgsSense,
             addCgsSpellGrant: ThirdEraItemSheet.onAddCgsSpellGrant,
-            removeCgsSpellGrant: ThirdEraItemSheet.onRemoveCgsSpellGrant
+            removeCgsSpellGrant: ThirdEraItemSheet.onRemoveCgsSpellGrant,
+            addCgsTypedDefense: ThirdEraItemSheet.onAddCgsTypedDefense,
+            removeCgsTypedDefense: ThirdEraItemSheet.onRemoveCgsTypedDefense
         }
     };
 
@@ -177,6 +184,17 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
                     ThirdEraItemSheet.onCgsSpellGrantFieldChange(this, el).catch(() => {});
+                },
+                true
+            );
+            formCgs?.addEventListener(
+                "change",
+                (ev) => {
+                    const el = ev.target;
+                    if (!el?.classList?.contains?.("cgs-defense-field")) return;
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                    ThirdEraItemSheet.onCgsTypedDefenseFieldChange(this, el).catch(() => {});
                 },
                 true
             );
@@ -314,7 +332,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             castingAbilities: CONFIG.THIRDERA?.castingAbilities || {},
             spellListKeys: CONFIG.THIRDERA?.spellListKeys || {},
             spellResistanceChoices: CONFIG.THIRDERA?.spellResistanceChoices || {},
-            senseTypes: CONFIG.THIRDERA?.senseTypes || {}
+            senseTypes: CONFIG.THIRDERA?.senseTypes || {},
+            immunityTags: CONFIG.THIRDERA?.immunityTags || {},
+            energyTypes: CONFIG.THIRDERA?.energyTypes || {},
+            drBypassTypes: CONFIG.THIRDERA?.drBypassTypes || {}
         };
 
         // Enrich HTML description and other fields
@@ -585,6 +606,12 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
               : [];
         /** @type {ReturnType<typeof buildSpellGrantSheetRowsFromGrants>} */
         let cgsSpellGrantRows = [];
+        /** @type {ReturnType<typeof buildImmunitySheetRowsFromGrants>} */
+        let cgsImmunityRows = [];
+        /** @type {ReturnType<typeof buildEnergyResistanceSheetRowsFromGrants>} */
+        let cgsEnergyResistanceRows = [];
+        /** @type {ReturnType<typeof buildDamageReductionSheetRowsFromGrants>} */
+        let cgsDamageReductionRows = [];
         if (ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(item.type)) {
             const spellNameForUuid = (uuid) => {
                 try {
@@ -595,6 +622,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 }
             };
             cgsSpellGrantRows = buildSpellGrantSheetRowsFromGrants(grantsForSpellUi, { spellNameForUuid });
+            cgsImmunityRows = buildImmunitySheetRowsFromGrants(grantsForSpellUi);
+            cgsEnergyResistanceRows = buildEnergyResistanceSheetRowsFromGrants(grantsForSpellUi);
+            cgsDamageReductionRows = buildDamageReductionSheetRowsFromGrants(grantsForSpellUi);
         }
 
         if (item.type === "class") {
@@ -649,7 +679,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "race" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             modifierChangeKeys: (item.type === "feat" || item.type === "race" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
-            cgsSpellGrantRows
+            cgsSpellGrantRows,
+            cgsImmunityRows,
+            cgsEnergyResistanceRows,
+            cgsDamageReductionRows
         };
     }
 
@@ -2656,6 +2689,116 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             } else if (["armor", "weapon", "equipment"].includes(doc.type) && doc.uuid) {
                 await sheet._syncWorldItemToActorCopies();
             }
+        }
+    }
+
+    /** Add a typed defense grant row (immunity, energyResistance, damageReduction) to `system.cgsGrants.grants`. */
+    static async onAddCgsTypedDefense(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const category = target?.dataset?.cgsDefenseCategory;
+        if (!category || !["immunity", "energyResistance", "damageReduction"].includes(category)) return;
+        const doc = this.document;
+        const tab = event?.target?.closest?.(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        if (category === "immunity") {
+            grants.push({ category: "immunity", tag: "" });
+        } else if (category === "energyResistance") {
+            grants.push({ category: "energyResistance", energyType: "", amount: 0 });
+        } else if (category === "damageReduction") {
+            grants.push({ category: "damageReduction", value: 0, bypass: "" });
+        }
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /** Remove one typed defense grant row by `data-cgs-defense-index` (full grants-array index). */
+    static async onRemoveCgsTypedDefense(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const category = target?.dataset?.cgsDefenseCategory;
+        if (!category || !["immunity", "energyResistance", "damageReduction"].includes(category)) return;
+        const doc = this.document;
+        const tab = target?.closest?.(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const row = target?.closest?.("[data-cgs-defense-index]");
+        const idx = parseInt(row?.dataset?.cgsDefenseIndex ?? target?.dataset?.cgsDefenseIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const g = grants[idx];
+        if (!g || g.category !== category) return;
+        grants.splice(idx, 1);
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /**
+     * Persist a field on one typed defense grant row (inputs have no `name`; avoids submitOnChange clobbering `grants`).
+     * @param {ThirdEraItemSheet} sheet
+     * @param {HTMLElement} el
+     */
+    static async onCgsTypedDefenseFieldChange(sheet, el) {
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(sheet.document?.type)) return;
+        if (!sheet.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const field = el.dataset?.defenseField;
+        const category = el.dataset?.cgsDefenseCategory;
+        const rowEl = el.closest("[data-cgs-defense-index]");
+        const idx = parseInt(rowEl?.dataset?.cgsDefenseIndex ?? el.dataset?.cgsDefenseIndex, 10);
+        if (!field || !category || Number.isNaN(idx)) return;
+        const doc = sheet.document;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const g = grants[idx];
+        if (!g || g.category !== category) return;
+
+        if (field === "tag" || field === "energyType" || field === "bypass") {
+            g[field] = String(el.value ?? "").trim();
+        } else if (field === "amount" || field === "value") {
+            const raw = String(el.value ?? "").trim();
+            const n = Number(raw);
+            g[field] = Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
+        }
+
+        const tab = rowEl?.closest?.(".tab");
+        if (tab) sheet._preservedScrollTop = tab.scrollTop;
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(sheet);
+            await sheet.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
         }
     }
 }

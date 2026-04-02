@@ -5,11 +5,18 @@
  * Phase 2: senses Stage A (union + dedupe). Phase 5a: Stage B `applySenseSuppressions` — `senses.rows` are
  * **effective**; `senses.sensesUnionRows` = pre-suppression union; `senses.suppressed` explains removed rows.
  * Phase 5d: `spellGrants.rows` via `mergeSpellGrantRows` (dedupe by `spellUuid`, merged sources + optional meta).
+ * Phase 5e: typed defenses — `immunities.rows` (set by tag), `energyResistance.rows` (max per type),
+ * `damageReduction.rows` (all rows; consumer picks best applicable DR).
+ * Future: energy/immunity/DR label vocabularies may move to compendium Items or CONFIG+Items hybrid; merge uses
+ * injected `deps` label maps — see cgs-phased-implementation.md § "Future — Typed defense catalogs".
  *
  * @typedef {{ label: string, grants: unknown[], sourceRef?: Record<string, unknown> }} CapabilityContribution
  * @typedef {{ label: string, sourceRef?: Record<string, unknown> }} CgsSourceEntry
  * @typedef {{ senseType: string, range: string, label: string, sources: CgsSourceEntry[] }} MergedSenseRow
  * @typedef {{ spellUuid: string, sources: CgsSourceEntry[], label?: string, usesPerDay?: number, atWill?: boolean, casterLevel?: number, classItemId?: string }} MergedSpellGrantRow
+ * @typedef {{ tag: string, label: string, sources: CgsSourceEntry[] }} MergedImmunityRow
+ * @typedef {{ energyType: string, amount: number, label: string, sources: CgsSourceEntry[] }} MergedEnergyResistanceRow
+ * @typedef {{ value: number, bypass: string, label: string, sources: CgsSourceEntry[] }} MergedDamageReductionRow
  * @typedef {Record<string, { rows?: unknown[], grants?: unknown[] }>} CapabilityGrantsResult
  *
  * @see .cursor/plans/cgs-implementation.md
@@ -262,6 +269,154 @@ export function mergeSpellGrantRows(atoms) {
 }
 
 /**
+ * Merge immunity grants: set of tags, each with merged sources.
+ *
+ * @typedef {{ tag: string, label: string, sources: CgsSourceEntry[] }} MergedImmunityRow
+ * @param {Array<{ tag: string, label?: string, _source: CgsSourceEntry }>} atoms
+ * @param {{ immunityTagLabels?: Record<string, string> }} [deps]
+ * @returns {MergedImmunityRow[]}
+ */
+export function mergeImmunityRows(atoms, deps = {}) {
+    if (!Array.isArray(atoms) || atoms.length === 0) return [];
+    /** @type {Map<string, { tag: string, label?: string, sources: CgsSourceEntry[] }>} */
+    const map = new Map();
+    for (const a of atoms) {
+        if (!a || typeof a !== "object") continue;
+        const tag = typeof a.tag === "string" ? a.tag.trim() : "";
+        if (!tag) continue;
+        const src = a._source && typeof a._source === "object" ? a._source : { label: "Unknown source" };
+        const label = typeof src.label === "string" ? src.label : "Unknown source";
+        /** @type {CgsSourceEntry} */
+        const sourceEntry = { label };
+        if (src.sourceRef && typeof src.sourceRef === "object") sourceEntry.sourceRef = src.sourceRef;
+
+        const existing = map.get(tag);
+        if (!existing) {
+            map.set(tag, {
+                tag,
+                label: typeof a.label === "string" ? a.label : undefined,
+                sources: [sourceEntry]
+            });
+        } else {
+            existing.sources.push(sourceEntry);
+            if (!existing.label && typeof a.label === "string") existing.label = a.label;
+        }
+    }
+    const labels =
+        deps.immunityTagLabels ??
+        (typeof globalThis.CONFIG !== "undefined" && globalThis.CONFIG?.THIRDERA?.immunityTags) ??
+        {};
+    return [...map.values()].map(row => ({
+        tag: row.tag,
+        label: row.label ?? (typeof labels[row.tag] === "string" ? labels[row.tag] : row.tag),
+        sources: dedupeCgsSourceEntries(row.sources)
+    }));
+}
+
+/**
+ * Merge energy resistance grants: per energy type, take MAX value (SRD stacking rule), accumulate sources.
+ *
+ * @typedef {{ energyType: string, amount: number, label: string, sources: CgsSourceEntry[] }} MergedEnergyResistanceRow
+ * @param {Array<{ energyType: string, amount: number, label?: string, _source: CgsSourceEntry }>} atoms
+ * @param {{ energyTypeLabels?: Record<string, string> }} [deps]
+ * @returns {MergedEnergyResistanceRow[]}
+ */
+export function mergeEnergyResistanceRows(atoms, deps = {}) {
+    if (!Array.isArray(atoms) || atoms.length === 0) return [];
+    /** @type {Map<string, { energyType: string, amount: number, label?: string, sources: CgsSourceEntry[] }>} */
+    const map = new Map();
+    for (const a of atoms) {
+        if (!a || typeof a !== "object") continue;
+        const et = typeof a.energyType === "string" ? a.energyType.trim() : "";
+        if (!et) continue;
+        const amt = typeof a.amount === "number" && Number.isFinite(a.amount) ? a.amount : 0;
+        if (amt <= 0) continue;
+        const src = a._source && typeof a._source === "object" ? a._source : { label: "Unknown source" };
+        const label = typeof src.label === "string" ? src.label : "Unknown source";
+        /** @type {CgsSourceEntry} */
+        const sourceEntry = { label };
+        if (src.sourceRef && typeof src.sourceRef === "object") sourceEntry.sourceRef = src.sourceRef;
+
+        const existing = map.get(et);
+        if (!existing) {
+            map.set(et, {
+                energyType: et,
+                amount: amt,
+                label: typeof a.label === "string" ? a.label : undefined,
+                sources: [sourceEntry]
+            });
+        } else {
+            existing.sources.push(sourceEntry);
+            if (amt > existing.amount) existing.amount = amt;
+            if (!existing.label && typeof a.label === "string") existing.label = a.label;
+        }
+    }
+    const labels =
+        deps.energyTypeLabels ??
+        (typeof globalThis.CONFIG !== "undefined" && globalThis.CONFIG?.THIRDERA?.energyTypes) ??
+        {};
+    return [...map.values()].map(row => ({
+        energyType: row.energyType,
+        amount: row.amount,
+        label: row.label ?? (typeof labels[row.energyType] === "string" ? `${labels[row.energyType]} ${row.amount}` : `${row.energyType} ${row.amount}`),
+        sources: dedupeCgsSourceEntries(row.sources)
+    }));
+}
+
+/**
+ * Merge damage reduction grants: keep all rows, each with value + bypass + sources.
+ * Consumer (combat resolution) picks best applicable DR from the list.
+ *
+ * @typedef {{ value: number, bypass: string, label: string, sources: CgsSourceEntry[] }} MergedDamageReductionRow
+ * @param {Array<{ value: number, bypass?: string, label?: string, _source: CgsSourceEntry }>} atoms
+ * @param {{ drBypassLabels?: Record<string, string> }} [deps]
+ * @returns {MergedDamageReductionRow[]}
+ */
+export function mergeDamageReductionRows(atoms, deps = {}) {
+    if (!Array.isArray(atoms) || atoms.length === 0) return [];
+    /** @type {Map<string, { value: number, bypass: string, label?: string, sources: CgsSourceEntry[] }>} */
+    const map = new Map();
+    for (const a of atoms) {
+        if (!a || typeof a !== "object") continue;
+        const val = typeof a.value === "number" && Number.isFinite(a.value) ? a.value : 0;
+        if (val <= 0) continue;
+        const byp = typeof a.bypass === "string" ? a.bypass.trim() : "";
+        const key = `${val}\0${byp.toLowerCase()}`;
+        const src = a._source && typeof a._source === "object" ? a._source : { label: "Unknown source" };
+        const label = typeof src.label === "string" ? src.label : "Unknown source";
+        /** @type {CgsSourceEntry} */
+        const sourceEntry = { label };
+        if (src.sourceRef && typeof src.sourceRef === "object") sourceEntry.sourceRef = src.sourceRef;
+
+        const existing = map.get(key);
+        if (!existing) {
+            map.set(key, {
+                value: val,
+                bypass: byp,
+                label: typeof a.label === "string" ? a.label : undefined,
+                sources: [sourceEntry]
+            });
+        } else {
+            existing.sources.push(sourceEntry);
+            if (!existing.label && typeof a.label === "string") existing.label = a.label;
+        }
+    }
+    const labels =
+        deps.drBypassLabels ??
+        (typeof globalThis.CONFIG !== "undefined" && globalThis.CONFIG?.THIRDERA?.drBypassTypes) ??
+        {};
+    return [...map.values()].map(row => {
+        const bypLabel = row.bypass ? (typeof labels[row.bypass] === "string" ? labels[row.bypass] : row.bypass) : "—";
+        return {
+            value: row.value,
+            bypass: row.bypass,
+            label: row.label ?? `${row.value}/${bypLabel}`,
+            sources: dedupeCgsSourceEntries(row.sources)
+        };
+    });
+}
+
+/**
  * Stage B: remove sense rows whose type is covered by active `senseSuppression` grants (union of scopes).
  * `suppressionGrants` entries are raw grants with `_suppressingSource` from merge (contribution provenance).
  *
@@ -411,9 +566,10 @@ export function collectCapabilityContributions(actor, providers, deps = {}) {
 /**
  * Merge collected contributions into per-category CGS output.
  * Senses: Stage A union → Stage B suppression; `senses.rows` effective, `senses.sensesUnionRows` pre-B.
+ * Phase 5e: immunities (set by tag), energyResistance (max per type), damageReduction (keep all rows).
  *
  * @param {CapabilityContribution[]} contributions
- * @param {{ senseTypeLabels?: Record<string, string>, allVisionSenseTypeKeys?: string[] }} [deps]
+ * @param {{ senseTypeLabels?: Record<string, string>, allVisionSenseTypeKeys?: string[], immunityTagLabels?: Record<string, string>, energyTypeLabels?: Record<string, string>, drBypassLabels?: Record<string, string> }} [deps]
  * @returns {CapabilityGrantsResult}
  */
 export function mergeCapabilityGrantContributions(contributions, deps = {}) {
@@ -422,6 +578,12 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
     const senseAtoms = [];
     /** @type {Array<{ spellUuid: string, label?: string, usesPerDay?: number, atWill?: boolean, casterLevel?: number, classItemId?: string, _source: CgsSourceEntry }>} */
     const spellGrantAtoms = [];
+    /** @type {Array<{ tag: string, label?: string, _source: CgsSourceEntry }>} */
+    const immunityAtoms = [];
+    /** @type {Array<{ energyType: string, amount: number, label?: string, _source: CgsSourceEntry }>} */
+    const energyResistanceAtoms = [];
+    /** @type {Array<{ value: number, bypass?: string, label?: string, _source: CgsSourceEntry }>} */
+    const damageReductionAtoms = [];
 
     for (const c of contributions) {
         const srcLabel = typeof c.label === "string" ? c.label : "";
@@ -463,11 +625,41 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
                     ...(classItemId ? { classItemId } : {}),
                     _source: baseSource
                 });
+            } else if (cat === "immunity") {
+                const tag = typeof g.tag === "string" ? g.tag.trim() : "";
+                if (!tag) continue;
+                immunityAtoms.push({
+                    tag,
+                    label: typeof g.label === "string" ? g.label : undefined,
+                    _source: baseSource
+                });
+            } else if (cat === "energyResistance") {
+                const energyType = typeof g.energyType === "string" ? g.energyType.trim() : "";
+                if (!energyType) continue;
+                const amount = typeof g.amount === "number" && Number.isFinite(g.amount) ? g.amount : 0;
+                energyResistanceAtoms.push({
+                    energyType,
+                    amount,
+                    label: typeof g.label === "string" ? g.label : undefined,
+                    _source: baseSource
+                });
+            } else if (cat === "damageReduction") {
+                const value = typeof g.value === "number" && Number.isFinite(g.value) ? g.value : 0;
+                if (value <= 0) continue;
+                damageReductionAtoms.push({
+                    value,
+                    bypass: typeof g.bypass === "string" ? g.bypass : "",
+                    label: typeof g.label === "string" ? g.label : undefined,
+                    _source: baseSource
+                });
             }
         }
     }
 
     out.spellGrants.rows = mergeSpellGrantRows(spellGrantAtoms);
+    out.immunities.rows = mergeImmunityRows(immunityAtoms, { immunityTagLabels: deps.immunityTagLabels });
+    out.energyResistance.rows = mergeEnergyResistanceRows(energyResistanceAtoms, { energyTypeLabels: deps.energyTypeLabels });
+    out.damageReduction.rows = mergeDamageReductionRows(damageReductionAtoms, { drBypassLabels: deps.drBypassLabels });
 
     const sensesUnionRows = mergeSenseRows(senseAtoms, deps);
     const { effectiveRows, suppressedSenseRows } = applySenseSuppressions(
@@ -485,7 +677,7 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
  * Aggregated structured capability grants for an actor (derived consumers use this entry point).
  *
  * @param {unknown} actor
- * @param {{ providers?: Array<(a: unknown) => unknown>, warn?: typeof console.warn, senseTypeLabels?: Record<string, string>, allVisionSenseTypeKeys?: string[] }} [deps]
+ * @param {{ providers?: Array<(a: unknown) => unknown>, warn?: typeof console.warn, senseTypeLabels?: Record<string, string>, allVisionSenseTypeKeys?: string[], immunityTagLabels?: Record<string, string>, energyTypeLabels?: Record<string, string>, drBypassLabels?: Record<string, string> }} [deps]
  *   When `providers` is omitted, uses CONFIG.THIRDERA.capabilitySourceProviders (Foundry init).
  * @returns {CapabilityGrantsResult}
  */
@@ -497,9 +689,13 @@ export function getActiveCapabilityGrants(actor, deps = {}) {
             (typeof globalThis.CONFIG !== "undefined" && globalThis.CONFIG?.THIRDERA?.capabilitySourceProviders) ??
             [];
         const contributions = collectCapabilityContributions(actor, providers, { warn: deps.warn });
+        const cfg = typeof globalThis.CONFIG !== "undefined" ? globalThis.CONFIG?.THIRDERA : undefined;
         return mergeCapabilityGrantContributions(contributions, {
             senseTypeLabels: deps.senseTypeLabels,
-            allVisionSenseTypeKeys: deps.allVisionSenseTypeKeys
+            allVisionSenseTypeKeys: deps.allVisionSenseTypeKeys,
+            immunityTagLabels: deps.immunityTagLabels ?? cfg?.immunityTags,
+            energyTypeLabels: deps.energyTypeLabels ?? cfg?.energyTypes,
+            drBypassLabels: deps.drBypassLabels ?? cfg?.drBypassTypes
         });
     } catch (e) {
         warn("ThirdEra | getActiveCapabilityGrants failed:", e);

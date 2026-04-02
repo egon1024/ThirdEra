@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getActiveCapabilityGrants } from "../../../module/logic/capability-aggregation.mjs";
 import {
     cgsActorCgsGrantsSensesProvider,
+    cgsNpcStatBlockDamageReductionProvider,
     cgsNpcStatBlockSensesProvider
 } from "../../../module/logic/cgs-actor-capability-providers.mjs";
 
@@ -78,5 +79,87 @@ describe("CGS NPC providers + merge (integration)", () => {
         expect(cgs.senses.rows).toHaveLength(1);
         expect(cgs.senses.rows[0].senseType).toBe("darkvision");
         expect(cgs.senses.rows[0].sources.map(s => s.label).sort()).toEqual(["Capability grants", "Stat block"]);
+    });
+});
+
+describe("cgsNpcStatBlockDamageReductionProvider (Phase 5e)", () => {
+    it("returns empty for non-npc", () => {
+        expect(cgsNpcStatBlockDamageReductionProvider({
+            type: "character",
+            system: { statBlock: { damageReduction: { value: 10, bypass: "magic" } } }
+        })).toEqual([]);
+    });
+
+    it("returns empty when DR value is zero", () => {
+        expect(cgsNpcStatBlockDamageReductionProvider({
+            type: "npc",
+            system: { statBlock: { damageReduction: { value: 0, bypass: "magic" } } }
+        })).toEqual([]);
+    });
+
+    it("returns empty when DR object is missing", () => {
+        expect(cgsNpcStatBlockDamageReductionProvider({
+            type: "npc",
+            system: { statBlock: {} }
+        })).toEqual([]);
+    });
+
+    it("maps stat block DR to damageReduction grant", () => {
+        const out = cgsNpcStatBlockDamageReductionProvider({
+            type: "npc",
+            system: {
+                statBlock: {
+                    damageReduction: { value: 10, bypass: "magic" }
+                }
+            }
+        });
+        expect(out).toHaveLength(1);
+        expect(out[0].label).toBe("Stat block");
+        expect(out[0].sourceRef).toEqual({ kind: "statBlock" });
+        expect(out[0].grants).toHaveLength(1);
+        expect(out[0].grants[0]).toEqual({
+            category: "damageReduction",
+            value: 10,
+            bypass: "magic"
+        });
+    });
+
+    it("handles empty bypass string", () => {
+        const out = cgsNpcStatBlockDamageReductionProvider({
+            type: "npc",
+            system: {
+                statBlock: {
+                    damageReduction: { value: 5, bypass: "" }
+                }
+            }
+        });
+        expect(out[0].grants[0]).toEqual({
+            category: "damageReduction",
+            value: 5,
+            bypass: ""
+        });
+    });
+});
+
+describe("CGS NPC DR provider + merge (integration)", () => {
+    it("integrates stat block DR into merged damageReduction.rows", () => {
+        const actor = {
+            type: "npc",
+            uuid: "Actor.npc1",
+            system: {
+                statBlock: {
+                    damageReduction: { value: 15, bypass: "good" }
+                }
+            }
+        };
+        const cgs = getActiveCapabilityGrants(actor, {
+            providers: [cgsNpcStatBlockDamageReductionProvider],
+            drBypassLabels: { good: "Good" }
+        });
+        expect(cgs.damageReduction.rows).toHaveLength(1);
+        expect(cgs.damageReduction.rows[0].value).toBe(15);
+        expect(cgs.damageReduction.rows[0].bypass).toBe("good");
+        expect(cgs.damageReduction.rows[0].label).toBe("15/Good");
+        expect(cgs.damageReduction.rows[0].sources[0].label).toBe("Stat block");
     });
 });

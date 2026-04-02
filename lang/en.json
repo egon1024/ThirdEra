@@ -70,7 +70,22 @@
             "CastMessageFromCapabilityGrant": "Cast via capability grant (not class spell slots).",
             "RtcGrantCastTrackedOnActor": "Casts for this at-will or per-day grant are tracked on the actor (capability grant channel), not on the spell item’s Cast field.",
             "RtcGrantSourcesLine": "Grant sources for this section:",
-            "RtcGrantSourcesLineTitle": "Items, feats, or features contributing these spells (DC/caster level still use the class shown in the heading)."
+            "RtcGrantSourcesLineTitle": "Items, feats, or features contributing these spells (DC/caster level still use the class shown in the heading).",
+            "TypedDefensesHeading": "Typed defenses",
+            "MergedTypedDefensesHeading": "Defenses",
+            "MergedImmunitiesHeading": "Immunities",
+            "MergedEnergyResistanceHeading": "Energy Resistance",
+            "MergedDamageReductionHeading": "Damage Reduction (DR)",
+            "ImmunitiesHeading": "Immunities",
+            "EnergyResistanceHeading": "Energy resistance",
+            "DamageReductionHeading": "Damage reduction",
+            "ImmunityTagPlaceholder": "— choose immunity —",
+            "EnergyTypePlaceholder": "— choose energy —",
+            "DRBypassNone": "— (none)",
+            "AddImmunity": "Add immunity",
+            "AddEnergyResistance": "Add energy resistance",
+            "AddDamageReduction": "Add damage reduction",
+            "RemoveGrant": "Remove"
         },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",

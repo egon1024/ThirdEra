@@ -1,0 +1,69 @@
+{{#if hasAnyTypedDefenses}}
+<div class="cgs-merged-typed-defenses">
+<h4 class="items-header">{{localize 'THIRDERA.CGS.MergedTypedDefensesHeading'}}</h4>
+
+{{#if cgsMergedImmunities.length}}
+<h5 class="cgs-defense-subheading">{{localize 'THIRDERA.CGS.MergedImmunitiesHeading'}}</h5>
+<ul class="cgs-merged-defense-list items-list">
+  {{#each cgsMergedImmunities as |row|}}
+  <li class="cgs-merged-defense-row">
+    <span class="cgs-merged-defense-label">{{row.label}}</span>
+    {{#if row.sourceDisplays.length}}
+    <details class="cgs-provenance">
+      <summary class="cgs-provenance-summary">{{localize 'THIRDERA.CGS.ProvenanceSourcesSummary'}}</summary>
+      <ul class="cgs-provenance-source-list">
+        {{#each row.sourceDisplays as |h|}}
+        <li class="cgs-provenance-source-item">{{{h}}}</li>
+        {{/each}}
+      </ul>
+    </details>
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>
+{{/if}}
+
+{{#if cgsMergedEnergyResistance.length}}
+<h5 class="cgs-defense-subheading">{{localize 'THIRDERA.CGS.MergedEnergyResistanceHeading'}}</h5>
+<ul class="cgs-merged-defense-list items-list">
+  {{#each cgsMergedEnergyResistance as |row|}}
+  <li class="cgs-merged-defense-row">
+    <span class="cgs-merged-defense-label">{{row.label}}</span>
+    {{#if row.sourceDisplays.length}}
+    <details class="cgs-provenance">
+      <summary class="cgs-provenance-summary">{{localize 'THIRDERA.CGS.ProvenanceSourcesSummary'}}</summary>
+      <ul class="cgs-provenance-source-list">
+        {{#each row.sourceDisplays as |h|}}
+        <li class="cgs-provenance-source-item">{{{h}}}</li>
+        {{/each}}
+      </ul>
+    </details>
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>
+{{/if}}
+
+{{#if cgsMergedDamageReduction.length}}
+<h5 class="cgs-defense-subheading">{{localize 'THIRDERA.CGS.MergedDamageReductionHeading'}}</h5>
+<ul class="cgs-merged-defense-list items-list">
+  {{#each cgsMergedDamageReduction as |row|}}
+  <li class="cgs-merged-defense-row">
+    <span class="cgs-merged-defense-label">{{row.label}}</span>
+    {{#if row.sourceDisplays.length}}
+    <details class="cgs-provenance">
+      <summary class="cgs-provenance-summary">{{localize 'THIRDERA.CGS.ProvenanceSourcesSummary'}}</summary>
+      <ul class="cgs-provenance-source-list">
+        {{#each row.sourceDisplays as |h|}}
+        <li class="cgs-provenance-source-item">{{{h}}}</li>
+        {{/each}}
+      </ul>
+    </details>
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>
+{{/if}}
+
+</div>
+{{/if}}

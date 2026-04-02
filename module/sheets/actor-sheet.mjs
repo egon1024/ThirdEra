@@ -15,7 +15,8 @@ import { normalizeNpcStatBlockNaturalAttackPresetBonuses } from "../logic/npc-st
 import {
     enrichCgsMergedSenseRowsForProvenance,
     enrichCgsSpellGrantRowSourcesForProvenance,
-    enrichCgsSuppressedSenseRowsForProvenance
+    enrichCgsSuppressedSenseRowsForProvenance,
+    enrichCgsTypedDefenseRowsForProvenance
 } from "../logic/cgs-provenance-display.mjs";
 import { getCgsSpellGrantCastTotal } from "../logic/cgs-spell-grant-cast.mjs";
 import { getMergedSpellGrantRowsForActor } from "../logic/cgs-spell-grant-rows.mjs";
@@ -2052,6 +2053,36 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }));
         })();
 
+        const cgsTypedDefenseProvenanceCtx = {
+            isGM: game.user?.isGM === true,
+            user: game.user,
+            sheetActor: actor,
+            resolveUuid: (uuid) => {
+                try {
+                    return typeof foundry?.utils?.fromUuidSync === "function" ? foundry.utils.fromUuidSync(uuid) : null;
+                } catch { return null; }
+            }
+        };
+        const cgsMergedImmunities = enrichCgsTypedDefenseRowsForProvenance(
+            systemData.cgs?.immunities?.rows, cgsTypedDefenseProvenanceCtx
+        ).map((row) => ({
+            label: row.label,
+            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+        }));
+        const cgsMergedEnergyResistance = enrichCgsTypedDefenseRowsForProvenance(
+            systemData.cgs?.energyResistance?.rows, cgsTypedDefenseProvenanceCtx
+        ).map((row) => ({
+            label: row.label,
+            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+        }));
+        const cgsMergedDamageReduction = enrichCgsTypedDefenseRowsForProvenance(
+            systemData.cgs?.damageReduction?.rows, cgsTypedDefenseProvenanceCtx
+        ).map((row) => ({
+            label: row.label,
+            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+        }));
+        const hasAnyTypedDefenses = cgsMergedImmunities.length > 0 || cgsMergedEnergyResistance.length > 0 || cgsMergedDamageReduction.length > 0;
+
         return {
             ...context,
             actor,
@@ -2151,7 +2182,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             // Phase 4: permission-aware provenance for merged CGS senses (display side)
             cgsMergedSensesProvenance,
             // Phase 5a: suppressed senses (Stage B) + suppressing sources
-            cgsSuppressedSensesProvenance
+            cgsSuppressedSensesProvenance,
+            // Phase 5e: merged typed defenses (immunities, energy resistance, DR) with provenance
+            cgsMergedImmunities,
+            cgsMergedEnergyResistance,
+            cgsMergedDamageReduction,
+            hasAnyTypedDefenses
         };
     }
 

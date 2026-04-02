@@ -43,7 +43,8 @@ import { registerModifierSourceProviders } from "./module/logic/modifier-aggrega
 import { registerCapabilitySourceProviders } from "./module/logic/capability-aggregation.mjs";
 import {
     cgsActorCgsGrantsSensesProvider,
-    cgsNpcStatBlockSensesProvider
+    cgsNpcStatBlockSensesProvider,
+    cgsNpcStatBlockDamageReductionProvider
 } from "./module/logic/cgs-actor-capability-providers.mjs";
 import { cgsConditionsCapabilityProvider } from "./module/logic/cgs-conditions-capability-provider.mjs";
 import { cgsEmbeddedItemGrantsProvider } from "./module/logic/cgs-embedded-item-grants-provider.mjs";
@@ -249,6 +250,65 @@ Hooks.once("init", async function () {
             blindsense: "Blindsense",
             tremorsense: "Tremorsense"
         },
+        /**
+         * Energy types for resistance/immunity/vulnerability (Phase 5e CGS).
+         * Future: may be replaced or augmented by compendium catalog Items; keep grant `energyType` keys stable or migrate with care — see plans/cgs-phased-implementation.md § Future — Typed defense catalogs.
+         */
+        energyTypes: {
+            acid: "Acid",
+            cold: "Cold",
+            electricity: "Electricity",
+            fire: "Fire",
+            sonic: "Sonic"
+        },
+        /**
+         * Immunity tags for CGS immunity grants (Phase 5e). Machine keys; display strings here feed CGS label deps.
+         * Future: catalog Items or hybrid — same plan section as `energyTypes`.
+         */
+        immunityTags: {
+            fire: "Fire",
+            cold: "Cold",
+            electricity: "Electricity",
+            acid: "Acid",
+            sonic: "Sonic",
+            poison: "Poison",
+            disease: "Disease",
+            sleep: "Sleep effects",
+            paralysis: "Paralysis",
+            stunning: "Stunning",
+            criticalHits: "Critical hits",
+            flanking: "Flanking",
+            mindAffecting: "Mind-affecting effects",
+            fear: "Fear",
+            charmCompulsion: "Charm and compulsion",
+            death: "Death effects",
+            necromancy: "Necromancy effects",
+            energyDrain: "Energy drain",
+            abilityDamage: "Ability damage",
+            abilityDrain: "Ability drain",
+            exhaustion: "Exhaustion and fatigue",
+            petrification: "Petrification",
+            polymorph: "Polymorph",
+            magicSleep: "Magic sleep effects"
+        },
+        /**
+         * DR bypass qualifiers for damage reduction grants (Phase 5e CGS).
+         * Future: catalog Items or hybrid — same plan section as `energyTypes`.
+         */
+        drBypassTypes: {
+            magic: "Magic",
+            epic: "Epic",
+            adamantine: "Adamantine",
+            silver: "Silver",
+            coldIron: "Cold iron",
+            bludgeoning: "Bludgeoning",
+            piercing: "Piercing",
+            slashing: "Slashing",
+            good: "Good",
+            evil: "Evil",
+            lawful: "Lawful",
+            chaotic: "Chaotic"
+        },
         /** Treasure presets for NPC/monster reference (Phase F). Custom text allowed via sheet. */
         treasure: {
             "": "—",
@@ -453,6 +513,8 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/cgs-legacy-statblock-senses.hbs",
         "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs",
         "systems/thirdera/templates/partials/cgs-mechanics-spell-grants.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses.hbs",
+        "systems/thirdera/templates/partials/cgs-merged-typed-defenses.hbs",
         "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs",
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs",
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-global-section.hbs",
@@ -465,6 +527,7 @@ Hooks.once("init", async function () {
     registerCapabilitySourceProviders();
     CONFIG.THIRDERA.capabilitySourceProviders.push(
         cgsNpcStatBlockSensesProvider,
+        cgsNpcStatBlockDamageReductionProvider,
         cgsActorCgsGrantsSensesProvider,
         cgsConditionsCapabilityProvider,
         cgsEmbeddedItemGrantsProvider,

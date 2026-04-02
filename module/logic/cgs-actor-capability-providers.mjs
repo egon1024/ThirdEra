@@ -1,5 +1,5 @@
 /**
- * Built-in CGS source providers for actor system data (Phase 2 — senses).
+ * Built-in CGS source providers for actor system data (Phase 2 — senses, Phase 5e — typed defenses).
  * Phase 5b embedded item grants: [`cgs-embedded-item-grants-provider.mjs`](cgs-embedded-item-grants-provider.mjs).
  * Registered from thirdera.mjs after registerCapabilitySourceProviders().
  *
@@ -64,6 +64,34 @@ export function cgsActorCgsGrantsSensesProvider(actor) {
             label: "Capability grants",
             sourceRef: { kind: "actorCgsGrants", uuid: actor.uuid },
             grants
+        }
+    ];
+}
+
+/**
+ * Legacy NPC stat block damage reduction → damageReduction grants (Phase 5e).
+ *
+ * @param {unknown} actor
+ * @returns {Array<{ label: string, grants: unknown[], sourceRef?: Record<string, unknown> }>}
+ */
+export function cgsNpcStatBlockDamageReductionProvider(actor) {
+    if (!actor || typeof actor !== "object" || actor.type !== "npc") return [];
+    const dr = actor.system?.statBlock?.damageReduction;
+    if (!dr || typeof dr !== "object") return [];
+    const value = typeof dr.value === "number" && Number.isFinite(dr.value) ? dr.value : 0;
+    if (value <= 0) return [];
+    const bypass = typeof dr.bypass === "string" ? dr.bypass.trim() : "";
+    return [
+        {
+            label: "Stat block",
+            sourceRef: { kind: "statBlock" },
+            grants: [
+                {
+                    category: "damageReduction",
+                    value,
+                    bypass
+                }
+            ]
         }
     ];
 }
