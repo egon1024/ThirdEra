@@ -1,0 +1,53 @@
+{{!-- Phase 5f: Actor CGS Mechanics — creature type / subtype overlay UUID lists (additive to NPC base type). --}}
+<div class="cgs-actor-type-overlays-panel">
+<h4 class="items-header">{{localize "THIRDERA.CGS.ActorTypeOverlaysHeading"}}</h4>
+<p class="notes">{{localize "THIRDERA.CGS.ActorTypeOverlaysHint"}}</p>
+
+<div class="cgs-overlay-section">
+<h5 class="cgs-overlay-section-heading">{{localize "THIRDERA.CGS.CreatureTypeOverlaysHeading"}}</h5>
+<ol class="cgs-overlay-list">
+{{#each actorCgsCreatureTypeOverlayRows}}
+  <li class="cgs-overlay-row" data-actor-cgs-type-overlay-index="{{idx}}">
+    <select name="system.cgsGrants.creatureTypeOverlayUuids.{{idx}}" class="details-input actor-cgs-type-overlay-select" {{#unless @root.editable}}disabled{{/unless}} aria-label="{{localize 'THIRDERA.CGS.CreatureTypePlaceholder'}}">
+      <option value="">{{localize "THIRDERA.CGS.CreatureTypePlaceholder"}}</option>
+      {{#each @root.creatureTypeChoices as |choice|}}
+      <option value="{{choice.uuid}}" {{#if (eq choice.uuid ../uuid)}}selected{{/if}}>{{choice.name}}</option>
+      {{/each}}
+    </select>
+    {{#if @root.editable}}
+    <button type="button" class="cgs-overlay-remove" data-action="removeActorCgsCreatureTypeOverlay" data-actor-cgs-type-overlay-index="{{idx}}" title="{{localize 'THIRDERA.CGS.RemoveGrant'}}" aria-label="{{localize 'THIRDERA.CGS.RemoveGrant'}}"><i class="fas fa-trash"></i></button>
+    {{/if}}
+  </li>
+{{/each}}
+</ol>
+{{#if @root.editable}}
+<div class="cgs-overlay-add">
+  <button type="button" class="cgs-overlay-add-btn" data-action="addActorCgsCreatureTypeOverlay" title="{{localize 'THIRDERA.CGS.AddCreatureTypeOverlay'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.AddCreatureTypeOverlay"}}</button>
+</div>
+{{/if}}
+</div>
+
+<div class="cgs-overlay-section">
+<h5 class="cgs-overlay-section-heading">{{localize "THIRDERA.CGS.SubtypeOverlaysHeading"}}</h5>
+<ol class="cgs-overlay-list">
+{{#each actorCgsSubtypeOverlayRows}}
+  <li class="cgs-overlay-row" data-actor-cgs-subtype-overlay-index="{{idx}}">
+    <select name="system.cgsGrants.subtypeOverlayUuids.{{idx}}" class="details-input actor-cgs-subtype-overlay-select" {{#unless @root.editable}}disabled{{/unless}} aria-label="{{localize 'THIRDERA.CGS.SubtypePlaceholder'}}">
+      <option value="">{{localize "THIRDERA.CGS.SubtypePlaceholder"}}</option>
+      {{#each @root.subtypeChoices as |choice|}}
+      <option value="{{choice.uuid}}" {{#if (eq choice.uuid ../uuid)}}selected{{/if}}>{{choice.name}}</option>
+      {{/each}}
+    </select>
+    {{#if @root.editable}}
+    <button type="button" class="cgs-overlay-remove" data-action="removeActorCgsSubtypeOverlay" data-actor-cgs-subtype-overlay-index="{{idx}}" title="{{localize 'THIRDERA.CGS.RemoveGrant'}}" aria-label="{{localize 'THIRDERA.CGS.RemoveGrant'}}"><i class="fas fa-trash"></i></button>
+    {{/if}}
+  </li>
+{{/each}}
+</ol>
+{{#if @root.editable}}
+<div class="cgs-overlay-add">
+  <button type="button" class="cgs-overlay-add-btn" data-action="addActorCgsSubtypeOverlay" title="{{localize 'THIRDERA.CGS.AddSubtypeOverlay'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.AddSubtypeOverlay"}}</button>
+</div>
+{{/if}}
+</div>
+</div>

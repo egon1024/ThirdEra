@@ -2,6 +2,7 @@ const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringFie
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
+import { buildCgsOverlayItemLabelMaps } from "../logic/cgs-overlay-labels.mjs";
 import { getActiveModifiers, sumChangeValuesForModifierKey } from "../logic/modifier-aggregation.mjs";
 import { prepareNpcSkillItems, buildModifierOnlySkills } from "../logic/npc-skill-prep.mjs";
 
@@ -162,7 +163,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             // Biography/Description
             biography: new HTMLField({ required: true, blank: true }),
 
-            /** Actor-level CGS authoring (senses, …); merged into derived system.cgs */
+            /** Actor-level CGS authoring (senses, type/subtype overlays, …); merged into derived system.cgs */
             cgsGrants: new SchemaField(
                 {
                     senses: new ArrayField(
@@ -175,7 +176,15 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                             range: new StringField({ required: true, blank: true, initial: "" })
                         }),
                         { required: true, initial: [] }
-                    )
+                    ),
+                    creatureTypeOverlayUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                        required: true,
+                        initial: []
+                    }),
+                    subtypeOverlayUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                        required: true,
+                        initial: []
+                    })
                 },
                 { required: false }
             ),
@@ -193,9 +202,11 @@ export class NPCData extends foundry.abstract.TypeDataModel {
     /** @override */
     static migrateData(source) {
         if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
-            source.cgsGrants = { senses: [] };
-        } else if (!Array.isArray(source.cgsGrants.senses)) {
-            source.cgsGrants.senses = [];
+            source.cgsGrants = { senses: [], creatureTypeOverlayUuids: [], subtypeOverlayUuids: [] };
+        } else {
+            if (!Array.isArray(source.cgsGrants.senses)) source.cgsGrants.senses = [];
+            if (!Array.isArray(source.cgsGrants.creatureTypeOverlayUuids)) source.cgsGrants.creatureTypeOverlayUuids = [];
+            if (!Array.isArray(source.cgsGrants.subtypeOverlayUuids)) source.cgsGrants.subtypeOverlayUuids = [];
         }
         return super.migrateData(source);
     }
@@ -445,9 +456,16 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 ? CONFIG.THIRDERA.senseTypes
                 : {};
         const allVisionSenseTypeKeys = Object.keys(senseTypeLabels).map(k => String(k).trim()).filter(Boolean);
-        this.cgs = getActiveCapabilityGrants(this.parent, {
+        const cgsBase = getActiveCapabilityGrants(this.parent, {
             senseTypeLabels,
             allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined
+        });
+        const { creatureTypeItemLabels, subtypeItemLabels } = buildCgsOverlayItemLabelMaps(cgsBase);
+        this.cgs = getActiveCapabilityGrants(this.parent, {
+            senseTypeLabels,
+            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined,
+            creatureTypeItemLabels,
+            subtypeItemLabels
         });
     }
 }

@@ -43,6 +43,7 @@ import { registerModifierSourceProviders } from "./module/logic/modifier-aggrega
 import { registerCapabilitySourceProviders } from "./module/logic/capability-aggregation.mjs";
 import {
     cgsActorCgsGrantsSensesProvider,
+    cgsActorCgsGrantsTypeOverlaysProvider,
     cgsNpcStatBlockSensesProvider,
     cgsNpcStatBlockDamageReductionProvider
 } from "./module/logic/cgs-actor-capability-providers.mjs";
@@ -515,6 +516,9 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/cgs-mechanics-spell-grants.hbs",
         "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses.hbs",
         "systems/thirdera/templates/partials/cgs-merged-typed-defenses.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-type-overlays.hbs",
+        "systems/thirdera/templates/partials/cgs-merged-type-overlays.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-actor-type-overlays.hbs",
         "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs",
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs",
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-global-section.hbs",
@@ -529,6 +533,7 @@ Hooks.once("init", async function () {
         cgsNpcStatBlockSensesProvider,
         cgsNpcStatBlockDamageReductionProvider,
         cgsActorCgsGrantsSensesProvider,
+        cgsActorCgsGrantsTypeOverlaysProvider,
         cgsConditionsCapabilityProvider,
         cgsEmbeddedItemGrantsProvider,
         cgsGrantedClassFeatureGrantsProvider

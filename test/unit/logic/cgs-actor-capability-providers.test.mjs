@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getActiveCapabilityGrants } from "../../../module/logic/capability-aggregation.mjs";
 import {
     cgsActorCgsGrantsSensesProvider,
+    cgsActorCgsGrantsTypeOverlaysProvider,
     cgsNpcStatBlockDamageReductionProvider,
     cgsNpcStatBlockSensesProvider
 } from "../../../module/logic/cgs-actor-capability-providers.mjs";
@@ -54,6 +55,36 @@ describe("cgsActorCgsGrantsSensesProvider", () => {
         });
         expect(out[0].grants[0]).toMatchObject({ category: "sense", senseType: "lowLight" });
         expect(out[0].sourceRef?.uuid).toBe("Actor.x");
+    });
+});
+
+describe("cgsActorCgsGrantsTypeOverlaysProvider (Phase 5f)", () => {
+    it("returns empty when overlay arrays missing or empty", () => {
+        expect(cgsActorCgsGrantsTypeOverlaysProvider({ uuid: "A", system: {} })).toEqual([]);
+        expect(
+            cgsActorCgsGrantsTypeOverlaysProvider({
+                uuid: "A",
+                system: { cgsGrants: { creatureTypeOverlayUuids: [], subtypeOverlayUuids: [] } }
+            })
+        ).toEqual([]);
+    });
+
+    it("emits creatureTypeOverlay and subtypeOverlay grants", () => {
+        const out = cgsActorCgsGrantsTypeOverlaysProvider({
+            uuid: "Actor.abc",
+            system: {
+                cgsGrants: {
+                    creatureTypeOverlayUuids: ["  ", "Compendium.t.Item.humanoid"],
+                    subtypeOverlayUuids: ["Compendium.t.Item.orc"]
+                }
+            }
+        });
+        expect(out).toHaveLength(1);
+        expect(out[0].sourceRef).toEqual({ kind: "actorCgsGrants", uuid: "Actor.abc" });
+        expect(out[0].grants).toEqual([
+            { category: "creatureTypeOverlay", typeUuid: "Compendium.t.Item.humanoid" },
+            { category: "subtypeOverlay", subtypeUuid: "Compendium.t.Item.orc" }
+        ]);
     });
 });
 

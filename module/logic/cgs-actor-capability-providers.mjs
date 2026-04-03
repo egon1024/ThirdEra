@@ -1,5 +1,6 @@
 /**
- * Built-in CGS source providers for actor system data (Phase 2 — senses, Phase 5e — typed defenses).
+ * Built-in CGS source providers for actor system data (Phase 2 — senses, Phase 5e — typed defenses,
+ * Phase 5f — actor-level type/subtype overlay UUID lists).
  * Phase 5b embedded item grants: [`cgs-embedded-item-grants-provider.mjs`](cgs-embedded-item-grants-provider.mjs).
  * Registered from thirdera.mjs after registerCapabilitySourceProviders().
  *
@@ -57,6 +58,40 @@ export function cgsActorCgsGrantsSensesProvider(actor) {
             senseType: t,
             range: typeof s.range === "string" ? s.range : ""
         });
+    }
+    if (grants.length === 0) return [];
+    return [
+        {
+            label: "Capability grants",
+            sourceRef: { kind: "actorCgsGrants", uuid: actor.uuid },
+            grants
+        }
+    ];
+}
+
+/**
+ * Actor-authored creature type / subtype overlays (`system.cgsGrants.creatureTypeOverlayUuids`,
+ * `subtypeOverlayUuids`) — additive overlays on top of NPC base type/subtypes (Phase 5f).
+ *
+ * @param {unknown} actor
+ * @returns {Array<{ label: string, grants: unknown[], sourceRef: Record<string, unknown> }>}
+ */
+export function cgsActorCgsGrantsTypeOverlaysProvider(actor) {
+    if (!actor || typeof actor !== "object") return [];
+    const cg = actor.system?.cgsGrants;
+    if (!cg || typeof cg !== "object") return [];
+    const typeUuids = Array.isArray(cg.creatureTypeOverlayUuids) ? cg.creatureTypeOverlayUuids : [];
+    const subUuids = Array.isArray(cg.subtypeOverlayUuids) ? cg.subtypeOverlayUuids : [];
+    const grants = [];
+    for (const raw of typeUuids) {
+        const u = typeof raw === "string" ? raw.trim() : "";
+        if (!u) continue;
+        grants.push({ category: "creatureTypeOverlay", typeUuid: u });
+    }
+    for (const raw of subUuids) {
+        const u = typeof raw === "string" ? raw.trim() : "";
+        if (!u) continue;
+        grants.push({ category: "subtypeOverlay", subtypeUuid: u });
     }
     if (grants.length === 0) return [];
     return [

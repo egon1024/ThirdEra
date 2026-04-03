@@ -15,6 +15,10 @@ import {
     buildEnergyResistanceSheetRowsFromGrants,
     buildImmunitySheetRowsFromGrants
 } from "../logic/cgs-typed-defense-item-sheet.mjs";
+import {
+    buildCreatureTypeOverlaySheetRowsFromGrants,
+    buildSubtypeOverlaySheetRowsFromGrants
+} from "../logic/cgs-type-overlay-item-sheet.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -83,7 +87,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addCgsSpellGrant: ThirdEraItemSheet.onAddCgsSpellGrant,
             removeCgsSpellGrant: ThirdEraItemSheet.onRemoveCgsSpellGrant,
             addCgsTypedDefense: ThirdEraItemSheet.onAddCgsTypedDefense,
-            removeCgsTypedDefense: ThirdEraItemSheet.onRemoveCgsTypedDefense
+            removeCgsTypedDefense: ThirdEraItemSheet.onRemoveCgsTypedDefense,
+            addCgsTypeOverlay: ThirdEraItemSheet.onAddCgsTypeOverlay,
+            removeCgsTypeOverlay: ThirdEraItemSheet.onRemoveCgsTypeOverlay
         }
     };
 
@@ -195,6 +201,17 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
                     ThirdEraItemSheet.onCgsTypedDefenseFieldChange(this, el).catch(() => {});
+                },
+                true
+            );
+            formCgs?.addEventListener(
+                "change",
+                (ev) => {
+                    const el = ev.target;
+                    if (!el?.classList?.contains?.("cgs-type-overlay-field")) return;
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                    ThirdEraItemSheet.onCgsTypeOverlayFieldChange(this, el).catch(() => {});
                 },
                 true
             );
@@ -612,6 +629,14 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         let cgsEnergyResistanceRows = [];
         /** @type {ReturnType<typeof buildDamageReductionSheetRowsFromGrants>} */
         let cgsDamageReductionRows = [];
+        /** @type {ReturnType<typeof buildCreatureTypeOverlaySheetRowsFromGrants>} */
+        let cgsCreatureTypeOverlayRows = [];
+        /** @type {ReturnType<typeof buildSubtypeOverlaySheetRowsFromGrants>} */
+        let cgsSubtypeOverlayRows = [];
+        /** @type {Array<{ uuid: string, name: string }>} */
+        let cgsOverlayCreatureTypeChoices = [];
+        /** @type {Array<{ uuid: string, name: string }>} */
+        let cgsOverlaySubtypeChoices = [];
         if (ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(item.type)) {
             const spellNameForUuid = (uuid) => {
                 try {
@@ -625,6 +650,23 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             cgsImmunityRows = buildImmunitySheetRowsFromGrants(grantsForSpellUi);
             cgsEnergyResistanceRows = buildEnergyResistanceSheetRowsFromGrants(grantsForSpellUi);
             cgsDamageReductionRows = buildDamageReductionSheetRowsFromGrants(grantsForSpellUi);
+            cgsCreatureTypeOverlayRows = buildCreatureTypeOverlaySheetRowsFromGrants(grantsForSpellUi);
+            cgsSubtypeOverlayRows = buildSubtypeOverlaySheetRowsFromGrants(grantsForSpellUi);
+            const typesPack = game.packs.get("thirdera.thirdera_creature_types");
+            const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
+            const typesFromPack = typesPack ? await typesPack.getDocuments() : [];
+            const typesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "creatureType");
+            const subtypesFromPack = subtypesPack ? await subtypesPack.getDocuments() : [];
+            const subtypesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "subtype");
+            const allOvTypes = [...typesFromPack, ...typesFromWorld];
+            const allOvSubtypes = [...subtypesFromPack, ...subtypesFromWorld];
+            const ovSort = (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
+            cgsOverlayCreatureTypeChoices = allOvTypes
+                .map((doc) => ({ uuid: doc.uuid, name: doc.name || "—" }))
+                .sort((a, b) => ovSort({ name: a.name }, { name: b.name }));
+            cgsOverlaySubtypeChoices = allOvSubtypes
+                .map((doc) => ({ uuid: doc.uuid, name: doc.name || "—" }))
+                .sort((a, b) => ovSort({ name: a.name }, { name: b.name }));
         }
 
         if (item.type === "class") {
@@ -682,7 +724,11 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             cgsSpellGrantRows,
             cgsImmunityRows,
             cgsEnergyResistanceRows,
-            cgsDamageReductionRows
+            cgsDamageReductionRows,
+            cgsCreatureTypeOverlayRows,
+            cgsSubtypeOverlayRows,
+            cgsOverlayCreatureTypeChoices,
+            cgsOverlaySubtypeChoices
         };
     }
 
@@ -1064,6 +1110,68 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 grants[idx] = { ...grants[idx], category: "spellGrant", spellUuid };
             } else {
                 grants.push({ category: "spellGrant", spellUuid });
+            }
+
+            const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+            const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+            const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+            try {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+                await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+                await this.render(true);
+            } catch (err) {
+                const msg = err instanceof Error ? err.message : String(err);
+                ui.notifications?.error?.(msg);
+            }
+            return;
+        }
+
+        const typeOverlayDropRow = event.target.closest?.("[data-cgs-creature-type-overlay-drop]");
+        const subtypeOverlayDropRow = event.target.closest?.("[data-cgs-subtype-overlay-drop]");
+        const typeOverlayPanel = event.target.closest?.(".cgs-type-overlays-panel");
+        const typeDropOnOverlayUi =
+            inCgsItemUi &&
+            droppedItem.type === "creatureType" &&
+            (typeOverlayDropRow || (typeOverlayPanel && !subtypeOverlayDropRow));
+        const subtypeDropOnOverlayUi =
+            inCgsItemUi && droppedItem.type === "subtype" && (subtypeOverlayDropRow || typeOverlayPanel);
+        if (typeDropOnOverlayUi || subtypeDropOnOverlayUi) {
+            if (!this.isEditable) {
+                ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+                return;
+            }
+            const doc = this.document;
+            const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+            const itemUuid = (droppedItem.uuid ?? "").trim();
+            if (!itemUuid) return;
+
+            if (typeDropOnOverlayUi) {
+                if (typeOverlayDropRow) {
+                    const idx = parseInt(typeOverlayDropRow.dataset.cgsTypeOverlayIndex, 10);
+                    if (Number.isNaN(idx)) return;
+                    const row = grants[idx];
+                    if (!row || row.category !== "creatureTypeOverlay") {
+                        ui.notifications?.warn?.(game.i18n.localize("THIRDERA.CGS.TypeOverlayDropWrongRow"));
+                        return;
+                    }
+                    grants[idx] = { ...grants[idx], category: "creatureTypeOverlay", typeUuid: itemUuid };
+                } else {
+                    grants.push({ category: "creatureTypeOverlay", typeUuid: itemUuid });
+                }
+            } else if (subtypeDropOnOverlayUi) {
+                if (subtypeOverlayDropRow) {
+                    const idx = parseInt(subtypeOverlayDropRow.dataset.cgsSubtypeOverlayIndex, 10);
+                    if (Number.isNaN(idx)) return;
+                    const row = grants[idx];
+                    if (!row || row.category !== "subtypeOverlay") {
+                        ui.notifications?.warn?.(game.i18n.localize("THIRDERA.CGS.TypeOverlayDropWrongRow"));
+                        return;
+                    }
+                    grants[idx] = { ...grants[idx], category: "subtypeOverlay", subtypeUuid: itemUuid };
+                } else {
+                    grants.push({ category: "subtypeOverlay", subtypeUuid: itemUuid });
+                }
             }
 
             const tab = this.element?.querySelector?.(".sheet-body .tab.active");
@@ -2788,6 +2896,121 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             g[field] = Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
         }
 
+        const tab = rowEl?.closest?.(".tab");
+        if (tab) sheet._preservedScrollTop = tab.scrollTop;
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(sheet);
+            await sheet.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /** Add a creature type or subtype overlay row to `system.cgsGrants.grants`. */
+    static async onAddCgsTypeOverlay(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const category = target?.dataset?.cgsOverlayCategory;
+        if (!category || !["creatureTypeOverlay", "subtypeOverlay"].includes(category)) return;
+        const doc = this.document;
+        const tab = event?.target?.closest?.(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        if (category === "creatureTypeOverlay") {
+            grants.push({ category: "creatureTypeOverlay", typeUuid: "" });
+        } else {
+            grants.push({ category: "subtypeOverlay", subtypeUuid: "" });
+        }
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /** Remove one overlay grant row by index and category. */
+    static async onRemoveCgsTypeOverlay(event, target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const category = target?.dataset?.cgsOverlayCategory;
+        if (!category || !["creatureTypeOverlay", "subtypeOverlay"].includes(category)) return;
+        const doc = this.document;
+        const tab = target?.closest?.(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const row = target?.closest?.("[data-cgs-type-overlay-index], [data-cgs-subtype-overlay-index]");
+        const idxRaw =
+            category === "creatureTypeOverlay"
+                ? row?.dataset?.cgsTypeOverlayIndex ?? target?.dataset?.cgsTypeOverlayIndex
+                : row?.dataset?.cgsSubtypeOverlayIndex ?? target?.dataset?.cgsSubtypeOverlayIndex;
+        const idx = parseInt(idxRaw, 10);
+        if (Number.isNaN(idx)) return;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const g = grants[idx];
+        if (!g || g.category !== category) return;
+        grants.splice(idx, 1);
+        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        try {
+            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /**
+     * Persist overlay UUID select (grants array index).
+     * @param {ThirdEraItemSheet} sheet
+     * @param {HTMLElement} el
+     */
+    static async onCgsTypeOverlayFieldChange(sheet, el) {
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(sheet.document?.type)) return;
+        if (!sheet.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const field = el.dataset?.overlayField;
+        const category = el.dataset?.cgsOverlayCategory;
+        const rowEl = el.closest("[data-cgs-type-overlay-index], [data-cgs-subtype-overlay-index]");
+        const idxRaw =
+            category === "creatureTypeOverlay"
+                ? rowEl?.dataset?.cgsTypeOverlayIndex ?? el.dataset?.cgsTypeOverlayIndex
+                : rowEl?.dataset?.cgsSubtypeOverlayIndex ?? el.dataset?.cgsSubtypeOverlayIndex;
+        const idx = parseInt(idxRaw, 10);
+        if (!field || !category || Number.isNaN(idx)) return;
+        const doc = sheet.document;
+        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const g = grants[idx];
+        if (!g || g.category !== category) return;
+        const v = String(el.value ?? "").trim();
+        if (field === "typeUuid") {
+            g.typeUuid = v;
+        } else if (field === "subtypeUuid") {
+            g.subtypeUuid = v;
+        } else {
+            return;
+        }
         const tab = rowEl?.closest?.(".tab");
         if (tab) sheet._preservedScrollTop = tab.scrollTop;
         const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);

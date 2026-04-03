@@ -1,0 +1,48 @@
+{{#if hasAnyTypeOverlays}}
+<div class="cgs-merged-type-overlays">
+<h4 class="items-header">{{localize 'THIRDERA.CGS.MergedTypeOverlaysHeading'}}</h4>
+<p class="notes">{{localize 'THIRDERA.CGS.MergedTypeOverlaysHint'}}</p>
+
+{{#if cgsMergedCreatureTypeOverlays.length}}
+<h5 class="cgs-overlay-subheading">{{localize 'THIRDERA.CGS.MergedCreatureTypeOverlaysHeading'}}</h5>
+<ul class="cgs-merged-overlay-list items-list">
+  {{#each cgsMergedCreatureTypeOverlays as |row|}}
+  <li class="cgs-merged-overlay-row">
+    <span class="cgs-merged-overlay-label">{{row.label}}</span>
+    {{#if row.sourceDisplays.length}}
+    <details class="cgs-provenance">
+      <summary class="cgs-provenance-summary">{{localize 'THIRDERA.CGS.ProvenanceSourcesSummary'}}</summary>
+      <ul class="cgs-provenance-source-list">
+        {{#each row.sourceDisplays as |h|}}
+        <li class="cgs-provenance-source-item">{{{h}}}</li>
+        {{/each}}
+      </ul>
+    </details>
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>
+{{/if}}
+
+{{#if cgsMergedSubtypeOverlays.length}}
+<h5 class="cgs-overlay-subheading">{{localize 'THIRDERA.CGS.MergedSubtypeOverlaysHeading'}}</h5>
+<ul class="cgs-merged-overlay-list items-list">
+  {{#each cgsMergedSubtypeOverlays as |row|}}
+  <li class="cgs-merged-overlay-row">
+    <span class="cgs-merged-overlay-label">{{row.label}}</span>
+    {{#if row.sourceDisplays.length}}
+    <details class="cgs-provenance">
+      <summary class="cgs-provenance-summary">{{localize 'THIRDERA.CGS.ProvenanceSourcesSummary'}}</summary>
+      <ul class="cgs-provenance-source-list">
+        {{#each row.sourceDisplays as |h|}}
+        <li class="cgs-provenance-source-item">{{{h}}}</li>
+        {{/each}}
+      </ul>
+    </details>
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>
+{{/if}}
+</div>
+{{/if}}

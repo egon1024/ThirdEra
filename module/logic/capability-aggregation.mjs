@@ -7,6 +7,8 @@
  * Phase 5d: `spellGrants.rows` via `mergeSpellGrantRows` (dedupe by `spellUuid`, merged sources + optional meta).
  * Phase 5e: typed defenses — `immunities.rows` (set by tag), `energyResistance.rows` (max per type),
  * `damageReduction.rows` (all rows; consumer picks best applicable DR).
+ * Phase 5f: `creatureTypeOverlays.rows` / `subtypeOverlays.rows` — overlay type/subtype UUIDs with merged sources
+ * (base type stays on NPC `details`). V1: additive with primary — **base ∪ overlays**; see cgs-implementation.md §5.1.
  * Future: energy/immunity/DR label vocabularies may move to compendium Items or CONFIG+Items hybrid; merge uses
  * injected `deps` label maps — see cgs-phased-implementation.md § "Future — Typed defense catalogs".
  *
@@ -17,6 +19,8 @@
  * @typedef {{ tag: string, label: string, sources: CgsSourceEntry[] }} MergedImmunityRow
  * @typedef {{ energyType: string, amount: number, label: string, sources: CgsSourceEntry[] }} MergedEnergyResistanceRow
  * @typedef {{ value: number, bypass: string, label: string, sources: CgsSourceEntry[] }} MergedDamageReductionRow
+ * @typedef {{ typeUuid: string, label: string, sources: CgsSourceEntry[] }} MergedCreatureTypeOverlayRow
+ * @typedef {{ subtypeUuid: string, label: string, sources: CgsSourceEntry[] }} MergedSubtypeOverlayRow
  * @typedef {Record<string, { rows?: unknown[], grants?: unknown[] }>} CapabilityGrantsResult
  *
  * @see .cursor/plans/cgs-implementation.md
@@ -417,6 +421,90 @@ export function mergeDamageReductionRows(atoms, deps = {}) {
 }
 
 /**
+ * Merge creature type overlay grants: dedupe by type document UUID; merged sources (templates, items, actor rows).
+ * V1 semantics: additive with primary type — see cgs-implementation.md §5.1.
+ *
+ * @param {Array<{ typeUuid: string, label?: string, _source: CgsSourceEntry }>} atoms
+ * @param {{ creatureTypeItemLabels?: Record<string, string> }} [deps]
+ * @returns {MergedCreatureTypeOverlayRow[]}
+ */
+export function mergeCreatureTypeOverlayRows(atoms, deps = {}) {
+    if (!Array.isArray(atoms) || atoms.length === 0) return [];
+    /** @type {Map<string, { typeUuid: string, label?: string, sources: CgsSourceEntry[] }>} */
+    const map = new Map();
+    for (const a of atoms) {
+        if (!a || typeof a !== "object") continue;
+        const id = typeof a.typeUuid === "string" ? a.typeUuid.trim() : "";
+        if (!id) continue;
+        const src = a._source && typeof a._source === "object" ? a._source : { label: "Unknown source" };
+        const label = typeof src.label === "string" ? src.label : "Unknown source";
+        /** @type {CgsSourceEntry} */
+        const sourceEntry = { label };
+        if (src.sourceRef && typeof src.sourceRef === "object") sourceEntry.sourceRef = src.sourceRef;
+
+        const existing = map.get(id);
+        if (!existing) {
+            map.set(id, {
+                typeUuid: id,
+                label: typeof a.label === "string" ? a.label : undefined,
+                sources: [sourceEntry]
+            });
+        } else {
+            existing.sources.push(sourceEntry);
+            if (!existing.label && typeof a.label === "string") existing.label = a.label;
+        }
+    }
+    const labels = deps.creatureTypeItemLabels && typeof deps.creatureTypeItemLabels === "object" ? deps.creatureTypeItemLabels : {};
+    return [...map.values()].map(row => ({
+        typeUuid: row.typeUuid,
+        label: row.label ?? (typeof labels[row.typeUuid] === "string" ? labels[row.typeUuid] : row.typeUuid),
+        sources: dedupeCgsSourceEntries(row.sources)
+    }));
+}
+
+/**
+ * Merge subtype overlay grants: dedupe by subtype document UUID; merged sources.
+ * V1 semantics: additive with primary subtypes — see cgs-implementation.md §5.1.
+ *
+ * @param {Array<{ subtypeUuid: string, label?: string, _source: CgsSourceEntry }>} atoms
+ * @param {{ subtypeItemLabels?: Record<string, string> }} [deps]
+ * @returns {MergedSubtypeOverlayRow[]}
+ */
+export function mergeSubtypeOverlayRows(atoms, deps = {}) {
+    if (!Array.isArray(atoms) || atoms.length === 0) return [];
+    /** @type {Map<string, { subtypeUuid: string, label?: string, sources: CgsSourceEntry[] }>} */
+    const map = new Map();
+    for (const a of atoms) {
+        if (!a || typeof a !== "object") continue;
+        const id = typeof a.subtypeUuid === "string" ? a.subtypeUuid.trim() : "";
+        if (!id) continue;
+        const src = a._source && typeof a._source === "object" ? a._source : { label: "Unknown source" };
+        const label = typeof src.label === "string" ? src.label : "Unknown source";
+        /** @type {CgsSourceEntry} */
+        const sourceEntry = { label };
+        if (src.sourceRef && typeof src.sourceRef === "object") sourceEntry.sourceRef = src.sourceRef;
+
+        const existing = map.get(id);
+        if (!existing) {
+            map.set(id, {
+                subtypeUuid: id,
+                label: typeof a.label === "string" ? a.label : undefined,
+                sources: [sourceEntry]
+            });
+        } else {
+            existing.sources.push(sourceEntry);
+            if (!existing.label && typeof a.label === "string") existing.label = a.label;
+        }
+    }
+    const labels = deps.subtypeItemLabels && typeof deps.subtypeItemLabels === "object" ? deps.subtypeItemLabels : {};
+    return [...map.values()].map(row => ({
+        subtypeUuid: row.subtypeUuid,
+        label: row.label ?? (typeof labels[row.subtypeUuid] === "string" ? labels[row.subtypeUuid] : row.subtypeUuid),
+        sources: dedupeCgsSourceEntries(row.sources)
+    }));
+}
+
+/**
  * Stage B: remove sense rows whose type is covered by active `senseSuppression` grants (union of scopes).
  * `suppressionGrants` entries are raw grants with `_suppressingSource` from merge (contribution provenance).
  *
@@ -567,9 +655,10 @@ export function collectCapabilityContributions(actor, providers, deps = {}) {
  * Merge collected contributions into per-category CGS output.
  * Senses: Stage A union → Stage B suppression; `senses.rows` effective, `senses.sensesUnionRows` pre-B.
  * Phase 5e: immunities (set by tag), energyResistance (max per type), damageReduction (keep all rows).
+ * Phase 5f: creatureTypeOverlay / subtypeOverlay (dedupe by UUID, merged sources).
  *
  * @param {CapabilityContribution[]} contributions
- * @param {{ senseTypeLabels?: Record<string, string>, allVisionSenseTypeKeys?: string[], immunityTagLabels?: Record<string, string>, energyTypeLabels?: Record<string, string>, drBypassLabels?: Record<string, string> }} [deps]
+ * @param {{ senseTypeLabels?: Record<string, string>, allVisionSenseTypeKeys?: string[], immunityTagLabels?: Record<string, string>, energyTypeLabels?: Record<string, string>, drBypassLabels?: Record<string, string>, creatureTypeItemLabels?: Record<string, string>, subtypeItemLabels?: Record<string, string> }} [deps]
  * @returns {CapabilityGrantsResult}
  */
 export function mergeCapabilityGrantContributions(contributions, deps = {}) {
@@ -584,6 +673,10 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
     const energyResistanceAtoms = [];
     /** @type {Array<{ value: number, bypass?: string, label?: string, _source: CgsSourceEntry }>} */
     const damageReductionAtoms = [];
+    /** @type {Array<{ typeUuid: string, label?: string, _source: CgsSourceEntry }>} */
+    const creatureTypeOverlayAtoms = [];
+    /** @type {Array<{ subtypeUuid: string, label?: string, _source: CgsSourceEntry }>} */
+    const subtypeOverlayAtoms = [];
 
     for (const c of contributions) {
         const srcLabel = typeof c.label === "string" ? c.label : "";
@@ -652,6 +745,22 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
                     label: typeof g.label === "string" ? g.label : undefined,
                     _source: baseSource
                 });
+            } else if (cat === "creatureTypeOverlay") {
+                const typeUuid = typeof g.typeUuid === "string" ? g.typeUuid.trim() : "";
+                if (!typeUuid) continue;
+                creatureTypeOverlayAtoms.push({
+                    typeUuid,
+                    label: typeof g.label === "string" ? g.label : undefined,
+                    _source: baseSource
+                });
+            } else if (cat === "subtypeOverlay") {
+                const subtypeUuid = typeof g.subtypeUuid === "string" ? g.subtypeUuid.trim() : "";
+                if (!subtypeUuid) continue;
+                subtypeOverlayAtoms.push({
+                    subtypeUuid,
+                    label: typeof g.label === "string" ? g.label : undefined,
+                    _source: baseSource
+                });
             }
         }
     }
@@ -660,6 +769,12 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
     out.immunities.rows = mergeImmunityRows(immunityAtoms, { immunityTagLabels: deps.immunityTagLabels });
     out.energyResistance.rows = mergeEnergyResistanceRows(energyResistanceAtoms, { energyTypeLabels: deps.energyTypeLabels });
     out.damageReduction.rows = mergeDamageReductionRows(damageReductionAtoms, { drBypassLabels: deps.drBypassLabels });
+    out.creatureTypeOverlays.rows = mergeCreatureTypeOverlayRows(creatureTypeOverlayAtoms, {
+        creatureTypeItemLabels: deps.creatureTypeItemLabels
+    });
+    out.subtypeOverlays.rows = mergeSubtypeOverlayRows(subtypeOverlayAtoms, {
+        subtypeItemLabels: deps.subtypeItemLabels
+    });
 
     const sensesUnionRows = mergeSenseRows(senseAtoms, deps);
     const { effectiveRows, suppressedSenseRows } = applySenseSuppressions(
@@ -677,7 +792,7 @@ export function mergeCapabilityGrantContributions(contributions, deps = {}) {
  * Aggregated structured capability grants for an actor (derived consumers use this entry point).
  *
  * @param {unknown} actor
- * @param {{ providers?: Array<(a: unknown) => unknown>, warn?: typeof console.warn, senseTypeLabels?: Record<string, string>, allVisionSenseTypeKeys?: string[], immunityTagLabels?: Record<string, string>, energyTypeLabels?: Record<string, string>, drBypassLabels?: Record<string, string> }} [deps]
+ * @param {{ providers?: Array<(a: unknown) => unknown>, warn?: typeof console.warn, senseTypeLabels?: Record<string, string>, allVisionSenseTypeKeys?: string[], immunityTagLabels?: Record<string, string>, energyTypeLabels?: Record<string, string>, drBypassLabels?: Record<string, string>, creatureTypeItemLabels?: Record<string, string>, subtypeItemLabels?: Record<string, string> }} [deps]
  *   When `providers` is omitted, uses CONFIG.THIRDERA.capabilitySourceProviders (Foundry init).
  * @returns {CapabilityGrantsResult}
  */
@@ -695,7 +810,9 @@ export function getActiveCapabilityGrants(actor, deps = {}) {
             allVisionSenseTypeKeys: deps.allVisionSenseTypeKeys,
             immunityTagLabels: deps.immunityTagLabels ?? cfg?.immunityTags,
             energyTypeLabels: deps.energyTypeLabels ?? cfg?.energyTypes,
-            drBypassLabels: deps.drBypassLabels ?? cfg?.drBypassTypes
+            drBypassLabels: deps.drBypassLabels ?? cfg?.drBypassTypes,
+            creatureTypeItemLabels: deps.creatureTypeItemLabels,
+            subtypeItemLabels: deps.subtypeItemLabels
         });
     } catch (e) {
         warn("ThirdEra | getActiveCapabilityGrants failed:", e);

@@ -5,6 +5,7 @@ import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbran
 import { ClassData } from "./item-class.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
 import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
+import { buildCgsOverlayItemLabelMaps } from "../logic/cgs-overlay-labels.mjs";
 import { getActiveModifiers, sumChangeValuesForModifierKey } from "../logic/modifier-aggregation.mjs";
 import { resolvedSkillMiscLineLabel } from "../logic/npc-skill-prep.mjs";
 
@@ -171,7 +172,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             /** Casts today via CGS grant Cast (SLA-style), keyed by merged `spellUuid` — separate from spell item `system.cast` */
             cgsSpellGrantCasts: new ObjectField({ required: false, initial: {}, label: "CGS Spell Grant Casts" }),
 
-            /** Actor-level CGS authoring (senses, …); merged into derived system.cgs */
+            /** Actor-level CGS authoring (senses, type/subtype overlays, …); merged into derived system.cgs */
             cgsGrants: new SchemaField(
                 {
                     senses: new ArrayField(
@@ -184,7 +185,16 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                             range: new StringField({ required: true, blank: true, initial: "" })
                         }),
                         { required: true, initial: [] }
-                    )
+                    ),
+                    /** Phase 5f: overlay creature type Item UUIDs (polymorph / templates / GM-authored). */
+                    creatureTypeOverlayUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                        required: true,
+                        initial: []
+                    }),
+                    subtypeOverlayUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                        required: true,
+                        initial: []
+                    })
                 },
                 { required: false }
             )
@@ -197,9 +207,11 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         // required fields never get defaults. Same backfill runs from preUpdate hooks on live documents.
         backfillCharacterSystemSourceInPlace(source);
         if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
-            source.cgsGrants = { senses: [] };
-        } else if (!Array.isArray(source.cgsGrants.senses)) {
-            source.cgsGrants.senses = [];
+            source.cgsGrants = { senses: [], creatureTypeOverlayUuids: [], subtypeOverlayUuids: [] };
+        } else {
+            if (!Array.isArray(source.cgsGrants.senses)) source.cgsGrants.senses = [];
+            if (!Array.isArray(source.cgsGrants.creatureTypeOverlayUuids)) source.cgsGrants.creatureTypeOverlayUuids = [];
+            if (!Array.isArray(source.cgsGrants.subtypeOverlayUuids)) source.cgsGrants.subtypeOverlayUuids = [];
         }
         if (!source.cgsSpellGrantCasts || typeof source.cgsSpellGrantCasts !== "object") {
             source.cgsSpellGrantCasts = {};
@@ -811,9 +823,16 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 ? CONFIG.THIRDERA.senseTypes
                 : {};
         const allVisionSenseTypeKeys = Object.keys(senseTypeLabels).map(k => String(k).trim()).filter(Boolean);
-        this.cgs = getActiveCapabilityGrants(this.parent, {
+        const cgsBase = getActiveCapabilityGrants(this.parent, {
             senseTypeLabels,
             allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined
+        });
+        const { creatureTypeItemLabels, subtypeItemLabels } = buildCgsOverlayItemLabelMaps(cgsBase);
+        this.cgs = getActiveCapabilityGrants(this.parent, {
+            senseTypeLabels,
+            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined,
+            creatureTypeItemLabels,
+            subtypeItemLabels
         });
     }
 }

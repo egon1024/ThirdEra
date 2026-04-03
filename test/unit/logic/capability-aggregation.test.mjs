@@ -7,9 +7,11 @@ import {
     formatMergedSenseLabel,
     getActiveCapabilityGrants,
     mergeCapabilityGrantContributions,
+    mergeCreatureTypeOverlayRows,
     mergeDamageReductionRows,
     mergeEnergyResistanceRows,
     mergeImmunityRows,
+    mergeSubtypeOverlayRows,
     mergeSpellGrantRows,
     mergeSenseRows,
     normalizeSenseRangeKey,
@@ -391,6 +393,55 @@ describe("mergeCapabilityGrantContributions", () => {
         expect(merged.immunities.rows[0].tag).toBe("fire");
         expect(merged.energyResistance.rows).toHaveLength(0);
         expect(merged.senses.rows).toHaveLength(1);
+    });
+
+    it("merges creatureTypeOverlay and subtypeOverlay grants (Phase 5f)", () => {
+        const merged = mergeCapabilityGrantContributions(
+            [
+                {
+                    label: "Shapechange",
+                    grants: [
+                        { category: "creatureTypeOverlay", typeUuid: "Compendium.x.Item.dragon" },
+                        { category: "subtypeOverlay", subtypeUuid: "Compendium.x.Item.fire" }
+                    ]
+                },
+                {
+                    label: "Template",
+                    grants: [{ category: "creatureTypeOverlay", typeUuid: "Compendium.x.Item.dragon" }]
+                }
+            ],
+            {
+                creatureTypeItemLabels: { "Compendium.x.Item.dragon": "Dragon" },
+                subtypeItemLabels: { "Compendium.x.Item.fire": "Fire" }
+            }
+        );
+        expect(merged.creatureTypeOverlays.rows).toHaveLength(1);
+        expect(merged.creatureTypeOverlays.rows[0].typeUuid).toBe("Compendium.x.Item.dragon");
+        expect(merged.creatureTypeOverlays.rows[0].label).toBe("Dragon");
+        expect(merged.creatureTypeOverlays.rows[0].sources.map(s => s.label).sort()).toEqual(["Shapechange", "Template"]);
+        expect(merged.subtypeOverlays.rows).toHaveLength(1);
+        expect(merged.subtypeOverlays.rows[0].subtypeUuid).toBe("Compendium.x.Item.fire");
+        expect(merged.subtypeOverlays.rows[0].label).toBe("Fire");
+    });
+});
+
+describe("mergeCreatureTypeOverlayRows / mergeSubtypeOverlayRows", () => {
+    it("dedupes by UUID and uses label map fallback to uuid", () => {
+        const ct = mergeCreatureTypeOverlayRows(
+            [
+                { typeUuid: "u1", _source: { label: "A" } },
+                { typeUuid: "u1", _source: { label: "B" } }
+            ],
+            {}
+        );
+        expect(ct).toHaveLength(1);
+        expect(ct[0].typeUuid).toBe("u1");
+        expect(ct[0].label).toBe("u1");
+        expect(ct[0].sources).toHaveLength(2);
+        const st = mergeSubtypeOverlayRows([{ subtypeUuid: "s1", _source: { label: "X" } }], {
+            subtypeItemLabels: { s1: "Goblinoid" }
+        });
+        expect(st[0].label).toBe("Goblinoid");
     });
 });
 

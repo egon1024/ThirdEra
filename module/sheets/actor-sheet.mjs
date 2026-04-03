@@ -99,6 +99,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             openSpecialAbilitiesEditor: ThirdEraActorSheet.#onOpenSpecialAbilitiesEditor,
             addCgsSense: ThirdEraActorSheet.#onAddCgsSense,
             removeCgsSense: ThirdEraActorSheet.#onRemoveCgsSense,
+            addActorCgsCreatureTypeOverlay: ThirdEraActorSheet.#onAddActorCgsCreatureTypeOverlay,
+            removeActorCgsCreatureTypeOverlay: ThirdEraActorSheet.#onRemoveActorCgsCreatureTypeOverlay,
+            addActorCgsSubtypeOverlay: ThirdEraActorSheet.#onAddActorCgsSubtypeOverlay,
+            removeActorCgsSubtypeOverlay: ThirdEraActorSheet.#onRemoveActorCgsSubtypeOverlay,
             addLegacyStatBlockSense: ThirdEraActorSheet.#onAddLegacyStatBlockSense,
             removeLegacyStatBlockSense: ThirdEraActorSheet.#onRemoveLegacyStatBlockSense,
             configurePrototypeToken: ThirdEraActorSheet.#onConfigurePrototypeToken,
@@ -1966,23 +1970,27 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             };
         });
 
-        // NPC-only: creature type and subtype choices + resolved (for dropdown and display)
-        let creatureTypeChoices = [];
+        // Creature type / subtype Item lists (NPC Details + CGS overlay mechanics on all actors)
+        const typesPack = game.packs.get("thirdera.thirdera_creature_types");
+        const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
+        const typesFromPack = typesPack ? await typesPack.getDocuments() : [];
+        const typesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "creatureType");
+        const subtypesFromPack = subtypesPack ? await subtypesPack.getDocuments() : [];
+        const subtypesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "subtype");
+        const allTypes = [...typesFromPack, ...typesFromWorld];
+        const allSubtypes = [...subtypesFromPack, ...subtypesFromWorld];
+        const typeSort = (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
+        const creatureTypeChoices = allTypes
+            .map((doc) => ({ uuid: doc.uuid, name: doc.name }))
+            .sort((a, b) => typeSort({ name: a.name }, { name: b.name }));
+        const subtypeChoices = allSubtypes
+            .map((doc) => ({ uuid: doc.uuid, name: doc.name }))
+            .sort((a, b) => typeSort({ name: a.name }, { name: b.name }));
+
         let creatureTypeResolved = null;
-        let subtypeChoices = [];
+        /** @type {Array<{ uuid: string, name: string }>} */
         let selectedSubtypes = [];
         if (actor.type === "npc") {
-            const typesPack = game.packs.get("thirdera.thirdera_creature_types");
-            const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
-            const typesFromPack = typesPack ? await typesPack.getDocuments() : [];
-            const typesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "creatureType");
-            const subtypesFromPack = subtypesPack ? await subtypesPack.getDocuments() : [];
-            const subtypesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "subtype");
-            const allTypes = [...typesFromPack, ...typesFromWorld];
-            const allSubtypes = [...subtypesFromPack, ...subtypesFromWorld];
-            const typeSort = (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
-            creatureTypeChoices = allTypes.map((doc) => ({ uuid: doc.uuid, name: doc.name })).sort((a, b) => typeSort({ name: a.name }, { name: b.name }));
-            subtypeChoices = allSubtypes.map((doc) => ({ uuid: doc.uuid, name: doc.name })).sort((a, b) => typeSort({ name: a.name }, { name: b.name }));
             const creatureTypeUuid = (systemData.details?.creatureTypeUuid ?? "").trim();
             if (creatureTypeUuid) {
                 try {
@@ -2003,6 +2011,19 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
             }
         }
+
+        const ctOv = Array.isArray(systemData.cgsGrants?.creatureTypeOverlayUuids)
+            ? systemData.cgsGrants.creatureTypeOverlayUuids
+            : [];
+        const stOv = Array.isArray(systemData.cgsGrants?.subtypeOverlayUuids) ? systemData.cgsGrants.subtypeOverlayUuids : [];
+        const actorCgsCreatureTypeOverlayRows = ctOv.map((uuid, idx) => ({
+            idx,
+            uuid: uuid != null ? String(uuid).trim() : ""
+        }));
+        const actorCgsSubtypeOverlayRows = stOv.map((uuid, idx) => ({
+            idx,
+            uuid: uuid != null ? String(uuid).trim() : ""
+        }));
 
         /** @type {Array<{ senseLabel: string, sourceDisplays: unknown[] }>} */
         const cgsMergedSensesProvenance = (() => {
@@ -2082,6 +2103,22 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
         }));
         const hasAnyTypedDefenses = cgsMergedImmunities.length > 0 || cgsMergedEnergyResistance.length > 0 || cgsMergedDamageReduction.length > 0;
+
+        const cgsMergedCreatureTypeOverlays = enrichCgsTypedDefenseRowsForProvenance(
+            systemData.cgs?.creatureTypeOverlays?.rows,
+            cgsTypedDefenseProvenanceCtx
+        ).map((row) => ({
+            label: row.label,
+            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+        }));
+        const cgsMergedSubtypeOverlays = enrichCgsTypedDefenseRowsForProvenance(
+            systemData.cgs?.subtypeOverlays?.rows,
+            cgsTypedDefenseProvenanceCtx
+        ).map((row) => ({
+            label: row.label,
+            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+        }));
+        const hasAnyTypeOverlays = cgsMergedCreatureTypeOverlays.length > 0 || cgsMergedSubtypeOverlays.length > 0;
 
         return {
             ...context,
@@ -2187,7 +2224,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             cgsMergedImmunities,
             cgsMergedEnergyResistance,
             cgsMergedDamageReduction,
-            hasAnyTypedDefenses
+            hasAnyTypedDefenses,
+            cgsMergedCreatureTypeOverlays,
+            cgsMergedSubtypeOverlays,
+            hasAnyTypeOverlays,
+            actorCgsCreatureTypeOverlayRows,
+            actorCgsSubtypeOverlayRows
         };
     }
 
@@ -5286,6 +5328,38 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (idx < 0 || idx >= senses.length) return;
         senses.splice(idx, 1);
         await this.actor.update({ "system.cgsGrants.senses": senses });
+    }
+
+    static async #onAddActorCgsCreatureTypeOverlay(_event, _target) {
+        const list = foundry.utils.duplicate(this.actor.system.cgsGrants?.creatureTypeOverlayUuids ?? []);
+        list.push("");
+        await this.actor.update({ "system.cgsGrants.creatureTypeOverlayUuids": list });
+    }
+
+    static async #onRemoveActorCgsCreatureTypeOverlay(event, target) {
+        const row = target?.closest?.("[data-actor-cgs-type-overlay-index]");
+        const idx = parseInt(row?.dataset?.actorCgsTypeOverlayIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const list = foundry.utils.duplicate(this.actor.system.cgsGrants?.creatureTypeOverlayUuids ?? []);
+        if (idx < 0 || idx >= list.length) return;
+        list.splice(idx, 1);
+        await this.actor.update({ "system.cgsGrants.creatureTypeOverlayUuids": list });
+    }
+
+    static async #onAddActorCgsSubtypeOverlay(_event, _target) {
+        const list = foundry.utils.duplicate(this.actor.system.cgsGrants?.subtypeOverlayUuids ?? []);
+        list.push("");
+        await this.actor.update({ "system.cgsGrants.subtypeOverlayUuids": list });
+    }
+
+    static async #onRemoveActorCgsSubtypeOverlay(event, target) {
+        const row = target?.closest?.("[data-actor-cgs-subtype-overlay-index]");
+        const idx = parseInt(row?.dataset?.actorCgsSubtypeOverlayIndex, 10);
+        if (Number.isNaN(idx)) return;
+        const list = foundry.utils.duplicate(this.actor.system.cgsGrants?.subtypeOverlayUuids ?? []);
+        if (idx < 0 || idx >= list.length) return;
+        list.splice(idx, 1);
+        await this.actor.update({ "system.cgsGrants.subtypeOverlayUuids": list });
     }
 
     /**
