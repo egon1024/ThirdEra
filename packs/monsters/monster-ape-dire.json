@@ -79,12 +79,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Rend (Ex):</strong> Two claw hits deal extra 2d6+12.</p><p><strong>Full attack:</strong> 2 claws +10, bite +5.</p>",
       "environment": "Warm forests",
       "organization": "Solitary or troop (2-5)",
@@ -145,6 +140,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

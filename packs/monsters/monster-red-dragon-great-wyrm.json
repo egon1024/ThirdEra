@@ -131,16 +131,7 @@
         "bypass": ""
       },
       "spellResistance": 32,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +49, 2× Claw +47, 2× Wing +47, Tail slap +47, Crush +47, Tail sweep +47.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 24d10 (40)</p><p><strong>Special qualities (by age):</strong> Discern location</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
       "environment": "Warm mountains",
       "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
@@ -201,6 +192,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

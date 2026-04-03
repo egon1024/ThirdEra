@@ -72,12 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Natural cunning (Ex):</strong> Immune to maze; never lost in mazes; +4 vs. bull rush and trip.</p><p><strong>Powerful charge (Ex):</strong> Gore after charge for 4d6+6.</p><p><strong>Attack:</strong> Greataxe +9/+4 (3d6+6) or gore +9 (1d8+4).</p>",
       "environment": "Underground",
       "organization": "Solitary, pair, or band",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

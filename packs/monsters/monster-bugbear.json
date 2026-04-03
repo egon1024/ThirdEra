@@ -66,16 +66,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "scent",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Attack:</strong> Morningstar +5 melee (1d8+2) or javelin +3 ranged (1d6+2).</p><p><strong>Special:</strong> Darkvision 60 ft.; scent.</p>",
       "environment": "Temperate mountains",
       "organization": "Solitary, gang, or band",
@@ -136,6 +127,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

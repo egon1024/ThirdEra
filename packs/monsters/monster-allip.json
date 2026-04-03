@@ -66,12 +66,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Babble (Su):</strong> Creatures within 60 ft. may become insane (Will DC 16).</p><p><strong>Incorporeal touch +5</strong> (1d4 Wisdom drain).</p>",
       "environment": "Any",
       "organization": "Solitary",
@@ -132,6 +127,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

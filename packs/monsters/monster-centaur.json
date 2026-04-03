@@ -72,12 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Weapon Focus (hoof)</strong> represented with generic Weapon Focus; hooves +3 secondary in full attack.</p><p><strong>Full attack:</strong> Longsword +7 and 2 hooves +3, or composite longbow (+4 Str) +5 ranged.</p><p><strong>Lance:</strong> Deals double damage on a charge when using a lance like a mounted rider.</p>",
       "environment": "Temperate forests",
       "organization": "Solitary, company, troop, or tribe",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

@@ -76,12 +76,7 @@
         "bypass": "good"
       },
       "spellResistance": 28,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:devil.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Devil\"><h4>SRD type: Devil</h4><p>\n\tDevils are fiends from lawful evil-aligned planes.\n</p>\n<p>\n\tMany devils are surrounded by a <a href=\"/srd/specialAbilities.htm#fearAura\">fear aura</a>, which they use to break up powerful groups and defeat opponents piecemeal. Devils with <a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">spell-like abilities</a> use their illusion abilities to delude and confuse foes as much as possible. A favorite trick is to create illusory reinforcements; enemies can never be entirely sure if a threat is only a figment or real summoned devils joining the fray.\n</p>\n\n<h5>Devil Traits</h5>\n<p>\n\tMost devils possesses the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li><a href=\"/srd/specialAbilities.htm#fireImmunity\">Immunity to fire</a> and <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to acid 10 and cold 10.</li>\n\t<li>See in Darkness (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): Some devils can see perfectly in darkness of any kind, even that created by a <a class=\"spell\" href=\"/srd/spells/deeperDarkness.htm\">deeper darkness</a> spell.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#summon\">Summon</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>): Some devils share the ability to summon others of their kind (the success chance and type of devils summoned are noted in each monster description).</li>\n\t<li><a href=\"/srd/specialAbilities.htm#telepathy\">Telepathy</a>.</li>\n</ul>\n<p>\n\tExcept when otherwise noted, devils speak Infernal, Celestial, and Draconic.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Fear aura, infernal wound, spell-like abilities, stun, summon devil</p><p><strong>Special Qualities:</strong> Damage reduction 10/good and silver, darkvision 60 ft., immunity to fire and poison, resistance to acid 10 and cold 10, regeneration 5, see in darkness, spell resistance 28, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "A lawful evil-aligned plane",
       "organization": "Solitary, team (2-4), or squad (6-10)",
@@ -142,6 +137,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

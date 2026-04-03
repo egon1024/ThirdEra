@@ -72,16 +72,7 @@
         "bypass": "adamantine"
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:golem.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Golem\"><h4>SRD type: Golem</h4><p>\n\tGolems are magically created automatons of great power. Constructing one involves the employment of mighty magic and elemental forces.\n</p>\n<p>\n\tThe animating force for a golem is a spirit from the Elemental Plane of Earth. The process of creating the golem binds the unwilling spirit to the artificial body and subjects it to the will of the golem’s creator.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tGolems are tenacious in combat and prodigiously strong as well. Being mindless, they do nothing without orders from their creators. They follow instructions explicitly and are incapable of any strategy or tactics. They are emotionless in combat and cannot be provoked.\n</p>\n<p>\n\tA golem’s creator can command it if the golem is within 60 feet and can see and hear its creator. If uncommanded, a golem usually follows its last instruction to the best of its ability, though if attacked it returns the attack. The creator can give the golem a simple command to govern its actions in his or her absence. The golem’s creator can order the golem to obey the commands of another person (who might in turn place the golem under someone else’s control, and so on), but the golem’s creator can always resume control over his creation by commanding the golem to obey him alone.\n</p>\n\n<h5>Immunity to Magic (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tGolems have immunity to most magical and <a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">supernatural</a> effects, except when otherwise noted.\n</p>\n\n<h3>Construction</h3>\n<p>\n\tThe cost to create given for each golem includes the cost of the physical body and all the materials and spell components that are consumed or become a permanent part of the golem. Creating a golem is essentially similar to creating any sort of magic item. However, a golem’s body includes costly material components that may require some extra preparation. The golem’s creator can assemble the body or hire someone else to do the job. The builder must have the appropriate skill, which varies with the golem variety.\n</p>\n<p>\n\tCompleting the golem’s creation drains the appropriate XP from the creator and requires casting any spells on the final day.\n</p>\n<p>\n\tThe creator must cast the spells personally, but they can come from outside sources, such as scrolls.\n</p>\n<p>\n\tThe characteristics of a golem that come from its nature as a magic item (caster level, prerequisite feats and spells, market price, cost to create) are given in summary form at the end of each golem’s description.\n</p>\n<p>\n\tNote: The market price of an advanced golem (a golem with more Hit Dice than the typical golem described in each entry) is increased by 5,000 gp for each additional Hit Die, and increased by an additional 50,000 gp if the golem’s size increases. The XP cost for creating an advanced golem is equal to 1/25 the advanced golem’s market price minus the cost of the special materials required.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Slow</p><p><strong>Special Qualities:</strong> Construct traits, damage reduction 10/adamantine, darkvision 60 ft., immunity to magic, low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Any",
       "organization": "Solitary or gang (2-4)",
@@ -142,6 +133,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

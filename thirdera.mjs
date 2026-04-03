@@ -32,6 +32,7 @@ import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
 import { migrateAllRaceStockDeltas } from "./module/logic/race-srd-changes-merge.mjs";
 import { migrateAllRaceQualitativeTraits } from "./module/logic/race-qualitative-traits-stock.mjs";
+import { migrateAllNpcPhase6StatBlockSenses } from "./module/logic/cgs-phase6-npc-world-migrate.mjs";
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
 import {
     syncDerivedFlatFootedCondition,
@@ -718,6 +719,17 @@ Hooks.once("ready", async function () {
         }
     } catch (e) {
         console.warn("Third Era | Race qualitative traits migration error:", e);
+    }
+    try {
+        const npcCgs = await migrateAllNpcPhase6StatBlockSenses({ game });
+        if (!npcCgs.skipped && (npcCgs.worldUpdated > 0 || npcCgs.compendiumUpdated > 0)) {
+            console.log(
+                "Third Era | Phase 6 NPC senses: merged legacy stat block into CGS — " +
+                    `world actors ${npcCgs.worldUpdated}, monsters compendium ${npcCgs.compendiumUpdated}`
+            );
+        }
+    } catch (e) {
+        console.warn("Third Era | Phase 6 NPC CGS sense migration error:", e);
     }
     // Resolve compendium index img paths so thumbnails work from /game.
     applyCompendiumImageRouteFix();

@@ -72,12 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:giant.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Giant\"><h4>SRD type: Giant</h4><p>\n\tAll giants speak Giant. Those with Intelligence scores of 10 or higher also speak Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tGiants relish melee combat. They favor massive two-handed weapons and wield them with impressive skill. They have enough cunning to soften up a foe with ranged attacks first, if they can. A giant’s favorite ranged weapon is a big rock.\n</p>\n\n<h5>Rock Throwing (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tAdult giants are accomplished rock throwers and receive a +1 racial bonus on <a href=\"/srd/combat/combatStatistics.htm#attackRoll\">attack rolls</a> when throwing rocks. A giant of at least Large size can hurl rocks weighing 40 to 50 pounds each (Small objects) up to five range increments. The size of the range increment varies with the giant’s variety. A Huge giant can hurl rocks of 60 to 80 pounds (Medium objects).\n</p>\n\n<h5>Rock Catching (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tA giant of at least Large size can catch Small, Medium, or Large rocks (or projectiles of similar shape).\n</p>\n<p>\n\tOnce per round, a giant that would normally be hit by a rock can make a <a href=\"/srd/combat/combatStatistics.htm#reflex\">Reflex save</a> to catch it as a <a href=\"/srd/combat/actionsInCombat.htm#freeActions\">free action</a>. The DC is 15 for a Small rock, 20 for a Medium one, and 25 for a Large one. (If the projectile provides a magical bonus on <a href=\"/srd/combat/combatStatistics.htm#attackRoll\">attack rolls</a>, the DC increases by that amount.) The giant must be ready for and aware of the attack in order to make a rock catching attempt.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Spell-like abilities</p><p><strong>Special Qualities:</strong> Freedom of movement, immunity to electricity, low-light vision, rock catching, water breathing</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Warm mountains",
       "organization": "Solitary or family (2-4 plus 35% noncombatants plus 1 sorcerer or cleric of 7th-10th level plus 1-2 rocs, 2-5 griffons, or 2-8 sea cats)",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

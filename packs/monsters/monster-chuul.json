@@ -74,12 +74,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Constrict</strong> 3d6+5. <strong>Improved grab.</strong> <strong>Paralytic tentacles (Ex):</strong> Fort DC 19 or paralyzed 6 rounds. <strong>Amphibious.</strong> Immune to poison.</p>",
       "environment": "Temperate marshes",
       "organization": "Solitary, pair, or pack (3–5)",
@@ -140,6 +135,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

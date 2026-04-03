@@ -75,12 +75,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Air mastery (Ex):</strong> Airborne creatures take a -1 penalty on attack and damage rolls against an air elemental.</p><p><strong>Whirlwind (Su):</strong> Reflex DC 11 or take 1d4 damage and be lifted; see SRD elemental rules.</p><p><strong>Slam +5</strong> (1d4).</p>",
       "environment": "Elemental Plane of Air",
       "organization": "Solitary",
@@ -141,6 +136,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

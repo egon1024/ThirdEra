@@ -64,16 +64,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Attack:</strong> Greatclub +8 melee (2d8+7) or javelin +1 ranged (1d8+5).</p><p><strong>Special:</strong> Darkvision 60 ft.; low-light vision.</p>",
       "environment": "Temperate hills",
       "organization": "Solitary, pair, gang, or band",
@@ -134,6 +125,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

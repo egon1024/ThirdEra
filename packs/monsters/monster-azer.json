@@ -68,12 +68,7 @@
         "bypass": ""
       },
       "spellResistance": 13,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Heat (Ex):</strong> Metallic weapon strikes deal extra fire damage.</p><p><strong>Immunity:</strong> Fire.</p>",
       "environment": "Elemental Plane of Fire",
       "organization": "Solitary, pair, or squad (3-12)",
@@ -134,6 +129,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

@@ -79,16 +79,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Displacement (Su):</strong> Total concealment (50% miss); true seeing negates.</p><p><strong>Full attack:</strong> 2 tentacles +10 (1d6+4), bite +5 (1d8+2).</p>",
       "environment": "Temperate hills",
       "organization": "Solitary, pair, or pride (6–10)",
@@ -149,6 +140,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

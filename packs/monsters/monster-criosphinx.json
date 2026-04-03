@@ -72,16 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:sphinx.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Sphinx\"><h4>SRD type: Sphinx</h4><p>\n\tSphinxes are enigmatic creatures with great, feathery wings and leonine bodies. All sphinxes are territorial, but the more intelligent ones can differentiate between deliberate intrusion and temporary or inadvertent trespass.\n</p>\n<p>\n\tA typical sphinx is about 10 feet long and weighs about 800 pounds.\n</p>\n<p>\n\tSphinxes speak Sphinx, Common, and Draconic.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tMost sphinxes fight on the ground, using their wings to help them <a href=\"/srd/specialAbilities.htm#pounce\">pounce</a> much as lions do. If outnumbered by earthbound creatures, a sphinx takes wing and attacks on the fly.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#pounce\">Pounce</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tIf a sphinx <a href=\"/srd/combat/specialAttacks.htm#charge\">charges</a> a foe, it can make a <a href=\"/srd/combat/actionsInCombat.htm#fullAttack\">full attack</a>, including two <a href=\"/srd/specialAbilities.htm#rake\">rake</a> attacks.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#rake\">Rake</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tA sphinx that <a href=\"/srd/specialAbilities.htm#pounce\">pounces</a> onto a creature can make two <a href=\"/srd/specialAbilities.htm#rake\">rake</a> attacks with its hind legs. Each sphinx’s description provides its attack bonus and damage.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Pounce, rake 1d6+3</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Warm deserts",
       "organization": "Solitary",
@@ -142,6 +133,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

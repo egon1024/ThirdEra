@@ -74,12 +74,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Web (Ex):</strong> Ranged touch entangling web.</p><p><strong>Spells:</strong> Sorcerer casting as 3rd-level sorcerer.</p><p><strong>Bite +6</strong> (1d6 plus poison).</p>",
       "environment": "Warm forests",
       "organization": "Solitary or colony (3-6)",
@@ -140,6 +135,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

@@ -67,12 +67,7 @@
         "bypass": ""
       },
       "spellResistance": 15,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Corporeal instability (Su):</strong> Contact can destabilize foes (see SRD).</p><p><strong>Immune:</strong> Critical hits, transformation.</p>",
       "environment": "Chaotic-aligned planes",
       "organization": "Solitary",
@@ -133,6 +128,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

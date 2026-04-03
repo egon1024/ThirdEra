@@ -131,16 +131,7 @@
         "bypass": ""
       },
       "spellResistance": 29,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +45, 2× Claw +43, 2× Wing +43, Tail slap +43, Crush +43, Tail sweep +43.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): 22d8 (36)</p><p><strong>Special qualities (by age):</strong> DR 20/magic</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p>",
       "environment": "Temperate deserts",
       "organization": "Wyrmling, very young, young, juvenile, and young adult: solitary or clutch (2-5); adult, mature adult, old, very old, ancient, wyrm, or great wyrm: solitary, pair, or family (1-2 and 2-5 offspring)",
@@ -201,6 +192,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

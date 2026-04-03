@@ -5,6 +5,7 @@ import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
 import { buildCgsOverlayItemLabelMaps } from "../logic/cgs-overlay-labels.mjs";
 import { getActiveModifiers, sumChangeValuesForModifierKey } from "../logic/modifier-aggregation.mjs";
 import { prepareNpcSkillItems, buildModifierOnlySkills } from "../logic/npc-skill-prep.mjs";
+import { migrateNpcStatBlockSensesIntoCgsGrants } from "../logic/cgs-phase6-npc-statblock-migrate.mjs";
 
 /**
  * Data model for D&D 3.5 NPC actors
@@ -208,6 +209,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             if (!Array.isArray(source.cgsGrants.creatureTypeOverlayUuids)) source.cgsGrants.creatureTypeOverlayUuids = [];
             if (!Array.isArray(source.cgsGrants.subtypeOverlayUuids)) source.cgsGrants.subtypeOverlayUuids = [];
         }
+        migrateNpcStatBlockSensesIntoCgsGrants(source);
         return super.migrateData(source);
     }
 

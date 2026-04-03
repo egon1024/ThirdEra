@@ -79,12 +79,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Full attack:</strong> Bite +2 (1d6+1 plus paralysis) and 2 claws +0 (1d3 plus paralysis).</p><p><strong>Ghoul fever (Su):</strong> Bite, Fort DC 12, 1 day incubation, 1d3 Con and 1d3 Dex.</p><p><strong>Paralysis (Ex):</strong> DC 12 Fort or paralyzed 1d4+1 rounds (elves immune).</p>",
       "environment": "Any",
       "organization": "Solitary, gang, or pack",
@@ -145,6 +140,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

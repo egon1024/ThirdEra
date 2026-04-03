@@ -18,6 +18,7 @@ import {
     enrichCgsSuppressedSenseRowsForProvenance,
     enrichCgsTypedDefenseRowsForProvenance
 } from "../logic/cgs-provenance-display.mjs";
+import { formatCgsProvenanceLinkTooltip } from "../logic/cgs-provenance-tooltip.mjs";
 import { getCgsSpellGrantCastTotal } from "../logic/cgs-spell-grant-cast.mjs";
 import { getMergedSpellGrantRowsForActor } from "../logic/cgs-spell-grant-rows.mjs";
 import {
@@ -895,9 +896,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
     /**
      * Build one provenance line for merged CGS senses (Phase 4): Foundry content-link when allowed, else escaped label.
      * @param {{ showLabel: boolean, linkUuid: string | null, useLabel: string }} plan
+     * @param {Map<string, unknown> | undefined} [uuidCache] Dedupes sync UUID resolution within one sheet context pass (many CGS rows repeat the same source).
      * @returns {unknown} Handlebars.SafeString when Handlebars is available
      */
-    static buildCgsProvenanceSourceHtml(plan) {
+    static buildCgsProvenanceSourceHtml(plan, uuidCache) {
         const HB = globalThis.Handlebars;
         const esc = (t) => (HB?.Utils?.escapeExpression ? HB.Utils.escapeExpression(String(t)) : String(t));
         const unknown =
@@ -919,7 +921,20 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
         };
 
-        const doc = plan.linkUuid ? resolveUuidSync(plan.linkUuid) : null;
+        /** @type {unknown} */
+        let doc = null;
+        const uuid = typeof plan.linkUuid === "string" ? plan.linkUuid.trim() : "";
+        if (uuid) {
+            if (uuidCache instanceof Map) {
+                if (uuidCache.has(uuid)) doc = uuidCache.get(uuid);
+                else {
+                    doc = resolveUuidSync(uuid);
+                    uuidCache.set(uuid, doc);
+                }
+            } else {
+                doc = resolveUuidSync(uuid);
+            }
+        }
         const canLink =
             doc &&
             (isGM || doc.testUserPermission?.(user, "OBSERVER")) &&
@@ -927,7 +942,13 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         if (canLink) {
             try {
-                return new HB.SafeString(doc.toAnchor({ name: plan.useLabel }).outerHTML);
+                const anchor = doc.toAnchor({ name: plan.useLabel });
+                const tooltipText = formatCgsProvenanceLinkTooltip(doc, plan.useLabel, {
+                    localize: (k) => game.i18n.localize(k),
+                    itemTypeLabels: CONFIG.Item?.typeLabels
+                });
+                if (tooltipText) anchor.dataset.tooltipText = tooltipText;
+                return new HB.SafeString(anchor.outerHTML);
             } catch {
                 // fall through to plain label
             }
@@ -1852,6 +1873,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 }
             }
         });
+        const cgsProvUuidCache = new Map();
+        const cgsProvenanceSourceHtml = (plan) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(plan, cgsProvUuidCache);
+
         const resolveCgsSpellGrantUuid = (uuid) => {
             try {
                 return typeof foundry?.utils?.fromUuidSync === "function" ? foundry.utils.fromUuidSync(uuid) : null;
@@ -1913,7 +1937,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 out.push({
                     spellDisplay: e.spellDisplay,
                     usesHint: formatCgsSpellGrantUsesHint(e.row, localizeCgsSpell),
-                    sourceDisplays: plans.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p)),
+                    sourceDisplays: plans.map((p) => cgsProvenanceSourceHtml(p)),
                     castClassItemId,
                     castSpellLevel,
                     showCgsPreparedCountControl,
@@ -2044,7 +2068,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
             return planned.map((row) => ({
                 senseLabel: row.senseLabel,
-                sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+                sourceDisplays: row.sources.map((p) => cgsProvenanceSourceHtml(p))
             }));
         })();
 
@@ -2067,10 +2091,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             });
             return planned.map((row) => ({
                 senseLabel: row.senseLabel,
-                senseSourceDisplays: row.senseSources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p)),
-                suppressingSourceDisplays: row.suppressingSources.map((p) =>
-                    ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p)
-                )
+                senseSourceDisplays: row.senseSources.map((p) => cgsProvenanceSourceHtml(p)),
+                suppressingSourceDisplays: row.suppressingSources.map((p) => cgsProvenanceSourceHtml(p))
             }));
         })();
 
@@ -2088,19 +2110,19 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             systemData.cgs?.immunities?.rows, cgsTypedDefenseProvenanceCtx
         ).map((row) => ({
             label: row.label,
-            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+            sourceDisplays: row.sources.map((p) => cgsProvenanceSourceHtml(p))
         }));
         const cgsMergedEnergyResistance = enrichCgsTypedDefenseRowsForProvenance(
             systemData.cgs?.energyResistance?.rows, cgsTypedDefenseProvenanceCtx
         ).map((row) => ({
             label: row.label,
-            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+            sourceDisplays: row.sources.map((p) => cgsProvenanceSourceHtml(p))
         }));
         const cgsMergedDamageReduction = enrichCgsTypedDefenseRowsForProvenance(
             systemData.cgs?.damageReduction?.rows, cgsTypedDefenseProvenanceCtx
         ).map((row) => ({
             label: row.label,
-            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+            sourceDisplays: row.sources.map((p) => cgsProvenanceSourceHtml(p))
         }));
         const hasAnyTypedDefenses = cgsMergedImmunities.length > 0 || cgsMergedEnergyResistance.length > 0 || cgsMergedDamageReduction.length > 0;
 
@@ -2109,14 +2131,14 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             cgsTypedDefenseProvenanceCtx
         ).map((row) => ({
             label: row.label,
-            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+            sourceDisplays: row.sources.map((p) => cgsProvenanceSourceHtml(p))
         }));
         const cgsMergedSubtypeOverlays = enrichCgsTypedDefenseRowsForProvenance(
             systemData.cgs?.subtypeOverlays?.rows,
             cgsTypedDefenseProvenanceCtx
         ).map((row) => ({
             label: row.label,
-            sourceDisplays: row.sources.map((p) => ThirdEraActorSheet.buildCgsProvenanceSourceHtml(p))
+            sourceDisplays: row.sources.map((p) => cgsProvenanceSourceHtml(p))
         }));
         const hasAnyTypeOverlays = cgsMergedCreatureTypeOverlays.length > 0 || cgsMergedSubtypeOverlays.length > 0;
 

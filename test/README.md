@@ -46,7 +46,7 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 
 These modules are **intentionally excluded** from Node unit tests until logic is extracted or **Quench** (in-Foundry) tests exist:
 
-- **`module/logic/`** — `spell-sr-from-chat`, `spell-save-from-chat`, `concentration-from-chat`, `character-system-source-backfill` (`foundry.utils`), `apply-damage-healing` / `apply-damage-healing-entry-points`, `auto-granted-feats`, `domain-spells`, `compendium-loader`, `audit-log`, `class-spell-list` (async `game` / packs), `derived-conditions` (`sync*` / `isFlatFootedFromCombat` — use `game.combat`), `condition-helpers` (`getConditionItemsMap*`).
+- **`module/logic/`** — `spell-sr-from-chat`, `spell-save-from-chat`, `concentration-from-chat`, `character-system-source-backfill` (`foundry.utils`), `apply-damage-healing` / `apply-damage-healing-entry-points`, `auto-granted-feats`, `domain-spells`, `compendium-loader`, `cgs-phase6-npc-world-migrate` (GM `game` / `Actor#update` on ready), `audit-log`, `class-spell-list` (async `game` / packs), `derived-conditions` (`sync*` / `isFlatFootedFromCombat` — use `game.combat`), `condition-helpers` (`getConditionItemsMap*`).
 - **`module/data/_ac-helpers.mjs`** — Uses `CONFIG.THIRDERA.sizeModifiers` and `system.parent.items` (Foundry-shaped graph); test after injecting `CONFIG` or extracting pure pieces.
 - **`module/documents/`**, **`module/sheets/`**, **`module/applications/`**, **`thirdera.mjs`** — Document/sheet/UI layer; future Quench or E2E.
 - **`module/data/*`** (TypeDataModels) — Depend on `foundry.data.fields` at import time.

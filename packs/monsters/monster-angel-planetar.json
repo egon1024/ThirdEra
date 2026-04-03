@@ -76,16 +76,7 @@
         "bypass": "evil"
       },
       "spellResistance": 30,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:angel.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Angel\"><h4>SRD type: Angel</h4><p>\n\tAngels are a race of celestials, beings who live on the good-aligned Outer Planes.\n</p>\n<p>\n\tAngels can be of any good <a href=\"/srd/description.htm#alignment\">alignment</a>. Regardless of their alignment, angels never lie, cheat, or steal. They are impeccably honorable in all their dealings and often prove the most trustworthy and diplomatic of all the celestials.\n</p>\n<p>\n\tAll angels are blessed with comely looks, though their actual appearances vary widely.\n</p>\n<p>\n\tAngels speak Celestial, Infernal, and Draconic, though they can speak with almost any creature because of their <a class=\"spell\" href=\"/srd/spells/tongues.htm\">tongues</a> ability.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tIn combat, most angels make full use of their mobility and their ability to attack at a distance.\n</p>\n\n<h5>Angel Traits</h5>\n<p>\n\tAn angel possesses the following traits (unless otherwise noted in a creature’s entry).\n</p>\n<ul>\n\t<li><a href=\"/srd/specialAbilities.htm#darkvision\">Darkvision</a> out to 60 feet and <a href=\"/srd/specialAbilities.htm#lowLightVision\">low-light vision</a>.</li>\n\t<li>Immunity to acid, cold, and petrification.</li>\n\t<li><a href=\"/srd/specialAbilities.htm#resistanceToEnergy\">Resistance</a> to electricity 10 and fire 10.</li>\n\t<li>+4 racial bonus on saves against <a href=\"/srd/specialAbilities.htm#poison\">poison</a>.</li>\n\t<li>Protective Aura (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): Against attacks made or effects created by evil creatures, this ability provides a +4 <a href=\"/srd/theBasics.htm#deflectionBonus\">deflection bonus</a> to AC and a +4 <a href=\"/srd/theBasics.htm#resistanceBonus\">resistance bonus</a> on <a href=\"/srd/combat/combatStatistics.htm#savingThrows\">saving throws</a> to anyone within 20 feet of the angel. Otherwise, it functions as a <a class=\"spell\" href=\"/srd/spells/magicCircleAgainstEvil.htm\">magic circle against evil</a> effect and a <a class=\"spell\" href=\"/srd/spells/globeOfInvulnerabilityLesser.htm\">lesser globe of invulnerability</a>, both with a radius of 20 feet (caster level equals angel’s HD). This aura can be dispelled, but the angel can create it again as a <a href=\"/srd/combat/actionsInCombat.htm#freeActions\">free action</a> on its next turn. (The defensive benefits from the circle are not included in an angel’s statistics block.)</li>\n\t<li>Tongues (<a href=\"/srd/specialAbilities.htm#supernaturalAbilities\">Su</a>): All angels can speak with any creature that has a language, as though using a <a class=\"spell\" href=\"/srd/spells/tongues.htm\">tongues</a> spell (caster level equal to angel’s Hit Dice). This ability is always active.</li>\n</ul></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Spell-like abilities, spells</p><p><strong>Special Qualities:</strong> Change shape, damage reduction 10/evil, darkvision 60 ft., low-light vision, immunity to acid, cold, and petrification, protective aura, regeneration 10, resistance to electricity 10 and fire 10, spell resistance 30, tongues</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Any good-aligned plane",
       "organization": "Solitary or pair",
@@ -146,6 +137,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

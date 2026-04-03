@@ -79,12 +79,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Moan, engulf, shadow shift</strong> (see SRD). <strong>Full attack:</strong> Tail +8, bite +3 (reach 5 ft.).</p>",
       "environment": "Underground",
       "organization": "Solitary, mob (3–6), or flock (7–12)",
@@ -145,6 +140,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [
