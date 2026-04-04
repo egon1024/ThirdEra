@@ -4,6 +4,7 @@
  */
 
 import { ClassData } from "../data/item-class.mjs";
+import { yieldToMain } from "./client-main-thread-cooperation.mjs";
 
 /** @type {Map<string, Array<{ level: number, spellName: string, uuid: string }>>} */
 let _cacheByDomainKey = null;
@@ -47,11 +48,15 @@ function spellsEntriesForDomain(spellDoc, normalizedKey) {
  * (e.g. from Hooks.on("ready")) so getSpellsForDomain can run synchronously.
  * Safe to call again to invalidate/refresh.
  */
+/** Yield every N spells after getDocuments so ready stays responsive on large spell packs. */
+const POPULATE_CACHE_YIELD_EVERY = 100;
+
 export async function populateCompendiumCache() {
     _cacheByDomainKey = new Map();
     const pack = game.packs?.get(SPELL_PACK_ID);
     if (!pack) return;
     const docs = await pack.getDocuments();
+    let processedSpells = 0;
     for (const doc of docs) {
         if (doc.type !== "spell") continue;
         const levelsByDomain = doc.system?.levelsByDomain || [];
@@ -66,6 +71,8 @@ export async function populateCompendiumCache() {
                 uuid: doc.uuid || ""
             });
         }
+        processedSpells++;
+        if (processedSpells % POPULATE_CACHE_YIELD_EVERY === 0) await yieldToMain();
     }
 }
 

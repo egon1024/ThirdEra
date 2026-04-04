@@ -34,6 +34,7 @@ import { migrateAllRaceStockDeltas } from "./module/logic/race-srd-changes-merge
 import { migrateAllRaceQualitativeTraits } from "./module/logic/race-qualitative-traits-stock.mjs";
 import { migrateAllNpcPhase6StatBlockSenses } from "./module/logic/cgs-phase6-npc-world-migrate.mjs";
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
+import { yieldToMain } from "./module/logic/client-main-thread-cooperation.mjs";
 import {
     syncDerivedFlatFootedCondition,
     syncDerivedHpCondition,
@@ -450,6 +451,15 @@ Hooks.once("init", async function () {
         default: false
     });
 
+    game.settings.register("thirdera", "logClientBootstrapTiming", {
+        name: "THIRDERA.Settings.LogClientBootstrapTiming.Name",
+        hint: "THIRDERA.Settings.LogClientBootstrapTiming.Hint",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     // Register data models
     CONFIG.Actor.dataModels = {
         character: CharacterData,
@@ -607,14 +617,16 @@ function resolveIndexImgPaths(index) {
     }
 }
 
-function applyCompendiumImageRouteFix() {
-    for (const pack of game.packs) {
+/** After resolving index img paths, rebuild compendium trees in small batches so ready can paint sooner. */
+const COMPENDIUM_TREE_REBUILD_CHUNK = 4;
+
+async function applyCompendiumImageRouteFix() {
+    const packs = [...game.packs];
+    for (const pack of packs) {
         if (!pack?.collection?.index) continue;
 
         // Resolve img on the index already in memory (from metadata at load).
         resolveIndexImgPaths(pack.collection.index);
-        // Force tree rebuild so directory UI uses entries with resolved img (tree is built from index.contents).
-        pack.initializeTree();
 
         const origGetIndex = pack.collection.getIndex.bind(pack.collection);
         pack.collection.getIndex = async function (options) {
@@ -623,6 +635,15 @@ function applyCompendiumImageRouteFix() {
             this.initializeTree();
             return index;
         };
+    }
+
+    for (let i = 0; i < packs.length; i += COMPENDIUM_TREE_REBUILD_CHUNK) {
+        const slice = packs.slice(i, i + COMPENDIUM_TREE_REBUILD_CHUNK);
+        for (const pack of slice) {
+            if (!pack?.collection?.index) continue;
+            pack.initializeTree();
+        }
+        if (i + COMPENDIUM_TREE_REBUILD_CHUNK < packs.length) await yieldToMain();
     }
 
     const base = window.location?.origin ?? "";
@@ -689,10 +710,19 @@ function applyCompendiumImageRouteFix() {
  * Ready hook
  */
 Hooks.once("ready", async function () {
+    const t0 = performance.now();
+    const logBootstrap =
+        typeof game !== "undefined" && game.settings?.get?.("thirdera", "logClientBootstrapTiming") === true;
+    const mark = (label) => {
+        if (logBootstrap) console.log(`Third Era | ready +${(performance.now() - t0).toFixed(0)}ms — ${label}`);
+    };
+
     console.log("Third Era | System ready");
-    
+    mark("start");
+
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
+    mark("after CompendiumLoader.init");
     // Merge bundled SRD skill/save/hide rows into existing race items (compendium + world + actors); does not replace documents.
     try {
         const raceDelta = await migrateAllRaceStockDeltas({ game });
@@ -731,17 +761,19 @@ Hooks.once("ready", async function () {
     } catch (e) {
         console.warn("Third Era | Phase 6 NPC CGS sense migration error:", e);
     }
+    mark("after migrations");
     // Resolve compendium index img paths so thumbnails work from /game.
-    applyCompendiumImageRouteFix();
-    // Build CONFIG.statusEffects from condition items so Token HUD and toggleStatusEffect work
-    await buildConditionStatusEffects();
-    // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
-    await populateCompendiumCache();
+    await applyCompendiumImageRouteFix();
+    mark("after compendium index / tree");
+    // Condition status effects + domain spell cache: independent I/O; run in parallel.
+    await Promise.all([buildConditionStatusEffects(), populateCompendiumCache()]);
+    mark("after condition statusEffects + domain-spells cache");
     // Sync HP-derived and combat-derived conditions so actors load with correct state
-    for (const actor of (game.actors?.contents ?? [])) {
-        if (actor.system?.attributes?.hp) await syncDerivedHpCondition(actor);
-    }
+    const actorsWithHp = (game.actors?.contents ?? []).filter((a) => a.system?.attributes?.hp);
+    await Promise.all(actorsWithHp.map((actor) => syncDerivedHpCondition(actor)));
+    mark("after HP-derived conditions");
     await syncFlatFootedForCombat();
+    mark("after flat-footed sync");
     // Re-render actor sheets so conditions and Ready to cast show on initial load.
     // Include sheets that are not yet rendered (no app.rendered check) so restored windows get correct data.
     function reRenderActorSheets() {
@@ -756,8 +788,10 @@ Hooks.once("ready", async function () {
         }
     }
     reRenderActorSheets();
+    mark("after initial actor sheet re-render");
     // Staggered re-renders so sheets that register or finish restoring after ready are caught
     [0, 100, 300].forEach((delay) => setTimeout(reRenderActorSheets, delay));
+    mark("ready hook await chain finished (staggered re-renders scheduled)");
 });
 
 /**

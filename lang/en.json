@@ -416,6 +416,10 @@
             "ReimportCompendiumJsonEachLoad": {
                 "Name": "Re-import compendium JSON on each load",
                 "Hint": "When off (default), system pack JSON is only applied to compendiums that are still empty, which makes world load much faster. Turn on temporarily after a system update if you need to refresh compendium content from the bundled JSON, then turn it off again."
+            },
+            "LogClientBootstrapTiming": {
+                "Name": "Log client bootstrap timing (debug)",
+                "Hint": "When enabled, logs elapsed milliseconds for each major step of the system ready hook (compendium load, migrations, caches, derived conditions). Client-only; use while profiling slow reloads."
             }
         },
         "SpellListBrowser": {

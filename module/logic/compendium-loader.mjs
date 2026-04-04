@@ -5,6 +5,7 @@
  */
 import { parseSpellFields, applyParsedSpellFields } from "./spell-description-parser.mjs";
 import { resolveMonsterPackNpcKeys } from "./monster-pack-keys.mjs";
+import { yieldToMain } from "./client-main-thread-cooperation.mjs";
 
 /**
  * Returns a stable key for matching compendium documents (incoming JSON or existing).
@@ -865,9 +866,6 @@ export class CompendiumLoader {
         // Only run if we're the GM
         if (!game.user.isGM) return;
 
-        // Debug: log all available packs
-        console.log("Third Era | Available packs:", Array.from(game.packs.keys()));
-
         let packsLoadedFromJson = 0;
         let packsSkippedPopulated = 0;
 
@@ -900,6 +898,8 @@ export class CompendiumLoader {
             } catch (error) {
                 console.error(`Third Era | Error loading compendium ${packName}:`, error);
             }
+            // Let the UI paint between packs when JSON import runs many files (dev / first load).
+            await yieldToMain();
         }
 
         if (packsSkippedPopulated > 0) {

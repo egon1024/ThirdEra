@@ -33,6 +33,7 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 | `module/logic/cgs-stale-item-sheet-sync.mjs` (pack sheet vs live `Item` — `updateSource` sync helpers) | `unit/logic/cgs-stale-item-sheet-sync.test.mjs` |
 | `module/logic/derived-conditions.mjs` (`getDerivedHpConditionId`, `getDerivedFrom` only) | `unit/logic/derived-conditions.test.mjs` |
 | `module/logic/monster-pack-keys.mjs` (`resolveMonsterPackNpcKeys`) | `unit/logic/monster-pack-keys.test.mjs` |
+| `module/logic/client-main-thread-cooperation.mjs` (`yieldToMain`, `runWithConcurrencyLimit`) | `unit/logic/client-main-thread-cooperation.test.mjs` |
 | `module/logic/token-dimensions-from-size.mjs` | `unit/logic/token-dimensions-from-size.test.mjs` |
 | `module/logic/token-dimensions-from-size-hooks.mjs` (handlers + `registerTokenDimensionHooks`) | `unit/logic/token-dimensions-from-size-hooks.test.mjs` |
 | `module/logic/npc-skill-prep.mjs` (`prepareNpcSkillItems`, `buildModifierOnlySkills`, `skillMiscBreakdownLabel`, `resolvedSkillMiscLineLabel`) | `unit/logic/npc-skill-prep.test.mjs` |

@@ -43,6 +43,8 @@ There is no build step, bundler, or package manager **for the system at runtime*
 
 `thirdera.mjs` - Registers all data models, document classes, sheet classes, Handlebars helpers, and partials in `Hooks.once("init")`. Also registers sidebar delete button hooks. Global config: `CONFIG.THIRDERA`.
 
+The `Hooks.once("ready")` path is tuned to keep the browser responsive on large worlds and packs: compendium index/img fix-up rebuilds directory trees in small batches with main-thread yields between chunks; condition status metadata and the domain-spell compendium cache load in parallel; GM compendium JSON import yields between packs; Phase 6 NPC sense migration and HP-derived condition sync use bounded parallelism where safe. For timing breakdowns when debugging slow reloads, enable the **client** setting **Log client bootstrap timing (debug)** under **Configure Settings → Third Era** (console output only).
+
 ### Data Models (`module/data/`)
 
 Each file defines a `TypeDataModel` subclass with static `defineSchema()` using Foundry field classes (`NumberField`, `StringField`, `SchemaField`, `HTMLField`, etc.).

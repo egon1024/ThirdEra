@@ -4,6 +4,10 @@
  */
 
 import { buildNpcPhase6StatBlockSenseMigrationUpdate } from "./cgs-phase6-npc-statblock-migrate.mjs";
+import { runWithConcurrencyLimit } from "./client-main-thread-cooperation.mjs";
+
+/** Bounded parallel updates during ready (Phase 6 migration). */
+const NPC_PHASE6_MIGRATION_CONCURRENCY = 5;
 
 /**
  * @param {Actor} actor
@@ -34,22 +38,25 @@ export async function migrateAllNpcPhase6StatBlockSenses(deps) {
         return { skipped: true, reason: "not-gm", worldUpdated: 0, compendiumUpdated: 0 };
     }
 
-    let worldUpdated = 0;
-    for (const actor of game.actors ?? []) {
-        if (actor.type !== "npc") continue;
-        const r = await applyNpcPhase6StatBlockSenseMigrationToActor(actor);
-        if (r === "updated") worldUpdated++;
-    }
+    const worldNpcs = [...(game.actors ?? [])].filter((a) => a.type === "npc");
+    const worldResults = await runWithConcurrencyLimit(
+        worldNpcs,
+        NPC_PHASE6_MIGRATION_CONCURRENCY,
+        (actor) => applyNpcPhase6StatBlockSenseMigrationToActor(actor)
+    );
+    let worldUpdated = worldResults.filter((r) => r === "updated").length;
 
     let compendiumUpdated = 0;
     const pack = game.packs?.get?.("thirdera.thirdera_monsters");
     if (pack) {
         const docs = await pack.getDocuments();
-        for (const doc of docs) {
-            if (doc.type !== "npc") continue;
-            const r = await applyNpcPhase6StatBlockSenseMigrationToActor(doc);
-            if (r === "updated") compendiumUpdated++;
-        }
+        const npcDocs = docs.filter((d) => d.type === "npc");
+        const compResults = await runWithConcurrencyLimit(
+            npcDocs,
+            NPC_PHASE6_MIGRATION_CONCURRENCY,
+            (doc) => applyNpcPhase6StatBlockSenseMigrationToActor(doc)
+        );
+        compendiumUpdated = compResults.filter((r) => r === "updated").length;
     }
 
     return { skipped: false, worldUpdated, compendiumUpdated };
