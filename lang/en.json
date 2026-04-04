@@ -189,7 +189,12 @@
         "FeatModifierLabelPlaceholder": "Optional breakdown label",
         "FeatAddModifier": "Add modifier",
         "ItemModifiers": "Modifiers",
-        "ItemModifiersHint": "Optional modifiers when this item is equipped (e.g. AC +1, Reflex save +2).",
+        "ItemModifiersHint": "Optional numeric modifiers from this item’s Mechanical effects table. By default they apply only when the item is equipped or wielded; set Mechanical effects & capability grants below to apply while carried.",
+        "MechanicalApplyScope": "Mechanical effects & capability grants",
+        "MechanicalApplyScopeHint": "Numeric mechanical effects (GMS / system.changes) and capability grants (CGS: senses, spell grants, etc.) use the same rule. Default: only while this armor or gear is equipped, or while this weapon is wielded in primary or off-hand. Carried: applies while the item is on this actor’s sheet inventory.",
+        "MechanicalApplyScopeEquippedArmor": "When equipped",
+        "MechanicalApplyScopeEquippedWeapon": "When wielded (primary or off-hand)",
+        "MechanicalApplyScopeCarried": "When carried (in inventory)",
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"

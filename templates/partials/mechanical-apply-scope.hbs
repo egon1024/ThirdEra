@@ -1,0 +1,7 @@
+<div class="form-group">
+    <label title="{{localize "THIRDERA.MechanicalApplyScopeHint"}}">{{localize "THIRDERA.MechanicalApplyScope"}}</label>
+    <select name="system.mechanicalApplyScope" data-dtype="String">
+        <option value="equipped" {{#unless (eq system.mechanicalApplyScope "carried")}}selected{{/unless}}>{{localize equippedScopeLabelKey}}</option>
+        <option value="carried" {{#if (eq system.mechanicalApplyScope "carried")}}selected{{/if}}>{{localize "THIRDERA.MechanicalApplyScopeCarried"}}</option>
+    </select>
+</div>

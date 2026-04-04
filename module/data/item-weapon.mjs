@@ -38,6 +38,18 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
 
             equipped: new StringField({ required: true, blank: false, initial: "none", label: "Equipped" }),
 
+            /**
+             * When GMS `changes` and CGS grants apply: wielded only (default) or while carried on the actor.
+             * @see module/logic/item-gear-mechanical-apply.mjs
+             */
+            mechanicalApplyScope: new StringField({
+                required: true,
+                blank: false,
+                initial: "equipped",
+                choices: () => ({ equipped: "When wielded (primary/off-hand)", carried: "When carried (inventory)" }),
+                label: "Mechanical effects apply"
+            }),
+
             /** Optional mechanical modifiers when equipped (generalized modifier system). Same key set as conditions/feats. */
             changes: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),

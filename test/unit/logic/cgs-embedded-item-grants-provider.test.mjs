@@ -126,6 +126,26 @@ describe("cgsEmbeddedItemGrantsProvider", () => {
         expect(out[0].label).toBe("Cloak");
     });
 
+    it("armor contributes cgs when not equipped but mechanicalApplyScope is carried", () => {
+        const actor = {
+            items: [
+                {
+                    type: "armor",
+                    name: "Ioun",
+                    uuid: "Item.a2",
+                    system: {
+                        equipped: "false",
+                        mechanicalApplyScope: "carried",
+                        cgsGrants: { grants: [{ category: "sense", senseType: "blindsight", range: "5 ft" }] }
+                    }
+                }
+            ]
+        };
+        const out = cgsEmbeddedItemGrantsProvider(actor);
+        expect(out).toHaveLength(1);
+        expect(out[0].label).toBe("Ioun");
+    });
+
     it("feat contributes senses from cgsGrants.senses when grants empty", () => {
         const actor = {
             items: [

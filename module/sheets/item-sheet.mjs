@@ -718,6 +718,14 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             availableFeats,
             autoGrantedFeatsForDisplay,
             // Key options for mechanical effects table (condition, feat, race, armor, weapon, equipment)
+            ...(item.type === "armor" || item.type === "equipment" || item.type === "weapon"
+                ? {
+                      equippedScopeLabelKey:
+                          item.type === "weapon"
+                              ? "THIRDERA.MechanicalApplyScopeEquippedWeapon"
+                              : "THIRDERA.MechanicalApplyScopeEquippedArmor"
+                  }
+                : {}),
             changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "race" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             modifierChangeKeys: (item.type === "feat" || item.type === "race" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},

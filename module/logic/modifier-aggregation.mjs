@@ -9,6 +9,7 @@
  */
 
 import { getActorEffectsList, getConditionItemsMapSync, getEffectStatusIds } from "./condition-helpers.mjs";
+import { embeddedGearMechanicalEffectsApply } from "./item-gear-mechanical-apply.mjs";
 
 // ---------------------------------------------------------------------------
 // Canonical modifier key set
@@ -213,7 +214,7 @@ function conditionsModifierProvider(actor) {
 
 /**
  * Provider that returns one contribution per owned item that has system.changes
- * and applies (race, feat: always when owned; equipment/armor/weapon: when equipped — Phase 5).
+ * and applies (race, feat: always when owned; equipment/armor/weapon: when equipped by default, or when carried if `system.mechanicalApplyScope === "carried"` — Phase 5g).
  *
  * @param {Actor} actor
  * @returns {Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>}
@@ -250,9 +251,9 @@ export function itemsModifierProvider(actor) {
             });
             continue;
         }
-        // Phase 5: armor, weapon, equipment — apply when equipped
+        // Phase 5g: armor, weapon, equipment — equipped by default, or carried when scoped
         if (item.type === "armor" || item.type === "equipment") {
-            if (item.system?.equipped !== "true") continue;
+            if (!embeddedGearMechanicalEffectsApply(item)) continue;
             const changes = item.system?.changes;
             if (!Array.isArray(changes) || changes.length === 0) continue;
             const label = item.name || (item.type === "armor" ? "Armor" : "Equipment");
@@ -267,8 +268,7 @@ export function itemsModifierProvider(actor) {
             continue;
         }
         if (item.type === "weapon") {
-            const eq = item.system?.equipped;
-            if (eq !== "primary" && eq !== "offhand") continue;
+            if (!embeddedGearMechanicalEffectsApply(item)) continue;
             const changes = item.system?.changes;
             if (!Array.isArray(changes) || changes.length === 0) continue;
             const label = item.name || "Weapon";

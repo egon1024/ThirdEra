@@ -24,7 +24,7 @@ Configuration that drives sheets and logic (sizes, damage types, movement maneuv
 
 ## Modifier system (adding new sources)
 
-The system uses a **unified modifier pipeline**: conditions, feats, race, and equipped items contribute modifiers through a single aggregation. If you add a new item type or effect that should grant numeric bonuses (e.g. to AC, saves, ability scores, skills), you can plug in without changing core code:
+The system uses a **unified modifier pipeline**: conditions, feats, race, and gear items contribute modifiers through a single aggregation (gear defaults to equipped/wielded only; optional `system.mechanicalApplyScope: "carried"` applies `changes` while the item is on the actor’s inventory, with the same flag used for **capability grants** on that item). If you add a new item type or effect that should grant numeric bonuses (e.g. to AC, saves, ability scores, skills), you can plug in without changing core code:
 
 - **Register a provider:** Push a function `(actor) => Array<{ label, changes }>` to `CONFIG.THIRDERA.modifierSourceProviders`. See [Development — Modifier system](development.md#modifier-system-modulelogicmodifier-aggregationmjs) for the full contract and canonical keys.
 - **Item method:** Implement `getModifierChanges(actor)` on your item type returning `{ applies, changes }`; the built-in item provider will call it and merge when `applies` is true.

@@ -1,6 +1,6 @@
 /**
  * CGS contributions from embedded race, feat, class feature, and equipped armor/equipment/weapon (Phase 5b–5c).
- * Apply rules mirror {@link itemsModifierProvider} in modifier-aggregation.mjs.
+ * Apply rules mirror {@link itemsModifierProvider} in modifier-aggregation.mjs (Phase 5g: `system.mechanicalApplyScope`).
  *
  * Items expose optional `system.cgsGrants.grants` (same discriminated shape as conditions).
  * Races also resolve `system.cgsGrants.senses` and stock `race-*` compendium defaults when grants are empty.
@@ -10,6 +10,7 @@
 
 import { getEffectiveOwnedItemCgsGrants } from "./cgs-owned-item-grants.mjs";
 import { getEffectiveRaceCgsGrants } from "./cgs-stock-race-grants.mjs";
+import { embeddedGearMechanicalEffectsApply } from "./item-gear-mechanical-apply.mjs";
 
 /**
  * @param {unknown} item
@@ -83,14 +84,13 @@ export function cgsEmbeddedItemGrantsProvider(actor) {
             continue;
         }
         if (type === "armor" || type === "equipment") {
-            if (item.system?.equipped !== "true") continue;
+            if (!embeddedGearMechanicalEffectsApply(item)) continue;
             const c = cgsContributionFromOwnedItem(item, type === "armor" ? "Armor" : "Equipment");
             if (c) out.push(c);
             continue;
         }
         if (type === "weapon") {
-            const eq = item.system?.equipped;
-            if (eq !== "primary" && eq !== "offhand") continue;
+            if (!embeddedGearMechanicalEffectsApply(item)) continue;
             const c = cgsContributionFromOwnedItem(item, "Weapon");
             if (c) out.push(c);
         }
