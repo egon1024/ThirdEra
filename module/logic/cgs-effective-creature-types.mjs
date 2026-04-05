@@ -88,3 +88,33 @@ export function getEffectiveCreatureTypes(systemData) {
 export function getEffectiveCreatureTypesFromActor(actor) {
     return getEffectiveCreatureTypes(actor?.system);
 }
+
+/**
+ * Whether the given creature type or subtype UUID appears in the effective sets (v1 union).
+ * Use for mechanical checks (targeting, gates, etc.) instead of comparing only `details`.
+ *
+ * @param {Parameters<typeof getEffectiveCreatureTypes>[0]} systemData
+ * @param {string} uuid
+ * @returns {boolean}
+ */
+export function effectiveCreatureTypesIncludeUuid(systemData, uuid) {
+    const id = typeof uuid === "string" ? uuid.trim() : "";
+    if (!id) return false;
+    const { typeUuids, subtypeUuids } = getEffectiveCreatureTypes(systemData);
+    return typeUuids.includes(id) || subtypeUuids.includes(id);
+}
+
+/**
+ * True if any UUID in `candidates` is in the effective type or subtype set.
+ *
+ * @param {Parameters<typeof getEffectiveCreatureTypes>[0]} systemData
+ * @param {Iterable<string>} candidates
+ * @returns {boolean}
+ */
+export function effectiveCreatureTypesIncludeAnyUuid(systemData, candidates) {
+    if (candidates == null) return false;
+    for (const raw of candidates) {
+        if (effectiveCreatureTypesIncludeUuid(systemData, raw)) return true;
+    }
+    return false;
+}

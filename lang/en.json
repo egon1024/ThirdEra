@@ -104,7 +104,13 @@
             "MergedSubtypeOverlaysHeading": "Subtype overlays",
             "ActorTypeOverlaysHeading": "Extra types and subtypes (this character)",
             "ActorTypeOverlaysHint": "Record extra types and subtypes for this character in addition to their normal form—templates, GM effects, or tracking shapechange-style cases. Choose from the lists below, using the same compendium or world entries as elsewhere. Primary type and subtypes on the Details tab stay unchanged. These are additive grants; the system does not run type-based rules from them yet.",
-            "TypeOverlayDropWrongRow": "Use a creature type row for types and a subtype row for subtypes."
+            "TypeOverlayDropWrongRow": "Use a creature type row for types and a subtype row for subtypes.",
+            "EffectiveCreatureTypesContext": "Show effective creature types (mechanical)",
+            "EffectiveTypesTitle": "{name}: effective creature types (primary and CGS overlays)",
+            "EffectiveTypesTypesLabel": "Types",
+            "EffectiveTypesSubtypesLabel": "Subtypes",
+            "EffectiveTypesEmptyList": "—",
+            "EffectiveTypesNoActor": "No actor data to inspect."
         },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",

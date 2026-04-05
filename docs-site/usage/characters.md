@@ -67,6 +67,17 @@ From the **Combat** tab you can apply damage or healing to tokens without editin
 
 Weapon rows offer **Attack** (d20), **Damage**, and **Attack & Damage** (one message with both rolls). On any damage or healing roll posted to chat (including Attack & Damage), an **Apply** button appears; select target tokens and click **Apply** to open the dialog with the roll’s total pre-filled. You can also open the dialog from a macro: `game.thirdera.applyDamageHealing.openDialog()` or `game.thirdera.applyDamageHealing.openWithOptions({ targetActors, amount, mode, nonlethal })`.
 
+## Effective creature types (GM tools and macros)
+
+**Supported today:** Third Era computes **mechanical** creature types and subtypes as the **union** of an NPC’s primary **Details** classification (**creature type** + **subtype** UUIDs) and any **CGS overlay** grants (feats, items, conditions, actor mechanics, etc.). That merged view is what sheets show under **Additional creature types (active)** and what the code means by *effective* types (see [Development — Capability grants](../development.md#capability-grants-structured-effects-parallel-to-the-modifier-system)).
+
+- **GMs:** Right-click a **world** actor in the **Actors** sidebar → **Show effective creature types (mechanical)** → notification with resolved type/subtype names.
+- **Macros / console** (after the world is **ready**): `game.thirdera.effectiveCreatureTypes.getFromActor(actor)`, `.getDisplayText(actor)`, `.notify(actor)`, plus `.includesUuid` / `.includesAnyUuid` for custom logic.
+
+**Not in core yet:** Automated rules that *depend* on creature type (turning, favored enemy, type-only spells, gear restrictions, etc.) are **not** enforced by the system—you still adjudicate those at the table. **Token vision on the map** does **not** follow CGS effective senses. **Wild shape / full form replacement** is **not** modeled as replacing primary type for all checks (overlays are additive only for now).
+
+When core gains new type-based automation, this page and [Development](development.md) should be updated in the same release so “supported vs not yet” stays accurate.
+
 ## Experience and level
 
 Current XP and the next-level threshold are on **Attributes → Details**. The sheet header can show an XP progress bar. When you remove a class level, the level-down dialog offers to adjust XP to the midpoint or minimum of the new level.

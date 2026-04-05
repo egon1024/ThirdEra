@@ -35,6 +35,14 @@ The system uses a **unified modifier pipeline**: conditions, feats, race, and ge
 
 For GM-facing world options (e.g. track currency weight, audit log, first-level full HP), see **[World configuration](usage/world-configuration.md)** in the Usage section.
 
+## Capability grants (CGS)
+
+Structured **non-numeric** effects (senses, spell-like grants, typed defenses, extra creature types, condition-driven suppression, …) live in **`system.cgsGrants`** and merge into derived **`actor.system.cgs`**, parallel to the numeric **modifier** pipeline (`system.changes`). Full contracts and file paths are on **[Development — Capability grants](development.md#capability-grants-structured-effects-parallel-to-the-modifier-system)**.
+
+**Supported vs not yet:** That page lists what the **current** release automates (merged senses, spell grants, DR/resist/immunity readouts, effective type **resolution** + GM/macro helpers, gear apply scope, etc.) and what is still **manual or planned** (type-based combat rules, map vision from effective senses, polymorph replacement semantics, optional compendium catalogs for defense tags). When you ship homebrew or modules that assume type-based automation, check those bullets—if the core behavior is still “not yet,” your content should describe table adjudication or supply its own logic.
+
+**Extender expectation:** If you contribute a **core** change that shifts an item from “not yet” to “supported,” update **Development** and any **Usage** pages that mention the feature so published docs stay in sync.
+
 ## Changing the core code
 
 If you are working on the repository itself (entry points, file layout, conventions, Foundry v13 behavior), use the **[Development](development.md)** page on this site. It is the single reference for architecture, conventions, and operational notes when contributing to the codebase.

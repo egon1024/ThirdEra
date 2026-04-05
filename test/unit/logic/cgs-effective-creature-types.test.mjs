@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
     getEffectiveCreatureTypes,
     getEffectiveCreatureTypesFromActor,
+    effectiveCreatureTypesIncludeUuid,
+    effectiveCreatureTypesIncludeAnyUuid,
 } from "../../../module/logic/cgs-effective-creature-types.mjs";
 
 describe("getEffectiveCreatureTypes", () => {
@@ -215,5 +217,42 @@ describe("getEffectiveCreatureTypesFromActor", () => {
         const result = getEffectiveCreatureTypesFromActor(null);
         expect(result.typeUuids).toEqual([]);
         expect(result.subtypeUuids).toEqual([]);
+    });
+});
+
+describe("effectiveCreatureTypesIncludeUuid / includeAnyUuid", () => {
+    const data = {
+        details: { creatureTypeUuid: "t1", subtypeUuids: ["s1"] },
+        cgs: {
+            creatureTypeOverlays: { rows: [{ typeUuid: "t2" }] },
+            subtypeOverlays: { rows: [{ subtypeUuid: "s2" }] },
+        },
+    };
+
+    it("matches primary type and subtype", () => {
+        expect(effectiveCreatureTypesIncludeUuid(data, "t1")).toBe(true);
+        expect(effectiveCreatureTypesIncludeUuid(data, "s1")).toBe(true);
+    });
+
+    it("matches overlay type and subtype", () => {
+        expect(effectiveCreatureTypesIncludeUuid(data, "t2")).toBe(true);
+        expect(effectiveCreatureTypesIncludeUuid(data, "s2")).toBe(true);
+    });
+
+    it("returns false for unknown or blank uuid", () => {
+        expect(effectiveCreatureTypesIncludeUuid(data, "xx")).toBe(false);
+        expect(effectiveCreatureTypesIncludeUuid(data, "")).toBe(false);
+        expect(effectiveCreatureTypesIncludeUuid(data, "  ")).toBe(false);
+    });
+
+    it("includeAnyUuid is true when any candidate matches", () => {
+        expect(effectiveCreatureTypesIncludeAnyUuid(data, ["nope", "t2"])).toBe(true);
+        expect(effectiveCreatureTypesIncludeAnyUuid(data, new Set(["s1"]))).toBe(true);
+        expect(effectiveCreatureTypesIncludeAnyUuid(data, ["a", "b"])).toBe(false);
+    });
+
+    it("includeAnyUuid false for null/empty candidates", () => {
+        expect(effectiveCreatureTypesIncludeAnyUuid(data, null)).toBe(false);
+        expect(effectiveCreatureTypesIncludeAnyUuid(data, [])).toBe(false);
     });
 });

@@ -63,6 +63,18 @@ import {
     resolveParentActorForItem,
     registerCgsCapabilityRefreshHooks
 } from "./module/logic/cgs-refresh-hooks.mjs";
+import {
+    getEffectiveCreatureTypes,
+    getEffectiveCreatureTypesFromActor,
+    effectiveCreatureTypesIncludeUuid,
+    effectiveCreatureTypesIncludeAnyUuid
+} from "./module/logic/cgs-effective-creature-types.mjs";
+import {
+    registerCgsEffectiveCreatureTypesGmHooks,
+    buildEffectiveCreatureTypesDisplayText,
+    notifyEffectiveCreatureTypesForActor,
+    createDefaultEffectiveCreatureTypesGmDeps
+} from "./module/logic/cgs-effective-creature-types-gm.mjs";
 import "./module/logic/apply-damage-healing-entry-points.mjs";
 import "./module/logic/spell-save-from-chat.mjs";
 import "./module/logic/concentration-from-chat.mjs";
@@ -147,6 +159,7 @@ Hooks.once("init", async function () {
     initHpAutoIncrease();
     registerTokenDimensionHooks();
     registerCgsCapabilityRefreshHooks();
+    registerCgsEffectiveCreatureTypesGmHooks(Hooks.on);
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;
@@ -158,6 +171,15 @@ Hooks.once("init", async function () {
         game.thirdera.applyDamageHealing = {
             openDialog: () => ApplyDamageHealingDialog.openForSelection(),
             openWithOptions: (options) => ApplyDamageHealingDialog.openWithOptions(options)
+        };
+        const cgsEffDeps = createDefaultEffectiveCreatureTypesGmDeps();
+        game.thirdera.effectiveCreatureTypes = {
+            get: getEffectiveCreatureTypes,
+            getFromActor: getEffectiveCreatureTypesFromActor,
+            includesUuid: effectiveCreatureTypesIncludeUuid,
+            includesAnyUuid: effectiveCreatureTypesIncludeAnyUuid,
+            getDisplayText: (actor) => buildEffectiveCreatureTypesDisplayText(actor?.system, cgsEffDeps),
+            notify: (actor) => notifyEffectiveCreatureTypesForActor(actor, cgsEffDeps)
         };
     });
 
