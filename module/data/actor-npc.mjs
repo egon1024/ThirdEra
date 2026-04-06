@@ -2,6 +2,7 @@ const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringFie
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
+import { getMergedTypedDefenseLabelMapsForPrepare } from "../logic/cgs-typed-defense-catalog-runtime.mjs";
 import { buildCgsOverlayItemLabelMaps } from "../logic/cgs-overlay-labels.mjs";
 import { getActiveModifiers, sumChangeValuesForModifierKey } from "../logic/modifier-aggregation.mjs";
 import { prepareNpcSkillItems, buildModifierOnlySkills } from "../logic/npc-skill-prep.mjs";
@@ -458,16 +459,26 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 ? CONFIG.THIRDERA.senseTypes
                 : {};
         const allVisionSenseTypeKeys = Object.keys(senseTypeLabels).map(k => String(k).trim()).filter(Boolean);
+        const typedDefenseLabels = getMergedTypedDefenseLabelMapsForPrepare(
+            typeof game !== "undefined" ? game : undefined,
+            typeof CONFIG !== "undefined" ? CONFIG.THIRDERA : undefined
+        );
         const cgsBase = getActiveCapabilityGrants(this.parent, {
             senseTypeLabels,
-            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined
+            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined,
+            immunityTagLabels: typedDefenseLabels.immunityTagLabels,
+            energyTypeLabels: typedDefenseLabels.energyTypeLabels,
+            drBypassLabels: typedDefenseLabels.drBypassLabels
         });
         const { creatureTypeItemLabels, subtypeItemLabels } = buildCgsOverlayItemLabelMaps(cgsBase);
         this.cgs = getActiveCapabilityGrants(this.parent, {
             senseTypeLabels,
             allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined,
             creatureTypeItemLabels,
-            subtypeItemLabels
+            subtypeItemLabels,
+            immunityTagLabels: typedDefenseLabels.immunityTagLabels,
+            energyTypeLabels: typedDefenseLabels.energyTypeLabels,
+            drBypassLabels: typedDefenseLabels.drBypassLabels
         });
     }
 }

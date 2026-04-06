@@ -50,6 +50,13 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
                 label: "Mechanical effects apply"
             }),
 
+            /** If non-empty, GMS/CGS apply only when the owner matches an effective type/subtype UUID. */
+            mechanicalCreatureGateUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                required: false,
+                initial: [],
+                label: "Mechanical creature type gate"
+            }),
+
             /** Optional mechanical modifiers when equipped (generalized modifier system). Same key set as conditions/feats. */
             changes: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),

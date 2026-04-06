@@ -1,3 +1,7 @@
+import { yieldToMain } from "./client-main-thread-cooperation.mjs";
+
+const RACE_QUAL_MIGRATION_YIELD_EVERY = 8;
+
 /**
  * Default qualitative racial traits (vision, immunities, familiarity, languages, etc.) for stock ThirdEra races.
  * Ability adjustments and unconditional skill/save rows belong in `system.changes` instead of duplicating here.
@@ -194,7 +198,9 @@ export async function migrateAllRaceQualitativeTraits(deps) {
     const pack = game.packs?.get?.("thirdera.thirdera_races");
     if (pack) {
         const docs = await pack.getDocuments();
+        let docIdx = 0;
         for (const doc of docs) {
+            if (++docIdx % RACE_QUAL_MIGRATION_YIELD_EVERY === 0) await yieldToMain();
             if (doc.type !== "race") continue;
             if (getRaceQualitativeTraitsRevOnDoc(doc) >= RACE_QUALITATIVE_TRAITS_REV) continue;
             const result = await applyRaceQualitativeTraitsToDocument(doc);
@@ -205,8 +211,10 @@ export async function migrateAllRaceQualitativeTraits(deps) {
 
     let worldUpdated = 0;
     let worldUnchanged = 0;
+    let worldPass = 0;
     for (const item of game.items?.filter?.((i) => i.type === "race") ?? []) {
         if (getRaceQualitativeTraitsRevOnDoc(item) >= RACE_QUALITATIVE_TRAITS_REV) continue;
+        if (++worldPass % RACE_QUAL_MIGRATION_YIELD_EVERY === 0) await yieldToMain();
         const result = await applyRaceQualitativeTraitsToDocument(item);
         if (result === "updated") worldUpdated++;
         else if (result === "unchanged") worldUnchanged++;
@@ -214,10 +222,12 @@ export async function migrateAllRaceQualitativeTraits(deps) {
 
     let actorsUpdated = 0;
     let actorsUnchanged = 0;
+    let actorRacePass = 0;
     for (const actor of game.actors ?? []) {
         const races = actor.items?.filter?.((i) => i.type === "race") ?? [];
         for (const item of races) {
             if (getRaceQualitativeTraitsRevOnDoc(item) >= RACE_QUALITATIVE_TRAITS_REV) continue;
+            if (++actorRacePass % RACE_QUAL_MIGRATION_YIELD_EVERY === 0) await yieldToMain();
             const result = await applyRaceQualitativeTraitsToDocument(item);
             if (result === "updated") actorsUpdated++;
             else if (result === "unchanged") actorsUnchanged++;

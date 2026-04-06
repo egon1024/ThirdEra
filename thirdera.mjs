@@ -20,6 +20,7 @@ import { SchoolData } from "./module/data/item-school.mjs";
 import { ConditionData } from "./module/data/item-condition.mjs";
 import { CreatureTypeData } from "./module/data/item-creature-type.mjs";
 import { SubtypeData } from "./module/data/item-subtype.mjs";
+import { DefenseCatalogData } from "./module/data/item-defense-catalog.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -75,6 +76,7 @@ import {
     notifyEffectiveCreatureTypesForActor,
     createDefaultEffectiveCreatureTypesGmDeps
 } from "./module/logic/cgs-effective-creature-types-gm.mjs";
+import { refreshTypedDefenseCatalogCache } from "./module/logic/cgs-typed-defense-catalog-runtime.mjs";
 import "./module/logic/apply-damage-healing-entry-points.mjs";
 import "./module/logic/spell-save-from-chat.mjs";
 import "./module/logic/concentration-from-chat.mjs";
@@ -159,7 +161,7 @@ Hooks.once("init", async function () {
     initHpAutoIncrease();
     registerTokenDimensionHooks();
     registerCgsCapabilityRefreshHooks();
-    registerCgsEffectiveCreatureTypesGmHooks(Hooks.on);
+    registerCgsEffectiveCreatureTypesGmHooks(Hooks.on.bind(Hooks));
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;
@@ -181,6 +183,7 @@ Hooks.once("init", async function () {
             getDisplayText: (actor) => buildEffectiveCreatureTypesDisplayText(actor?.system, cgsEffDeps),
             notify: (actor) => notifyEffectiveCreatureTypesForActor(actor, cgsEffDeps)
         };
+        game.thirdera.refreshTypedDefenseCatalogCache = () => refreshTypedDefenseCatalogCache(game);
     });
 
     // Define THIRDERA configuration
@@ -502,7 +505,8 @@ Hooks.once("init", async function () {
         school: SchoolData,
         condition: ConditionData,
         creatureType: CreatureTypeData,
-        subtype: SubtypeData
+        subtype: SubtypeData,
+        defenseCatalog: DefenseCatalogData
     };
 
     // Register item type labels for the creation menu
@@ -520,7 +524,8 @@ Hooks.once("init", async function () {
         school: "THIRDERA.TYPES.Item.school",
         condition: "THIRDERA.TYPES.Item.condition",
         creatureType: "THIRDERA.TYPES.Item.creatureType",
-        subtype: "THIRDERA.TYPES.Item.subtype"
+        subtype: "THIRDERA.TYPES.Item.subtype",
+        defenseCatalog: "THIRDERA.TYPES.Item.defenseCatalog"
     };
 
     // Register sheet application classes
@@ -555,6 +560,7 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs",
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs",
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-global-section.hbs",
+        "systems/thirdera/templates/partials/item-mechanical-creature-gate.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs",
         "systems/thirdera/templates/apps/skill-picker-dialog.hbs"
     ]);
@@ -571,6 +577,24 @@ Hooks.once("init", async function () {
         cgsEmbeddedItemGrantsProvider,
         cgsGrantedClassFeatureGrantsProvider
     );
+
+    async function scheduleTypedDefenseCatalogRefresh() {
+        if (typeof game === "undefined" || !game?.thirdera) return;
+        try {
+            await refreshTypedDefenseCatalogCache(game);
+        } catch (e) {
+            console.warn("Third Era | defense label maps refresh failed:", e);
+        }
+    }
+    Hooks.on("createItem", (doc) => {
+        if (doc?.type === "defenseCatalog") void scheduleTypedDefenseCatalogRefresh();
+    });
+    Hooks.on("updateItem", (doc) => {
+        if (doc?.type === "defenseCatalog") void scheduleTypedDefenseCatalogRefresh();
+    });
+    Hooks.on("deleteItem", (doc) => {
+        if (doc?.type === "defenseCatalog") void scheduleTypedDefenseCatalogRefresh();
+    });
 
     console.log("Third Era | System initialized");
 });
@@ -733,8 +757,13 @@ async function applyCompendiumImageRouteFix() {
  */
 Hooks.once("ready", async function () {
     const t0 = performance.now();
-    const logBootstrap =
-        typeof game !== "undefined" && game.settings?.get?.("thirdera", "logClientBootstrapTiming") === true;
+    let logBootstrap = false;
+    try {
+        logBootstrap =
+            typeof game !== "undefined" && game.settings.get("thirdera", "logClientBootstrapTiming") === true;
+    } catch {
+        /* Setting not registered yet or unavailable — skip timing logs */
+    }
     const mark = (label) => {
         if (logBootstrap) console.log(`Third Era | ready +${(performance.now() - t0).toFixed(0)}ms — ${label}`);
     };
@@ -745,51 +774,21 @@ Hooks.once("ready", async function () {
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
     mark("after CompendiumLoader.init");
-    // Merge bundled SRD skill/save/hide rows into existing race items (compendium + world + actors); does not replace documents.
-    try {
-        const raceDelta = await migrateAllRaceStockDeltas({ game });
-        if (!raceDelta.skipped && (raceDelta.compendiumUpdated + raceDelta.worldUpdated + raceDelta.actorsUpdated) > 0) {
-            console.log(
-                "Third Era | Race SRD mechanical rows merged (existing items preserved): " +
-                    `compendium ${raceDelta.compendiumUpdated} updated, ` +
-                    `world ${raceDelta.worldUpdated} updated, ` +
-                    `embedded ${raceDelta.actorsUpdated} updated`
-            );
-        }
-    } catch (e) {
-        console.warn("Third Era | Race stock delta migration error:", e);
-    }
-    try {
-        const raceQual = await migrateAllRaceQualitativeTraits({ game });
-        if (!raceQual.skipped && (raceQual.compendiumUpdated + raceQual.worldUpdated + raceQual.actorsUpdated) > 0) {
-            console.log(
-                "Third Era | Race qualitative traits (reference HTML) merged into empty fields: " +
-                    `compendium ${raceQual.compendiumUpdated} updated, ` +
-                    `world ${raceQual.worldUpdated} updated, ` +
-                    `embedded ${raceQual.actorsUpdated} updated`
-            );
-        }
-    } catch (e) {
-        console.warn("Third Era | Race qualitative traits migration error:", e);
-    }
-    try {
-        const npcCgs = await migrateAllNpcPhase6StatBlockSenses({ game });
-        if (!npcCgs.skipped && (npcCgs.worldUpdated > 0 || npcCgs.compendiumUpdated > 0)) {
-            console.log(
-                "Third Era | Phase 6 NPC senses: merged legacy stat block into CGS — " +
-                    `world actors ${npcCgs.worldUpdated}, monsters compendium ${npcCgs.compendiumUpdated}`
-            );
-        }
-    } catch (e) {
-        console.warn("Third Era | Phase 6 NPC CGS sense migration error:", e);
-    }
-    mark("after migrations");
+    // GM migrations (race stock/qualitative rows, Phase 6 NPC stat-block senses) can take many seconds
+    // (compendium getDocuments + per-document updates). Run them after the awaited ready chain so Foundry
+    // can finish ready and the sidebar/UI stay responsive; migrations remain idempotent and converge the same.
     // Resolve compendium index img paths so thumbnails work from /game.
     await applyCompendiumImageRouteFix();
     mark("after compendium index / tree");
     // Condition status effects + domain spell cache: independent I/O; run in parallel.
     await Promise.all([buildConditionStatusEffects(), populateCompendiumCache()]);
     mark("after condition statusEffects + domain-spells cache");
+    try {
+        await refreshTypedDefenseCatalogCache(game);
+    } catch (e) {
+        console.warn("Third Era | defense label maps initial refresh failed:", e);
+    }
+    mark("after defense label maps cache");
     // Sync HP-derived and combat-derived conditions so actors load with correct state
     const actorsWithHp = (game.actors?.contents ?? []).filter((a) => a.system?.attributes?.hp);
     await Promise.all(actorsWithHp.map((actor) => syncDerivedHpCondition(actor)));
@@ -814,6 +813,52 @@ Hooks.once("ready", async function () {
     // Staggered re-renders so sheets that register or finish restoring after ready are caught
     [0, 100, 300].forEach((delay) => setTimeout(reRenderActorSheets, delay));
     mark("ready hook await chain finished (staggered re-renders scheduled)");
+
+    setTimeout(() => {
+        void (async () => {
+            await yieldToMain();
+            try {
+                const raceDelta = await migrateAllRaceStockDeltas({ game });
+                if (!raceDelta.skipped && (raceDelta.compendiumUpdated + raceDelta.worldUpdated + raceDelta.actorsUpdated) > 0) {
+                    console.log(
+                        "Third Era | Race SRD mechanical rows merged (existing items preserved): " +
+                            `compendium ${raceDelta.compendiumUpdated} updated, ` +
+                            `world ${raceDelta.worldUpdated} updated, ` +
+                            `embedded ${raceDelta.actorsUpdated} updated`
+                    );
+                }
+            } catch (e) {
+                console.warn("Third Era | Race stock delta migration error:", e);
+            }
+            await yieldToMain();
+            try {
+                const raceQual = await migrateAllRaceQualitativeTraits({ game });
+                if (!raceQual.skipped && (raceQual.compendiumUpdated + raceQual.worldUpdated + raceQual.actorsUpdated) > 0) {
+                    console.log(
+                        "Third Era | Race qualitative traits (reference HTML) merged into empty fields: " +
+                            `compendium ${raceQual.compendiumUpdated} updated, ` +
+                            `world ${raceQual.worldUpdated} updated, ` +
+                            `embedded ${raceQual.actorsUpdated} updated`
+                    );
+                }
+            } catch (e) {
+                console.warn("Third Era | Race qualitative traits migration error:", e);
+            }
+            await yieldToMain();
+            try {
+                const npcCgs = await migrateAllNpcPhase6StatBlockSenses({ game });
+                if (!npcCgs.skipped && (npcCgs.worldUpdated > 0 || npcCgs.compendiumUpdated > 0)) {
+                    console.log(
+                        "Third Era | Phase 6 NPC senses: merged legacy stat block into CGS — " +
+                            `world actors ${npcCgs.worldUpdated}, monsters compendium ${npcCgs.compendiumUpdated}`
+                    );
+                }
+            } catch (e) {
+                console.warn("Third Era | Phase 6 NPC CGS sense migration error:", e);
+            }
+            mark("after migrations (deferred)");
+        })();
+    }, 0);
 });
 
 /**

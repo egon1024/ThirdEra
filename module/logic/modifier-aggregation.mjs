@@ -9,7 +9,8 @@
  */
 
 import { getActorEffectsList, getConditionItemsMapSync, getEffectStatusIds } from "./condition-helpers.mjs";
-import { embeddedGearMechanicalEffectsApply } from "./item-gear-mechanical-apply.mjs";
+import { embeddedGearMechanicalEffectsApply, embeddedGearItemStableKey } from "./item-gear-mechanical-apply.mjs";
+import { getAcceptedMechanicalGearIdsForActor } from "./cgs-embedded-item-grants-provider.mjs";
 
 // ---------------------------------------------------------------------------
 // Canonical modifier key set
@@ -221,6 +222,7 @@ function conditionsModifierProvider(actor) {
  */
 export function itemsModifierProvider(actor) {
     const items = actor?.items ?? [];
+    const acceptedMechanicalGear = getAcceptedMechanicalGearIdsForActor(actor);
     const out = [];
     for (const item of items) {
         if (item.type === "race") {
@@ -254,6 +256,9 @@ export function itemsModifierProvider(actor) {
         // Phase 5g: armor, weapon, equipment — equipped by default, or carried when scoped
         if (item.type === "armor" || item.type === "equipment") {
             if (!embeddedGearMechanicalEffectsApply(item)) continue;
+            if (acceptedMechanicalGear !== null && !acceptedMechanicalGear.has(embeddedGearItemStableKey(item))) {
+                continue;
+            }
             const changes = item.system?.changes;
             if (!Array.isArray(changes) || changes.length === 0) continue;
             const label = item.name || (item.type === "armor" ? "Armor" : "Equipment");
@@ -269,6 +274,9 @@ export function itemsModifierProvider(actor) {
         }
         if (item.type === "weapon") {
             if (!embeddedGearMechanicalEffectsApply(item)) continue;
+            if (acceptedMechanicalGear !== null && !acceptedMechanicalGear.has(embeddedGearItemStableKey(item))) {
+                continue;
+            }
             const changes = item.system?.changes;
             if (!Array.isArray(changes) || changes.length === 0) continue;
             const label = item.name || "Weapon";

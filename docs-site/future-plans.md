@@ -4,7 +4,9 @@ This page lists planned or possible work. Priorities can change. If you want to 
 
 ## In progress or explicitly planned
 
-- **Automated testing framework** — Vitest, **`make test`** / **`make test-coverage`**, CI in **Validate**; **import-safe** coverage under `test/unit/` with an explicit matrix in **`test/README.md`** (repo root). Optional **Quench** (in-Foundry) remains under consideration (see **Under consideration** below). No replacement for manual in-world verification.
+- **Creature features item type** — Dedicated item type and compendium path for structured monster special qualities (SRD monster pack is complete; this reduces rework vs. freeform stat-block text only). Coordinate via issue or maintainer channel before large contributions so scope matches current priorities.
+- **CGS follow-ups** — Core **capability grants** (senses, suppression, spell/SLA grants, typed defenses, overlays, gear apply scope, monster JSON + NPC migration) are **in core**, plus **gear creature-type gates** (`mechanicalCreatureGateUuids`) and optional **custom defense label** items (**`defenseCatalog`**) for extending how immunities, resistances, and DR bypasses read on sheets. Remaining work includes further **effective-type consumers** (favored enemy, turning, spell targeting, …), optional incremental **`cgsGrants`** pack authoring, and **map vision** from effective senses (deferred). See [Development — Capability grants](development.md#capability-grants-structured-effects-parallel-to-the-modifier-system).
+- **Automated testing** — **Vitest** and **`make test`** / **`make test-coverage`** run in **Validate** CI; coverage matrix in **`test/README.md`** (repo root). **Ongoing:** extend tests when touching `module/logic/` and pure helpers. Optional **Quench** (in-Foundry) remains under consideration (see **Under consideration** below). No replacement for manual in-world verification.
 - **Equipment compendium** — Complete or refine the Equipment pack. The [Compendium guide](compendium-guide.md) lists it as “Incomplete.”
 - **Feat prerequisites by UUID** — Ensure all feat prerequisites use document ID/UUID (not name or key), per the project’s [item-references rule](development.md#item-references). The script `scripts/apply-feat-prerequisites.mjs` is related.
 
@@ -12,15 +14,15 @@ This page lists planned or possible work. Priorities can change. If you want to 
 
 The goal is smoother at-table combat for playtesting without full rules automation. **For current maintainer priorities** (ordering of automation vs. spell/combat work), open a **[GitHub issue](https://github.com/egon1024/ThirdEra/issues)** or check recent releases—the numbered list below is a **product** roadmap snapshot and may lag individual shipped features.
 
-The following order prioritizes playability for playtesters (spell/save flow, initiative, concentration), then character build depth (prestige classes), then higher-level combat (iterative attacks).
+The following order prioritized playability for playtesters (spell/save flow, initiative, concentration), then character build depth (prestige classes), then higher-level combat (iterative attacks). **Initiative, concentration from cast chat, roll save from spell messages, spell targeting, and mechanical conditions** are **implemented**—see [Development](development.md).
 
 **Already implemented:** Apply damage/heal (Phases 2–4): sheet "Apply damage/healing" and "Apply to this token"; chat "Apply" button; weapon "Attack & Damage"; temp HP, nonlethal, healing (see [Development reference](development.md) and `module/logic/apply-damage-healing*.mjs`). **Roll save from spell message:** Cast messages store save DC and type; "Roll save" button and context menu let the target (or GM) roll the appropriate save vs. DC. **Spell targeting:** When casting from the sheet, selected tokens are recorded as targets on the message; "Roll save (Target name)" buttons allow one-click rolls per target. **Rest and natural healing:** **Take rest…** on Spells → Ready to cast opens a dialog for optional natural healing (level + modifier key `naturalHealingPerDay` + **Attributes → Details** bonus), optional reset of spell cast/prepared counts, and a chat summary (or “no changes”). See [Character sheet — Spellcasting](usage/characters.md#spellcasting) and [Development — Rest and natural healing](development.md#rest-and-natural-healing).
 
-**Planned (ordered):**
+**From this list — still open vs done:**
 
-1. **Initiative and combat tracker** — Use `@attributes.initiative.bonus` in system initiative formula (for feats like Improved Initiative); add a "Roll initiative" (or "Add to combat & roll initiative") button on the Combat tab that calls Foundry's `Actor.rollInitiative({ createCombatants: true })`.
-2. **Concentration check** — Quick Concentration check (button or prompt when casting) with appropriate DCs (defensive casting, damage, etc.).
-3. **Conditions with mechanical effects** — Ensure condition compendium items have `changes` (AC, saves, speed) populated where applicable so applying Blinded, Shaken, etc. updates the sheet automatically.
+1. ~~**Initiative and combat tracker**~~ — **Done** (`@attributes.initiative.bonus`, Combat tab **Roll initiative**).
+2. ~~**Concentration check**~~ — **Done** (cast chat, defensive/damage DCs; see Development — Spell cast chat).
+3. ~~**Conditions with mechanical effects**~~ — **Done** (GMS `changes` on conditions; generalized modifier system on characters and NPCs).
 4. **Classes Phase 6** — Prestige classes and prerequisites (BAB, skills, feats, spellcasting level).
 5. **Later: Iterative attacks / full attack** — Multiple attacks at BAB +6/+11/+16 (currently single attack per weapon).
 
@@ -59,6 +61,6 @@ The **generalized modifier system** (Phases 1–7 complete) provides a single pi
 - **Losing more than half hit points** — Rules for having lost more than half your HP (e.g. disabled when at 0, or half-HP–based effects); support in sheet and automation where useful.
 - **Party XP calculator** — A tool to automatically calculate and award XP for a party (e.g. by CR/EL, or from encounter totals divided by party size).
 - **Foundry V14** — Document whether the system is “v13 only” or “v13 with V14 in mind.” Pack names are already V14-friendly; a short compatibility checklist could be added when relevant.
-- **Linting** — ESLint or similar could be added alongside or after the automated testing effort if stricter PR checks are desired. (Automated tests are now an explicit next priority; see **In progress or explicitly planned** above.)
+- **Linting** — ESLint or similar could replace the **Validate** workflow’s placeholder **lint** job when stricter PR checks are desired. **Vitest** already runs in CI (see **In progress or explicitly planned** above).
 - **Third-party modules** — Document how to build and ship a module that extends ThirdEra, or add a module template, when the need arises.
 - **Changelog** — Release notes are currently PR-driven. Optionally add a `CHANGELOG.md` or a “What’s new” page in the docs.

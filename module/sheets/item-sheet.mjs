@@ -89,7 +89,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addCgsTypedDefense: ThirdEraItemSheet.onAddCgsTypedDefense,
             removeCgsTypedDefense: ThirdEraItemSheet.onRemoveCgsTypedDefense,
             addCgsTypeOverlay: ThirdEraItemSheet.onAddCgsTypeOverlay,
-            removeCgsTypeOverlay: ThirdEraItemSheet.onRemoveCgsTypeOverlay
+            removeCgsTypeOverlay: ThirdEraItemSheet.onRemoveCgsTypeOverlay,
+            removeMechanicalCreatureGate: ThirdEraItemSheet.onRemoveMechanicalCreatureGate
         }
     };
 
@@ -614,7 +615,17 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             systemForContext = plain;
         }
         if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
-            systemForContext = { ...(systemData || {}), changes: Array.isArray(systemData?.changes) ? systemData.changes : [] };
+            systemForContext = {
+                ...(systemData || {}),
+                changes: Array.isArray(systemData?.changes) ? systemData.changes : [],
+                mechanicalCreatureGateUuids: foundry.utils.duplicate(systemData?.mechanicalCreatureGateUuids ?? [])
+            };
+        }
+        if (item.type === "defenseCatalog") {
+            systemForContext =
+                typeof systemData?.toObject === "function"
+                    ? systemData.toObject(false)
+                    : { ...(systemData || {}) };
         }
         const grantsForSpellUi = Array.isArray(systemForContext?.cgsGrants?.grants)
             ? systemForContext.cgsGrants.grants
@@ -667,6 +678,27 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             cgsOverlaySubtypeChoices = allOvSubtypes
                 .map((doc) => ({ uuid: doc.uuid, name: doc.name || "—" }))
                 .sort((a, b) => ovSort({ name: a.name }, { name: b.name }));
+        }
+
+        /** @type {Array<{ gateIndex: number, name: string, uuid: string }>} */
+        let mechanicalCreatureGateRows = [];
+        if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
+            const raw = Array.isArray(systemForContext?.mechanicalCreatureGateUuids)
+                ? systemForContext.mechanicalCreatureGateUuids
+                : [];
+            mechanicalCreatureGateRows = raw.map((uuid, gateIndex) => {
+                const u = typeof uuid === "string" ? uuid.trim() : "";
+                let name = u;
+                if (u) {
+                    try {
+                        const d = foundry.utils.fromUuidSync(u);
+                        if (d?.name) name = d.name;
+                    } catch (_) {
+                        /* keep uuid */
+                    }
+                }
+                return { gateIndex, name, uuid: u };
+            });
         }
 
         if (item.type === "class") {
@@ -736,7 +768,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             cgsCreatureTypeOverlayRows,
             cgsSubtypeOverlayRows,
             cgsOverlayCreatureTypeChoices,
-            cgsOverlaySubtypeChoices
+            cgsOverlaySubtypeChoices,
+            mechanicalCreatureGateRows
         };
     }
 
@@ -1194,6 +1227,30 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 const msg = err instanceof Error ? err.message : String(err);
                 ui.notifications?.error?.(msg);
             }
+            return;
+        }
+
+        const mechanicalGateDrop = event.target.closest?.("[data-mechanical-gate-drop]");
+        const gearTypes = new Set(["armor", "equipment", "weapon"]);
+        if (
+            mechanicalGateDrop &&
+            gearTypes.has(this.document.type) &&
+            (droppedItem.type === "creatureType" || droppedItem.type === "subtype")
+        ) {
+            if (!this.isEditable) {
+                ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+                return;
+            }
+            const itemUuid = (droppedItem.uuid ?? "").trim();
+            if (!itemUuid) return;
+            const uuids = foundry.utils.duplicate(this.document.system?.mechanicalCreatureGateUuids ?? []);
+            if (!uuids.includes(itemUuid)) {
+                uuids.push(itemUuid);
+            }
+            const tabEl = this.element?.querySelector?.(".sheet-body .tab.active");
+            if (tabEl) this._preservedScrollTop = tabEl.scrollTop;
+            await this.document.update({ "system.mechanicalCreatureGateUuids": uuids });
+            await this.render(true);
             return;
         }
 
@@ -2544,6 +2601,19 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (!uuid) return;
         const uuids = (this.document.system.prerequisiteFeatUuids ?? []).filter((u) => u !== uuid);
         await this.document.update({ "system.prerequisiteFeatUuids": uuids });
+    }
+
+    /** Remove a mechanical creature gate row by index (armor / equipment / weapon). */
+    static async onRemoveMechanicalCreatureGate(_event, target) {
+        const t = this.document?.type;
+        if (t !== "armor" && t !== "equipment" && t !== "weapon") return;
+        const rawIdx = target?.dataset?.index ?? target?.closest?.("[data-index]")?.dataset?.index;
+        const idx = parseInt(rawIdx, 10);
+        if (Number.isNaN(idx) || idx < 0) return;
+        const uuids = foundry.utils.duplicate(this.document.system?.mechanicalCreatureGateUuids ?? []);
+        if (idx >= uuids.length) return;
+        uuids.splice(idx, 1);
+        await this.document.update({ "system.mechanicalCreatureGateUuids": uuids });
     }
 
     /** Item types that edit `system.cgsGrants.senses` on the item sheet (Phase 5b). */

@@ -162,6 +162,83 @@ describe("cgsEmbeddedItemGrantsProvider", () => {
         expect(out[0].grants[0]).toMatchObject({ category: "sense", senseType: "scent", range: "15 ft" });
     });
 
+    it("excludes gated armor when actor effective type does not match gate UUID", () => {
+        const actor = {
+            system: { details: { creatureTypeUuid: "type-beast" } },
+            items: [
+                {
+                    type: "armor",
+                    id: "a1",
+                    uuid: "Actor.1.Item.a1",
+                    name: "Elf-only",
+                    system: {
+                        equipped: "true",
+                        mechanicalCreatureGateUuids: ["type-elf"],
+                        cgsGrants: { grants: [{ category: "sense", senseType: "darkvision", range: "5 ft" }] }
+                    }
+                }
+            ]
+        };
+        const out = cgsEmbeddedItemGrantsProvider(actor);
+        expect(out).toEqual([]);
+    });
+
+    it("includes gated armor when primary creature type matches gate UUID", () => {
+        const actor = {
+            system: { details: { creatureTypeUuid: "type-elf" } },
+            items: [
+                {
+                    type: "armor",
+                    id: "a1",
+                    uuid: "Actor.1.Item.a1",
+                    name: "Elf mail",
+                    system: {
+                        equipped: "true",
+                        mechanicalCreatureGateUuids: ["type-elf"],
+                        cgsGrants: { grants: [{ category: "sense", senseType: "darkvision", range: "5 ft" }] }
+                    }
+                }
+            ]
+        };
+        const out = cgsEmbeddedItemGrantsProvider(actor);
+        expect(out).toHaveLength(1);
+        expect(out[0].label).toBe("Elf mail");
+    });
+
+    it("fixed-point accepts gated gear after another gear grants matching type overlay", () => {
+        const actor = {
+            system: { details: { creatureTypeUuid: "type-humanoid" } },
+            items: [
+                {
+                    type: "armor",
+                    id: "chain",
+                    uuid: "Actor.1.Item.chain",
+                    name: "Overlay chain",
+                    system: {
+                        equipped: "true",
+                        mechanicalCreatureGateUuids: [],
+                        cgsGrants: {
+                            grants: [{ category: "creatureTypeOverlay", typeUuid: "type-giant" }]
+                        }
+                    }
+                },
+                {
+                    type: "armor",
+                    id: "plate",
+                    uuid: "Actor.1.Item.plate",
+                    name: "Giant-gated plate",
+                    system: {
+                        equipped: "true",
+                        mechanicalCreatureGateUuids: ["type-giant"],
+                        cgsGrants: { grants: [{ category: "sense", senseType: "scent", range: "" }] }
+                    }
+                }
+            ]
+        };
+        const out = cgsEmbeddedItemGrantsProvider(actor);
+        expect(out.map((x) => x.label).sort()).toEqual(["Giant-gated plate", "Overlay chain"]);
+    });
+
     it("weapon only when primary or offhand", () => {
         const actor = {
             items: [

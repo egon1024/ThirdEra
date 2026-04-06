@@ -44,6 +44,16 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
                 label: "Mechanical effects apply"
             }),
 
+            /**
+             * If non-empty, GMS/CGS from this armor apply only when the owning actor’s effective creature
+             * type or subtype (union) matches at least one referenced document UUID.
+             */
+            mechanicalCreatureGateUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                required: false,
+                initial: [],
+                label: "Mechanical creature type gate"
+            }),
+
             /** Optional mechanical modifiers when equipped (generalized modifier system). Same key set as conditions/feats. */
             changes: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),

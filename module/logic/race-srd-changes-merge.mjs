@@ -1,3 +1,8 @@
+import { yieldToMain } from "./client-main-thread-cooperation.mjs";
+
+/** Yield so the browser can paint/handle input between many fast skip-path iterations (microtasks alone do not). */
+const RACE_MIGRATION_YIELD_EVERY = 8;
+
 /**
  * Merge bundled SRD racial skill/save/hide modifiers into existing race items without replacing documents.
  * The Races **compendium** is refreshed from `packs/races/*.json` on load (CompendiumLoader); this pass still
@@ -227,7 +232,9 @@ export async function migrateAllRaceStockDeltas(deps) {
     const pack = game.packs?.get?.("thirdera.thirdera_races");
     if (pack) {
         const docs = await pack.getDocuments();
+        let docIdx = 0;
         for (const doc of docs) {
+            if (++docIdx % RACE_MIGRATION_YIELD_EVERY === 0) await yieldToMain();
             if (doc.type !== "race") continue;
             const result = await applyRaceStockDeltaToDocument(doc);
             if (result === "updated") compendiumUpdated++;
@@ -237,7 +244,9 @@ export async function migrateAllRaceStockDeltas(deps) {
 
     let worldUpdated = 0;
     let worldUnchanged = 0;
+    let worldPass = 0;
     for (const item of game.items?.filter?.((i) => i.type === "race") ?? []) {
+        if (++worldPass % RACE_MIGRATION_YIELD_EVERY === 0) await yieldToMain();
         const result = await applyRaceStockDeltaToDocument(item);
         if (result === "updated") worldUpdated++;
         else if (result === "unchanged") worldUnchanged++;
@@ -245,9 +254,11 @@ export async function migrateAllRaceStockDeltas(deps) {
 
     let actorsUpdated = 0;
     let actorsUnchanged = 0;
+    let actorRacePass = 0;
     for (const actor of game.actors ?? []) {
         const races = actor.items?.filter?.((i) => i.type === "race") ?? [];
         for (const item of races) {
+            if (++actorRacePass % RACE_MIGRATION_YIELD_EVERY === 0) await yieldToMain();
             const result = await applyRaceStockDeltaToDocument(item);
             if (result === "updated") actorsUpdated++;
             else if (result === "unchanged") actorsUnchanged++;

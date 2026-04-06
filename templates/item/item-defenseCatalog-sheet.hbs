@@ -1,0 +1,36 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}"
+                    placeholder="{{localize 'THIRDERA.DefenseCatalog.NamePlaceholder'}}" /></h1>
+        </div>
+    </header>
+
+    <section class="sheet-body">
+        <div class="tab active" data-group="primary" data-tab="description">
+            <div class="form-group">
+                <label title="{{localize 'THIRDERA.DefenseCatalog.GrantTokenHint'}}">{{localize "THIRDERA.DefenseCatalog.GrantToken"}}</label>
+                <input type="text" name="system.catalogKey" value="{{system.catalogKey}}" data-dtype="String"
+                    placeholder="{{localize 'THIRDERA.DefenseCatalog.GrantTokenPlaceholder'}}"
+                    title="{{localize 'THIRDERA.DefenseCatalog.GrantTokenHint'}}" />
+            </div>
+            <div class="form-group">
+                <label title="{{localize 'THIRDERA.DefenseCatalog.KindHint'}}">{{localize "THIRDERA.DefenseCatalog.Kind"}}</label>
+                <select name="system.catalogKind" data-dtype="String" title="{{localize 'THIRDERA.DefenseCatalog.KindHint'}}">
+                    <option value="immunityTag" {{#if (eq system.catalogKind "immunityTag")}}selected{{/if}}>{{localize "THIRDERA.DefenseCatalog.KindImmunity"}}</option>
+                    <option value="energyType" {{#if (eq system.catalogKind "energyType")}}selected{{/if}}>{{localize "THIRDERA.DefenseCatalog.KindEnergy"}}</option>
+                    <option value="energyResistance" {{#if (eq system.catalogKind "energyResistance")}}selected{{/if}}>{{localize "THIRDERA.DefenseCatalog.KindEnergyResistance"}}</option>
+                    <option value="drBypass" {{#if (eq system.catalogKind "drBypass")}}selected{{/if}}>{{localize "THIRDERA.DefenseCatalog.KindBypass"}}</option>
+                </select>
+            </div>
+            {{> systems/thirdera/templates/partials/editor-box.hbs
+                label=(localize "THIRDERA.Description")
+                name="system.description"
+                value=system.description
+                enrichedContent=enriched.description
+                documentUuid=item.uuid
+            }}
+        </div>
+    </section>
+</form>

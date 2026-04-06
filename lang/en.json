@@ -201,6 +201,23 @@
         "MechanicalApplyScopeEquippedArmor": "When equipped",
         "MechanicalApplyScopeEquippedWeapon": "When wielded (primary or off-hand)",
         "MechanicalApplyScopeCarried": "When carried (in inventory)",
+        "MechanicalCreatureGate": "Restrict to creature type (optional)",
+        "MechanicalCreatureGateHint": "If you list one or more creature type or subtype items, numeric modifiers and capability grants from this gear apply only when the wearer has that type or subtype in their effective mechanical types (including overlays from other sources). Leave empty for no restriction.",
+        "MechanicalCreatureGateHelp": "Drop creature type or subtype items here. At least one match is required when the list is non-empty.",
+        "MechanicalCreatureGateDropHint": "Drop a creature type or subtype item to add a gate UUID.",
+        "MechanicalCreatureGateRemove": "Remove gate entry",
+        "DefenseCatalog": {
+            "NamePlaceholder": "Display label (e.g. shown on actor sheet)",
+            "GrantToken": "Text on items that grant the defense",
+            "GrantTokenPlaceholder": "e.g. fire, acid, adamantine, magic",
+            "GrantTokenHint": "Must match the immunity tag, energy type, or damage reduction (DR) bypass text used in Capability grants on the feat, item, race, condition, or other document that grants that defense—not this label item’s Foundry id. Same spelling as there (often camelCase, e.g. coldIron).",
+            "Kind": "Applies to",
+            "KindHint": "Which kind of capability grant this name is for. Energy type and energy resistance share the same type labels (fire, cold, etc.). DR bypass labels only name bypass types (adamantine, magic); DR amount is set on the grant, not here.",
+            "KindImmunity": "Immunity tag",
+            "KindEnergy": "Energy type",
+            "KindEnergyResistance": "Energy resistance (type label)",
+            "KindBypass": "DR bypass"
+        },
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"
@@ -683,28 +700,29 @@
                 "Cost": "cost: {oldValue} → {newValue}",
                 "Quantity": "quantity: {oldValue} → {newValue}"
             }
-        }
-    },
-    "TYPES": {
-        "Item": {
-            "spell": "Spell",
-            "weapon": "Weapon",
-            "armor": "Armor",
-            "equipment": "Equipment",
-            "feat": "Feat",
-            "skill": "Skill",
-            "race": "Race",
-            "class": "Class",
-            "feature": "Class Feature",
-            "domain": "Domain",
-            "school": "School of Magic",
-            "condition": "Condition",
-            "creatureType": "Creature Type",
-            "subtype": "Subtype"
         },
-        "Actor": {
-            "character": "Character",
-            "npc": "NPC"
+        "TYPES": {
+            "Item": {
+                "spell": "Spell",
+                "weapon": "Weapon",
+                "armor": "Armor",
+                "equipment": "Equipment",
+                "feat": "Feat",
+                "skill": "Skill",
+                "race": "Race",
+                "class": "Class",
+                "feature": "Class Feature",
+                "domain": "Domain",
+                "school": "School of Magic",
+                "condition": "Condition",
+                "creatureType": "Creature Type",
+                "subtype": "Subtype",
+                "defenseCatalog": "Custom defense labels"
+            },
+            "Actor": {
+                "character": "Character",
+                "npc": "NPC"
+            }
         }
     }
 }
