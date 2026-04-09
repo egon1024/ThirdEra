@@ -1,0 +1,43 @@
+<div class="form-group thirdera-spell-creature-type-targeting">
+    <ol class="spell-type-targeting-list">
+        {{#each spellCreatureTypeTargetingRows}}
+        <li class="flexrow" data-spell-type-targeting-index="{{targetIndex}}">
+            <span class="spell-type-targeting-name">{{name}}</span>
+            <button type="button" class="icon fa-solid fa-trash" data-action="removeSpellCreatureTypeTarget"
+                data-index="{{targetIndex}}" title="{{localize 'THIRDERA.SpellCreatureTypeTargetingRemove'}}" aria-label="{{localize 'THIRDERA.SpellCreatureTypeTargetingRemove'}}"></button>
+        </li>
+        {{/each}}
+    </ol>
+    {{#if editable}}
+    {{#if hasSpellCreatureTypeChoicesForAdd}}
+    <div class="spell-type-targeting-add" style="margin-bottom: 6px;">
+        <select class="spell-creature-type-target-select" title="{{localize 'THIRDERA.SpellCreatureTypeTargetingSelectPlaceholder'}}">
+            <option value="">{{localize "THIRDERA.SpellCreatureTypeTargetingSelectPlaceholder"}}</option>
+            {{#if hasSpellCreatureTypeChoiceTypes}}
+            <optgroup label="{{localize 'THIRDERA.SpellCreatureTypeTargetingOptgroupTypes'}}">
+                {{#each spellCreatureTypeChoicesTypes}}
+                <option value="{{uuid}}">{{name}}</option>
+                {{/each}}
+            </optgroup>
+            {{/if}}
+            {{#if hasSpellCreatureTypeChoiceSubtypes}}
+            <optgroup label="{{localize 'THIRDERA.SpellCreatureTypeTargetingOptgroupSubtypes'}}">
+                {{#each spellCreatureTypeChoicesSubtypes}}
+                <option value="{{uuid}}">{{name}}</option>
+                {{/each}}
+            </optgroup>
+            {{/if}}
+        </select>
+        <button type="button" class="spell-type-targeting-add-btn" data-action="addSpellCreatureTypeTargetFromSelect"
+            title="{{localize 'THIRDERA.SpellCreatureTypeTargetingAddTitle'}}"
+            aria-label="{{localize 'THIRDERA.SpellCreatureTypeTargetingAddTitle'}}">
+            <i class="fas fa-plus"></i> {{localize "THIRDERA.SpellCreatureTypeTargetingAdd"}}
+        </button>
+    </div>
+    {{/if}}
+    {{/if}}
+    <div class="flexrow spell-type-targeting-drop" data-spell-type-targeting-drop
+        title="{{localize 'THIRDERA.SpellCreatureTypeTargetingDropHint'}}">
+        <span class="hint">{{localize "THIRDERA.SpellCreatureTypeTargetingDropHint"}}</span>
+    </div>
+</div>

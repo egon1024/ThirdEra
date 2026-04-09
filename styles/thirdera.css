@@ -5662,6 +5662,17 @@ form.thirdera.sheet.flexcol > .sheet-body {
   opacity: 1;
 }
 
+.thirdera .spell-type-targeting-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.thirdera .spell-type-targeting-add .spell-creature-type-target-select {
+  flex: 1;
+  min-width: 0;
+}
+
 /* School sheet: Opposition Schools, Subschools, Descriptor Tags */
 .thirdera .school-drop-zone {
   min-height: 36px;

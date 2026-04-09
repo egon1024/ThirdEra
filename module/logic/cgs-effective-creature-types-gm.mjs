@@ -91,6 +91,31 @@ export function notifyEffectiveCreatureTypesForActor(actor, deps) {
 }
 
 /**
+ * Show effective creature types for all currently selected (controlled) canvas tokens.
+ * Designed for GM macro use: `game.thirdera.effectiveCreatureTypes.notifyForSelectedTokens()`
+ *
+ * @param {EffectiveCreatureTypesGmDeps} deps
+ * @param {{ getControlledTokens?: () => Array<{ actor?: object }> }} [canvasDeps]
+ */
+export function notifyEffectiveCreatureTypesForSelectedTokens(
+    deps,
+    canvasDeps = { getControlledTokens: () => globalThis.canvas?.tokens?.controlled ?? [] }
+) {
+    if (!deps.isGm()) return;
+    const tokens = canvasDeps.getControlledTokens();
+    if (!tokens || tokens.length === 0) {
+        deps.notifyInfo(deps.localize("THIRDERA.CGS.EffectiveTypesNoTokensSelected"));
+        return;
+    }
+    for (const token of tokens) {
+        const actor = token?.actor;
+        if (actor && (actor.type === "character" || actor.type === "npc")) {
+            notifyEffectiveCreatureTypesForActor(actor, deps);
+        }
+    }
+}
+
+/**
  * @param {(name: string, fn: Function) => void} hooksOn - e.g. Hooks.on
  * @param {EffectiveCreatureTypesGmDeps} [deps]
  */

@@ -15,6 +15,10 @@ import {
 } from "../logic/cgs-spell-grant-prep.mjs";
 import { filterNpcSkillItemDataForCreate } from "../logic/npc-embedded-skill-identity.mjs";
 import { parseSaveType } from "../logic/spell-save-helpers.mjs";
+import {
+    normalizeSpellTargetCreatureTypeUuids,
+    validateSpellTargetsCreatureTypes
+} from "../logic/spell-creature-type-targeting.mjs";
 
 /**
  * HTML for Success/Failure in roll flavor (chat template renders flavor with triple braces).
@@ -604,6 +608,37 @@ export class ThirdEraActor extends Actor {
             }
         }
 
+        const spellTypeUuids = normalizeSpellTargetCreatureTypeUuids(spellItem.system.targetCreatureTypeUuids);
+        let creatureTypeRestrictionLine = "";
+        if (spellTypeUuids.length > 0) {
+            const typeNames = spellTypeUuids.map((u) => {
+                try {
+                    const doc = foundry.utils.fromUuidSync(u);
+                    return doc?.name || u;
+                } catch (_) { return u; }
+            });
+            creatureTypeRestrictionLine = `<p class="cast-type-restriction">${game.i18n.format("THIRDERA.SpellCreatureTypeTargetingChatLine", { types: typeNames.join(", ") })}</p>`;
+
+            if (targetActorUuids.length > 0) {
+                const targetData = [];
+                for (const uuid of targetActorUuids) {
+                    try {
+                        const a = foundry.utils.fromUuidSync(uuid);
+                        if (a?.system) targetData.push({ name: a.name || "?", uuid, systemData: a.system });
+                    } catch (_) { /* skip */ }
+                }
+                const { results } = validateSpellTargetsCreatureTypes(spellTypeUuids, targetData);
+                for (const r of results) {
+                    if (!r.valid) {
+                        ui.notifications.warn(game.i18n.format("THIRDERA.SpellCreatureTypeTargetingCastWarn", {
+                            spell: spellName,
+                            target: r.name
+                        }));
+                    }
+                }
+            }
+        }
+
         const grantSourceLine = useCgsGrantCastMap
             ? `<p class="cast-grant-source">${game.i18n.localize("THIRDERA.CGS.CastMessageFromCapabilityGrant")}</p>`
             : "";
@@ -613,6 +648,7 @@ export class ThirdEraActor extends Actor {
   ${grantSourceLine}
   <div class="cast-dc-breakdown">${dcLine}</div>
   <p>${srLine}</p>
+  ${creatureTypeRestrictionLine}
   ${targetNamesLine}
 </div>`;
 

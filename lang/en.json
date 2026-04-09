@@ -110,7 +110,9 @@
             "EffectiveTypesTypesLabel": "Types",
             "EffectiveTypesSubtypesLabel": "Subtypes",
             "EffectiveTypesEmptyList": "—",
-            "EffectiveTypesNoActor": "No actor data to inspect."
+            "EffectiveTypesNoActor": "No actor data to inspect.",
+            "EffectiveTypesNoTokensSelected": "No tokens selected.",
+            "EffectiveCreatureTypesTokenContext": "Show effective creature types"
         },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",
@@ -206,6 +208,17 @@
         "MechanicalCreatureGateHelp": "Drop creature type or subtype items here. At least one match is required when the list is non-empty.",
         "MechanicalCreatureGateDropHint": "Drop a creature type or subtype item to add a gate UUID.",
         "MechanicalCreatureGateRemove": "Remove gate entry",
+        "SpellCreatureTypeTargeting": "Target creature types",
+        "SpellCreatureTypeTargetingHint": "If types are listed, a target must match at least one (after overlays such as polymorph). Leave empty for no restriction. The GM is warned on cast if a chosen target may not qualify.",
+        "SpellCreatureTypeTargetingDropHint": "Or drop a creature type or subtype item here.",
+        "SpellCreatureTypeTargetingRemove": "Remove from list",
+        "SpellCreatureTypeTargetingAdd": "Add",
+        "SpellCreatureTypeTargetingAddTitle": "Add the selected type or subtype to the list.",
+        "SpellCreatureTypeTargetingSelectPlaceholder": "Type or subtype…",
+        "SpellCreatureTypeTargetingOptgroupTypes": "Creature types",
+        "SpellCreatureTypeTargetingOptgroupSubtypes": "Subtypes",
+        "SpellCreatureTypeTargetingCastWarn": "{spell}: target {target} does not match the required creature types.",
+        "SpellCreatureTypeTargetingChatLine": "Target creature types: {types}",
         "DefenseCatalog": {
             "NamePlaceholder": "Display label (e.g. shown on actor sheet)",
             "GrantToken": "Text on items that grant the defense",

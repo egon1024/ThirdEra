@@ -90,7 +90,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             removeCgsTypedDefense: ThirdEraItemSheet.onRemoveCgsTypedDefense,
             addCgsTypeOverlay: ThirdEraItemSheet.onAddCgsTypeOverlay,
             removeCgsTypeOverlay: ThirdEraItemSheet.onRemoveCgsTypeOverlay,
-            removeMechanicalCreatureGate: ThirdEraItemSheet.onRemoveMechanicalCreatureGate
+            removeMechanicalCreatureGate: ThirdEraItemSheet.onRemoveMechanicalCreatureGate,
+            removeSpellCreatureTypeTarget: ThirdEraItemSheet.onRemoveSpellCreatureTypeTarget,
+            addSpellCreatureTypeTargetFromSelect: ThirdEraItemSheet.onAddSpellCreatureTypeTargetFromSelect
         }
     };
 
@@ -701,6 +703,55 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             });
         }
 
+        /** @type {Array<{ targetIndex: number, name: string, uuid: string }>} */
+        let spellCreatureTypeTargetingRows = [];
+        /** @type {Array<{ uuid: string, name: string }>} */
+        let spellCreatureTypeChoicesTypes = [];
+        /** @type {Array<{ uuid: string, name: string }>} */
+        let spellCreatureTypeChoicesSubtypes = [];
+        let hasSpellCreatureTypeChoicesForAdd = false;
+        let hasSpellCreatureTypeChoiceTypes = false;
+        let hasSpellCreatureTypeChoiceSubtypes = false;
+        if (item.type === "spell") {
+            const raw = Array.isArray(systemForContext?.targetCreatureTypeUuids)
+                ? systemForContext.targetCreatureTypeUuids
+                : [];
+            const selected = new Set(
+                raw.map((u) => (typeof u === "string" ? u.trim() : "")).filter(Boolean)
+            );
+            spellCreatureTypeTargetingRows = raw.map((uuid, targetIndex) => {
+                const u = typeof uuid === "string" ? uuid.trim() : "";
+                let name = u;
+                if (u) {
+                    try {
+                        const d = foundry.utils.fromUuidSync(u);
+                        if (d?.name) name = d.name;
+                    } catch (_) {
+                        /* keep uuid */
+                    }
+                }
+                return { targetIndex, name, uuid: u };
+            });
+            const typesPack = game.packs.get("thirdera.thirdera_creature_types");
+            const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
+            const typesFromPack = typesPack ? await typesPack.getDocuments() : [];
+            const typesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "creatureType");
+            const subtypesFromPack = subtypesPack ? await subtypesPack.getDocuments() : [];
+            const subtypesFromWorld = (game.items?.contents ?? []).filter((i) => i.type === "subtype");
+            const nameSort = (a, b) => (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
+            spellCreatureTypeChoicesTypes = [...typesFromPack, ...typesFromWorld]
+                .map((doc) => ({ uuid: (doc.uuid || "").trim(), name: doc.name || "—" }))
+                .filter((e) => e.uuid && !selected.has(e.uuid))
+                .sort(nameSort);
+            spellCreatureTypeChoicesSubtypes = [...subtypesFromPack, ...subtypesFromWorld]
+                .map((doc) => ({ uuid: (doc.uuid || "").trim(), name: doc.name || "—" }))
+                .filter((e) => e.uuid && !selected.has(e.uuid))
+                .sort(nameSort);
+            hasSpellCreatureTypeChoiceTypes = spellCreatureTypeChoicesTypes.length > 0;
+            hasSpellCreatureTypeChoiceSubtypes = spellCreatureTypeChoicesSubtypes.length > 0;
+            hasSpellCreatureTypeChoicesForAdd = hasSpellCreatureTypeChoiceTypes || hasSpellCreatureTypeChoiceSubtypes;
+        }
+
         if (item.type === "class") {
             const rawSystem = item._source?.system ?? item.toObject?.()?.system;
             const systemPlain = (rawSystem && typeof rawSystem === "object")
@@ -769,7 +820,13 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             cgsSubtypeOverlayRows,
             cgsOverlayCreatureTypeChoices,
             cgsOverlaySubtypeChoices,
-            mechanicalCreatureGateRows
+            mechanicalCreatureGateRows,
+            spellCreatureTypeTargetingRows,
+            spellCreatureTypeChoicesTypes,
+            spellCreatureTypeChoicesSubtypes,
+            hasSpellCreatureTypeChoicesForAdd,
+            hasSpellCreatureTypeChoiceTypes,
+            hasSpellCreatureTypeChoiceSubtypes
         };
     }
 
@@ -1250,6 +1307,29 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             const tabEl = this.element?.querySelector?.(".sheet-body .tab.active");
             if (tabEl) this._preservedScrollTop = tabEl.scrollTop;
             await this.document.update({ "system.mechanicalCreatureGateUuids": uuids });
+            await this.render(true);
+            return;
+        }
+
+        const spellTypeTargetingDrop = event.target.closest?.("[data-spell-type-targeting-drop]");
+        if (
+            spellTypeTargetingDrop &&
+            this.document.type === "spell" &&
+            (droppedItem.type === "creatureType" || droppedItem.type === "subtype")
+        ) {
+            if (!this.isEditable) {
+                ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+                return;
+            }
+            const itemUuid = (droppedItem.uuid ?? "").trim();
+            if (!itemUuid) return;
+            const uuids = foundry.utils.duplicate(this.document.system?.targetCreatureTypeUuids ?? []);
+            if (!uuids.includes(itemUuid)) {
+                uuids.push(itemUuid);
+            }
+            const tabEl = this.element?.querySelector?.(".sheet-body .tab.active");
+            if (tabEl) this._preservedScrollTop = tabEl.scrollTop;
+            await this.document.update({ "system.targetCreatureTypeUuids": uuids });
             await this.render(true);
             return;
         }
@@ -2613,7 +2693,38 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const uuids = foundry.utils.duplicate(this.document.system?.mechanicalCreatureGateUuids ?? []);
         if (idx >= uuids.length) return;
         uuids.splice(idx, 1);
+        const tabEl = this.element?.querySelector?.(".sheet-body .tab.active");
+        if (tabEl) this._preservedScrollTop = tabEl.scrollTop;
         await this.document.update({ "system.mechanicalCreatureGateUuids": uuids });
+    }
+
+    static async onRemoveSpellCreatureTypeTarget(_event, target) {
+        if (this.document?.type !== "spell") return;
+        const rawIdx = target?.dataset?.index ?? target?.closest?.("[data-index]")?.dataset?.index;
+        const idx = parseInt(rawIdx, 10);
+        if (Number.isNaN(idx) || idx < 0) return;
+        const uuids = foundry.utils.duplicate(this.document.system?.targetCreatureTypeUuids ?? []);
+        if (idx >= uuids.length) return;
+        uuids.splice(idx, 1);
+        const tabEl = this.element?.querySelector?.(".sheet-body .tab.active");
+        if (tabEl) this._preservedScrollTop = tabEl.scrollTop;
+        await this.document.update({ "system.targetCreatureTypeUuids": uuids });
+    }
+
+    /** Add a creature type or subtype UUID from the spell sheet dropdown. */
+    static async onAddSpellCreatureTypeTargetFromSelect(_event, target) {
+        if (this.document?.type !== "spell" || !this.isEditable) return;
+        const form = target.closest("form");
+        const select = form?.querySelector(".spell-creature-type-target-select");
+        const uuid = select?.value?.trim();
+        if (!uuid) return;
+        const uuids = foundry.utils.duplicate(this.document.system?.targetCreatureTypeUuids ?? []);
+        if (uuids.includes(uuid)) return;
+        uuids.push(uuid);
+        const tabEl = this.element?.querySelector?.(".sheet-body .tab.active");
+        if (tabEl) this._preservedScrollTop = tabEl.scrollTop;
+        await this.document.update({ "system.targetCreatureTypeUuids": uuids });
+        if (select) select.value = "";
     }
 
     /** Item types that edit `system.cgsGrants.senses` on the item sheet (Phase 5b). */

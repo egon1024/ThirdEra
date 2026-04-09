@@ -58,6 +58,12 @@ export class SpellData extends foundry.abstract.TypeDataModel {
                 label: "Spell Resistance"
             }),
 
+            /** Creature type/subtype UUIDs restricting valid targets (empty = no restriction). */
+            targetCreatureTypeUuids: new ArrayField(
+                new StringField({ required: true, blank: false }),
+                { initial: [], label: "Target Creature Types" }
+            ),
+
             prepared: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Times Prepared" }),
             cast: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Times Cast" })
         };

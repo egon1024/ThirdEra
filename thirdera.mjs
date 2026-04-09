@@ -74,6 +74,7 @@ import {
     registerCgsEffectiveCreatureTypesGmHooks,
     buildEffectiveCreatureTypesDisplayText,
     notifyEffectiveCreatureTypesForActor,
+    notifyEffectiveCreatureTypesForSelectedTokens,
     createDefaultEffectiveCreatureTypesGmDeps
 } from "./module/logic/cgs-effective-creature-types-gm.mjs";
 import { refreshTypedDefenseCatalogCache } from "./module/logic/cgs-typed-defense-catalog-runtime.mjs";
@@ -181,7 +182,8 @@ Hooks.once("init", async function () {
             includesUuid: effectiveCreatureTypesIncludeUuid,
             includesAnyUuid: effectiveCreatureTypesIncludeAnyUuid,
             getDisplayText: (actor) => buildEffectiveCreatureTypesDisplayText(actor?.system, cgsEffDeps),
-            notify: (actor) => notifyEffectiveCreatureTypesForActor(actor, cgsEffDeps)
+            notify: (actor) => notifyEffectiveCreatureTypesForActor(actor, cgsEffDeps),
+            notifyForSelectedTokens: () => notifyEffectiveCreatureTypesForSelectedTokens(cgsEffDeps)
         };
         game.thirdera.refreshTypedDefenseCatalogCache = () => refreshTypedDefenseCatalogCache(game);
     });
@@ -561,6 +563,7 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs",
         "systems/thirdera/templates/partials/spells-ready-cgs-grant-global-section.hbs",
         "systems/thirdera/templates/partials/item-mechanical-creature-gate.hbs",
+        "systems/thirdera/templates/partials/spell-creature-type-targeting.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs",
         "systems/thirdera/templates/apps/skill-picker-dialog.hbs"
     ]);

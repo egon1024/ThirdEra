@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
     CGS_EFFECTIVE_CREATURE_TYPES_GM_HOOK_NAMES,
     buildEffectiveCreatureTypesDisplayText,
+    notifyEffectiveCreatureTypesForSelectedTokens,
     registerCgsEffectiveCreatureTypesGmHooks,
 } from "../../../module/logic/cgs-effective-creature-types-gm.mjs";
 
@@ -122,5 +123,61 @@ describe("registerCgsEffectiveCreatureTypesGmHooks", () => {
         const msg = notifyInfo.mock.calls[0][0];
         expect(msg).toContain("Zombie");
         expect(msg).toContain("Undead");
+    });
+});
+
+describe("notifyEffectiveCreatureTypesForSelectedTokens", () => {
+    const makeDeps = (overrides = {}) => ({
+        isGm: () => true,
+        fromUuidSync: (uuid) => ({ name: `Name-${uuid}` }),
+        localize: (key, data) =>
+            key === "THIRDERA.CGS.EffectiveTypesTitle"
+                ? `${data?.name}: title`
+                : ({
+                      "THIRDERA.CGS.EffectiveTypesTypesLabel": "Types",
+                      "THIRDERA.CGS.EffectiveTypesSubtypesLabel": "Subtypes",
+                      "THIRDERA.CGS.EffectiveTypesEmptyList": "—",
+                      "THIRDERA.CGS.EffectiveTypesNoTokensSelected": "No tokens selected.",
+                  })[key] ?? key,
+        notifyInfo: vi.fn(),
+        ...overrides
+    });
+
+    it("shows 'no tokens selected' when none controlled", () => {
+        const deps = makeDeps();
+        notifyEffectiveCreatureTypesForSelectedTokens(deps, { getControlledTokens: () => [] });
+        expect(deps.notifyInfo).toHaveBeenCalledWith("No tokens selected.");
+    });
+
+    it("does nothing for non-GM users", () => {
+        const deps = makeDeps({ isGm: () => false });
+        notifyEffectiveCreatureTypesForSelectedTokens(deps, {
+            getControlledTokens: () => [{ actor: { type: "npc", name: "Z", system: { details: {}, cgs: {} } } }]
+        });
+        expect(deps.notifyInfo).not.toHaveBeenCalled();
+    });
+
+    it("notifies for each controlled NPC/character token", () => {
+        const deps = makeDeps();
+        const tokens = [
+            { actor: { type: "npc", name: "Zombie", system: { details: { creatureTypeUuid: "ct-u" }, cgs: {} } } },
+            { actor: { type: "character", name: "Hero", system: { details: {}, cgs: {} } } },
+        ];
+        notifyEffectiveCreatureTypesForSelectedTokens(deps, { getControlledTokens: () => tokens });
+        expect(deps.notifyInfo).toHaveBeenCalledTimes(2);
+        expect(deps.notifyInfo.mock.calls[0][0]).toContain("Zombie");
+        expect(deps.notifyInfo.mock.calls[1][0]).toContain("Hero");
+    });
+
+    it("skips tokens without an actor or with non-character/npc type", () => {
+        const deps = makeDeps();
+        const tokens = [
+            { actor: null },
+            { actor: { type: "vehicle", name: "Cart", system: {} } },
+            { actor: { type: "npc", name: "Valid", system: { details: {}, cgs: {} } } },
+        ];
+        notifyEffectiveCreatureTypesForSelectedTokens(deps, { getControlledTokens: () => tokens });
+        expect(deps.notifyInfo).toHaveBeenCalledTimes(1);
+        expect(deps.notifyInfo.mock.calls[0][0]).toContain("Valid");
     });
 });
