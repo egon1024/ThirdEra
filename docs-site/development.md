@@ -217,7 +217,7 @@ See **[Compendium guide](compendium-guide.md)** for the full guide.
 - Declared in `system.json` with `ownership`. Pack names use **underscores** (e.g. `thirdera_races`) for V14.
 - Content in LevelDB; JSON in `packs/` is imported by `CompendiumLoader`. Collection IDs: `{systemId}.{packName}`.
 - Unlock before create/update. Remove invalid `_id`; use `Document.createDocuments()` / `updateDocuments()` with `{pack: pack.collection}`. Loader can update by name/key for content fixes.
-- **Current:** Races (7), Classes (11), Skills (36), Feats (86), Armor (16), Weapons (58), Equipment (63), Spells (SRD 0–9), Schools, Conditions, Creature Types, Subtypes, Features, **Monsters (SRD NPC starter set)** — Actor pack `thirdera_monsters` (`packs/monsters/`); see [Compendium guide](compendium-guide.md) (Monster compendium section).
+- **Current:** Races (7), Classes (11), Skills (36), Feats (86), Armor (18), Weapons (59), Equipment (67), Spells (SRD 0–9), Schools, Conditions, Creature Types, Subtypes, Features, **Monsters (SRD NPC starter set)** — Actor pack `thirdera_monsters` (`packs/monsters/`); see [Compendium guide](compendium-guide.md) (Monster compendium section).
 
 ## Foundry VTT v13 - Critical Technical Notes
 

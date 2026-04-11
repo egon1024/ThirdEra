@@ -1,0 +1,33 @@
+{
+  "_id": "equipment-magic-winged-boots",
+  "name": "Winged Boots",
+  "type": "equipment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "description": "<p>These boots appear to be ordinary footgear. On command, the boots sprout wings at the heel and let the wearer fly, without having to maintain concentration, as if affected by a fly spell. He can fly three times day for up to 5 minutes per flight.</p>",
+    "quantity": 1,
+    "cost": 16000,
+    "weight": 1,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": "",
+    "mechanicalApplyScope": "equipped",
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "spellGrant",
+          "spellKey": "fly",
+          "usesPerDay": 3,
+          "label": "Up to 5 minutes per use, no concentration (SRD winged boots)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 103
+}

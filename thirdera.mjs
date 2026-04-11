@@ -550,6 +550,7 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/scaling-table.hbs",
         "systems/thirdera/templates/partials/spell-search.hbs",
         "systems/thirdera/templates/partials/mechanical-effects-table.hbs",
+        "systems/thirdera/templates/partials/mechanical-apply-scope.hbs",
         "systems/thirdera/templates/partials/cgs-merged-senses.hbs",
         "systems/thirdera/templates/partials/cgs-legacy-statblock-senses.hbs",
         "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs",

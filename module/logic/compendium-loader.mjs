@@ -154,7 +154,7 @@ export class CompendiumLoader {
             "weapon-javelin.json", "weapon-kama.json", "weapon-kukri.json",
             "weapon-lance.json", "weapon-light-crossbow.json", "weapon-light-mace.json",
             "weapon-longbow.json", "weapon-longspear.json", "weapon-longsword.json",
-            "weapon-mace.json", "weapon-morningstar.json", "weapon-net.json",
+            "weapon-mace.json", "weapon-magic-javelin-of-lightning.json", "weapon-morningstar.json", "weapon-net.json",
             "weapon-nunchaku.json", "weapon-orc-double-axe.json", "weapon-pike.json",
             "weapon-quarterstaff.json", "weapon-ranseur.json", "weapon-rapier.json",
             "weapon-repeating-heavy-crossbow.json", "weapon-repeating-light-crossbow.json",
@@ -168,8 +168,10 @@ export class CompendiumLoader {
         "thirdera.thirdera_armor": [
             "armor-padded.json", "armor-leather.json", "armor-studded-leather.json",
             "armor-hide.json", "armor-chain-shirt.json", "armor-scale-mail.json",
-            "armor-chainmail.json", "armor-breastplate.json", "armor-splint-mail.json",
+            "armor-chainmail.json", "armor-breastplate.json", "armor-breastplate-adamantine.json",
+            "armor-splint-mail.json",
             "armor-bandmail.json", "armor-half-plate.json", "armor-full-plate.json",
+            "armor-full-plate-adamantine.json",
             "shield-buckler.json", "shield-light.json", "shield-heavy.json", "shield-tower.json"
         ],
         "thirdera.thirdera_equipment": [
@@ -183,7 +185,11 @@ export class CompendiumLoader {
             "equipment-hammer.json", "equipment-hemp-rope.json", "equipment-holy-symbol.json",
             "equipment-holy-symbol-silver.json", "equipment-holy-water.json", "equipment-ink.json",
             "equipment-inkpen.json", "equipment-iron-spikes.json", "equipment-lantern-bullseye.json",
-            "equipment-lantern-hooded.json", "equipment-lock.json", "equipment-magnifying-glass.json",
+            "equipment-lantern-hooded.json", "equipment-lock.json",             "equipment-magnifying-glass.json",
+            "equipment-magic-goggles-of-night.json",
+            "equipment-magic-ring-of-feather-falling.json",
+            "equipment-magic-ring-of-fire-resistance.json",
+            "equipment-magic-winged-boots.json",
             "equipment-manacles.json", "equipment-manacles-masterwork.json", "equipment-mirror-small.json",
             "equipment-monks-outfit.json", "equipment-nobles-outfit.json", "equipment-oil.json",
             "equipment-paper.json", "equipment-parchment.json", "equipment-peasants-outfit.json",

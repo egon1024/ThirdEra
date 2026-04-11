@@ -1,0 +1,33 @@
+{
+  "_id": "equipment-magic-ring-of-fire-resistance",
+  "name": "Ring of Fire Resistance (Minor)",
+  "type": "equipment",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "description": "<p>This ring continually protects the wearer from damage from fire as a resist energy spell (minor ring 10 points, major 20 points, greater 30 points). This is a minor ring (10 points).</p>",
+    "quantity": 1,
+    "cost": 12000,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": "",
+    "mechanicalApplyScope": "equipped",
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "energyResistance",
+          "energyType": "fire",
+          "amount": 10,
+          "label": "Resist energy (fire) 10 (SRD minor ring)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 102
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "equipment-magic-ring-of-feather-falling",
+  "name": "Ring of Feather Falling",
+  "type": "equipment",
+  "img": "icons/svg/light.svg",
+  "system": {
+    "description": "<p>This ring acts as a feather fall spell, activated automatically if the wearer falls more than 5 feet.</p>",
+    "quantity": 1,
+    "cost": 2200,
+    "weight": 0,
+    "equipped": "false",
+    "isContainer": false,
+    "containerCapacity": 0,
+    "weightMode": "full",
+    "freeRetrieval": "false",
+    "containerId": "",
+    "mechanicalApplyScope": "equipped",
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "spellGrant",
+          "spellKey": "featherFall",
+          "atWill": true,
+          "label": "Automatic when falling more than 5 ft. (SRD ring)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 101
+}

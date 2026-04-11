@@ -332,12 +332,12 @@ To clear another pack (e.g. `packs/races`), use the same pattern: delete `*.ldb`
 - **Skills**: 36 items (all SRD skills)
 - **Feats**: 86 items (all SRD feats - General, Fighter Bonus, Metamagic, Item Creation). Most feats stay **GMS** (`system.changes`) or prose; add **`system.cgsGrants`** when the SRD grants a fixed spell-like ability or typed defense that maps cleanly to a CGS category (use **`spellKey`** until the compendium resolver fills **`spellUuid`**).
 - **Class features** (`packs/features/`): exemplar **`system.cgsGrants`** rows ship for unambiguous SRD cases—**`spellGrant`** + **`spellKey`** (e.g. paladin Detect Evil at will, monk Abundant Step 1/day as *dimension door*), **`immunity`** tags (e.g. poison, disease). Many features remain prose-only until automation warrants a structured row.
-- **Armor**: 16 items (all SRD armor types and shields)
-- **Weapons**: 58 items (all SRD weapons - Simple, Martial, Exotic)
+- **Armor**: 18 items (SRD armor types, shields, plus **adamantine** breastplate and full plate exemplars with **`cgsGrants`** damage reduction)
+- **Weapons**: 59 items (SRD weapons plus **javelin of lightning** exemplar with **`spellGrant`** / **`spellKey`**)
 - **Spells**: 500+ items (SRD 0–9)
 
 ### Incomplete
-- **Equipment**: 63 items (SRD adventuring gear and similar)
+- **Equipment**: 67 JSON items (mundane adventuring gear plus a small **magic** slice—goggles of night, rings, winged boots—with **`system.cgsGrants`** and **`mechanicalApplyScope`** where appropriate). General SRD equipment coverage remains incremental, not exhaustive.
 
 ## Capability grants (CGS) in pack JSON
 
@@ -360,6 +360,12 @@ Git remains the source of truth: keep **keys** in JSON; compendium copies gain U
 
 - **Class features** are the primary place for fixed **spell-like** lines from the SRD (paladin/monk/etc.): add **`spellGrant`** with **`spellKey`** matching **`system.key`** on the spell item (see `feature-paladin-detect-evil.json`, `feature-monk-abundant-step.json`). Use **`atWill`: true** or **`usesPerDay`** when the rules match a single static bucket; skip or document in **`label`** when uses scale oddly (e.g. weekly **remove disease**) so the sheet does not over-claim automation.
 - **Feats** use the same **`cgsGrants`** shape; the core SRD feat list rarely grants a single fixed SLA, so most entries omit CGS until a clear case appears (metamagic, numeric bonuses, and open-ended choices stay out of CGS).
+
+### Gear (Phase 3 — armor, weapons, equipment)
+
+- **Armor / weapons / equipment** share **`system.cgsGrants`** (senses on the **`senses`** array; **`spellGrant`**, **`energyResistance`**, **`damageReduction`**, etc. in **`grants`**) and optional **`system.mechanicalApplyScope`** (`equipped` vs `carried`) per Phase 5g. See **`armor-breastplate-adamantine.json`**, **`equipment-magic-goggles-of-night.json`**, **`weapon-magic-javelin-of-lightning.json`** for authoring patterns.
+- **Numeric** enhancement bonuses, competence bonuses to skills, and AC from armor still belong in **`system.changes`** (GMS), not duplicated as fake CGS rows.
+- **`mechanicalCreatureGateTypeKeys`** / **`SubtypeKeys`** on gear resolve to **`mechanicalCreatureGateUuids`** on GM ready (same pass as spell key resolution).
 
 ### Helper scripts (repo root)
 

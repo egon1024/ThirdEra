@@ -19,6 +19,7 @@ import {
     buildCreatureTypeOverlaySheetRowsFromGrants,
     buildSubtypeOverlaySheetRowsFromGrants
 } from "../logic/cgs-type-overlay-item-sheet.mjs";
+import { buildPlainGearSystemForItemSheet } from "../logic/item-sheet-gear-system-for-template.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -617,11 +618,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             systemForContext = plain;
         }
         if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
-            systemForContext = {
-                ...(systemData || {}),
-                changes: Array.isArray(systemData?.changes) ? systemData.changes : [],
-                mechanicalCreatureGateUuids: foundry.utils.duplicate(systemData?.mechanicalCreatureGateUuids ?? [])
-            };
+            systemForContext = buildPlainGearSystemForItemSheet(systemData);
         }
         if (item.type === "defenseCatalog") {
             systemForContext =

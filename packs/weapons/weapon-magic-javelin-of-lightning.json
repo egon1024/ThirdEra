@@ -1,0 +1,44 @@
+{
+  "_id": "weapon-magic-javelin-of-lightning",
+  "name": "Javelin of Lightning",
+  "type": "weapon",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "<p>This javelin becomes a 5d6 lightning bolt when thrown (Reflex DC 14 half) and is consumed on use. Each javelin carries three such charges; when all are spent, it is destroyed.</p>",
+    "damage": {
+      "dice": "1d6",
+      "type": "piercing"
+    },
+    "critical": {
+      "range": 20,
+      "multiplier": 2
+    },
+    "range": 30,
+    "properties": {
+      "melee": "ranged",
+      "handedness": "light",
+      "size": "Medium",
+      "proficiency": "simple"
+    },
+    "cost": 1500,
+    "weight": 2,
+    "quantity": 1,
+    "equipped": "none",
+    "containerId": "",
+    "mechanicalApplyScope": "equipped",
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "spellGrant",
+          "spellKey": "lightningBolt",
+          "usesPerDay": 3,
+          "label": "Thrown bolt: 5d6 electricity, Reflex DC 14 half (SRD; charges tracked at table)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 100
+}
