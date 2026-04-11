@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Characters - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../../css/logo.png">
+  <link href="../../css/torillic.css" rel="stylesheet">
+  <link href="../../css/single-column.css" rel="stylesheet">
+  <link href="../../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="../..">Home</a>
+      
+      
+      
+      <a class="current" href="../">Usage</a>
+      
+      
+      
+      <a class="" href="../../extending/">Extending</a>
+      
+      
+      
+      <a class="" href="../../development/">Development</a>
+      
+      
+      
+      <a class="" href="../../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="character-sheet">Character sheet</h1>
+<p>The character sheet is the main interface for player characters. It is organized into tabs; each tab focuses on one area of the character.</p>
+<h2 id="tabs">Tabs</h2>
+<ul>
+<li><strong>Description</strong> - Biography and character background. Use the <strong>Edit</strong> button in the header to edit the biography.</li>
+<li><strong>Attributes</strong> - Contains several subtabs:</li>
+<li><strong>Details</strong> - Size, experience points, next-level threshold, and <strong>natural healing bonus (per day)</strong> (extra HP recovered when using <strong>Take rest</strong>; see <a href="#spellcasting">Spellcasting</a>).</li>
+<li><strong>Scores &amp; Saves</strong> - Ability scores, modifiers, and saving throws.</li>
+<li><strong>Skills</strong> - Skill list with ranks, class/cross-class, and modifiers. Skills are derived from your classes and race (class skills, cross-class cost, max ranks).</li>
+<li><strong>Feats</strong> - Feats the character has. You can add feats by dragging from compendiums or the Items directory.</li>
+<li><strong>Class Features</strong> - <strong>From class levels</strong> lists what your classes grant from level data (click a row to open the compendium or world feature item). <strong>Feature items on character</strong> lists embedded feature items you drag onto the sheet.</li>
+<li><strong>Classes</strong> - Class levels and level history. Add a class by dragging a class item from a compendium onto the sheet. The <strong>Level History</strong> panel shows each level’s hit points, class features, feats, and skills gained. You can remove the last level of a class (with optional XP adjustment) from here.</li>
+<li><strong>Spells</strong> - Spellcasting by class: known/prepared spells, slots per day, domain spells (if any), and cast/prepared counts. See <a href="#spellcasting">Spellcasting</a> below.</li>
+<li><strong>Combat</strong> - Hit points, initiative (bonus matches what you roll; see below), AC (with breakdown), conditions, and combat-related actions. Use <strong>Roll initiative</strong> next to the initiative value to add this actor’s tokens to the <strong>active encounter</strong> (if needed) and roll using Foundry’s combat tracker—the same flow as rolling from the tracker or token UI. You need an active combat and (for creating combatants) a scene on the canvas; the GM can start an encounter on the current scene. You can also apply damage or healing to selected tokens, apply to this character’s token, and roll attack and damage (or a combined Attack &amp; Damage). See <a href="#applying-damage-and-healing">Applying damage and healing</a> below.</li>
+</ul>
+<p>The header shows the character’s portrait and token image; you can click the token image to set the prototype token image used on the map.</p>
+<h2 id="level-up">Level-up</h2>
+<p>When the character gains a level in a class:</p>
+<ol>
+<li>Use <strong>Add Level</strong> (or the level-up flow) for that class.</li>
+<li>Choose hit points (roll or fixed).</li>
+<li>Allocate <strong>skill points</strong> for the new level (class and cross-class costs apply). The flow warns if you overspend the level budget or assign more points to one skill than D&amp;D 3.5 normally allows at that level; remaining points turn red when negative, per-skill overages are highlighted in red with a tooltip, and those overages are still recorded if you keep them. Clicking <strong>Next</strong> with unspent points asks whether you want to continue and keep them unallocated.</li>
+<li>If the level-up flow includes a <strong>feat</strong> step (SRD <strong>character</strong> levels 1, 3, 6, 9, 12, 15, 18 after this level, and/or <strong>Fighter</strong> bonus feat levels for that class), choose at most <strong>one</strong> feat from the list. The list shows feats you qualify for; others appear separately with reasons. You can finish without selecting a feat (GM/table override). <strong>Other</strong> class bonus-feat schedules (e.g. wizard), racial extra feats, multiple picks on one level, and class-feature-driven feat pools are <strong>not</strong> automated yet — see <a href="../../future-plans/#extended-bonus-feat-slots">Future plans — Extended bonus feat slots</a>.</li>
+<li>Finish to commit the level. Class features, auto-granted feats (e.g. Improved Unarmed Strike for monk), and domain spells (for clerics) are applied automatically where applicable.</li>
+</ol>
+<p>Level-down is available from the <strong>Classes</strong> tab: use <strong>Remove Level</strong> on the last level of a class. You can choose to leave XP unchanged or set it to the midpoint or minimum of the new level.</p>
+<h2 id="skills">Skills</h2>
+<p>Skills come from the character’s classes (class skills) and race (some skills may be excluded). Ranks are tracked per level; the sheet shows total ranks, class vs cross-class, and modifiers. Skill points at each level are determined by class and Intelligence modifier (×4 at 1st level for most classes).</p>
+<h2 id="feats">Feats</h2>
+<p>Feats can be added by dragging from the Feats compendium (or world items) onto the character sheet. Prerequisites (required feats, BAB, ability scores) are enforced when selecting a feat during level-up; dragging a feat onto the sheet bypasses prerequisite checks (GM override). The sheet shows which feats were gained at which level. Level-up <strong>bonus feat</strong> automation today covers <strong>SRD general levels</strong> and <strong>Fighter</strong> bonus feats only; add other bonus feats by dragging items onto the sheet until <a href="../../future-plans/#extended-bonus-feat-slots">extended bonus-feat slots</a> are implemented.</p>
+<h2 id="spellcasting">Spellcasting</h2>
+<p>If a character has one or more classes with spellcasting enabled:</p>
+<ul>
+<li><strong>Spells</strong> tab shows a block per spellcasting class: caster type (arcane/divine), preparation style (prepared or spontaneous), spell DC, and slots per day.</li>
+<li><strong>Known / Available</strong> sub-tab lists spells by class and level; for prepared casters (e.g. wizard) you set how many of each spell are prepared. <strong>Ready to cast</strong> sub-tab shows the shortlist of spells you can cast and their remaining uses.</li>
+<li>Spells that are not on any class list appear under <strong>Manually added spells</strong> in Known. You can add them to <strong>Ready to cast</strong> for a spellcasting class (e.g. Sorcerer) using <strong>Add to ready</strong> (or <strong>Add to ready as</strong> and choose the class when you have multiple). They then appear under that class in Ready to cast and use that class’s DC and spell slots when cast.</li>
+<li><strong>Domain spells</strong> (e.g. cleric domains) appear in a separate section, are always prepared, and use domain slots. They are added automatically when you add a domain to the class.</li>
+<li><strong>Take rest…</strong> (Spells → <strong>Ready to cast</strong>) opens a dialog for the day’s rest: optional <strong>natural healing</strong>, optional reset of all spell <strong>cast</strong> counts to 0, and (only if the character has at least one <strong>prepared</strong> spellcasting class) optional reset of all <strong>prepared</strong> counts to 0. Natural healing uses the same HP rules as Combat → Apply healing: amount is <strong>character level</strong> (total level, minimum 1) <strong>plus</strong> any modifier total for the <strong><code>naturalHealingPerDay</code></strong> key (from feats, conditions, equipped items, race, etc.) <strong>plus</strong> the character’s <strong>natural healing bonus</strong> on <strong>Attributes → Details</strong>. Healing is capped at current max HP; if nothing would change (full HP, no casts to reset, etc.), the posted chat message says there were no changes. You can still use <strong>Reset cast counts (rest)</strong> and <strong>Reset prepared</strong> to apply only those resets without opening the dialog.</li>
+<li>For <strong>spontaneous</strong> casters, each spell row on Ready to cast has a numeric <strong>Cast</strong> field (in addition to the Cast button) so you can correct mistakes or adjust counts manually; <strong>Used</strong> / <strong>Remaining</strong> for the level stay derived from slots minus total cast.</li>
+<li>For prepared casters, use <strong>Reset prepared</strong> to clear prepared counts; use <strong>Reset cast counts (rest)</strong> to restore daily cast usage after a rest (or use <strong>Take rest…</strong> and check only the options you want).</li>
+<li><strong>Cast</strong> on a spell in Ready to cast posts the spell to chat with save DC and spell resistance; you can drag a spell to the macro bar to create a “Cast: &lt;Spell&gt;” macro.</li>
+</ul>
+<p><strong>Rolling saves from a spell cast:</strong> When the spell has a saving throw (e.g. Fortitude, Reflex, or Will), the cast message in chat shows a <strong>Roll save (…)</strong> button. Click it to open a dialog where you choose which actor rolls the save; the roll is made against the spell's DC. You can also right‑click the message and choose "Roll save vs. spell DC" for the same dialog. If you <strong>select one or more tokens</strong> on the canvas before casting (e.g. the intended targets), the cast message instead lists <strong>Target(s): …</strong> and shows a <strong>Roll save (Name)</strong> button for each target; clicking one rolls that character's or creature's save immediately, with no picker. When no tokens are selected (or when casting from a macro), you get the single Roll save button and picker.</p>
+<p><strong>Concentration from a spell cast:</strong> The same cast message can show <strong>Concentration (defensive)</strong> (DC 15 + spell level, for casting defensively) and <strong>Concentration (other)…</strong> (opens a dialog: damage taken for DC 10 + damage + spell level, or a fixed custom DC). Right‑click the message and choose <strong>Roll Concentration…</strong> for the same dialog as “other.” You must <strong>own</strong> the caster (or be GM). The character needs the <strong>Concentration</strong> skill or a modifier-only Concentration entry under <strong>Attributes → Skills</strong>; otherwise the system warns and does not roll.</p>
+<p><strong>Spell penetration from a spell cast:</strong> For spells whose SR line is <strong>Yes</strong> or <strong>Yes (harmless)</strong> on the spell item, and if you <strong>own</strong> the caster (or are GM), the cast message can show <strong>Spell penetration</strong> buttons. You roll <strong>1d20 + caster level</strong> for this cast vs the target’s SR (meet or beat). If you had <strong>tokens selected</strong> when casting and at least one target has SR greater than zero, you get one button per such target. Otherwise use <strong>Spell penetration…</strong> to pick a creature with SR (you must be able to <strong>observe</strong> that actor unless you are the GM). Harmless spells: the table may still show the button; the GM or players <strong>skip the roll</strong> when the target is willing or SR does not apply—Foundry does not auto-detect willingness. Set <strong>Spell resistance</strong> on <strong>Attributes → Details</strong> for PCs; NPCs use the stat block SR field. <strong>Older cast messages</strong> from before the system stored caster level on the message will not offer penetration buttons; cast again or roll manually if needed (see <a href="../../development/#spell-cast-chat-message-flags-save-concentration-spell-penetration">Development — Spell cast chat</a>).</p>
+<p>Spells are added to the character by dragging from the Spells compendium (or from the Spell List browser). Classes with a “learned” spell list (e.g. wizard) do not auto-add all spells when you add the class; you add spells to the character as the character learns them.</p>
+<h2 id="applying-damage-and-healing">Applying damage and healing</h2>
+<p>From the <strong>Combat</strong> tab you can apply damage or healing to tokens without editing HP by hand:</p>
+<ul>
+<li><strong>Apply damage/healing</strong> — Select one or more tokens on the canvas, then click <strong>Apply damage/healing</strong>. Enter the amount and choose Damage or Healing; temp HP is reduced first for damage, and healing removes lethal damage before reducing nonlethal. You can optionally apply as <strong>nonlethal damage</strong> when dealing damage.</li>
+<li><strong>Apply to this token</strong> — If this character has a token on the current scene, <strong>Apply to this token</strong> opens the same dialog with that token as the only target (no selection needed).</li>
+</ul>
+<p>Weapon rows offer <strong>Attack</strong> (d20), <strong>Damage</strong>, and <strong>Attack &amp; Damage</strong> (one message with both rolls). On any damage or healing roll posted to chat (including Attack &amp; Damage), an <strong>Apply</strong> button appears; select target tokens and click <strong>Apply</strong> to open the dialog with the roll’s total pre-filled. You can also open the dialog from a macro: <code>game.thirdera.applyDamageHealing.openDialog()</code> or <code>game.thirdera.applyDamageHealing.openWithOptions({ targetActors, amount, mode, nonlethal })</code>.</p>
+<h2 id="effective-creature-types-gm-tools-and-macros">Effective creature types (GM tools and macros)</h2>
+<p><strong>Supported today:</strong> Third Era computes <strong>mechanical</strong> creature types and subtypes as the <strong>union</strong> of an NPC’s primary <strong>Details</strong> classification (<strong>creature type</strong> + <strong>subtype</strong> UUIDs) and any <strong>CGS overlay</strong> grants (feats, items, conditions, actor mechanics, etc.). That merged view is what sheets show under <strong>Additional creature types (active)</strong> and what the code means by <em>effective</em> types (see <a href="../../development/#capability-grants-structured-effects-parallel-to-the-modifier-system">Development — Capability grants</a>).</p>
+<ul>
+<li><strong>GMs:</strong> Right-click a <strong>world</strong> actor in the <strong>Actors</strong> sidebar → <strong>Show effective creature types (mechanical)</strong> → notification with resolved type/subtype names.</li>
+<li><strong>Macros / console</strong> (after the world is <strong>ready</strong>): <code>game.thirdera.effectiveCreatureTypes.getFromActor(actor)</code>, <code>.getDisplayText(actor)</code>, <code>.notify(actor)</code>, plus <code>.includesUuid</code> / <code>.includesAnyUuid</code> for custom logic.</li>
+</ul>
+<p><strong>Not in core yet:</strong> Automated rules that <em>depend</em> on creature type (turning, favored enemy, type-only spells, gear restrictions, etc.) are <strong>not</strong> enforced by the system—you still adjudicate those at the table. <strong>Token vision on the map</strong> does <strong>not</strong> follow CGS effective senses. <strong>Wild shape / full form replacement</strong> is <strong>not</strong> modeled as replacing primary type for all checks (overlays are additive only for now).</p>
+<p>When core gains new type-based automation, this page and <a href="development.md">Development</a> should be updated in the same release so “supported vs not yet” stays accurate.</p>
+<h2 id="experience-and-level">Experience and level</h2>
+<p>Current XP and the next-level threshold are on <strong>Attributes → Details</strong>. The sheet header can show an XP progress bar. When you remove a class level, the level-down dialog offers to adjust XP to the midpoint or minimum of the new level.</p>
+
+    
+    
+    
+    
+    
+    
+
+
+
+    
+        
+        
+    
+
+
+
+    
+        
+    
+
+
+<a href="../" class="torillic-backlink">🡐 Usage overview</a>
+    
+  </main>
+  <script src="../../js/version-selector.js"></script>
+  <script src="../../search/main.js"></script>
+</body>
+
+</html>

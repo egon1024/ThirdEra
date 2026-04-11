@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Future plans - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../css/logo.png">
+  <link href="../css/torillic.css" rel="stylesheet">
+  <link href="../css/single-column.css" rel="stylesheet">
+  <link href="../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="..">Home</a>
+      
+      
+      
+      <a class="" href="../usage/">Usage</a>
+      
+      
+      
+      <a class="" href="../extending/">Extending</a>
+      
+      
+      
+      <a class="current" href="../development/">Development</a>
+      
+      
+      
+      <a class="" href="../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="future-plans">Future plans</h1>
+<p>This page lists planned or possible work. Priorities can change. If you want to contribute, open an issue first so we can align with current focus—see <a href="../contributing/">Contributing</a>.</p>
+<h2 id="in-progress-or-explicitly-planned">In progress or explicitly planned</h2>
+<ul>
+<li><strong>Creature features item type</strong> — Dedicated item type and compendium path for structured monster special qualities (SRD monster pack is complete; this reduces rework vs. freeform stat-block text only). Coordinate via issue or maintainer channel before large contributions so scope matches current priorities.</li>
+<li><strong>CGS follow-ups</strong> — Core <strong>capability grants</strong> (senses, suppression, spell/SLA grants, typed defenses, overlays, gear apply scope, monster JSON + NPC migration) are <strong>in core</strong>, plus <strong>gear creature-type gates</strong> (<code>mechanicalCreatureGateUuids</code>) and optional <strong>custom defense label</strong> items (<strong><code>defenseCatalog</code></strong>) for extending how immunities, resistances, and DR bypasses read on sheets. <strong>Pack JSON</strong> can author <strong>keys</strong> (<code>spellKey</code>, <code>targetCreatureTypeKeys</code>, <code>mechanicalCreatureGateTypeKeys</code>, …) resolved to compendium UUIDs on load — see <a href="../compendium-guide/#capability-grants-cgs-in-pack-json">Compendium guide — CGS in pack JSON</a>. Remaining work includes further <strong>effective-type consumers</strong> (favored enemy, turning, …), optional incremental <strong><code>cgsGrants</code></strong> authoring, and <strong>map vision</strong> from effective senses (deferred). <strong>Future idea — grant activation gates:</strong> optional conditions on <strong>whether a grant is active</strong> (merged but suppressed with provenance), e.g. <strong>encumbrance load band</strong> (light / medium / heavy) and <strong>global loadout</strong> (unarmed-only, requires worn armor, disallowed in heavy armor, shield present, etc.) — separate from per-item <strong><code>mechanicalApplyScope</code></strong> (whether that item’s modifiers and CGS contribute at all). See <a href="../development/#capability-grants-structured-effects-parallel-to-the-modifier-system">Development — Capability grants</a>.</li>
+<li><strong>Automated testing</strong> — <strong>Vitest</strong> and <strong><code>make test</code></strong> / <strong><code>make test-coverage</code></strong> run in <strong>Validate</strong> CI; coverage matrix in <strong><code>test/README.md</code></strong> (repo root). <strong>Ongoing:</strong> extend tests when touching <code>module/logic/</code> and pure helpers. Optional <strong>Quench</strong> (in-Foundry) remains under consideration (see <strong>Under consideration</strong> below). No replacement for manual in-world verification.</li>
+<li><strong>Equipment compendium</strong> — Complete or refine the Equipment pack. The <a href="../compendium-guide/">Compendium guide</a> lists it as “Incomplete.”</li>
+<li><strong>Feat prerequisites by UUID</strong> — Ensure all feat prerequisites use document ID/UUID (not name or key), per the project’s <a href="../development/#item-references">item-references rule</a>. The script <code>scripts/apply-feat-prerequisites.mjs</code> is related.</li>
+</ul>
+<h2 id="character-advancement-level-up">Character advancement (level-up)</h2>
+<h3 id="extended-bonus-feat-slots">Extended bonus feat slots</h3>
+<p><strong>Supported today:</strong> the level-up flow may offer <strong>one optional</strong> player-chosen feat when <strong>total character level</strong> after the new level is <strong>1, 3, 6, 9, 12, 15, or 18</strong> (SRD general schedule) <strong>and/or</strong> the class being leveled is named <strong>Fighter</strong> (case-insensitive) and that class’s new level matches the <strong>SRD fighter bonus feat</strong> schedule; the picker lists feats that pass <strong>prerequisites</strong>, and <strong>fighter bonus</strong> picks are limited to feats marked <strong><code>fighterBonusEligible</code></strong>.</p>
+<p><strong>Not in core yet (planned):</strong> <strong>data-driven</strong> extra feat slots on <strong>class</strong> and <strong>race</strong> items (e.g. human +1 feat at 1st, wizard bonus feats at 5th/10th/15th/20th), <strong>multiple</strong> player-chosen feats on the <strong>same</strong> level when rules stack (e.g. Fighter 1 at character level 1), <strong>class feature</strong> definitions that trigger a feat step with <strong>custom eligible pools</strong> (e.g. metamagic-only lists), <strong>stable class identity</strong> (not display name) for fighter-like schedules, <strong><code>levelHistory</code></strong> (or equivalent) able to record <strong>more than one</strong> chosen feat per level, and <strong>mandatory</strong> feat selection when a slot applies. Implement in <strong>progression / level-up</strong> (<code>LevelUpFlow</code> and related data), not CGS. User-facing summary: <a href="../usage/characters/#level-up">Characters — Level-up</a>.</p>
+<h2 id="combat-workflow-support">Combat workflow / support</h2>
+<p>The goal is smoother at-table combat for playtesting without full rules automation. <strong>For current maintainer priorities</strong> (ordering of automation vs. spell/combat work), open a <strong><a href="https://github.com/egon1024/ThirdEra/issues">GitHub issue</a></strong> or check recent releases—the numbered list below is a <strong>product</strong> roadmap snapshot and may lag individual shipped features.</p>
+<p>The following order prioritized playability for playtesters (spell/save flow, initiative, concentration), then character build depth (prestige classes), then higher-level combat (iterative attacks). <strong>Initiative, concentration from cast chat, roll save from spell messages, spell targeting, and mechanical conditions</strong> are <strong>implemented</strong>—see <a href="../development/">Development</a>.</p>
+<p><strong>Already implemented:</strong> Apply damage/heal (Phases 2–4): sheet "Apply damage/healing" and "Apply to this token"; chat "Apply" button; weapon "Attack &amp; Damage"; temp HP, nonlethal, healing (see <a href="../development/">Development reference</a> and <code>module/logic/apply-damage-healing*.mjs</code>). <strong>Roll save from spell message:</strong> Cast messages store save DC and type; "Roll save" button and context menu let the target (or GM) roll the appropriate save vs. DC. <strong>Spell targeting:</strong> When casting from the sheet, selected tokens are recorded as targets on the message; "Roll save (Target name)" buttons allow one-click rolls per target. <strong>Rest and natural healing:</strong> <strong>Take rest…</strong> on Spells → Ready to cast opens a dialog for optional natural healing (level + modifier key <code>naturalHealingPerDay</code> + <strong>Attributes → Details</strong> bonus), optional reset of spell cast/prepared counts, and a chat summary (or “no changes”). See <a href="../usage/characters/#spellcasting">Character sheet — Spellcasting</a> and <a href="../development/#rest-and-natural-healing">Development — Rest and natural healing</a>.</p>
+<p><strong>From this list — still open vs done:</strong></p>
+<ol>
+<li>~~<strong>Initiative and combat tracker</strong>~~ — <strong>Done</strong> (<code>@attributes.initiative.bonus</code>, Combat tab <strong>Roll initiative</strong>).</li>
+<li>~~<strong>Concentration check</strong>~~ — <strong>Done</strong> (cast chat, defensive/damage DCs; see Development — Spell cast chat).</li>
+<li>~~<strong>Conditions with mechanical effects</strong>~~ — <strong>Done</strong> (GMS <code>changes</code> on conditions; generalized modifier system on characters and NPCs).</li>
+<li><strong>Classes Phase 6</strong> — Prestige classes and prerequisites (BAB, skills, feats, spellcasting level).</li>
+<li><strong>Later: Iterative attacks / full attack</strong> — Multiple attacks at BAB +6/+11/+16 (currently single attack per weapon).</li>
+</ol>
+<p><strong>Scope:</strong> Attacks of opportunity, flanking, and grid-facing are left to table ruling or modules; the system does not automate them. The same applies to complex special cases (e.g. full grappling automation). Documenting this keeps scope clear.</p>
+<h2 id="generalized-modifier-system-and-magic-items">Generalized modifier system and magic items</h2>
+<p>The <strong>generalized modifier system</strong> (Phases 1–7 complete) provides a single pipeline for any source to apply modifiers to actors: ability scores, skills, AC, saves, attack, speed, etc. Character and NPC both call <code>getActiveModifiers(actor)</code> once in <code>prepareDerivedData</code>; ability deltas, then AC, speed, saves, attack, and skills use the same modifier bag. Design: <a href="../development/">development.md</a> (Modifier system). Further extension ideas appear under <strong>Planned extensions</strong> and <strong>Magic item categories</strong> on this page.</p>
+<p><strong>Capability grants (CGS):</strong> The <strong>structured capability-grant channel</strong> (<strong>CGS</strong>) is <strong>in core today</strong>—senses, suppression, spell/SLA grants, typed defenses, creature-type overlays, and related merge/provenance—parallel to numeric GMS. See <a href="../development/#capability-grants-structured-effects-parallel-to-the-modifier-system">Development — Capability grants</a> for <strong>what is supported vs not yet</strong> (type-based combat automation, map vision from effective senses, etc.). Sense-like and other structured grants belong in <strong><code>system.cgsGrants</code></strong>, not fake GMS keys; numeric bonuses stay in <strong><code>system.changes</code></strong>.</p>
+<p><strong>Current sources:</strong> Conditions (via ActiveEffects), race (optional <code>system.changes</code>, same as feats), feats (optional <code>system.changes</code>), and equipped armor/weapons/equipment (optional <code>system.changes</code> when equipped). Skill modifiers and breakdowns, including “modifier-only” skills and a shared key UI (e.g. skill picker), are implemented. Extenders can add providers to <code>CONFIG.THIRDERA.modifierSourceProviders</code> or implement <code>getModifierChanges(actor)</code> on items; see <a href="../development/#modifier-system-modulelogicmodifier-aggregationmjs">Development — Modifier system</a>.</p>
+<p><strong>Planned extensions:</strong></p>
+<ul>
+<li><strong>Class features</strong> — When a class feature is granted (actor has the class at the right level), it could contribute <code>changes</code>; a provider would resolve active features from levelHistory and feed them into the same aggregation.</li>
+<li><strong>Magic items</strong> — All magic item categories below would use the same modifier schema when they grant <strong>numeric</strong> bonuses; sense-like and other structured grants use <strong>CGS</strong> on the item (<code>system.cgsGrants</code>) where applicable (see <a href="../development/#capability-grants-structured-effects-parallel-to-the-modifier-system">Development — Capability grants</a>).</li>
+</ul>
+<p><strong>Magic item categories (depend on modifier system):</strong></p>
+<ul>
+<li><strong>Spell-completion (rods, staffs, wands)</strong> — Primarily grant use of specific spell(s) with charges; use the modifier system only if they also grant passive bonuses.</li>
+<li><strong>General magic items</strong> — Magic armor, weapons, wondrous items (belts, cloaks, etc.) that grant bonuses (+1 AC, +2 Str, +5 Swim, DR 5/magic, etc.). When equipped, their <code>changes</code> are applied via the shared pipeline.</li>
+<li><strong>Artifacts</strong> — Same modifier schema; may have many effects and/or special rules (e.g. one artifact active).</li>
+<li><strong>Intelligent items</strong> — Same modifier schema for bonuses; add Ego, communication, and conflict behavior on top.</li>
+<li><strong>Cursed items</strong> — Same modifier schema (often negative); add rules for when they apply (e.g. always active while in inventory, or cannot unequip until uncursed).</li>
+</ul>
+<h2 id="release-and-docs-setup">Release and docs setup</h2>
+<ul>
+<li><strong>First release and docs redirect</strong> — Run one full release (merge a PR with a version tag), confirm the release workflow and mike deploy, then run <code>mike set-default --push latest</code> once so the docs site root redirects to “latest” (if not already done).</li>
+</ul>
+<h2 id="under-consideration">Under consideration</h2>
+<ul>
+<li><strong>Temporary hit points</strong> — Track and apply temp HP (e.g. from spells, class features) with appropriate ordering vs. normal damage and healing.</li>
+<li><strong>Below 0 hit points</strong> — Mechanics for being at or below 0 HP: dying, disabled, stable, death at −10 (or variant rules); integration with derived conditions (Dead, Dying, Disabled, Stable) and rest/healing.</li>
+<li><strong>Losing more than half hit points</strong> — Rules for having lost more than half your HP (e.g. disabled when at 0, or half-HP–based effects); support in sheet and automation where useful.</li>
+<li><strong>Party XP calculator</strong> — A tool to automatically calculate and award XP for a party (e.g. by CR/EL, or from encounter totals divided by party size).</li>
+<li><strong>Foundry V14</strong> — Document whether the system is “v13 only” or “v13 with V14 in mind.” Pack names are already V14-friendly; a short compatibility checklist could be added when relevant.</li>
+<li><strong>Linting</strong> — ESLint or similar could replace the <strong>Validate</strong> workflow’s placeholder <strong>lint</strong> job when stricter PR checks are desired. <strong>Vitest</strong> already runs in CI (see <strong>In progress or explicitly planned</strong> above).</li>
+<li><strong>Third-party modules</strong> — Document how to build and ship a module that extends ThirdEra, or add a module template, when the need arises.</li>
+<li><strong>Changelog</strong> — Release notes are currently PR-driven. Optionally add a <code>CHANGELOG.md</code> or a “What’s new” page in the docs.</li>
+</ul>
+
+    
+    
+    
+    
+    
+    
+
+
+
+    
+        
+        
+    
+
+
+
+    
+
+
+<a href=".." class="torillic-backlink">🡐 Development</a>
+    
+  </main>
+  <script src="../js/version-selector.js"></script>
+  <script src="../search/main.js"></script>
+</body>
+
+</html>
