@@ -15,10 +15,8 @@ import {
 } from "../logic/cgs-spell-grant-prep.mjs";
 import { filterNpcSkillItemDataForCreate } from "../logic/npc-embedded-skill-identity.mjs";
 import { parseSaveType } from "../logic/spell-save-helpers.mjs";
-import {
-    normalizeSpellTargetCreatureTypeUuids,
-    validateSpellTargetsCreatureTypes
-} from "../logic/spell-creature-type-targeting.mjs";
+import { resolveSpellTargetTypeUuidsFromPacks } from "../logic/cgs-spell-target-type-resolve-runtime.mjs";
+import { validateSpellTargetsCreatureTypes } from "../logic/spell-creature-type-targeting.mjs";
 
 /**
  * HTML for Success/Failure in roll flavor (chat template renders flavor with triple braces).
@@ -608,7 +606,7 @@ export class ThirdEraActor extends Actor {
             }
         }
 
-        const spellTypeUuids = normalizeSpellTargetCreatureTypeUuids(spellItem.system.targetCreatureTypeUuids);
+        const spellTypeUuids = await resolveSpellTargetTypeUuidsFromPacks(spellItem.system);
         let creatureTypeRestrictionLine = "";
         if (spellTypeUuids.length > 0) {
             const typeNames = spellTypeUuids.map((u) => {

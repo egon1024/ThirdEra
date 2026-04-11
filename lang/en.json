@@ -435,7 +435,13 @@
             "classFeatures": "Class Features",
             "scalingTable": "Scaling Table",
             "grantLevel": "Grant Level",
-            "noFeatures": "No class features assigned"
+            "noFeatures": "No class features assigned",
+            "ActorSheetGrantedFromClasses": "From class levels",
+            "ActorSheetGrantedFromClassesHint": "Features your classes grant from level progression. Shown from class data, not as separate items on this character.",
+            "ActorSheetEmbeddedFeatureItems": "Feature items on character",
+            "ActorSheetEmbeddedFeatureItemsHint": "Feature items embedded on this actor (drag from the Class Features compendium or Items). Use these for a full item sheet, edits, or effects tied to a specific item.",
+            "OpenGrantedClassFeatureSheet": "Open feature details (compendium or world item)",
+            "GrantedClassFeatureNoDocument": "No compendium or world item could be resolved for this granted feature."
         },
         "Settings": {
             "CurrencyWeight": {

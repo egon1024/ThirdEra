@@ -6,7 +6,17 @@
   "system": {
     "description": "<p>Immunity to all poisons.</p>",
     "key": "monkDiamondBody",
-    "scalingTable": []
+    "scalingTable": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "poison",
+          "label": "Immune to all poisons (SRD)."
+        }
+      ],
+      "senses": []
+    }
   },
   "flags": {},
   "folder": null,

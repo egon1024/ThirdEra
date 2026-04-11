@@ -1,12 +1,14 @@
 /**
  * Spell creature type targeting — effective-type consumer #4.
  *
- * When a spell has `system.targetCreatureTypeUuids` (non-empty), it is limited
- * to targets whose effective creature types (§5.1 union) include at least one
- * of those UUIDs. Validation uses `getEffectiveCreatureTypes` so overlays from
- * CGS are respected.
+ * When a spell has `system.targetCreatureTypeUuids` (non-empty), or authoring keys
+ * (`targetCreatureTypeKeys` / `targetCreatureSubtypeKeys`) resolved at cast via
+ * `cgs-spell-target-type-resolve-runtime.mjs`, it is limited to targets whose effective
+ * creature types (§5.1 union) include at least one of those UUIDs. Validation uses
+ * `getEffectiveCreatureTypes` so overlays from CGS are respected.
  *
- * Pure module — no Foundry globals. Depends only on cgs-effective-creature-types.mjs.
+ * Pure helpers here (no Foundry globals). Runtime key resolution lives in
+ * `cgs-spell-target-type-resolve-runtime.mjs`.
  */
 
 import { getEffectiveCreatureTypes, effectiveCreatureTypesIncludeAnyUuid } from "./cgs-effective-creature-types.mjs";

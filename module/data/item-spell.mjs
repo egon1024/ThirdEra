@@ -9,6 +9,12 @@ export class SpellData extends foundry.abstract.TypeDataModel {
         return {
             description: new HTMLField({ required: true, blank: true, label: "Description" }),
 
+            /**
+             * Stable slug for compendium JSON and spellGrant references (e.g. holdPerson).
+             * Compendium matching remains by spell name; see compendium-guide — CGS pack authoring.
+             */
+            key: new StringField({ required: true, blank: true, initial: "", label: "Spell Key" }),
+
             /** Legacy single level; used as fallback when no levelsByClass entry matches the class */
             level: new NumberField({ required: true, integer: true, min: 0, max: 9, initial: 0, label: "Spell Level (fallback)" }),
 
@@ -63,6 +69,18 @@ export class SpellData extends foundry.abstract.TypeDataModel {
                 new StringField({ required: true, blank: false }),
                 { initial: [], label: "Target Creature Types" }
             ),
+
+            /** Authoring: `system.key` values from Creature Type compendium; resolved to UUIDs on compendium load. */
+            targetCreatureTypeKeys: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                initial: [],
+                label: "Target creature type keys (pack JSON)"
+            }),
+
+            /** Authoring: `system.key` values from Subtype compendium; merged into target UUID list on load. */
+            targetCreatureSubtypeKeys: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                initial: [],
+                label: "Target creature subtype keys (pack JSON)"
+            }),
 
             prepared: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Times Prepared" }),
             cast: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Times Cast" })

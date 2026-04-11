@@ -6,6 +6,14 @@
 import { parseSpellFields, applyParsedSpellFields } from "./spell-description-parser.mjs";
 import { resolveMonsterPackNpcKeys } from "./monster-pack-keys.mjs";
 import { yieldToMain } from "./client-main-thread-cooperation.mjs";
+import {
+    buildCreatureTypeKeyToUuidMap,
+    buildSubtypeKeyToUuidMap,
+    buildSpellKeyToUuidMap,
+    resolveSpellTargetCreatureKeys,
+    resolveMechanicalCreatureGateKeys,
+    resolveCgsGrantReferenceKeys
+} from "./cgs-compendium-reference-resolve.mjs";
 
 /**
  * Returns a stable key for matching compendium documents (incoming JSON or existing).
@@ -908,6 +916,125 @@ export class CompendiumLoader {
                     `ran JSON load for ${packsLoadedFromJson} pack(s). ` +
                     `Enable \"Re-import compendium JSON on each load\" in system settings to force a full refresh from pack JSON.`
             );
+        }
+
+        try {
+            await CompendiumLoader.resolveCgsReferenceKeysInPacks();
+        } catch (err) {
+            console.error("Third Era | resolveCgsReferenceKeysInPacks failed:", err);
+        }
+    }
+
+    /**
+     * Resolve pack-JSON authoring keys (creature types, subtypes, spells) into stored UUIDs on compendium Items.
+     * Runs once per GM ready after JSON import pass so load order between packs does not matter.
+     */
+    static async resolveCgsReferenceKeysInPacks() {
+        if (!game?.user?.isGM) return;
+
+        const typesPack = game.packs.get("thirdera.thirdera_creature_types");
+        const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
+        const spellsPack = game.packs.get("thirdera.thirdera_spells");
+
+        if (!typesPack || !subtypesPack) return;
+
+        const typeKeyToUuid = buildCreatureTypeKeyToUuidMap(await typesPack.getDocuments());
+        const subtypeKeyToUuid = buildSubtypeKeyToUuidMap(await subtypesPack.getDocuments());
+
+        const spellDocs = spellsPack ? await spellsPack.getDocuments() : [];
+        const spellKeyToUuid = buildSpellKeyToUuidMap(spellDocs);
+
+        /** @type {{ spellKeyToUuid: Map<string, string>, typeKeyToUuid: Map<string, string>, subtypeKeyToUuid: Map<string, string> }} */
+        const maps = { spellKeyToUuid, typeKeyToUuid, subtypeKeyToUuid };
+
+        if (spellsPack && spellDocs.length > 0) {
+            const updates = [];
+            for (const doc of spellDocs) {
+                const r = resolveSpellTargetCreatureKeys(doc.system, typeKeyToUuid, subtypeKeyToUuid);
+                if (!r) continue;
+                updates.push({
+                    _id: doc.id,
+                    system: {
+                        ...doc.system,
+                        targetCreatureTypeUuids: r.targetCreatureTypeUuids,
+                        ...(r.clearTypeKeys ? { targetCreatureTypeKeys: [] } : {}),
+                        ...(r.clearSubtypeKeys ? { targetCreatureSubtypeKeys: [] } : {})
+                    }
+                });
+            }
+            if (updates.length > 0) {
+                const Impl = spellsPack.documentClass?.implementation;
+                if (Impl?.updateDocuments) {
+                    await Impl.updateDocuments(updates, { pack: spellsPack.collection });
+                    console.log(`Third Era | Resolved spell target creature-type keys for ${updates.length} spell(s)`);
+                }
+            }
+        }
+
+        for (const collection of ["thirdera.thirdera_armor", "thirdera.thirdera_weapons", "thirdera.thirdera_equipment"]) {
+            const pack = game.packs.get(collection);
+            if (!pack) continue;
+            const docs = await pack.getDocuments();
+            const updates = [];
+            for (const doc of docs) {
+                const r = resolveMechanicalCreatureGateKeys(doc.system, typeKeyToUuid, subtypeKeyToUuid);
+                if (!r) continue;
+                updates.push({
+                    _id: doc.id,
+                    system: {
+                        ...doc.system,
+                        mechanicalCreatureGateUuids: r.mechanicalCreatureGateUuids,
+                        ...(r.clearTypeKeys ? { mechanicalCreatureGateTypeKeys: [] } : {}),
+                        ...(r.clearSubtypeKeys ? { mechanicalCreatureGateSubtypeKeys: [] } : {})
+                    }
+                });
+            }
+            if (updates.length > 0) {
+                const Impl = pack.documentClass?.implementation;
+                if (Impl?.updateDocuments) {
+                    await Impl.updateDocuments(updates, { pack: pack.collection });
+                    console.log(`Third Era | Resolved mechanical creature gate keys for ${updates.length} item(s) in ${collection}`);
+                }
+            }
+        }
+
+        const cgsKeyPacks = [
+            "thirdera.thirdera_feats",
+            "thirdera.thirdera_features",
+            "thirdera.thirdera_races",
+            "thirdera.thirdera_conditions",
+            "thirdera.thirdera_armor",
+            "thirdera.thirdera_weapons",
+            "thirdera.thirdera_equipment"
+        ];
+        for (const collection of cgsKeyPacks) {
+            const pack = game.packs.get(collection);
+            if (!pack) continue;
+            const docs = await pack.getDocuments();
+            const updates = [];
+            for (const doc of docs) {
+                const grants = doc.system?.cgsGrants?.grants;
+                if (!Array.isArray(grants) || grants.length === 0) continue;
+                const { grants: newGrants, changed } = resolveCgsGrantReferenceKeys(grants, maps);
+                if (!changed) continue;
+                updates.push({
+                    _id: doc.id,
+                    system: {
+                        ...doc.system,
+                        cgsGrants: {
+                            ...doc.system.cgsGrants,
+                            grants: newGrants
+                        }
+                    }
+                });
+            }
+            if (updates.length > 0) {
+                const Impl = pack.documentClass?.implementation;
+                if (Impl?.updateDocuments) {
+                    await Impl.updateDocuments(updates, { pack: pack.collection });
+                    console.log(`Third Era | Resolved CGS grant reference keys for ${updates.length} item(s) in ${collection}`);
+                }
+            }
         }
     }
 

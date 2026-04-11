@@ -4345,8 +4345,7 @@ form.thirdera.sheet.flexcol > .sheet-body {
   gap: 3px;
 }
 
-.thirdera .subtab[data-tab="feats"] .feats-section-header,
-.thirdera .subtab[data-tab="features"] .feats-section-header {
+.thirdera .subtab[data-tab="feats"] .feats-section-header {
   margin: 6px 0 2px;
   padding-top: 2px;
   padding-bottom: 2px;
@@ -4365,6 +4364,15 @@ form.thirdera.sheet.flexcol > .sheet-body {
 /* Granted features list */
 .thirdera .granted-features-list .granted-feature {
   background: var(--color-bg-input);
+}
+
+/* Class Features subtab: open compendium/world feature from granted row */
+.thirdera .subtab[data-tab="features"] .granted-class-feature-openable {
+  cursor: pointer;
+}
+
+.thirdera .subtab[data-tab="features"] .granted-class-feature-openable:hover {
+  filter: brightness(1.03);
 }
 
 /* ---- Scaling Table (Feat sheet) ---- */

@@ -63,6 +63,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             configureOwnership: ThirdEraActorSheet.#onConfigureOwnership,
             deleteActor: ThirdEraActorSheet.#onActorDeleteHeader,
             openRace: ThirdEraActorSheet.#onOpenRace,
+            openGrantedClassFeature: ThirdEraActorSheet.#onOpenGrantedClassFeature,
             removeRace: ThirdEraActorSheet.#onRemoveRace,
             openClass: ThirdEraActorSheet.#onOpenClass,
             removeClass: ThirdEraActorSheet.#onRemoveClass,
@@ -4699,6 +4700,35 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         if (race) {
             race.sheet.render({ force: true });
         }
+    }
+
+    /**
+     * Open the compendium or world feature item for a class-granted feature row (derived, not embedded).
+     * @param {PointerEvent} event
+     * @param {HTMLElement} target
+     * @this {ThirdEraActorSheet}
+     */
+    static async #onOpenGrantedClassFeature(event, target) {
+        event.preventDefault();
+        const row = target.closest("[data-action='openGrantedClassFeature']");
+        if (!row) return;
+        const featItemId = (row.dataset.featItemId || "").trim();
+        const featKey = (row.dataset.featKey || "").trim();
+        const uuid = await LevelUpFlow.resolveGrantedClassFeatureUuid({ featItemId, featKey });
+        if (!uuid) {
+            ui.notifications?.warn(
+                game.i18n.localize("THIRDERA.Features.GrantedClassFeatureNoDocument")
+            );
+            return;
+        }
+        const doc = await foundry.utils.fromUuid(uuid);
+        if (!doc?.sheet) {
+            ui.notifications?.warn(
+                game.i18n.localize("THIRDERA.Features.GrantedClassFeatureNoDocument")
+            );
+            return;
+        }
+        doc.sheet.render({ force: true });
     }
 
     /**

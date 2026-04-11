@@ -54,6 +54,18 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
                 label: "Mechanical creature type gate"
             }),
 
+            /** Pack JSON authoring: creature type keys → UUIDs on compendium load. */
+            mechanicalCreatureGateTypeKeys: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                initial: [],
+                label: "Mechanical gate type keys (pack JSON)"
+            }),
+
+            /** Pack JSON authoring: subtype keys → UUIDs on compendium load. */
+            mechanicalCreatureGateSubtypeKeys: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                initial: [],
+                label: "Mechanical gate subtype keys (pack JSON)"
+            }),
+
             /** Optional mechanical modifiers when equipped (generalized modifier system). Same key set as conditions/feats. */
             changes: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),

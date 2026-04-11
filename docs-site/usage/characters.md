@@ -10,7 +10,7 @@ The character sheet is the main interface for player characters. It is organized
   - **Scores & Saves** - Ability scores, modifiers, and saving throws.
   - **Skills** - Skill list with ranks, class/cross-class, and modifiers. Skills are derived from your classes and race (class skills, cross-class cost, max ranks).
   - **Feats** - Feats the character has. You can add feats by dragging from compendiums or the Items directory.
-  - **Class Features** - Class features granted by your classes, shown by level.
+  - **Class Features** - **From class levels** lists what your classes grant from level data (click a row to open the compendium or world feature item). **Feature items on character** lists embedded feature items you drag onto the sheet.
 - **Classes** - Class levels and level history. Add a class by dragging a class item from a compendium onto the sheet. The **Level History** panel shows each level’s hit points, class features, feats, and skills gained. You can remove the last level of a class (with optional XP adjustment) from here.
 - **Spells** - Spellcasting by class: known/prepared spells, slots per day, domain spells (if any), and cast/prepared counts. See [Spellcasting](#spellcasting) below.
 - **Combat** - Hit points, initiative (bonus matches what you roll; see below), AC (with breakdown), conditions, and combat-related actions. Use **Roll initiative** next to the initiative value to add this actor’s tokens to the **active encounter** (if needed) and roll using Foundry’s combat tracker—the same flow as rolling from the tracker or token UI. You need an active combat and (for creating combatants) a scene on the canvas; the GM can start an encounter on the current scene. You can also apply damage or healing to selected tokens, apply to this character’s token, and roll attack and damage (or a combined Attack & Damage). See [Applying damage and healing](#applying-damage-and-healing) below.
@@ -24,7 +24,7 @@ When the character gains a level in a class:
 1. Use **Add Level** (or the level-up flow) for that class.
 2. Choose hit points (roll or fixed).
 3. Allocate **skill points** for the new level (class and cross-class costs apply). The flow warns if you overspend the level budget or assign more points to one skill than D&D 3.5 normally allows at that level; remaining points turn red when negative, per-skill overages are highlighted in red with a tooltip, and those overages are still recorded if you keep them. Clicking **Next** with unspent points asks whether you want to continue and keep them unallocated.
-4. If the character gains a **feat** at this level (e.g. 1st, 3rd, 6th, or a fighter bonus feat), choose one from the list. The list only shows feats the character qualifies for; feats that are not yet available are listed separately with their requirements.
+4. If the level-up flow includes a **feat** step (SRD **character** levels 1, 3, 6, 9, 12, 15, 18 after this level, and/or **Fighter** bonus feat levels for that class), choose at most **one** feat from the list. The list shows feats you qualify for; others appear separately with reasons. You can finish without selecting a feat (GM/table override). **Other** class bonus-feat schedules (e.g. wizard), racial extra feats, multiple picks on one level, and class-feature-driven feat pools are **not** automated yet — see [Future plans — Extended bonus feat slots](../future-plans.md#extended-bonus-feat-slots).
 5. Finish to commit the level. Class features, auto-granted feats (e.g. Improved Unarmed Strike for monk), and domain spells (for clerics) are applied automatically where applicable.
 
 Level-down is available from the **Classes** tab: use **Remove Level** on the last level of a class. You can choose to leave XP unchanged or set it to the midpoint or minimum of the new level.
@@ -35,7 +35,7 @@ Skills come from the character’s classes (class skills) and race (some skills 
 
 ## Feats
 
-Feats can be added by dragging from the Feats compendium (or world items) onto the character sheet. Prerequisites (required feats, BAB, ability scores) are enforced when selecting a feat during level-up; dragging a feat onto the sheet bypasses prerequisite checks (GM override). The sheet shows which feats were gained at which level and supports class-granted bonus feats (e.g. fighter, wizard).
+Feats can be added by dragging from the Feats compendium (or world items) onto the character sheet. Prerequisites (required feats, BAB, ability scores) are enforced when selecting a feat during level-up; dragging a feat onto the sheet bypasses prerequisite checks (GM override). The sheet shows which feats were gained at which level. Level-up **bonus feat** automation today covers **SRD general levels** and **Fighter** bonus feats only; add other bonus feats by dragging items onto the sheet until [extended bonus-feat slots](../future-plans.md#extended-bonus-feat-slots) are implemented.
 
 ## Spellcasting
 

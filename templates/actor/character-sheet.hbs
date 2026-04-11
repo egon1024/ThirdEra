@@ -377,10 +377,12 @@
         data-tab="features">
         {{!-- Granted Class Features --}}
         {{#if grantedClassFeatures.length}}
-        <h4 class="feats-section-header">Granted Features</h4>
+        <h4 class="items-header" title="{{localize 'THIRDERA.Features.ActorSheetGrantedFromClassesHint'}}">{{localize 'THIRDERA.Features.ActorSheetGrantedFromClasses'}}</h4>
         <ol class="items-list granted-features-list">
           {{#each grantedClassFeatures as |feat|}}
-          <li class="item flexrow granted-feature">
+          <li class="item flexrow granted-feature granted-class-feature-openable" data-action="openGrantedClassFeature"
+            data-feat-item-id="{{feat.featItemId}}" data-feat-key="{{feat.featKey}}"
+            title="{{localize 'THIRDERA.Features.OpenGrantedClassFeatureSheet'}}">
             <div class="item-name">
               <h4>{{feat.featName}}</h4>
               {{#if feat.scalingValue}}<span class="feature-scaling-value">({{feat.scalingValue}})</span>{{/if}}
@@ -394,7 +396,7 @@
         </ol>
         {{/if}}
         {{!-- Manually-Added Class Features --}}
-        <h4 class="items-header">Class Features</h4>
+        <h4 class="items-header" title="{{localize 'THIRDERA.Features.ActorSheetEmbeddedFeatureItemsHint'}}">{{localize 'THIRDERA.Features.ActorSheetEmbeddedFeatureItems'}}</h4>
         <ol class="items-list">
           {{#each classFeatures as |item id|}}
           <li class="item flexrow" data-item-id="{{item._id}}">
