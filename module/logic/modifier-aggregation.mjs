@@ -1,6 +1,6 @@
 /**
  * Unified modifier aggregation for ThirdEra.
- * Any source (conditions, feats, race, equipped items, future types) can contribute
+ * Any source (conditions, feats, race via system.changes, equipped items, future types) can contribute
  * modifiers by adhering to the modifier-source interface. This module provides the
  * canonical key set, provider registry, and getActiveModifiers(actor).
  *
@@ -8,7 +8,9 @@
  * @see docs-site/development.md (Modifier system)
  */
 
-import { getConditionItemsMapSync } from "./condition-helpers.mjs";
+import { getActorEffectsList, getConditionItemsMapSync, getEffectStatusIds } from "./condition-helpers.mjs";
+import { embeddedGearMechanicalEffectsApply, embeddedGearItemStableKey } from "./item-gear-mechanical-apply.mjs";
+import { getAcceptedMechanicalGearIdsForActor } from "./cgs-embedded-item-grants-provider.mjs";
 
 // ---------------------------------------------------------------------------
 // Canonical modifier key set
@@ -42,6 +44,29 @@ export function isCanonicalModifierKey(key) {
     }
     if (k.startsWith("skill.")) return true;
     return false;
+}
+
+/**
+ * Sum numeric values in a `system.changes`-style array for one modifier key (e.g. `ability.dex`).
+ * Used for the actor sheet **racial** column: breakdown entries use per-change labels, so filtering
+ * `mods.breakdown` by `label === race.name` misses race rows when authors set row labels.
+ *
+ * @param {Array<{key?: string, value?: unknown}>|undefined|null} changes
+ * @param {string} modifierKey  Canonical key to match (trimmed)
+ * @returns {number}
+ */
+export function sumChangeValuesForModifierKey(changes, modifierKey) {
+    if (!Array.isArray(changes) || !modifierKey) return 0;
+    const want = String(modifierKey).trim();
+    if (!want || !isCanonicalModifierKey(want)) return 0;
+    let sum = 0;
+    for (const c of changes) {
+        const k = (c?.key || "").trim();
+        if (k !== want) continue;
+        const v = Number(c?.value);
+        if (!Number.isNaN(v)) sum += v;
+    }
+    return sum;
 }
 
 /**
@@ -148,73 +173,6 @@ export function getActiveModifiers(actor) {
 // ---------------------------------------------------------------------------
 
 /**
- * Get status IDs from an effect (Set, Array, or source object).
- * Foundry stores statuses as a Set on the document; during data prep or from source we may see an array.
- *
- * @param {Object} effect  ActiveEffect document or plain effect object
- * @returns {string[]}
- */
-function getEffectStatusIds(effect) {
-    if (!effect) return [];
-    const s = effect.statuses;
-    if (s instanceof Set) return Array.from(s);
-    if (Array.isArray(s)) return s;
-    const src = effect._source ?? effect.toObject?.() ?? effect;
-    const raw = src?.statuses;
-    if (Array.isArray(raw)) return raw;
-    if (raw instanceof Set) return Array.from(raw);
-    const legacyId = effect.flags?.core?.statusId ?? effect.getFlag?.("core", "statusId");
-    if (legacyId) return [legacyId];
-    return [];
-}
-
-/**
- * Get the list of effect objects to use for condition resolution.
- * During data prep the document may expose effects differently; use both document collection and source.
- */
-function getActorEffectsList(actor) {
-    const fromDoc = actor?.effects ?? [];
-    const docIsCollection = fromDoc && typeof fromDoc.size === "number" && typeof fromDoc.entries === "function";
-    const docList = docIsCollection ? Array.from(fromDoc) : (Array.isArray(fromDoc) ? fromDoc : []);
-    if (docList.length > 0) return docList;
-    const src = actor?._source ?? actor?.toObject?.() ?? {};
-    const fromSource = src?.effects;
-    const sourceList = Array.isArray(fromSource) ? fromSource : [];
-    return sourceList.length > 0 ? sourceList : docList;
-}
-
-// ---------------------------------------------------------------------------
-// Race provider (adapter: actor's race item abilityAdjustments → contribution)
-// ---------------------------------------------------------------------------
-
-/**
- * Provider that returns one contribution for the actor's race (if any), converting
- * abilityAdjustments into the canonical change shape (ability.str, ability.dex, ...).
- * No schema change to race; uses existing abilityAdjustments.
- *
- * @param {Actor} actor
- * @returns {Array<{ label: string, changes: Array<{ key: string, value: number }> }>}
- */
-function raceModifierProvider(actor) {
-    const raceItem = actor?.items?.find(i => i.type === "race");
-    if (!raceItem) return [];
-    const adj = raceItem.system?.abilityAdjustments;
-    if (!adj) return [];
-    const changes = [];
-    for (const abil of ABILITY_KEYS) {
-        const value = Number(adj[abil]);
-        if (Number.isNaN(value) || value === 0) continue;
-        changes.push({ key: `ability.${abil}`, value });
-    }
-    if (changes.length === 0) return [];
-    return [{ label: raceItem.name || "Race", changes }];
-}
-
-// ---------------------------------------------------------------------------
-// Conditions provider (adapter: effects → condition items → contributions)
-// ---------------------------------------------------------------------------
-
-/**
  * Provider that returns one contribution per active condition (from actor.effects).
  * Uses getConditionItemsMapSync() so safe to call from prepareDerivedData.
  *
@@ -257,15 +215,30 @@ function conditionsModifierProvider(actor) {
 
 /**
  * Provider that returns one contribution per owned item that has system.changes
- * and applies (feat: always when owned; equipment/armor/weapon: when equipped — Phase 5).
+ * and applies (race, feat: always when owned; equipment/armor/weapon: when equipped by default, or when carried if `system.mechanicalApplyScope === "carried"` — Phase 5g).
  *
  * @param {Actor} actor
  * @returns {Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>}
  */
-function itemsModifierProvider(actor) {
+export function itemsModifierProvider(actor) {
     const items = actor?.items ?? [];
+    const acceptedMechanicalGear = getAcceptedMechanicalGearIdsForActor(actor);
     const out = [];
     for (const item of items) {
+        if (item.type === "race") {
+            const changes = item.system?.changes;
+            if (!Array.isArray(changes) || changes.length === 0) continue;
+            const label = item.name || "Race";
+            out.push({
+                label,
+                changes: changes.map(c => ({
+                    key: (c.key || "").trim(),
+                    value: Number(c.value),
+                    label: (c.label || "").trim() || undefined
+                }))
+            });
+            continue;
+        }
         if (item.type === "feat") {
             const changes = item.system?.changes;
             if (!Array.isArray(changes) || changes.length === 0) continue;
@@ -280,9 +253,12 @@ function itemsModifierProvider(actor) {
             });
             continue;
         }
-        // Phase 5: armor, weapon, equipment — apply when equipped
+        // Phase 5g: armor, weapon, equipment — equipped by default, or carried when scoped
         if (item.type === "armor" || item.type === "equipment") {
-            if (item.system?.equipped !== "true") continue;
+            if (!embeddedGearMechanicalEffectsApply(item)) continue;
+            if (acceptedMechanicalGear !== null && !acceptedMechanicalGear.has(embeddedGearItemStableKey(item))) {
+                continue;
+            }
             const changes = item.system?.changes;
             if (!Array.isArray(changes) || changes.length === 0) continue;
             const label = item.name || (item.type === "armor" ? "Armor" : "Equipment");
@@ -297,8 +273,10 @@ function itemsModifierProvider(actor) {
             continue;
         }
         if (item.type === "weapon") {
-            const eq = item.system?.equipped;
-            if (eq !== "primary" && eq !== "offhand") continue;
+            if (!embeddedGearMechanicalEffectsApply(item)) continue;
+            if (acceptedMechanicalGear !== null && !acceptedMechanicalGear.has(embeddedGearItemStableKey(item))) {
+                continue;
+            }
             const changes = item.system?.changes;
             if (!Array.isArray(changes) || changes.length === 0) continue;
             const label = item.name || "Weapon";
@@ -329,6 +307,5 @@ export function registerModifierSourceProviders() {
     const reg = CONFIG.THIRDERA.modifierSourceProviders;
     if (!Array.isArray(reg)) return;
     reg.push(conditionsModifierProvider);
-    reg.push(raceModifierProvider);
     reg.push(itemsModifierProvider);
 }

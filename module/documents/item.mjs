@@ -1,5 +1,6 @@
 import { getWieldingInfo, getTWFPenalties, getStrMultiplier } from "../data/_damage-helpers.mjs";
 import { backfillCharacterSystemSourceForActor } from "../logic/character-system-source-backfill.mjs";
+import { defaultCatalogKeyFromDisplayName } from "../logic/cgs-typed-defense-catalog.mjs";
 
 /**
  * Slugify a string for use as conditionId (lowercase, spaces/special to hyphens).
@@ -46,6 +47,19 @@ export class ThirdEraItem extends Item {
             }
         }
 
+        // defenseCatalog (Custom defense labels): derive catalogKey from name when blank on create (like conditionId).
+        if (data.type === "defenseCatalog") {
+            const raw = data.system?.catalogKey;
+            if (raw === undefined || raw === null || String(raw).trim() === "") {
+                const catalogKey = defaultCatalogKeyFromDisplayName(data.name);
+                if (catalogKey) {
+                    if (!data.system) data.system = {};
+                    data.system.catalogKey = catalogKey;
+                    this.updateSource({ "system.catalogKey": catalogKey });
+                }
+            }
+        }
+
         // Auto-generate conditionId for condition items (schema allows blank; we fill before persist)
         if (data.type === "condition") {
             const raw = data.system?.conditionId;
@@ -67,6 +81,15 @@ export class ThirdEraItem extends Item {
             backfillCharacterSystemSourceForActor(parentActor);
         }
         super._preUpdate(changes, options, user);
+
+        // Defense catalog: if catalogKey cleared in an update, re-derive from name
+        if (this.type === "defenseCatalog" && changes.system?.catalogKey !== undefined) {
+            const v = changes.system.catalogKey;
+            if (v === "" || (typeof v === "string" && !v.trim())) {
+                const catalogKey = defaultCatalogKeyFromDisplayName(this.name);
+                if (catalogKey) changes.system.catalogKey = catalogKey;
+            }
+        }
 
         // If conditionId is being set to blank, fill from name or random
         if (this.type === "condition" && changes.system?.conditionId !== undefined) {

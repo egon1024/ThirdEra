@@ -79,20 +79,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        },
-        {
-          "type": "scent",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Full attack:</strong> 2 claws +9, bite +4.</p><p><strong>Rend (Ex):</strong> If both claws hit, extra 2d6+10.</p><p><strong>Regeneration 5:</strong> Acid and fire deal normal damage.</p>",
       "environment": "Cold mountains",
       "organization": "Solitary, gang, or band",
@@ -153,6 +140,24 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

@@ -81,12 +81,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Enslave (Su):</strong> Three/day dominated target (Will DC 17).</p><p><strong>Mucus cloud (Ex):</strong> Underwater cloud that impairs breathing.</p><p><strong>Tail slap +12</strong> (2d6+8).</p>",
       "environment": "Underground",
       "organization": "Solitary, brood (2-4), or city (7-12)",
@@ -147,6 +142,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

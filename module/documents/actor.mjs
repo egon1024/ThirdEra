@@ -4,8 +4,19 @@ import {
     backfillCharacterSystemSourceInPlace
 } from "../logic/character-system-source-backfill.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
+import {
+    incrementCgsSpellGrantCastsMap,
+    shouldUseCgsGrantCastMapForCast
+} from "../logic/cgs-spell-grant-cast.mjs";
+import { getMergedSpellGrantRowsForActor } from "../logic/cgs-spell-grant-rows.mjs";
+import {
+    findMergedSpellGrantRowForActorSpell,
+    normalizeCgsSpellGrantUsesPerDay
+} from "../logic/cgs-spell-grant-prep.mjs";
 import { filterNpcSkillItemDataForCreate } from "../logic/npc-embedded-skill-identity.mjs";
 import { parseSaveType } from "../logic/spell-save-helpers.mjs";
+import { resolveSpellTargetTypeUuidsFromPacks } from "../logic/cgs-spell-target-type-resolve-runtime.mjs";
+import { validateSpellTargetsCreatureTypes } from "../logic/spell-creature-type-targeting.mjs";
 
 /**
  * HTML for Success/Failure in roll flavor (chat template renders flavor with triple braces).
@@ -423,6 +434,8 @@ export class ThirdEraActor extends Actor {
      * @param {string} options.classItemId  The class item ID (from spellcastingByClass) for DC and slot context
      * @param {number|string} options.spellLevel  Spell level 0-9 for this class
      * @param {Actor[]|string[]} [options.targetActors]  Optional targets (Actor docs or actor UUIDs); stored on message for Roll save
+     * @param {boolean} [options.viaCgsGrant]  When true and the spell matches an SLA-style CGS row, use `system.cgsSpellGrantCasts` instead of `spellItem.system.cast`
+     * @param {boolean} [options.fromCgsRtcCapabilityGrant]  When true (Cast from CGS RTC panel): skip class prepared/slot warnings; also use the same SLA-style `cgsSpellGrantCasts` path when the merged grant is at-will or has `usesPerDay`
      * @returns {Promise<boolean>}   True if cast was applied and message posted
      *
      * Chat message `flags.thirdera.spellCast` includes (for consumers such as concentration / SR UI):
@@ -430,7 +443,13 @@ export class ThirdEraActor extends Actor {
      * `spellLevel` (0–9), `classItemId` (embedded class item id on this actor), `casterLevel` (for that class at cast time),
      * `srKey` (spell item's spell resistance key, e.g. yes/no/yes-harmless).
      */
-    async castSpell(spellItem, { classItemId, spellLevel, targetActors: rawTargets }) {
+    async castSpell(spellItem, {
+        classItemId,
+        spellLevel,
+        targetActors: rawTargets,
+        viaCgsGrant = false,
+        fromCgsRtcCapabilityGrant = false
+    }) {
         if (!spellItem || spellItem.type !== "spell") return false;
         if (this.type !== "character") return false;
 
@@ -479,6 +498,14 @@ export class ThirdEraActor extends Actor {
         const slotsAtLevel = spellsPerDay[level] ?? spellsPerDay[String(level)] ?? 0;
         const domainSlotsAtLevel = classData.domainSpellSlots?.[level] ?? classData.domainSpellSlots?.[String(level)] ?? 0;
 
+        const cgsGrantRow = findMergedSpellGrantRowForActorSpell(spellItem, getMergedSpellGrantRowsForActor(this));
+        const useCgsGrantCastMap = shouldUseCgsGrantCastMapForCast(
+            viaCgsGrant,
+            fromCgsRtcCapabilityGrant,
+            cgsGrantRow
+        );
+        const skipClassSlotCastWarnings = fromCgsRtcCapabilityGrant === true;
+
         if (isDomainSpell) {
             // Domain spells use domain slots only (typically 1 per level). Do not count against regular prepared/spontaneous slots.
             let domainCastSum = 0;
@@ -492,7 +519,20 @@ export class ThirdEraActor extends Actor {
             if (wouldExceed) {
                 ui.notifications.warn(game.i18n.format("THIRDERA.Spells.NoSlotsRemaining", { spell: spellItem.name }));
             }
-        } else if (preparationType === "spontaneous") {
+        } else if (useCgsGrantCastMap) {
+            const grantUuid = typeof cgsGrantRow.spellUuid === "string" ? cgsGrantRow.spellUuid.trim() : "";
+            if (cgsGrantRow.atWill !== true && grantUuid) {
+                const cap = normalizeCgsSpellGrantUsesPerDay(cgsGrantRow.usesPerDay);
+                if (cap !== undefined && cap > 0) {
+                    const used = Number(systemData.cgsSpellGrantCasts?.[grantUuid] ?? 0) || 0;
+                    if (used >= cap) {
+                        ui.notifications.warn(
+                            game.i18n.format("THIRDERA.Spells.CgsGrantUsesExhausted", { spell: spellItem.name })
+                        );
+                    }
+                }
+            }
+        } else if (preparationType === "spontaneous" && !skipClassSlotCastWarnings) {
             const { SpellData } = await import("../data/item-spell.mjs");
             const spellListKey = classData.spellListKey;
             const shortlistIds = new Set(systemData.spellShortlistByClass?.[classItemId] || []);
@@ -508,7 +548,7 @@ export class ThirdEraActor extends Actor {
             if (remaining <= 0) {
                 ui.notifications.warn(game.i18n.format("THIRDERA.Spells.NoSlotsRemaining", { spell: spellItem.name }));
             }
-        } else if (preparationType === "prepared") {
+        } else if (preparationType === "prepared" && !skipClassSlotCastWarnings) {
             const prepared = spellItem.system.prepared ?? 0;
             const cast = spellItem.system.cast ?? 0;
             if (prepared <= 0 || cast >= prepared) {
@@ -516,8 +556,20 @@ export class ThirdEraActor extends Actor {
             }
         }
 
-        const currentCast = spellItem.system.cast ?? 0;
-        await spellItem.update({ "system.cast": currentCast + 1 });
+        if (useCgsGrantCastMap) {
+            const grantUuid = typeof cgsGrantRow.spellUuid === "string" ? cgsGrantRow.spellUuid.trim() : "";
+            if (grantUuid) {
+                const prev =
+                    systemData.cgsSpellGrantCasts && typeof systemData.cgsSpellGrantCasts === "object"
+                        ? /** @type {Record<string, number>} */ (systemData.cgsSpellGrantCasts)
+                        : {};
+                const next = incrementCgsSpellGrantCastsMap(prev, grantUuid);
+                await this.update({ "system.cgsSpellGrantCasts": next });
+            }
+        } else {
+            const currentCast = spellItem.system.cast ?? 0;
+            await spellItem.update({ "system.cast": currentCast + 1 });
+        }
 
         const abilityMod = classData.abilityMod ?? 0;
         const abilityName = CONFIG.THIRDERA?.AbilityScores?.[classData.castingAbility] ?? classData.castingAbility ?? "";
@@ -554,10 +606,47 @@ export class ThirdEraActor extends Actor {
             }
         }
 
+        const spellTypeUuids = await resolveSpellTargetTypeUuidsFromPacks(spellItem.system);
+        let creatureTypeRestrictionLine = "";
+        if (spellTypeUuids.length > 0) {
+            const typeNames = spellTypeUuids.map((u) => {
+                try {
+                    const doc = foundry.utils.fromUuidSync(u);
+                    return doc?.name || u;
+                } catch (_) { return u; }
+            });
+            creatureTypeRestrictionLine = `<p class="cast-type-restriction">${game.i18n.format("THIRDERA.SpellCreatureTypeTargetingChatLine", { types: typeNames.join(", ") })}</p>`;
+
+            if (targetActorUuids.length > 0) {
+                const targetData = [];
+                for (const uuid of targetActorUuids) {
+                    try {
+                        const a = foundry.utils.fromUuidSync(uuid);
+                        if (a?.system) targetData.push({ name: a.name || "?", uuid, systemData: a.system });
+                    } catch (_) { /* skip */ }
+                }
+                const { results } = validateSpellTargetsCreatureTypes(spellTypeUuids, targetData);
+                for (const r of results) {
+                    if (!r.valid) {
+                        ui.notifications.warn(game.i18n.format("THIRDERA.SpellCreatureTypeTargetingCastWarn", {
+                            spell: spellName,
+                            target: r.name
+                        }));
+                    }
+                }
+            }
+        }
+
+        const grantSourceLine = useCgsGrantCastMap
+            ? `<p class="cast-grant-source">${game.i18n.localize("THIRDERA.CGS.CastMessageFromCapabilityGrant")}</p>`
+            : "";
+
         const content = `<div class="thirdera cast-message">
   <p><strong>${actorName}</strong> ${castsLabel} <strong>${spellName}</strong>.</p>
+  ${grantSourceLine}
   <div class="cast-dc-breakdown">${dcLine}</div>
   <p>${srLine}</p>
+  ${creatureTypeRestrictionLine}
   ${targetNamesLine}
 </div>`;
 
@@ -574,7 +663,8 @@ export class ThirdEraActor extends Actor {
             spellLevel: level,
             classItemId,
             casterLevel,
-            srKey: srKey || ""
+            srKey: srKey || "",
+            viaCgsGrant: useCgsGrantCastMap
         };
         if (targetActorUuids.length > 0) {
             spellCastFlags.targetActorUuids = targetActorUuids;
@@ -604,9 +694,10 @@ export class ThirdEraActor extends Actor {
     /**
      * Add a single spell to this actor with source UUID so it can be recognized as "already known" (e.g. in level-up Spell List).
      * @param {Item|string} source - Spell document or UUID of a spell document
+     * @param {{ embeddedAsCgsGrantOnly?: boolean }} [options] - When true, marks the embed so it can be removed when CGS spell grants no longer reference it.
      * @returns {Promise<Item|null>} The created embedded spell item, or null if source invalid or not a spell
      */
-    async addSpell(source) {
+    async addSpell(source, { embeddedAsCgsGrantOnly = false } = {}) {
         const doc = await ThirdEraActor._resolveSpellSource(source);
         if (!doc) return null;
         const clone = doc.toObject();
@@ -615,7 +706,8 @@ export class ThirdEraActor extends Actor {
             ...clone.flags,
             thirdera: {
                 ...(clone.flags?.thirdera || {}),
-                sourceSpellUuid: doc.uuid
+                sourceSpellUuid: doc.uuid,
+                ...(embeddedAsCgsGrantOnly ? { embeddedForCgsGrant: true } : {})
             }
         };
         const created = await this.createEmbeddedDocuments("Item", [clone]);

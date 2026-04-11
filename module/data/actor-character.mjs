@@ -4,7 +4,10 @@ import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
 import { ClassData } from "./item-class.mjs";
 import { getSpellsForDomain } from "../logic/domain-spells.mjs";
-import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
+import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
+import { getMergedTypedDefenseLabelMapsForPrepare } from "../logic/cgs-typed-defense-catalog-runtime.mjs";
+import { buildCgsOverlayItemLabelMaps } from "../logic/cgs-overlay-labels.mjs";
+import { getActiveModifiers, sumChangeValuesForModifierKey } from "../logic/modifier-aggregation.mjs";
 import { resolvedSkillMiscLineLabel } from "../logic/npc-skill-prep.mjs";
 
 /**
@@ -165,7 +168,37 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             }),
 
             // Spell shortlist for full-list prepared casters (cleric, druid): classItemId -> spell item IDs to show in "Ready to cast"
-            spellShortlistByClass: new ObjectField({ initial: {}, label: "Spell Shortlist by Class" })
+            spellShortlistByClass: new ObjectField({ initial: {}, label: "Spell Shortlist by Class" }),
+
+            /** Casts today via CGS grant Cast (SLA-style), keyed by merged `spellUuid` — separate from spell item `system.cast` */
+            cgsSpellGrantCasts: new ObjectField({ required: false, initial: {}, label: "CGS Spell Grant Casts" }),
+
+            /** Actor-level CGS authoring (senses, type/subtype overlays, …); merged into derived system.cgs */
+            cgsGrants: new SchemaField(
+                {
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({
+                                required: true,
+                                blank: true,
+                                initial: ""
+                            }),
+                            range: new StringField({ required: true, blank: true, initial: "" })
+                        }),
+                        { required: true, initial: [] }
+                    ),
+                    /** Phase 5f: overlay creature type Item UUIDs (polymorph / templates / GM-authored). */
+                    creatureTypeOverlayUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                        required: true,
+                        initial: []
+                    }),
+                    subtypeOverlayUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                        required: true,
+                        initial: []
+                    })
+                },
+                { required: false }
+            )
         };
     }
 
@@ -174,6 +207,16 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
         // Foundry's schema migrateSource only walks keys that already exist on disk, so missing nested
         // required fields never get defaults. Same backfill runs from preUpdate hooks on live documents.
         backfillCharacterSystemSourceInPlace(source);
+        if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
+            source.cgsGrants = { senses: [], creatureTypeOverlayUuids: [], subtypeOverlayUuids: [] };
+        } else {
+            if (!Array.isArray(source.cgsGrants.senses)) source.cgsGrants.senses = [];
+            if (!Array.isArray(source.cgsGrants.creatureTypeOverlayUuids)) source.cgsGrants.creatureTypeOverlayUuids = [];
+            if (!Array.isArray(source.cgsGrants.subtypeOverlayUuids)) source.cgsGrants.subtypeOverlayUuids = [];
+        }
+        if (!source.cgsSpellGrantCasts || typeof source.cgsSpellGrantCasts !== "object") {
+            source.cgsSpellGrantCasts = {};
+        }
         return super.migrateData(source);
     }
 
@@ -197,7 +240,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             ability.effective = ability.value;
         }
 
-        // Single modifier aggregation (conditions, race, future: feats, equipment); apply ability deltas
+        // Single modifier aggregation (conditions, feats, race via system.changes, equipment); apply ability deltas
         const mods = getActiveModifiers(this.parent);
         for (const [key, ability] of Object.entries(this.abilities)) {
             const delta = mods.totals[`ability.${key}`] ?? 0;
@@ -207,9 +250,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                 ? ability.modifierBreakdown.map(b => `${b.label}: ${b.value >= 0 ? "+" : ""}${b.value}`).join("\n")
                 : "";
             ability.mod = Math.floor((ability.effective - 10) / 2);
-            // Display: racial column shows sum of contributions from actor's race (for sheet UI)
+            // Display: racial column from race item changes only (not breakdown labels — row labels may differ from race.name)
             ability.racial = race
-                ? (mods.breakdown[`ability.${key}`] ?? []).filter(b => b.label === race.name).reduce((s, b) => s + b.value, 0)
+                ? sumChangeValuesForModifierKey(race.system?.changes, `ability.${key}`)
                 : 0;
         }
 
@@ -775,5 +818,32 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
             capacity,
             load
         };
+
+        const senseTypeLabels =
+            typeof CONFIG !== "undefined" && CONFIG?.THIRDERA?.senseTypes && typeof CONFIG.THIRDERA.senseTypes === "object"
+                ? CONFIG.THIRDERA.senseTypes
+                : {};
+        const allVisionSenseTypeKeys = Object.keys(senseTypeLabels).map(k => String(k).trim()).filter(Boolean);
+        const typedDefenseLabels = getMergedTypedDefenseLabelMapsForPrepare(
+            typeof game !== "undefined" ? game : undefined,
+            typeof CONFIG !== "undefined" ? CONFIG.THIRDERA : undefined
+        );
+        const cgsBase = getActiveCapabilityGrants(this.parent, {
+            senseTypeLabels,
+            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined,
+            immunityTagLabels: typedDefenseLabels.immunityTagLabels,
+            energyTypeLabels: typedDefenseLabels.energyTypeLabels,
+            drBypassLabels: typedDefenseLabels.drBypassLabels
+        });
+        const { creatureTypeItemLabels, subtypeItemLabels } = buildCgsOverlayItemLabelMaps(cgsBase);
+        this.cgs = getActiveCapabilityGrants(this.parent, {
+            senseTypeLabels,
+            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined,
+            creatureTypeItemLabels,
+            subtypeItemLabels,
+            immunityTagLabels: typedDefenseLabels.immunityTagLabels,
+            energyTypeLabels: typedDefenseLabels.energyTypeLabels,
+            drBypassLabels: typedDefenseLabels.drBypassLabels
+        });
     }
 }

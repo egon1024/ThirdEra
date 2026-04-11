@@ -10,7 +10,15 @@ Compendiums in Foundry VTT are collections of pre-made game content (items, acto
 
 ### Storage Model
 
-**Critical Understanding**: Foundry VTT stores compendium content in **LevelDB database files** (`.db` files) within the `packs/` directory, NOT as individual JSON files. The JSON files in `packs/` are source files that must be programmatically imported into the compendiums.
+**Critical Understanding**: Foundry persists compendium content in database files under each `packs/<name>/` directory. ThirdEra also keeps **JSON source files** in those folders; on world load the system’s **CompendiumLoader** (GM) reads that JSON and creates or **updates** matching compendium documents (including races).
+
+### Races pack (JSON refresh)
+
+On each world load (GM client, **ready**), **CompendiumLoader** refreshes **all** mapped packs from `packs/*.json`, including **Races**: **existing** compendium race documents are **updated** from disk when the stable key (race **name**) matches, so compendium entries track system releases. **Edits you make inside the Races compendium are overwritten** on the next load—use **world** race Items (or another pack you control) for homebrew or experiments you need to keep. **New** race JSON files are still **created** when missing from the pack.
+
+**SRD race mechanical rows (GMS):** On **ready**, the GM client also runs a one-way **merge** (`module/logic/race-srd-changes-merge.mjs`) that appends missing bundled skill/save/hide `system.changes` rows to **existing** race items (Races compendium, world race items, and races **embedded on actors**) when `flags.thirdera.raceStockDeltaRev` is below the current revision (`RACE_STOCK_DELTA_REV` in that module). It does **not** remove or replace documents, does **not** add a row if that modifier **key** already appears in `changes` (so custom values for the same key are left alone), and does **not** touch ability-score rows. **Self-heal:** If the revision flag is already current but a race that **belongs to the Races compendium** (or is embedded with a `thirdera_races` compendium `sourceId`/UUID) is still missing bundled rows for its stock name, the same pass merges those rows in again — so incomplete compendium entries (e.g. Elf with only ability adjustments) are repaired without bumping `RACE_STOCK_DELTA_REV`. Homebrew races in the world that happen to share a stock name are not altered. When you add new stock delta rows for a release, bump `RACE_STOCK_DELTA_REV`. **Regression tests:** `test/unit/data/race-pack-stock-changes.test.mjs` asserts each race JSON still includes every row returned by `getRaceStockDeltaRowsForName` — run `npm test` after editing race packs or sync scripts.
+
+**Other racial traits (HTML):** Stock races ship **`system.otherRacialTraits`** for vision, immunities, weapon familiarity, languages, spell-like abilities, and similar traits that are **not** represented as numeric `system.changes` rows. The field is edited on the race sheet (Details) and shown on the PC sheet **Description** tab. On **ready**, the GM client runs `module/logic/race-qualitative-traits-stock.mjs`: when `flags.thirdera.raceQualitativeTraitsRev` is below the bundled revision, empty fields are filled from stock text keyed by default race **names**, and known obsolete bundled wording may be replaced (see `isStaleBundledQualitativeTraitsHtml` in that module). Custom text is otherwise left as-is while the flag is advanced. Keep the stock map aligned with `packs/races/*.json` when editing shipped prose.
 
 ### Compendium Pack Definition (`system.json`)
 
@@ -319,16 +327,51 @@ To clear another pack (e.g. `packs/races`), use the same pattern: delete `*.ldb`
 ## Current Compendium Status
 
 ### Complete
-- **Races**: 7 items (all SRD races)
+- **Races**: 7 items (all SRD races); compendium entries **update from `packs/races/*.json`** on each GM world load (see Races pack section above). Numeric racial modifiers use **`system.changes`** (same entries as feats/conditions: `ability.str` … `ability.cha`, `skill.<key>`, saves, etc.); legacy `abilityAdjustments` in old worlds is migrated on load. Shipped data includes **unconditional** SRD racial skill and save adjustments where they map to a single canonical key (e.g. elf +2 Listen/Search/Spot, halfling +1 Fort/Ref/Will and +2 Climb/Jump/Listen/Move Silently, Small races’ +4 Hide). Situational bonuses (dwarf vs poison/spells, elf vs enchantment, attack vs favored enemies, thrown-only attacks, stone-only Craft/Appraise, etc.) are **not** encoded as flat `changes` rows so the bag is not overstated—handle those at the table or in future structured grants (CGS). **`system.cgsGrants.senses`** (race sheet) and optional **`system.cgsGrants.grants`** supply CGS when this race is owned on a character; numeric ability adjustments stay in **`changes`**. **`system.otherRacialTraits`** holds rich text for additional racial qualities (vision, languages, immunities, etc.); see the Races pack section above.
 - **Classes**: 11 items (all SRD base classes)
 - **Skills**: 36 items (all SRD skills)
-- **Feats**: 86 items (all SRD feats - General, Fighter Bonus, Metamagic, Item Creation)
-- **Armor**: 16 items (all SRD armor types and shields)
-- **Weapons**: 58 items (all SRD weapons - Simple, Martial, Exotic)
+- **Feats**: 86 items (all SRD feats - General, Fighter Bonus, Metamagic, Item Creation). Most feats stay **GMS** (`system.changes`) or prose; add **`system.cgsGrants`** when the SRD grants a fixed spell-like ability or typed defense that maps cleanly to a CGS category (use **`spellKey`** until the compendium resolver fills **`spellUuid`**).
+- **Class features** (`packs/features/`): exemplar **`system.cgsGrants`** rows ship for unambiguous SRD cases—**`spellGrant`** + **`spellKey`** (e.g. paladin Detect Evil at will, monk Abundant Step 1/day as *dimension door*), **`immunity`** tags (e.g. poison, disease). Many features remain prose-only until automation warrants a structured row.
+- **Armor**: 18 items (SRD armor types, shields, plus **adamantine** breastplate and full plate exemplars with **`cgsGrants`** damage reduction)
+- **Weapons**: 59 items (SRD weapons plus **javelin of lightning** exemplar with **`spellGrant`** / **`spellKey`**)
 - **Spells**: 500+ items (SRD 0–9)
 
 ### Incomplete
-- **Equipment**: 63 items (SRD adventuring gear and similar)
+- **Equipment**: 67 JSON items (mundane adventuring gear plus a small **magic** slice—goggles of night, rings, winged boots—with **`system.cgsGrants`** and **`mechanicalApplyScope`** where appropriate). General SRD equipment coverage remains incremental, not exhaustive.
+
+## Capability grants (CGS) in pack JSON
+
+Structured grants belong in **`system.cgsGrants`** (and spell target restrictions on **`system.targetCreatureType*`**), not in numeric **`system.changes`**. See [Development — Capability grants](development.md#capability-grants-structured-effects-parallel-to-the-modifier-system) for categories and merge behavior.
+
+### Stable keys vs compendium UUIDs
+
+Foundry assigns **document UUIDs** when compendium items are created. Pack **source JSON** under `packs/` usually does **not** include those UUIDs. Authors therefore use **stable keys** that match **`system.key`** on Creature Type, Subtype, and Spell items; the GM **ready** hook runs **`CompendiumLoader.resolveCgsReferenceKeysInPacks()`** (after JSON import) and writes resolved UUIDs into the live compendium documents.
+
+| Location | Authoring fields | Resolved to |
+|----------|------------------|-------------|
+| Spells | **`system.key`** (slug, e.g. `holdPerson` — use `node scripts/add-spell-keys-from-filename.mjs` after adding spells) | Used to resolve **`spellGrant.spellKey`** in other items |
+| Spells | **`system.targetCreatureTypeKeys`**, **`system.targetCreatureSubtypeKeys`** (match **`system.key`** on type/subtype items) | **`system.targetCreatureTypeUuids`** (types and subtypes share one list for targeting) |
+| Armor, weapons, equipment | **`system.mechanicalCreatureGateTypeKeys`**, **`system.mechanicalCreatureGateSubtypeKeys`** | **`system.mechanicalCreatureGateUuids`** |
+| **`cgsGrants.grants`** on feats, features, races, conditions, gear | **`spellKey`** on `{ "category": "spellGrant", … }`; **`typeKey`** / **`subtypeKey`** on overlay grants | **`spellUuid`**, **`typeUuid`**, **`subtypeUuid`** |
+
+Git remains the source of truth: keep **keys** in JSON; compendium copies gain UUIDs at runtime. Re-import pack JSON (system setting **Re-import compendium JSON on each load**) to refresh from disk, then resolution runs again.
+
+### Feats and class features (Phase 2 pack authoring)
+
+- **Class features** are the primary place for fixed **spell-like** lines from the SRD (paladin/monk/etc.): add **`spellGrant`** with **`spellKey`** matching **`system.key`** on the spell item (see `feature-paladin-detect-evil.json`, `feature-monk-abundant-step.json`). Use **`atWill`: true** or **`usesPerDay`** when the rules match a single static bucket; skip or document in **`label`** when uses scale oddly (e.g. weekly **remove disease**) so the sheet does not over-claim automation.
+- **Feats** use the same **`cgsGrants`** shape; the core SRD feat list rarely grants a single fixed SLA, so most entries omit CGS until a clear case appears (metamagic, numeric bonuses, and open-ended choices stay out of CGS).
+
+### Gear (Phase 3 — armor, weapons, equipment)
+
+- **Armor / weapons / equipment** share **`system.cgsGrants`** (senses on the **`senses`** array; **`spellGrant`**, **`energyResistance`**, **`damageReduction`**, etc. in **`grants`**) and optional **`system.mechanicalApplyScope`** (`equipped` vs `carried`) per Phase 5g. See **`armor-breastplate-adamantine.json`**, **`equipment-magic-goggles-of-night.json`**, **`weapon-magic-javelin-of-lightning.json`** for authoring patterns.
+- **Numeric** enhancement bonuses, competence bonuses to skills, and AC from armor still belong in **`system.changes`** (GMS), not duplicated as fake CGS rows.
+- **`mechanicalCreatureGateTypeKeys`** / **`SubtypeKeys`** on gear resolve to **`mechanicalCreatureGateUuids`** on GM ready (same pass as spell key resolution).
+
+### Helper scripts (repo root)
+
+- **`node scripts/add-spell-keys-from-filename.mjs`** — sets **`system.key`** on every `packs/spells/spell-*.json` from the filename stem (`spell-hold-person` → `holdPerson`).
+- **`node scripts/cgs-seed-spell-target-type-keys.mjs`** — optional starter list of **`targetCreatureTypeKeys`** for common SRD type-limited spells; extend the map as you add more.
+- **`node scripts/cgs-monster-pack-template.mjs`** — placeholder pointer for large monster-pack CGS batches; see **`scripts/phase6-migrate-monster-pack.mjs`** for a real migration pattern.
 
 ## Adding New Compendium Content
 

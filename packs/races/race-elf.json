@@ -7,16 +7,46 @@
     "description": "<p>Elves are a magical people of otherworldly grace, living in the world but not entirely part of it.</p>",
     "size": "Medium",
     "speed": 30,
-    "abilityAdjustments": {
-      "str": 0,
-      "dex": 2,
-      "con": -2,
-      "int": 0,
-      "wis": 0,
-      "cha": 0
-    },
+    "changes": [
+      {
+        "key": "ability.dex",
+        "value": 2,
+        "label": ""
+      },
+      {
+        "key": "ability.con",
+        "value": -2,
+        "label": ""
+      },
+      {
+        "key": "skill.listen",
+        "value": 2,
+        "label": "SRD racial"
+      },
+      {
+        "key": "skill.search",
+        "value": 2,
+        "label": "SRD racial"
+      },
+      {
+        "key": "skill.spot",
+        "value": 2,
+        "label": "SRD racial"
+      }
+    ],
     "excludedSkills": [],
-    "favoredClass": "Wizard"
+    "favoredClass": "Wizard",
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "magicSleep",
+          "label": "Magic sleep effects"
+        }
+      ],
+      "senses": [{ "type": "lowLight", "range": "" }]
+    },
+    "otherRacialTraits": "<ul>\n<li><strong>Immunity</strong> to magic sleep effects.</li>\n<li><strong>Saves:</strong> +2 racial bonus on saving throws vs enchantment spells and effects.</li>\n<li><strong>Low-light vision.</strong></li>\n<li><strong>Weapon proficiency:</strong> longswords, rapiers, longbows (including composite), and shortbows (including composite).</li>\n<li><strong>Languages:</strong> Common and Elven; bonus: Draconic, Gnoll, Gnome, Goblin, Orc, Sylvan.</li>\n</ul>"
   },
   "flags": {},
   "folder": null,

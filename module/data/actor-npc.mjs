@@ -1,8 +1,12 @@
 const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 import { getEffectiveMaxDex, applyMaxDex, computeAC, computeSpeed } from "./_ac-helpers.mjs";
 import { getCarryingCapacity, getLoadStatus, getLoadEffects } from "./_encumbrance-helpers.mjs";
-import { getActiveModifiers } from "../logic/modifier-aggregation.mjs";
+import { getActiveCapabilityGrants } from "../logic/capability-aggregation.mjs";
+import { getMergedTypedDefenseLabelMapsForPrepare } from "../logic/cgs-typed-defense-catalog-runtime.mjs";
+import { buildCgsOverlayItemLabelMaps } from "../logic/cgs-overlay-labels.mjs";
+import { getActiveModifiers, sumChangeValuesForModifierKey } from "../logic/modifier-aggregation.mjs";
 import { prepareNpcSkillItems, buildModifierOnlySkills } from "../logic/npc-skill-prep.mjs";
+import { migrateNpcStatBlockSensesIntoCgsGrants } from "../logic/cgs-phase6-npc-statblock-migrate.mjs";
 
 /**
  * Data model for D&D 3.5 NPC actors
@@ -161,6 +165,32 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             // Biography/Description
             biography: new HTMLField({ required: true, blank: true }),
 
+            /** Actor-level CGS authoring (senses, type/subtype overlays, …); merged into derived system.cgs */
+            cgsGrants: new SchemaField(
+                {
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({
+                                required: true,
+                                blank: true,
+                                initial: ""
+                            }),
+                            range: new StringField({ required: true, blank: true, initial: "" })
+                        }),
+                        { required: true, initial: [] }
+                    ),
+                    creatureTypeOverlayUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                        required: true,
+                        initial: []
+                    }),
+                    subtypeOverlayUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                        required: true,
+                        initial: []
+                    })
+                },
+                { required: false }
+            ),
+
             // Currency
             currency: new SchemaField({
                 pp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Platinum (pp)" }),
@@ -169,6 +199,19 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 cp: new NumberField({ required: true, integer: true, min: 0, initial: 0, label: "Copper (cp)" })
             })
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        if (!source.cgsGrants || typeof source.cgsGrants !== "object") {
+            source.cgsGrants = { senses: [], creatureTypeOverlayUuids: [], subtypeOverlayUuids: [] };
+        } else {
+            if (!Array.isArray(source.cgsGrants.senses)) source.cgsGrants.senses = [];
+            if (!Array.isArray(source.cgsGrants.creatureTypeOverlayUuids)) source.cgsGrants.creatureTypeOverlayUuids = [];
+            if (!Array.isArray(source.cgsGrants.subtypeOverlayUuids)) source.cgsGrants.subtypeOverlayUuids = [];
+        }
+        migrateNpcStatBlockSensesIntoCgsGrants(source);
+        return super.migrateData(source);
     }
 
     /**
@@ -180,7 +223,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
             ability.effective = ability.value;
         }
 
-        // Single modifier aggregation (conditions, race, feats, equipped items); apply ability deltas
+        // Single modifier aggregation (conditions, feats, race via system.changes, equipped items); apply ability deltas
         const mods = getActiveModifiers(this.parent);
         const race = this.parent.items.find(i => i.type === "race");
         for (const [key, ability] of Object.entries(this.abilities)) {
@@ -192,7 +235,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                 : "";
             ability.mod = Math.floor((ability.effective - 10) / 2);
             ability.racial = race
-                ? (mods.breakdown[`ability.${key}`] ?? []).filter(b => b.label === race.name).reduce((s, b) => s + b.value, 0)
+                ? sumChangeValuesForModifierKey(race.system?.changes, `ability.${key}`)
                 : 0;
         }
 
@@ -410,5 +453,32 @@ export class NPCData extends foundry.abstract.TypeDataModel {
                     return `${s.label.toLowerCase()} ${s.value} ft`;
                 })
                 .join(", ");
+
+        const senseTypeLabels =
+            typeof CONFIG !== "undefined" && CONFIG?.THIRDERA?.senseTypes && typeof CONFIG.THIRDERA.senseTypes === "object"
+                ? CONFIG.THIRDERA.senseTypes
+                : {};
+        const allVisionSenseTypeKeys = Object.keys(senseTypeLabels).map(k => String(k).trim()).filter(Boolean);
+        const typedDefenseLabels = getMergedTypedDefenseLabelMapsForPrepare(
+            typeof game !== "undefined" ? game : undefined,
+            typeof CONFIG !== "undefined" ? CONFIG.THIRDERA : undefined
+        );
+        const cgsBase = getActiveCapabilityGrants(this.parent, {
+            senseTypeLabels,
+            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined,
+            immunityTagLabels: typedDefenseLabels.immunityTagLabels,
+            energyTypeLabels: typedDefenseLabels.energyTypeLabels,
+            drBypassLabels: typedDefenseLabels.drBypassLabels
+        });
+        const { creatureTypeItemLabels, subtypeItemLabels } = buildCgsOverlayItemLabelMaps(cgsBase);
+        this.cgs = getActiveCapabilityGrants(this.parent, {
+            senseTypeLabels,
+            allVisionSenseTypeKeys: allVisionSenseTypeKeys.length > 0 ? allVisionSenseTypeKeys : undefined,
+            creatureTypeItemLabels,
+            subtypeItemLabels,
+            immunityTagLabels: typedDefenseLabels.immunityTagLabels,
+            energyTypeLabels: typedDefenseLabels.energyTypeLabels,
+            drBypassLabels: typedDefenseLabels.drBypassLabels
+        });
     }
 }

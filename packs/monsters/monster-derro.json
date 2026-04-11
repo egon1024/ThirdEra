@@ -72,12 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 15,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Special Attacks:</strong> Poison use, spell-like abilities, sneak attack +1d6</p><p><strong>Special Qualities:</strong> Madness, darkvision 60 ft., spell resistance 15, vulnerability to sunlight</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Underground",
       "organization": "Team (2-4), squad (5-8 plus 1 3rd-level sorcerer), or band (11-20 plus 30% noncombatants plus 3 3rd-level sorcerers and 1 sorcerer of 5th-8th level)",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

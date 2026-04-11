@@ -18,9 +18,108 @@
         },
         "Attributes": "Attributes",
         "TabDetails": "Details",
+        "CGS": {
+            "MergedSenses": "Senses",
+            "SensesItemHeading": "Senses",
+            "SensesMechanicsHeading": "Sense grants",
+            "ProvenanceSourcesSummary": "Sources",
+            "ProvenanceUnknownSource": "Unknown source",
+            "Mechanics": "Capability grants",
+            "LegacyStatBlockSenses": "Stat block senses",
+            "SenseTypePlaceholder": "— choose sense —",
+            "SuppressedSenses": "Suppressed senses",
+            "SuppressingSourcesSummary": "Suppressing",
+            "CapabilityGrantsItemSection": "Capability grants",
+            "GrantedSpellsHeading": "Granted spells",
+            "GrantedSpellsHeadingTitle": "From feats, features, equipment, or conditions. A spell may appear here and on your class list—use Cast from this section for SLA-style grants (at-will or uses/day) so grant uses are tracked separately. If a row says Not on sheet, use Add spell to character first. Then full-list: Add to Ready; learned: Prepared count.",
+            "SpellGrantAtWill": "At will",
+            "SpellGrantUsesPerDay": "{n}/day",
+            "GrantedSpellNotOnActor": "Not on sheet",
+            "GrantedSpellNotOnActorHint": "Add this spell to the character to prepare or cast it from the sheet.",
+            "SpellGrantsItemHeading": "Spell and SLA grants",
+            "SpellGrantsItemHint": "Drop a spell item onto a row to set it. Optional: uses per day, at-will, caster level (CL), label.",
+            "SpellGrantDropHint": "Drop spell here",
+            "SpellGrantDropNeedsSpell": "Drop a spell item to assign it to this row.",
+            "SpellGrantDropWrongRow": "That row is not an editable spell grant.",
+            "SpellGrantAtWillLabel": "At will",
+            "SpellGrantUsesPerDayLabel": "Uses/day",
+            "SpellGrantUsesPerDaySuffix": "/ day",
+            "SpellGrantCasterLevelLabel": "CL",
+            "SpellGrantCasterLevelTooltip": "Caster level (CL) used for this granted spell or SLA.",
+            "SpellGrantLabelField": "Label",
+            "SpellGrantRemove": "Remove spell grant",
+            "SpellGrantAdd": "Add spell grant row",
+            "AddGrantSpellToActor": "Add spell to character",
+            "AddGrantSpellToActorHint": "Create an embedded spell item on this actor so you can prepare, track casts, and use Cast from the sheet (the grant only references the spell by UUID until it is on the sheet).",
+            "AddGrantSpellToActorDone": "{name} was added to this character.",
+            "AddGrantSpellToActorFailed": "Could not add that spell. Check the UUID resolves to a spell document and the console for errors.",
+            "GrantChannelBadge": "Grant",
+            "GrantChannelBadgeTooltip": "This row is a capability grant (feat, feature, item, etc.). Cast from here for SLA-style grants so uses are tracked on the grant, not your class spell slots.",
+            "GrantChannelBadgeTooltipRtc": "This spell appears under Ready to cast from a capability grant (feat, feature, item, etc.), not from your normal class spell list. Cast here; SLA-style grants track uses on the grant channel.",
+            "ReadyToCastCapabilityGrantsHeading": "Capability grants (not class slots)",
+            "ReadyToCastCapabilityGrantsClassTitle": "Capability grants",
+            "ReadyToCastCapabilityGrantsAria": "Capability-granted spells for this casting class (shown first), separate from class spell slots and preparation.",
+            "ReadyToCastCapabilityGrantsHeadingTitle": "Spells listed here come from feats, features, items, or other capability grants—not from your prepared or spontaneous class list.",
+            "ReadyToCastCapabilityGrantsSubheading": "These still use this class for DC and caster level where applicable. They are not spells you readied from your class list.",
+            "ReadyToCastCapabilityGrantsGlobalTitle": "Capability grants (not tied to a class roster)",
+            "ReadyToCastCapabilityGrantsGlobalAria": "Capability-granted spells with no class roster link, separate from class spell slots.",
+            "ReadyToCastCapabilityGrantsGlobalSubheading": "These come from equipment, race, or other grants without a class item id. DC and caster level use your spellcasting class when the system needs a class context.",
+            "GrantCastCountHint": "Uses today counted for this granted spell or spell-like ability (separate from class slots and the spell item’s general cast count).",
+            "GrantCastsToday": "Grant uses today:",
+            "GrantCastAtWillShort": "At will (grant)",
+            "CastFromGrant": "Cast (grant)",
+            "CastFromGrantTooltip": "Cast using the capability grant channel (SLA uses/day or at-will), not class spell slots.",
+            "CastMessageFromCapabilityGrant": "Cast via capability grant (not class spell slots).",
+            "RtcGrantCastTrackedOnActor": "Casts for this at-will or per-day grant are tracked on the actor (capability grant channel), not on the spell item’s Cast field.",
+            "RtcGrantSourcesLine": "Grant sources for this section:",
+            "RtcGrantSourcesLineTitle": "Items, feats, or features contributing these spells (DC/caster level still use the class shown in the heading).",
+            "TypedDefensesHeading": "Typed defenses",
+            "MergedTypedDefensesHeading": "Defenses",
+            "MergedImmunitiesHeading": "Immunities",
+            "MergedEnergyResistanceHeading": "Energy Resistance",
+            "MergedDamageReductionHeading": "Damage Reduction (DR)",
+            "ImmunitiesHeading": "Immunities",
+            "EnergyResistanceHeading": "Energy resistance",
+            "DamageReductionHeading": "Damage reduction",
+            "ImmunityTagPlaceholder": "— choose immunity —",
+            "EnergyTypePlaceholder": "— choose energy —",
+            "DRBypassNone": "— (none)",
+            "AddImmunity": "Add immunity",
+            "AddEnergyResistance": "Add energy resistance",
+            "AddDamageReduction": "Add damage reduction",
+            "RemoveGrant": "Remove",
+            "TypeOverlaysItemHeading": "Extra creature types and subtypes",
+            "TypeOverlaysItemHint": "Use this when the rules give the creature extra types or subtypes on top of its normal form—templates, shapechange-style effects, and similar cases. Pick the matching creature type or subtype from the list, or drag in a real compendium or world entry from the sidebar, so the grant is tied to that definition—not a name you type by hand. This does not change an NPC's primary type and subtypes on the Details tab. These rows are additive: the system does not replace primary type or run type-based automation from them yet.",
+            "CreatureTypeOverlaysHeading": "Creature type overlays",
+            "SubtypeOverlaysHeading": "Subtype overlays",
+            "CreatureTypePlaceholder": "— choose creature type —",
+            "SubtypePlaceholder": "— choose subtype —",
+            "CreatureTypeOverlayDropHint": "Drop a creature type from the sidebar onto this row.",
+            "SubtypeOverlayDropHint": "Drop a subtype from the sidebar onto this row.",
+            "AddCreatureTypeOverlay": "Add creature type overlay",
+            "AddSubtypeOverlay": "Add subtype overlay",
+            "MergedTypeOverlaysHeading": "Additional creature types (active)",
+            "MergedTypeOverlaysHint": "All sources that add extra types or subtypes are gathered here. For now, read this as additional types alongside the creature's primary type and, for NPCs, the subtypes on Details—nothing here removes or overrides primary type. Type-based automation is not implemented yet.",
+            "MergedCreatureTypeOverlaysHeading": "Creature type overlays",
+            "MergedSubtypeOverlaysHeading": "Subtype overlays",
+            "ActorTypeOverlaysHeading": "Extra types and subtypes (this character)",
+            "ActorTypeOverlaysHint": "Record extra types and subtypes for this character in addition to their normal form—templates, GM effects, or tracking shapechange-style cases. Choose from the lists below, using the same compendium or world entries as elsewhere. Primary type and subtypes on the Details tab stay unchanged. These are additive grants; the system does not run type-based rules from them yet.",
+            "TypeOverlayDropWrongRow": "Use a creature type row for types and a subtype row for subtypes.",
+            "EffectiveCreatureTypesContext": "Show effective creature types (mechanical)",
+            "EffectiveTypesTitle": "{name}: effective creature types (primary and CGS overlays)",
+            "EffectiveTypesTypesLabel": "Types",
+            "EffectiveTypesSubtypesLabel": "Subtypes",
+            "EffectiveTypesEmptyList": "—",
+            "EffectiveTypesNoActor": "No actor data to inspect.",
+            "EffectiveTypesNoTokensSelected": "No tokens selected.",
+            "EffectiveCreatureTypesTokenContext": "Show effective creature types"
+        },
         "SheetLabels": {
             "Actor": "Third Era Character Sheet",
             "Item": "Third Era Item Sheet"
+        },
+        "ItemSheet": {
+            "SenseEditNotAllowed": "This item cannot be edited. Unlock the compendium pack if it is locked, or ensure you have owner permission on the document."
         },
         "AbilityScores": {
             "str": "Strength",
@@ -48,6 +147,7 @@
             "ref": "Ref",
             "will": "Will"
         },
+        "RaceOtherRacialTraits": "Other racial traits",
         "ItemTypes": {
             "weapon": "Weapon",
             "armor": "Armor",
@@ -97,7 +197,40 @@
         "FeatModifierLabelPlaceholder": "Optional breakdown label",
         "FeatAddModifier": "Add modifier",
         "ItemModifiers": "Modifiers",
-        "ItemModifiersHint": "Optional modifiers when this item is equipped (e.g. AC +1, Reflex save +2).",
+        "ItemModifiersHint": "Optional numeric modifiers from this item’s Mechanical effects table. By default they apply only when the item is equipped or wielded; set Mechanical effects & capability grants below to apply while carried.",
+        "MechanicalApplyScope": "Mechanical effects & capability grants",
+        "MechanicalApplyScopeHint": "Numeric mechanical effects (GMS / system.changes) and capability grants (CGS: senses, spell grants, etc.) use the same rule. Default: only while this armor or gear is equipped, or while this weapon is wielded in primary or off-hand. Carried: applies while the item is on this actor’s sheet inventory.",
+        "MechanicalApplyScopeEquippedArmor": "When equipped",
+        "MechanicalApplyScopeEquippedWeapon": "When wielded (primary or off-hand)",
+        "MechanicalApplyScopeCarried": "When carried (in inventory)",
+        "MechanicalCreatureGate": "Restrict to creature type (optional)",
+        "MechanicalCreatureGateHint": "If you list one or more creature type or subtype items, numeric modifiers and capability grants from this gear apply only when the wearer has that type or subtype in their effective mechanical types (including overlays from other sources). Leave empty for no restriction.",
+        "MechanicalCreatureGateHelp": "Drop creature type or subtype items here. At least one match is required when the list is non-empty.",
+        "MechanicalCreatureGateDropHint": "Drop a creature type or subtype item to add a gate UUID.",
+        "MechanicalCreatureGateRemove": "Remove gate entry",
+        "SpellCreatureTypeTargeting": "Target creature types",
+        "SpellCreatureTypeTargetingHint": "If types are listed, a target must match at least one (after overlays such as polymorph). Leave empty for no restriction. The GM is warned on cast if a chosen target may not qualify.",
+        "SpellCreatureTypeTargetingDropHint": "Or drop a creature type or subtype item here.",
+        "SpellCreatureTypeTargetingRemove": "Remove from list",
+        "SpellCreatureTypeTargetingAdd": "Add",
+        "SpellCreatureTypeTargetingAddTitle": "Add the selected type or subtype to the list.",
+        "SpellCreatureTypeTargetingSelectPlaceholder": "Type or subtype…",
+        "SpellCreatureTypeTargetingOptgroupTypes": "Creature types",
+        "SpellCreatureTypeTargetingOptgroupSubtypes": "Subtypes",
+        "SpellCreatureTypeTargetingCastWarn": "{spell}: target {target} does not match the required creature types.",
+        "SpellCreatureTypeTargetingChatLine": "Target creature types: {types}",
+        "DefenseCatalog": {
+            "NamePlaceholder": "Display label (e.g. shown on actor sheet)",
+            "GrantToken": "Text on items that grant the defense",
+            "GrantTokenPlaceholder": "e.g. fire, acid, adamantine, magic",
+            "GrantTokenHint": "Must match the immunity tag, energy type, or damage reduction (DR) bypass text used in Capability grants on the feat, item, race, condition, or other document that grants that defense—not this label item’s Foundry id. Same spelling as there (often camelCase, e.g. coldIron).",
+            "Kind": "Applies to",
+            "KindHint": "Which kind of capability grant this name is for. Energy type and energy resistance share the same type labels (fire, cold, etc.). DR bypass labels only name bypass types (adamantine, magic); DR amount is set on the grant, not here.",
+            "KindImmunity": "Immunity tag",
+            "KindEnergy": "Energy type",
+            "KindEnergyResistance": "Energy resistance (type label)",
+            "KindBypass": "DR bypass"
+        },
         "ActorTypes": {
             "character": "Character",
             "npc": "NPC"
@@ -154,6 +287,7 @@
             "ChatTakesRest": "takes a rest.",
             "ChatSummaryHealing": "Recovered {amount} hit points.",
             "ChatSummaryResetCast": "Reset cast counts for {count} spell(s).",
+            "ChatSummaryResetCgsGrantCasts": "Reset capability-grant spell uses for today.",
             "ChatSummaryResetPrepared": "Reset prepared counts for {count} spell(s)."
         },
         "SpellPenetration": {
@@ -301,7 +435,13 @@
             "classFeatures": "Class Features",
             "scalingTable": "Scaling Table",
             "grantLevel": "Grant Level",
-            "noFeatures": "No class features assigned"
+            "noFeatures": "No class features assigned",
+            "ActorSheetGrantedFromClasses": "From class levels",
+            "ActorSheetGrantedFromClassesHint": "Features your classes grant from level progression. Shown from class data, not as separate items on this character.",
+            "ActorSheetEmbeddedFeatureItems": "Feature items on character",
+            "ActorSheetEmbeddedFeatureItemsHint": "Feature items embedded on this actor (drag from the Class Features compendium or Items). Use these for a full item sheet, edits, or effects tied to a specific item.",
+            "OpenGrantedClassFeatureSheet": "Open feature details (compendium or world item)",
+            "GrantedClassFeatureNoDocument": "No compendium or world item could be resolved for this granted feature."
         },
         "Settings": {
             "CurrencyWeight": {
@@ -319,6 +459,14 @@
             "FirstLevelFullHp": {
                 "Name": "First Level Full Hit Points",
                 "Hint": "When enabled, the first level of the first class added to a character automatically grants maximum hit points from the class's hit die (e.g., d8 = 8 HP). The value remains editable in the level history."
+            },
+            "ReimportCompendiumJsonEachLoad": {
+                "Name": "Re-import compendium JSON on each load",
+                "Hint": "When off (default), system pack JSON is only applied to compendiums that are still empty, which makes world load much faster. Turn on temporarily after a system update if you need to refresh compendium content from the bundled JSON, then turn it off again."
+            },
+            "LogClientBootstrapTiming": {
+                "Name": "Log client bootstrap timing (debug)",
+                "Hint": "When enabled, logs elapsed milliseconds for each major step of the system ready hook (compendium load, migrations, caches, derived conditions). Client-only; use while profiling slow reloads."
             }
         },
         "SpellListBrowser": {
@@ -497,10 +645,12 @@
             "TargetsLine": "Target(s): {names}",
             "NoSlotsRemaining": "No spell slots remaining for this level ({spell}). Cast was still recorded.",
             "NoPreparedCastRemaining": "No prepared cast remaining for {spell}. Cast was still recorded.",
+            "CgsGrantUsesExhausted": "No uses remaining today for this granted spell ({spell}), per the feat or feature. Cast was still recorded.",
             "ResetCastCounts": "Reset cast counts (rest)",
             "ResetCastCountsHint": "Set all spell cast counts to 0 for this character (e.g. after a full rest, prayer, or study).",
             "ResetCastCountsNoChange": "No spell cast counts to reset.",
             "ResetCastCountsDone": "Reset cast counts for {count} spell(s).",
+            "ResetCgsGrantCastsDone": "Reset capability-grant spell uses.",
             "ResetPreparedCounts": "Reset prepared",
             "ResetPreparedCountsHint": "Set all spell prepared counts to 0 (e.g. after rest, before preparing spells again).",
             "ResetPreparedCountsConfirm": "Clear all prepared spell counts? You will need to set prepared counts again in the Known panel.",
@@ -569,28 +719,29 @@
                 "Cost": "cost: {oldValue} → {newValue}",
                 "Quantity": "quantity: {oldValue} → {newValue}"
             }
-        }
-    },
-    "TYPES": {
-        "Item": {
-            "spell": "Spell",
-            "weapon": "Weapon",
-            "armor": "Armor",
-            "equipment": "Equipment",
-            "feat": "Feat",
-            "skill": "Skill",
-            "race": "Race",
-            "class": "Class",
-            "feature": "Class Feature",
-            "domain": "Domain",
-            "school": "School of Magic",
-            "condition": "Condition",
-            "creatureType": "Creature Type",
-            "subtype": "Subtype"
         },
-        "Actor": {
-            "character": "Character",
-            "npc": "NPC"
+        "TYPES": {
+            "Item": {
+                "spell": "Spell",
+                "weapon": "Weapon",
+                "armor": "Armor",
+                "equipment": "Equipment",
+                "feat": "Feat",
+                "skill": "Skill",
+                "race": "Race",
+                "class": "Class",
+                "feature": "Class Feature",
+                "domain": "Domain",
+                "school": "School of Magic",
+                "condition": "Condition",
+                "creatureType": "Creature Type",
+                "subtype": "Subtype",
+                "defenseCatalog": "Custom defense labels"
+            },
+            "Actor": {
+                "character": "Character",
+                "npc": "NPC"
+            }
         }
     }
 }

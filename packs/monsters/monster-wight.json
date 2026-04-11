@@ -72,12 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Slam +3</strong> (1d4+1 plus energy drain).</p><p><strong>Energy drain (Su):</strong> One negative level (Fort DC 14 to remove). Charisma-based.</p><p><strong>Create spawn (Su):</strong> Humanoids slain become wights under creator’s control.</p>",
       "environment": "Any",
       "organization": "Solitary, pair, gang, or pack",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

@@ -72,12 +72,7 @@
         "bypass": "bludgeoning"
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Attack:</strong> Scimitar +1 melee (1d6+1/18–20) or 2 claws +1 melee (1d4+1).</p><p><strong>Special:</strong> DR 5/bludgeoning; immunity to cold; undead traits; single actions only.</p>",
       "environment": "Any",
       "organization": "Any",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

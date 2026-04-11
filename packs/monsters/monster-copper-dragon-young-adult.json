@@ -115,16 +115,7 @@
         "bypass": "magic"
       },
       "spellResistance": 19,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Full attack</strong> (SRD true dragon, Multiattack −2 on secondaries): Bite +20, 2× Claw +18, 2× Wing +18, Tail slap +18.</p><p><strong>Breath weapon</strong> (SRD table — save DC in parentheses): Line of acid or cone of slow gas (Fort vs. DC 21; slow duration see SRD). 10d4 acid line.</p><p><strong>Special qualities (by age):</strong> —</p><p>NPC spell lists are not implemented on the sheet yet. Imported from d20srd.org.</p><p><strong>Skills:</strong> Bluff, Hide, and Jump are class skills.</p><p>Casts as sorcerer of indicated CL; also cleric spells from Chaos, Earth, and Trickery domains as arcane (SRD).</p><p><strong>DR 5/magic.</strong> CL 5th.</p>",
       "environment": "Warm hills",
       "organization": "See SRD (solitary or clutch to family by age)",
@@ -185,6 +176,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

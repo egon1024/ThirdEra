@@ -1,4 +1,6 @@
-const { NumberField, SchemaField, StringField, HTMLField, ArrayField } = foundry.data.fields;
+import { migrateDataCgsGrants } from "./cgs-grants-migrate-helpers.mjs";
+
+const { ArrayField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Armor items
@@ -30,6 +32,40 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
 
             equipped: new StringField({ required: true, blank: false, initial: "false", label: "Equipped" }),
 
+            /**
+             * When GMS `changes` and CGS grants apply for this armor: equipped only (default) or while carried on the actor.
+             * @see module/logic/item-gear-mechanical-apply.mjs
+             */
+            mechanicalApplyScope: new StringField({
+                required: true,
+                blank: false,
+                initial: "equipped",
+                choices: () => ({ equipped: "When equipped", carried: "When carried (inventory)" }),
+                label: "Mechanical effects apply"
+            }),
+
+            /**
+             * If non-empty, GMS/CGS from this armor apply only when the owning actor’s effective creature
+             * type or subtype (union) matches at least one referenced document UUID.
+             */
+            mechanicalCreatureGateUuids: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                required: false,
+                initial: [],
+                label: "Mechanical creature type gate"
+            }),
+
+            /** Pack JSON authoring: creature type keys → UUIDs on compendium load. */
+            mechanicalCreatureGateTypeKeys: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                initial: [],
+                label: "Mechanical gate type keys (pack JSON)"
+            }),
+
+            /** Pack JSON authoring: subtype keys → UUIDs on compendium load. */
+            mechanicalCreatureGateSubtypeKeys: new ArrayField(new StringField({ required: true, blank: true, initial: "" }), {
+                initial: [],
+                label: "Mechanical gate subtype keys (pack JSON)"
+            }),
+
             /** Optional mechanical modifiers when equipped (generalized modifier system). Same key set as conditions/feats. */
             changes: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
@@ -38,7 +74,32 @@ export class ArmorData extends foundry.abstract.TypeDataModel {
             }), { required: false, initial: [], label: "Modifiers" }),
 
             // Track which container this item is in (if any)
-            containerId: new StringField({ required: true, blank: true, initial: "", label: "Container ID" })
+            containerId: new StringField({ required: true, blank: true, initial: "", label: "Container ID" }),
+
+            /** CGS grants while this armor is equipped (mirrors `changes` + GMS). */
+            cgsGrants: new SchemaField(
+                {
+                    grants: new ArrayField(new ObjectField(), {
+                        required: true,
+                        initial: [],
+                        label: "Capability grants"
+                    }),
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({ required: true, blank: true, initial: "", label: "Sense type" }),
+                            range: new StringField({ required: true, blank: true, initial: "", label: "Range" })
+                        }),
+                        { required: false, initial: [], label: "Senses" }
+                    )
+                },
+                { required: false, label: "Capability grants" }
+            )
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        migrateDataCgsGrants(source);
+        return super.migrateData(source);
     }
 }

@@ -72,16 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Special Attacks:</strong> Attach, blood drain</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Warm marshes",
       "organization": "Colony (2-4), flock (5-8), or storm (9-14)",
@@ -142,6 +133,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

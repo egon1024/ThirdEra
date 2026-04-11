@@ -79,12 +79,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Improved grab (Ex)</strong> with bite. <strong>Hold breath (Ex).</strong> +8 racial Swim; can run while swimming in a straight line. *Hide +4 in water (included in misc).</p>",
       "environment": "Warm marshes",
       "organization": "Solitary or colony (6–11)",
@@ -145,6 +140,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

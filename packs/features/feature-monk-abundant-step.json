@@ -6,7 +6,18 @@
   "system": {
     "description": "<p>Use dimension door once per day (caster level = half monk level, rounded down).</p>",
     "key": "monkAbundantStep",
-    "scalingTable": []
+    "scalingTable": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "spellGrant",
+          "spellKey": "dimensionDoor",
+          "usesPerDay": 1,
+          "label": "1/day as dimension door; caster level = half monk levels, rounded down (SRD)."
+        }
+      ],
+      "senses": []
+    }
   },
   "flags": {},
   "folder": null,

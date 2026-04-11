@@ -72,12 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Low-light vision, superior two-weapon fighting</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Cold hills",
       "organization": "Solitary, gang (2-4), troupe (1-2 plus 1-2 brown bears), band (3-5 plus 1-2 brown bears), or colony (3-5 plus 1-2 brown bears and 7-12 orcs or 9-16 goblins)",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

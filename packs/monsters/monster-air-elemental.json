@@ -75,12 +75,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:elemental.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Elemental\"><h4>SRD type: Elemental</h4><p>\n\tElementals are incarnations of the elements that compose existence.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tElementals have varied combat abilities and tactics, but all have the same elemental qualities.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Air mastery, whirlwind</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., elemental traits</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Elemental Plane of Air",
       "organization": "Solitary",
@@ -141,6 +136,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

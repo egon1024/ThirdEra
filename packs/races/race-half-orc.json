@@ -7,16 +7,30 @@
     "description": "<p>Half-orcs combine human ambition with orcish might.</p>",
     "size": "Medium",
     "speed": 30,
-    "abilityAdjustments": {
-      "str": 2,
-      "dex": 0,
-      "con": 0,
-      "int": -2,
-      "wis": 0,
-      "cha": -2
-    },
+    "changes": [
+      {
+        "key": "ability.str",
+        "value": 2,
+        "label": ""
+      },
+      {
+        "key": "ability.int",
+        "value": -2,
+        "label": ""
+      },
+      {
+        "key": "ability.cha",
+        "value": -2,
+        "label": ""
+      }
+    ],
     "excludedSkills": [],
-    "favoredClass": "Barbarian"
+    "favoredClass": "Barbarian",
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "darkvision", "range": "60 ft" }]
+    },
+    "otherRacialTraits": "<ul>\n<li><strong>Darkvision</strong> 60 ft.</li>\n<li><strong>Orc blood:</strong> counted as both human and orc for effects related to race.</li>\n<li><strong>Languages:</strong> Common and Orc; bonus: Draconic, Giant, Gnoll, Goblin, Abyssal.</li>\n</ul>"
   },
   "flags": {},
   "folder": null,

@@ -7,16 +7,14 @@
     "description": "<p>Humans are the most adaptable and ambitious people among the common races. Whatever drives them, humans are the innovators, the achievers, and the pioneers of the worlds.</p>",
     "size": "Medium",
     "speed": 30,
-    "abilityAdjustments": {
-      "str": 0,
-      "dex": 0,
-      "con": 0,
-      "int": 0,
-      "wis": 0,
-      "cha": 0
-    },
+    "changes": [],
     "excludedSkills": [],
-    "favoredClass": "Any"
+    "favoredClass": "Any",
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    },
+    "otherRacialTraits": "<ul>\n<li><strong>Extra feat:</strong> one bonus feat at 1st level.</li>\n<li><strong>Skill points:</strong> +4 at 1st level and +1 per level thereafter (before Intelligence).</li>\n<li><strong>Favored class:</strong> any class.</li>\n<li><strong>Languages:</strong> Common; bonus languages may include any non-secret language.</li>\n</ul>"
   },
   "flags": {},
   "folder": null,

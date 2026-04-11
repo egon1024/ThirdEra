@@ -75,12 +75,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Burn (Ex):</strong> Slam deals fire damage; opponents grappled or hit may catch fire (Ref DC 15).</p><p><strong>Special:</strong> Immune to fire; vulnerability to cold (+50% cold damage).</p><p><strong>Slam +10</strong> (2d6+1d6 fire plus burn).</p>",
       "environment": "Elemental Plane of Fire",
       "organization": "Solitary",
@@ -141,6 +136,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

@@ -1,0 +1,41 @@
+{
+  "_id": "armor-breastplate-adamantine",
+  "name": "Adamantine Breastplate",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>This nonmagical breastplate is made of adamantine, giving it its natural properties. Medium adamantine armor grants damage reduction 2/—. This suit is also masterwork: armor check penalty reduced by 1 and arcane spell failure reduced by 10% compared to a standard breastplate.</p>",
+    "armor": {
+      "type": "medium",
+      "bonus": 5,
+      "maxDex": 3,
+      "checkPenalty": -3,
+      "spellFailure": 15
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 10200,
+    "weight": 30,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": "",
+    "mechanicalApplyScope": "equipped",
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "damageReduction",
+          "value": 2,
+          "bypass": "",
+          "label": "Adamantine medium armor (SRD)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 105
+}

@@ -1,4 +1,6 @@
-const { StringField, HTMLField, NumberField, SchemaField, ArrayField } = foundry.data.fields;
+import { migrateDataCgsGrants } from "./cgs-grants-migrate-helpers.mjs";
+
+const { ArrayField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Feat items
@@ -45,7 +47,32 @@ export class FeatData extends foundry.abstract.TypeDataModel {
                 key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
                 value: new NumberField({ required: true, initial: 0, label: "Value" }),
                 label: new StringField({ required: false, blank: true, initial: "", label: "Label" })
-            }), { required: false, initial: [], label: "Mechanical effects" })
+            }), { required: false, initial: [], label: "Mechanical effects" }),
+
+            /** Optional structured CGS grants (senses, …) while numeric bonuses use `changes` (GMS). */
+            cgsGrants: new SchemaField(
+                {
+                    grants: new ArrayField(new ObjectField(), {
+                        required: true,
+                        initial: [],
+                        label: "Capability grants"
+                    }),
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({ required: true, blank: true, initial: "", label: "Sense type" }),
+                            range: new StringField({ required: true, blank: true, initial: "", label: "Range" })
+                        }),
+                        { required: false, initial: [], label: "Senses" }
+                    )
+                },
+                { required: false, label: "Capability grants" }
+            )
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        migrateDataCgsGrants(source);
+        return super.migrateData(source);
     }
 }

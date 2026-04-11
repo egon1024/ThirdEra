@@ -76,12 +76,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Constrict</strong> 2d8+6; <strong>improved grab;</strong> poison (Fort DC 16, Str damage). <strong>Psionics (Sp):</strong> at will—detect chaos/evil/good/law, detect thoughts (DC 15), invisibility, plane shift (DC 20); change shape (Su) Small or Medium humanoid (errata). <strong>Spells:</strong> As 9th-level sorcerer (cleric + Air, Good, Law domain lists as arcane). <strong>Ethereal jaunt (Su):</strong> CL 16th. Typical spells known listed in SRD.</p>",
       "environment": "Warm forests",
       "organization": "Solitary, pair, or flight (3–6)",
@@ -142,6 +137,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

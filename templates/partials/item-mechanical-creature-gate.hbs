@@ -1,0 +1,17 @@
+<div class="form-group thirdera-mechanical-creature-gate">
+    <label title="{{localize 'THIRDERA.MechanicalCreatureGateHint'}}">{{localize "THIRDERA.MechanicalCreatureGate"}}</label>
+    <p class="hint">{{localize "THIRDERA.MechanicalCreatureGateHelp"}}</p>
+    <ol class="mechanical-gate-list">
+        {{#each mechanicalCreatureGateRows}}
+        <li class="flexrow" data-mechanical-gate-index="{{gateIndex}}">
+            <span class="mechanical-gate-name">{{name}}</span>
+            <button type="button" class="icon fa-solid fa-trash" data-action="removeMechanicalCreatureGate"
+                data-index="{{gateIndex}}" title="{{localize 'THIRDERA.MechanicalCreatureGateRemove'}}" aria-label="{{localize 'THIRDERA.MechanicalCreatureGateRemove'}}"></button>
+        </li>
+        {{/each}}
+    </ol>
+    <div class="flexrow mechanical-gate-drop" data-mechanical-gate-drop
+        title="{{localize 'THIRDERA.MechanicalCreatureGateDropHint'}}">
+        <span class="hint">{{localize "THIRDERA.MechanicalCreatureGateDropHint"}}</span>
+    </div>
+</div>

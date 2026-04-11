@@ -87,6 +87,17 @@
             </div>
             {{/if}}
 
+            {{> "systems/thirdera/templates/partials/mechanical-apply-scope.hbs"}}
+            {{> "systems/thirdera/templates/partials/item-mechanical-creature-gate.hbs"}}
+
+            <div class="cgs-item-grants-block">
+            <h3 class="form-header">{{localize "THIRDERA.CGS.CapabilityGrantsItemSection"}}</h3>
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs" hideMechanicsTitle=true}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-spell-grants.hbs"}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses.hbs"}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-type-overlays.hbs"}}
+            </div>
+
             {{> "systems/thirdera/templates/partials/mechanical-effects-table.hbs" headerKey="THIRDERA.FeatModifiers" hintKey="THIRDERA.ItemModifiersHint" showLabel=true addButtonKey="THIRDERA.FeatAddModifier" changeKeyOptions=changeKeyOptions system=system}}
         </div>
     </section>

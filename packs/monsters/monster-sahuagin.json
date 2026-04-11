@@ -74,12 +74,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Special Attacks:</strong> Blood frenzy, rake 1d4+1</p><p><strong>Special Qualities:</strong> Blindsense 30 ft., darkvision 60 ft., freshwater sensitivity, light blindness, speak with sharks, water dependent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Warm aquatic",
       "organization": "Solitary, pair, team (5-8), patrol (11-20 plus 1 3rd-level lieutenant and 1-2 sharks), band (20-80 plus 100% noncombatants plus 1 3rd-level lieutenant and 1 4th-level chieftain per 20 adults plus 1-2 sharks), or tribe (70-160 plus 100% noncombatants plus 1 3rd-level lieutenant per 20 adults, 1 4th-level chieftain per 40 adults, 9 4th-level guards, 1-4 underpriestesses of 3rd-6th level, 1 7th-level priestess, and 1 baron of 6th-8th level plus 5-8 sharks)",
@@ -140,6 +135,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

@@ -1,0 +1,99 @@
+{{!-- Phase 5d: CGS spellGrant rows — capability channel (may duplicate class list for clarity); SLA casts use grant counters --}}
+<div class="spellcasting-class cgs-granted-spells-known">
+  <div class="spellcasting-header spellcasting-header--compact">
+    <h4 title="{{localize "THIRDERA.CGS.GrantedSpellsHeadingTitle"}}">{{localize "THIRDERA.CGS.GrantedSpellsHeading"}}</h4>
+  </div>
+  {{#each cgsGrantedSpellsByLevel as |entries spellLevel|}}
+    {{#if entries.length}}
+      <div class="spell-level-group">
+        <div class="spell-level-header">
+          <h5>{{#if (eq spellLevel "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal spellLevel}} Level{{/if}}</h5>
+        </div>
+        <ol class="items-list spells-list">
+          {{#each entries as |entry|}}
+          <li class="item flexrow spell-item cgs-granted-spell-item" {{#if entry.spellDisplay.id}}data-item-id="{{entry.spellDisplay.id}}"{{/if}} data-spell-name="{{entry.spellDisplay.name}}">
+            <div class="item-name">
+              {{#if entry.spellDisplay.img}}<div class="item-image"><img src="{{entry.spellDisplay.img}}" title="{{entry.spellDisplay.name}}" width="24" height="24" /></div>{{else}}<div class="item-image"><i class="fas fa-scroll" title="{{entry.spellDisplay.name}}"></i></div>{{/if}}
+              <h4>
+                {{#if entry.spellDisplay.id}}
+                <a class="spell-name-link" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}">{{entry.spellDisplay.name}}</a>
+                <span class="cgs-grant-channel-badge" title="{{localize 'THIRDERA.CGS.GrantChannelBadgeTooltip'}}">{{localize "THIRDERA.CGS.GrantChannelBadge"}}</span>
+                {{else}}
+                <span class="cgs-granted-spell-name-unlinked">{{entry.spellDisplay.name}}</span>
+                <span class="cgs-granted-spell-badge" title="{{localize 'THIRDERA.CGS.GrantedSpellNotOnActorHint'}}">{{localize "THIRDERA.CGS.GrantedSpellNotOnActor"}}</span>
+                {{/if}}
+                {{#if entry.usesHint}}<span class="cgs-spell-grant-uses-hint"> — {{entry.usesHint}}</span>{{/if}}
+              </h4>
+            </div>
+            <div class="cgs-granted-spell-provenance">
+              {{#if entry.sourceDisplays.length}}
+              <span class="cgs-provenance-label">{{localize "THIRDERA.CGS.ProvenanceSourcesSummary"}}:</span>
+              <span class="cgs-provenance-sources-inline">{{#each entry.sourceDisplays as |src|}}{{{src}}}{{#unless @last}}; {{/unless}}{{/each}}</span>
+              {{/if}}
+            </div>
+            {{#unless entry.spellDisplay.id}}
+            {{#if entry.spellDisplay.spellUuid}}
+            <div class="spell-tracking cgs-granted-spell-add-to-actor">
+              <button type="button" class="add-placeholder-spell cgs-add-grant-spell-btn" data-action="addCgsGrantSpellToActor" data-spell-uuid="{{entry.spellDisplay.spellUuid}}" title="{{localize 'THIRDERA.CGS.AddGrantSpellToActorHint'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.AddGrantSpellToActor"}}</button>
+            </div>
+            {{/if}}
+            {{/unless}}
+            {{#if entry.spellDisplay.id}}
+            {{#if @root.hasAnySpellcasting}}
+            <div class="spell-ready-manual-controls cgs-granted-spell-ready-controls">
+              {{#if entry.showCgsPreparedCountControl}}
+              <div class="prepared-tracking" title="{{localize 'THIRDERA.Spells.PreparedHint'}}">
+                <label>{{localize "THIRDERA.Spells.Prepared"}}:</label>
+                <input type="number" class="spell-tracking-input" min="0" value="{{entry.spellDisplay.system.prepared}}" data-item-id="{{entry.spellDisplay.id}}" data-spell-field="prepared" />
+              </div>
+              {{else}}
+              {{#each (lookup @root.spellShortlistMembershipBySpellId entry.spellDisplay.id) as |slEntry|}}
+              {{#if @first}}<span class="in-ready-label">{{localize "THIRDERA.Spells.InReady"}}: </span>{{/if}}
+              <span class="in-ready-class">{{slEntry.className}}</span>
+              <a class="item-control remove-from-ready-manual" data-action="removeFromShortlist" data-class-item-id="{{slEntry.classItemId}}" title="{{localize 'THIRDERA.Spells.RemoveFromReady'}}"><i class="fas fa-minus-circle"></i></a>
+              {{else}}
+              {{#if (eq @root.spellcastingClassesForShortlist.length 1)}}
+              <button type="button" class="shortlist-toggle-btn" data-action="addToShortlist" data-item-id="{{entry.spellDisplay.id}}" data-class-item-id="{{lookup (lookup @root.spellcastingClassesForShortlist 0) 'classItemId'}}" title="{{localize 'THIRDERA.Spells.ToggleReady'}}">{{localize "THIRDERA.Spells.AddToReady"}}</button>
+              {{else}}
+              <select name="readyAsClass" class="ready-as-class-select" title="{{localize 'THIRDERA.Spells.AddToReadyAs'}}">
+                {{#each @root.spellcastingClassesForShortlist as |cls|}}
+                <option value="{{cls.classItemId}}">{{cls.className}}</option>
+                {{/each}}
+              </select>
+              <button type="button" class="shortlist-toggle-btn" data-action="addToShortlistFromSelect" data-item-id="{{entry.spellDisplay.id}}" title="{{localize 'THIRDERA.Spells.AddToReady'}}">{{localize "THIRDERA.Spells.AddToReady"}}</button>
+              {{/if}}
+              {{/each}}
+              {{/if}}
+            </div>
+            {{/if}}
+            {{#unless @root.cgsGrantedSpellsSuppressCastOnKnownTab}}
+            {{#if entry.castClassItemId}}
+            <div class="spell-tracking cgs-granted-spell-cast">
+              {{#if entry.cgsIsSlaStyle}}
+              <span class="cgs-grant-cast-meta" title="{{localize 'THIRDERA.CGS.GrantCastCountHint'}}">
+                {{#if entry.cgsGrantUsesPerDayCap}}
+                {{localize "THIRDERA.CGS.GrantCastsToday"}} <strong>{{entry.cgsGrantCastCount}}/{{entry.cgsGrantUsesPerDayCap}}</strong>
+                {{else}}
+                {{localize "THIRDERA.CGS.GrantCastAtWillShort"}}
+                {{/if}}
+              </span>
+              <button type="button" class="cast-spell-btn cast-spell-btn--cgs-grant" tabindex="-1" data-action="castCgsGrantedSpell" data-item-id="{{entry.spellDisplay.id}}" data-class-item-id="{{entry.castClassItemId}}" data-spell-level="{{entry.castSpellLevel}}" title="{{localize 'THIRDERA.CGS.CastFromGrantTooltip'}}">{{localize "THIRDERA.CGS.CastFromGrant"}}</button>
+              {{else}}
+              <button type="button" class="cast-spell-btn" tabindex="-1" data-action="castSpell" data-item-id="{{entry.spellDisplay.id}}" data-class-item-id="{{entry.castClassItemId}}" data-spell-level="{{entry.castSpellLevel}}" title="{{localize 'THIRDERA.Spells.CastSpell'}}">{{localize "THIRDERA.Spells.CastSpell"}}</button>
+              {{/if}}
+            </div>
+            {{/if}}
+            {{/unless}}
+            {{/if}}
+            <div class="item-controls">
+              {{#if entry.spellDisplay.id}}
+              <a class="item-edit" data-action="editItem" title="{{localize 'THIRDERA.Spells.ViewSpell'}}"><i class="fas fa-edit"></i></a>
+              {{/if}}
+            </div>
+          </li>
+          {{/each}}
+        </ol>
+      </div>
+    {{/if}}
+  {{/each}}
+</div>

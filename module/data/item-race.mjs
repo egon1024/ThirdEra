@@ -1,4 +1,7 @@
-const { HTMLField, NumberField, SchemaField, StringField, ArrayField } = foundry.data.fields;
+import { legacyAbilityAdjustmentsToChanges } from "../logic/race-legacy-migration.mjs";
+import { migrateDataCgsGrants } from "./cgs-grants-migrate-helpers.mjs";
+
+const { ArrayField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Race items
@@ -12,21 +15,61 @@ export class RaceData extends foundry.abstract.TypeDataModel {
             size: new StringField({ required: true, blank: false, initial: "Medium", choices: () => CONFIG.THIRDERA.sizes, label: "Size" }),
             speed: new NumberField({ required: true, integer: true, min: 0, initial: 30, label: "Base Land Speed" }),
 
-            abilityAdjustments: new SchemaField({
-                str: new NumberField({ required: true, integer: true, initial: 0, label: "Strength" }),
-                dex: new NumberField({ required: true, integer: true, initial: 0, label: "Dexterity" }),
-                con: new NumberField({ required: true, integer: true, initial: 0, label: "Constitution" }),
-                int: new NumberField({ required: true, integer: true, initial: 0, label: "Intelligence" }),
-                wis: new NumberField({ required: true, integer: true, initial: 0, label: "Wisdom" }),
-                cha: new NumberField({ required: true, integer: true, initial: 0, label: "Charisma" })
-            }),
+            /** Numeric modifiers (GMS); same shape as feats/conditions. */
+            changes: new ArrayField(new SchemaField({
+                key: new StringField({ required: true, blank: true, initial: "", label: "Key" }),
+                value: new NumberField({ required: true, initial: 0, label: "Value" }),
+                label: new StringField({ required: false, blank: true, initial: "", label: "Label" })
+            }), { required: false, initial: [], label: "Mechanical effects" }),
 
             excludedSkills: new ArrayField(new SchemaField({
                 key: new StringField({ required: true, blank: false, label: "Skill Key" }),
                 name: new StringField({ required: false, blank: true, label: "Skill Name" })
             }), { label: "Excluded Skills" }),
 
-            favoredClass: new StringField({ required: true, blank: true, initial: "", label: "Favored Class" })
+            favoredClass: new StringField({ required: true, blank: true, initial: "", label: "Favored Class" }),
+
+            /** Traits such as vision, immunities, weapon familiarity, languages, and spell-like abilities. */
+            otherRacialTraits: new HTMLField({ required: false, blank: true, initial: "", label: "Other racial traits" }),
+
+            /** Structured CGS grants when this race is on the actor (senses, senseSuppression, …). Ability scores stay in `changes` (GMS). */
+            cgsGrants: new SchemaField(
+                {
+                    grants: new ArrayField(new ObjectField(), {
+                        required: true,
+                        initial: [],
+                        label: "Capability grants"
+                    }),
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({ required: true, blank: true, initial: "", label: "Sense type" }),
+                            range: new StringField({ required: true, blank: true, initial: "", label: "Range" })
+                        }),
+                        { required: false, initial: [], label: "Senses" }
+                    )
+                },
+                { required: false, label: "Capability grants" }
+            )
         };
+    }
+
+    /** @override */
+    static migrateData(source) {
+        const hadLegacy = source.abilityAdjustments != null && typeof source.abilityAdjustments === "object";
+        if (hadLegacy) {
+            const existing = Array.isArray(source.changes) ? source.changes : [];
+            if (existing.length === 0) {
+                source.changes = legacyAbilityAdjustmentsToChanges(source.abilityAdjustments);
+            }
+            delete source.abilityAdjustments;
+        }
+        if (!Array.isArray(source.changes)) {
+            source.changes = [];
+        }
+        if (typeof source.otherRacialTraits !== "string") {
+            source.otherRacialTraits = source.otherRacialTraits == null ? "" : String(source.otherRacialTraits);
+        }
+        migrateDataCgsGrants(source);
+        return super.migrateData(source);
     }
 }

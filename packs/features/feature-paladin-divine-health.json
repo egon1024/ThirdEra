@@ -6,7 +6,17 @@
   "system": {
     "description": "<p>Immunity to all diseases, including supernatural and magical diseases.</p>",
     "key": "paladinDivineHealth",
-    "scalingTable": []
+    "scalingTable": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "disease",
+          "label": "Immune to all diseases including magical (SRD)."
+        }
+      ],
+      "senses": []
+    }
   },
   "flags": {},
   "folder": null,

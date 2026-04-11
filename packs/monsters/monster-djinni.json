@@ -75,12 +75,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:genie.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Genie\"><h4>SRD type: Genie</h4><p>\n\tGenies are humanlike beings who dwell on the elemental planes. They are famous for their strength, guile, and skill with illusion magic.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tGenies prefer to outmaneuver and outthink their foes. They are not too proud to flee if it means they’ll live to fight another day. If trapped, they bargain, offering treasure or favors in return for their lives and freedom.\n</p>\n\n<h5><a class=\"spell\" href=\"/srd/spells/planeShift.htm\">Plane Shift</a> (<a href=\"/srd/specialAbilities.htm#spellLikeAbilities\">Sp</a>)</h5>\n<p>\n\tA genie can enter any of the elemental planes, the Astral Plane, or the Material Plane. This ability transports the genie and up to eight other creatures, provided they all link hands with the genie. It is otherwise similar to the spell of the same name (caster level 13th).\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Air mastery, spell-like abilities, whirlwind</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., immunity to acid, plane shift, telepathy 100 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Elemental Plane of Air",
       "organization": "Solitary, company (2-4), or band (6-15)",
@@ -141,6 +136,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

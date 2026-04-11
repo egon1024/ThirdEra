@@ -79,16 +79,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "lowLight",
-          "range": ""
-        },
-        {
-          "type": "scent",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Racial:</strong> +4 Climb, Hide, Move Silently; +8 Jump; +8 Balance; Dex to Climb/Jump. *+8 Hide in tall grass or heavy undergrowth (included in misc where applicable).</p><p><strong>Full attack:</strong> 2 claws +4, bite –1.</p>",
       "environment": "Temperate plains",
       "organization": "Domesticated or solitary",
@@ -149,6 +140,20 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

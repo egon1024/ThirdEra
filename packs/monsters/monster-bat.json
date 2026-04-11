@@ -64,12 +64,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "blindsense",
-          "range": "20 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p>Blindsense 20 ft.</p>",
       "environment": "Temperate",
       "organization": "Colony",
@@ -130,6 +125,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "blindsense",
+          "range": "20 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

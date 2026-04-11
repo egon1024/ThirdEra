@@ -21,6 +21,7 @@ export default defineConfig({
                 "module/logic/character-system-source-backfill.mjs",
                 "module/logic/class-spell-list.mjs",
                 "module/logic/compendium-loader.mjs",
+                "module/logic/cgs-phase6-npc-world-migrate.mjs",
                 "module/logic/domain-spells.mjs",
                 // Needs Foundry-shaped actor graph; defer until extracted or CONFIG-injected tests.
                 "module/data/_ac-helpers.mjs"

@@ -74,12 +74,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "lowLight",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Special Attacks:</strong> —</p><p><strong>Special Qualities:</strong> Amphibious, low-light vision</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Temperate aquatic",
       "organization": "Company (2-4), patrol (11-20 plus 2 3rd-level lieutenants and 1 leaderof 3rd-6th level), or band (30-60 plus 1 3rd-level sergeant per 20 adults,5 5th-level lieutenants, 3 7th-level captains, and 10 porpoises)",
@@ -140,6 +135,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "lowLight",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

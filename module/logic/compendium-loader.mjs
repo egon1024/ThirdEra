@@ -5,6 +5,15 @@
  */
 import { parseSpellFields, applyParsedSpellFields } from "./spell-description-parser.mjs";
 import { resolveMonsterPackNpcKeys } from "./monster-pack-keys.mjs";
+import { yieldToMain } from "./client-main-thread-cooperation.mjs";
+import {
+    buildCreatureTypeKeyToUuidMap,
+    buildSubtypeKeyToUuidMap,
+    buildSpellKeyToUuidMap,
+    resolveSpellTargetCreatureKeys,
+    resolveMechanicalCreatureGateKeys,
+    resolveCgsGrantReferenceKeys
+} from "./cgs-compendium-reference-resolve.mjs";
 
 /**
  * Returns a stable key for matching compendium documents (incoming JSON or existing).
@@ -26,6 +35,15 @@ function getStableKey(doc) {
 }
 
 export class CompendiumLoader {
+    /**
+     * Packs where **existing** compendium documents are not overwritten from `packs/*.json` on world load.
+     * Add a `pack.collection` id here only when in-compendium GM edits must survive reload (none by default).
+     * The **Races** pack refreshes from JSON like every other mapped pack; use world Items for durable homebrew races.
+     * When adding racial `changes` to JSON, keep `race-srd-changes-merge.mjs` in sync and bump `RACE_STOCK_DELTA_REV`
+     * if worlds need a re-merge for **embedded** / world race copies; `test/unit/data/race-pack-stock-changes.test.mjs` guards pack JSON.
+     */
+    static PACKS_SKIP_JSON_REFRESH_FOR_EXISTING = new Set();
+
     /**
      * File mappings for each compendium pack
      */
@@ -136,7 +154,7 @@ export class CompendiumLoader {
             "weapon-javelin.json", "weapon-kama.json", "weapon-kukri.json",
             "weapon-lance.json", "weapon-light-crossbow.json", "weapon-light-mace.json",
             "weapon-longbow.json", "weapon-longspear.json", "weapon-longsword.json",
-            "weapon-mace.json", "weapon-morningstar.json", "weapon-net.json",
+            "weapon-mace.json", "weapon-magic-javelin-of-lightning.json", "weapon-morningstar.json", "weapon-net.json",
             "weapon-nunchaku.json", "weapon-orc-double-axe.json", "weapon-pike.json",
             "weapon-quarterstaff.json", "weapon-ranseur.json", "weapon-rapier.json",
             "weapon-repeating-heavy-crossbow.json", "weapon-repeating-light-crossbow.json",
@@ -150,8 +168,10 @@ export class CompendiumLoader {
         "thirdera.thirdera_armor": [
             "armor-padded.json", "armor-leather.json", "armor-studded-leather.json",
             "armor-hide.json", "armor-chain-shirt.json", "armor-scale-mail.json",
-            "armor-chainmail.json", "armor-breastplate.json", "armor-splint-mail.json",
+            "armor-chainmail.json", "armor-breastplate.json", "armor-breastplate-adamantine.json",
+            "armor-splint-mail.json",
             "armor-bandmail.json", "armor-half-plate.json", "armor-full-plate.json",
+            "armor-full-plate-adamantine.json",
             "shield-buckler.json", "shield-light.json", "shield-heavy.json", "shield-tower.json"
         ],
         "thirdera.thirdera_equipment": [
@@ -165,7 +185,11 @@ export class CompendiumLoader {
             "equipment-hammer.json", "equipment-hemp-rope.json", "equipment-holy-symbol.json",
             "equipment-holy-symbol-silver.json", "equipment-holy-water.json", "equipment-ink.json",
             "equipment-inkpen.json", "equipment-iron-spikes.json", "equipment-lantern-bullseye.json",
-            "equipment-lantern-hooded.json", "equipment-lock.json", "equipment-magnifying-glass.json",
+            "equipment-lantern-hooded.json", "equipment-lock.json",             "equipment-magnifying-glass.json",
+            "equipment-magic-goggles-of-night.json",
+            "equipment-magic-ring-of-feather-falling.json",
+            "equipment-magic-ring-of-fire-resistance.json",
+            "equipment-magic-winged-boots.json",
             "equipment-manacles.json", "equipment-manacles-masterwork.json", "equipment-mirror-small.json",
             "equipment-monks-outfit.json", "equipment-nobles-outfit.json", "equipment-oil.json",
             "equipment-paper.json", "equipment-parchment.json", "equipment-peasants-outfit.json",
@@ -856,11 +880,8 @@ export class CompendiumLoader {
         // Only run if we're the GM
         if (!game.user.isGM) return;
 
-        // Wait a bit for compendiums to be fully registered
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Debug: log all available packs
-        console.log("Third Era | Available packs:", Array.from(game.packs.keys()));
+        let packsLoadedFromJson = 0;
+        let packsSkippedPopulated = 0;
 
         for (const [packName, fileList] of Object.entries(CompendiumLoader.FILE_MAPPINGS)) {
             // Try multiple ways to find the pack
@@ -885,9 +906,140 @@ export class CompendiumLoader {
 
             // Load JSON files (will update existing items or create new ones)
             try {
-                await CompendiumLoader.loadPackFromJSON(pack, fileList);
+                const ran = await CompendiumLoader.loadPackFromJSON(pack, fileList);
+                if (ran) packsLoadedFromJson++;
+                else packsSkippedPopulated++;
             } catch (error) {
                 console.error(`Third Era | Error loading compendium ${packName}:`, error);
+            }
+            // Let the UI paint between packs when JSON import runs many files (dev / first load).
+            await yieldToMain();
+        }
+
+        if (packsSkippedPopulated > 0) {
+            console.log(
+                `Third Era | Compendium JSON: skipped ${packsSkippedPopulated} pack(s) that already have index entries; ` +
+                    `ran JSON load for ${packsLoadedFromJson} pack(s). ` +
+                    `Enable \"Re-import compendium JSON on each load\" in system settings to force a full refresh from pack JSON.`
+            );
+        }
+
+        try {
+            await CompendiumLoader.resolveCgsReferenceKeysInPacks();
+        } catch (err) {
+            console.error("Third Era | resolveCgsReferenceKeysInPacks failed:", err);
+        }
+    }
+
+    /**
+     * Resolve pack-JSON authoring keys (creature types, subtypes, spells) into stored UUIDs on compendium Items.
+     * Runs once per GM ready after JSON import pass so load order between packs does not matter.
+     */
+    static async resolveCgsReferenceKeysInPacks() {
+        if (!game?.user?.isGM) return;
+
+        const typesPack = game.packs.get("thirdera.thirdera_creature_types");
+        const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
+        const spellsPack = game.packs.get("thirdera.thirdera_spells");
+
+        if (!typesPack || !subtypesPack) return;
+
+        const typeKeyToUuid = buildCreatureTypeKeyToUuidMap(await typesPack.getDocuments());
+        const subtypeKeyToUuid = buildSubtypeKeyToUuidMap(await subtypesPack.getDocuments());
+
+        const spellDocs = spellsPack ? await spellsPack.getDocuments() : [];
+        const spellKeyToUuid = buildSpellKeyToUuidMap(spellDocs);
+
+        /** @type {{ spellKeyToUuid: Map<string, string>, typeKeyToUuid: Map<string, string>, subtypeKeyToUuid: Map<string, string> }} */
+        const maps = { spellKeyToUuid, typeKeyToUuid, subtypeKeyToUuid };
+
+        if (spellsPack && spellDocs.length > 0) {
+            const updates = [];
+            for (const doc of spellDocs) {
+                const r = resolveSpellTargetCreatureKeys(doc.system, typeKeyToUuid, subtypeKeyToUuid);
+                if (!r) continue;
+                updates.push({
+                    _id: doc.id,
+                    system: {
+                        ...doc.system,
+                        targetCreatureTypeUuids: r.targetCreatureTypeUuids,
+                        ...(r.clearTypeKeys ? { targetCreatureTypeKeys: [] } : {}),
+                        ...(r.clearSubtypeKeys ? { targetCreatureSubtypeKeys: [] } : {})
+                    }
+                });
+            }
+            if (updates.length > 0) {
+                const Impl = spellsPack.documentClass?.implementation;
+                if (Impl?.updateDocuments) {
+                    await Impl.updateDocuments(updates, { pack: spellsPack.collection });
+                    console.log(`Third Era | Resolved spell target creature-type keys for ${updates.length} spell(s)`);
+                }
+            }
+        }
+
+        for (const collection of ["thirdera.thirdera_armor", "thirdera.thirdera_weapons", "thirdera.thirdera_equipment"]) {
+            const pack = game.packs.get(collection);
+            if (!pack) continue;
+            const docs = await pack.getDocuments();
+            const updates = [];
+            for (const doc of docs) {
+                const r = resolveMechanicalCreatureGateKeys(doc.system, typeKeyToUuid, subtypeKeyToUuid);
+                if (!r) continue;
+                updates.push({
+                    _id: doc.id,
+                    system: {
+                        ...doc.system,
+                        mechanicalCreatureGateUuids: r.mechanicalCreatureGateUuids,
+                        ...(r.clearTypeKeys ? { mechanicalCreatureGateTypeKeys: [] } : {}),
+                        ...(r.clearSubtypeKeys ? { mechanicalCreatureGateSubtypeKeys: [] } : {})
+                    }
+                });
+            }
+            if (updates.length > 0) {
+                const Impl = pack.documentClass?.implementation;
+                if (Impl?.updateDocuments) {
+                    await Impl.updateDocuments(updates, { pack: pack.collection });
+                    console.log(`Third Era | Resolved mechanical creature gate keys for ${updates.length} item(s) in ${collection}`);
+                }
+            }
+        }
+
+        const cgsKeyPacks = [
+            "thirdera.thirdera_feats",
+            "thirdera.thirdera_features",
+            "thirdera.thirdera_races",
+            "thirdera.thirdera_conditions",
+            "thirdera.thirdera_armor",
+            "thirdera.thirdera_weapons",
+            "thirdera.thirdera_equipment"
+        ];
+        for (const collection of cgsKeyPacks) {
+            const pack = game.packs.get(collection);
+            if (!pack) continue;
+            const docs = await pack.getDocuments();
+            const updates = [];
+            for (const doc of docs) {
+                const grants = doc.system?.cgsGrants?.grants;
+                if (!Array.isArray(grants) || grants.length === 0) continue;
+                const { grants: newGrants, changed } = resolveCgsGrantReferenceKeys(grants, maps);
+                if (!changed) continue;
+                updates.push({
+                    _id: doc.id,
+                    system: {
+                        ...doc.system,
+                        cgsGrants: {
+                            ...doc.system.cgsGrants,
+                            grants: newGrants
+                        }
+                    }
+                });
+            }
+            if (updates.length > 0) {
+                const Impl = pack.documentClass?.implementation;
+                if (Impl?.updateDocuments) {
+                    await Impl.updateDocuments(updates, { pack: pack.collection });
+                    console.log(`Third Era | Resolved CGS grant reference keys for ${updates.length} item(s) in ${collection}`);
+                }
             }
         }
     }
@@ -896,8 +1048,18 @@ export class CompendiumLoader {
      * Load a compendium pack from JSON files
      * @param {CompendiumCollection} pack - The compendium pack to populate
      * @param {string[]} fileList - List of JSON file names to load
+     * @returns {Promise<boolean>} True if JSON was fetched and processed; false if skipped (pack already populated and setting does not force reimport)
      */
     static async loadPackFromJSON(pack, fileList) {
+        const forceReimport =
+            typeof game !== "undefined" && game.settings?.get?.("thirdera", "reimportCompendiumJsonEachLoad") === true;
+        if (!forceReimport) {
+            await pack.getIndex();
+            if (pack.index.size > 0) {
+                return false;
+            }
+        }
+
         // Normalize the path - remove any existing systems/thirdera/ prefix to avoid duplication
         let normalizedPath = pack.metadata.path;
         if (normalizedPath.startsWith('systems/thirdera/')) {
@@ -1025,7 +1187,7 @@ export class CompendiumLoader {
             const DocumentClass = pack.documentClass;
             if (!DocumentClass) {
                 console.error(`Third Era | Could not determine document class for pack ${pack.collection}`);
-                return;
+                return true;
             }
 
             // Get existing documents from the compendium; match by stable key (not name)
@@ -1049,6 +1211,9 @@ export class CompendiumLoader {
                 }
                 const existing = existingByKey.get(key);
                 if (existing) {
+                    if (CompendiumLoader.PACKS_SKIP_JSON_REFRESH_FOR_EXISTING.has(pack.collection)) {
+                        continue;
+                    }
                     // Update existing document: use existing.id so the client can find the document.
                     // Do not spread docData._id — JSON _ids can differ from the collection's ids and cause "id does not exist".
                     const { _id: _omit, ...rest } = docData;
@@ -1100,5 +1265,6 @@ export class CompendiumLoader {
                 console.log(`Third Era | Processed ${documents.length} documents in ${pack.collection}`);
             }
         }
+        return true;
     }
 }

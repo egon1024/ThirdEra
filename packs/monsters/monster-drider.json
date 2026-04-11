@@ -72,12 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 17,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Special Attacks:</strong> Spells, spell-like abilities, poison</p><p><strong>Special Qualities:</strong> Darkvision 60 ft., spell resistance 17</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Underground",
       "organization": "Solitary, pair, or troupe (1-2 plus 7-12 Medium monstrous spiders)",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

@@ -20,6 +20,7 @@ import { SchoolData } from "./module/data/item-school.mjs";
 import { ConditionData } from "./module/data/item-condition.mjs";
 import { CreatureTypeData } from "./module/data/item-creature-type.mjs";
 import { SubtypeData } from "./module/data/item-subtype.mjs";
+import { DefenseCatalogData } from "./module/data/item-defense-catalog.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -30,7 +31,11 @@ import { ThirdEraActorSheet } from "./module/sheets/actor-sheet.mjs";
 import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
+import { migrateAllRaceStockDeltas } from "./module/logic/race-srd-changes-merge.mjs";
+import { migrateAllRaceQualitativeTraits } from "./module/logic/race-qualitative-traits-stock.mjs";
+import { migrateAllNpcPhase6StatBlockSenses } from "./module/logic/cgs-phase6-npc-world-migrate.mjs";
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
+import { yieldToMain } from "./module/logic/client-main-thread-cooperation.mjs";
 import {
     syncDerivedFlatFootedCondition,
     syncDerivedHpCondition,
@@ -38,13 +43,47 @@ import {
     removeDerivedFlatFooted
 } from "./module/logic/derived-conditions.mjs";
 import { registerModifierSourceProviders } from "./module/logic/modifier-aggregation.mjs";
+import { registerCapabilitySourceProviders } from "./module/logic/capability-aggregation.mjs";
+import {
+    cgsActorCgsGrantsSensesProvider,
+    cgsActorCgsGrantsTypeOverlaysProvider,
+    cgsNpcStatBlockSensesProvider,
+    cgsNpcStatBlockDamageReductionProvider
+} from "./module/logic/cgs-actor-capability-providers.mjs";
+import { cgsConditionsCapabilityProvider } from "./module/logic/cgs-conditions-capability-provider.mjs";
+import { cgsEmbeddedItemGrantsProvider } from "./module/logic/cgs-embedded-item-grants-provider.mjs";
+import { cgsGrantedClassFeatureGrantsProvider } from "./module/logic/cgs-granted-class-feature-grants-provider.mjs";
 import { ApplyDamageHealingDialog } from "./module/applications/apply-damage-healing-dialog.mjs";
 import { fuzzyScore } from "./module/utils/fuzzy.mjs";
 import { registerTokenDimensionHooks } from "./module/logic/token-dimensions-from-size-hooks.mjs";
+import {
+    createDefaultCgsRefreshDeps,
+    refreshCapabilityGrantsForActor,
+    refreshCapabilityGrantDependentsFromItem,
+    refreshCapabilityGrantDependentsFromWorldFeatureItem,
+    resolveParentActorForItem,
+    registerCgsCapabilityRefreshHooks
+} from "./module/logic/cgs-refresh-hooks.mjs";
+import {
+    getEffectiveCreatureTypes,
+    getEffectiveCreatureTypesFromActor,
+    effectiveCreatureTypesIncludeUuid,
+    effectiveCreatureTypesIncludeAnyUuid
+} from "./module/logic/cgs-effective-creature-types.mjs";
+import {
+    registerCgsEffectiveCreatureTypesGmHooks,
+    buildEffectiveCreatureTypesDisplayText,
+    notifyEffectiveCreatureTypesForActor,
+    notifyEffectiveCreatureTypesForSelectedTokens,
+    createDefaultEffectiveCreatureTypesGmDeps
+} from "./module/logic/cgs-effective-creature-types-gm.mjs";
+import { refreshTypedDefenseCatalogCache } from "./module/logic/cgs-typed-defense-catalog-runtime.mjs";
 import "./module/logic/apply-damage-healing-entry-points.mjs";
 import "./module/logic/spell-save-from-chat.mjs";
 import "./module/logic/concentration-from-chat.mjs";
 import "./module/logic/spell-sr-from-chat.mjs";
+
+const cgsRefreshDeps = createDefaultCgsRefreshDeps();
 
 /**
  * Initialize HP auto-increase system
@@ -122,6 +161,8 @@ Hooks.once("init", async function () {
     AuditLog.init();
     initHpAutoIncrease();
     registerTokenDimensionHooks();
+    registerCgsCapabilityRefreshHooks();
+    registerCgsEffectiveCreatureTypesGmHooks(Hooks.on.bind(Hooks));
 
     // Register custom Document classes
     CONFIG.Actor.documentClass = ThirdEraActor;
@@ -134,6 +175,17 @@ Hooks.once("init", async function () {
             openDialog: () => ApplyDamageHealingDialog.openForSelection(),
             openWithOptions: (options) => ApplyDamageHealingDialog.openWithOptions(options)
         };
+        const cgsEffDeps = createDefaultEffectiveCreatureTypesGmDeps();
+        game.thirdera.effectiveCreatureTypes = {
+            get: getEffectiveCreatureTypes,
+            getFromActor: getEffectiveCreatureTypesFromActor,
+            includesUuid: effectiveCreatureTypesIncludeUuid,
+            includesAnyUuid: effectiveCreatureTypesIncludeAnyUuid,
+            getDisplayText: (actor) => buildEffectiveCreatureTypesDisplayText(actor?.system, cgsEffDeps),
+            notify: (actor) => notifyEffectiveCreatureTypesForActor(actor, cgsEffDeps),
+            notifyForSelectedTokens: () => notifyEffectiveCreatureTypesForSelectedTokens(cgsEffDeps)
+        };
+        game.thirdera.refreshTypedDefenseCatalogCache = () => refreshTypedDefenseCatalogCache(game);
     });
 
     // Define THIRDERA configuration
@@ -228,6 +280,65 @@ Hooks.once("init", async function () {
             blindsense: "Blindsense",
             tremorsense: "Tremorsense"
         },
+        /**
+         * Energy types for resistance/immunity/vulnerability (Phase 5e CGS).
+         * Future: may be replaced or augmented by compendium catalog Items; keep grant `energyType` keys stable or migrate with care — see plans/cgs-phased-implementation.md § Future — Typed defense catalogs.
+         */
+        energyTypes: {
+            acid: "Acid",
+            cold: "Cold",
+            electricity: "Electricity",
+            fire: "Fire",
+            sonic: "Sonic"
+        },
+        /**
+         * Immunity tags for CGS immunity grants (Phase 5e). Machine keys; display strings here feed CGS label deps.
+         * Future: catalog Items or hybrid — same plan section as `energyTypes`.
+         */
+        immunityTags: {
+            fire: "Fire",
+            cold: "Cold",
+            electricity: "Electricity",
+            acid: "Acid",
+            sonic: "Sonic",
+            poison: "Poison",
+            disease: "Disease",
+            sleep: "Sleep effects",
+            paralysis: "Paralysis",
+            stunning: "Stunning",
+            criticalHits: "Critical hits",
+            flanking: "Flanking",
+            mindAffecting: "Mind-affecting effects",
+            fear: "Fear",
+            charmCompulsion: "Charm and compulsion",
+            death: "Death effects",
+            necromancy: "Necromancy effects",
+            energyDrain: "Energy drain",
+            abilityDamage: "Ability damage",
+            abilityDrain: "Ability drain",
+            exhaustion: "Exhaustion and fatigue",
+            petrification: "Petrification",
+            polymorph: "Polymorph",
+            magicSleep: "Magic sleep effects"
+        },
+        /**
+         * DR bypass qualifiers for damage reduction grants (Phase 5e CGS).
+         * Future: catalog Items or hybrid — same plan section as `energyTypes`.
+         */
+        drBypassTypes: {
+            magic: "Magic",
+            epic: "Epic",
+            adamantine: "Adamantine",
+            silver: "Silver",
+            coldIron: "Cold iron",
+            bludgeoning: "Bludgeoning",
+            piercing: "Piercing",
+            slashing: "Slashing",
+            good: "Good",
+            evil: "Evil",
+            lawful: "Lawful",
+            chaotic: "Chaotic"
+        },
         /** Treasure presets for NPC/monster reference (Phase F). Custom text allowed via sheet. */
         treasure: {
             "": "—",
@@ -307,7 +418,11 @@ Hooks.once("init", async function () {
         /** Canonical modifier keys for the unified modifier system. See module/logic/modifier-aggregation.mjs and docs-site/development.md. */
         modifierKeys: null,
         /** Registry of modifier-source providers: (actor) => Array<{ label, changes }>. Populated at init by modifier-aggregation. */
-        modifierSourceProviders: []
+        modifierSourceProviders: [],
+        /** Frozen list of CGS output category keys. Set at init by capability-aggregation. */
+        capabilityGrantCategoryIds: null,
+        /** Registry of capability grant providers: (actor) => contributions[]. Phase 1: empty; later phases add built-ins. */
+        capabilitySourceProviders: []
     };
 
     // Register World Settings
@@ -354,6 +469,24 @@ Hooks.once("init", async function () {
         default: true
     });
 
+    game.settings.register("thirdera", "reimportCompendiumJsonEachLoad", {
+        name: "THIRDERA.Settings.ReimportCompendiumJsonEachLoad.Name",
+        hint: "THIRDERA.Settings.ReimportCompendiumJsonEachLoad.Hint",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register("thirdera", "logClientBootstrapTiming", {
+        name: "THIRDERA.Settings.LogClientBootstrapTiming.Name",
+        hint: "THIRDERA.Settings.LogClientBootstrapTiming.Hint",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     // Register data models
     CONFIG.Actor.dataModels = {
         character: CharacterData,
@@ -374,7 +507,8 @@ Hooks.once("init", async function () {
         school: SchoolData,
         condition: ConditionData,
         creatureType: CreatureTypeData,
-        subtype: SubtypeData
+        subtype: SubtypeData,
+        defenseCatalog: DefenseCatalogData
     };
 
     // Register item type labels for the creation menu
@@ -392,7 +526,8 @@ Hooks.once("init", async function () {
         school: "THIRDERA.TYPES.Item.school",
         condition: "THIRDERA.TYPES.Item.condition",
         creatureType: "THIRDERA.TYPES.Item.creatureType",
-        subtype: "THIRDERA.TYPES.Item.subtype"
+        subtype: "THIRDERA.TYPES.Item.subtype",
+        defenseCatalog: "THIRDERA.TYPES.Item.defenseCatalog"
     };
 
     // Register sheet application classes
@@ -415,12 +550,55 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/scaling-table.hbs",
         "systems/thirdera/templates/partials/spell-search.hbs",
         "systems/thirdera/templates/partials/mechanical-effects-table.hbs",
+        "systems/thirdera/templates/partials/mechanical-apply-scope.hbs",
+        "systems/thirdera/templates/partials/cgs-merged-senses.hbs",
+        "systems/thirdera/templates/partials/cgs-legacy-statblock-senses.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-spell-grants.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses.hbs",
+        "systems/thirdera/templates/partials/cgs-merged-typed-defenses.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-type-overlays.hbs",
+        "systems/thirdera/templates/partials/cgs-merged-type-overlays.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-actor-type-overlays.hbs",
+        "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs",
+        "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs",
+        "systems/thirdera/templates/partials/spells-ready-cgs-grant-global-section.hbs",
+        "systems/thirdera/templates/partials/item-mechanical-creature-gate.hbs",
+        "systems/thirdera/templates/partials/spell-creature-type-targeting.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs",
         "systems/thirdera/templates/apps/skill-picker-dialog.hbs"
     ]);
 
     // Register modifier-source providers after CONFIG.THIRDERA exists
     registerModifierSourceProviders();
+    registerCapabilitySourceProviders();
+    CONFIG.THIRDERA.capabilitySourceProviders.push(
+        cgsNpcStatBlockSensesProvider,
+        cgsNpcStatBlockDamageReductionProvider,
+        cgsActorCgsGrantsSensesProvider,
+        cgsActorCgsGrantsTypeOverlaysProvider,
+        cgsConditionsCapabilityProvider,
+        cgsEmbeddedItemGrantsProvider,
+        cgsGrantedClassFeatureGrantsProvider
+    );
+
+    async function scheduleTypedDefenseCatalogRefresh() {
+        if (typeof game === "undefined" || !game?.thirdera) return;
+        try {
+            await refreshTypedDefenseCatalogCache(game);
+        } catch (e) {
+            console.warn("Third Era | defense label maps refresh failed:", e);
+        }
+    }
+    Hooks.on("createItem", (doc) => {
+        if (doc?.type === "defenseCatalog") void scheduleTypedDefenseCatalogRefresh();
+    });
+    Hooks.on("updateItem", (doc) => {
+        if (doc?.type === "defenseCatalog") void scheduleTypedDefenseCatalogRefresh();
+    });
+    Hooks.on("deleteItem", (doc) => {
+        if (doc?.type === "defenseCatalog") void scheduleTypedDefenseCatalogRefresh();
+    });
 
     console.log("Third Era | System initialized");
 });
@@ -489,14 +667,16 @@ function resolveIndexImgPaths(index) {
     }
 }
 
-function applyCompendiumImageRouteFix() {
-    for (const pack of game.packs) {
+/** After resolving index img paths, rebuild compendium trees in small batches so ready can paint sooner. */
+const COMPENDIUM_TREE_REBUILD_CHUNK = 4;
+
+async function applyCompendiumImageRouteFix() {
+    const packs = [...game.packs];
+    for (const pack of packs) {
         if (!pack?.collection?.index) continue;
 
         // Resolve img on the index already in memory (from metadata at load).
         resolveIndexImgPaths(pack.collection.index);
-        // Force tree rebuild so directory UI uses entries with resolved img (tree is built from index.contents).
-        pack.initializeTree();
 
         const origGetIndex = pack.collection.getIndex.bind(pack.collection);
         pack.collection.getIndex = async function (options) {
@@ -505,6 +685,15 @@ function applyCompendiumImageRouteFix() {
             this.initializeTree();
             return index;
         };
+    }
+
+    for (let i = 0; i < packs.length; i += COMPENDIUM_TREE_REBUILD_CHUNK) {
+        const slice = packs.slice(i, i + COMPENDIUM_TREE_REBUILD_CHUNK);
+        for (const pack of slice) {
+            if (!pack?.collection?.index) continue;
+            pack.initializeTree();
+        }
+        if (i + COMPENDIUM_TREE_REBUILD_CHUNK < packs.length) await yieldToMain();
     }
 
     const base = window.location?.origin ?? "";
@@ -571,21 +760,45 @@ function applyCompendiumImageRouteFix() {
  * Ready hook
  */
 Hooks.once("ready", async function () {
+    const t0 = performance.now();
+    let logBootstrap = false;
+    try {
+        logBootstrap =
+            typeof game !== "undefined" && game.settings.get("thirdera", "logClientBootstrapTiming") === true;
+    } catch {
+        /* Setting not registered yet or unavailable — skip timing logs */
+    }
+    const mark = (label) => {
+        if (logBootstrap) console.log(`Third Era | ready +${(performance.now() - t0).toFixed(0)}ms — ${label}`);
+    };
+
     console.log("Third Era | System ready");
-    
+    mark("start");
+
     // Load compendiums from JSON files if they're empty
     await CompendiumLoader.init();
+    mark("after CompendiumLoader.init");
+    // GM migrations (race stock/qualitative rows, Phase 6 NPC stat-block senses) can take many seconds
+    // (compendium getDocuments + per-document updates). Run them after the awaited ready chain so Foundry
+    // can finish ready and the sidebar/UI stay responsive; migrations remain idempotent and converge the same.
     // Resolve compendium index img paths so thumbnails work from /game.
-    applyCompendiumImageRouteFix();
-    // Build CONFIG.statusEffects from condition items so Token HUD and toggleStatusEffect work
-    await buildConditionStatusEffects();
-    // Populate domain-spells cache so getSpellsForDomain is sync in prepareDerivedData
-    await populateCompendiumCache();
-    // Sync HP-derived and combat-derived conditions so actors load with correct state
-    for (const actor of (game.actors?.contents ?? [])) {
-        if (actor.system?.attributes?.hp) await syncDerivedHpCondition(actor);
+    await applyCompendiumImageRouteFix();
+    mark("after compendium index / tree");
+    // Condition status effects + domain spell cache: independent I/O; run in parallel.
+    await Promise.all([buildConditionStatusEffects(), populateCompendiumCache()]);
+    mark("after condition statusEffects + domain-spells cache");
+    try {
+        await refreshTypedDefenseCatalogCache(game);
+    } catch (e) {
+        console.warn("Third Era | defense label maps initial refresh failed:", e);
     }
+    mark("after defense label maps cache");
+    // Sync HP-derived and combat-derived conditions so actors load with correct state
+    const actorsWithHp = (game.actors?.contents ?? []).filter((a) => a.system?.attributes?.hp);
+    await Promise.all(actorsWithHp.map((actor) => syncDerivedHpCondition(actor)));
+    mark("after HP-derived conditions");
     await syncFlatFootedForCombat();
+    mark("after flat-footed sync");
     // Re-render actor sheets so conditions and Ready to cast show on initial load.
     // Include sheets that are not yet rendered (no app.rendered check) so restored windows get correct data.
     function reRenderActorSheets() {
@@ -600,8 +813,56 @@ Hooks.once("ready", async function () {
         }
     }
     reRenderActorSheets();
+    mark("after initial actor sheet re-render");
     // Staggered re-renders so sheets that register or finish restoring after ready are caught
     [0, 100, 300].forEach((delay) => setTimeout(reRenderActorSheets, delay));
+    mark("ready hook await chain finished (staggered re-renders scheduled)");
+
+    setTimeout(() => {
+        void (async () => {
+            await yieldToMain();
+            try {
+                const raceDelta = await migrateAllRaceStockDeltas({ game });
+                if (!raceDelta.skipped && (raceDelta.compendiumUpdated + raceDelta.worldUpdated + raceDelta.actorsUpdated) > 0) {
+                    console.log(
+                        "Third Era | Race SRD mechanical rows merged (existing items preserved): " +
+                            `compendium ${raceDelta.compendiumUpdated} updated, ` +
+                            `world ${raceDelta.worldUpdated} updated, ` +
+                            `embedded ${raceDelta.actorsUpdated} updated`
+                    );
+                }
+            } catch (e) {
+                console.warn("Third Era | Race stock delta migration error:", e);
+            }
+            await yieldToMain();
+            try {
+                const raceQual = await migrateAllRaceQualitativeTraits({ game });
+                if (!raceQual.skipped && (raceQual.compendiumUpdated + raceQual.worldUpdated + raceQual.actorsUpdated) > 0) {
+                    console.log(
+                        "Third Era | Race qualitative traits (reference HTML) merged into empty fields: " +
+                            `compendium ${raceQual.compendiumUpdated} updated, ` +
+                            `world ${raceQual.worldUpdated} updated, ` +
+                            `embedded ${raceQual.actorsUpdated} updated`
+                    );
+                }
+            } catch (e) {
+                console.warn("Third Era | Race qualitative traits migration error:", e);
+            }
+            await yieldToMain();
+            try {
+                const npcCgs = await migrateAllNpcPhase6StatBlockSenses({ game });
+                if (!npcCgs.skipped && (npcCgs.worldUpdated > 0 || npcCgs.compendiumUpdated > 0)) {
+                    console.log(
+                        "Third Era | Phase 6 NPC senses: merged legacy stat block into CGS — " +
+                            `world actors ${npcCgs.worldUpdated}, monsters compendium ${npcCgs.compendiumUpdated}`
+                    );
+                }
+            } catch (e) {
+                console.warn("Third Era | Phase 6 NPC CGS sense migration error:", e);
+            }
+            mark("after migrations (deferred)");
+        })();
+    }, 0);
 });
 
 /**
@@ -642,7 +903,6 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
     if (document.type === "condition") {
         const conditionId = (document.system?.conditionId ?? "").trim().toLowerCase();
         if (conditionId && game.actors) {
-            const actorIdsWithCondition = new Set();
             for (const actor of game.actors) {
                 const effects = actor.effects ?? [];
                 const has = effects.some((e) => {
@@ -651,30 +911,18 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
                     if (Array.isArray(s)) return s.includes(conditionId);
                     return false;
                 });
-                if (has) {
-                    actorIdsWithCondition.add(actor.id);
-                    await actor.prepareData();
-                }
-            }
-            const instances = foundry.applications?.instances;
-            if (instances) {
-                const actorFromApp = (app) => {
-                    const a = app.actor ?? app.document;
-                    return a && typeof a.effects !== "undefined" && a.id ? a : null;
-                };
-                for (const app of instances.values()) {
-                    const actor = actorFromApp(app);
-                    if (!actor || !actorIdsWithCondition.has(actor.id)) continue;
-                    await actor.prepareData();
-                    if (app.rendered) await app.render({ force: true });
-                }
+                if (has) await refreshCapabilityGrantsForActor(actor, cgsRefreshDeps);
             }
         }
         return;
     }
+    if (document.type === "race") {
+        await refreshCapabilityGrantDependentsFromItem(document, cgsRefreshDeps);
+        return;
+    }
     // Resolve parent actor: (1) document.parent/actor/collection.parent, (2) parse UUID "Actor.actorId.Item.itemId", or (3) resolve via fromUuid (embedded doc may have .parent).
     let actor = null;
-    if (document.type === "feat") {
+    if (document.type === "feat" || document.type === "feature") {
         actor = document.parent ?? document.actor ?? document.collection?.parent ?? null;
         if (!actor && document.uuid && typeof game !== "undefined" && game.actors) {
             const parts = String(document.uuid).split(".");
@@ -689,18 +937,12 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
             }
         }
     }
-    if (document.type === "feat" && actor) {
-        await actor.prepareData();
-        const instances = foundry.applications?.instances;
-        if (instances) {
-            for (const app of instances.values()) {
-                const appActor = app.actor ?? app.document;
-                if (appActor?.id === actor.id && app.rendered) {
-                    await app.render({ force: true });
-                    break;
-                }
-            }
-        }
+    if ((document.type === "feat" || document.type === "feature") && actor) {
+        await refreshCapabilityGrantsForActor(actor, cgsRefreshDeps);
+        return;
+    }
+    if (document.type === "feature" && !document.isEmbedded) {
+        await refreshCapabilityGrantDependentsFromWorldFeatureItem(document, cgsRefreshDeps);
         return;
     }
     // Armor, weapon, equipment: when an owned item is updated, refresh the actor so AC and other derived stats update.
@@ -717,7 +959,6 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
             }
         }
         // Fallback: world item (uuid "Item.xxx") — find any actor that has an item with this id.
-        let foundByScan = false;
         const actorsToCheck = [...(game.actors?.contents ?? game.actors ?? [])];
         if (typeof canvas !== "undefined" && canvas.scene?.tokens) {
             for (const token of canvas.scene.tokens) {
@@ -730,7 +971,6 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
                 const hasItem = a.items?.get(document.id);
                 if (hasItem) {
                     armorActor = a;
-                    foundByScan = true;
                     break;
                 }
             }
@@ -776,24 +1016,25 @@ Hooks.on("updateItem", async (document, changes, options, userId) => {
                 if (byName.length > 0) matching = byName;
                 else if (equippedArmor.length === 1) matching = equippedArmor;
             }
-            for (const item of matching) {
-                await item.update({ system: systemData });
-            }
-            await a.prepareData();
-            const instances = foundry.applications?.instances;
-            if (instances) {
-                for (const app of instances.values()) {
-                    const appActor = app.actor ?? app.document;
-                    if (appActor?.id === a.id && app.rendered) {
-                        await app.render({ force: true });
-                        break;
-                    }
+            // World/pack items: push template system onto matching embedded copies. Embedded updates must not run this
+            // (redundant; matching-by-name can also hit unrelated rows).
+            if (!document.isEmbedded) {
+                for (const item of matching) {
+                    await item.update({ system: systemData });
                 }
             }
+            await refreshCapabilityGrantsForActor(a, cgsRefreshDeps);
         }
         return;
     }
-    if (document.type !== "spell") return;
+    if (document.type !== "spell") {
+        const skipCgsParentRefresh = new Set(["condition", "feat", "feature", "armor", "weapon", "equipment", "race"]);
+        if (!skipCgsParentRefresh.has(document.type)) {
+            const pa = await resolveParentActorForItem(document, cgsRefreshDeps);
+            if (pa) await refreshCapabilityGrantsForActor(pa, cgsRefreshDeps);
+        }
+        return;
+    }
     await populateCompendiumCache();
     const instances = foundry.applications?.instances;
     if (!instances) return;

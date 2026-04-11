@@ -72,20 +72,7 @@
         "bypass": "-"
       },
       "spellResistance": 21,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        },
-        {
-          "type": "scent",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Special Attacks:</strong> Trample 2d6+12, vorpal tusks</p><p><strong>Special Qualities:</strong> Damage reduction 5/-, darkvision 60 ft., fast healing 10,low-light vision, scent, spell resistance 21</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Temperate or warm forest or mountains",
       "organization": "Solitary",
@@ -146,6 +133,24 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

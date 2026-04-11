@@ -74,12 +74,7 @@
         "bypass": ""
       },
       "spellResistance": 14,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:hag.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Hag\"><h4>SRD type: Hag</h4><p>\n\tAlthough different hags are unique in appearance and mannerism, they have many aspects in common. All take the form of crones whose bent shapes belie their fierce power and swiftness.\n</p>\n<p>\n\tHags speak Giant and Common.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tHags are tremendously strong. They are naturally resistant to spells and can cast magic of their own. Hags often gather to form coveys. A covey, usually containing one hag of each type, can use powers beyond those of the individual members.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Horrific appearance, evil eye</p><p><strong>Special Qualities:</strong> Amphibious, spell resistance 14, darkvision 60 ft.</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Temperate aquatic",
       "organization": "Solitary or covey (3 hags of any kind plus 1-8 ogres and 1-4 evil giants)",
@@ -140,6 +135,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

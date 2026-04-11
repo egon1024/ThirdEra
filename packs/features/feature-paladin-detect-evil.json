@@ -6,7 +6,18 @@
   "system": {
     "description": "<p>Use detect evil at will, as the spell.</p>",
     "key": "paladinDetectEvil",
-    "scalingTable": []
+    "scalingTable": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "spellGrant",
+          "spellKey": "detectEvil",
+          "atWill": true,
+          "label": "At will as detect evil (SRD paladin)."
+        }
+      ],
+      "senses": []
+    }
   },
   "flags": {},
   "folder": null,

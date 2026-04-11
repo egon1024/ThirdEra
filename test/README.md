@@ -26,9 +26,14 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 | `module/logic/feat-prerequisites.mjs` (`actorHasFeatByUuid`, `meetsFeatPrerequisites` with stubbed `foundry` / `game` / `CONFIG`) | `unit/logic/feat-prerequisites.test.mjs` |
 | `module/logic/modifier-aggregation.mjs` (`isCanonicalModifierKey`, `getActiveModifiers` with stubbed `CONFIG`) | `unit/logic/modifier-aggregation.test.mjs` |
 | `module/logic/rest-healing.mjs` (`computeRestHealing` with mocked `getActiveModifiers`) | `unit/logic/rest-healing.test.mjs` |
-| `module/logic/condition-helpers.mjs` (`getActiveConditionModifiers` only) | `unit/logic/condition-helpers.test.mjs` |
+| `module/logic/condition-helpers.mjs` (`getActiveConditionModifiers`, `getActorEffectsList`, `getEffectStatusIds`) | `unit/logic/condition-helpers.test.mjs` |
+| `module/logic/cgs-conditions-capability-provider.mjs` | `unit/logic/cgs-conditions-capability-provider.test.mjs` |
+| `module/logic/cgs-embedded-item-grants-provider.mjs` | `unit/logic/cgs-embedded-item-grants-provider.test.mjs` (includes `CGS invariant: grants follow sources` — no actor orphan revocation) |
+| `module/logic/cgs-owned-item-grants.mjs` (`getEffectiveOwnedItemCgsGrants`, `mapCgsSensesRowsToSenseGrants`) | `unit/logic/cgs-owned-item-grants.test.mjs` |
+| `module/logic/cgs-stale-item-sheet-sync.mjs` (pack sheet vs live `Item` — `updateSource` sync helpers) | `unit/logic/cgs-stale-item-sheet-sync.test.mjs` |
 | `module/logic/derived-conditions.mjs` (`getDerivedHpConditionId`, `getDerivedFrom` only) | `unit/logic/derived-conditions.test.mjs` |
 | `module/logic/monster-pack-keys.mjs` (`resolveMonsterPackNpcKeys`) | `unit/logic/monster-pack-keys.test.mjs` |
+| `module/logic/client-main-thread-cooperation.mjs` (`yieldToMain`, `runWithConcurrencyLimit`) | `unit/logic/client-main-thread-cooperation.test.mjs` |
 | `module/logic/token-dimensions-from-size.mjs` | `unit/logic/token-dimensions-from-size.test.mjs` |
 | `module/logic/token-dimensions-from-size-hooks.mjs` (handlers + `registerTokenDimensionHooks`) | `unit/logic/token-dimensions-from-size-hooks.test.mjs` |
 | `module/logic/npc-skill-prep.mjs` (`prepareNpcSkillItems`, `buildModifierOnlySkills`, `skillMiscBreakdownLabel`, `resolvedSkillMiscLineLabel`) | `unit/logic/npc-skill-prep.test.mjs` |
@@ -42,12 +47,12 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 
 These modules are **intentionally excluded** from Node unit tests until logic is extracted or **Quench** (in-Foundry) tests exist:
 
-- **`module/logic/`** — `spell-sr-from-chat`, `spell-save-from-chat`, `concentration-from-chat`, `character-system-source-backfill` (`foundry.utils`), `apply-damage-healing` / `apply-damage-healing-entry-points`, `auto-granted-feats`, `domain-spells`, `compendium-loader`, `audit-log`, `class-spell-list` (async `game` / packs), `derived-conditions` (`sync*` / `isFlatFootedFromCombat` — use `game.combat`), `condition-helpers` (`getConditionItemsMap*`).
+- **`module/logic/`** — `spell-sr-from-chat`, `spell-save-from-chat`, `concentration-from-chat`, `character-system-source-backfill` (`foundry.utils`), `apply-damage-healing` / `apply-damage-healing-entry-points`, `auto-granted-feats`, `domain-spells`, `compendium-loader`, `cgs-phase6-npc-world-migrate` (GM `game` / `Actor#update` on ready), `audit-log`, `class-spell-list` (async `game` / packs), `derived-conditions` (`sync*` / `isFlatFootedFromCombat` — use `game.combat`), `condition-helpers` (`getConditionItemsMap*`).
 - **`module/data/_ac-helpers.mjs`** — Uses `CONFIG.THIRDERA.sizeModifiers` and `system.parent.items` (Foundry-shaped graph); test after injecting `CONFIG` or extracting pure pieces.
 - **`module/documents/`**, **`module/sheets/`**, **`module/applications/`**, **`thirdera.mjs`** — Document/sheet/UI layer; future Quench or E2E.
 - **`module/data/*`** (TypeDataModels) — Depend on `foundry.data.fields` at import time.
 
-When you change a **covered** module, add or update tests in the matching `test/unit/**` file. Policy: [`.cursor/rules/automated-tests-for-logic.mdc`](../.cursor/rules/automated-tests-for-logic.mdc).
+When you change a **covered** module, add or update tests in the matching `test/unit/**` file. Policy: [Development — Automated unit tests](../docs-site/development.md#automated-unit-tests) (published summary); maintainer detail may also exist in workspace automation rules when present.
 
 ## Commands
 

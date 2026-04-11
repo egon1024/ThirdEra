@@ -1,0 +1,29 @@
+<div class="cgs-item-grants-panel">
+{{#if hideMechanicsTitle}}
+<h4 class="items-header">{{localize "THIRDERA.CGS.SensesItemHeading"}}</h4>
+{{else}}
+<h4 class="items-header">{{localize "THIRDERA.CGS.SensesMechanicsHeading"}}</h4>
+{{/if}}
+{{!-- Single #with + #each: avoid double #if on senses (empty [] / HB truthiness); keep indexed names for form merge. --}}
+{{!-- Do not use `items-list` here: that class is for actor inventory rows and can disturb paint/stacking on item sheets. --}}
+{{#with system.cgsGrants}}
+<ol class="senses-list cgs-mechanics-senses">
+  {{#each senses as |sense idx|}}
+  <li class="sense flexrow" data-sense-index="{{idx}}">
+    <select name="system.cgsGrants.senses.{{idx}}.type" class="details-input sense-type">
+      <option value="">{{localize 'THIRDERA.CGS.SenseTypePlaceholder'}}</option>
+      {{#each @root.config.senseTypes as |label key|}}
+      <option value="{{key}}" {{#if (eq key sense.type)}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+    <input type="text" name="system.cgsGrants.senses.{{idx}}.range" value="{{sense.range}}"
+      data-dtype="String" class="details-input sense-range" placeholder="{{localize 'THIRDERA.NPC.SenseRange'}}" />
+    <button type="button" class="sense-remove" data-action="removeCgsSense" data-sense-index="{{idx}}" title="{{localize 'THIRDERA.NPC.RemoveSense'}}" aria-label="{{localize 'THIRDERA.NPC.RemoveSense'}}"><i class="fas fa-trash"></i></button>
+  </li>
+  {{/each}}
+</ol>
+{{/with}}
+<div class="cgs-senses-add">
+  <button type="button" class="cgs-sense-add-btn" data-action="addCgsSense" title="{{localize 'THIRDERA.NPC.AddSense'}}"><i class="fas fa-plus"></i> {{localize 'THIRDERA.NPC.AddSense'}}</button>
+</div>
+</div>

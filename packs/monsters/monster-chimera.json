@@ -93,20 +93,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "darkvision",
-          "range": "60 ft."
-        },
-        {
-          "type": "lowLight",
-          "range": ""
-        },
-        {
-          "type": "scent",
-          "range": ""
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<p><strong>Breath weapon (Su):</strong> Dragon head—60 ft. cone, 3d8 fire, Ref DC 17 half (1d4 rounds recharge).</p><p><strong>Full attack:</strong> Bite +11, bite +11, gore +11, 2 claws +9.</p>",
       "environment": "Temperate hills",
       "organization": "Solitary",
@@ -167,6 +154,24 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "darkvision",
+          "range": "60 ft."
+        },
+        {
+          "type": "lowLight",
+          "range": ""
+        },
+        {
+          "type": "scent",
+          "range": ""
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [

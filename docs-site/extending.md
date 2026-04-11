@@ -24,16 +24,24 @@ Configuration that drives sheets and logic (sizes, damage types, movement maneuv
 
 ## Modifier system (adding new sources)
 
-The system uses a **unified modifier pipeline**: conditions, feats, race, and equipped items contribute modifiers through a single aggregation. If you add a new item type or effect that should grant numeric bonuses (e.g. to AC, saves, ability scores, skills), you can plug in without changing core code:
+The system uses a **unified modifier pipeline**: conditions, feats, race, and gear items contribute modifiers through a single aggregation (gear defaults to equipped/wielded only; optional `system.mechanicalApplyScope: "carried"` applies `changes` while the item is on the actor’s inventory, with the same flag used for **capability grants** on that item). If you add a new item type or effect that should grant numeric bonuses (e.g. to AC, saves, ability scores, skills), you can plug in without changing core code:
 
 - **Register a provider:** Push a function `(actor) => Array<{ label, changes }>` to `CONFIG.THIRDERA.modifierSourceProviders`. See [Development — Modifier system](development.md#modifier-system-modulelogicmodifier-aggregationmjs) for the full contract and canonical keys.
 - **Item method:** Implement `getModifierChanges(actor)` on your item type returning `{ applies, changes }`; the built-in item provider will call it and merge when `applies` is true.
 
 **Natural healing (Take rest):** To grant extra hit points recovered per day of rest, use the canonical modifier key **`naturalHealingPerDay`** in `changes` (same shape as other GMS keys). The **Take rest** dialog sums `getActiveModifiers(actor).totals.naturalHealingPerDay` with character level and the character’s **`system.details.naturalHealingBonus`** field. See [Development — Rest and natural healing](development.md#rest-and-natural-healing) and [Character sheet — Spellcasting](usage/characters.md#spellcasting).
 
-**Initiative (combat):** Use the canonical key **`initiative`** in feat, condition, or equipped-item `changes` for flat bonuses or penalties (e.g. Improved Initiative +4, Deafened −4). The character and NPC data models add the aggregated total to Dexterity mod for `attributes.initiative.bonus`. The package **`initiative`** formula in `system.json` must stay aligned with that field (default: `1d20 + @attributes.initiative.bonus`); Foundry evaluates `@` paths from the actor’s roll data (`getRollData()` → system). See [Development — Initiative and combat](development.md#initiative-and-combat).
+**Initiative (combat):** Use the canonical key **`initiative`** in feat, race, condition, or equipped-item `changes` for flat bonuses or penalties (e.g. Improved Initiative +4, Deafened −4). The character and NPC data models add the aggregated total to Dexterity mod for `attributes.initiative.bonus`. The package **`initiative`** formula in `system.json` must stay aligned with that field (default: `1d20 + @attributes.initiative.bonus`); Foundry evaluates `@` paths from the actor’s roll data (`getRollData()` → system). See [Development — Initiative and combat](development.md#initiative-and-combat).
 
 For GM-facing world options (e.g. track currency weight, audit log, first-level full HP), see **[World configuration](usage/world-configuration.md)** in the Usage section.
+
+## Capability grants (CGS)
+
+Structured **non-numeric** effects (senses, spell-like grants, typed defenses, extra creature types, condition-driven suppression, …) live in **`system.cgsGrants`** and merge into derived **`actor.system.cgs`**, parallel to the numeric **modifier** pipeline (`system.changes`). Full contracts and file paths are on **[Development — Capability grants](development.md#capability-grants-structured-effects-parallel-to-the-modifier-system)**.
+
+**Supported vs not yet:** That page lists what the **current** release automates (merged senses, spell grants, DR/resist/immunity readouts, effective type **resolution** + GM/macro helpers, gear apply scope, etc.) and what is still **manual or planned** (type-based combat rules, map vision from effective senses, polymorph replacement semantics, optional compendium catalogs for defense tags). When you ship homebrew or modules that assume type-based automation, check those bullets—if the core behavior is still “not yet,” your content should describe table adjudication or supply its own logic.
+
+**Extender expectation:** If you contribute a **core** change that shifts an item from “not yet” to “supported,” update **Development** and any **Usage** pages that mention the feature so published docs stay in sync.
 
 ## Changing the core code
 

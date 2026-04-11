@@ -840,6 +840,16 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     }
 
     /**
+     * Resolve a feature Item UUID for UI (e.g. actor sheet rows for features granted from class levels).
+     * Same rules as the level-up flow: world item id, compendium document id, full UUID, or featKey fallback.
+     * @param {{ featItemId?: string, featKey?: string }} feature
+     * @returns {Promise<string>} UUID or empty string
+     */
+    static resolveGrantedClassFeatureUuid(feature) {
+        return LevelUpFlow.#resolveFeatureItemUuid(feature);
+    }
+
+    /**
      * Build context for the features step: class features gained at the new class level.
      * @param {LevelUpFlow} flow
      * @returns {Promise<Object>}

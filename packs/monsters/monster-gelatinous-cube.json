@@ -72,12 +72,7 @@
         "bypass": ""
       },
       "spellResistance": 0,
-      "senses": [
-        {
-          "type": "blindsight",
-          "range": "60 ft."
-        }
-      ],
+      "senses": [],
       "specialAbilities": "<!--thirdera-srd-hub-start:ooze.htm--><section class=\"thirdera-srd-hub\" data-hub=\"Ooze\"><h4>SRD type: Ooze</h4><p>\n\t<a href=\"/srd/typesSubtypes.htm#oozeType\">Oozes</a> are amorphous creatures that live only to eat. They inhabit underground areas throughout the world, scouring caverns, ruins, and dungeons in search of organic matter—living or dead.\n</p>\n\n<h3>Combat</h3>\n<p>\n\tOozes attack any creatures they encounter. They lash out with pseudopods or simply engulf opponents with their bodies, which secrete acids that help them catch or digest their prey.\n</p>\n\n<h5><a href=\"/srd/specialAbilities.htm#blindsightAndBlindsense\">Blindsight</a> (<a href=\"/srd/specialAbilities.htm#extraordinaryAbilities\">Ex</a>)</h5>\n<p>\n\tAn ooze’s entire body is a primitive sensory organ that can ascertain prey by scent and vibration within 60 feet.\n</p></section><!--thirdera-srd-hub-end-->\n<p><strong>Special Attacks:</strong> Acid, engulf, paralysis</p><p><strong>Special Qualities:</strong> Blindsight 60 ft., immunity to electricity, ooze traits, transparent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
       "environment": "Underground",
       "organization": "Solitary",
@@ -138,6 +133,16 @@
       "gp": 0,
       "sp": 0,
       "cp": 0
+    },
+    "cgsGrants": {
+      "senses": [
+        {
+          "type": "blindsight",
+          "range": "60 ft."
+        }
+      ],
+      "creatureTypeOverlayUuids": [],
+      "subtypeOverlayUuids": []
     }
   },
   "items": [],

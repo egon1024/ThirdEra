@@ -101,6 +101,12 @@
           {{{enriched.biography}}}
         </prose-mirror>
       </div>
+      {{#if raceOtherTraitsEnriched}}
+      <div class="race-other-traits-description-block">
+        <h3 class="form-header">{{localize "THIRDERA.RaceOtherRacialTraits"}}</h3>
+        <div class="race-other-traits-summary prose">{{{raceOtherTraitsEnriched}}}</div>
+      </div>
+      {{/if}}
     </div>
 
     {{!-- Attributes Tab (formerly Abilities) --}}
@@ -146,6 +152,13 @@
             <label for="system.details.spellResistance" class="details-label">{{localize 'THIRDERA.NPC.SpellResistance'}}</label>
             <input type="number" id="system.details.spellResistance" name="system.details.spellResistance" value="{{system.details.spellResistance}}" data-dtype="Number" min="0" step="1" class="details-input details-input--compact-number" />
           </div>
+          <div class="details-cgs-senses">
+            {{> "systems/thirdera/templates/partials/cgs-merged-senses.hbs"}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs"}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-actor-type-overlays.hbs"}}
+          </div>
+          {{> "systems/thirdera/templates/partials/cgs-merged-typed-defenses.hbs"}}
+          {{> "systems/thirdera/templates/partials/cgs-merged-type-overlays.hbs"}}
         </div>
       </div>
 
@@ -364,10 +377,12 @@
         data-tab="features">
         {{!-- Granted Class Features --}}
         {{#if grantedClassFeatures.length}}
-        <h4 class="feats-section-header">Granted Features</h4>
+        <h4 class="items-header" title="{{localize 'THIRDERA.Features.ActorSheetGrantedFromClassesHint'}}">{{localize 'THIRDERA.Features.ActorSheetGrantedFromClasses'}}</h4>
         <ol class="items-list granted-features-list">
           {{#each grantedClassFeatures as |feat|}}
-          <li class="item flexrow granted-feature">
+          <li class="item flexrow granted-feature granted-class-feature-openable" data-action="openGrantedClassFeature"
+            data-feat-item-id="{{feat.featItemId}}" data-feat-key="{{feat.featKey}}"
+            title="{{localize 'THIRDERA.Features.OpenGrantedClassFeatureSheet'}}">
             <div class="item-name">
               <h4>{{feat.featName}}</h4>
               {{#if feat.scalingValue}}<span class="feature-scaling-value">({{feat.scalingValue}})</span>{{/if}}
@@ -381,7 +396,7 @@
         </ol>
         {{/if}}
         {{!-- Manually-Added Class Features --}}
-        <h4 class="items-header">Class Features</h4>
+        <h4 class="items-header" title="{{localize 'THIRDERA.Features.ActorSheetEmbeddedFeatureItemsHint'}}">{{localize 'THIRDERA.Features.ActorSheetEmbeddedFeatureItems'}}</h4>
         <ol class="items-list">
           {{#each classFeatures as |item id|}}
           <li class="item flexrow" data-item-id="{{item._id}}">
@@ -1058,6 +1073,9 @@
         {{!-- Known / Available panel: roster only, no prepared/cast; Add to ready for full-list --}}
         <div class="subtab spells-known {{#if (eq tabs.spells 'known')}}active{{/if}}" data-group="spells" data-tab="known">
           {{> "systems/thirdera/templates/partials/spell-search.hbs" inputId="spell-known-search" inputName="spellKnownSearch" placeholderKey="THIRDERA.Spells.SearchPlaceholder" noResultsKey="THIRDERA.Spells.SearchNoResults"}}
+          {{#if hasCgsGrantedSpells}}
+          {{> "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs"}}
+          {{/if}}
           {{!-- Manually added spells: not on any class list or domain; e.g. dropped without class assignment --}}
           {{#if hasManuallyAddedSpells}}
             <div class="spellcasting-class manually-added-spells">
@@ -1283,6 +1301,11 @@
             {{/if}}
             {{/if}}
           </div>
+          {{#if hasAnySpellcasting}}
+          {{#if rtcGlobalCgsGrants.hasCgsGrantReadySpellsForRtcSection}}
+            {{> "systems/thirdera/templates/partials/spells-ready-cgs-grant-global-section.hbs" rtcGlobal=rtcGlobalCgsGrants}}
+          {{/if}}
+          {{/if}}
           {{#each readyToCastByClass as |classData|}}
             {{#if classData.hasSpellcasting}}
               <div class="spellcasting-class">
@@ -1294,8 +1317,9 @@
                     <span class="spell-dc">Spell DC: {{classData.baseSpellDC}} + spell level</span>
                   </div>
                 </div>
+                {{> "systems/thirdera/templates/partials/spells-ready-cgs-grant-class-section.hbs" classData=classData}}
                 {{#each classData.spellsByLevel as |spells spellLevel|}}
-                  {{#if (or spells.length (gt (lookup classData.spellsPerDay spellLevel) 0))}}
+                  {{#if (lookup classData.rtcLevelVisible spellLevel)}}
                     <div class="spell-level-group{{#if (lookup classData.spellsKnownOverLimit spellLevel)}} spell-level-over-limit{{/if}}">
                       <div class="spell-level-header">
                         <h5>{{#if (eq spellLevel "0")}}0-Level (Cantrips/Orisons){{else}}{{ordinal spellLevel}} Level{{/if}}</h5>

@@ -1,0 +1,41 @@
+{
+  "_id": "armor-full-plate-adamantine",
+  "name": "Adamantine Full Plate",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "description": "<p>This nonmagical full plate is made of adamantine, giving it its natural properties. Heavy adamantine armor grants damage reduction 3/—. This suit is also masterwork: armor check penalty reduced by 1 and arcane spell failure reduced by 10% compared to a standard full plate.</p>",
+    "armor": {
+      "type": "heavy",
+      "bonus": 8,
+      "maxDex": 1,
+      "checkPenalty": -5,
+      "spellFailure": 25
+    },
+    "size": "Medium",
+    "speed": {
+      "ft30": 20,
+      "ft20": 15
+    },
+    "cost": 16500,
+    "weight": 50,
+    "quantity": 1,
+    "equipped": "false",
+    "containerId": "",
+    "mechanicalApplyScope": "equipped",
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "damageReduction",
+          "value": 3,
+          "bypass": "",
+          "label": "Adamantine heavy armor (SRD)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null,
+  "sort": 106
+}
