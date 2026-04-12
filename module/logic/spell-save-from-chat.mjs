@@ -4,25 +4,9 @@
  * Phase B: per-target "Roll save (Name)" buttons when message has targetActorUuids.
  */
 
-const ROLL_SAVE_BUTTON_SELECTOR = ".thirdera-spell-save-from-chat";
+import { getSpellCastDataFromMessage } from "./spell-save-from-chat-helpers.mjs";
 
-/**
- * Get spell-cast payload from a chat message if it has a save type.
- * @param {ChatMessage} message
- * @returns {{ dc: number, saveType: string, spellName: string, targetActorUuids?: string[] }|null}
- */
-function getSpellCastDataFromMessage(message) {
-    const spellCast = message?.flags?.thirdera?.spellCast;
-    if (!spellCast || spellCast.saveType == null) return null;
-    const dc = spellCast.dc;
-    if (typeof dc !== "number" || !Number.isFinite(dc)) return null;
-    return {
-        dc: spellCast.dc,
-        saveType: spellCast.saveType,
-        spellName: spellCast.spellName ?? "",
-        targetActorUuids: Array.isArray(spellCast.targetActorUuids) ? spellCast.targetActorUuids : []
-    };
-}
+const ROLL_SAVE_BUTTON_SELECTOR = ".thirdera-spell-save-from-chat";
 
 /**
  * Actors the user can roll a save for (owned or GM sees all).

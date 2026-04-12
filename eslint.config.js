@@ -46,11 +46,20 @@ const foundryClientGlobals = {
     jQuery: "readonly",
     /** Legacy global alias still referenced in some sheets */
     fromUuid: "readonly",
+    /** Common Foundry document classes referenced in hooks / sheets without import */
+    ActiveEffect: "readonly",
+    TokenDocument: "readonly",
 };
 
 export default [
     {
         ignores: ["**/node_modules/**", "coverage/**"],
+    },
+    {
+        linterOptions: {
+            // Surface stale `eslint-disable` / `eslint-disable-next-line` comments as warnings.
+            reportUnusedDisableDirectives: "warn"
+        }
     },
     {
         files: ["test/**/*.mjs"],

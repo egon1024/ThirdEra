@@ -22,6 +22,7 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 | `module/logic/concentration-dcs.mjs` | `unit/logic/concentration-dcs.test.mjs` |
 | `module/logic/xp-table.mjs` | `unit/logic/xp-table.test.mjs` |
 | `module/logic/spell-resistance-helpers.mjs` | `unit/logic/spell-resistance-helpers.test.mjs` |
+| `module/logic/spell-save-from-chat-helpers.mjs` (`getSpellCastDataFromMessage`) | `unit/logic/spell-save-from-chat-helpers.test.mjs` |
 | `module/logic/spell-save-helpers.mjs` | `unit/logic/spell-save-helpers.test.mjs` |
 | `module/logic/spell-search.mjs` | `unit/logic/spell-search.test.mjs` |
 | `module/logic/spell-description-parser.mjs` | `unit/logic/spell-description-parser.test.mjs` |
@@ -49,7 +50,7 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 
 These modules are **intentionally excluded** from Node unit tests until logic is extracted or **Quench** (in-Foundry) tests exist:
 
-- **`module/logic/`** — `spell-sr-from-chat`, `spell-save-from-chat`, `concentration-from-chat`, `character-system-source-backfill` (`foundry.utils`), `apply-damage-healing` / `apply-damage-healing-entry-points`, `auto-granted-feats`, `domain-spells`, `compendium-loader`, `cgs-phase6-npc-world-migrate` (GM `game` / `Actor#update` on ready), `audit-log`, `class-spell-list` (async `game` / packs), `derived-conditions` (`sync*` / `isFlatFootedFromCombat` — use `game.combat`), `condition-helpers` (`getConditionItemsMap*`).
+- **`module/logic/`** — `spell-sr-from-chat`, `spell-save-from-chat` (chat hooks / DOM only — **`spell-save-from-chat-helpers.mjs`** is covered in Vitest), `concentration-from-chat`, `character-system-source-backfill` (`foundry.utils`), `apply-damage-healing` / `apply-damage-healing-entry-points`, `auto-granted-feats`, `domain-spells`, `compendium-loader`, `cgs-phase6-npc-world-migrate` (GM `game` / `Actor#update` on ready), `audit-log`, `class-spell-list` (async `game` / packs), `derived-conditions` (`sync*` / `isFlatFootedFromCombat` — use `game.combat`), `condition-helpers` (`getConditionItemsMap*`).
 - **`module/data/_ac-helpers.mjs`** — Uses `CONFIG.THIRDERA.sizeModifiers` and `system.parent.items` (Foundry-shaped graph); test after injecting `CONFIG` or extracting pure pieces.
 - **`module/documents/`**, **`module/sheets/`**, **`module/applications/`**, **`thirdera.mjs`** — Document/sheet/UI layer; future Quench or E2E.
 - **`module/data/*`** (TypeDataModels) — Depend on `foundry.data.fields` at import time.
