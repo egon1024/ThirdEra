@@ -37,7 +37,6 @@ import { migrateAllNpcPhase6StatBlockSenses } from "./module/logic/cgs-phase6-np
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
 import { yieldToMain } from "./module/logic/client-main-thread-cooperation.mjs";
 import {
-    syncDerivedFlatFootedCondition,
     syncDerivedHpCondition,
     syncFlatFootedForCombat,
     removeDerivedFlatFooted
@@ -96,7 +95,7 @@ function initHpAutoIncrease() {
     const updatingHp = new Set();
     
     // Capture old max HP before update
-    Hooks.on("preUpdateActor", (document, changes, options, userId) => {
+    Hooks.on("preUpdateActor", (document, changes, _options, _userId) => {
         // Only track character actors
         if (document.type !== "character") return;
         
@@ -112,7 +111,7 @@ function initHpAutoIncrease() {
     });
     
     // Adjust current HP after update (prepareDerivedData has run by this point)
-    Hooks.on("updateActor", async (document, changes, options, userId) => {
+    Hooks.on("updateActor", async (document, changes, _options, _userId) => {
         // Only process character actors
         if (document.type !== "character") return;
         
@@ -719,7 +718,7 @@ async function applyCompendiumImageRouteFix() {
     };
 
     // Run when compendium app renders.
-    Hooks.on("renderApplication", (app, html, data) => {
+    Hooks.on("renderApplication", (app, html, _data) => {
         if (!app?.options?.id?.startsWith("compendium-")) return;
         fixThumbnailsIn(app?.element ?? html);
         setTimeout(() => fixThumbnailsIn(app?.element), 0);
@@ -804,11 +803,9 @@ Hooks.once("ready", async function () {
     function reRenderActorSheets() {
         const instances = foundry.applications?.instances;
         if (!instances) return;
-        let count = 0;
         for (const app of instances.values()) {
             if (app.document?.documentName === "Actor" && game.system?.id === "thirdera") {
                 app.render(true);
-                count++;
             }
         }
     }
@@ -868,7 +865,7 @@ Hooks.once("ready", async function () {
 /**
  * Sync HP-derived conditions (dead, dying, disabled, stable) when actor HP or stable flag changes.
  */
-Hooks.on("updateActor", async (document, changes, options, userId) => {
+Hooks.on("updateActor", async (document, changes, _options, _userId) => {
     const flat = foundry.utils.flattenObject(changes);
     if ("system.attributes.hp.value" in flat || "system.attributes.hp.stable" in flat) {
         await syncDerivedHpCondition(document);
@@ -878,7 +875,7 @@ Hooks.on("updateActor", async (document, changes, options, userId) => {
 /**
  * Sync flat-footed from combat when combat turn or combatants change.
  */
-Hooks.on("updateCombat", async (combat, changes, options, userId) => {
+Hooks.on("updateCombat", async (combat, changes, _options, _userId) => {
     const flat = foundry.utils.flattenObject(changes);
     if ("turn" in flat || "combatants" in flat || "round" in flat) {
         await syncFlatFootedForCombat();
@@ -888,7 +885,7 @@ Hooks.on("updateCombat", async (combat, changes, options, userId) => {
 /**
  * Remove combat-derived flat-footed from all actors when combat ends.
  */
-Hooks.on("deleteCombat", async (combat, options, userId) => {
+Hooks.on("deleteCombat", async (combat, _options, _userId) => {
     for (const c of (combat.combatants ?? [])) {
         const actor = c.actor ?? game.actors.get(c.actorId);
         if (actor) await removeDerivedFlatFooted(actor);
@@ -899,7 +896,7 @@ Hooks.on("deleteCombat", async (combat, options, userId) => {
  * When a spell is updated (e.g. levelsByDomain changed), refresh the domain-spells cache and
  * re-render any open domain sheets so the "Granted spells" list updates immediately.
  */
-Hooks.on("updateItem", async (document, changes, options, userId) => {
+Hooks.on("updateItem", async (document, _changes, _options, _userId) => {
     if (document.type === "condition") {
         const conditionId = (document.system?.conditionId ?? "").trim().toLowerCase();
         if (conditionId && game.actors) {
@@ -1060,7 +1057,7 @@ Hooks.on("hotbarDrop", (bar, data, slot) => {
  * @param {number} slot   The hotbar slot
  */
 async function createThirdEraMacro(data, slot) {
-    const { rollType, actorId, itemId, itemName, sceneId, tokenId, classItemId, spellLevel } = data;
+    const { rollType, actorId, itemId, itemName, classItemId, spellLevel } = data;
 
     // Build the macro label and icon
     const labels = {
@@ -1174,7 +1171,7 @@ function registerHandlebarsHelpers() {
     });
 
     Handlebars.registerHelper("or", function (...args) {
-        const options = args.pop();
+        args.pop(); // Handlebars options hash (last argument)
         return args.some(Boolean);
     });
 
@@ -1223,14 +1220,14 @@ function registerHandlebarsHelpers() {
 /**
  * Add Delete button to Actor Directory
  */
-Hooks.on("renderActorDirectory", (app, html, data) => {
+Hooks.on("renderActorDirectory", (app, html, _data) => {
     _addSidebarDeleteButton(app, html, "Actor");
 });
 
 /**
  * Add Delete button and Spell List button to Item Directory
  */
-Hooks.on("renderItemDirectory", (app, html, data) => {
+Hooks.on("renderItemDirectory", (app, html, _data) => {
     _addSidebarDeleteButton(app, html, "Item");
     _addSpellListButton(html);
 });
