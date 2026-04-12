@@ -978,14 +978,14 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         // Manual listener for ProseMirror changes
         const editors = this.element.querySelectorAll("prose-mirror");
         editors.forEach(editor => {
-            editor.addEventListener("change", (event) => {
+            editor.addEventListener("change", () => {
                 this.submit();
             });
         });
 
         // Spells per day table input handlers
         const spellsPerDayInputs = this.element.querySelectorAll(".spells-per-day-input");
-        spellsPerDayInputs.forEach((input, index) => {
+        spellsPerDayInputs.forEach((input) => {
             // Store original value on focus
             let originalValue = input.value || "0";
             
@@ -1053,7 +1053,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 }
             });
 
-            input.addEventListener("change", (event) => {
+            input.addEventListener("change", (_event) => {
                 // Capture scroll position on change event (before form submission)
                 const tab = this.element.querySelector(".sheet-body .tab.active");
                 if (tab && this._preservedScrollTop === undefined) {
@@ -1380,7 +1380,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 const levelInput = await foundry.applications.api.DialogV2.prompt({
                     window: { title: "Spell Level for Class" },
                     content: `<form><div class="form-group"><label>At what spell level can ${className} cast ${this.document.name}?</label><input type="number" name="level" value="1" min="0" max="9" autofocus /></div></form>`,
-                    ok: { callback: (e, btn, dlg) => parseInt(btn.form.elements.level.value) || 0 },
+                    ok: { callback: (e, btn, _dlg) => parseInt(btn.form.elements.level.value) || 0 },
                     rejectClose: false
                 });
                 if (levelInput == null) return;
@@ -1407,7 +1407,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 const levelInput = await foundry.applications.api.DialogV2.prompt({
                     window: { title: "Spell Level for Domain" },
                     content: `<form><div class="form-group"><label>At what spell level does the ${domainName} domain grant ${this.document.name}?</label><input type="number" name="level" value="1" min="1" max="9" autofocus /></div></form>`,
-                    ok: { callback: (e, btn, dlg) => parseInt(btn.form.elements.level.value) || 1 },
+                    ok: { callback: (e, btn, _dlg) => parseInt(btn.form.elements.level.value) || 1 },
                     rejectClose: false
                 });
                 if (levelInput == null) return;
@@ -1480,7 +1480,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             const levelInput = await foundry.applications.api.DialogV2.prompt({
                 window: { title: "Spell Level for Domain" },
                 content: `<form><div class="form-group"><label>At what spell level does the ${domainName} domain grant ${droppedItem.name}?</label><input type="number" name="level" value="1" min="1" max="9" autofocus /></div></form>`,
-                ok: { callback: (e, btn, dlg) => parseInt(btn.form.elements.level.value, 10) || 1 },
+                ok: { callback: (e, btn, _dlg) => parseInt(btn.form.elements.level.value, 10) || 1 },
                 rejectClose: false
             });
             if (levelInput == null) return;
@@ -1510,7 +1510,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 window: { title: "Assign Class Feature" },
                 content: `<form><div class="form-group"><label>At what level does ${this.document.name} gain ${droppedItem.name}?</label><input type="number" name="level" value="1" min="1" autofocus /></div></form>`,
                 ok: {
-                    callback: (event, button, dialog) => parseInt(button.form.elements.level.value) || 1
+                    callback: (_event, button, _dialog) => parseInt(button.form.elements.level.value) || 1
                 },
                 rejectClose: false
             });
@@ -1638,7 +1638,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             const name = anchor?.name ?? "";
             const autoGrantedMatch = name.match(/^system\.autoGrantedFeats\.(\d+)\.(featUuid|featUuids\.(\d+))$/);
             let toSet = fromForm;
-            let usedDocumentOnlyBranch = false;
             if (autoGrantedMatch && (anchor?.tagName === "SELECT" || anchor?.nodeName === "SELECT")) {
                 const i = parseInt(autoGrantedMatch[1], 10);
                 const field = autoGrantedMatch[2];
@@ -1656,7 +1655,6 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                             featUuid: (e?.featUuid ?? "").trim(),
                             featUuids: idx === i ? docUuids : [...(e?.featUuids ?? [])]
                         }));
-                        usedDocumentOnlyBranch = true;
                     }
                 } else if (i >= 0 && i < fromForm.length) {
                     if (field === "featUuid") {
@@ -1866,7 +1864,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 const out = [];
                 for (const x of c) out.push(x);
                 return out;
-            } catch (e) {
+            } catch (_e) {
                 return [];
             }
         };
@@ -1906,7 +1904,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 try {
                     const ref = await foundry.utils.fromUuid(a.uuid);
                     if (ref?.documentName === "Actor" && getMatchingItems(ref).length > 0) actorsToRefresh.push(ref);
-                } catch (_) {}
+                } catch {
+                    /* fromUuid may fail for invalid or unloaded actor references */
+                }
             }
         }
         const systemData = doc.system?.toObject?.() ?? doc.system ?? {};
@@ -1984,7 +1984,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static onRollAttack(event, target) {
+    static onRollAttack(_event, _target) {
         if (this.item.type === 'weapon') {
             this.item.rollAttack();
         }
@@ -1996,7 +1996,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static onRollDamage(event, target) {
+    static onRollDamage(_event, _target) {
         if (this.item.type === 'weapon') {
             this.item.rollDamage();
         }
@@ -2032,7 +2032,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static async onItemDeleteHeader(event, target) {
+    static async onItemDeleteHeader(_event, _target) {
         const confirm = await foundry.applications.api.DialogV2.confirm({
             window: { title: "Delete Item" },
             content: `<h4>Are you sure you want to delete ${this.item.name}?</h4>`,
@@ -2299,7 +2299,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraItemSheet}
      */
-    static onOpenConditionDescription(event, target) {
+    static onOpenConditionDescription(_event, _target) {
         const pm = this.element?.querySelector?.(".condition-editor-box prose-mirror[name='system.description']");
         if (pm && typeof pm.open !== "undefined") pm.open = true;
     }

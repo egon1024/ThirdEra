@@ -1,5 +1,5 @@
 # Convenience targets; npm remains the source of truth (see package.json).
-.PHONY: test test-coverage
+.PHONY: test test-coverage lint
 
 # Non-login shells (e.g. some IDE / `make` invocations) often omit nvm from PATH.
 NODE := $(shell command -v node 2>/dev/null)
@@ -32,4 +32,15 @@ else
 endif
 else
 	npm run test:coverage
+endif
+
+lint:
+ifeq ($(NODE),)
+ifneq ($(wildcard $(NVMSH)),)
+	@bash -c 'set -e; . "$(NVMSH)"; npm run lint'
+else
+	@printf '%s\n' "make lint: no Node on PATH (tried \`node\` and \`nodejs\`). If you use nvm, ensure $(NVMSH) exists or set NVM_DIR. Otherwise add Node to PATH or run \`npm run lint\` from a shell where \`node\` works." >&2; exit 1
+endif
+else
+	npm run lint
 endif

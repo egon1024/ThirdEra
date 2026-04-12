@@ -76,8 +76,6 @@ export class ThirdEraActor extends Actor {
         super.prepareDerivedData();
 
         const actorData = this;
-        const systemData = actorData.system;
-        const flags = actorData.flags.thirdera || {};
 
         // Make separate methods for each Actor type (character, npc, etc.) to keep
         // things organized
@@ -109,9 +107,7 @@ export class ThirdEraActor extends Actor {
     /**
      * Prepare Character specific derived data
      */
-    _prepareCharacterData(actorData) {
-        const systemData = actorData.system;
-
+    _prepareCharacterData(_actorData) {
         // Add any additional character-specific calculations here
         // For now, the data model handles most calculations
     }
@@ -119,9 +115,7 @@ export class ThirdEraActor extends Actor {
     /**
      * Prepare NPC specific derived data
      */
-    _prepareNPCData(actorData) {
-        const systemData = actorData.system;
-
+    _prepareNPCData(_actorData) {
         // Add any additional NPC-specific calculations here
     }
 

@@ -63,12 +63,8 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      # When ESLint, Prettier --check, or similar is added, insert a step here, e.g.:
-      # - name: Run linter
-      #   run: npm run lint
-
-      - name: Lint (placeholder)
-        run: echo "No lint step yet — add npm run lint (or equivalent) when configured."
+      - name: Lint JavaScript modules (ESLint)
+        run: npm run lint
 
   static-validation:
     runs-on: ubuntu-latest

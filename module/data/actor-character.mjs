@@ -236,7 +236,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
         // Base ability values only; racial and other modifiers flow through getActiveModifiers
         const race = this.parent.items.find(i => i.type === "race");
-        for (const [key, ability] of Object.entries(this.abilities)) {
+        for (const [, ability] of Object.entries(this.abilities)) {
             ability.effective = ability.value;
         }
 
@@ -439,7 +439,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
                             }
                         }
                     }
-                } catch (e) {
+                } catch (_e) {
                     // Sidebar item may not exist (deleted); scaling stays null
                 }
 

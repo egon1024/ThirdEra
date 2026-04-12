@@ -920,7 +920,7 @@ export class CompendiumLoader {
             console.log(
                 `Third Era | Compendium JSON: skipped ${packsSkippedPopulated} pack(s) that already have index entries; ` +
                     `ran JSON load for ${packsLoadedFromJson} pack(s). ` +
-                    `Enable \"Re-import compendium JSON on each load\" in system settings to force a full refresh from pack JSON.`
+                    `Enable "Re-import compendium JSON on each load" in system settings to force a full refresh from pack JSON.`
             );
         }
 

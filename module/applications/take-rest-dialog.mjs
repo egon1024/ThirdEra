@@ -68,7 +68,7 @@ export class TakeRestDialog extends foundry.applications.api.HandlebarsApplicati
     }
 
     /** @override */
-    _prepareContext(options) {
+    _prepareContext(_options) {
         const actor = this.actor;
         const canApply = Boolean(actor?.canUserModify?.(game.user, "update"));
         const naturalHealingAmount = getRestHealingAmount(actor);

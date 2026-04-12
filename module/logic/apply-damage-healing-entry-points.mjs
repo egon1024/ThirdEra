@@ -51,7 +51,7 @@ function openApplyFromChat(amount, mode) {
  */
 function registerChatEntryPoints() {
     // Add "Apply" button to messages that contain a damage or healing roll
-    Hooks.on("renderChatMessageHTML", (message, html, messageData) => {
+    Hooks.on("renderChatMessageHTML", (message, html, _messageData) => {
         const data = getApplyDataFromMessage(message);
         if (!data) return;
         const btn = document.createElement("button");
