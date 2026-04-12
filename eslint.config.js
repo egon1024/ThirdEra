@@ -1,5 +1,7 @@
 /**
- * ESLint flat config — ThirdEra `.mjs` sources (Vitest tree, system `module/`, entry, scripts, Vitest config).
+ * ESLint flat config — ThirdEra `.mjs` sources (Vitest tree, system `module/`, entry, Vitest config).
+ * **`package.json`** `lint` passes the same globs/files to **eslint** so CI and local runs stay aligned.
+ * **`scripts/`** is intentionally **not** linted here (no CI gate; maintainer policy — see **`plans/future-features.md`** § Lint in CI).
  *
  * Rules: `eslint:recommended` on each slice. The system slice uses browser + common Foundry VTT globals
  * (readonly) so `no-undef` is useful without listing the entire Foundry API. Remaining false positives
@@ -44,11 +46,20 @@ const foundryClientGlobals = {
     jQuery: "readonly",
     /** Legacy global alias still referenced in some sheets */
     fromUuid: "readonly",
+    /** Common Foundry document classes referenced in hooks / sheets without import */
+    ActiveEffect: "readonly",
+    TokenDocument: "readonly",
 };
 
 export default [
     {
         ignores: ["**/node_modules/**", "coverage/**"],
+    },
+    {
+        linterOptions: {
+            // Surface stale `eslint-disable` / `eslint-disable-next-line` comments as warnings.
+            reportUnusedDisableDirectives: "warn"
+        }
     },
     {
         files: ["test/**/*.mjs"],
@@ -69,6 +80,17 @@ export default [
             ecmaVersion: 2022,
             sourceType: "module",
             globals: foundryClientGlobals,
+        },
+        rules: recommendedWithUnderscoreUnused,
+    },
+    {
+        files: ["vitest.config.mjs"],
+        languageOptions: {
+            ecmaVersion: 2022,
+            sourceType: "module",
+            globals: {
+                ...globals.node,
+            },
         },
         rules: recommendedWithUnderscoreUnused,
     },

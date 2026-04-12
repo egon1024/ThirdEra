@@ -2,6 +2,8 @@
 
 Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.mjs`](../vitest.config.mjs)). **Foundry VTT is not required** for these tests.
 
+**`scripts/`:** Repo **`scripts/`** is **not** part of Vitest or ESLint (maintainer decision; see [Development — Automated unit tests](../docs-site/development.md#automated-unit-tests)).
+
 ## Layout
 
 | Directory | Mirrors | Purpose |
@@ -18,8 +20,12 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 | Production module | Test file |
 |-------------------|-----------|
 | `module/logic/concentration-dcs.mjs` | `unit/logic/concentration-dcs.test.mjs` |
+| `module/logic/concentration-from-chat-helpers.mjs` (`parseConcentrationOtherInputs`) | `unit/logic/concentration-from-chat-helpers.test.mjs` |
+| `module/logic/apply-damage-healing-chat-helpers.mjs` | `unit/logic/apply-damage-healing-chat-helpers.test.mjs` |
+| `module/logic/spell-sr-from-chat-helpers.mjs` (`getSpellPenetrationCastFlags`) | `unit/logic/spell-sr-from-chat-helpers.test.mjs` |
 | `module/logic/xp-table.mjs` | `unit/logic/xp-table.test.mjs` |
 | `module/logic/spell-resistance-helpers.mjs` | `unit/logic/spell-resistance-helpers.test.mjs` |
+| `module/logic/spell-save-from-chat-helpers.mjs` (`getSpellCastDataFromMessage`) | `unit/logic/spell-save-from-chat-helpers.test.mjs` |
 | `module/logic/spell-save-helpers.mjs` | `unit/logic/spell-save-helpers.test.mjs` |
 | `module/logic/spell-search.mjs` | `unit/logic/spell-search.test.mjs` |
 | `module/logic/spell-description-parser.mjs` | `unit/logic/spell-description-parser.test.mjs` |
@@ -47,7 +53,7 @@ Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.m
 
 These modules are **intentionally excluded** from Node unit tests until logic is extracted or **Quench** (in-Foundry) tests exist:
 
-- **`module/logic/`** — `spell-sr-from-chat`, `spell-save-from-chat`, `concentration-from-chat`, `character-system-source-backfill` (`foundry.utils`), `apply-damage-healing` / `apply-damage-healing-entry-points`, `auto-granted-feats`, `domain-spells`, `compendium-loader`, `cgs-phase6-npc-world-migrate` (GM `game` / `Actor#update` on ready), `audit-log`, `class-spell-list` (async `game` / packs), `derived-conditions` (`sync*` / `isFlatFootedFromCombat` — use `game.combat`), `condition-helpers` (`getConditionItemsMap*`).
+- **`module/logic/`** — `spell-sr-from-chat` (hooks/DOM — **`spell-sr-from-chat-helpers.mjs`** covered in Vitest), `spell-save-from-chat` (hooks/DOM — **`spell-save-from-chat-helpers.mjs`** covered), `concentration-from-chat` (hooks/DOM — **`concentration-from-chat-helpers.mjs`** covered), `character-system-source-backfill` (`foundry.utils`), `apply-damage-healing` / `apply-damage-healing-entry-points` (hooks/DOM — **`apply-damage-healing-chat-helpers.mjs`** covered), `auto-granted-feats`, `domain-spells`, `compendium-loader`, `cgs-phase6-npc-world-migrate` (GM `game` / `Actor#update` on ready), `audit-log`, `class-spell-list` (async `game` / packs), `derived-conditions` (`sync*` / `isFlatFootedFromCombat` — use `game.combat`), `condition-helpers` (`getConditionItemsMap*`).
 - **`module/data/_ac-helpers.mjs`** — Uses `CONFIG.THIRDERA.sizeModifiers` and `system.parent.items` (Foundry-shaped graph); test after injecting `CONFIG` or extracting pure pieces.
 - **`module/documents/`**, **`module/sheets/`**, **`module/applications/`**, **`thirdera.mjs`** — Document/sheet/UI layer; future Quench or E2E.
 - **`module/data/*`** (TypeDataModels) — Depend on `foundry.data.fields` at import time.
@@ -60,9 +66,9 @@ When you change a **covered** module, add or update tests in the matching `test/
 |---------|---------|
 | `make test` | Same as `npm test` — run all tests once (fast; no coverage). |
 | `make test-coverage` | Same as `npm run test:coverage` — **v8** coverage, **minimum thresholds** (see `coverage.thresholds` in [`vitest.config.mjs`](../vitest.config.mjs)); writes **`coverage/`** (HTML: `coverage/index.html`, LCOV: `coverage/lcov.info`). Fails if coverage is below the configured floors. **Validate** CI uses this target. |
-| `make lint` | Same as `npm run lint` — **ESLint** on `test/**/*.mjs`, `module/**/*.mjs`, `thirdera.mjs`, `scripts/**/*.mjs`, and `vitest.config.mjs` (see [`eslint.config.js`](../eslint.config.js) at repo root). **Validate** CI **`lint`** job runs this after `npm ci`. |
+| `make lint` | Same as `npm run lint` — **ESLint** on `test/**/*.mjs`, `module/**/*.mjs`, `thirdera.mjs`, and `vitest.config.mjs` (see **`package.json`** `lint` and [`eslint.config.js`](../eslint.config.js)). **Validate** CI **`lint`** job runs this after `npm ci`. |
 | `npm test` / `npm run test:coverage` | Direct npm invocations; equivalent to the `make` targets above. |
-| `npm run lint` | ESLint on the paths above (Vitest tree, system `module/`, system entry, `scripts/`, Vitest config). |
+| `npm run lint` | ESLint on the paths above (Vitest tree, system `module/`, `thirdera.mjs`, `vitest.config.mjs`). |
 | `npm run test:watch` | Re-run tests on change (local only). |
 
 Coverage **includes** `module/logic/**`, `module/utils/**`, and `module/data/_*.mjs`, but **excludes** modules we do not intend to cover in Node (Foundry chat hooks, packs, audit log, `_ac-helpers`, etc.) — see `coverage.exclude` in [`vitest.config.mjs`](../vitest.config.mjs). **`coverage.thresholds`** enforces minimum **lines**, **statements**, **branches**, and **functions** over that scoped set (CI and local **`make test-coverage`**). The headline percentage reflects **unit-test-in-scope** files; open the HTML report for per-file detail. When you add Vitest coverage for a previously excluded file, remove its path from `coverage.exclude`.
