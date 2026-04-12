@@ -58,7 +58,7 @@ export class SpellListBrowser extends foundry.applications.api.HandlebarsApplica
     newClassLevel = null;
 
     /** @override */
-    async _prepareContext(options) {
+    async _prepareContext(_options) {
         const [classes, domains] = await Promise.all([getAllClasses(), getAllDomains()]);
         this._cachedClasses = classes;
         this._cachedDomains = domains;

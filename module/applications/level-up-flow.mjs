@@ -170,7 +170,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
     }
 
     /** @override */
-    async _prepareContext(options) {
+    async _prepareContext(_options) {
         const sequence = getStepSequence(this);
         const stepIndex = sequence.indexOf(this.step);
         const stepLabel = game.i18n.format("THIRDERA.LevelUp.StepNOfM", {
@@ -963,11 +963,9 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             const syncPending = async (ev) => {
                 const triggerInput = ev?.target?.name === "pointsToSpend" ? ev.target : null;
                 let nextIndex = 0;
-                let triggerIndex = -1;
                 if (triggerInput) {
                     const idx = Array.from(pointsInputs).indexOf(triggerInput);
                     if (idx >= 0) {
-                        triggerIndex = idx;
                         nextIndex = (idx + 1) % pointsInputs.length;
                     }
                 }
@@ -1181,7 +1179,6 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
         }
 
         const history = [...(flow.actor.system.levelHistory || [])];
-        const totalLevelAfter = history.length + 1;
         const classSkillKeys = flow.actor.system.classSkillKeys ?? new Set();
         const grantedSkillKeys = flow.actor.system.grantedSkillKeys ?? new Set();
         const cls = flow.actor.items.get(flow.selectedClassItemId);
@@ -1300,7 +1297,7 @@ export class LevelUpFlow extends foundry.applications.api.HandlebarsApplicationM
             flow.close();
             return;
         }
-        const { totalLevelAtTarget, levelsInClassAtTarget } = ctx;
+        const { levelsInClassAtTarget } = ctx;
         const history = [...(flow.actor.system.levelHistory || [])];
         const idx = flow.catchUpLevelHistoryIndex;
         if (idx < 0 || idx >= history.length) {

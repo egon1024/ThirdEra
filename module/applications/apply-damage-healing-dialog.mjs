@@ -72,7 +72,7 @@ export class ApplyDamageHealingDialog extends foundry.applications.api.Handlebar
     }
 
     /** @override */
-    _prepareContext(options) {
+    _prepareContext(_options) {
         const targetNames = this.targetActors.map((a) => a.name || "Unknown");
         const canApply = this.targetActors.length > 0;
         const mode = this.mode ?? "damage";
