@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Compendium guide - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../css/logo.png">
+  <link href="../css/torillic.css" rel="stylesheet">
+  <link href="../css/single-column.css" rel="stylesheet">
+  <link href="../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="..">Home</a>
+      
+      
+      
+      <a class="" href="../usage/">Usage</a>
+      
+      
+      
+      <a class="" href="../extending/">Extending</a>
+      
+      
+      
+      <a class="current" href="../development/">Development</a>
+      
+      
+      
+      <a class="" href="../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="compendium-building-guide">Compendium Building Guide</h1>
+<p>This document captures learnings and best practices for creating and managing Foundry VTT compendiums in the ThirdEra system.</p>
+<h2 id="overview">Overview</h2>
+<p>Compendiums in Foundry VTT are collections of pre-made game content (items, actors, etc.) that can be imported into worlds. ThirdEra uses compendiums to distribute SRD content (races, classes, skills, feats, spells, weapons, armor, equipment) so users don't have to manually create every item.</p>
+<h2 id="compendium-architecture">Compendium Architecture</h2>
+<h3 id="storage-model">Storage Model</h3>
+<p><strong>Critical Understanding</strong>: Foundry persists compendium content in database files under each <code>packs/&lt;name&gt;/</code> directory. ThirdEra also keeps <strong>JSON source files</strong> in those folders; on world load the system’s <strong>CompendiumLoader</strong> (GM) reads that JSON and creates or <strong>updates</strong> matching compendium documents (including races).</p>
+<h3 id="races-pack-json-refresh">Races pack (JSON refresh)</h3>
+<p>On each world load (GM client, <strong>ready</strong>), <strong>CompendiumLoader</strong> refreshes <strong>all</strong> mapped packs from <code>packs/*.json</code>, including <strong>Races</strong>: <strong>existing</strong> compendium race documents are <strong>updated</strong> from disk when the stable key (race <strong>name</strong>) matches, so compendium entries track system releases. <strong>Edits you make inside the Races compendium are overwritten</strong> on the next load—use <strong>world</strong> race Items (or another pack you control) for homebrew or experiments you need to keep. <strong>New</strong> race JSON files are still <strong>created</strong> when missing from the pack.</p>
+<p><strong>SRD race mechanical rows (GMS):</strong> On <strong>ready</strong>, the GM client also runs a one-way <strong>merge</strong> (<code>module/logic/race-srd-changes-merge.mjs</code>) that appends missing bundled skill/save/hide <code>system.changes</code> rows to <strong>existing</strong> race items (Races compendium, world race items, and races <strong>embedded on actors</strong>) when <code>flags.thirdera.raceStockDeltaRev</code> is below the current revision (<code>RACE_STOCK_DELTA_REV</code> in that module). It does <strong>not</strong> remove or replace documents, does <strong>not</strong> add a row if that modifier <strong>key</strong> already appears in <code>changes</code> (so custom values for the same key are left alone), and does <strong>not</strong> touch ability-score rows. <strong>Self-heal:</strong> If the revision flag is already current but a race that <strong>belongs to the Races compendium</strong> (or is embedded with a <code>thirdera_races</code> compendium <code>sourceId</code>/UUID) is still missing bundled rows for its stock name, the same pass merges those rows in again — so incomplete compendium entries (e.g. Elf with only ability adjustments) are repaired without bumping <code>RACE_STOCK_DELTA_REV</code>. Homebrew races in the world that happen to share a stock name are not altered. When you add new stock delta rows for a release, bump <code>RACE_STOCK_DELTA_REV</code>. <strong>Regression tests:</strong> <code>test/unit/data/race-pack-stock-changes.test.mjs</code> asserts each race JSON still includes every row returned by <code>getRaceStockDeltaRowsForName</code> — run <code>npm test</code> after editing race packs or sync scripts.</p>
+<p><strong>Other racial traits (HTML):</strong> Stock races ship <strong><code>system.otherRacialTraits</code></strong> for vision, immunities, weapon familiarity, languages, spell-like abilities, and similar traits that are <strong>not</strong> represented as numeric <code>system.changes</code> rows. The field is edited on the race sheet (Details) and shown on the PC sheet <strong>Description</strong> tab. On <strong>ready</strong>, the GM client runs <code>module/logic/race-qualitative-traits-stock.mjs</code>: when <code>flags.thirdera.raceQualitativeTraitsRev</code> is below the bundled revision, empty fields are filled from stock text keyed by default race <strong>names</strong>, and known obsolete bundled wording may be replaced (see <code>isStaleBundledQualitativeTraitsHtml</code> in that module). Custom text is otherwise left as-is while the flag is advanced. Keep the stock map aligned with <code>packs/races/*.json</code> when editing shipped prose.</p>
+<h3 id="compendium-pack-definition-systemjson">Compendium Pack Definition (<code>system.json</code>)</h3>
+<p>Each compendium pack must be declared in <code>system.json</code> under the <code>"packs"</code> array:</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;thirdera_races&quot;,
+  &quot;label&quot;: &quot;Races&quot;,
+  &quot;path&quot;: &quot;packs/races&quot;,
+  &quot;type&quot;: &quot;Item&quot;,
+  &quot;system&quot;: &quot;thirdera&quot;,
+  &quot;ownership&quot;: {
+    &quot;GAMEMASTER&quot;: &quot;OWNER&quot;,
+    &quot;ASSISTANT&quot;: &quot;OWNER&quot;,
+    &quot;TRUSTED&quot;: &quot;OBSERVER&quot;,
+    &quot;PLAYER&quot;: &quot;OBSERVER&quot;
+  }
+}
+</code></pre>
+<p><strong>Key Fields:</strong>
+- <code>name</code>: Must use underscores, not dots (e.g., <code>thirdera_races</code> not <code>thirdera.races</code>) for Foundry V14 compatibility
+- <code>label</code>: Display name shown in the Compendium sidebar
+- <code>path</code>: Relative path to the directory containing JSON source files
+- <code>type</code>: Document type — <strong><code>"Item"</code></strong> for races, classes, spells, etc.; <strong><code>"Actor"</code></strong> for the <strong>Monsters (SRD)</strong> pack (<code>thirdera_monsters</code>, NPC actors).
+- <code>system</code>: System ID (<code>"thirdera"</code>)
+- <code>ownership</code>: <strong>REQUIRED</strong> - Without this, compendiums won't be visible in the UI. Defines permissions for each user role.
+- <code>banner</code>: <strong>Optional.</strong> A file path to a banner image shown behind each compendium entry in the Compendium sidebar (and in the compendium window header when opened). If omitted, Foundry uses the default for the pack type (e.g. the same generic Item banner for all Item packs).</p>
+<h4 id="compendium-banner-images-per-pack">Compendium banner images (per-pack)</h4>
+<p>You can give each pack its own banner by adding a <code>"banner"</code> property to that pack in <code>system.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;thirdera_armor&quot;,
+  &quot;label&quot;: &quot;Armor&quot;,
+  &quot;path&quot;: &quot;packs/armor&quot;,
+  &quot;type&quot;: &quot;Item&quot;,
+  &quot;system&quot;: &quot;thirdera&quot;,
+  &quot;banner&quot;: &quot;systems/thirdera/assets/banners/armor-banner.webp&quot;,
+  &quot;ownership&quot;: { ... }
+}
+</code></pre>
+<p><strong>Image characteristics:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recommended dimensions</strong></td>
+<td><strong>290 × 70</strong> pixels (Foundry's documented size for the sidebar strip).</td>
+</tr>
+<tr>
+<td><strong>Aspect</strong></td>
+<td>Landscape; the image is displayed with <code>object-fit: cover</code> and <code>object-position: center</code>, so it will be cropped to fit. A 290×70 (or proportional) landscape works best.</td>
+</tr>
+<tr>
+<td><strong>Where to put files</strong></td>
+<td>Inside the system, e.g. <code>assets/banners/</code> (path in <code>system.json</code>: <code>systems/thirdera/assets/banners/your-banner.webp</code>).</td>
+</tr>
+<tr>
+<td><strong>Formats</strong></td>
+<td>WebP, PNG, or JPEG. Foundry core uses <code>.webp</code>.</td>
+</tr>
+<tr>
+<td><strong>Display</strong></td>
+<td>The image is shown at ~80% opacity with a slight dark overlay; the pack name and icon are centered on top. Design so important elements remain visible with that overlay.</td>
+</tr>
+<tr>
+<td><strong>Contexts</strong></td>
+<td>Same image is used in the sidebar list (70px tall) and in the compendium window header when a pack is opened (100px tall).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="collection-ids">Collection IDs</h3>
+<p>Foundry VTT uses collection IDs to reference compendium packs. The format is: <code>{systemId}.{packName}</code></p>
+<p>Example: For pack name <code>thirdera_races</code>, the collection ID is <code>thirdera.thirdera_races</code></p>
+<p><strong>Important</strong>: When looking up packs in code, use the collection ID:</p>
+<pre><code class="language-javascript">const pack = game.packs.get(&quot;thirdera.thirdera_races&quot;);
+</code></pre>
+<h2 id="compendium-loader-modulelogiccompendium-loadermjs">Compendium Loader (<code>module/logic/compendium-loader.mjs</code>)</h2>
+<p>The <code>CompendiumLoader</code> class programmatically imports JSON files into compendiums.</p>
+<h3 id="initialization">Initialization</h3>
+<p>Called from <code>thirdera.mjs</code> on the <code>Hooks.once("ready")</code> hook:</p>
+<pre><code class="language-javascript">Hooks.once(&quot;ready&quot;, () =&gt; {
+    CompendiumLoader.init();
+});
+</code></pre>
+<h3 id="key-methods">Key Methods</h3>
+<h4 id="init"><code>init()</code></h4>
+<ul>
+<li>Only runs for GM users</li>
+<li>Waits 1 second for compendiums to be fully registered</li>
+<li>Iterates through <code>FILE_MAPPINGS</code> to find and populate each pack</li>
+<li>Checks if pack is already populated (skips if entries exist)</li>
+<li>Updates existing items or creates new ones</li>
+</ul>
+<h4 id="loadpackfromjsonpack-filelist"><code>loadPackFromJSON(pack, fileList)</code></h4>
+<ul>
+<li>Normalizes file paths (removes duplicate <code>systems/thirdera/</code> prefixes)</li>
+<li>Fetches JSON files via HTTP (<code>fetch()</code>)</li>
+<li>Removes invalid <code>_id</code> values (Foundry requires 16-character alphanumeric IDs)</li>
+<li>Unlocks compendium if locked (required to create/update documents)</li>
+<li><strong>Matches by stable key</strong>: For each document, the loader uses a stable key to decide whether to update an existing compendium entry or create a new one. The key is: <code>system.conditionId</code> for conditions, otherwise <code>system.key</code> if present, otherwise <code>name</code>. This allows renaming a document in JSON (e.g. for disambiguation) without creating duplicates-the same compendium document is updated.</li>
+<li>Uses <code>Document.createDocuments()</code> and <code>Document.updateDocuments()</code> with <code>{pack: pack.collection}</code> option</li>
+</ul>
+<h3 id="file_mappings">FILE_MAPPINGS</h3>
+<p>Maps collection IDs to arrays of JSON filenames:</p>
+<pre><code class="language-javascript">static FILE_MAPPINGS = {
+    &quot;thirdera.thirdera_races&quot;: [
+        &quot;race-dwarf.json&quot;,
+        &quot;race-elf.json&quot;,
+        // ...
+    ],
+    // ...
+};
+</code></pre>
+<p><strong>Important</strong>: Keys must match Foundry's collection IDs (<code>systemId.packName</code>).</p>
+<p><a id="monster-npc-compendium-thirdera_monsters"></a></p>
+<h2 id="monster-npc-compendium-thirdera_monsters">Monster (NPC) compendium (<code>thirdera_monsters</code>)</h2>
+<ul>
+<li><strong>Pack:</strong> <code>thirdera_monsters</code> — <strong><code>type</code>: <code>"Actor"</code></strong>, folder <code>packs/monsters/</code>.</li>
+<li><strong>Stable key:</strong> Each NPC must have <strong><code>system.key</code></strong> (e.g. <code>monsterGoblin</code>) so the compendium loader can update the same entry across reloads (same pattern as item <code>system.key</code>).</li>
+<li><strong>Creature type / subtypes (authoring):</strong> Source JSON may use <strong><code>system.creatureTypeKey</code></strong> (matches <strong>Creature Type</strong> item <code>system.key</code>, e.g. <code>humanoid</code>, <code>magicalBeast</code>) and <strong><code>system.subtypeKeys</code></strong> (array of <strong>Subtype</strong> item keys, e.g. <code>goblinoid</code>, <code>orc</code>, <code>fire</code>, <code>extraplanar</code>, <code>swarm</code>, <code>incorporeal</code>). On load, the compendium loader resolves these to <strong><code>creatureTypeUuid</code></strong> and <strong><code>subtypeUuids</code></strong> using the <strong>Creature Types</strong> and <strong>Subtypes</strong> packs, then removes the authoring keys.</li>
+<li><strong>Regenerating JSON:</strong> Run <code>python3 scripts/build-monster-pack-json.py</code> from the repo root to rewrite the starter SRD monster files after editing the generator.</li>
+<li><strong>Skills and feats on monsters:</strong> NPC actors embed <strong><code>skill</code></strong> and <strong><code>feat</code></strong> items (same shapes as the Skills / Feats packs) so the NPC sheet can show class vs cross-class (<strong><code>system.npcClassSkill</code></strong> on skills) and totals that include armor/load ACP and feat <strong>GMS</strong> keys (e.g. Alertness’s <code>skill.listen</code>). Ranks and <strong><code>modifier.misc</code></strong> are authored so totals match the SRD/MM entry for each stat block (including racial/size bonuses folded into misc where the system does not compute them automatically). Use optional <strong><code>modifier.miscLabel</code></strong> so the skill total tooltip names that bonus (e.g. size/MM) instead of a generic “Misc” line. After regenerating monsters from the Python script, run <strong><code>node scripts/apply-monster-skills-feats.mjs</code></strong> to re-merge those embedded items (the Node script is the source of truth for skill/feat rows; edit <code>scripts/apply-monster-skills-feats.mjs</code> to adjust them). That script strips prior embedded <strong><code>skill</code></strong> / <strong><code>feat</code></strong> rows using a case-normalized type check and <strong>dedupes by <code>system.key</code></strong>, so reruns or odd legacy rows cannot leave two embedded items for the same skill.</li>
+</ul>
+<h2 id="json-file-structure">JSON File Structure</h2>
+<h3 id="required-fields">Required Fields</h3>
+<p>All compendium JSON files must follow this structure:</p>
+<pre><code class="language-json">{
+  &quot;_id&quot;: &quot;item-id&quot;,
+  &quot;name&quot;: &quot;Item Name&quot;,
+  &quot;type&quot;: &quot;itemType&quot;,
+  &quot;img&quot;: &quot;icons/svg/icon.svg&quot;,
+  &quot;system&quot;: {
+    // Type-specific data matching the TypeDataModel schema
+  },
+  &quot;flags&quot;: {},
+  &quot;folder&quot;: null,
+  &quot;sort&quot;: 0
+}
+</code></pre>
+<h3 id="id-handling">ID Handling</h3>
+<p><strong>Critical</strong>: Foundry VTT requires <code>_id</code> values to be exactly 16 alphanumeric characters. JSON files with descriptive IDs (like <code>"race-dwarf"</code>) will cause validation errors.</p>
+<p><strong>Solution</strong>: The loader removes invalid <code>_id</code> values before importing, allowing Foundry to generate valid IDs automatically:</p>
+<pre><code class="language-javascript">if (jsonData._id &amp;&amp; !jsonData._id.match(/^[a-zA-Z0-9]{16}$/)) {
+    delete jsonData._id;
+}
+</code></pre>
+<h3 id="icon-paths">Icon Paths</h3>
+<p>Icons must use paths that exist in Foundry VTT's icon set. Common paths:
+- <code>icons/svg/sword.svg</code> - Weapons, combat feats
+- <code>icons/svg/shield.svg</code> - Armor, defensive feats
+- <code>icons/svg/target.svg</code> - Ranged weapons, archery feats
+- <code>icons/svg/aura.svg</code> - Magic, spells, metamagic feats
+- <code>icons/svg/book.svg</code> - Knowledge, skills, item creation feats
+- <code>icons/svg/temple.svg</code> - Holy symbols, religious items
+- <code>icons/svg/pawprint.svg</code> - Animals, mounted combat
+- <code>icons/svg/eye.svg</code> - Perception, awareness
+- <code>icons/svg/invisible.svg</code> - Stealth, hidden things</p>
+<p><strong>Icon Validation</strong>: Verify icons exist in your Foundry installation's public icon set (e.g. <code>resources/app/public/icons/svg/</code> under the Foundry app directory) before using them.</p>
+<h3 id="spell-compendium-format">Spell Compendium Format</h3>
+<p>Spell compendium JSON should use the <strong>current</strong> schema (not legacy fields) so content does not depend on migration.</p>
+<ul>
+<li><strong>School</strong>: Use <code>schoolKey</code>, <code>schoolName</code>, <code>schoolSubschool</code>, and <code>schoolDescriptors</code> (do not use the legacy <code>school</code> string).</li>
+<li><code>schoolKey</code>: One of the 8 SRD school keys: <code>abjuration</code>, <code>conjuration</code>, <code>divination</code>, <code>enchantment</code>, <code>evocation</code>, <code>illusion</code>, <code>necromancy</code>, <code>transmutation</code> (same as <code>CONFIG.THIRDERA.schools</code> and the Schools compendium item keys).</li>
+<li><code>schoolName</code>: Display name (e.g. <code>"Evocation"</code>, <code>"Conjuration"</code>).</li>
+<li><code>schoolSubschool</code>: Optional subschool in parentheses, e.g. <code>"(Healing)"</code>, <code>"(Creation)"</code>, <code>"(Compulsion)"</code>; use <code>""</code> if none.</li>
+<li><code>schoolDescriptors</code>: Array of descriptor tags in brackets, e.g. <code>["[Fire]"]</code>, <code>["[Mind-Affecting]"]</code>; use <code>[]</code> if none.</li>
+<li><strong>levelsByClass</strong>: One entry per class list that has the spell. Each entry: <code>classKey</code> (from <code>CONFIG.THIRDERA.spellListKeys</code>: <code>sorcererWizard</code>, <code>bard</code>, <code>cleric</code>, <code>druid</code>, <code>paladin</code>, <code>ranger</code>), <code>className</code> (display name, e.g. <code>"Sorcerer/Wizard"</code>), and <code>level</code> (0–9). Migration can backfill <code>className</code> from CONFIG if omitted.</li>
+<li><strong>levelsByDomain</strong>: One entry per <strong>cleric domain</strong> that includes the spell (SRD cleric domain spell lists). Each entry: <code>domainKey</code> (must match a domain item's <code>system.key</code> in the Domains compendium, e.g. <code>knowledge</code>, <code>fire</code>, <code>healing</code>), <code>domainName</code> (display name, e.g. <code>"Knowledge"</code>), and <code>level</code> (1–9; domain spells are never 0-level). Use <code>[]</code> only when the spell does not appear on any SRD domain list. <strong>All new spell JSONs must set levelsByDomain</strong> by checking the SRD domain spell tables (e.g. d20srd.org cleric domains). Domain spell lists are <strong>derived from spell levelsByDomain</strong> (single source of truth); domain compendium JSONs do <strong>not</strong> include a <code>spells</code> array.</li>
+<li><strong>spellResistance</strong>: Use only machine-readable values: <code>""</code>, <code>"yes"</code>, <code>"no"</code>, <code>"yes-harmless"</code>, <code>"no-object"</code>, <code>"see-text"</code>. For automation, <code>yes-harmless</code> is treated like <code>yes</code> for offering a penetration control: the GM decides when SR actually applies (e.g. unwilling targets). See <a href="../development/">Development reference</a> (section <em>Spell cast chat</em>).</li>
+<li><strong>Components</strong>: Use <code>"true"</code> / <code>"false"</code> strings for verbal, somatic, material, focus, divineFocus; <code>xp</code> as number. <strong>Always populate <code>materialDescription</code></strong> when material or focus is true: put the SRD material component and/or focus text here (e.g. "Gold dust worth 25 gp." or "Focus: A pair of platinum rings (worth at least 50 gp each)..."). When both apply, combine in one string (e.g. "Material: Incense worth at least 25 gp. Focus: A set of marked sticks..."). Older compendium spells (0-level, 1st-level) may still have empty <code>materialDescription</code>; backfill from the SRD when editing those spells.</li>
+<li><strong>IDs</strong>: Omit <code>_id</code> or use a valid 16-character alphanumeric ID; the loader strips invalid IDs.</li>
+</ul>
+<p>Icon strategy: use a single default (e.g. <code>icons/svg/aura.svg</code>) or a small set by school; verify paths in Foundry's icon set.</p>
+<h3 id="domain-compendium-format">Domain Compendium Format</h3>
+<p>Domain items have <code>system.description</code> and <code>system.key</code> only. Domain spell lists are <strong>not</strong> stored on the domain; they are derived at runtime from spell items' <code>levelsByDomain</code> (world items + spells compendium). Domain compendium JSONs must <strong>not</strong> include a <code>spells</code> array.</p>
+<h2 id="compendium-locking">Compendium Locking</h2>
+<p>Compendiums are <strong>locked by default</strong> in Foundry VTT. You must unlock them before creating or updating documents:</p>
+<pre><code class="language-javascript">if (pack.locked) {
+    await pack.configure({ locked: false });
+}
+</code></pre>
+<h2 id="updating-existing-content">Updating Existing Content</h2>
+<p>The loader supports updating existing compendium entries:</p>
+<ol>
+<li>Fetches existing documents from the compendium</li>
+<li><strong>Matches by stable key</strong> (not name alone): <code>system.conditionId</code> for conditions, otherwise <code>system.key</code> if set, otherwise <code>name</code>. So you can change a document's <code>name</code> in JSON (e.g. to "Evasion (Rogue)") and the loader will update the same compendium document as long as <code>system.key</code> is unchanged.</li>
+<li>Updates existing items or creates new ones</li>
+<li>Uses <code>Document.updateDocuments()</code> for updates, <code>Document.createDocuments()</code> for new items</li>
+</ol>
+<p>This allows updating compendium content (e.g., fixing icons or disambiguating display names) without creating duplicates.</p>
+<h3 id="key-convention-for-new-content">Key convention for new content</h3>
+<p><strong>New document keys should use UUIDs</strong> (or UUID-like unique identifiers). Human-readable keys that are similar across documents (e.g. <code>evasion</code> in multiple classes) can cause confusion; UUIDs keep each document's key globally distinct and avoid collisions when names are alike. Existing keys remain as-is; this convention applies to new compendium entries and should be followed when adding content.</p>
+<p><strong>Class Features compendium:</strong> Feature document names in the compendium may include "(ClassName)" for disambiguation (e.g. "Evasion (Rogue)" vs "Evasion (Monk)"). Character sheet, class sheet, and level-up flow show the short name (e.g. "Evasion") from the class data (<code>featName</code>), not the compendium document name.</p>
+<h2 id="common-issues-and-solutions">Common Issues and Solutions</h2>
+<h3 id="compendiums-not-visible">Compendiums Not Visible</h3>
+<p><strong>Problem</strong>: Compendiums don't appear in the Compendium sidebar.</p>
+<p><strong>Solution</strong>: Add <code>ownership</code> field to pack definition in <code>system.json</code>. Without it, Foundry won't display the compendium.</p>
+<h3 id="pack-not-found-errors">"Pack not found" Errors</h3>
+<p><strong>Problem</strong>: <code>game.packs.get(packName)</code> returns <code>undefined</code>.</p>
+<p><strong>Solution</strong>: Use the collection ID format: <code>thirdera.thirdera_races</code> not just <code>thirdera_races</code>.</p>
+<h3 id="path-duplication-404-errors">Path Duplication (404 Errors)</h3>
+<p><strong>Problem</strong>: File paths like <code>systems/thirdera/systems/thirdera/packs/...</code> cause 404 errors.</p>
+<p><strong>Solution</strong>: Normalize paths by removing existing <code>systems/thirdera/</code> prefix:</p>
+<pre><code class="language-javascript">let normalizedPath = pack.metadata.path;
+if (normalizedPath.startsWith('systems/thirdera/')) {
+    normalizedPath = normalizedPath.replace(/^systems\/thirdera\//, '');
+}
+const basePath = `systems/thirdera/${normalizedPath}`;
+</code></pre>
+<h3 id="invalid-id-validation-errors">Invalid ID Validation Errors</h3>
+<p><strong>Problem</strong>: <code>DataModelValidationError: _id: must be a valid 16-character alphanumeric ID</code></p>
+<p><strong>Solution</strong>: Remove invalid <code>_id</code> values from JSON before importing. Foundry will generate valid IDs automatically.</p>
+<h3 id="importdocuments-is-not-a-function">"importDocuments is not a function"</h3>
+<p><strong>Problem</strong>: Trying to use <code>pack.importDocuments()</code>.</p>
+<p><strong>Solution</strong>: Use <code>Document.createDocuments()</code> with pack option:</p>
+<pre><code class="language-javascript">await DocumentClass.implementation.createDocuments(documents, {pack: pack.collection});
+</code></pre>
+<h3 id="locked-compendium-errors">"locked compendium" Errors</h3>
+<p><strong>Problem</strong>: Cannot create documents in locked compendium.</p>
+<p><strong>Solution</strong>: Unlock the compendium before creating documents:</p>
+<pre><code class="language-javascript">if (pack.locked) {
+    await pack.configure({ locked: false });
+}
+</code></pre>
+<h3 id="icon-or-content-updates-not-appearing-after-restart">Icon or content updates not appearing after restart</h3>
+<p><strong>Problem</strong>: You changed JSON (e.g. <code>img</code> paths) and restarted Foundry, but the compendium still shows old icons or content.</p>
+<p><strong>Cause</strong>: Foundry stores compendium data in <strong>LevelDB files</strong> (<code>.ldb</code>, <code>CURRENT</code>, <code>LOG</code>, <code>MANIFEST-*</code>, etc.) inside each pack directory. The loader updates existing documents by name; if the server or index keeps serving cached data, or updates don't persist as expected, the pack continues to show old values.</p>
+<p><strong>Solution</strong>: Clear the pack's LevelDB cache so the loader re-imports from JSON (it will create all documents fresh). <strong>Do this with Foundry fully stopped.</strong></p>
+<ol>
+<li>Stop Foundry (close the app or stop the headless process).</li>
+<li>From the repo root, remove only the LevelDB files in the pack directory (do <strong>not</strong> delete the <code>.json</code> source files):</li>
+</ol>
+<p><code>bash
+   # Class Features pack
+   rm -f packs/features/*.ldb packs/features/CURRENT packs/features/LOCK packs/features/LOG packs/features/LOG.old packs/features/MANIFEST-*</code></p>
+<ol>
+<li>Start Foundry and load the world. The loader will see an empty pack and run <code>createDocuments()</code> for all JSON files, so the new <code>img</code> and content will appear.</li>
+</ol>
+<p>To clear another pack (e.g. <code>packs/races</code>), use the same pattern: delete <code>*.ldb</code>, <code>CURRENT</code>, <code>LOCK</code>, <code>LOG</code>, <code>LOG.old</code>, <code>MANIFEST-*</code> in that directory only.</p>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li><strong>Always include <code>ownership</code></strong> in pack definitions</li>
+<li><strong>Use underscores in pack names</strong> (not dots) for V14 compatibility</li>
+<li><strong>Remove invalid <code>_id</code> values</strong> from JSON before importing</li>
+<li><strong>Unlock compendiums</strong> before creating/updating documents</li>
+<li><strong>Use collection IDs</strong> (<code>systemId.packName</code>) when looking up packs</li>
+<li><strong>Normalize file paths</strong> to avoid duplication</li>
+<li><strong>Update existing items</strong> by name to support content updates</li>
+<li><strong>Verify icon paths</strong> exist in Foundry's icon set</li>
+<li><strong>Match JSON structure</strong> to the TypeDataModel schema exactly</li>
+<li><strong>Test after changes</strong> - restart Foundry and verify compendiums populate correctly</li>
+</ol>
+<h2 id="current-compendium-status">Current Compendium Status</h2>
+<h3 id="complete">Complete</h3>
+<ul>
+<li><strong>Races</strong>: 7 items (all SRD races); compendium entries <strong>update from <code>packs/races/*.json</code></strong> on each GM world load (see Races pack section above). Numeric racial modifiers use <strong><code>system.changes</code></strong> (same entries as feats/conditions: <code>ability.str</code> … <code>ability.cha</code>, <code>skill.&lt;key&gt;</code>, saves, etc.); legacy <code>abilityAdjustments</code> in old worlds is migrated on load. Shipped data includes <strong>unconditional</strong> SRD racial skill and save adjustments where they map to a single canonical key (e.g. elf +2 Listen/Search/Spot, halfling +1 Fort/Ref/Will and +2 Climb/Jump/Listen/Move Silently, Small races’ +4 Hide). Situational bonuses (dwarf vs poison/spells, elf vs enchantment, attack vs favored enemies, thrown-only attacks, stone-only Craft/Appraise, etc.) are <strong>not</strong> encoded as flat <code>changes</code> rows so the bag is not overstated—handle those at the table or in future structured grants (CGS). <strong><code>system.cgsGrants.senses</code></strong> (race sheet) and optional <strong><code>system.cgsGrants.grants</code></strong> supply CGS when this race is owned on a character; numeric ability adjustments stay in <strong><code>changes</code></strong>. <strong><code>system.otherRacialTraits</code></strong> holds rich text for additional racial qualities (vision, languages, immunities, etc.); see the Races pack section above.</li>
+<li><strong>Classes</strong>: 11 items (all SRD base classes)</li>
+<li><strong>Skills</strong>: 36 items (all SRD skills)</li>
+<li><strong>Feats</strong>: 86 items (all SRD feats - General, Fighter Bonus, Metamagic, Item Creation). Most feats stay <strong>GMS</strong> (<code>system.changes</code>) or prose; add <strong><code>system.cgsGrants</code></strong> when the SRD grants a fixed spell-like ability or typed defense that maps cleanly to a CGS category (use <strong><code>spellKey</code></strong> until the compendium resolver fills <strong><code>spellUuid</code></strong>).</li>
+<li><strong>Class features</strong> (<code>packs/features/</code>): exemplar <strong><code>system.cgsGrants</code></strong> rows ship for unambiguous SRD cases—<strong><code>spellGrant</code></strong> + <strong><code>spellKey</code></strong> (e.g. paladin Detect Evil at will, monk Abundant Step 1/day as <em>dimension door</em>), <strong><code>immunity</code></strong> tags (e.g. poison, disease). Many features remain prose-only until automation warrants a structured row.</li>
+<li><strong>Armor</strong>: 18 items (SRD armor types, shields, plus <strong>adamantine</strong> breastplate and full plate exemplars with <strong><code>cgsGrants</code></strong> damage reduction)</li>
+<li><strong>Weapons</strong>: 59 items (SRD weapons plus <strong>javelin of lightning</strong> exemplar with <strong><code>spellGrant</code></strong> / <strong><code>spellKey</code></strong>)</li>
+<li><strong>Spells</strong>: 500+ items (SRD 0–9)</li>
+</ul>
+<h3 id="incomplete">Incomplete</h3>
+<ul>
+<li><strong>Equipment</strong>: 67 JSON items (mundane adventuring gear plus a small <strong>magic</strong> slice—goggles of night, rings, winged boots—with <strong><code>system.cgsGrants</code></strong> and <strong><code>mechanicalApplyScope</code></strong> where appropriate). General SRD equipment coverage remains incremental, not exhaustive.</li>
+</ul>
+<h2 id="capability-grants-cgs-in-pack-json">Capability grants (CGS) in pack JSON</h2>
+<p>Structured grants belong in <strong><code>system.cgsGrants</code></strong> (and spell target restrictions on <strong><code>system.targetCreatureType*</code></strong>), not in numeric <strong><code>system.changes</code></strong>. See <a href="../development/#capability-grants-structured-effects-parallel-to-the-modifier-system">Development — Capability grants</a> for categories and merge behavior.</p>
+<h3 id="stable-keys-vs-compendium-uuids">Stable keys vs compendium UUIDs</h3>
+<p>Foundry assigns <strong>document UUIDs</strong> when compendium items are created. Pack <strong>source JSON</strong> under <code>packs/</code> usually does <strong>not</strong> include those UUIDs. Authors therefore use <strong>stable keys</strong> that match <strong><code>system.key</code></strong> on Creature Type, Subtype, and Spell items; the GM <strong>ready</strong> hook runs <strong><code>CompendiumLoader.resolveCgsReferenceKeysInPacks()</code></strong> (after JSON import) and writes resolved UUIDs into the live compendium documents.</p>
+<table>
+<thead>
+<tr>
+<th>Location</th>
+<th>Authoring fields</th>
+<th>Resolved to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spells</td>
+<td><strong><code>system.key</code></strong> (slug, e.g. <code>holdPerson</code> — use <code>node scripts/add-spell-keys-from-filename.mjs</code> after adding spells)</td>
+<td>Used to resolve <strong><code>spellGrant.spellKey</code></strong> in other items</td>
+</tr>
+<tr>
+<td>Spells</td>
+<td><strong><code>system.targetCreatureTypeKeys</code></strong>, <strong><code>system.targetCreatureSubtypeKeys</code></strong> (match <strong><code>system.key</code></strong> on type/subtype items)</td>
+<td><strong><code>system.targetCreatureTypeUuids</code></strong> (types and subtypes share one list for targeting)</td>
+</tr>
+<tr>
+<td>Armor, weapons, equipment</td>
+<td><strong><code>system.mechanicalCreatureGateTypeKeys</code></strong>, <strong><code>system.mechanicalCreatureGateSubtypeKeys</code></strong></td>
+<td><strong><code>system.mechanicalCreatureGateUuids</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>cgsGrants.grants</code></strong> on feats, features, races, conditions, gear</td>
+<td><strong><code>spellKey</code></strong> on <code>{ "category": "spellGrant", … }</code>; <strong><code>typeKey</code></strong> / <strong><code>subtypeKey</code></strong> on overlay grants</td>
+<td><strong><code>spellUuid</code></strong>, <strong><code>typeUuid</code></strong>, <strong><code>subtypeUuid</code></strong></td>
+</tr>
+</tbody>
+</table>
+<p>Git remains the source of truth: keep <strong>keys</strong> in JSON; compendium copies gain UUIDs at runtime. Re-import pack JSON (system setting <strong>Re-import compendium JSON on each load</strong>) to refresh from disk, then resolution runs again.</p>
+<h3 id="feats-and-class-features-phase-2-pack-authoring">Feats and class features (Phase 2 pack authoring)</h3>
+<ul>
+<li><strong>Class features</strong> are the primary place for fixed <strong>spell-like</strong> lines from the SRD (paladin/monk/etc.): add <strong><code>spellGrant</code></strong> with <strong><code>spellKey</code></strong> matching <strong><code>system.key</code></strong> on the spell item (see <code>feature-paladin-detect-evil.json</code>, <code>feature-monk-abundant-step.json</code>). Use <strong><code>atWill</code>: true</strong> or <strong><code>usesPerDay</code></strong> when the rules match a single static bucket; skip or document in <strong><code>label</code></strong> when uses scale oddly (e.g. weekly <strong>remove disease</strong>) so the sheet does not over-claim automation.</li>
+<li><strong>Feats</strong> use the same <strong><code>cgsGrants</code></strong> shape; the core SRD feat list rarely grants a single fixed SLA, so most entries omit CGS until a clear case appears (metamagic, numeric bonuses, and open-ended choices stay out of CGS).</li>
+</ul>
+<h3 id="gear-phase-3-armor-weapons-equipment">Gear (Phase 3 — armor, weapons, equipment)</h3>
+<ul>
+<li><strong>Armor / weapons / equipment</strong> share <strong><code>system.cgsGrants</code></strong> (senses on the <strong><code>senses</code></strong> array; <strong><code>spellGrant</code></strong>, <strong><code>energyResistance</code></strong>, <strong><code>damageReduction</code></strong>, etc. in <strong><code>grants</code></strong>) and optional <strong><code>system.mechanicalApplyScope</code></strong> (<code>equipped</code> vs <code>carried</code>) per Phase 5g. See <strong><code>armor-breastplate-adamantine.json</code></strong>, <strong><code>equipment-magic-goggles-of-night.json</code></strong>, <strong><code>weapon-magic-javelin-of-lightning.json</code></strong> for authoring patterns.</li>
+<li><strong>Numeric</strong> enhancement bonuses, competence bonuses to skills, and AC from armor still belong in <strong><code>system.changes</code></strong> (GMS), not duplicated as fake CGS rows.</li>
+<li><strong><code>mechanicalCreatureGateTypeKeys</code></strong> / <strong><code>SubtypeKeys</code></strong> on gear resolve to <strong><code>mechanicalCreatureGateUuids</code></strong> on GM ready (same pass as spell key resolution).</li>
+</ul>
+<h3 id="helper-scripts-repo-root">Helper scripts (repo root)</h3>
+<ul>
+<li><strong><code>node scripts/add-spell-keys-from-filename.mjs</code></strong> — sets <strong><code>system.key</code></strong> on every <code>packs/spells/spell-*.json</code> from the filename stem (<code>spell-hold-person</code> → <code>holdPerson</code>).</li>
+<li><strong><code>node scripts/cgs-seed-spell-target-type-keys.mjs</code></strong> — optional starter list of <strong><code>targetCreatureTypeKeys</code></strong> for common SRD type-limited spells; extend the map as you add more.</li>
+<li><strong><code>node scripts/cgs-monster-pack-template.mjs</code></strong> — placeholder pointer for large monster-pack CGS batches; see <strong><code>scripts/phase6-migrate-monster-pack.mjs</code></strong> for a real migration pattern.</li>
+</ul>
+<h2 id="adding-new-compendium-content">Adding New Compendium Content</h2>
+<ol>
+<li>Create JSON file in appropriate <code>packs/</code> subdirectory</li>
+<li>Match the TypeDataModel schema exactly</li>
+<li>Use valid Foundry icon paths</li>
+<li>Remove or omit <code>_id</code> (or use valid 16-char alphanumeric)</li>
+<li>Add filename to <code>FILE_MAPPINGS</code> in <code>compendium-loader.mjs</code></li>
+<li>Restart Foundry - loader will automatically import/update the content</li>
+</ol>
+
+    
+    
+    
+    
+    
+    
+
+
+
+    
+        
+        
+    
+
+
+
+    
+
+
+<a href=".." class="torillic-backlink">🡐 Development</a>
+    
+  </main>
+  <script src="../js/version-selector.js"></script>
+  <script src="../search/main.js"></script>
+</body>
+
+</html>
