@@ -219,7 +219,7 @@ export class NPCData extends foundry.abstract.TypeDataModel {
      */
     prepareDerivedData() {
         // Base ability values only; racial and other modifiers flow through getActiveModifiers (same as character)
-        for (const [key, ability] of Object.entries(this.abilities)) {
+        for (const [, ability] of Object.entries(this.abilities)) {
             ability.effective = ability.value;
         }
 

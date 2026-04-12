@@ -1,4 +1,4 @@
-const { HTMLField, SchemaField, StringField } = foundry.data.fields;
+const { HTMLField, StringField } = foundry.data.fields;
 
 /**
  * Data model for D&D 3.5 Creature Type items (e.g. Humanoid, Dragon, Undead).

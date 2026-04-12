@@ -122,7 +122,6 @@ export class ThirdEraItem extends Item {
         super.prepareDerivedData();
 
         const itemData = this;
-        const systemData = itemData.system;
 
         // Make separate methods for each Item type
         if (itemData.type === 'weapon') this._prepareWeaponData(itemData);
@@ -203,16 +202,14 @@ export class ThirdEraItem extends Item {
     /**
      * Prepare Armor specific derived data
      */
-    _prepareArmorData(itemData) {
-        const systemData = itemData.system;
+    _prepareArmorData(_itemData) {
         // Add any armor-specific calculations here
     }
 
     /**
      * Prepare Spell specific derived data
      */
-    _prepareSpellData(itemData) {
-        const systemData = itemData.system;
+    _prepareSpellData(_itemData) {
         // Add any spell-specific calculations here
     }
 
