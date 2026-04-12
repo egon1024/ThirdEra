@@ -35,7 +35,7 @@ export class ThirdEraItem extends Item {
         }
 
         // Auto-generate a key if not already set (skills, feats, features, domains)
-        if ((data.type === "skill" || data.type === "feat" || data.type === "feature" || data.type === "domain" || data.type === "school") && !data.system?.key) {
+        if ((data.type === "skill" || data.type === "feat" || data.type === "feature" || data.type === "creatureFeature" || data.type === "domain" || data.type === "school") && !data.system?.key) {
             this.updateSource({ "system.key": foundry.utils.randomID() });
         }
 

@@ -1,0 +1,54 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage" title="{{item.name}}" />
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize "THIRDERA.CreatureFeature.NamePlaceholder"}}" /></h1>
+        </div>
+    </header>
+
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item {{#if (eq tabs.primary 'description')}}active{{/if}}" data-action="changeTab"
+            data-group="primary" data-tab="description">{{localize "THIRDERA.CreatureFeature.TabDescription"}}</a>
+        <a class="item {{#if (eq tabs.primary 'details')}}active{{/if}}" data-action="changeTab" data-group="primary"
+            data-tab="details">{{localize "THIRDERA.CreatureFeature.TabDetails"}}</a>
+    </nav>
+
+    <section class="sheet-body">
+        <div class="tab {{#if (eq tabs.primary 'description')}}active{{/if}}" data-group="primary"
+            data-tab="description">
+            <div class="editor-box">
+                <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}"
+                    value="{{system.description}}" toggled="false">
+                    {{{enriched.description}}}
+                </prose-mirror>
+            </div>
+        </div>
+
+        <div class="tab details {{#if (eq tabs.primary 'details')}}active{{/if}}" data-group="primary"
+            data-tab="details">
+            <div class="form-group">
+                <label for="creature-feature-ability-kind">{{localize "THIRDERA.CreatureFeature.AbilityKind"}}</label>
+                <select id="creature-feature-ability-kind" name="system.abilityKind" data-dtype="String"
+                    title="{{localize "THIRDERA.CreatureFeature.AbilityKindHint"}}">
+                    {{selectOptions config.creatureFeatureAbilityKinds selected=system.abilityKind}}
+                </select>
+            </div>
+
+            {{> "systems/thirdera/templates/partials/mechanical-effects-table.hbs"
+                headerKey="THIRDERA.CreatureFeature.MechanicalEffects"
+                hintKey="THIRDERA.CreatureFeature.MechanicalEffectsHint"
+                showLabel=true
+                addButtonKey="THIRDERA.CreatureFeature.AddModifier"
+                changeKeyOptions=changeKeyOptions
+                system=system}}
+
+            <div class="cgs-item-grants-block">
+            <h3 class="form-header">{{localize "THIRDERA.CGS.CapabilityGrantsItemSection"}}</h3>
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-senses.hbs" hideMechanicsTitle=true}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-spell-grants.hbs"}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses.hbs"}}
+            {{> "systems/thirdera/templates/partials/cgs-mechanics-type-overlays.hbs"}}
+            </div>
+        </div>
+    </section>
+</form>

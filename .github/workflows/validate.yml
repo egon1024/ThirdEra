@@ -154,7 +154,7 @@ jobs:
           done
 
           # Check that each item type has a corresponding template
-          for type in weapon armor equipment spell feat skill; do
+          for type in weapon armor equipment spell feat skill creatureFeature; do
             tmpl="templates/item/item-${type}-sheet.hbs"
             if [ -f "$tmpl" ]; then
               echo "  ✓ $tmpl"

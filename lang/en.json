@@ -190,6 +190,16 @@
             "abilityCha": "Ability: Charisma",
             "skill": "Skill"
         },
+        "CreatureFeature": {
+            "NamePlaceholder": "Creature feature name",
+            "TabDescription": "Description",
+            "TabDetails": "Details",
+            "AbilityKind": "Ability kind",
+            "AbilityKindHint": "SRD tag: extraordinary (Ex), supernatural (Su), or spell-like (Sp). Optional.",
+            "MechanicalEffects": "Mechanical effects",
+            "MechanicalEffectsHint": "Optional numeric modifiers (GMS), same key set as feats. Until the system merges owned creature features on actors, these rows are for authoring and preview only.",
+            "AddModifier": "Add modifier"
+        },
         "MechanicalEffectsChooseSkill": "Choose skill…",
         "FeatModifiers": "Mechanical effects",
         "FeatModifiersHint": "Optional modifiers from this feat (e.g. Will save +2, Strength +2). Applied when the character has this feat.",
@@ -736,7 +746,8 @@
                 "condition": "Condition",
                 "creatureType": "Creature Type",
                 "subtype": "Subtype",
-                "defenseCatalog": "Custom defense labels"
+                "defenseCatalog": "Custom defense labels",
+                "creatureFeature": "Creature Feature"
             },
             "Actor": {
                 "character": "Character",

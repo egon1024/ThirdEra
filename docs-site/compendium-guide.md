@@ -4,7 +4,7 @@ This document captures learnings and best practices for creating and managing Fo
 
 ## Overview
 
-Compendiums in Foundry VTT are collections of pre-made game content (items, actors, etc.) that can be imported into worlds. ThirdEra uses compendiums to distribute SRD content (races, classes, skills, feats, spells, weapons, armor, equipment) so users don't have to manually create every item.
+Compendiums in Foundry VTT are collections of pre-made game content (items, actors, etc.) that can be imported into worlds. ThirdEra uses compendiums to distribute SRD content (races, classes, skills, feats, spells, weapons, armor, equipment, creature features, monsters) so users don't have to manually create every item.
 
 ## Compendium Architecture
 
@@ -142,6 +142,16 @@ static FILE_MAPPINGS = {
 - **Creature type / subtypes (authoring):** Source JSON may use **`system.creatureTypeKey`** (matches **Creature Type** item `system.key`, e.g. `humanoid`, `magicalBeast`) and **`system.subtypeKeys`** (array of **Subtype** item keys, e.g. `goblinoid`, `orc`, `fire`, `extraplanar`, `swarm`, `incorporeal`). On load, the compendium loader resolves these to **`creatureTypeUuid`** and **`subtypeUuids`** using the **Creature Types** and **Subtypes** packs, then removes the authoring keys.
 - **Regenerating JSON:** Run `python3 scripts/build-monster-pack-json.py` from the repo root to rewrite the starter SRD monster files after editing the generator.
 - **Skills and feats on monsters:** NPC actors embed **`skill`** and **`feat`** items (same shapes as the Skills / Feats packs) so the NPC sheet can show class vs cross-class (**`system.npcClassSkill`** on skills) and totals that include armor/load ACP and feat **GMS** keys (e.g. Alertness’s `skill.listen`). Ranks and **`modifier.misc`** are authored so totals match the SRD/MM entry for each stat block (including racial/size bonuses folded into misc where the system does not compute them automatically). Use optional **`modifier.miscLabel`** so the skill total tooltip names that bonus (e.g. size/MM) instead of a generic “Misc” line. After regenerating monsters from the Python script, run **`node scripts/apply-monster-skills-feats.mjs`** to re-merge those embedded items (the Node script is the source of truth for skill/feat rows; edit `scripts/apply-monster-skills-feats.mjs` to adjust them). That script strips prior embedded **`skill`** / **`feat`** rows using a case-normalized type check and **dedupes by `system.key`**, so reruns or odd legacy rows cannot leave two embedded items for the same skill.
+
+<a id="creature-features-compendium-thirdera_creature_features"></a>
+
+## Creature Features compendium (`thirdera_creature_features`)
+
+- **Pack:** `thirdera_creature_features` — **`type`: `"Item"`**, folder `packs/creature-features/`, declared **before** the **Monsters** pack in `system.json` so future monster JSON can resolve references to creature-feature documents during compendium load.
+- **Purpose:** Reusable **creature feature** items model SRD-style special qualities (optional **Ex / Su / Sp** tag on `system.abilityKind`), prose in **`system.description`**, numeric mechanical rows in **`system.changes`** (same canonical GMS keys as feats and conditions), and structured capability rows in **`system.cgsGrants`** (CGS — senses, spell-like grants, typed defenses, overlays), mirroring class feature / feat item shapes.
+- **Stable key:** Each JSON file should set **`system.key`** (e.g. `rendTroll`) so the compendium loader updates the same entry across reloads, consistent with feats and monster actors.
+- **Loader:** Add new filenames to **`CompendiumLoader.FILE_MAPPINGS`** under `"thirdera.thirdera_creature_features"` in `module/logic/compendium-loader.mjs` (same pattern as other Item packs).
+- **Sheets:** Item type id is **`creatureFeature`**; the sheet template path is **`templates/item/item-creatureFeature-sheet.hbs`** (same rule as `creatureType` → `item-creatureType-sheet.hbs`: the filename uses the exact `type` string). The sheet supports Description, Details (ability kind, mechanical effects table, CGS blocks). **`system.key`** is not shown on the sheet; it is set from pack JSON or auto-generated when creating a new item (for compendium matching and cross-references). Until the system merges owned creature features on actors, GMS rows are for authoring and preview; see [Development](development.md) for the modifier and capability pipelines.
 
 ## JSON File Structure
 

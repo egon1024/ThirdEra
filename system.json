@@ -216,6 +216,20 @@
       }
     },
     {
+      "name": "thirdera_creature_features",
+      "label": "Creature Features",
+      "path": "packs/creature-features",
+      "type": "Item",
+      "system": "thirdera",
+      "banner": "systems/thirdera/assets/banners/monsters-banner.webp",
+      "ownership": {
+        "GAMEMASTER": "OWNER",
+        "ASSISTANT": "OWNER",
+        "TRUSTED": "OBSERVER",
+        "PLAYER": "OBSERVER"
+      }
+    },
+    {
       "name": "thirdera_monsters",
       "label": "Monsters (SRD)",
       "path": "packs/monsters",
@@ -265,7 +279,8 @@
       "condition": {},
       "creatureType": {},
       "subtype": {},
-      "defenseCatalog": {}
+      "defenseCatalog": {},
+      "creatureFeature": {}
     }
   },
   "socket": false,

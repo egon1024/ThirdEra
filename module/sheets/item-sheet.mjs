@@ -356,7 +356,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             senseTypes: CONFIG.THIRDERA?.senseTypes || {},
             immunityTags: CONFIG.THIRDERA?.immunityTags || {},
             energyTypes: CONFIG.THIRDERA?.energyTypes || {},
-            drBypassTypes: CONFIG.THIRDERA?.drBypassTypes || {}
+            drBypassTypes: CONFIG.THIRDERA?.drBypassTypes || {},
+            creatureFeatureAbilityKinds: CONFIG.THIRDERA?.creatureFeatureAbilityKinds || {}
         };
 
         // Enrich HTML description and other fields
@@ -617,6 +618,19 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             };
             systemForContext = plain;
         }
+        if (item.type === "creatureFeature") {
+            const plain =
+                typeof systemData?.toObject === "function"
+                    ? systemData.toObject(false)
+                    : { ...(systemData || {}) };
+            const cg = systemData?.cgsGrants;
+            plain.changes = Array.isArray(systemData?.changes) ? systemData.changes : [];
+            plain.cgsGrants = {
+                grants: foundry.utils.duplicate(cg?.grants ?? []),
+                senses: foundry.utils.duplicate(cg?.senses ?? [])
+            };
+            systemForContext = plain;
+        }
         if (item.type === "armor" || item.type === "weapon" || item.type === "equipment") {
             systemForContext = buildPlainGearSystemForItemSheet(systemData);
         }
@@ -806,9 +820,9 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                               : "THIRDERA.MechanicalApplyScopeEquippedArmor"
                   }
                 : {}),
-            changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "race" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
+            changeKeyOptions: (item.type === "condition" || item.type === "feat" || item.type === "creatureFeature" || item.type === "race" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             conditionChangeKeys: item.type === "condition" ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
-            modifierChangeKeys: (item.type === "feat" || item.type === "race" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
+            modifierChangeKeys: (item.type === "feat" || item.type === "creatureFeature" || item.type === "race" || item.type === "condition" || item.type === "armor" || item.type === "weapon" || item.type === "equipment") ? (ThirdEraItemSheet.getConditionChangeKeyOptions() ?? {}) : {},
             cgsSpellGrantRows,
             cgsImmunityRows,
             cgsEnergyResistanceRows,
@@ -1691,7 +1705,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
         // Mechanical effects: rebuild system.changes from the live form so submitOnChange (e.g. Description / ProseMirror)
         // cannot wipe rows when default expansion omits nested system.changes.* fields (race/feat/condition/item gear).
-        const typesWithMechanicalChanges = ["condition", "feat", "race", "armor", "weapon", "equipment"];
+        const typesWithMechanicalChanges = ["condition", "feat", "creatureFeature", "race", "armor", "weapon", "equipment"];
         if (typesWithMechanicalChanges.includes(this.document?.type) && form && form.nodeName === "FORM") {
             const fromForm = getSystemChangesFromForm(form);
             if (fromForm !== undefined) {
@@ -2314,7 +2328,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         event?.preventDefault?.();
         event?.stopPropagation?.();
         const doc = this.document;
-        const typesWithChanges = ["condition", "feat", "race", "armor", "weapon", "equipment"];
+        const typesWithChanges = ["condition", "feat", "creatureFeature", "race", "armor", "weapon", "equipment"];
         if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -2345,7 +2359,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         event?.preventDefault?.();
         event?.stopPropagation?.();
         const doc = this.document;
-        const typesWithChanges = ["condition", "feat", "race", "armor", "weapon", "equipment"];
+        const typesWithChanges = ["condition", "feat", "creatureFeature", "race", "armor", "weapon", "equipment"];
         if (!doc || !typesWithChanges.includes(doc.type)) return;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
@@ -2725,7 +2739,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /** Item types that edit `system.cgsGrants.senses` on the item sheet (Phase 5b). */
-    static #itemTypesWithCgsSensesUi = new Set(["race", "feat", "feature", "armor", "weapon", "equipment"]);
+    static #itemTypesWithCgsSensesUi = new Set(["race", "feat", "feature", "creatureFeature", "armor", "weapon", "equipment"]);
 
     /**
      * Build a plain `{ grants, senses }` for `system.cgsGrants` (duplicate, not references).

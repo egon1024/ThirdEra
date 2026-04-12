@@ -389,6 +389,7 @@ export class CompendiumLoader {
             "subtype-good.json", "subtype-incorporeal.json", "subtype-lawful.json", "subtype-native.json",
             "subtype-orc.json", "subtype-reptilian.json", "subtype-shapechanger.json", "subtype-swarm.json", "subtype-water.json"
         ],
+        "thirdera.thirdera_creature_features": ["creature-feature-placeholder.json"],
         "thirdera.thirdera_monsters": [
             "monster-aasimar.json",
             "monster-aboleth.json",
@@ -1007,6 +1008,7 @@ export class CompendiumLoader {
         const cgsKeyPacks = [
             "thirdera.thirdera_feats",
             "thirdera.thirdera_features",
+            "thirdera.thirdera_creature_features",
             "thirdera.thirdera_races",
             "thirdera.thirdera_conditions",
             "thirdera.thirdera_armor",

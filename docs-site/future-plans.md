@@ -47,6 +47,7 @@ The **generalized modifier system** (Phases 1–7 complete) provides a single pi
 
 **Planned extensions:**
 
+- **Ability score override (GMS)** — Today `ability.*` `changes` rows are **additive**: each `value` sums into the modifier bag, and the actor’s effective score is **base `ability.value` + total delta**. There is **no** supported way to express “set this ability’s effective score to an explicit number” (e.g. polymorph-style replacement) through GMS alone. A future extension would need an **authoring field** (e.g. per-change mode or a dedicated override channel), **merge rules** when multiple sources set the same ability, and a clear **order of operations** vs. additive bonuses and sheet base scores. Until then, table ruling or adjusting the actor’s base scores remains the practical approach.
 - **Class features** — When a class feature is granted (actor has the class at the right level), it could contribute `changes`; a provider would resolve active features from levelHistory and feed them into the same aggregation.
 - **Magic items** — All magic item categories below would use the same modifier schema when they grant **numeric** bonuses; sense-like and other structured grants use **CGS** on the item (`system.cgsGrants`) where applicable (see [Development — Capability grants](development.md#capability-grants-structured-effects-parallel-to-the-modifier-system)).
 

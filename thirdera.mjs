@@ -21,6 +21,7 @@ import { ConditionData } from "./module/data/item-condition.mjs";
 import { CreatureTypeData } from "./module/data/item-creature-type.mjs";
 import { SubtypeData } from "./module/data/item-subtype.mjs";
 import { DefenseCatalogData } from "./module/data/item-defense-catalog.mjs";
+import { CreatureFeatureData } from "./module/data/item-creature-feature.mjs";
 
 // Import document classes
 import { ThirdEraActor } from "./module/documents/actor.mjs";
@@ -279,6 +280,13 @@ Hooks.once("init", async function () {
             blindsense: "Blindsense",
             tremorsense: "Tremorsense"
         },
+        /** Labels for creature feature / special quality kind (SRD Ex / Su / Sp). */
+        creatureFeatureAbilityKinds: {
+            "": "—",
+            Ex: "Extraordinary (Ex)",
+            Su: "Supernatural (Su)",
+            Sp: "Spell-like (Sp)"
+        },
         /**
          * Energy types for resistance/immunity/vulnerability (Phase 5e CGS).
          * Future: may be replaced or augmented by compendium catalog Items; keep grant `energyType` keys stable or migrate with care — see plans/cgs-phased-implementation.md § Future — Typed defense catalogs.
@@ -507,7 +515,8 @@ Hooks.once("init", async function () {
         condition: ConditionData,
         creatureType: CreatureTypeData,
         subtype: SubtypeData,
-        defenseCatalog: DefenseCatalogData
+        defenseCatalog: DefenseCatalogData,
+        creatureFeature: CreatureFeatureData
     };
 
     // Register item type labels for the creation menu
@@ -526,7 +535,8 @@ Hooks.once("init", async function () {
         condition: "THIRDERA.TYPES.Item.condition",
         creatureType: "THIRDERA.TYPES.Item.creatureType",
         subtype: "THIRDERA.TYPES.Item.subtype",
-        defenseCatalog: "THIRDERA.TYPES.Item.defenseCatalog"
+        defenseCatalog: "THIRDERA.TYPES.Item.defenseCatalog",
+        creatureFeature: "THIRDERA.TYPES.Item.creatureFeature"
     };
 
     // Register sheet application classes
