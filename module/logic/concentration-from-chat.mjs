@@ -3,7 +3,8 @@
  * Mirrors spell-save-from-chat: renderChatMessageHTML + delegated click on ui.chat.
  */
 
-import { damageWhileCastingDc, defensiveDc } from "./concentration-dcs.mjs";
+import { defensiveDc } from "./concentration-dcs.mjs";
+import { parseConcentrationOtherInputs } from "./concentration-from-chat-helpers.mjs";
 
 const CONCENTRATION_DEFENSIVE_SELECTOR = ".thirdera-concentration-from-chat";
 const CONCENTRATION_OTHER_SELECTOR = ".thirdera-concentration-other-from-chat";
@@ -37,12 +38,11 @@ function getConcentrationCastContext(message) {
 }
 
 /**
- * Read damage / custom DC from the A4 dialog; prefer damage when that field is non-empty.
- * @param {jQuery|HTMLElement} html - Dialog callback passes jQuery in Foundry.
- * @param {number} spellLevel
- * @returns {{ dc: number, label: string }|{ error: string }}
+ * Read damage / custom DC field strings from the A4 dialog (jQuery or DOM).
+ * @param {jQuery|HTMLElement} html
+ * @returns {{ damageStr: string, customStr: string }}
  */
-function parseConcentrationOtherDialog(html, spellLevel) {
+function readConcentrationOtherDialogFieldStrings(html) {
     let damageStr = "";
     let customStr = "";
     if (typeof html?.find === "function") {
@@ -53,34 +53,24 @@ function parseConcentrationOtherDialog(html, spellLevel) {
         damageStr = (root?.querySelector?.('input[name="damage"]')?.value ?? "").trim();
         customStr = (root?.querySelector?.('input[name="customDc"]')?.value ?? "").trim();
     }
+    return { damageStr, customStr };
+}
 
-    if (damageStr.length > 0) {
-        const damage = Number(damageStr);
-        if (!Number.isFinite(damage) || damage < 0) {
-            return { error: "THIRDERA.Concentration.OtherInvalidDamage" };
-        }
-        const dc = damageWhileCastingDc(damage, spellLevel);
-        if (!Number.isFinite(dc)) {
-            return { error: "THIRDERA.Concentration.OtherInvalidDamage" };
-        }
-        return {
-            dc,
-            label: game.i18n.format("THIRDERA.Concentration.DamageWhileCastingLabel", { damage })
-        };
-    }
-
-    if (customStr.length > 0) {
-        const customDc = Number(customStr);
-        if (!Number.isFinite(customDc)) {
-            return { error: "THIRDERA.Concentration.OtherInvalidCustomDc" };
-        }
-        return {
-            dc: customDc,
-            label: game.i18n.localize("THIRDERA.Concentration.CustomDcLabel")
-        };
-    }
-
-    return { error: "THIRDERA.Concentration.OtherNeedDcOrDamage" };
+/**
+ * Read damage / custom DC from the A4 dialog; prefer damage when that field is non-empty.
+ * @param {jQuery|HTMLElement} html - Dialog callback passes jQuery in Foundry.
+ * @param {number} spellLevel
+ * @returns {{ dc: number, label: string }|{ error: string }}
+ */
+function parseConcentrationOtherDialog(html, spellLevel) {
+    const { damageStr, customStr } = readConcentrationOtherDialogFieldStrings(html);
+    const parsed = parseConcentrationOtherInputs(damageStr, customStr, spellLevel);
+    if (!parsed.ok) return { error: parsed.errorKey };
+    const label =
+        parsed.labelKind === "damage"
+            ? game.i18n.format("THIRDERA.Concentration.DamageWhileCastingLabel", { damage: parsed.damage })
+            : game.i18n.localize("THIRDERA.Concentration.CustomDcLabel");
+    return { dc: parsed.dc, label };
 }
 
 /**

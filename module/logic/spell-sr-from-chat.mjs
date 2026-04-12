@@ -3,7 +3,8 @@
  * Caster (message speaker) rolls 1d20 + CL vs a target's SR; mirrors spell-save / concentration chat UX.
  */
 
-import { getActorSpellResistance, spellAllowsPenetrationRoll } from "./spell-resistance-helpers.mjs";
+import { getActorSpellResistance } from "./spell-resistance-helpers.mjs";
+import { getSpellPenetrationCastFlags } from "./spell-sr-from-chat-helpers.mjs";
 
 const PENETRATION_BUTTON_SELECTOR = ".thirdera-spell-penetration-from-chat";
 
@@ -23,19 +24,12 @@ function userMayPickActor(actor) {
  * @returns {{ casterLevel: number, spellName: string, targetActorUuids: string[] }|null}
  */
 function getSpellPenetrationCastData(message) {
-    const spellCast = message?.flags?.thirdera?.spellCast;
-    if (!spellCast) return null;
-    if (!spellAllowsPenetrationRoll(spellCast.srKey ?? "")) return null;
-    const casterLevel = spellCast.casterLevel;
-    if (typeof casterLevel !== "number" || !Number.isFinite(casterLevel)) return null;
+    const flags = getSpellPenetrationCastFlags(message?.flags?.thirdera?.spellCast);
+    if (!flags) return null;
     const caster = message.speakerActor;
     if (!caster || typeof caster.rollSpellPenetration !== "function") return null;
     if (!(game.user.isGM || caster.testUserPermission(game.user, "OWNER"))) return null;
-    return {
-        casterLevel,
-        spellName: spellCast.spellName ?? "",
-        targetActorUuids: Array.isArray(spellCast.targetActorUuids) ? spellCast.targetActorUuids : []
-    };
+    return flags;
 }
 
 /**
