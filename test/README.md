@@ -2,6 +2,8 @@
 
 Vitest runs any `*.test.mjs` / `*.spec.mjs` under `test/` (see [`vitest.config.mjs`](../vitest.config.mjs)). **Foundry VTT is not required** for these tests.
 
+**`scripts/`:** Repo **`scripts/`** is **not** part of Vitest or ESLint (maintainer decision; see [Development — Automated unit tests](../docs-site/development.md#automated-unit-tests)).
+
 ## Layout
 
 | Directory | Mirrors | Purpose |
@@ -60,9 +62,9 @@ When you change a **covered** module, add or update tests in the matching `test/
 |---------|---------|
 | `make test` | Same as `npm test` — run all tests once (fast; no coverage). |
 | `make test-coverage` | Same as `npm run test:coverage` — **v8** coverage, **minimum thresholds** (see `coverage.thresholds` in [`vitest.config.mjs`](../vitest.config.mjs)); writes **`coverage/`** (HTML: `coverage/index.html`, LCOV: `coverage/lcov.info`). Fails if coverage is below the configured floors. **Validate** CI uses this target. |
-| `make lint` | Same as `npm run lint` — **ESLint** on `test/**/*.mjs`, `module/**/*.mjs`, `thirdera.mjs`, `scripts/**/*.mjs`, and `vitest.config.mjs` (see [`eslint.config.js`](../eslint.config.js) at repo root). **Validate** CI **`lint`** job runs this after `npm ci`. |
+| `make lint` | Same as `npm run lint` — **ESLint** on `test/**/*.mjs`, `module/**/*.mjs`, `thirdera.mjs`, and `vitest.config.mjs` (see **`package.json`** `lint` and [`eslint.config.js`](../eslint.config.js)). **Validate** CI **`lint`** job runs this after `npm ci`. |
 | `npm test` / `npm run test:coverage` | Direct npm invocations; equivalent to the `make` targets above. |
-| `npm run lint` | ESLint on the paths above (Vitest tree, system `module/`, system entry, `scripts/`, Vitest config). |
+| `npm run lint` | ESLint on the paths above (Vitest tree, system `module/`, `thirdera.mjs`, `vitest.config.mjs`). |
 | `npm run test:watch` | Re-run tests on change (local only). |
 
 Coverage **includes** `module/logic/**`, `module/utils/**`, and `module/data/_*.mjs`, but **excludes** modules we do not intend to cover in Node (Foundry chat hooks, packs, audit log, `_ac-helpers`, etc.) — see `coverage.exclude` in [`vitest.config.mjs`](../vitest.config.mjs). **`coverage.thresholds`** enforces minimum **lines**, **statements**, **branches**, and **functions** over that scoped set (CI and local **`make test-coverage`**). The headline percentage reflects **unit-test-in-scope** files; open the HTML report for per-file detail. When you add Vitest coverage for a previously excluded file, remove its path from `coverage.exclude`.
