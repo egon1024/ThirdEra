@@ -72,15 +72,4 @@ export default [
         },
         rules: recommendedWithUnderscoreUnused,
     },
-    {
-        files: ["scripts/**/*.mjs", "vitest.config.mjs"],
-        languageOptions: {
-            ecmaVersion: 2022,
-            sourceType: "module",
-            globals: {
-                ...globals.node,
-            },
-        },
-        rules: recommendedWithUnderscoreUnused,
-    },
 ];
