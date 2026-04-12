@@ -28,10 +28,10 @@ export class AuditLog {
         Hooks.on("createItem", (document, options, userId) => this._onDocumentEvent("Created", document, userId));
 
         // Pre-update hooks to capture old values
-        Hooks.on("preUpdateActor", (document, changes, options, userId) => {
+        Hooks.on("preUpdateActor", (document, _changes, _options, _userId) => {
             this._captureOldValues(document, "Actor");
         });
-        Hooks.on("preUpdateItem", (document, changes, options, userId) => {
+        Hooks.on("preUpdateItem", (document, _changes, _options, _userId) => {
             this._captureOldValues(document, "Item");
         });
 

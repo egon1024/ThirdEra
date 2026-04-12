@@ -6,9 +6,6 @@
 const HP_DERIVED = "hp";
 const COMBAT_DERIVED = "combat";
 
-/** Condition IDs we auto-apply from HP (SRD: disabled at 0, dying -1..-9, stable when stabilized, dead at -10). */
-const HP_CONDITION_IDS = new Set(["dead", "dying", "stable", "disabled", "unconscious"]);
-
 /**
  * Get the HP-derived condition ID for an actor based on current HP and stable flag.
  * D&D 3.5: Disabled (0 HP), Dying (-1 to -9, not stable), Stable (-1 to -9, stable), Dead (-10 or below).

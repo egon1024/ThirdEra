@@ -975,7 +975,9 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             if (coll != null && typeof coll[Symbol.iterator] === "function") {
                 safeItemList = Array.from(coll);
             }
-        } catch (_) {}
+        } catch {
+            /* Defensive: actor.items may throw during early sheet lifecycle */
+        }
 
         // Prepare items
         const items = this._prepareItems(safeItemList, actor.type);
@@ -3068,7 +3070,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         // After removal this class has 0 levels -> 0 slots at every level; only consider spells that were on this class's list
         for (const spell of actor.items.filter((i) => i.type === "spell")) {
             if (!SpellData.hasLevelForClass(spell.system, spellListKey)) continue;
-            const spellLevel = SpellData.getLevelForClass(spell.system, spellListKey);
             const otherHasSlots = otherClasses.some((other) => {
                 const oSc = other.system?.spellcasting;
                 if (!oSc?.enabled && oSc?.enabled !== "true") return false;
@@ -3159,7 +3160,6 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const enabled = sc?.enabled === true || sc?.enabled === "true";
         const table = sc?.spellsKnownTable;
         const tableOk = Array.isArray(table) && table.length > 0;
-        const prepType = sc?.preparationType;
         if (!sc || !enabled || sc.preparationType !== "spontaneous") return;
         if (!tableOk) return;
         const spellListKey = (sc.spellListKey || "").trim()
@@ -3300,7 +3300,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {DragEvent} event         The drop event
      * @returns {Promise<boolean>}      False if handled, true/Item if should continue with normal drop
      */
-    async _handleContainerDrop(item, containerId, event) {
+    async _handleContainerDrop(item, containerId, _event) {
         const container = this.actor.items.get(containerId);
         if (!container || container.type !== "equipment" || !container.system.isContainer) {
             return true; // Not a valid container, continue with normal drop
@@ -3554,8 +3554,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             }
             
             // No stackable item found, create new item
-            const createdItems = await this.actor.createEmbeddedDocuments("Item", [itemData]);
-            
+            await this.actor.createEmbeddedDocuments("Item", [itemData]);
+
             // Ensure the new items are processed
             await this.actor.prepareData();
             
@@ -4213,14 +4213,10 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             await existingItem.update({ "system.quantity": currentQuantity + 1 });
             return existingItem;
         }
-        try {
-            const result = await Item.implementation.create(itemData, { parent: this.actor });
-            if (result) await this.actor.prepareData();
-            if (result) await this.render();
-            return result;
-        } catch (err) {
-            throw err;
-        }
+        const result = await Item.implementation.create(itemData, { parent: this.actor });
+        if (result) await this.actor.prepareData();
+        if (result) await this.render();
+        return result;
     }
 
     /**
@@ -4329,7 +4325,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static async #onConfigureOwnership(event, target) {
+    static async #onConfigureOwnership(event, _target) {
         event.preventDefault();
         console.log("Third Era | Configure ownership clicked", {document: this.document, apps: foundry.applications?.apps});
         try {
@@ -4364,7 +4360,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static async #onActorDeleteHeader(event, target) {
+    static async #onActorDeleteHeader(_event, _target) {
         const confirm = await foundry.applications.api.DialogV2.confirm({
             window: { title: "Delete Actor" },
             content: `<h4>Are you sure you want to delete ${this.actor.name}?</h4>`,
@@ -4381,7 +4377,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * Open Prototype Token Configuration for the actor's default token.
      * @param {PointerEvent} event
      */
-    static #onConfigurePrototypeToken(event) {
+    static #onConfigurePrototypeToken(_event) {
         new CONFIG.Token.prototypeSheetClass({
             prototype: this.actor.prototypeToken,
             position: {
@@ -4695,7 +4691,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static #onOpenRace(event, target) {
+    static #onOpenRace(_event, _target) {
         const race = this.actor.items.find(i => i.type === "race");
         if (race) {
             race.sheet.render({ force: true });
@@ -4737,7 +4733,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static async #onRemoveRace(event, target) {
+    static async #onRemoveRace(_event, _target) {
         const race = this.actor.items.find(i => i.type === "race");
         if (race) {
             await race.delete();
@@ -4857,7 +4853,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static #onOpenLevelUpFlow(event, target) {
+    static #onOpenLevelUpFlow(_event, _target) {
         if (this.actor.type !== "character") return;
         new LevelUpFlow(this.actor).render(true);
     }
@@ -5057,7 +5053,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static async #onAddHpAdjustment(event, target) {
+    static async #onAddHpAdjustment(_event, _target) {
         const adjustments = [...(this.actor.system.attributes.hp.adjustments || [])];
         adjustments.push({ value: 0, label: "Misc" });
         await this.actor.update({ "system.attributes.hp.adjustments": adjustments });
@@ -5184,7 +5180,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The add button
      * @this {ThirdEraActorSheet}
      */
-    static async #onAddNaturalAttack(event, target) {
+    static async #onAddNaturalAttack(_event, _target) {
         if (this.actor.type !== "npc") return;
         const current = this.actor.system.statBlock?.naturalAttacks ?? [];
         const newEntry = { name: "", dice: "1d4", damageType: "bludgeoning", primary: "true", reach: "" };
@@ -5247,7 +5243,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static #onOpenDescriptionEditor(event, target) {
+    static #onOpenDescriptionEditor(_event, _target) {
         const box = this.element?.querySelector?.(".description-editor-box");
         const pm = box?.querySelector?.("prose-mirror[name='system.biography']");
         if (!box || !pm) return;
@@ -5272,7 +5268,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target
      * @this {ThirdEraActorSheet}
      */
-    static #onApplyDamageHealing(event, target) {
+    static #onApplyDamageHealing(_event, _target) {
         ApplyDamageHealingDialog.openForSelection();
     }
 
@@ -5283,7 +5279,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target
      * @this {ThirdEraActorSheet}
      */
-    static #onApplyDamageHealingToThisToken(event, target) {
+    static #onApplyDamageHealingToThisToken(_event, _target) {
         const actor = this.actor;
         const hp = actor?.system?.attributes?.hp;
         if (!actor || !hp || typeof hp.value !== "number" || typeof hp.max !== "number") return;
@@ -5296,7 +5292,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target
      * @this {ThirdEraActorSheet}
      */
-    static async #onRollInitiativeCombat(event, target) {
+    static async #onRollInitiativeCombat(_event, _target) {
         try {
             const actor = this.actor;
             const combat = game.combat;
@@ -5340,7 +5336,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static #onOpenSpecialAbilitiesEditor(event, target) {
+    static #onOpenSpecialAbilitiesEditor(_event, _target) {
         if (this.actor.type !== "npc") return;
         const box = this.element?.querySelector?.(".special-abilities-editor-box");
         const pm = box?.querySelector?.("prose-mirror[name='system.statBlock.specialAbilities']");
@@ -5360,7 +5356,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target   The clicked element
      * @this {ThirdEraActorSheet}
      */
-    static async #onAddCgsSense(event, target) {
+    static async #onAddCgsSense(_event, _target) {
         const senses = foundry.utils.duplicate(this.actor.system.cgsGrants?.senses ?? []);
         senses.push({ type: "", range: "" });
         await this.actor.update({ "system.cgsGrants.senses": senses });
@@ -5420,7 +5416,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {HTMLElement} target
      * @this {ThirdEraActorSheet}
      */
-    static async #onAddLegacyStatBlockSense(event, target) {
+    static async #onAddLegacyStatBlockSense(_event, _target) {
         if (this.actor.type !== "npc") return;
         const current = foundry.utils.duplicate(this.actor.system.statBlock?.senses ?? []);
         current.push({ type: "", range: "" });
@@ -5682,7 +5678,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {PointerEvent} event
      * @param {HTMLElement} target
      */
-    static #onTakeRest(event, target) {
+    static #onTakeRest(_event, _target) {
         if (this.actor.type !== "character") return;
         const hasPreparedSpellcasting = ThirdEraActorSheet.actorHasPreparedSpellcasting(this.actor);
         const dialog = new TakeRestDialog(this.actor, { sheet: this, hasPreparedSpellcasting });
@@ -5705,7 +5701,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {PointerEvent} event
      * @param {HTMLElement} target   Element with data-action="resetSpellUsage"
      */
-    static async #onResetSpellUsage(event, target) {
+    static async #onResetSpellUsage(_event, _target) {
         const toReset = this.actor.items.filter(
             i => i.type === "spell" && (i.system?.cast ?? 0) !== 0
         );
@@ -5738,7 +5734,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
      * @param {PointerEvent} event
      * @param {HTMLElement} target   Element with data-action="resetPreparedCounts"
      */
-    static async #onResetPreparedCounts(event, target) {
+    static async #onResetPreparedCounts(_event, _target) {
         const toReset = this.actor.items.filter(
             i => i.type === "spell" && (i.system?.prepared ?? 0) !== 0
         );
