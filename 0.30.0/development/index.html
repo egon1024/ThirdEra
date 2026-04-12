@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Development reference - ThirdEra</title>
+  <link rel="icon" type="image/x-icon" href="../css/logo.png">
+  <link href="../css/torillic.css" rel="stylesheet">
+  <link href="../css/single-column.css" rel="stylesheet">
+  <link href="../css/navigation.css" rel="stylesheet">
+  <style>
+    .torillic-background {
+      
+    }
+  </style>
+  <script>
+    function toggleSpoiler(element) {
+      // add/remove "hidden" class
+      if (element.classList.contains("hidden")) {
+        element.classList.remove("hidden");
+      } else {
+        element.classList.add("hidden");
+      }
+    }
+  </script>
+</head>
+
+<body class="torillic-background">
+  <header class="torillic-header">
+    <h1>ThirdEra</h1>
+    <nav>
+      
+      
+      <a class="" href="..">Home</a>
+      
+      
+      
+      <a class="" href="../usage/">Usage</a>
+      
+      
+      
+      <a class="" href="../extending/">Extending</a>
+      
+      
+      
+      <a class="current" href="./">Development</a>
+      
+      
+      
+      <a class="" href="../contributing/">Contributing</a>
+      
+      
+    </nav>
+  </header>
+  <main class="torillic-page">
+    
+    <h1 id="development-reference">Development reference</h1>
+<p>This page is the single reference for <strong><a href="../contributing/">contributors</a></strong> working in this repository: project overview, architecture, conventions, and operational notes. If you are <strong>extending</strong> the system (adding compendiums, modules, or new content) rather than changing core code, see <strong><a href="../extending/">Extending</a></strong> first.</p>
+<h2 id="project-overview">Project Overview</h2>
+<p>ThirdEra is a <strong>Foundry VTT game system</strong> implementing D&amp;D 3.5 Edition using the System Reference Document (SRD). It targets <strong>Foundry VTT v13</strong> and uses the <strong>ApplicationV2 / HandlebarsApplicationMixin</strong> sheet framework (not the legacy Application v1). <strong>Only SRD content is intended to be implemented - no proprietary data outside the SRD.</strong> The system is designed so that third-party compendiums or modules can extend it.</p>
+<p>There is no build step, bundler, or package manager <strong>for the system at runtime</strong>. The system is plain ES modules + CSS + Handlebars templates, loaded directly by Foundry VTT at runtime.</p>
+<p><strong>Automated unit tests</strong> use a <strong>dev-only</strong> toolchain (<a href="../package.json"><code>package.json</code></a> + <strong>Vitest</strong>) for logic that can run in Node. Tests live under <code>test/</code> and <strong>complement</strong> in-world checks (F5 reload, optional scenarios under gitignored <code>docs/testing/</code> when present). Roadmap and planned work are summarized on <strong><a href="../future-plans/">Future plans</a></strong>.</p>
+<h3 id="published-documentation-docs-site-and-feature-state">Published documentation (docs-site) and feature state</h3>
+<p>The <strong>docs-site</strong> (this MkDocs tree: <code>development.md</code>, <code>extending.md</code>, <code>usage/*</code>, <code>compendium-guide.md</code>, etc.) is the <strong>published</strong> description of how the system behaves <strong>in releases</strong>. It should stay <strong>honest about what is implemented vs what is only planned or manual</strong>:</p>
+<ul>
+<li>Prefer explicit phrases such as <strong>“supported today”</strong>, <strong>“not in core yet”</strong>, or <strong>“planned”</strong> wherever a feature is partial (CGS categories, type-based rules, vision, and similar).</li>
+<li><strong>Contributors:</strong> When a PR changes user-visible or macro-facing behavior, update the relevant docs-site page(s) in the <strong>same</strong> change or an immediately following PR so the site does not lag the code.</li>
+<li><strong>QA / manual test steps</strong> belong in maintainer notes or gitignored testing docs, <strong>not</strong> in docs-site (see project conventions); behavior descriptions and limitations <strong>do</strong> belong here.</li>
+</ul>
+<h2 id="development-setup">Development Setup</h2>
+<ul>
+<li>Symlink or copy this repository into Foundry VTT <code>Data/systems/</code> as <code>thirdera/</code>. Foundry resolves paths relative to <code>systems/thirdera/</code> (e.g. template paths use <code>"systems/thirdera/templates/..."</code>).</li>
+<li><strong>In-game verification:</strong> Reload the Foundry VTT world in-browser (F5 or "Reload" in developer tools) when changing behavior the unit suite does not cover.</li>
+</ul>
+<h2 id="automated-unit-tests">Automated unit tests</h2>
+<p><strong>Prerequisites:</strong> <a href="https://nodejs.org/">Node.js</a> <strong>v20+</strong> on your PATH (same major version as <a href="../.github/workflows/validate.yml"><code>.github/workflows/validate.yml</code></a>). You do <strong>not</strong> need Foundry running to execute unit tests.</p>
+<p><strong>First-time setup (same as CI):</strong> From the repository root:</p>
+<ol>
+<li><code>npm ci</code> — installs exact versions from <code>package-lock.json</code> (use <code>npm install</code> instead if you are not using a lockfile-driven workflow locally, but CI always uses <code>npm ci</code>).</li>
+<li><strong><code>make test</code></strong> or <strong><code>npm test</code></strong> — runs <strong>Vitest</strong> once and exits; must pass before considering related work done.</li>
+<li><strong><code>make lint</code></strong> or <strong><code>npm run lint</code></strong> — runs <strong>ESLint</strong> on <code>test/**/*.mjs</code>, <code>module/**/*.mjs</code>, <code>thirdera.mjs</code>, <code>scripts/**/*.mjs</code>, and <code>vitest.config.mjs</code> (<a href="../eslint.config.js"><code>eslint.config.js</code></a>); same scope as the <strong>Validate</strong> workflow <strong><code>lint</code></strong> job.</li>
+</ol>
+<p><strong>Day-to-day:</strong> After dependencies are installed, <strong><code>make test</code></strong> or <strong><code>npm test</code></strong> is enough for quick iteration. Use <code>npm run test:watch</code> for interactive re-runs while editing (not used in CI). Before finishing work that touches scoped backend logic, also run <strong><code>make test-coverage</code></strong> so <strong>minimum coverage</strong> (see below) is satisfied—the same command CI runs. After editing tests or system JavaScript under <code>module/</code> (or the other linted paths), run <strong><code>make lint</code></strong> (or <code>npm run lint</code>) before pushing.</p>
+<p><strong>Coverage (same as CI for PRs on scoped files):</strong></p>
+<ul>
+<li>Run <strong><code>make test-coverage</code></strong> or <strong><code>npm run test:coverage</code></strong> — full suite with the <strong>v8</strong> coverage provider, <strong>minimum thresholds</strong> enforced by Vitest (see <a href="../vitest.config.mjs"><code>vitest.config.mjs</code></a> <code>coverage.thresholds</code>; currently <strong>66%</strong> for lines, statements, branches, and functions over the included paths). Writes reports under <strong><code>coverage/</code></strong> (gitignored); the command <strong>fails</strong> if coverage drops below those floors.</li>
+<li><strong>HTML report:</strong> open <strong><code>coverage/index.html</code></strong> in a browser for per-file line coverage. <strong><code>coverage/lcov.info</code></strong> is suitable for external tools (e.g. IDE extensions, Codecov).</li>
+<li>Coverage is <strong>scoped</strong> in <a href="../vitest.config.mjs"><code>vitest.config.mjs</code></a> to <code>module/logic/**</code>, <code>module/utils/**</code>, and <code>module/data/_*.mjs</code>, with <strong><code>coverage.exclude</code></strong> omitting Foundry-only logic (chat hooks, packs, audit log, <code>_ac-helpers</code>, etc.) so the <strong>headline percentage</strong> reflects files we aim to cover in Node. Use the HTML report for per-file detail. <strong>Raise thresholds</strong> in that file when sustained coverage improves and the team wants a tighter gate.</li>
+<li><strong>Pull requests:</strong> the <strong>Validate</strong> workflow runs parallel jobs: <strong><code>unit-tests</code></strong> (<strong><code>make test</code></strong>, Vitest only), <strong><code>coverage</code></strong> (<strong><code>make test-coverage</code></strong>, thresholds + artifact <strong><code>coverage-report</code></strong>), <strong><code>lint</code></strong> (<strong><code>npm run lint</code></strong>, ESLint on the paths listed above), <strong><code>static-validation</code></strong> (JSON / syntax / templates). Download the HTML/LCOV bundle from the <strong><code>coverage</code></strong> job’s <strong>Artifacts</strong> on GitHub. The suite runs twice in CI (once per job); that keeps a fast test gate separate from the slower coverage run.</li>
+</ul>
+<p><strong>Layout:</strong> Tests live under <code>test/unit/</code>, grouped to mirror code: <code>test/unit/logic/</code> → <code>module/logic/</code>, <code>test/unit/utils/</code> → <code>module/utils/</code>, <code>test/unit/data/</code> → <code>module/data/</code> helpers. Use the <code>*.test.mjs</code> (or <code>*.spec.mjs</code>) suffix. <strong><code>test/README.md</code></strong> lists <strong>which production files are covered</strong> and <strong>which are intentionally out of scope</strong> for Node (Foundry-only). The system’s <code>esmodules</code> entry is unchanged; <code>node_modules/</code> is dev-only and gitignored.</p>
+<p><strong>Policy:</strong> Changes to behavioral logic under <code>module/logic/</code>, <code>module/utils/</code>, and pure <code>module/data/*_helpers.mjs</code> should include new or updated tests where practical, <strong><code>make test</code></strong> must pass, <strong><code>make test-coverage</code></strong> must pass <strong>including coverage thresholds</strong>, and <strong><code>make lint</code></strong> must pass (see <strong><code>test/README.md</code></strong> at the repository root for scope and exceptions). <strong><code>make lint</code></strong> includes system <code>module/</code> and the other paths listed in step 3 above; clear reported issues when you touch those files, and use dedicated PRs for broad ESLint cleanup when the backlog is large. Pull request validation uses the <strong>Validate</strong> workflow: <strong><code>unit-tests</code></strong> (<code>npm ci</code> + <strong><code>make test</code></strong>), <strong><code>coverage</code></strong> (<code>npm ci</code> + <strong><code>make test-coverage</code></strong>), <strong><code>lint</code></strong> (<code>npm ci</code> + <strong><code>npm run lint</code></strong>), and <strong><code>static-validation</code></strong> (JSON, <code>node --check</code> on <code>.mjs</code>, template paths).</p>
+<h2 id="architecture">Architecture</h2>
+<h3 id="entry-point">Entry Point</h3>
+<p><code>thirdera.mjs</code> - Registers all data models, document classes, sheet classes, Handlebars helpers, and partials in <code>Hooks.once("init")</code>. Also registers sidebar delete button hooks. Global config: <code>CONFIG.THIRDERA</code>.</p>
+<p>The <code>Hooks.once("ready")</code> path is tuned to keep the browser responsive on large worlds and packs: compendium index/img fix-up rebuilds directory trees in small batches with main-thread yields between chunks; condition status metadata and the domain-spell compendium cache load in parallel; GM compendium JSON import yields between packs; Phase 6 NPC sense migration and HP-derived condition sync use bounded parallelism where safe. For timing breakdowns when debugging slow reloads, enable the <strong>client</strong> setting <strong>Log client bootstrap timing (debug)</strong> under <strong>Configure Settings → Third Era</strong> (console output only).</p>
+<h3 id="data-models-moduledata">Data Models (<code>module/data/</code>)</h3>
+<p>Each file defines a <code>TypeDataModel</code> subclass with static <code>defineSchema()</code> using Foundry field classes (<code>NumberField</code>, <code>StringField</code>, <code>SchemaField</code>, <code>HTMLField</code>, etc.).</p>
+<ul>
+<li><strong>Actor types</strong>: <code>CharacterData</code> (actor-character.mjs), <code>NPCData</code> (actor-npc.mjs). <strong><code>CharacterData.migrateData</code></strong>, <strong><code>backfillCharacterSystemSourceForActor</code></strong>, and <strong><code>backfillCharacterSystemChangeObject</code></strong> (<code>module/logic/character-system-source-backfill.mjs</code>) backfill missing <code>system.details</code> / <code>system.experience</code> keys on load, on the live <code>system</code> source (<code>ThirdEraActor._preUpdate</code> / <code>ThirdEraItem</code> when parent is a PC), and on <strong><code>changes.system</code></strong> in <code>ThirdEraActor._preUpdate</code> (including when the delta omits <code>details</code> / <code>experience</code> but <code>changed.items</code> is absent — spell updates often send <code>system</code> only). <strong><code>details.naturalHealingBonus</code></strong>, <strong><code>details.spellResistance</code></strong>, and <strong><code>experience.value</code> / <code>experience.max</code></strong> use <strong><code>required: false</code></strong> so partial actor/system merges do not hard-fail validation; <strong><code>prepareDerivedData</code></strong> coerces nullish values to defaults. Embedded <strong>Item</strong> updates may still use <strong><code>changes.items</code></strong> without <code>system</code>; when that happens, <code>ThirdEraActor._preUpdate</code> can inject a minimal <code>changes.system</code>. <strong>Spell resistance (numeric):</strong> PCs store <code>system.details.spellResistance</code> (integer ≥ 0, default 0; character sheet <strong>Attributes → Details</strong>); NPCs use <code>system.statBlock.spellResistance</code>.</li>
+<li><strong>Item types</strong>: <code>WeaponData</code>, <code>ArmorData</code>, <code>EquipmentData</code>, <code>SpellData</code>, <code>FeatData</code>, <code>SkillData</code>, <code>RaceData</code>, <code>ClassData</code>, <code>FeatureData</code></li>
+</ul>
+<p>Derived data (ability modifiers, save totals, grapple, initiative) is calculated in <code>prepareDerivedData()</code> on the data models, not on document classes.</p>
+<h3 id="document-classes-moduledocuments">Document Classes (<code>module/documents/</code>)</h3>
+<ul>
+<li><strong>ThirdEraActor</strong> (actor.mjs) - Extends <code>Actor</code>. Roll methods: <code>rollAbilityCheck</code>, <code>rollSavingThrow</code>, <code>rollSkillCheck</code>, <code>rollConcentrationCheck</code>, <code>rollSpellPenetration</code>. <strong>Initiative</strong> uses Foundry’s inherited <code>Actor.rollInitiative</code> (no override) so combatants and chat messages stay in sync with the combat tracker. Delegates to type-specific <code>_prepareCharacterData</code> / <code>_prepareNPCData</code>.</li>
+<li><strong>ThirdEraItem</strong> (item.mjs) - Extends <code>Item</code>. <code>rollAttack</code> / <code>rollDamage</code> for weapons. Skill totals in <code>_prepareSkillData</code> when the item is owned by an actor.</li>
+</ul>
+<h3 id="sheet-classes-modulesheets">Sheet Classes (<code>module/sheets/</code>)</h3>
+<p>Both use <strong>ApplicationV2</strong>: <code>HandlebarsApplicationMixin(ActorSheetV2)</code> / <code>HandlebarsApplicationMixin(ItemSheetV2)</code>.</p>
+<ul>
+<li><strong>ThirdEraActorSheet</strong> (actor-sheet.mjs) - Single PARTS entry; template swapped in <code>_configureRenderParts()</code> by actor type (character vs npc). Actions: static private methods in <code>DEFAULT_OPTIONS.actions</code>. <strong>Unlinked tokens:</strong> the sheet document is a synthetic actor (ActorDelta). Character <strong>Attributes → Details</strong> fields (size, natural healing bonus, spell resistance, current XP) are mirrored to the world <code>Actor</code> on submit and removed from the synthetic update so the same PC opened from the Actors sidebar stays in sync (same pattern as dropping a condition onto a token sheet targeting the world actor).</li>
+<li><strong>ThirdEraItemSheet</strong> (item-sheet.mjs) - Template per item type (<code>item-${type}-sheet.hbs</code>). <code>submitOnChange: true</code> for auto-saving. <strong>Compendium / pack items:</strong> the sheet’s <code>document</code> may not be the same object reference as <code>game.packs.get(pack).get(id)</code>; after updating the pack-cached instance, resync the sheet’s copy with <code>Document#updateSource</code> so nested <code>system</code> TypeDataModels match (helpers in <code>module/logic/cgs-stale-item-sheet-sync.mjs</code>).</li>
+</ul>
+<p>Tab switching is manual via a <code>changeTab</code> action (not Foundry's built-in tab system).</p>
+<h3 id="templates-templates">Templates (<code>templates/</code>)</h3>
+<ul>
+<li><strong>Actor</strong>: <code>templates/actor/character-sheet.hbs</code>, <code>npc-sheet.hbs</code></li>
+<li><strong>Item</strong>: One per type (<code>item-weapon-sheet.hbs</code>, <code>item-armor-sheet.hbs</code>, etc.), plus <code>item-feature-sheet.hbs</code></li>
+<li><strong>Partials</strong>: <code>templates/partials/editor-box.hbs</code> (ProseMirror display/edit toggle). See <code>templates/partials/README.md</code>.</li>
+</ul>
+<p>Context comes from <code>_prepareContext()</code>; item lists are pre-sorted in the sheet's <code>_prepareItems()</code>. For <strong>NPC</strong> actors, embedded <strong>skills</strong> in sheet context are <strong>de-duplicated by skill identity</strong> (<code>npc-embedded-skill-identity.mjs</code>: same <code>system.key</code> for most skills; <code>profession</code> uses key + name). <code>ThirdEraActor.createEmbeddedDocuments</code> also <strong>drops duplicate skill payloads</strong> so imports/drops cannot stack identical rows.</p>
+<h3 id="handlebars-helpers">Handlebars Helpers</h3>
+<p>Registered in <code>thirdera.mjs:registerHandlebarsHelpers()</code>: <code>abilityMod(score)</code>, <code>signedNumber(num)</code>, <code>eq(a, b)</code>, <code>concat(...args)</code>.</p>
+<h3 id="styles">Styles</h3>
+<p><code>styles/thirdera.css</code> - All selectors under <code>.thirdera</code>. ProseMirror: <code>.active</code>/<code>.inactive</code> for edit/display; <code>--editor-min-height</code> custom property.</p>
+<p><strong>Design tokens</strong> (on <code>.thirdera</code>): Use <strong>only</strong> these - no new hardcoded colors or font sizes.</p>
+<ul>
+<li><strong>Colors</strong>: <code>--color-*</code> (text, backgrounds, theme accents, hover, status, borders)</li>
+<li><strong>Typography</strong>: <code>--font-family</code>, <code>--font-size-*</code> scale (note, label, body, value, value-lg, value-xl, heading)</li>
+</ul>
+<h3 id="localization">Localization</h3>
+<p><code>lang/en.json</code> - <code>THIRDERA.*</code> namespace; also <code>TYPES.Item.*</code> and <code>TYPES.Actor.*</code> for Foundry type labels.</p>
+<h2 id="reference-resources">Reference Resources</h2>
+<ul>
+<li><strong>Extenders:</strong> <strong><a href="../extending/">Extending</a></strong> (this site) - Adding compendiums or new content; data-driven design and reference rules.</li>
+<li><strong>Foundry VTT source:</strong> <code>~/foundryvtt/</code> - For base classes, hooks, API. Consult its own docs as needed.</li>
+<li><strong>Online:</strong> D&amp;D 3.5 SRD - https://www.d20srd.org/index.htm | Foundry API - https://foundryvtt.com/api/</li>
+</ul>
+<h2 id="key-conventions">Key Conventions</h2>
+<ul>
+<li><strong>Item references:</strong> Use <strong>document ID or UUID</strong> for references and membership checks, not name or key. See <a href="#item-references">Item references</a> below.</li>
+<li><strong>Config:</strong> <code>CONFIG.THIRDERA</code> uses mixed casing; sheets remap to camelCase in <code>_prepareContext()</code> for templates (e.g. <code>config.abilityScores</code>).</li>
+<li><strong>Sizes:</strong> Actors, weapons, armor use <code>choices: () =&gt; CONFIG.THIRDERA.sizes</code> (9 SRD size categories).</li>
+<li><strong>Token footprint vs size:</strong> On actor <strong>create</strong>, if the prototype token is still Foundry’s default <strong>1×1</strong>, width/height are set from <strong><code>system.details.size</code></strong> (3.5 space on a 5 ft grid; Fine–Tiny use fractional squares). On <strong>size change</strong>, the prototype is updated only when its current width/height still match the auto footprint for the <strong>previous</strong> size (manual dimensions are preserved). <strong>Linked</strong> scene tokens are resized to the new footprint on size change (<strong>GM client</strong>). Existing actors are not batch-migrated. Pure rules: <code>module/logic/token-dimensions-from-size.mjs</code>; Foundry handlers + registration: <code>module/logic/token-dimensions-from-size-hooks.mjs</code> (<code>registerTokenDimensionHooks</code> from <code>thirdera.mjs</code> on init).</li>
+<li><strong>Booleans on items:</strong> Store as <strong>StringField</strong> <code>"true"</code> / <code>"false"</code>, not BooleanField.</li>
+<li><strong>Sheets:</strong> <code>form: { submitOnChange: true }</code> in <code>DEFAULT_OPTIONS</code>; actions via <code>data-action</code> and <code>DEFAULT_OPTIONS.actions</code>; item actions use <code>target.closest("[data-item-id]")?.dataset.itemId</code>.</li>
+<li><strong>Value breakdown:</strong> Show base + each modifier (labeled) + total; provide a <strong>visual indicator</strong> when a value is modified (e.g. armor capping Dex).</li>
+<li><strong>Extensibility:</strong> Races, classes, etc. are <strong>Item types</strong>, not hardcoded config.</li>
+<li><strong>Rich text:</strong> <code>&lt;prose-mirror&gt;</code> (Foundry v13); styling with <code>.active</code>/<code>.inactive</code>. Exception: npc-sheet biography still uses legacy <code>{{editor}}</code>. <code>toggled</code> is read-once config; <code>open</code> and <code>.active</code>/<code>.inactive</code> control state.</li>
+<li><strong>Checkboxes:</strong> Never style as text inputs (no background/border/full-width). Use transparent background, no border, <code>accent-color</code> for theme.</li>
+<li><strong>Release upgrades:</strong> Every branch intended to become a release must include a migration path from the previous release version. See <a href="#release-migrations">Release migrations</a> below.</li>
+</ul>
+<h3 id="item-references">Item references</h3>
+<p>All references between items (and any membership or “do you have this?” checks) must use <strong>document identity</strong> — ID or UUID — not name, key, or other string labels.</p>
+<ul>
+<li><strong>Reference storage:</strong> When one item references another (e.g. required feat, class that grants this, spell school), store the <strong>document UUID</strong> (or, for same-world-only references, the document <strong>id</strong>). Do not store the referenced item’s name or a “key” for lookup or membership checks.</li>
+<li><strong>Membership / “has this” checks:</strong> When checking whether an actor (or another item) “has” or “includes” a given item (e.g. “does the character have the Dodge feat?”), resolve by <strong>document identity</strong>: compare by document UUID, document id, or by a stored source/origin that is itself an ID or UUID (e.g. compendium sourceId). Do not determine membership by matching name or key strings.</li>
+<li><strong>Display:</strong> Names and keys remain fine for <strong>display</strong> (e.g. showing “Dodge” in the UI). The constraint is on <strong>storage and logic</strong>: what we store and how we resolve “is this the same item?” must be ID/UUID-based.</li>
+</ul>
+<p><strong>Rationale:</strong> Names and keys can change or collide; IDs and UUIDs are stable and unique. Compendium documents are identified by UUID; world documents have id (and uuid). Using ID/UUID keeps world and compendium references consistent and avoids ambiguity when the same “logical” item exists in multiple packs or the world.</p>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><strong>Feat prerequisites “required feats”:</strong> Store an array of <strong>feat document UUIDs</strong> (e.g. <code>prerequisiteFeatUuids: ["Compendium.thirdera.thirdera_feats.Item.abc123", …]</code>). To check “actor has this feat”, resolve each UUID to a document and determine whether the actor has an item that is or derives from that document (e.g. by sourceId, origin, or same document id when applicable).</li>
+<li><strong>Class feature “feat item”:</strong> Store the <strong>feat document’s id or UUID</strong> (e.g. <code>featItemId</code> or <code>featItemUuid</code>), not the feat name. Lookup and membership by that id/UUID.</li>
+<li><strong>Spell’s school:</strong> Reference the school <strong>item’s id/UUID</strong> if the system models schools as items; otherwise a stable identifier that is not the display name.</li>
+</ul>
+<p><strong>Exception:</strong> Where the codebase explicitly uses a <strong>stable key</strong> (e.g. <code>system.key</code>) for compendium <strong>name-based matching</strong> (e.g. loader “match by key when name collides”), that remains a separate concern. The key is still not used as the <strong>canonical reference</strong> between items for “which feat is required” or “does the actor have this?” — those use ID/UUID. Keys may be used to <em>resolve</em> “which document is Dodge?” when building UUID references (e.g. in migration or authoring), but the stored reference is the document’s id/UUID.</p>
+<h3 id="release-migrations">Release migrations</h3>
+<p>Every meaningful change must consider <strong>upgrade from the previous release version</strong>. Migration work is part of development, not a post-release cleanup task.</p>
+<ul>
+<li><strong>Goal:</strong> Users upgrading into the release built from the current branch should keep their data and reach a working state without manual repair.</li>
+<li><strong>When migration is required:</strong> Any change that affects stored data, schema shapes, references, compendium-driven assumptions, derived-data expectations, or sheet/workflow behavior must be evaluated for upgrade impact.</li>
+<li><strong>Branch-wide view:</strong> Do not design migrations one ticket at a time in isolation. Consider the <strong>combined effect of all changes in the current branch</strong> so the resulting migration path accounts for ordering, compatibility between related changes, and idempotence.</li>
+<li><strong>Expected outcome per task:</strong> Either add/update migration logic and validation steps, or explicitly document why no migration is needed.</li>
+<li><strong>Preferred migration behavior:</strong> Preserve user data in place, repair outdated structures safely, and avoid one-off manual cleanup unless there is no safer alternative.</li>
+</ul>
+<h3 id="modifier-system-modulelogicmodifier-aggregationmjs">Modifier system (<code>module/logic/modifier-aggregation.mjs</code>)</h3>
+<p>A <strong>unified modifier pipeline</strong> aggregates contributions from conditions, feats, race, equipped items, and future sources into one <strong>modifier bag</strong> per actor. Extensions, magic-item categories, and sequencing for non-numeric traits are summarized on <strong><a href="../future-plans/#generalized-modifier-system-and-magic-items">Future plans</a></strong>.</p>
+<ul>
+<li><strong>Canonical keys:</strong> <code>CONFIG.THIRDERA.modifierKeys</code> lists allowed keys (e.g. <code>ac</code>, <code>acLoseDex</code>, <code>speedMultiplier</code>, <code>saveFort</code>/<code>saveRef</code>/<code>saveWill</code>, <code>attack</code>/<code>attackMelee</code>/<code>attackRanged</code>, <code>naturalHealingPerDay</code>, <strong><code>initiative</code></strong>, <code>ability.str</code> … <code>ability.cha</code>, <code>skill.&lt;skillKey&gt;</code>). Only these keys are applied. The <strong><code>initiative</code></strong> total is summed with Dexterity modifier into <code>attributes.initiative.bonus</code> (used by the system initiative formula in <code>system.json</code>). The <strong><code>naturalHealingPerDay</code></strong> total is added to character level and to <code>actor.system.details.naturalHealingBonus</code> when computing daily natural healing in the <strong>Take rest</strong> flow (<code>getRestHealingAmount</code> in <code>module/logic/rest-healing.mjs</code>).</li>
+<li><strong>Ability and skill keys:</strong> Condition items (and later feats/equipped items) can use <code>ability.str</code>, <code>ability.dex</code>, etc. and <code>skill.&lt;skillKey&gt;</code> (e.g. <code>skill.hide</code>) in their <code>changes</code> array. The aggregator outputs per-key totals and breakdowns; character <code>prepareDerivedData</code> applies ability deltas to each ability’s <strong>effective</strong> (with breakdown), then recomputes <strong>mod</strong> before any other step uses ability mod. Skill modifiers from the bag are applied in the skill loop; modifier-only skills (no ranks) appear in an "Other skill modifiers" block with roll.</li>
+<li><strong>NPC skills:</strong> NPCs use the same GMS integration for skills: <strong><code>prepareNpcSkillItems</code></strong> in <a href="../module/logic/npc-skill-prep.mjs"><code>module/logic/npc-skill-prep.mjs</code></a> runs in <code>NPCData.prepareDerivedData</code> (after max Dex / load) and sets each embedded <strong><code>skill</code></strong> item’s <strong><code>modifier.total</code></strong> to ability + ranks + misc + armor/load ACP + <strong><code>skill.&lt;key&gt;</code></strong> from <code>getActiveModifiers</code>. There is <strong>no</strong> skill point budget or max rank enforcement on NPCs. Per-skill <strong>class vs cross-class</strong> on NPCs is controlled by <strong><code>system.npcClassSkill</code></strong> on the skill item (<a href="../module/data/item-skill.mjs"><code>module/data/item-skill.mjs</code></a>, default <strong>true</strong> when embedded on an NPC); <strong><code>prepareNpcSkillItems</code></strong> maps that to derived <strong><code>isClassSkill</code></strong> for row styling only (PC class rules are unchanged). <strong><code>buildModifierOnlySkills</code></strong> fills <strong><code>modifierOnlySkills</code></strong> for modifier-only rows and <strong><code>rollSkillCheckByKey</code></strong> (same as characters). The NPC sheet <strong>Attributes → Skills</strong> subtab lists embedded skills (with a class-skill checkbox), an <strong>Add skill</strong> dropdown (world + all Item compendia via <strong><code>getNpcSkillAddOptions</code></strong> in <a href="../module/applications/skill-picker-dialog.mjs"><code>module/applications/skill-picker-dialog.mjs</code></a>), and modifier-only entries. <strong><code>modifier.miscLabel</code></strong> on a skill item (optional) replaces the generic <strong>Misc</strong> line in the skill total tooltip; character and NPC sheets expose <strong>misc</strong> and <strong>misc label</strong> inline next to ranks, and the owned skill item sheet has the same fields.</li>
+<li><strong>Provider contract:</strong> A <strong>modifier-source provider</strong> is a function <code>(actor) =&gt; Array&lt;{ label: string, changes: Array&lt;{ key: string, value: number, label?: string }&gt; }&gt;</code>. The aggregator runs all functions in <code>CONFIG.THIRDERA.modifierSourceProviders</code> and merges results.</li>
+<li><strong>Usage:</strong> Call <code>getActiveModifiers(actor)</code> once early in character or NPC <code>prepareDerivedData</code> (after base ability values); apply ability deltas and set mod; then use the same modifier bag for AC, speed, saves, attack, initiative, and skills. Race contributes like feats: the actor’s race item uses optional <code>system.changes</code> (canonical keys), merged by the built-in item modifier provider when the race is owned.</li>
+</ul>
+<p><strong>Extending the modifier system:</strong> You can add new modifier sources in two ways.</p>
+<ol>
+<li><strong>Register a provider function.</strong> Push a function to <code>CONFIG.THIRDERA.modifierSourceProviders</code>. Each provider has signature <code>(actor) =&gt; Array&lt;{ label: string, changes: Array&lt;{ key: string, value: number, label?: string }&gt; }&gt;</code>. The aggregator runs all providers and merges contributions; only keys in the canonical set (see <code>CONFIG.THIRDERA.modifierKeys</code>) are applied. Example: a module that adds temporary spell effects could register a provider that returns one contribution per active spell with a <code>changes</code> array.</li>
+<li><strong>Item method <code>getModifierChanges(actor)</code>.</strong> On any item type, implement <code>getModifierChanges(actor)</code> returning <code>{ applies: boolean, changes: Array&lt;{ key: string, value: number, label?: string }&gt; }</code>. The built-in item provider in the registry iterates <code>actor.items</code> and, when this method exists, calls it; when <code>applies === true</code>, it merges the returned <code>changes</code> with <code>label = item.name</code>. No change to the aggregator is required. <em>(Note: the stock <code>itemsModifierProvider</code> today reads <code>system.changes</code> directly for feat, race, and gear items; <code>getModifierChanges</code> is the documented extension hook for custom item types.)</em> Items can use optional <code>system.changes</code> (same shape) and rely on the default item provider’s type-specific “applies” rules (feat and race: always when owned; armor, equipment, weapon: when equipped/wielded by default). <strong>Gear apply scope (Phase 5g):</strong> armor, equipment, and weapon items may set <code>system.mechanicalApplyScope</code> to <code>equipped</code> (default) or <code>carried</code>. The same predicate gates GMS numeric modifiers and embedded-item CGS grants (<code>module/logic/item-gear-mechanical-apply.mjs</code>, <code>embeddedGearMechanicalEffectsApply</code>).</li>
+</ol>
+<h3 id="capability-grants-structured-effects-parallel-to-the-modifier-system">Capability grants (structured effects, parallel to the modifier system)</h3>
+<p><strong>In-world and sheet naming:</strong> Character and item sheets use the label <strong>Capability grants</strong> for structured contributions that are <strong>not</strong> numeric modifier rows (e.g. senses and vision lines, condition-driven suppression, spell-like grants, <strong>extra creature types and subtypes</strong> for shapechanging and template-style effects). Internally the codebase may still refer to the <strong>Capability Grant System (CGS)</strong> in logic modules and maintainer docs; contributors should keep <strong>numeric</strong> bonuses in <strong>Mechanical effects</strong> (<code>system.changes</code>) and structured non-numeric effects in <strong><code>system.cgsGrants</code></strong> where applicable.</p>
+<h4 id="cgs-supported-in-core-today">CGS — supported in core today</h4>
+<p>The engine merges grants from items, conditions, race, class features, actor-level CGS mechanics, and (for NPCs) stat-block inputs where applicable; <strong>refresh</strong> propagates when sources change. <strong>Today this includes:</strong></p>
+<ul>
+<li><strong>Senses:</strong> Stage A union merge plus <strong>Stage B</strong> effective senses after <strong><code>senseSuppression</code></strong> (e.g. blindness); <strong>Sources</strong> / provenance on the sheet; legacy NPC stat-block sense migration into <strong><code>system.cgsGrants.senses</code></strong> (including stock monster pack shape).</li>
+<li><strong>Spell and SLA grants:</strong> Merged <strong><code>spellGrant</code></strong> rows, <strong>Granted spells</strong> / <strong>Ready to cast</strong> integration, grant-channel cast tracking (<strong><code>cgsSpellGrantCasts</code></strong>), rest resets.</li>
+<li><strong>Typed defenses:</strong> Merged <strong>immunities</strong>, <strong>energy resistance</strong>, <strong>damage reduction</strong> with provenance; CONFIG-backed labels for core SRD vocabulary, augmented by optional world items of type <strong><code>defenseCatalog</code></strong> (<strong>Custom defense labels</strong> in the UI) whose <strong><code>catalogKey</code></strong> (must match the corresponding text in capability grants) and <strong><code>catalogKind</code></strong> override or extend display labels (see <strong><code>game.thirdera.refreshTypedDefenseCatalogCache</code></strong> after <strong><code>ready</code></strong>). Those items only supply <strong>display names</strong> (they do not store resistance amounts or DR values; those stay on grants). <strong><code>catalogKind</code></strong> can be <strong>energy resistance (type label)</strong> or <strong>energy type</strong> interchangeably for the shared energy-type label map. On create, a blank <strong><code>catalogKey</code></strong> is filled from the item <strong>name</strong> (camelCase heuristic); authors can edit <strong><code>catalogKey</code></strong> on the sheet when it must differ from the display name.</li>
+<li><strong>Creature type / subtype overlays:</strong> Authoring on items and actors; merged readout with provenance; <strong>v1 semantics</strong> are <strong>additive</strong> (primary <strong>Details</strong> type/subtypes <strong>∪</strong> overlay UUIDs). <strong><code>getEffectiveCreatureTypes(actor.system)</code></strong> in <code>module/logic/cgs-effective-creature-types.mjs</code> is the single supported resolver for that union; <strong><code>effectiveCreatureTypesIncludeUuid</code></strong> / <strong><code>effectiveCreatureTypesIncludeAnyUuid</code></strong> match stored reference UUIDs against the same union. <strong><code>game.thirdera.effectiveCreatureTypes</code></strong> (after <strong><code>ready</code></strong>) exposes <strong><code>get</code></strong>, <strong><code>getFromActor</code></strong>, <strong><code>includesUuid</code></strong>, <strong><code>includesAnyUuid</code></strong>, <strong><code>getDisplayText</code></strong>, <strong><code>notify</code></strong>, <strong><code>notifyForSelectedTokens</code></strong> for macros and auditing. GMs: world <strong>Actors</strong> sidebar → right-click → <strong>Show effective creature types (mechanical)</strong>; or select token(s) on the canvas and call <strong><code>game.thirdera.effectiveCreatureTypes.notifyForSelectedTokens()</code></strong> from a macro.</li>
+<li><strong>Gear:</strong> <strong><code>system.mechanicalApplyScope</code></strong> (<strong>equipped</strong> vs <strong>carried</strong>) gates both GMS <strong><code>system.changes</code></strong> and embedded-item CGS on armor, equipment, and weapons (<code>module/logic/item-gear-mechanical-apply.mjs</code>). Optional <strong><code>system.mechanicalCreatureGateUuids</code>:</strong> when non-empty, that gear’s mechanical effects apply only if the owner’s <strong><code>getEffectiveCreatureTypes</code></strong> matches at least one listed type/subtype document UUID (convergent fixed-point when multiple gated pieces interact; <code>module/logic/cgs-embedded-item-grants-provider.mjs</code>).</li>
+<li><strong>Spell creature type targeting:</strong> Spells can optionally set <strong><code>system.targetCreatureTypeUuids</code></strong> (an array of creature type/subtype document UUIDs) to restrict valid targets by creature type. When casting, <strong><code>castSpell</code></strong> validates each target’s effective creature types and warns the GM if a target does not match (cast is not blocked). Chat messages show a creature type restriction line. Pure logic: <code>module/logic/spell-creature-type-targeting.mjs</code>. Spell sheet: <strong>Target creature types</strong> section on Details tab (dropdown or drag-drop creature type/subtype items).</li>
+</ul>
+<h4 id="cgs-not-in-core-yet-planned-deferred-or-gmmanual-only">CGS — not in core yet (planned, deferred, or GM/manual only)</h4>
+<p>These areas may have <strong>data and UI</strong> in ThirdEra but <strong>no</strong> built-in automation, or are explicitly <strong>out of scope</strong> for the current v1 overlay design:</p>
+<ul>
+<li><strong>Type-based mechanics (deferred):</strong> Turning/rebuking, favored enemy, smite-style riders keyed to type, and similar <strong>rules</strong> are <strong>not</strong> implemented as automated core resolution—authors and GMs apply the rules at the table. <strong>Gear</strong> may use <strong><code>mechanicalCreatureGateUuids</code></strong> so modifiers and CGS from that item apply only when <strong><code>getEffectiveCreatureTypes</code></strong> matches. When further features are added to core, they must use <strong><code>getEffectiveCreatureTypes</code></strong> (not <strong>Details</strong> alone).</li>
+<li><strong>CGS grant activation gates (future):</strong> No built-in rules yet for <strong>turning individual grants off</strong> based on actor-wide state such as <strong>encumbrance load</strong> (e.g. heavy load) or <strong>equipped inventory patterns</strong> (e.g. unarmed-only class features, “works only in light armor,” requires worn armor). That is separate from <strong><code>system.mechanicalApplyScope</code></strong> on armor/equipment/weapons (equipped vs carried) and from <strong><code>mechanicalCreatureGateUuids</code></strong> on gear. If added, it should align with CGS provenance (show suppressed grants with a reason rather than silent omission). See <a href="../future-plans/">Future plans</a>.</li>
+<li><strong>Token / canvas vision</strong> driven from <strong>effective</strong> CGS senses: <strong>not</strong> implemented; map sight does not follow merged/suppressed senses yet.</li>
+<li><strong>Polymorph / “form replacement”:</strong> Overlays do <strong>not</strong> replace primary type for all purposes; <strong>per-purpose</strong> or full replacement semantics are <strong>future</strong> design (maintainer <strong><code>cgs-implementation.md</code> §5.1</strong>).</li>
+<li><strong>Defense label packs:</strong> World <strong><code>defenseCatalog</code></strong> items (and an optional future pack <strong><code>thirdera.thirdera_defense_catalog</code></strong>) augment CONFIG label maps; there is no requirement to ship a core compendium for SRD labels.</li>
+</ul>
+<p>When any item above moves from “not yet” to “supported,” <strong>update this subsection and any linked usage pages in the same effort.</strong></p>
+<ul>
+<li><strong>Actors:</strong> The <strong>Senses</strong> block is the merged, effective readout (with <strong>Sources</strong> for provenance). <strong>Sense grants</strong> on the sheet is where actor-level sense rows are edited (<code>system.cgsGrants.senses</code>); optional <strong>type overlays</strong> are edited nearby (<code>system.cgsGrants.creatureTypeOverlayUuids</code> / <code>subtypeOverlayUuids</code> — references to <strong>Creature Type</strong> and <strong>Subtype</strong> documents, additive on top of an NPC’s base type on <strong>Details</strong>). Merged overlays appear under <strong>Additional creature types (active)</strong> with provenance. <strong>NPC / monster upgrade (Phase 6):</strong> Stock <strong>Monsters</strong> compendium JSON stores mechanical senses under <strong><code>system.cgsGrants.senses</code></strong> (legacy <strong><code>system.statBlock.senses</code></strong> is merged out in pack data). When you open a world as GM, any NPC that still has legacy stat-block sense rows gets an <strong>idempotent</strong> migration: those rows are merged into <strong><code>system.cgsGrants.senses</code></strong> (deduped) and <strong><code>system.statBlock.senses</code></strong> is cleared, matching what <strong><code>NPCData.migrateData</code></strong> already does on load. Suppressed senses (e.g. blindness) appear under <strong>Suppressed senses</strong> with <strong>Suppressing</strong> sources.</li>
+<li><strong>Spell grants:</strong> In <code>system.cgsGrants.grants</code>, entries with <code>{ "category": "spellGrant", "spellUuid": "&lt;full item UUID&gt;" }</code> (or <strong><code>spellKey</code></strong> matching the spell’s <strong><code>system.key</code></strong> in pack JSON, resolved at compendium load) merge into derived <strong><code>system.cgs.spellGrants.rows</code></strong> (deduped by UUID, with provenance). Optional fields include <strong><code>usesPerDay</code></strong>, <strong><code>atWill</code></strong>, <strong><code>casterLevel</code></strong>, <strong><code>classItemId</code></strong> (which spellcasting class treats the spell as <strong>Ready to cast</strong> when ambiguous), and <strong><code>label</code></strong>. The grant’s <code>spellUuid</code> should resolve to a spell document; the character should normally have an <strong>embedded</strong> spell item <strong>linked</strong> to that UUID (via <code>uuid</code>, <code>sourceId</code>, <strong>flags.core.sourceId</strong>, or <strong>flags.thirdera.sourceSpellUuid</strong> set when using the actor’s <strong>add spell</strong> helpers). The <strong>Granted spells</strong> list offers <strong>Add spell to character</strong> when no embedded match is found—preparation/cast tracking needs that item. On the Spells tab <strong>Known / Available</strong>, <strong>Granted spells</strong> lists <strong>all</strong> merged spell grants (even when the same spell also appears under a class list) so the player can see the <strong>capability grant</strong> channel and cast from it explicitly. <strong>Add to Ready</strong> / shortlist applies to <strong>full-list prepared</strong> casters; <strong>Learned</strong> (or otherwise non–full-list) <strong>non-spontaneous</strong> casters get the same <strong>Prepared</strong> count field as on class Known rows; the sheet also shows that control if <strong>Preparation type</strong> was left at <strong>None</strong> but the list is not the full-list style—prefer setting <strong>Preparation type</strong> to <strong>Prepared</strong> on the class item when the class prepares spells. <strong>Ready to cast</strong> merges capability-granted spells by class routing when they are readied (shortlist, <strong>prepared</strong> count, or spontaneous rules). A <strong>Cast</strong> button appears when a spellcasting class can be resolved. <strong>SLA-style</strong> grants (<strong>at-will</strong> or <strong>uses/day</strong>): the <strong>Granted spells</strong> row uses <strong><code>actor.system.cgsSpellGrantCasts</code></strong> (keyed by merged grant <code>spellUuid</code>) for daily use counts, separate from the embedded spell’s <strong><code>system.cast</code></strong> and from class slots; casting from that row passes <strong><code>viaCgsGrant: true</code></strong> into <strong><code>castSpell</code></strong>. Grants without those flags use normal spontaneous/prepared rules when cast from the grant row’s standard <strong>Cast</strong> control. <strong>Take rest</strong> / <strong>Reset cast counts</strong> clear both embedded spell cast totals and <strong><code>cgsSpellGrantCasts</code></strong> when the user resets casts.</li>
+<li><strong>Items:</strong> Race, feat, class feature, armor, weapon, and equipment sheets group structured effects under <strong>Capability grants</strong> with subsection headings: <strong>Senses</strong> (<code>system.cgsGrants.senses</code>), <strong>Spell and SLA grants</strong> for <code>spellGrant</code> entries in <code>system.cgsGrants.grants</code>, <strong>typed defenses</strong> (<code>immunity</code>, <code>energyResistance</code>, <code>damageReduction</code>), and <strong>extra creature types and subtypes</strong> (<code>creatureTypeOverlay</code> / <code>subtypeOverlay</code> referencing <strong>Creature Type</strong> or <strong>Subtype</strong> documents — drag from the sidebar or pick from the list; use compendium or world entries so the grant resolves to a real definition). Feats apply while owned; armor, equipment, and weapons apply when equipped or wielded by default, or when <strong>carried</strong> if <code>system.mechanicalApplyScope</code> is set to <code>carried</code> (same rule as GMS <code>system.changes</code> on that item). When <code>grants</code> is non-empty, it remains authoritative alongside the simple sense list (maintainer plans). Conditions use <strong><code>system.cgsGrants.grants</code></strong> for structured effects such as sense suppression.</li>
+<li><strong>Further detail:</strong> See <strong><a href="../compendium-guide/">Compendium guide</a></strong> for pack-level notes (e.g. races) and <strong>Capability grants (CGS) in pack JSON</strong> (authoring keys such as <strong><code>spellKey</code></strong>, <strong><code>targetCreatureTypeKeys</code></strong>, <strong><code>mechanicalCreatureGateTypeKeys</code></strong>, resolved to compendium UUIDs on GM <strong>ready</strong>). Internal design: <code>.cursor/plans/cgs-implementation.md</code> / <code>cgs-phased-implementation.md</code> for merge rules and extension.</li>
+</ul>
+<h3 id="initiative-and-combat">Initiative and combat</h3>
+<ul>
+<li><strong><code>system.json</code>:</strong> The <code>initiative</code> property is the roll formula string passed to Foundry’s combat pipeline (e.g. <code>Combatant.getInitiativeRoll</code>). Third Era sets it to <strong><code>1d20 + @attributes.initiative.bonus</code></strong>. <code>@</code> references resolve against <strong><code>actor.getRollData()</code></strong>, which returns the actor’s prepared <strong>system</strong> data, so the static bonus stays one source of truth with the sheet.</li>
+<li><strong>Derived bonus:</strong> In character and NPC <code>prepareDerivedData</code>, <strong><code>attributes.initiative.bonus</code></strong> = Dexterity modifier + <strong><code>getActiveModifiers(actor).totals.initiative</code></strong> (GMS key <strong><code>initiative</code></strong> from feats, conditions, equipped items, etc.).</li>
+<li><strong>Document class:</strong> Do <strong>not</strong> override <strong><code>rollInitiative</code></strong> on <strong>ThirdEraActor</strong> unless the implementation ends by delegating to <strong><code>super.rollInitiative(options)</code></strong> for the normal combat path; otherwise the combat tracker will not receive rolled totals.</li>
+<li><strong>Sheet:</strong> <strong>Roll initiative</strong> on the character and NPC Combat tabs (<code>data-action="rollInitiativeCombat"</code>) calls <strong><code>await this.actor.rollInitiative({ createCombatants: true })</code></strong> (<code>module/sheets/actor-sheet.mjs</code>). Requires a viewed scene for combatant creation; notifications use <strong><code>THIRDERA.SheetCombat.*</code></strong> in <code>lang/en.json</code>.</li>
+</ul>
+<h3 id="rest-and-natural-healing">Rest and natural healing</h3>
+<ul>
+<li><strong>Code:</strong> <code>module/applications/take-rest-dialog.mjs</code> — <code>TakeRestDialog</code> (ApplicationV2 + HandlebarsApplicationMixin), opened from the character sheet (<strong>Spells → Ready to cast → Take rest…</strong>). Template: <code>templates/apps/take-rest-dialog.hbs</code>. Strings use <code>THIRDERA.Rest.*</code> in <code>lang/en.json</code>.</li>
+<li><strong>Apply path:</strong> Optional <code>applyDamageOrHealing(..., "healing")</code> with amount from <code>getRestHealingAmount(actor)</code>; optional bulk <code>system.cast: 0</code> / <code>system.prepared: 0</code> on spell items; <code>ChatMessage.create</code> with actor as speaker; notifications on close; sheet re-render when provided.</li>
+<li><strong>Formula:</strong> <code>getRestHealingAmount(actor)</code> = effective character level (from <code>details.totalLevel</code> or <code>details.level</code>, minimum 1) + <code>getActiveModifiers(actor).totals.naturalHealingPerDay</code> + non-negative integer <code>details.naturalHealingBonus</code>.</li>
+<li><strong>NPCs:</strong> No Take rest control on the NPC sheet (characters only).</li>
+</ul>
+<h3 id="compendiums-packs-and-modulelogiccompendium-loadermjs">Compendiums (<code>packs/</code> and <code>module/logic/compendium-loader.mjs</code>)</h3>
+<p>See <strong><a href="../compendium-guide/">Compendium guide</a></strong> for the full guide.</p>
+<ul>
+<li>Declared in <code>system.json</code> with <code>ownership</code>. Pack names use <strong>underscores</strong> (e.g. <code>thirdera_races</code>) for V14.</li>
+<li>Content in LevelDB; JSON in <code>packs/</code> is imported by <code>CompendiumLoader</code>. Collection IDs: <code>{systemId}.{packName}</code>.</li>
+<li>Unlock before create/update. Remove invalid <code>_id</code>; use <code>Document.createDocuments()</code> / <code>updateDocuments()</code> with <code>{pack: pack.collection}</code>. Loader can update by name/key for content fixes.</li>
+<li><strong>Current:</strong> Races (7), Classes (11), Skills (36), Feats (86), Armor (18), Weapons (59), Equipment (67), Spells (SRD 0–9), Schools, Conditions, Creature Types, Subtypes, Features, <strong>Monsters (SRD NPC starter set)</strong> — Actor pack <code>thirdera_monsters</code> (<code>packs/monsters/</code>); see <a href="../compendium-guide/">Compendium guide</a> (Monster compendium section).</li>
+</ul>
+<h2 id="foundry-vtt-v13-critical-technical-notes">Foundry VTT v13 - Critical Technical Notes</h2>
+<ul>
+<li><strong>Module caching:</strong> Foundry caches JS <strong>server-side</strong>. Browser refresh does not reload server modules. <strong>Restart Foundry</strong> after changing <code>.mjs</code> files if changes don't appear.</li>
+<li><strong>Capturing old values in hooks:</strong> In <code>updateItem</code>/<code>updateActor</code> hooks the document is already updated. Capture old values in <strong>preUpdate</strong> (e.g. in a Map keyed by document id). Empty string is a valid captured value; don't use <code>document.system.field</code> as "old" in update hooks.</li>
+<li><strong>Data preparation order:</strong> (1) Actor TypeDataModel <code>prepareBaseData</code>, (2) Actor <code>prepareBaseData</code>, (3) <code>prepareEmbeddedDocuments</code> (each item's full prepareData), (4) Actor TypeDataModel <code>prepareDerivedData</code>, (5) Actor <code>prepareDerivedData</code>. So embedded item <code>prepareDerivedData</code> runs <strong>before</strong> the actor's - put cross-cutting logic (e.g. class skill status, armor check penalty) in the <strong>actor's</strong> <code>prepareDerivedData</code>.</li>
+<li><strong>Item ownership:</strong> Items on actors are <strong>embedded copies</strong>, not references. Deleting a sidebar item does not affect actor-owned copies.</li>
+<li><strong>Schema:</strong> <code>defineSchema()</code> is lazily evaluated; safe to use <code>CONFIG.THIRDERA</code>; use <code>choices: () =&gt; CONFIG.THIRDERA.sizes</code> for dynamic choices.</li>
+<li><strong>Dialog API:</strong> <code>Dialog.render(true)</code> is <strong>not</strong> a Promise. Attach handlers after render (e.g. <code>requestAnimationFrame</code> + <code>setTimeout</code>); prefer event delegation.</li>
+<li><strong>Item stacking:</strong> Stack when same name/type, same <code>containerId</code>, same <code>equipped</code>, same type-specific props; containers don't stack. Use helpers like <code>_canStackItems</code>, <code>_findStackableItem</code>, <code>_splitItemStack</code>; quantity UI for actions on stacks.</li>
+</ul>
+<h3 id="spell-cast-chat-message-flags-save-concentration-spell-penetration">Spell cast chat (message flags: save, concentration, spell penetration)</h3>
+<p>When a character casts a spell, the posted chat message includes <strong><code>flags.thirdera.spellCast</code></strong> with:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dc</code></td>
+<td>Save DC (number)</td>
+</tr>
+<tr>
+<td><code>saveType</code></td>
+<td><code>"fort"</code> | <code>"ref"</code> | <code>"will"</code> | <code>null</code></td>
+</tr>
+<tr>
+<td><code>spellName</code>, <code>spellUuid</code></td>
+<td>Display and document reference</td>
+</tr>
+<tr>
+<td><code>targetActorUuids</code></td>
+<td>Optional: UUIDs of targeted actors when casting with tokens selected</td>
+</tr>
+<tr>
+<td><code>spellLevel</code></td>
+<td>Spell level (0–9) for this cast</td>
+</tr>
+<tr>
+<td><code>classItemId</code></td>
+<td>Embedded class item id on the caster</td>
+</tr>
+<tr>
+<td><code>casterLevel</code></td>
+<td>Caster level for that class at cast time</td>
+</tr>
+<tr>
+<td><code>srKey</code></td>
+<td>Raw spell resistance setting from the spell item (<code>system.spellResistance</code>); drives cast-chat spell penetration when <code>spellAllowsPenetrationRoll</code> is true</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Spell resistance helpers</strong> (<code>module/logic/spell-resistance-helpers.mjs</code>): <code>getActorSpellResistance(actor)</code> returns the numeric SR for <strong>NPCs</strong> (<code>system.statBlock.spellResistance</code>) and <strong>characters</strong> (<code>system.details.spellResistance</code>), otherwise <code>0</code>. <code>spellAllowsPenetrationRoll(srKey)</code> is <code>true</code> only for <code>yes</code> and <code>yes-harmless</code>. For <code>yes-harmless</code>, willingness and “harmless” are adjudicated at the table: the GM skips or ignores the roll when SR does not apply.</p>
+<p><strong>Spell penetration roll:</strong> <code>ThirdEraActor#rollSpellPenetration({ casterLevel, spellResistance, label })</code> (<code>module/documents/actor.mjs</code>) rolls <strong><code>1d20 + casterLevel</code></strong> (CL truncated; non-finite CL → 0) against the given <strong>SR</strong> (truncated, non-negative). SRD: the check <strong>succeeds if the total meets or exceeds SR</strong>. Chat flavor shows CL bonus, “vs SR <em>N</em>”, and <strong>Success</strong> / <strong>Failure</strong> (same styling as spell saves). Invalid non-numeric <code>spellResistance</code> aborts with a notification and returns <code>null</code>.</p>
+<p><strong>Spell penetration from cast chat</strong> (<code>module/logic/spell-sr-from-chat.mjs</code>): When <code>srKey</code> allows automation and <code>casterLevel</code> is a finite number, the <strong>owner</strong> of the message speaker (or a GM) sees penetration controls. If <code>targetActorUuids</code> includes at least one actor with <strong>SR &gt; 0</strong>, one button per such target (<strong>Spell penetration vs <em>Name</em> (SR <em>N</em>)</strong>) rolls immediately vs that target’s current SR. Otherwise a single <strong>Spell penetration…</strong> button opens a dialog listing <strong>character</strong> and <strong>NPC</strong> actors with SR &gt; 0 that the user may <strong>observe</strong> (GMs see all). Right‑click the message → <strong>Roll spell penetration…</strong> opens the same target picker. The roll always uses the <strong>speaker</strong> as the caster (<code>rollSpellPenetration</code> on that actor).</p>
+<p><strong>Legacy cast messages and caster level:</strong> Chat messages created <strong>before</strong> <code>spellCast.casterLevel</code> was stored, or any message where <code>casterLevel</code> is missing or not a finite number, <strong>do not</strong> show spell penetration automation (the SR line in the card may still display for reference). <strong><code>casterLevel</code> may be <code>0</code></strong> (finite); in that case controls still appear and the roll uses <code>1d20 + 0</code>. There is no separate combat-track integration—same cast-chat behavior whether or not a combat is active.</p>
+<p>The <strong>Roll save</strong> button and context menu (<code>module/logic/spell-save-from-chat.mjs</code>) use <code>dc</code>, <code>saveType</code>, and <code>targetActorUuids</code>. <strong>Concentration</strong> (<code>module/logic/concentration-from-chat.mjs</code>) uses <code>spellLevel</code> and the message <strong>speaker</strong> as the caster: <strong>Concentration (defensive)</strong> rolls vs DC 15 + spell level (see <code>module/logic/concentration-dcs.mjs</code>); <strong>Concentration (other)…</strong> opens a dialog for damage-based DC (10 + damage + spell level) or a custom DC. Right‑click the message → <strong>Roll Concentration…</strong> opens the same dialog. Only the <strong>owner</strong> of the speaker actor (or a GM) sees these controls. Rolls use <code>ThirdEraActor#rollConcentrationCheck</code> (<code>module/documents/actor.mjs</code>), which requires a Concentration skill item or a modifier-only Concentration entry. Extenders can rely on this flag shape when adding custom spell-cast messages or tools that react to spell casts.</p>
+
+    
+    
+    
+
+<h4>Contents</h4>
+
+<blockquote class=torillic-toc>
+
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    <li class="torillic-toc-page">
+        <a href="../compendium-guide/">Compendium guide</a>
+    </li>
+    
+
+    
+    
+    
+    
+    
+    
+    <li class="torillic-toc-page">
+        <a href="../future-plans/">Future plans</a>
+    </li>
+    
+
+</blockquote>
+
+    
+    
+    
+    
+    
+
+
+
+    
+        
+        
+    
+
+
+
+    
+
+
+<a href=".." class="torillic-backlink">🡐 Development</a>
+    
+  </main>
+  <script src="../js/version-selector.js"></script>
+  <script src="../search/main.js"></script>
+</body>
+
+</html>
