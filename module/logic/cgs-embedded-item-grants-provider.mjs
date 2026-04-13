@@ -1,5 +1,5 @@
 /**
- * CGS contributions from embedded race, feat, class feature, and equipped armor/equipment/weapon (Phase 5b–5c).
+ * CGS contributions from embedded race, feat, creatureFeature, class feature, and equipped armor/equipment/weapon (Phase 5b–5c).
  * Apply rules mirror {@link itemsModifierProvider} in modifier-aggregation.mjs (Phase 5g: `system.mechanicalApplyScope`).
  * Optional **creature gates** (`system.mechanicalCreatureGateUuids`) use a fixed-point resolver — see `getAcceptedMechanicalGearIdsForActor`.
  *
@@ -62,7 +62,8 @@ export function cgsContributionFromRaceItem(item) {
 }
 
 /**
- * Core collector for embedded item CGS. When `acceptedGearIds` is `null`, all armor/equipment/weapon that
+ * Core collector for embedded item CGS (race, feat, creatureFeature, class feature, gear).
+ * When `acceptedGearIds` is `null`, all armor/equipment/weapon that
  * pass `embeddedGearMechanicalEffectsApply` contribute. When it is a Set, only listed gear ids do.
  *
  * @param {unknown} actor
@@ -91,6 +92,11 @@ export function collectEmbeddedItemGrantsForCgs(actor, acceptedGearIds) {
         }
         if (type === "feature") {
             const c = cgsContributionFromOwnedItem(item, "Class feature");
+            if (c) out.push(c);
+            continue;
+        }
+        if (type === "creatureFeature") {
+            const c = cgsContributionFromOwnedItem(item, "Creature feature");
             if (c) out.push(c);
             continue;
         }

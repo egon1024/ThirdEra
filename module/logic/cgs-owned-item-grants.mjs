@@ -1,5 +1,5 @@
 /**
- * Resolve effective CGS grant payloads for owned items (feat, class feature, armor, equipment, weapon).
+ * Resolve effective CGS grant payloads for owned items (feat, creatureFeature, class feature, armor, equipment, weapon).
  * Precedence: non-empty `system.cgsGrants.grants` → rows in `system.cgsGrants.senses` mapped to sense grants.
  * No stock fallback (races use {@link ./cgs-stock-race-grants.mjs}).
  *
@@ -25,7 +25,7 @@ export function mapCgsSensesRowsToSenseGrants(senses) {
 }
 
 /**
- * @param {unknown} item - Item-like (feat, armor, equipment, weapon)
+ * @param {unknown} item - Item-like (feat, creatureFeature, armor, equipment, weapon)
  * @returns {Array<Record<string, unknown>>}
  */
 export function getEffectiveOwnedItemCgsGrants(item) {

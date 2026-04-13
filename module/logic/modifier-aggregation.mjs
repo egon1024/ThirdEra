@@ -215,7 +215,7 @@ function conditionsModifierProvider(actor) {
 
 /**
  * Provider that returns one contribution per owned item that has system.changes
- * and applies (race, feat: always when owned; equipment/armor/weapon: when equipped by default, or when carried if `system.mechanicalApplyScope === "carried"` — Phase 5g).
+ * and applies (race, feat, creatureFeature: always when owned; equipment/armor/weapon: when equipped by default, or when carried if `system.mechanicalApplyScope === "carried"` — Phase 5g).
  *
  * @param {Actor} actor
  * @returns {Array<{ label: string, changes: Array<{ key: string, value: number, label?: string }> }>}
@@ -239,10 +239,10 @@ export function itemsModifierProvider(actor) {
             });
             continue;
         }
-        if (item.type === "feat") {
+        if (item.type === "feat" || item.type === "creatureFeature") {
             const changes = item.system?.changes;
             if (!Array.isArray(changes) || changes.length === 0) continue;
-            const label = item.name || "Feat";
+            const label = item.name || (item.type === "creatureFeature" ? "Creature feature" : "Feat");
             out.push({
                 label,
                 changes: changes.map(c => ({

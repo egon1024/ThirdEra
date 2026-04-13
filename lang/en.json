@@ -197,7 +197,7 @@
             "AbilityKind": "Ability kind",
             "AbilityKindHint": "SRD tag: extraordinary (Ex), supernatural (Su), or spell-like (Sp). Optional.",
             "MechanicalEffects": "Mechanical effects",
-            "MechanicalEffectsHint": "Optional numeric modifiers (GMS), same key set as feats. Until the system merges owned creature features on actors, these rows are for authoring and preview only.",
+            "MechanicalEffectsHint": "Optional numeric modifiers (GMS), same key set as feats. Merged on the owning actor when this item is embedded (same rules as feats).",
             "AddModifier": "Add modifier"
         },
         "MechanicalEffectsChooseSkill": "Choose skill…",

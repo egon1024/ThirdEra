@@ -7,7 +7,8 @@ import { describe, expect, it } from "vitest";
 import {
     cgsContributionFromOwnedItem,
     cgsContributionFromRaceItem,
-    cgsEmbeddedItemGrantsProvider
+    cgsEmbeddedItemGrantsProvider,
+    collectEmbeddedItemGrantsForCgs
 } from "../../../module/logic/cgs-embedded-item-grants-provider.mjs";
 import { getActiveCapabilityGrants } from "../../../module/logic/capability-aggregation.mjs";
 
@@ -160,6 +161,40 @@ describe("cgsEmbeddedItemGrantsProvider", () => {
         const out = cgsEmbeddedItemGrantsProvider(actor);
         expect(out).toHaveLength(1);
         expect(out[0].grants[0]).toMatchObject({ category: "sense", senseType: "scent", range: "15 ft" });
+    });
+
+    it("includes embedded creatureFeature items when they have cgsGrants", () => {
+        const actor = {
+            items: [
+                {
+                    type: "creatureFeature",
+                    name: "Blindsense",
+                    uuid: "Actor.1.Item.cfz",
+                    system: { cgsGrants: { grants: [{ category: "sense", senseType: "blindsense", range: "30 ft" }] } }
+                }
+            ]
+        };
+        const out = cgsEmbeddedItemGrantsProvider(actor);
+        expect(out).toHaveLength(1);
+        expect(out[0].label).toBe("Blindsense");
+        expect(out[0].grants[0]).toMatchObject({ category: "sense", senseType: "blindsense", range: "30 ft" });
+        expect(out[0].sourceRef).toEqual({ kind: "item", uuid: "Actor.1.Item.cfz" });
+    });
+
+    it("collectEmbeddedItemGrantsForCgs maps creatureFeature senses-only like feats", () => {
+        const actor = {
+            items: [
+                {
+                    type: "creatureFeature",
+                    name: "Low light",
+                    uuid: "Actor.1.Item.cf2",
+                    system: { cgsGrants: { grants: [], senses: [{ type: "lowLight", range: "" }] } }
+                }
+            ]
+        };
+        const out = collectEmbeddedItemGrantsForCgs(actor, null);
+        expect(out).toHaveLength(1);
+        expect(out[0].grants[0]).toMatchObject({ category: "sense", senseType: "lowLight", range: "" });
     });
 
     it("excludes gated armor when actor effective type does not match gate UUID", () => {

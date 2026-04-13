@@ -235,4 +235,27 @@ describe("getActiveModifiers", () => {
         const bag = getActiveModifiers(actor);
         expect(bag.totals["ability.str"] ?? 0).toBe(0);
     });
+
+    it("itemsModifierProvider applies creatureFeature system.changes when owned (same as feat)", () => {
+        const actor = {
+            items: [
+                {
+                    type: "creatureFeature",
+                    name: "Rend",
+                    system: {
+                        changes: [
+                            { key: "attackMelee", value: 2 },
+                            { key: "skill.listen", value: 1, label: "Keen hearing" }
+                        ]
+                    }
+                }
+            ]
+        };
+        CONFIG.THIRDERA.modifierSourceProviders = [itemsModifierProvider];
+        const bag = getActiveModifiers(actor);
+        expect(bag.totals.attackMelee).toBe(2);
+        expect(bag.totals["skill.listen"]).toBe(1);
+        expect(bag.breakdown["skill.listen"][0].label).toBe("Keen hearing");
+        expect(bag.breakdown.attackMelee[0].label).toBe("Rend");
+    });
 });

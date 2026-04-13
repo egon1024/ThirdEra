@@ -928,10 +928,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     _onRender(context, options) {
         super._onRender(context, options);
 
-        // When this sheet is for an owned item that affects actor stats (feat, armor, weapon, equipment),
+        // When this sheet is for an owned item that affects actor stats (feat, creatureFeature, armor, weapon, equipment),
         // refresh the actor (and its sheet) when the item is updated so modifiers and derived stats update dynamically.
         const doc = this.document;
-        const typesThatAffectActor = ["feat", "armor", "weapon", "equipment"];
+        const typesThatAffectActor = ["feat", "creatureFeature", "armor", "weapon", "equipment"];
         const resolvedOwner = doc && (doc.actor ?? doc.parent);
         const resolvedOwnerFromUuid = doc?.uuid && game?.actors ? (() => { const p = String(doc.uuid).split("."); return p[0] === "Actor" && p[1] ? game.actors.get(p[1]) ?? null : null; })() : null;
         const owner = resolvedOwner ?? resolvedOwnerFromUuid;
