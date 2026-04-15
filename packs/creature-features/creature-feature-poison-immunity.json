@@ -1,0 +1,23 @@
+{
+  "name": "Poison Immunity",
+  "type": "creatureFeature",
+  "img": "icons/svg/biohazard.svg",
+  "system": {
+    "key": "creaturePoisonImmunity",
+    "description": "<p>The creature is immune to poison (SRD-style special quality).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "poison",
+          "label": "Immune to poison (SRD)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

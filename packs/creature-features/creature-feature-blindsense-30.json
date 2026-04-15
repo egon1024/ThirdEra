@@ -1,0 +1,17 @@
+{
+  "name": "Blindsense",
+  "type": "creatureFeature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "key": "creatureBlindsense30",
+    "description": "<p>The creature perceives its surroundings without sight out to the listed range, as blindsense (SRD).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "blindsense", "range": "30 ft" }]
+    }
+  },
+  "flags": {},
+  "folder": null
+}

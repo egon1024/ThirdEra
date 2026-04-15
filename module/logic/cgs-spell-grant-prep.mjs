@@ -167,11 +167,17 @@ export function mapCgsSpellGrantReadySpellIdsByClass(spellGrantRows, spellItems,
  * Embedded spell item ids for merged grant rows that do **not** set `classItemId` (equipment, race, etc.).
  * Shown under a global Ready-to-cast capability section, not under a class header.
  *
+ * When `knownSpellcastingClassItemIds` is provided, rows whose `classItemId` is **non-empty** but **not** in that
+ * set (stale id, wrong class, template typo) are still included here so the spell is not orphaned from RTC entirely.
+ *
  * @param {unknown[]} spellGrantRows
  * @param {unknown[]} spellItems
+ * @param {Set<string> | null} [knownSpellcastingClassItemIds] — `classItemId` values for actors that actually have spellcasting (embedded class items). Omit to preserve legacy behavior (explicit `classItemId` always skips unscoped).
  * @returns {Set<string>}
  */
-export function mapCgsUnscopedSpellGrantReadySpellIds(spellGrantRows, spellItems) {
+export function mapCgsUnscopedSpellGrantReadySpellIds(spellGrantRows, spellItems, knownSpellcastingClassItemIds = null) {
+    const known =
+        knownSpellcastingClassItemIds instanceof Set ? knownSpellcastingClassItemIds : null;
     /** @type {Set<string>} */
     const out = new Set();
     for (const row of spellGrantRows || []) {
@@ -179,7 +185,11 @@ export function mapCgsUnscopedSpellGrantReadySpellIds(spellGrantRows, spellItems
         const explicit = typeof /** @type {{ classItemId?: string }} */ (row).classItemId === "string"
             ? /** @type {{ classItemId?: string }} */ (row).classItemId.trim()
             : "";
-        if (explicit) continue;
+        if (explicit) {
+            if (!known) continue;
+            if (known.has(explicit)) continue;
+            /* orphan classItemId: fall through to global RTC */
+        }
         const su = typeof /** @type {{ spellUuid?: string }} */ (row).spellUuid === "string"
             ? /** @type {{ spellUuid?: string }} */ (row).spellUuid.trim()
             : "";

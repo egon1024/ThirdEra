@@ -1,0 +1,17 @@
+{
+  "name": "Reflexive Dodge",
+  "type": "creatureFeature",
+  "img": "icons/svg/angel.svg",
+  "system": {
+    "key": "creatureReflexiveDodge",
+    "description": "<p>Quick reflexes against area effects and traps; modeled as a bonus on Reflex saves (SRD-style).</p>",
+    "abilityKind": "Ex",
+    "changes": [{ "key": "saveRef", "value": 1, "label": "Reflexive dodge" }],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

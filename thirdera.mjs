@@ -658,7 +658,15 @@ async function buildConditionStatusEffects() {
  * resolve both the existing index and wrap getIndex for future refreshes.
  */
 // Icons that don't exist in Foundry core — use shield instead so thumbnails don't 404.
-const COMPENDIUM_MISSING_ICONS = new Set(["wolf.svg", "star.svg", "dodge.svg", "raven.svg", "run.svg"]);
+const COMPENDIUM_MISSING_ICONS = new Set([
+    "wolf.svg",
+    "star.svg",
+    "dodge.svg",
+    "raven.svg",
+    "run.svg",
+    "camera.svg",
+    "wave.svg"
+]);
 
 function resolveIndexImgPaths(index) {
     const base = typeof window !== "undefined" && window.location?.origin

@@ -20,6 +20,11 @@ import {
     buildSubtypeOverlaySheetRowsFromGrants
 } from "../logic/cgs-type-overlay-item-sheet.mjs";
 import { buildPlainGearSystemForItemSheet } from "../logic/item-sheet-gear-system-for-template.mjs";
+import {
+    actorHasCreatureFeatureNamed,
+    actorHasCreatureFeatureWithWorldSourceId,
+    getEmbeddedCreatureFeaturesMatchingWorldTemplate
+} from "../logic/world-creature-feature-embed-sync.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -1769,6 +1774,52 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
+     * When this sheet's document is a world creature feature (no parent), sync its data to every actor that has
+     * a matching embedded copy (by {@link Item#sourceId} or name), then refresh those actors — same pattern as feats.
+     */
+    async _syncWorldCreatureFeatureToActorCopies() {
+        if (this.document?.type !== "creatureFeature" || !this.document?.uuid) return;
+        const actor = this.document?.actor ?? this.document?.parent ?? this.document?.collection?.parent;
+        if (actor) return;
+        const docUuid = this.document.uuid;
+        const docName = (this.document.name ?? "").trim();
+        const actorList = game.actors?.contents ?? Array.from(game.actors?.values?.() ?? []);
+        let actorsToRefresh = actorList.filter((a) => actorHasCreatureFeatureWithWorldSourceId(a, docUuid));
+        if (actorsToRefresh.length === 0 && docName) {
+            actorsToRefresh = actorList.filter((a) => actorHasCreatureFeatureNamed(a, docName));
+        }
+        if (actorsToRefresh.length === 0 && docName) {
+            const instances = foundry.applications?.instances;
+            if (instances) {
+                for (const app of instances.values()) {
+                    const d = app.document;
+                    if (d?.documentName === "Actor" && actorHasCreatureFeatureNamed(d, docName)) {
+                        actorsToRefresh.push(d);
+                    }
+                }
+            }
+        }
+        const fullDoc = this.document.toObject();
+        delete fullDoc._id;
+        const changes = this.document.system.changes ?? [];
+        const cgsGrants = foundry.utils.duplicate(
+            this.document.system.cgsGrants ?? { grants: [], senses: [] }
+        );
+        for (const a of actorsToRefresh) {
+            const itemsToUpdate = getEmbeddedCreatureFeaturesMatchingWorldTemplate(a, docUuid, docName);
+            for (const item of itemsToUpdate) {
+                const payload = { ...fullDoc };
+                payload["==system"] = this.document.system.toObject();
+                delete payload.system;
+                await item.update(payload);
+                await item.update({ "system.changes": changes, "system.cgsGrants": cgsGrants });
+            }
+            if (typeof a.prepareData === "function") await a.prepareData();
+            if (a.sheet?.rendered) await a.sheet.render();
+        }
+    }
+
+    /**
      * When this sheet's document is a world race (no parent), sync to actors that have this race embedded.
      */
     async _syncWorldRaceToActorCopies() {
@@ -1946,6 +1997,17 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         if (doc?.type === "feat") {
             if (!actor && doc.uuid) {
                 await this._syncWorldFeatToActorCopies();
+                return;
+            }
+            if (actor && typeof actor.prepareData === "function") {
+                await actor.prepareData();
+                if (actor.sheet?.rendered) await actor.sheet.render();
+            }
+            return;
+        }
+        if (doc?.type === "creatureFeature") {
+            if (!actor && doc.uuid) {
+                await this._syncWorldCreatureFeatureToActorCopies();
                 return;
             }
             if (actor && typeof actor.prepareData === "function") {
@@ -2989,7 +3051,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const doc = sheet.document;
         if (doc.type === "feat") await sheet._syncWorldFeatToActorCopies();
         else if (doc.type === "race" && !doc.actor && doc.uuid) await sheet._syncWorldRaceToActorCopies();
-        else if (doc.type !== "condition") {
+        else if (doc.type === "creatureFeature" && !doc.actor && doc.uuid) {
+            // CGS rows are persisted via #applyCgsGrantsThroughSheetSubmit (drops, add row), not _processSubmitData
+            await sheet._syncWorldCreatureFeatureToActorCopies();
+        } else if (doc.type !== "condition") {
             if (doc.actor) {
                 const actor = doc.actor;
                 if (typeof actor.prepareData === "function") await actor.prepareData();

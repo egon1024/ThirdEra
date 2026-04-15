@@ -453,6 +453,13 @@
             "OpenGrantedClassFeatureSheet": "Open feature details (compendium or world item)",
             "GrantedClassFeatureNoDocument": "No compendium or world item could be resolved for this granted feature."
         },
+        "CreatureFeatures": {
+            "Tab": "Creature Features",
+            "Section": "Creature features",
+            "DropHint": "Drag entries from the Creature Features compendium or creature feature items from the Items sidebar onto the highlighted drop zone below or anywhere on this sheet to embed them on this actor.",
+            "DropZonePrompt": "Drop zone — creature features",
+            "DropZoneTitle": "You can also drop creature features anywhere on the actor sheet; this area marks a convenient target."
+        },
         "Settings": {
             "CurrencyWeight": {
                 "Name": "Track Currency Weight",

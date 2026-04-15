@@ -1,0 +1,24 @@
+{
+  "name": "Thick Hide",
+  "type": "creatureFeature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "key": "creatureThickHideDr2",
+    "description": "<p>Reinforced skin or scales absorb some weapon blows (SRD-style damage reduction).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "damageReduction",
+          "value": 2,
+          "bypass": "",
+          "label": "Damage reduction 2/— (SRD-style thick hide)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

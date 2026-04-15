@@ -1011,6 +1011,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
 
         // Ensure tabs state exists (TABS.primary has no initial in Foundry, so default to description)
         if (!this.tabGroups.abilities) this.tabGroups.abilities = (actor.type === "npc" ? "details" : "scores");
+        const abilitiesSubtabKeys = new Set([
+            "scores", "details", "skills", "feats", "creature-features", "features"
+        ]);
+        if (!abilitiesSubtabKeys.has(this.tabGroups.abilities)) {
+            this.tabGroups.abilities = actor.type === "npc" ? "details" : "scores";
+        }
         if (!this.tabGroups.spells) this.tabGroups.spells = "known";
         if (!this.tabGroups.primary) this.tabGroups.primary = "description";
         if (actor.type === "npc" && !this.tabGroups.combat) this.tabGroups.combat = "combat";
@@ -1541,7 +1547,17 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             items.spells,
             spellcastingByClass
         );
-        const cgsUnscopedReadyIds = mapCgsUnscopedSpellGrantReadySpellIds(cgsSpellGrantRows, items.spells);
+        const knownSpellcastingClassItemIds = new Set(
+            (spellcastingByClass || [])
+                .filter((c) => c?.hasSpellcasting)
+                .map((c) => (typeof c.classItemId === "string" ? c.classItemId.trim() : ""))
+                .filter(Boolean)
+        );
+        const cgsUnscopedReadyIds = mapCgsUnscopedSpellGrantReadySpellIds(
+            cgsSpellGrantRows,
+            items.spells,
+            knownSpellcastingClassItemIds
+        );
         const spellGrantCastClassDeps = {
             hasLevelForClass: (sys, key) => SpellData.hasLevelForClass(sys, key)
         };
@@ -2270,6 +2286,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const equipment = [];
         const spells = [];
         const feats = [];
+        const creatureFeatures = [];
         const classFeatures = [];
         const skills = [];
         const classes = [];
@@ -2328,6 +2345,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
                 itemsNotInContainers.equipment.push(itemData);
             } else if (item.type === 'spell') spells.push(itemData);
             else if (item.type === 'feat') feats.push(itemData);
+            else if (item.type === 'creatureFeature') creatureFeatures.push(itemData);
             else if (item.type === 'feature') classFeatures.push(itemData);
             else if (item.type === 'skill') skills.push(itemData);
             else if (item.type === 'race' && !race) race = itemData;
@@ -2388,6 +2406,7 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         skills.sort((a, b) => a.name.localeCompare(b.name));
         classFeatures.sort((a, b) => a.name.localeCompare(b.name));
         feats.sort((a, b) => a.name.localeCompare(b.name));
+        creatureFeatures.sort((a, b) => a.name.localeCompare(b.name));
 
         if (actorType === "npc" && skills.length > 0) {
             skills.splice(0, skills.length, ...dedupeNpcEmbeddedSkillItemsForDisplay(skills));
@@ -2399,7 +2418,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             armor, 
             equipment, 
             spells, 
-            feats, 
+            feats,
+            creatureFeatures,
             classFeatures, 
             skills, 
             race, 

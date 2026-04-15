@@ -144,13 +144,25 @@ describe("mapCgsSpellGrantReadySpellIdsByClass", () => {
         expect(unscoped.has("s1")).toBe(true);
     });
 
-    it("unscoped map skips rows with explicit classItemId", () => {
+    it("unscoped map skips rows with explicit classItemId when that class exists on the actor", () => {
         const spellItems = [{ type: "spell", id: "s1", uuid: "U1", system: {} }];
         const unscoped = mapCgsUnscopedSpellGrantReadySpellIds(
             [{ spellUuid: "U1", classItemId: "cWiz" }],
-            spellItems
+            spellItems,
+            new Set(["cWiz", "cClr"])
         );
         expect(unscoped.has("s1")).toBe(false);
+    });
+
+    it("unscoped map includes rows whose classItemId does not match any spellcasting class (orphan id fallback)", () => {
+        const spellItems = [{ type: "spell", id: "s1", uuid: "U1", system: { level: 2 } }];
+        const known = new Set(["realWizardId"]);
+        const unscoped = mapCgsUnscopedSpellGrantReadySpellIds(
+            [{ spellUuid: "U1", classItemId: "wrongOrStaleClassId" }],
+            spellItems,
+            known
+        );
+        expect(unscoped.has("s1")).toBe(true);
     });
 
     it("resolves spell by sourceId for unscoped rows (no class map entry)", () => {

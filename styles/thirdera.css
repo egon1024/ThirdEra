@@ -5979,6 +5979,45 @@ form.thirdera.sheet.flexcol > .sheet-body {
   font-style: italic;
 }
 
+/* Actor sheet — Attributes → Creature Features (embedded items + drop target) */
+.thirdera .creature-features-sheet-hint {
+  margin-top: 0.25rem;
+}
+
+.thirdera .creature-features-drop-zone {
+  box-sizing: border-box;
+  min-height: 3.5rem;
+  margin: 0.5rem 0 0.75rem 0;
+  padding: 0.65rem 0.75rem;
+  border: 2px dashed var(--color-border-input);
+  border-radius: 4px;
+  background: var(--color-bg-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thirdera .creature-features-drop-zone:focus-within {
+  outline: 2px solid var(--color-hover-alt, #007bff);
+  outline-offset: 2px;
+}
+
+.thirdera .creature-features-drop-zone-prompt {
+  font-size: var(--font-size-label, 13px);
+  color: var(--color-text-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.thirdera .creature-feature-ability-kind-badge {
+  margin-left: 0.35rem;
+  font-size: var(--font-size-note, 12px);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  cursor: help;
+  text-decoration: none;
+}
+
 }
 
 /* Spell List button in Items directory header — dark icon on light background (outside .thirdera) */

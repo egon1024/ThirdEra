@@ -1,0 +1,17 @@
+{
+  "name": "Tremorsense",
+  "type": "creatureFeature",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "key": "creatureTremorsense20",
+    "description": "<p>The creature can pinpoint creatures or objects in contact with the ground within range (SRD tremorsense).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "tremorsense", "range": "20 ft" }]
+    }
+  },
+  "flags": {},
+  "folder": null
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Resistance to Fire",
+  "type": "creatureFeature",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "key": "creatureResistanceFire10",
+    "description": "<p>Innate or magical protection reduces fire damage taken (SRD resist energy pattern).</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "energyResistance",
+          "energyType": "fire",
+          "amount": 10,
+          "label": "Resist fire 10 (SRD-style innate resistance)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

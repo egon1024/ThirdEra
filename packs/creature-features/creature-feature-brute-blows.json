@@ -1,0 +1,17 @@
+{
+  "name": "Brute Blows",
+  "type": "creatureFeature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "key": "creatureBruteBlows",
+    "description": "<p>Heavy strikes or natural weapons land with extra force; treat as a racial bonus on attack rolls (SRD-style).</p>",
+    "abilityKind": "Ex",
+    "changes": [{ "key": "attack", "value": 1, "label": "Brute blows" }],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

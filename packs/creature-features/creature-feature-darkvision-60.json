@@ -1,0 +1,17 @@
+{
+  "name": "Darkvision",
+  "type": "creatureFeature",
+  "img": "icons/svg/explosion.svg",
+  "system": {
+    "key": "creatureDarkvision60",
+    "description": "<p>The creature can see in the dark out to 60 feet. Darkvision is black and white only (SRD).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "darkvision", "range": "60 ft" }]
+    }
+  },
+  "flags": {},
+  "folder": null
+}

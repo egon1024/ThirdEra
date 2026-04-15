@@ -1,0 +1,17 @@
+{
+  "name": "Low-Light Vision",
+  "type": "creatureFeature",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "key": "creatureLowLightVision",
+    "description": "<p>The creature can see twice as far as a human in dim light (SRD low-light vision).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "lowLight", "range": "" }]
+    }
+  },
+  "flags": {},
+  "folder": null
+}

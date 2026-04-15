@@ -1,0 +1,17 @@
+{
+  "name": "Keen Senses",
+  "type": "creatureFeature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "key": "creatureKeenSensesInitiative",
+    "description": "<p>Sharper reactions in combat; modeled as a bonus on initiative checks (SRD-style special quality).</p>",
+    "abilityKind": "Ex",
+    "changes": [{ "key": "initiative", "value": 2, "label": "Keen senses" }],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

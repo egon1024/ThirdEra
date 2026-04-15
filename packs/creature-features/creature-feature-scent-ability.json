@@ -1,0 +1,17 @@
+{
+  "name": "Scent",
+  "type": "creatureFeature",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "key": "creatureScent",
+    "description": "<p>The creature can detect opponents by smell, generally within 30 feet (SRD scent).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "scent", "range": "30 ft" }]
+    }
+  },
+  "flags": {},
+  "folder": null
+}

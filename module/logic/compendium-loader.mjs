@@ -34,6 +34,20 @@ function getStableKey(doc) {
     return undefined;
 }
 
+/** Reserved `system.key` values for removed pack scaffolding (Phase 1 creature features placeholder). */
+export const OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS = new Set(["creatureFeaturePlaceholder"]);
+
+/**
+ * @param {Array<{ id?: string, system?: { key?: string } }>} docs
+ * @returns {string[]}
+ */
+export function collectObsoleteCreatureFeatureCompendiumDocIds(docs) {
+    if (!Array.isArray(docs)) return [];
+    return docs
+        .filter((d) => OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS.has(d.system?.key) && d.id)
+        .map((d) => d.id);
+}
+
 export class CompendiumLoader {
     /**
      * Packs where **existing** compendium documents are not overwritten from `packs/*.json` on world load.
@@ -389,7 +403,20 @@ export class CompendiumLoader {
             "subtype-good.json", "subtype-incorporeal.json", "subtype-lawful.json", "subtype-native.json",
             "subtype-orc.json", "subtype-reptilian.json", "subtype-shapechanger.json", "subtype-swarm.json", "subtype-water.json"
         ],
-        "thirdera.thirdera_creature_features": ["creature-feature-placeholder.json"],
+        "thirdera.thirdera_creature_features": [
+            "creature-feature-blindsense-30.json",
+            "creature-feature-brute-blows.json",
+            "creature-feature-chameleon-hide.json",
+            "creature-feature-damage-reduction-2.json",
+            "creature-feature-darkvision-60.json",
+            "creature-feature-keen-senses-initiative.json",
+            "creature-feature-low-light-vision.json",
+            "creature-feature-poison-immunity.json",
+            "creature-feature-reflexive-dodge.json",
+            "creature-feature-resistance-fire-10.json",
+            "creature-feature-scent-ability.json",
+            "creature-feature-tremorsense-20.json"
+        ],
         "thirdera.thirdera_monsters": [
             "monster-aasimar.json",
             "monster-aboleth.json",
@@ -930,6 +957,40 @@ export class CompendiumLoader {
         } catch (err) {
             console.error("Third Era | resolveCgsReferenceKeysInPacks failed:", err);
         }
+
+        try {
+            await CompendiumLoader.deleteObsoleteCreatureFeaturePlaceholders();
+        } catch (err) {
+            console.error("Third Era | deleteObsoleteCreatureFeaturePlaceholders failed:", err);
+        }
+    }
+
+    /**
+     * Remove legacy Phase-1 placeholder rows from the creature features compendium (not shipped in JSON anymore).
+     */
+    static async deleteObsoleteCreatureFeaturePlaceholders() {
+        if (!game?.user?.isGM) return;
+        const pack = game.packs.get("thirdera.thirdera_creature_features");
+        if (!pack) return;
+        let docs;
+        try {
+            docs = await pack.getDocuments();
+        } catch (e) {
+            console.warn("Third Era | deleteObsoleteCreatureFeaturePlaceholders: getDocuments failed:", e);
+            return;
+        }
+        const ids = collectObsoleteCreatureFeatureCompendiumDocIds(docs);
+        if (ids.length === 0) return;
+        const Impl = pack.documentClass?.implementation;
+        if (!Impl?.deleteDocuments) {
+            console.warn("Third Era | deleteObsoleteCreatureFeaturePlaceholders: deleteDocuments unavailable");
+            return;
+        }
+        if (pack.locked) {
+            await pack.configure({ locked: false });
+        }
+        await Impl.deleteDocuments(ids, { pack: pack.collection });
+        console.log(`Third Era | Removed ${ids.length} obsolete creature feature pack placeholder(s)`);
     }
 
     /**
@@ -1077,9 +1138,14 @@ export class CompendiumLoader {
 
         for (const fileName of fileList) {
             const filePath = `${basePath}/${fileName}`;
-            
+
             try {
-                const response = await fetch(`/${filePath}`);
+                // Use getRoute so installs with ROUTE_PREFIX (Foundry not at site root) resolve pack JSON correctly.
+                const requestUrl =
+                    typeof foundry !== "undefined" && typeof foundry.utils?.getRoute === "function"
+                        ? foundry.utils.getRoute(filePath)
+                        : `/${filePath}`;
+                const response = await fetch(requestUrl);
                 if (!response.ok) {
                     console.warn(`Third Era | Could not load ${filePath} (status: ${response.status})`);
                     continue;
@@ -1112,6 +1178,14 @@ export class CompendiumLoader {
             } catch (error) {
                 console.warn(`Third Era | Failed to load ${filePath}:`, error);
             }
+        }
+
+        if (fileList.length > 0 && documents.length === 0) {
+            console.error(
+                `Third Era | Compendium ${pack.collection}: loaded 0/${fileList.length} JSON files under ${basePath}. ` +
+                    `If the browser Network tab shows 404s, check ROUTE_PREFIX and that the server is serving this system’s packs/ folder. ` +
+                    `World setting "Re-import compendium JSON on each load" must be on (GM) if the pack index is non-empty.`
+            );
         }
 
         // Classes pack: resolve autoGrantedFeats featKey/featKeys to feat UUIDs from feats pack

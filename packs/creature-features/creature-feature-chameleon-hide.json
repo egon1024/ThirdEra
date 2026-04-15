@@ -1,0 +1,17 @@
+{
+  "name": "Chameleon Hide",
+  "type": "creatureFeature",
+  "img": "icons/svg/invisible.svg",
+  "system": {
+    "key": "creatureChameleonHide",
+    "description": "<p>Coloration or camouflage grants a substantial bonus on Hide checks (SRD 3.5 Hide skill).</p>",
+    "abilityKind": "Ex",
+    "changes": [{ "key": "skill.hide", "value": 4, "label": "Camouflage" }],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}
