@@ -4,7 +4,7 @@
   "img": "icons/svg/aura.svg",
   "system": {
     "key": "creatureTremorsense20",
-    "description": "<p>The creature can pinpoint creatures or objects in contact with the ground within range (SRD tremorsense).</p>",
+    "description": "<p><strong>What it does (SRD):</strong> <strong>Tremorsense</strong> lets the creature automatically sense the exact location of anything that is <strong>in contact with the ground</strong> within <strong>20 ft.</strong>, as long as the sensing creature is also in contact with the same ground (or bridge, floor, etc.). It still needs line of effect for targeting rules that require it.</p><p><strong>ThirdEra:</strong> Tremorsense (<strong>20 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other senses; it does not add numeric attack or save bonuses on its own.</p>",
     "abilityKind": "Ex",
     "changes": [],
     "cgsGrants": {

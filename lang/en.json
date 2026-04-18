@@ -460,7 +460,17 @@
             "DropZonePrompt": "Drop zone — creature features",
             "DropZoneTitle": "You can also drop creature features anywhere on the actor sheet; this area marks a convenient target."
         },
+        "Notifications": {
+            "BundledCompendiumSyncDone": "Third Era refreshed compendium content from the system: {packs} ({created} created, {updated} updated).",
+            "BundledCompendiumSyncFailed": "Third Era could not finish the compendium bundle refresh. Check the console (F12) and try again or use “Re-import compendium JSON on each load” once as GM.",
+            "BundledCompendiumSyncMissingPacks": "Third Era bundle refresh skipped — compendium not found: {packs}.",
+            "BundledCompendiumSyncMissingFileMapping": "Third Era bundle refresh skipped — no JSON file list for {pack}."
+        },
         "Settings": {
+            "BundledCompendiumSyncMigrationRevision": {
+                "Name": "Bundled compendium sync revision (internal)",
+                "Hint": "Tracks which automatic compendium-from-bundle migration has been applied in this world. Do not edit unless support instructs you."
+            },
             "CurrencyWeight": {
                 "Name": "Track Currency Weight",
                 "Hint": "If enabled, every 50 coins will add 1 lb to the total weight (D&D 3.5 standard)."

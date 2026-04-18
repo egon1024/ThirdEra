@@ -20,6 +20,16 @@ On each world load (GM client, **ready**), **CompendiumLoader** refreshes **all*
 
 **Other racial traits (HTML):** Stock races ship **`system.otherRacialTraits`** for vision, immunities, weapon familiarity, languages, spell-like abilities, and similar traits that are **not** represented as numeric `system.changes` rows. The field is edited on the race sheet (Details) and shown on the PC sheet **Description** tab. On **ready**, the GM client runs `module/logic/race-qualitative-traits-stock.mjs`: when `flags.thirdera.raceQualitativeTraitsRev` is below the bundled revision, empty fields are filled from stock text keyed by default race **names**, and known obsolete bundled wording may be replaced (see `isStaleBundledQualitativeTraitsHtml` in that module). Custom text is otherwise left as-is while the flag is advanced. Keep the stock map aligned with `packs/races/*.json` when editing shipped prose.
 
+### Bundled compendium sync migration (world upgrades)
+
+Some compendiums are **not** refreshed from disk on every world load when the pack already has index entries (see **Re-import compendium JSON on each load** below). For **selected** packs, Third Era also runs a **one-time migration** on the **first GM `ready`** after a system update when the shipped migration revision advances:
+
+- **World setting (internal):** `bundledCompendiumSyncMigrationRevision` — not shown in the Configure Settings sidebar; stores the last applied migration revision for this world.
+- **Behavior:** The GM client shows an **info notification** summarizing created/updated compendium documents (matched by stable key, same as normal JSON import). After success, the world’s revision is updated so the pass does not repeat until the revision is bumped again in a future release.
+- **Manual re-sync (console, GM):** `await game.thirdera.bundledCompendiumSync.syncCollectionsFromBundle()` — same bundled JSON apply as the migration **without** changing the migration revision (useful for support or if you add a settings button later). Optional argument: an array of `pack.collection` ids (defaults to the migration list).
+
+Implementation: `module/logic/compendium-bundled-json-sync.mjs` and `CompendiumLoader.loadPackFromJSON(..., { bypassPopulationGate: true })`.
+
 ### Compendium Pack Definition (`system.json`)
 
 Each compendium pack must be declared in `system.json` under the `"packs"` array:
@@ -109,7 +119,9 @@ Hooks.once("ready", () => {
 - Checks if pack is already populated (skips if entries exist)
 - Updates existing items or creates new ones
 
-#### `loadPackFromJSON(pack, fileList)`
+#### `loadPackFromJSON(pack, fileList, options?)`
+- Optional third argument `{ bypassPopulationGate: true }` forces a fetch/update cycle even when the compendium index is already non-empty (used by the bundled sync migration and optional manual sync). Otherwise the world setting **Re-import compendium JSON on each load** must be on for the same effect.
+- Returns `{ gateSkipped: true }` when the population gate skipped the load, or `{ gateSkipped: false, created, updated }` after processing (counts may be zero if no JSON matched or no changes were needed).
 - Normalizes file paths (removes duplicate `systems/thirdera/` prefixes)
 - Fetches JSON files via HTTP (`fetch()`)
 - Removes invalid `_id` values (Foundry requires 16-character alphanumeric IDs)
@@ -153,7 +165,8 @@ static FILE_MAPPINGS = {
 - **Loader:** Add new filenames to **`CompendiumLoader.FILE_MAPPINGS`** under `"thirdera.thirdera_creature_features"` in `module/logic/compendium-loader.mjs` (same pattern as other Item packs).
 - **Sheets:** Item type id is **`creatureFeature`**; the sheet template path is **`templates/item/item-creatureFeature-sheet.hbs`** (same rule as `creatureType` → `item-creatureType-sheet.hbs`: the filename uses the exact `type` string). The sheet supports Description, Details (ability kind, mechanical effects table, CGS blocks). **`system.key`** is not shown on the sheet; it is set from pack JSON or auto-generated when creating a new item (for compendium matching and cross-references). When a creature feature item is **owned by an actor**, **`system.changes`** merge into the numeric modifier bag (GMS) and **`system.cgsGrants`** merge into capability grants (CGS), the same way as embedded feats — see [Development](development.md).
 - **World template → embedded copies:** Saving a **world** (or compendium-unpacked) creature feature whose sheet is **not** opened from an actor pushes **`system.changes`**, **`system.cgsGrants`**, and the rest of the item payload to every embedded copy on actors that match by **`sourceId`** (or by **name**, same fallback as world feats), then refreshes those actors — parity with world **feat** sync in the item sheet.
-- **Curated seed set (examples):** initiative and attack or save bonuses (GMS-only rows), Hide skill bonus, darkvision / low-light / scent / blindsense / tremorsense (`cgsGrants.senses`), poison immunity, fire energy resistance, and simple damage reduction (typed `cgsGrants.grants` matching existing feat and gear patterns).
+- **Curated seed set (examples):** initiative and attack or save bonuses (numeric **Mechanical effects**), Hide skill bonus, darkvision / low-light / scent / blindsense / tremorsense (under **Capability grants** on the item sheet), poison immunity, fire energy resistance, simple damage reduction, plus **Multiattack** (`creatureMultiattack`) with empty **Mechanical effects** and prose that explains SRD natural-attack behavior vs the NPC sheet’s **Natural attacks** list and optional **preset attack bonus**. Pack descriptions use **What it does (SRD)** and **ThirdEra** sections with **player-facing sheet labels**, not internal storage field names.
+- **Selective feat → creature feature migration (monster pack JSON):** Maintainer-approved rows live in **`scripts/creature-feature-feat-migration-manifest.json`**. Apply (or re-check) with **`node scripts/migrate-monster-embedded-feats-to-creature-features.mjs`** from the repo root; use **`--dry-run`** to print actions without writing files. The script replaces listed embedded **`feat`** items with **`creatureFeature`** clones from `packs/creature-features/` matched by **`system.key`**. This is a **data-only** change to `packs/monsters/*.json`; worlds keep existing imported monster actors until those documents are re-imported or recreated.
 
 ## JSON File Structure
 

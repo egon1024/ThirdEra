@@ -4,7 +4,7 @@
   "img": "icons/svg/sword.svg",
   "system": {
     "key": "creatureBruteBlows",
-    "description": "<p>Heavy strikes or natural weapons land with extra force; treat as a racial bonus on attack rolls (SRD-style).</p>",
+    "description": "<p><strong>What it does (SRD):</strong> Represents a monster special quality that makes the creature’s blows land more reliably—here modeled as a flat <strong>+1 bonus on attack rolls</strong> (all melee and ranged attacks that use the general attack bonus).</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the <strong>+1</strong> is entered in <strong>Mechanical effects</strong>. It stacks with other attack bonuses from feats, equipment, and conditions, and appears in attack breakdowns as <strong>Brute blows</strong>.</p>",
     "abilityKind": "Ex",
     "changes": [{ "key": "attack", "value": 1, "label": "Brute blows" }],
     "cgsGrants": {

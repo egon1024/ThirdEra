@@ -32,6 +32,12 @@ import { ThirdEraActorSheet } from "./module/sheets/actor-sheet.mjs";
 import { ThirdEraItemSheet } from "./module/sheets/item-sheet.mjs";
 import { AuditLog } from "./module/logic/audit-log.mjs";
 import { CompendiumLoader } from "./module/logic/compendium-loader.mjs";
+import {
+    BUNDLED_COMPENDIUM_SYNC_PACK_COLLECTIONS,
+    createDefaultBundledCompendiumJsonSyncDeps,
+    runBundledCompendiumJsonWorldMigrationIfNeeded,
+    syncBundledCompendiumJsonForCollections
+} from "./module/logic/compendium-bundled-json-sync.mjs";
 import { migrateAllRaceStockDeltas } from "./module/logic/race-srd-changes-merge.mjs";
 import { migrateAllRaceQualitativeTraits } from "./module/logic/race-qualitative-traits-stock.mjs";
 import { migrateAllNpcPhase6StatBlockSenses } from "./module/logic/cgs-phase6-npc-world-migrate.mjs";
@@ -485,6 +491,15 @@ Hooks.once("init", async function () {
         default: false
     });
 
+    game.settings.register("thirdera", "bundledCompendiumSyncMigrationRevision", {
+        name: "THIRDERA.Settings.BundledCompendiumSyncMigrationRevision.Name",
+        hint: "THIRDERA.Settings.BundledCompendiumSyncMigrationRevision.Hint",
+        scope: "world",
+        config: false,
+        type: Number,
+        default: 0
+    });
+
     game.settings.register("thirdera", "logClientBootstrapTiming", {
         name: "THIRDERA.Settings.LogClientBootstrapTiming.Name",
         hint: "THIRDERA.Settings.LogClientBootstrapTiming.Hint",
@@ -792,7 +807,40 @@ Hooks.once("ready", async function () {
     console.log("Third Era | System ready");
     mark("start");
 
-    // Load compendiums from JSON files if they're empty
+    if (game.user?.isGM) {
+        game.thirdera = game.thirdera ?? {};
+        game.thirdera.bundledCompendiumSync = {
+            /**
+             * Re-apply bundled `packs/*.json` to the given compendium collections (bypasses the empty-pack gate).
+             * Does **not** change `bundledCompendiumSyncMigrationRevision`; use for manual recovery or a future UI button.
+             * @param {string[]} [collections] - defaults to the same list as the world migration
+             */
+            syncCollectionsFromBundle: (collections = BUNDLED_COMPENDIUM_SYNC_PACK_COLLECTIONS) =>
+                syncBundledCompendiumJsonForCollections(createDefaultBundledCompendiumJsonSyncDeps(), [...collections])
+        };
+        try {
+            const migDeps = {
+                ...createDefaultBundledCompendiumJsonSyncDeps(),
+                getAppliedRevision: () => Number(game.settings.get("thirdera", "bundledCompendiumSyncMigrationRevision")) || 0,
+                setAppliedRevision: async (n) => {
+                    await game.settings.set("thirdera", "bundledCompendiumSyncMigrationRevision", n);
+                },
+                localize: (key, data) => (data && Object.keys(data).length > 0 ? game.i18n.format(key, data) : game.i18n.localize(key)),
+                notifyInfo: (msg) => {
+                    ui.notifications?.info(msg);
+                },
+                notifyWarn: (msg) => {
+                    ui.notifications?.warn(msg);
+                }
+            };
+            await runBundledCompendiumJsonWorldMigrationIfNeeded(migDeps);
+        } catch (e) {
+            console.warn("Third Era | Bundled compendium migration (pre-init) failed:", e);
+        }
+        mark("after bundled compendium migration");
+    }
+
+    // Load compendiums from JSON files if they're empty (or full re-import when the world setting is on)
     await CompendiumLoader.init();
     mark("after CompendiumLoader.init");
     // GM migrations (race stock/qualitative rows, Phase 6 NPC stat-block senses) can take many seconds

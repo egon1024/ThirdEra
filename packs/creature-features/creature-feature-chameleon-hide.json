@@ -4,7 +4,7 @@
   "img": "icons/svg/invisible.svg",
   "system": {
     "key": "creatureChameleonHide",
-    "description": "<p>Coloration or camouflage grants a substantial bonus on Hide checks (SRD 3.5 Hide skill).</p>",
+    "description": "<p><strong>What it does (SRD):</strong> Superior camouflage or coloration makes the creature harder to spot—here modeled as a <strong>+4 racial bonus on Hide checks</strong> (in addition to size, Dexterity, ranks, and other modifiers).</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the <strong>+4</strong> is entered in <strong>Mechanical effects</strong> (labeled <strong>Camouflage</strong>). It stacks with Dexterity, skill ranks, and other Hide bonuses.</p>",
     "abilityKind": "Ex",
     "changes": [{ "key": "skill.hide", "value": 4, "label": "Camouflage" }],
     "cgsGrants": {

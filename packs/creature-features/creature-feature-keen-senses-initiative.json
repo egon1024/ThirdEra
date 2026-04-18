@@ -4,7 +4,7 @@
   "img": "icons/svg/eye.svg",
   "system": {
     "key": "creatureKeenSensesInitiative",
-    "description": "<p>Sharper reactions in combat; modeled as a bonus on initiative checks (SRD-style special quality).</p>",
+    "description": "<p><strong>What it does (SRD):</strong> Many monsters with exceptional hearing or scent act sooner in a fight. This seed <strong>does not</strong> add Listen or Spot; it models only a <strong>+2 bonus on initiative checks</strong> as a compact stand-in for that kind of special quality.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the <strong>+2</strong> is entered in <strong>Mechanical effects</strong> (labeled <strong>Keen senses</strong>). It stacks with Dexterity, the Improved Initiative feat, and other initiative bonuses.</p>",
     "abilityKind": "Ex",
     "changes": [{ "key": "initiative", "value": 2, "label": "Keen senses" }],
     "cgsGrants": {

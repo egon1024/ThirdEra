@@ -4,7 +4,7 @@
   "img": "icons/svg/angel.svg",
   "system": {
     "key": "creatureReflexiveDodge",
-    "description": "<p>Quick reflexes against area effects and traps; modeled as a bonus on Reflex saves (SRD-style).</p>",
+    "description": "<p><strong>What it does (SRD):</strong> Exceptional reflexes help against bursts, lines, and traps. This entry is <strong>not</strong> the Dodge feat (no +1 dodge bonus to AC). It applies a <strong>+1 bonus on Reflex saving throws</strong> only.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the <strong>+1</strong> is entered in <strong>Mechanical effects</strong> (labeled <strong>Reflexive dodge</strong>). It stacks with Dexterity and other Reflex bonuses from feats, equipment, and conditions.</p>",
     "abilityKind": "Ex",
     "changes": [{ "key": "saveRef", "value": 1, "label": "Reflexive dodge" }],
     "cgsGrants": {

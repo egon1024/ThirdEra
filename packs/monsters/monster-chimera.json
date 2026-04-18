@@ -240,28 +240,17 @@
     },
     {
       "name": "Multiattack",
-      "type": "feat",
+      "type": "creatureFeature",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "<p>The creature is adept at using its natural weapons in combination.</p>",
-        "key": "multiattack",
-        "type": "General",
-        "prerequisites": "",
-        "benefit": "<p>Your secondary natural weapons take a reduced penalty when used together with a primary natural weapon (typically −5, or −2 when the primary is a bite).</p>",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 0,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "key": "creatureMultiattack",
+        "description": "<p><strong>What it does (SRD):</strong> When the creature makes a <strong>full attack</strong> that includes its <strong>primary</strong> natural weapon, its <strong>secondary</strong> natural weapons are rolled with a reduced attack penalty compared to the usual full-attack stacking. The Monster Manual phrasing is typically <strong>secondary attacks at −5</strong> from the creature’s best natural attack bonus, or <strong>only −2</strong> behind the primary when the primary natural weapon is a <strong>bite</strong>.</p><p><strong>ThirdEra:</strong> This item leaves <strong>Mechanical effects</strong> empty on its <strong>Details</strong> tab. Natural attack bonuses come from the NPC sheet’s <strong>Natural attacks</strong> list: mark each attack as primary or secondary; the sheet uses full melee for primaries and <strong>full melee − 5</strong> for secondaries unless you enter a <strong>preset attack bonus</strong> on a row so it matches the printed stat block (for example, true dragons where secondaries are only −2 behind the bite).</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
       },
       "flags": {},
       "folder": null,

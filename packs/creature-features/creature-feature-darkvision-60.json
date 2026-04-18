@@ -4,7 +4,7 @@
   "img": "icons/svg/explosion.svg",
   "system": {
     "key": "creatureDarkvision60",
-    "description": "<p>The creature can see in the dark out to 60 feet. Darkvision is black and white only (SRD).</p>",
+    "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to <strong>60 ft.</strong> Darkvision is <strong>black and white</strong> only; it does not let the creature see through magical darkness unless another rule says so.</p><p><strong>ThirdEra:</strong> Darkvision (<strong>60 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other vision and senses from items and race; it does not add numeric attack or save bonuses on its own.</p>",
     "abilityKind": "Ex",
     "changes": [],
     "cgsGrants": {

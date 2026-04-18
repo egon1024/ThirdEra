@@ -411,6 +411,7 @@ export class CompendiumLoader {
             "creature-feature-darkvision-60.json",
             "creature-feature-keen-senses-initiative.json",
             "creature-feature-low-light-vision.json",
+            "creature-feature-multiattack.json",
             "creature-feature-poison-immunity.json",
             "creature-feature-reflexive-dodge.json",
             "creature-feature-resistance-fire-10.json",
@@ -934,8 +935,8 @@ export class CompendiumLoader {
 
             // Load JSON files (will update existing items or create new ones)
             try {
-                const ran = await CompendiumLoader.loadPackFromJSON(pack, fileList);
-                if (ran) packsLoadedFromJson++;
+                const res = await CompendiumLoader.loadPackFromJSON(pack, fileList);
+                if (!res.gateSkipped) packsLoadedFromJson++;
                 else packsSkippedPopulated++;
             } catch (error) {
                 console.error(`Third Era | Error loading compendium ${packName}:`, error);
@@ -1111,15 +1112,18 @@ export class CompendiumLoader {
      * Load a compendium pack from JSON files
      * @param {CompendiumCollection} pack - The compendium pack to populate
      * @param {string[]} fileList - List of JSON file names to load
-     * @returns {Promise<boolean>} True if JSON was fetched and processed; false if skipped (pack already populated and setting does not force reimport)
+     * @param {{ bypassPopulationGate?: boolean }} [options] - When `bypassPopulationGate` is true, JSON is applied even if the pack index is non-empty (unless {@link CompendiumLoader.PACKS_SKIP_JSON_REFRESH_FOR_EXISTING} skips updates for that collection). Used for world migrations and future manual “sync from bundle” actions. Does not change the global “Re-import compendium JSON on each load” setting.
+     * @returns {Promise<{ gateSkipped: true } | { gateSkipped: false, created: number, updated: number }>}
      */
-    static async loadPackFromJSON(pack, fileList) {
+    static async loadPackFromJSON(pack, fileList, options = {}) {
+        const bypassPopulationGate = options?.bypassPopulationGate === true;
         const forceReimport =
-            typeof game !== "undefined" && game.settings?.get?.("thirdera", "reimportCompendiumJsonEachLoad") === true;
+            bypassPopulationGate ||
+            (typeof game !== "undefined" && game.settings?.get?.("thirdera", "reimportCompendiumJsonEachLoad") === true);
         if (!forceReimport) {
             await pack.getIndex();
             if (pack.index.size > 0) {
-                return false;
+                return { gateSkipped: true };
             }
         }
 
@@ -1252,6 +1256,9 @@ export class CompendiumLoader {
             }
         }
 
+        let created = 0;
+        let updated = 0;
+
         if (documents.length > 0) {
             // Unlock the compendium if it's locked (required to create/update documents)
             if (pack.locked) {
@@ -1263,7 +1270,7 @@ export class CompendiumLoader {
             const DocumentClass = pack.documentClass;
             if (!DocumentClass) {
                 console.error(`Third Era | Could not determine document class for pack ${pack.collection}`);
-                return true;
+                return { gateSkipped: false, created: 0, updated: 0 };
             }
 
             // Get existing documents from the compendium; match by stable key (not name)
@@ -1303,12 +1310,14 @@ export class CompendiumLoader {
             if (toUpdate.length > 0) {
                 await DocumentClass.implementation.updateDocuments(toUpdate, {pack: pack.collection});
                 console.log(`Third Era | Updated ${toUpdate.length} documents in ${pack.collection}`);
+                updated = toUpdate.length;
             }
 
             // Create new documents
             if (toCreate.length > 0) {
                 await DocumentClass.implementation.createDocuments(toCreate, {pack: pack.collection});
                 console.log(`Third Era | Created ${toCreate.length} new documents in ${pack.collection}`);
+                created = toCreate.length;
             }
 
             // Feats pack: resolve prerequisiteFeatKeys to prerequisiteFeatUuids (by key within the same pack)
@@ -1341,6 +1350,6 @@ export class CompendiumLoader {
                 console.log(`Third Era | Processed ${documents.length} documents in ${pack.collection}`);
             }
         }
-        return true;
+        return { gateSkipped: false, created, updated };
     }
 }

@@ -4,7 +4,7 @@
   "img": "icons/svg/shield.svg",
   "system": {
     "key": "creatureThickHideDr2",
-    "description": "<p>Reinforced skin or scales absorb some weapon blows (SRD-style damage reduction).</p>",
+    "description": "<p><strong>What it does (SRD):</strong> Thick hide or similar quality gives <strong>damage reduction 2/—</strong>: each successful weapon hit has <strong>2 points of damage ignored</strong> unless a listed bypass applies (this template has <strong>no</strong> bypass, i.e. DR 2/—).</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the DR is under <strong>Capability grants</strong> (damage reduction), not in <strong>Mechanical effects</strong>. When you apply weapon damage, combine it with any other DR from gear or traits per the normal rules.</p>",
     "abilityKind": "Ex",
     "changes": [],
     "cgsGrants": {
