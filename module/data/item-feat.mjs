@@ -1,4 +1,4 @@
-import { migrateDataCgsGrants } from "./cgs-grants-migrate-helpers.mjs";
+import { migrateDataCgsGrantOverrides, migrateDataCgsGrants } from "./cgs-grants-migrate-helpers.mjs";
 
 const { ArrayField, HTMLField, NumberField, ObjectField, SchemaField, StringField } = foundry.data.fields;
 
@@ -66,6 +66,28 @@ export class FeatData extends foundry.abstract.TypeDataModel {
                     )
                 },
                 { required: false, label: "Capability grants" }
+            ),
+
+            /** Optional Item UUID for canonical CGS template (`sourceId` is used when this is blank). */
+            cgsTemplateUuid: new StringField({ required: true, blank: true, initial: "", label: "CGS template UUID" }),
+
+            /** Partial CGS grants merged over resolved template + local `cgsGrants`. */
+            cgsGrantOverrides: new SchemaField(
+                {
+                    grants: new ArrayField(new ObjectField(), {
+                        required: true,
+                        initial: [],
+                        label: "Capability grant overrides"
+                    }),
+                    senses: new ArrayField(
+                        new SchemaField({
+                            type: new StringField({ required: true, blank: true, initial: "", label: "Sense type" }),
+                            range: new StringField({ required: true, blank: true, initial: "", label: "Range" })
+                        }),
+                        { required: false, initial: [], label: "Sense overrides" }
+                    )
+                },
+                { required: false, label: "CGS grant overrides" }
             )
         };
     }
@@ -73,6 +95,7 @@ export class FeatData extends foundry.abstract.TypeDataModel {
     /** @override */
     static migrateData(source) {
         migrateDataCgsGrants(source);
+        migrateDataCgsGrantOverrides(source);
         return super.migrateData(source);
     }
 }

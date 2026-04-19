@@ -1,0 +1,24 @@
+<section class="cgs-item-grant-overrides-block form-group">
+  <h3 class="form-header">{{localize "THIRDERA.CGS.GrantOverridesSection"}}</h3>
+  <p class="notes">{{localize "THIRDERA.CGS.GrantOverridesHint"}}</p>
+  <div class="form-fields flexcol">
+    <label class="flexrow">
+      <span class="cgs-template-uuid-label">{{localize "THIRDERA.CGS.TemplateUuidLabel"}}</span>
+      <input type="text" name="system.cgsTemplateUuid" class="details-input flex1" value="{{system.cgsTemplateUuid}}"
+        placeholder="{{localize 'THIRDERA.CGS.TemplateUuidPlaceholder'}}"
+        title="{{localize 'THIRDERA.CGS.TemplateUuidTooltip'}}"
+        {{#unless editable}}disabled{{/unless}} />
+    </label>
+  </div>
+  {{> "systems/thirdera/templates/partials/cgs-mechanics-senses-override.hbs"}}
+  {{> "systems/thirdera/templates/partials/cgs-mechanics-spell-grants-override.hbs"}}
+  {{> "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses-override.hbs"}}
+  {{> "systems/thirdera/templates/partials/cgs-mechanics-type-overlays-override.hbs"}}
+  {{#if editable}}
+  <div class="cgs-grant-overrides-actions">
+    <button type="button" class="button" data-action="resetCgsGrantOverrides" title="{{localize 'THIRDERA.CGS.ResetOverridesTooltip'}}">
+      {{localize "THIRDERA.CGS.ResetOverrides"}}
+    </button>
+  </div>
+  {{/if}}
+</section>

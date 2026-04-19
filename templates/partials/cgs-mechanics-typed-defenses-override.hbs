@@ -1,0 +1,79 @@
+{{!-- CGS typed defense overrides under `system.cgsGrantOverrides.grants`. --}}
+<div class="cgs-typed-defenses-panel cgs-typed-defenses-panel--overrides" data-cgs-grant-layer="overrides">
+<h4 class="items-header">{{localize "THIRDERA.CGS.TypedDefenseOverridesHeading"}}</h4>
+
+<div class="cgs-defense-section cgs-immunities-section">
+<h5 class="cgs-defense-section-heading">{{localize "THIRDERA.CGS.ImmunitiesHeading"}}</h5>
+<ol class="cgs-defense-list cgs-immunities-list">
+{{#each cgsOverrideImmunityRows}}
+  <li class="cgs-defense-row flexrow" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="immunity">
+    <select class="cgs-defense-field cgs-immunity-tag details-input" data-defense-field="tag" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="immunity">
+      <option value="">{{localize 'THIRDERA.CGS.ImmunityTagPlaceholder'}}</option>
+      {{#each @root.config.immunityTags as |label key|}}
+      <option value="{{key}}" {{#if (eq key ../tag)}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+    {{#if @root.editable}}
+    <button type="button" class="cgs-defense-remove" data-action="removeCgsTypedDefense" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="immunity" title="{{localize 'THIRDERA.CGS.RemoveGrant'}}" aria-label="{{localize 'THIRDERA.CGS.RemoveGrant'}}"><i class="fas fa-trash"></i></button>
+    {{/if}}
+  </li>
+{{/each}}
+</ol>
+{{#if @root.editable}}
+<div class="cgs-defense-add">
+  <button type="button" class="cgs-defense-add-btn" data-action="addCgsTypedDefense" data-cgs-defense-category="immunity" title="{{localize 'THIRDERA.CGS.AddImmunity'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.AddImmunity"}}</button>
+</div>
+{{/if}}
+</div>
+
+<div class="cgs-defense-section cgs-energy-resistance-section">
+<h5 class="cgs-defense-section-heading">{{localize "THIRDERA.CGS.EnergyResistanceHeading"}}</h5>
+<ol class="cgs-defense-list cgs-energy-resistance-list">
+{{#each cgsOverrideEnergyResistanceRows}}
+  <li class="cgs-defense-row flexrow" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="energyResistance">
+    <select class="cgs-defense-field cgs-er-type details-input" data-defense-field="energyType" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="energyResistance">
+      <option value="">{{localize 'THIRDERA.CGS.EnergyTypePlaceholder'}}</option>
+      {{#each @root.config.energyTypes as |label key|}}
+      <option value="{{key}}" {{#if (eq key ../energyType)}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+    <input type="number" min="0" step="1" class="cgs-defense-field cgs-er-amount details-input" data-defense-field="amount" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="energyResistance" value="{{amount}}" placeholder="0" />
+    {{#if @root.editable}}
+    <button type="button" class="cgs-defense-remove" data-action="removeCgsTypedDefense" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="energyResistance" title="{{localize 'THIRDERA.CGS.RemoveGrant'}}" aria-label="{{localize 'THIRDERA.CGS.RemoveGrant'}}"><i class="fas fa-trash"></i></button>
+    {{/if}}
+  </li>
+{{/each}}
+</ol>
+{{#if @root.editable}}
+<div class="cgs-defense-add">
+  <button type="button" class="cgs-defense-add-btn" data-action="addCgsTypedDefense" data-cgs-defense-category="energyResistance" title="{{localize 'THIRDERA.CGS.AddEnergyResistance'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.AddEnergyResistance"}}</button>
+</div>
+{{/if}}
+</div>
+
+<div class="cgs-defense-section cgs-damage-reduction-section">
+<h5 class="cgs-defense-section-heading">{{localize "THIRDERA.CGS.DamageReductionHeading"}}</h5>
+<ol class="cgs-defense-list cgs-damage-reduction-list">
+{{#each cgsOverrideDamageReductionRows}}
+  <li class="cgs-defense-row flexrow" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="damageReduction">
+    <input type="number" min="0" step="1" class="cgs-defense-field cgs-dr-value details-input" data-defense-field="value" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="damageReduction" value="{{value}}" placeholder="0" />
+    <span class="cgs-dr-slash">/</span>
+    <select class="cgs-defense-field cgs-dr-bypass details-input" data-defense-field="bypass" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="damageReduction">
+      <option value="">{{localize 'THIRDERA.CGS.DRBypassNone'}}</option>
+      {{#each @root.config.drBypassTypes as |label key|}}
+      <option value="{{key}}" {{#if (eq key ../bypass)}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+    {{#if @root.editable}}
+    <button type="button" class="cgs-defense-remove" data-action="removeCgsTypedDefense" data-cgs-defense-index="{{grantIndex}}" data-cgs-defense-category="damageReduction" title="{{localize 'THIRDERA.CGS.RemoveGrant'}}" aria-label="{{localize 'THIRDERA.CGS.RemoveGrant'}}"><i class="fas fa-trash"></i></button>
+    {{/if}}
+  </li>
+{{/each}}
+</ol>
+{{#if @root.editable}}
+<div class="cgs-defense-add">
+  <button type="button" class="cgs-defense-add-btn" data-action="addCgsTypedDefense" data-cgs-defense-category="damageReduction" title="{{localize 'THIRDERA.CGS.AddDamageReduction'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.AddDamageReduction"}}</button>
+</div>
+{{/if}}
+</div>
+</div>

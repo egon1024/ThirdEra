@@ -104,6 +104,19 @@
             "MergedSubtypeOverlaysHeading": "Subtype overlays",
             "ActorTypeOverlaysHeading": "Extra types and subtypes (this character)",
             "ActorTypeOverlaysHint": "Record extra types and subtypes for this character in addition to their normal form—templates, GM effects, or tracking shapechange-style cases. Choose from the lists below, using the same compendium or world entries as elsewhere. Primary type and subtypes on the Details tab stay unchanged. These are additive grants; the system does not run type-based rules from them yet.",
+            "GrantOverridesSection": "CGS parameters and overrides",
+            "GrantOverridesHint": "Optional rows merged over the resolved template (the compendium or world item referenced by this item’s source or the explicit template UUID below) and this item’s Capability grants. Use for per-copy distances, resistance amounts, and similar parameters without duplicating the whole template item.",
+            "TemplateUuidLabel": "CGS template UUID",
+            "TemplateUuidPlaceholder": "Compendium or world Item UUID (optional)",
+            "TemplateUuidTooltip": "Document UUID for the canonical CGS template item when automatic source linkage is missing or wrong.",
+            "SenseOverridesHeading": "Sense parameter overrides",
+            "SpellGrantOverridesHeading": "Spell grant overrides",
+            "SpellGrantOverridesHint": "Spell-like rows stored only in overrides (merged with template spell grants).",
+            "TypedDefenseOverridesHeading": "Typed defense overrides",
+            "TypeOverlayOverridesHeading": "Type overlay overrides",
+            "TypeOverlayOverridesHint": "Overlay rows stored only in overrides (merged with template overlays).",
+            "ResetOverrides": "Reset CGS overrides",
+            "ResetOverridesTooltip": "Clear CGS parameter overrides and the explicit template UUID on this item.",
             "TypeOverlayDropWrongRow": "Use a creature type row for types and a subtype row for subtypes.",
             "EffectiveCreatureTypesContext": "Show effective creature types (mechanical)",
             "EffectiveTypesTitle": "{name}: effective creature types (primary and CGS overlays)",
@@ -470,6 +483,10 @@
             "BundledCompendiumSyncMigrationRevision": {
                 "Name": "Bundled compendium sync revision (internal)",
                 "Hint": "Tracks which automatic compendium-from-bundle migration has been applied in this world. Do not edit unless support instructs you."
+            },
+            "CgsGrantOverridesWorldMigrationRevision": {
+                "Name": "CGS grant overrides world migration (internal)",
+                "Hint": "Tracks the automatic world scan for CGS template + override scaffolding. Do not edit unless support instructs you."
             },
             "CurrencyWeight": {
                 "Name": "Track Currency Weight",

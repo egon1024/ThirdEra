@@ -62,6 +62,28 @@ describe("cgsContributionFromOwnedItem", () => {
         expect(c?.sourceRef).toEqual({ kind: "item", uuid: "Actor.1.Item.abc" });
         expect(c?.grants).toHaveLength(1);
     });
+
+    it("merges template darkvision with per-item overrides (template + override parity)", () => {
+        const tpl = {
+            documentName: "Item",
+            system: { cgsGrants: { grants: [], senses: [{ type: "darkvision", range: "60 ft" }] } }
+        };
+        const c = cgsContributionFromOwnedItem(
+            {
+                type: "feat",
+                name: "Wide eyes",
+                uuid: "Actor.1.Item.x",
+                sourceId: "Compendium.thirdera.thirdera_feats.Item.tpl",
+                system: {
+                    cgsGrants: { grants: [], senses: [{ type: "darkvision", range: "60 ft" }] },
+                    cgsGrantOverrides: { grants: [], senses: [{ type: "darkvision", range: "90 ft" }] }
+                }
+            },
+            "Feat",
+            { fromUuidSync: () => tpl, _resolvedCache: new Map() }
+        );
+        expect(c?.grants[0]).toMatchObject({ category: "sense", senseType: "darkvision", range: "90 ft" });
+    });
 });
 
 describe("cgsEmbeddedItemGrantsProvider", () => {

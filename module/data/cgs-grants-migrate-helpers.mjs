@@ -31,3 +31,31 @@ export function migrateDataCgsGrants(source, options = {}) {
         if (withSenses && !Array.isArray(source.cgsGrants.senses)) source.cgsGrants.senses = [];
     }
 }
+
+/**
+ * Normalize `system.cgsGrantOverrides` on item system payloads (same array shape as `cgsGrants`).
+ * @param {object} source - system subtree passed to migrateData
+ * @param {{ senses?: boolean }} [options] - `senses: false` when overrides should not carry senses (unused today; kept for parity)
+ */
+export function migrateDataCgsGrantOverrides(source, options = {}) {
+    const withSenses = options.senses !== false;
+    if (!source || typeof source !== "object") return;
+
+    if ("==cgsGrantOverrides" in source) {
+        const v = source["==cgsGrantOverrides"];
+        if (v && typeof v === "object") {
+            if (!Array.isArray(v.grants)) v.grants = [];
+            if (withSenses && !Array.isArray(v.senses)) v.senses = [];
+        }
+        return;
+    }
+
+    if (!("cgsGrantOverrides" in source)) return;
+
+    if (!source.cgsGrantOverrides || typeof source.cgsGrantOverrides !== "object") {
+        source.cgsGrantOverrides = withSenses ? { grants: [], senses: [] } : { grants: [] };
+    } else {
+        if (!Array.isArray(source.cgsGrantOverrides.grants)) source.cgsGrantOverrides.grants = [];
+        if (withSenses && !Array.isArray(source.cgsGrantOverrides.senses)) source.cgsGrantOverrides.senses = [];
+    }
+}

@@ -39,6 +39,9 @@
             {{> "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses.hbs"}}
             {{> "systems/thirdera/templates/partials/cgs-mechanics-type-overlays.hbs"}}
             </div>
+            {{#if showCgsGrantOverridesSection}}
+            {{> "systems/thirdera/templates/partials/cgs-item-grant-overrides-block.hbs"}}
+            {{/if}}
         </div>
     </section>
 </form>

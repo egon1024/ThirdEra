@@ -41,6 +41,7 @@ import {
 import { migrateAllRaceStockDeltas } from "./module/logic/race-srd-changes-merge.mjs";
 import { migrateAllRaceQualitativeTraits } from "./module/logic/race-qualitative-traits-stock.mjs";
 import { migrateAllNpcPhase6StatBlockSenses } from "./module/logic/cgs-phase6-npc-world-migrate.mjs";
+import { runCgsGrantOverridesWorldMigrationIfNeeded } from "./module/logic/cgs-grant-overrides-world-migrate.mjs";
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
 import { yieldToMain } from "./module/logic/client-main-thread-cooperation.mjs";
 import {
@@ -500,6 +501,15 @@ Hooks.once("init", async function () {
         default: 0
     });
 
+    game.settings.register("thirdera", "cgsGrantOverridesWorldMigrationRevision", {
+        name: "THIRDERA.Settings.CgsGrantOverridesWorldMigrationRevision.Name",
+        hint: "THIRDERA.Settings.CgsGrantOverridesWorldMigrationRevision.Hint",
+        scope: "world",
+        config: false,
+        type: Number,
+        default: 0
+    });
+
     game.settings.register("thirdera", "logClientBootstrapTiming", {
         name: "THIRDERA.Settings.LogClientBootstrapTiming.Name",
         hint: "THIRDERA.Settings.LogClientBootstrapTiming.Hint",
@@ -582,6 +592,11 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses.hbs",
         "systems/thirdera/templates/partials/cgs-merged-typed-defenses.hbs",
         "systems/thirdera/templates/partials/cgs-mechanics-type-overlays.hbs",
+        "systems/thirdera/templates/partials/cgs-item-grant-overrides-block.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-senses-override.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-spell-grants-override.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses-override.hbs",
+        "systems/thirdera/templates/partials/cgs-mechanics-type-overlays-override.hbs",
         "systems/thirdera/templates/partials/cgs-merged-type-overlays.hbs",
         "systems/thirdera/templates/partials/cgs-mechanics-actor-type-overlays.hbs",
         "systems/thirdera/templates/partials/cgs-granted-spells-known.hbs",
@@ -922,6 +937,12 @@ Hooks.once("ready", async function () {
                 }
             } catch (e) {
                 console.warn("Third Era | Phase 6 NPC CGS sense migration error:", e);
+            }
+            await yieldToMain();
+            try {
+                await runCgsGrantOverridesWorldMigrationIfNeeded({ game });
+            } catch (e) {
+                console.warn("Third Era | CGS grant overrides world migration error:", e);
             }
             mark("after migrations (deferred)");
         })();

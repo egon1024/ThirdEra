@@ -1,0 +1,55 @@
+{{!-- Phase 5f overlays under `system.cgsGrantOverrides.grants`. --}}
+<div class="cgs-type-overlays-panel cgs-type-overlays-panel--overrides" data-cgs-grant-layer="overrides">
+<h4 class="items-header">{{localize "THIRDERA.CGS.TypeOverlayOverridesHeading"}}</h4>
+<p class="notes">{{localize "THIRDERA.CGS.TypeOverlayOverridesHint"}}</p>
+
+<div class="cgs-overlay-section">
+<h5 class="cgs-overlay-section-heading">{{localize "THIRDERA.CGS.CreatureTypeOverlaysHeading"}}</h5>
+<ol class="cgs-overlay-list">
+{{#each cgsOverrideCreatureTypeOverlayRows}}
+  <li class="cgs-overlay-row" data-cgs-type-overlay-index="{{grantIndex}}" data-cgs-creature-type-overlay-drop>
+    <select class="cgs-type-overlay-field cgs-creature-type-overlay-select details-input" data-overlay-field="typeUuid" data-cgs-overlay-category="creatureTypeOverlay" data-cgs-type-overlay-index="{{grantIndex}}">
+      <option value="">{{localize "THIRDERA.CGS.CreatureTypePlaceholder"}}</option>
+      {{#each @root.cgsOverlayCreatureTypeChoices as |choice|}}
+      <option value="{{choice.uuid}}" {{#if (eq choice.uuid ../typeUuid)}}selected{{/if}}>{{choice.name}}</option>
+      {{/each}}
+    </select>
+    {{#if @root.editable}}
+    <button type="button" class="cgs-overlay-remove" data-action="removeCgsTypeOverlay" data-cgs-overlay-category="creatureTypeOverlay" data-cgs-type-overlay-index="{{grantIndex}}" title="{{localize 'THIRDERA.CGS.RemoveGrant'}}" aria-label="{{localize 'THIRDERA.CGS.RemoveGrant'}}"><i class="fas fa-trash"></i></button>
+    {{/if}}
+    {{#if @root.editable}}<p class="notes cgs-overlay-drop-hint">{{localize "THIRDERA.CGS.CreatureTypeOverlayDropHint"}}</p>{{/if}}
+  </li>
+{{/each}}
+</ol>
+{{#if @root.editable}}
+<div class="cgs-overlay-add">
+  <button type="button" class="cgs-overlay-add-btn" data-action="addCgsTypeOverlay" data-cgs-overlay-category="creatureTypeOverlay" title="{{localize 'THIRDERA.CGS.AddCreatureTypeOverlay'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.AddCreatureTypeOverlay"}}</button>
+</div>
+{{/if}}
+</div>
+
+<div class="cgs-overlay-section">
+<h5 class="cgs-overlay-section-heading">{{localize "THIRDERA.CGS.SubtypeOverlaysHeading"}}</h5>
+<ol class="cgs-overlay-list">
+{{#each cgsOverrideSubtypeOverlayRows}}
+  <li class="cgs-overlay-row" data-cgs-subtype-overlay-index="{{grantIndex}}" data-cgs-subtype-overlay-drop>
+    <select class="cgs-type-overlay-field cgs-subtype-overlay-select details-input" data-overlay-field="subtypeUuid" data-cgs-overlay-category="subtypeOverlay" data-cgs-subtype-overlay-index="{{grantIndex}}">
+      <option value="">{{localize "THIRDERA.CGS.SubtypePlaceholder"}}</option>
+      {{#each @root.cgsOverlaySubtypeChoices as |choice|}}
+      <option value="{{choice.uuid}}" {{#if (eq choice.uuid ../subtypeUuid)}}selected{{/if}}>{{choice.name}}</option>
+      {{/each}}
+    </select>
+    {{#if @root.editable}}
+    <button type="button" class="cgs-overlay-remove" data-action="removeCgsTypeOverlay" data-cgs-overlay-category="subtypeOverlay" data-cgs-subtype-overlay-index="{{grantIndex}}" title="{{localize 'THIRDERA.CGS.RemoveGrant'}}" aria-label="{{localize 'THIRDERA.CGS.RemoveGrant'}}"><i class="fas fa-trash"></i></button>
+    {{/if}}
+    {{#if @root.editable}}<p class="notes cgs-overlay-drop-hint">{{localize "THIRDERA.CGS.SubtypeOverlayDropHint"}}</p>{{/if}}
+  </li>
+{{/each}}
+</ol>
+{{#if @root.editable}}
+<div class="cgs-overlay-add">
+  <button type="button" class="cgs-overlay-add-btn" data-action="addCgsTypeOverlay" data-cgs-overlay-category="subtypeOverlay" title="{{localize 'THIRDERA.CGS.AddSubtypeOverlay'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.AddSubtypeOverlay"}}</button>
+</div>
+{{/if}}
+</div>
+</div>

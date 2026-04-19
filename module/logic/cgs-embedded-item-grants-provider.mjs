@@ -46,8 +46,13 @@ function cgsContributionFromGrants(item, defaultLabel, grants) {
  * @param {string} defaultLabel
  * @returns {{ label: string, grants: unknown[], sourceRef: Record<string, unknown> } | null}
  */
-export function cgsContributionFromOwnedItem(item, defaultLabel) {
-    const grants = getEffectiveOwnedItemCgsGrants(item);
+/**
+ * @param {unknown} item
+ * @param {string} defaultLabel
+ * @param {{ fromUuidSync?: (uuid: string) => unknown, _resolvedCache?: Map<string, unknown> }} [deps]
+ */
+export function cgsContributionFromOwnedItem(item, defaultLabel, deps) {
+    const grants = getEffectiveOwnedItemCgsGrants(item, deps);
     return cgsContributionFromGrants(item, defaultLabel, grants);
 }
 
@@ -75,6 +80,8 @@ export function collectEmbeddedItemGrantsForCgs(actor, acceptedGearIds) {
     if (!items) return [];
     const list =
         Array.isArray(items) ? items : typeof items[Symbol.iterator] === "function" ? Array.from(items) : [];
+    /** @type {{ fromUuidSync?: (uuid: string) => unknown, _resolvedCache?: Map<string, unknown> }} */
+    const templateDeps = { _resolvedCache: new Map() };
     /** @type {Array<{ label: string, grants: unknown[], sourceRef: Record<string, unknown> }>} */
     const out = [];
     for (const item of list) {
@@ -86,31 +93,31 @@ export function collectEmbeddedItemGrantsForCgs(actor, acceptedGearIds) {
             continue;
         }
         if (type === "feat") {
-            const c = cgsContributionFromOwnedItem(item, "Feat");
+            const c = cgsContributionFromOwnedItem(item, "Feat", templateDeps);
             if (c) out.push(c);
             continue;
         }
         if (type === "feature") {
-            const c = cgsContributionFromOwnedItem(item, "Class feature");
+            const c = cgsContributionFromOwnedItem(item, "Class feature", templateDeps);
             if (c) out.push(c);
             continue;
         }
         if (type === "creatureFeature") {
-            const c = cgsContributionFromOwnedItem(item, "Creature feature");
+            const c = cgsContributionFromOwnedItem(item, "Creature feature", templateDeps);
             if (c) out.push(c);
             continue;
         }
         if (type === "armor" || type === "equipment") {
             if (!embeddedGearMechanicalEffectsApply(item)) continue;
             if (acceptedGearIds !== null && !acceptedGearIds.has(embeddedGearItemStableKey(item))) continue;
-            const c = cgsContributionFromOwnedItem(item, type === "armor" ? "Armor" : "Equipment");
+            const c = cgsContributionFromOwnedItem(item, type === "armor" ? "Armor" : "Equipment", templateDeps);
             if (c) out.push(c);
             continue;
         }
         if (type === "weapon") {
             if (!embeddedGearMechanicalEffectsApply(item)) continue;
             if (acceptedGearIds !== null && !acceptedGearIds.has(embeddedGearItemStableKey(item))) continue;
-            const c = cgsContributionFromOwnedItem(item, "Weapon");
+            const c = cgsContributionFromOwnedItem(item, "Weapon", templateDeps);
             if (c) out.push(c);
         }
     }

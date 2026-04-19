@@ -1,10 +1,13 @@
 /**
  * Resolve effective CGS grant payloads for owned items (feat, creatureFeature, class feature, armor, equipment, weapon).
- * Precedence: non-empty `system.cgsGrants.grants` → rows in `system.cgsGrants.senses` mapped to sense grants.
+ * Precedence: merged effective `cgsGrants` shape (template resolution + {@link ./cgs-grant-template-merge.mjs} overrides),
+ * then non-empty `.grants` → rows in `.senses` mapped to sense grants.
  * No stock fallback (races use {@link ./cgs-stock-race-grants.mjs}).
  *
  * @see .cursor/plans/cgs-phased-implementation.md (Phase 5b)
  */
+
+import { getEffectiveCgsGrantShapeForOwnedItem } from "./cgs-grant-template-merge.mjs";
 
 /**
  * @param {unknown} senses
@@ -26,15 +29,15 @@ export function mapCgsSensesRowsToSenseGrants(senses) {
 
 /**
  * @param {unknown} item - Item-like (feat, creatureFeature, armor, equipment, weapon)
+ * @param {{ fromUuidSync?: (uuid: string) => unknown, _resolvedCache?: Map<string, unknown> }} [deps] - inject for unit tests / perf cache within one derivation pass
  * @returns {Array<Record<string, unknown>>}
  */
-export function getEffectiveOwnedItemCgsGrants(item) {
+export function getEffectiveOwnedItemCgsGrants(item, deps) {
     if (!item || typeof item !== "object") return [];
-    const sys = /** @type {{ cgsGrants?: { grants?: unknown, senses?: unknown } }} */ (item).system ?? {};
-    const cg = sys.cgsGrants ?? {};
-    const rawGrants = cg.grants;
+    const merged = getEffectiveCgsGrantShapeForOwnedItem(item, deps ?? {});
+    const rawGrants = merged.grants;
     if (Array.isArray(rawGrants) && rawGrants.length > 0) {
         return rawGrants.slice();
     }
-    return mapCgsSensesRowsToSenseGrants(cg.senses);
+    return mapCgsSensesRowsToSenseGrants(merged.senses);
 }

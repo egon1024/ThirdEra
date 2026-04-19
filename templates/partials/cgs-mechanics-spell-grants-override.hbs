@@ -1,0 +1,36 @@
+{{!-- CGS spellGrant overrides: indices = full `system.cgsGrantOverrides.grants` array. --}}
+<div class="cgs-spell-grants-panel cgs-spell-grants-panel--overrides" data-cgs-grant-layer="overrides">
+<h4 class="items-header">{{localize "THIRDERA.CGS.SpellGrantOverridesHeading"}}</h4>
+<p class="notes">{{localize "THIRDERA.CGS.SpellGrantOverridesHint"}}</p>
+<ol class="cgs-spell-grants-list">
+{{#each cgsOverrideSpellGrantRows}}
+  <li class="cgs-spell-grant-row{{#unless @root.editable}} cgs-spell-grant-row-readonly{{/unless}}" data-cgs-spell-grant-index="{{grantIndex}}" data-cgs-spell-grant-drop>
+    <div class="cgs-spell-grant-spell flexcol">
+      <span class="cgs-spell-grant-name" title="{{spellUuid}}">{{displayName}}</span>
+    </div>
+    {{#if @root.editable}}
+    <div class="cgs-spell-grant-fields">
+      <div class="cgs-spell-grant-line-primary">
+        <label class="cgs-spell-grant-atwill cgs-spell-grant-stack cgs-spell-grant-stack-narrow"><span class="cgs-spell-grant-field-label">{{localize "THIRDERA.CGS.SpellGrantAtWillLabel"}}</span><input type="checkbox" class="cgs-spell-grant-field" data-spell-grant-field="atWill" {{#if atWill}}checked{{/if}} /></label>
+        <label class="cgs-spell-grant-stack cgs-spell-grant-stack-narrow cgs-spell-grant-uses"><span class="cgs-spell-grant-field-label">{{localize "THIRDERA.CGS.SpellGrantUsesPerDayLabel"}}</span><input type="number" min="0" step="1" class="cgs-spell-grant-field details-input" data-spell-grant-field="usesPerDay" value="{{usesPerDayValue}}" /></label>
+      </div>
+      <div class="cgs-spell-grant-line-secondary">
+        <label class="cgs-spell-grant-stack cgs-spell-grant-stack-narrow"><span class="cgs-spell-grant-field-label" title="{{localize "THIRDERA.CGS.SpellGrantCasterLevelTooltip"}}">{{localize "THIRDERA.CGS.SpellGrantCasterLevelLabel"}}</span><input type="number" min="0" step="1" class="cgs-spell-grant-field details-input" data-spell-grant-field="casterLevel" value="{{casterLevelValue}}" /></label>
+        <label class="cgs-spell-grant-stack cgs-spell-grant-stack-grow cgs-spell-grant-label-field"><span class="cgs-spell-grant-field-label">{{localize "THIRDERA.CGS.SpellGrantLabelField"}}</span>
+          <input type="text" class="cgs-spell-grant-field details-input" data-spell-grant-field="label" value="{{label}}" /></label>
+      </div>
+    </div>
+    <button type="button" class="cgs-spell-grant-remove" data-action="removeCgsSpellGrant" data-cgs-spell-grant-index="{{grantIndex}}" title="{{localize 'THIRDERA.CGS.SpellGrantRemove'}}" aria-label="{{localize 'THIRDERA.CGS.SpellGrantRemove'}}"><i class="fas fa-trash"></i></button>
+    <p class="notes cgs-spell-grant-drop-hint">{{localize "THIRDERA.CGS.SpellGrantDropHint"}}</p>
+    {{else}}
+    <span class="cgs-spell-grant-readonly">{{#if atWill}}{{localize "THIRDERA.CGS.SpellGrantAtWill"}}{{else}}{{#if usesPerDayValue}}{{usesPerDayValue}} {{localize "THIRDERA.CGS.SpellGrantUsesPerDaySuffix"}}{{/if}}{{/if}}</span>
+    {{/if}}
+  </li>
+{{/each}}
+</ol>
+{{#if @root.editable}}
+<div class="cgs-spell-grants-add">
+  <button type="button" class="cgs-spell-grant-add-btn" data-action="addCgsSpellGrant" title="{{localize 'THIRDERA.CGS.SpellGrantAdd'}}"><i class="fas fa-plus"></i> {{localize "THIRDERA.CGS.SpellGrantAdd"}}</button>
+</div>
+{{/if}}
+</div>

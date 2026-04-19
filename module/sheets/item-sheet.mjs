@@ -25,6 +25,11 @@ import {
     actorHasCreatureFeatureWithWorldSourceId,
     getEmbeddedCreatureFeaturesMatchingWorldTemplate
 } from "../logic/world-creature-feature-embed-sync.mjs";
+import { migrateDataCgsGrantOverrides } from "../data/cgs-grants-migrate-helpers.mjs";
+import {
+    buildSystemUpdatePatchFromCgsOverrideSnapshot,
+    snapshotCgsTemplateOverrideFieldsFromItem
+} from "../logic/cgs-embed-override-sync-preservation.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -96,6 +101,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             removeCgsTypedDefense: ThirdEraItemSheet.onRemoveCgsTypedDefense,
             addCgsTypeOverlay: ThirdEraItemSheet.onAddCgsTypeOverlay,
             removeCgsTypeOverlay: ThirdEraItemSheet.onRemoveCgsTypeOverlay,
+            resetCgsGrantOverrides: ThirdEraItemSheet.onResetCgsGrantOverrides,
             removeMechanicalCreatureGate: ThirdEraItemSheet.onRemoveMechanicalCreatureGate,
             removeSpellCreatureTypeTarget: ThirdEraItemSheet.onRemoveSpellCreatureTypeTarget,
             addSpellCreatureTypeTargetFromSelect: ThirdEraItemSheet.onAddSpellCreatureTypeTargetFromSelect
@@ -645,6 +651,21 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                     ? systemData.toObject(false)
                     : { ...(systemData || {}) };
         }
+        if (ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(item.type) && item.type !== "race") {
+            const base =
+                systemForContext && typeof systemForContext === "object"
+                    ? systemForContext
+                    : typeof systemData?.toObject === "function"
+                      ? systemData.toObject(false)
+                      : { ...(systemData || {}) };
+            const ovr = base.cgsGrantOverrides && typeof base.cgsGrantOverrides === "object" ? base.cgsGrantOverrides : {};
+            base.cgsGrantOverrides = {
+                grants: foundry.utils.duplicate(Array.isArray(ovr.grants) ? ovr.grants : []),
+                senses: foundry.utils.duplicate(Array.isArray(ovr.senses) ? ovr.senses : [])
+            };
+            base.cgsTemplateUuid = typeof base.cgsTemplateUuid === "string" ? base.cgsTemplateUuid : "";
+            systemForContext = base;
+        }
         const grantsForSpellUi = Array.isArray(systemForContext?.cgsGrants?.grants)
             ? systemForContext.cgsGrants.grants
             : Array.isArray(systemData?.cgsGrants?.grants)
@@ -662,6 +683,18 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         let cgsCreatureTypeOverlayRows = [];
         /** @type {ReturnType<typeof buildSubtypeOverlaySheetRowsFromGrants>} */
         let cgsSubtypeOverlayRows = [];
+        /** @type {ReturnType<typeof buildSpellGrantSheetRowsFromGrants>} */
+        let cgsOverrideSpellGrantRows = [];
+        /** @type {ReturnType<typeof buildImmunitySheetRowsFromGrants>} */
+        let cgsOverrideImmunityRows = [];
+        /** @type {ReturnType<typeof buildEnergyResistanceSheetRowsFromGrants>} */
+        let cgsOverrideEnergyResistanceRows = [];
+        /** @type {ReturnType<typeof buildDamageReductionSheetRowsFromGrants>} */
+        let cgsOverrideDamageReductionRows = [];
+        /** @type {ReturnType<typeof buildCreatureTypeOverlaySheetRowsFromGrants>} */
+        let cgsOverrideCreatureTypeOverlayRows = [];
+        /** @type {ReturnType<typeof buildSubtypeOverlaySheetRowsFromGrants>} */
+        let cgsOverrideSubtypeOverlayRows = [];
         /** @type {Array<{ uuid: string, name: string }>} */
         let cgsOverlayCreatureTypeChoices = [];
         /** @type {Array<{ uuid: string, name: string }>} */
@@ -681,6 +714,15 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             cgsDamageReductionRows = buildDamageReductionSheetRowsFromGrants(grantsForSpellUi);
             cgsCreatureTypeOverlayRows = buildCreatureTypeOverlaySheetRowsFromGrants(grantsForSpellUi);
             cgsSubtypeOverlayRows = buildSubtypeOverlaySheetRowsFromGrants(grantsForSpellUi);
+            const grantsForOverrideUi = Array.isArray(systemForContext?.cgsGrantOverrides?.grants)
+                ? systemForContext.cgsGrantOverrides.grants
+                : [];
+            cgsOverrideSpellGrantRows = buildSpellGrantSheetRowsFromGrants(grantsForOverrideUi, { spellNameForUuid });
+            cgsOverrideImmunityRows = buildImmunitySheetRowsFromGrants(grantsForOverrideUi);
+            cgsOverrideEnergyResistanceRows = buildEnergyResistanceSheetRowsFromGrants(grantsForOverrideUi);
+            cgsOverrideDamageReductionRows = buildDamageReductionSheetRowsFromGrants(grantsForOverrideUi);
+            cgsOverrideCreatureTypeOverlayRows = buildCreatureTypeOverlaySheetRowsFromGrants(grantsForOverrideUi);
+            cgsOverrideSubtypeOverlayRows = buildSubtypeOverlaySheetRowsFromGrants(grantsForOverrideUi);
             const typesPack = game.packs.get("thirdera.thirdera_creature_types");
             const subtypesPack = game.packs.get("thirdera.thirdera_subtypes");
             const typesFromPack = typesPack ? await typesPack.getDocuments() : [];
@@ -834,6 +876,14 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             cgsDamageReductionRows,
             cgsCreatureTypeOverlayRows,
             cgsSubtypeOverlayRows,
+            showCgsGrantOverridesSection:
+                ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(item.type) && item.type !== "race",
+            cgsOverrideSpellGrantRows,
+            cgsOverrideImmunityRows,
+            cgsOverrideEnergyResistanceRows,
+            cgsOverrideDamageReductionRows,
+            cgsOverrideCreatureTypeOverlayRows,
+            cgsOverrideSubtypeOverlayRows,
             cgsOverlayCreatureTypeChoices,
             cgsOverlaySubtypeChoices,
             mechanicalCreatureGateRows,
@@ -1195,17 +1245,21 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
 
         const spellGrantDropRow = event.target.closest?.("[data-cgs-spell-grant-drop]");
-        const spellGrantPanel = event.target.closest?.(".cgs-spell-grants-panel");
+        const spellGrantPanel = event.target.closest?.(".cgs-spell-grants-panel:not(.cgs-spell-grants-panel--overrides)");
+        const spellGrantPanelOverride = event.target.closest?.(".cgs-spell-grants-panel--overrides");
         const inCgsItemUi = ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document.type);
         const spellDropOnGrantUi =
-            inCgsItemUi && droppedItem.type === "spell" && (spellGrantDropRow || spellGrantPanel);
+            inCgsItemUi && droppedItem.type === "spell" && (spellGrantDropRow || spellGrantPanel || spellGrantPanelOverride);
         if (spellDropOnGrantUi) {
             if (!this.isEditable) {
                 ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
                 return;
             }
             const doc = this.document;
-            const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+            const layer = event.target.closest?.(".cgs-spell-grants-panel--overrides") ? "overrides" : "base";
+            const grants = foundry.utils.duplicate(
+                layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+            );
             const spellUuid = (droppedItem.uuid ?? "").trim();
             if (!spellUuid) {
                 return;
@@ -1228,10 +1282,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
             const tab = this.element?.querySelector?.(".sheet-body .tab.active");
             if (tab) this._preservedScrollTop = tab.scrollTop;
-            const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-            const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+            const senses = foundry.utils.duplicate(
+                layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+            );
+            const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
             try {
-                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+                if (layer === "overrides") {
+                    await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+                } else {
+                    await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+                }
                 await ThirdEraItemSheet.#afterCgsSensesMutation(this);
                 await this.render(true);
             } catch (err) {
@@ -1243,20 +1303,26 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
         const typeOverlayDropRow = event.target.closest?.("[data-cgs-creature-type-overlay-drop]");
         const subtypeOverlayDropRow = event.target.closest?.("[data-cgs-subtype-overlay-drop]");
-        const typeOverlayPanel = event.target.closest?.(".cgs-type-overlays-panel");
+        const typeOverlayPanel = event.target.closest?.(".cgs-type-overlays-panel:not(.cgs-type-overlays-panel--overrides)");
+        const typeOverlayPanelOverride = event.target.closest?.(".cgs-type-overlays-panel--overrides");
         const typeDropOnOverlayUi =
             inCgsItemUi &&
             droppedItem.type === "creatureType" &&
-            (typeOverlayDropRow || (typeOverlayPanel && !subtypeOverlayDropRow));
+            (typeOverlayDropRow || (typeOverlayPanel && !subtypeOverlayDropRow) || typeOverlayPanelOverride);
         const subtypeDropOnOverlayUi =
-            inCgsItemUi && droppedItem.type === "subtype" && (subtypeOverlayDropRow || typeOverlayPanel);
+            inCgsItemUi &&
+            droppedItem.type === "subtype" &&
+            (subtypeOverlayDropRow || typeOverlayPanel || typeOverlayPanelOverride);
         if (typeDropOnOverlayUi || subtypeDropOnOverlayUi) {
             if (!this.isEditable) {
                 ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
                 return;
             }
             const doc = this.document;
-            const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+            const layer = event.target.closest?.(".cgs-type-overlays-panel--overrides") ? "overrides" : "base";
+            const grants = foundry.utils.duplicate(
+                layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+            );
             const itemUuid = (droppedItem.uuid ?? "").trim();
             if (!itemUuid) return;
 
@@ -1290,10 +1356,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
             const tab = this.element?.querySelector?.(".sheet-body .tab.active");
             if (tab) this._preservedScrollTop = tab.scrollTop;
-            const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-            const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+            const senses = foundry.utils.duplicate(
+                layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+            );
+            const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
             try {
-                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+                if (layer === "overrides") {
+                    await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+                } else {
+                    await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+                }
                 await ThirdEraItemSheet.#afterCgsSensesMutation(this);
                 await this.render(true);
             } catch (err) {
@@ -1762,11 +1834,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         for (const a of actorsToRefresh) {
             const itemsToUpdate = getMatchingFeatItems(a);
             for (const item of itemsToUpdate) {
+                const snap = snapshotCgsTemplateOverrideFieldsFromItem(item);
                 const payload = { ...fullDoc };
                 payload["==system"] = this.document.system.toObject();
                 delete payload.system;
                 await item.update(payload);
                 await item.update({ "system.changes": changes });
+                const restore = buildSystemUpdatePatchFromCgsOverrideSnapshot(snap);
+                if (Object.keys(restore).length > 0) {
+                    await item.update({ system: restore });
+                }
             }
             if (typeof a.prepareData === "function") await a.prepareData();
             if (a.sheet?.rendered) await a.sheet.render();
@@ -1808,11 +1885,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         for (const a of actorsToRefresh) {
             const itemsToUpdate = getEmbeddedCreatureFeaturesMatchingWorldTemplate(a, docUuid, docName);
             for (const item of itemsToUpdate) {
+                const snap = snapshotCgsTemplateOverrideFieldsFromItem(item);
                 const payload = { ...fullDoc };
                 payload["==system"] = this.document.system.toObject();
                 delete payload.system;
                 await item.update(payload);
                 await item.update({ "system.changes": changes, "system.cgsGrants": cgsGrants });
+                const restore = buildSystemUpdatePatchFromCgsOverrideSnapshot(snap);
+                if (Object.keys(restore).length > 0) {
+                    await item.update({ system: restore });
+                }
             }
             if (typeof a.prepareData === "function") await a.prepareData();
             if (a.sheet?.rendered) await a.sheet.render();
@@ -1858,11 +1940,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         for (const a of actorsToRefresh) {
             const itemsToUpdate = getMatchingRaceItems(a);
             for (const item of itemsToUpdate) {
+                const snap = snapshotCgsTemplateOverrideFieldsFromItem(item);
                 const payload = { ...fullDoc };
                 payload["==system"] = this.document.system.toObject();
                 delete payload.system;
                 await item.update(payload);
                 await item.update({ "system.changes": changes });
+                const restore = buildSystemUpdatePatchFromCgsOverrideSnapshot(snap);
+                if (Object.keys(restore).length > 0) {
+                    await item.update({ system: restore });
+                }
             }
             if (typeof a.prepareData === "function") await a.prepareData();
             if (a.sheet?.rendered) await a.sheet.render();
@@ -1978,10 +2065,15 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         for (const a of actorsToRefresh) {
             const itemsToUpdate = getMatchingItems(a);
             for (const item of itemsToUpdate) {
+                const snap = snapshotCgsTemplateOverrideFieldsFromItem(item);
                 const payload = { ...systemData };
                 if (item.system?.equipped !== undefined && item.system?.equipped !== null) payload.equipped = item.system.equipped;
                 if (item.system?.containerId !== undefined && item.system?.containerId !== null) payload.containerId = item.system.containerId;
                 await item.update({ system: payload });
+                const restore = buildSystemUpdatePatchFromCgsOverrideSnapshot(snap);
+                if (Object.keys(restore).length > 0) {
+                    await item.update({ system: restore });
+                }
             }
             if (typeof a.prepareData === "function") await a.prepareData();
             if (a.sheet?.rendered) await a.sheet.render();
@@ -2872,7 +2964,72 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     /**
-     * Add a sense row under `system.cgsGrants.senses`.
+     * @param {Event | { target?: EventTarget | null }} event
+     * @returns {"base" | "overrides"}
+     */
+    static #cgsGrantLayerFromEventTarget(event) {
+        const t = event?.target;
+        if (t && typeof /** @type {HTMLElement} */ (t).closest === "function") {
+            if (/** @type {HTMLElement} */ (t).closest("[data-cgs-grant-layer=\"overrides\"]")) return "overrides";
+        }
+        return "base";
+    }
+
+    /**
+     * @param {unknown} doc
+     * @param {"base" | "overrides"} layer
+     * @param {{ grants?: unknown[], senses?: unknown[] }} [overrides]
+     * @returns {{ grants: unknown[], senses: unknown[] }}
+     */
+    static #plainCgsPayloadForLayer(doc, layer, overrides = {}) {
+        if (layer === "overrides") {
+            return {
+                grants: foundry.utils.duplicate(overrides.grants ?? doc.system?.cgsGrantOverrides?.grants ?? []),
+                senses: foundry.utils.duplicate(overrides.senses ?? doc.system?.cgsGrantOverrides?.senses ?? [])
+            };
+        }
+        return ThirdEraItemSheet.#plainCgsPayload(doc, overrides);
+    }
+
+    /**
+     * @param {ThirdEraItemSheet} sheet
+     * @param {"base" | "overrides"} layer
+     * @param {{ grants: unknown[], senses: unknown[] }} cgsPayload
+     */
+    static async #applyCgsGrantPayloadForLayer(sheet, layer, cgsPayload) {
+        const sheetDoc = sheet.document;
+        const plain = foundry.utils.duplicate(cgsPayload);
+        let liveDoc = sheetDoc;
+        if (sheetDoc.pack) {
+            const pack = game.packs.get(sheetDoc.pack);
+            const fromPack = pack?.get(sheetDoc.id, { strict: false });
+            if (fromPack) liveDoc = fromPack;
+        }
+        const field = layer === "overrides" ? "cgsGrantOverrides" : "cgsGrants";
+        const systemPart = { [field]: plain };
+        const dm = globalThis.CONFIG?.Item?.dataModels?.[sheetDoc.type];
+        if (dm && typeof dm.migrateDataSafe === "function") {
+            dm.migrateDataSafe(systemPart);
+        } else if (layer === "overrides") {
+            migrateDataCgsGrantOverrides(systemPart);
+        }
+
+        const returned = await liveDoc.update({ system: systemPart }, { render: false, diff: false });
+
+        if (returned && staleSheetItemDocNeedsSystemResync(sheetDoc, returned)) {
+            sheetDoc.updateSource(
+                buildSystemUpdateSourceChangesFromReturnedItem(returned, {
+                    clone: (o) => foundry.utils.deepClone(o)
+                })
+            );
+            if (typeof sheetDoc.prepareData === "function") {
+                await sheetDoc.prepareData();
+            }
+        }
+    }
+
+    /**
+     * Add a sense row under `system.cgsGrants.senses` or `system.cgsGrantOverrides.senses`.
      */
     static async onAddCgsSense(event, target) {
         event?.preventDefault?.();
@@ -2887,12 +3044,19 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const doc = this.document;
         const tab = target.closest(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget(event);
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
         const newRow = ThirdEraItemSheet.#defaultNewCgsSenseRow();
         senses.push(newRow);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { senses });
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {
@@ -2916,12 +3080,44 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const row = target?.closest?.("[data-sense-index]");
         const idx = parseInt(row?.dataset?.senseIndex, 10);
         if (Number.isNaN(idx)) return;
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget(event);
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
         if (idx < 0 || idx >= senses.length) return;
         senses.splice(idx, 1);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { senses });
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            }
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /** Clear CGS override payload and explicit template UUID on this item. */
+    static async onResetCgsGrantOverrides(event, _target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type)) return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const doc = this.document;
+        const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        try {
+            await doc.update(
+                { system: { cgsGrantOverrides: { grants: [], senses: [] }, cgsTemplateUuid: "" } },
+                { diff: false }
+            );
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {
@@ -2942,12 +3138,21 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const doc = this.document;
         const tab = event?.target?.closest?.(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget(event);
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         grants.push({ category: "spellGrant", spellUuid: "" });
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {
@@ -2971,14 +3176,23 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const row = target?.closest?.("[data-cgs-spell-grant-index]");
         const idx = parseInt(row?.dataset?.cgsSpellGrantIndex ?? target?.dataset?.cgsSpellGrantIndex, 10);
         if (Number.isNaN(idx)) return;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget(event);
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         const g = grants[idx];
         if (!g || g.category !== "spellGrant") return;
         grants.splice(idx, 1);
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {
@@ -3003,7 +3217,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const idx = parseInt(rowEl?.dataset?.cgsSpellGrantIndex, 10);
         if (!field || Number.isNaN(idx)) return;
         const doc = sheet.document;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget({ target: el });
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         const g = grants[idx];
         if (!g || g.category !== "spellGrant") return;
 
@@ -3031,10 +3248,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
         const tab = rowEl?.closest?.(".tab");
         if (tab) sheet._preservedScrollTop = tab.scrollTop;
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(sheet, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(sheet);
             await sheet.render(true);
         } catch (err) {
@@ -3079,7 +3302,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const doc = this.document;
         const tab = event?.target?.closest?.(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget(event);
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         if (category === "immunity") {
             grants.push({ category: "immunity", tag: "" });
         } else if (category === "energyResistance") {
@@ -3087,10 +3313,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         } else if (category === "damageReduction") {
             grants.push({ category: "damageReduction", value: 0, bypass: "" });
         }
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {
@@ -3116,14 +3348,23 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const row = target?.closest?.("[data-cgs-defense-index]");
         const idx = parseInt(row?.dataset?.cgsDefenseIndex ?? target?.dataset?.cgsDefenseIndex, 10);
         if (Number.isNaN(idx)) return;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget(event);
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         const g = grants[idx];
         if (!g || g.category !== category) return;
         grants.splice(idx, 1);
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {
@@ -3149,7 +3390,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const idx = parseInt(rowEl?.dataset?.cgsDefenseIndex ?? el.dataset?.cgsDefenseIndex, 10);
         if (!field || !category || Number.isNaN(idx)) return;
         const doc = sheet.document;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget({ target: el });
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         const g = grants[idx];
         if (!g || g.category !== category) return;
 
@@ -3163,10 +3407,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
 
         const tab = rowEl?.closest?.(".tab");
         if (tab) sheet._preservedScrollTop = tab.scrollTop;
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(sheet, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(sheet);
             await sheet.render(true);
         } catch (err) {
@@ -3189,16 +3439,25 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const doc = this.document;
         const tab = event?.target?.closest?.(".tab");
         if (tab) this._preservedScrollTop = tab.scrollTop;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget(event);
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         if (category === "creatureTypeOverlay") {
             grants.push({ category: "creatureTypeOverlay", typeUuid: "" });
         } else {
             grants.push({ category: "subtypeOverlay", subtypeUuid: "" });
         }
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {
@@ -3228,14 +3487,23 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
                 : row?.dataset?.cgsSubtypeOverlayIndex ?? target?.dataset?.cgsSubtypeOverlayIndex;
         const idx = parseInt(idxRaw, 10);
         if (Number.isNaN(idx)) return;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget(event);
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         const g = grants[idx];
         if (!g || g.category !== category) return;
         grants.splice(idx, 1);
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(this, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {
@@ -3265,7 +3533,10 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         const idx = parseInt(idxRaw, 10);
         if (!field || !category || Number.isNaN(idx)) return;
         const doc = sheet.document;
-        const grants = foundry.utils.duplicate(doc.system?.cgsGrants?.grants ?? []);
+        const layer = ThirdEraItemSheet.#cgsGrantLayerFromEventTarget({ target: el });
+        const grants = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.grants ?? [] : doc.system?.cgsGrants?.grants ?? []
+        );
         const g = grants[idx];
         if (!g || g.category !== category) return;
         const v = String(el.value ?? "").trim();
@@ -3278,10 +3549,16 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
         }
         const tab = rowEl?.closest?.(".tab");
         if (tab) sheet._preservedScrollTop = tab.scrollTop;
-        const senses = foundry.utils.duplicate(doc.system?.cgsGrants?.senses ?? []);
-        const cgsPayload = ThirdEraItemSheet.#plainCgsPayload(doc, { grants, senses });
+        const senses = foundry.utils.duplicate(
+            layer === "overrides" ? doc.system?.cgsGrantOverrides?.senses ?? [] : doc.system?.cgsGrants?.senses ?? []
+        );
+        const cgsPayload = ThirdEraItemSheet.#plainCgsPayloadForLayer(doc, layer, { grants, senses });
         try {
-            await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            if (layer === "overrides") {
+                await ThirdEraItemSheet.#applyCgsGrantPayloadForLayer(sheet, layer, cgsPayload);
+            } else {
+                await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(sheet, cgsPayload);
+            }
             await ThirdEraItemSheet.#afterCgsSensesMutation(sheet);
             await sheet.render(true);
         } catch (err) {

@@ -57,4 +57,15 @@ describe("buildPlainGearSystemForItemSheet", () => {
         expect(plain.cost).toBe(5);
         expect(plain.cgsGrants?.senses).toHaveLength(1);
     });
+
+    it("copies cgsGrantOverrides and cgsTemplateUuid for item sheet context", () => {
+        const systemData = {
+            cgsGrants: { grants: [], senses: [] },
+            cgsGrantOverrides: { grants: [{ category: "immunity", tag: "sleep" }], senses: [] },
+            cgsTemplateUuid: "Compendium.thirdera.thirdera_feats.Item.x"
+        };
+        const plain = buildPlainGearSystemForItemSheet(systemData);
+        expect(plain.cgsGrantOverrides.grants).toHaveLength(1);
+        expect(plain.cgsTemplateUuid).toBe("Compendium.thirdera.thirdera_feats.Item.x");
+    });
 });

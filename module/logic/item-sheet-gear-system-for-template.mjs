@@ -22,6 +22,12 @@ export function buildPlainGearSystemForItemSheet(systemData) {
         grants: Array.isArray(cg?.grants) ? cg.grants.map((g) => (g && typeof g === "object" ? { ...g } : g)) : [],
         senses: Array.isArray(cg?.senses) ? cg.senses.map((s) => (s && typeof s === "object" ? { ...s } : s)) : []
     };
+    const ovr = systemData?.cgsGrantOverrides;
+    plain.cgsGrantOverrides = {
+        grants: Array.isArray(ovr?.grants) ? ovr.grants.map((g) => (g && typeof g === "object" ? { ...g } : g)) : [],
+        senses: Array.isArray(ovr?.senses) ? ovr.senses.map((s) => (s && typeof s === "object" ? { ...s } : s)) : []
+    };
+    plain.cgsTemplateUuid = typeof systemData?.cgsTemplateUuid === "string" ? systemData.cgsTemplateUuid : "";
     const dmg = plain.damage;
     if (dmg && typeof dmg === "object" && typeof dmg.dice === "string") {
         const props = plain.properties;

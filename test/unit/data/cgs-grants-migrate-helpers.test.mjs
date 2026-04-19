@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { migrateDataCgsGrants } from "../../../module/data/cgs-grants-migrate-helpers.mjs";
+import { migrateDataCgsGrantOverrides, migrateDataCgsGrants } from "../../../module/data/cgs-grants-migrate-helpers.mjs";
 
 describe("migrateDataCgsGrants", () => {
     it("does not add plain cgsGrants when only ==cgsGrants is present; normalizes nested arrays", () => {
@@ -45,5 +45,20 @@ describe("migrateDataCgsGrants", () => {
         const source = { conditionId: "foo" };
         migrateDataCgsGrants(source, { senses: false });
         expect("cgsGrants" in source).toBe(false);
+    });
+});
+
+describe("migrateDataCgsGrantOverrides", () => {
+    it("normalizes ==cgsGrantOverrides without adding plain key", () => {
+        const source = { "==cgsGrantOverrides": { grants: [{ x: 1 }] } };
+        migrateDataCgsGrantOverrides(source);
+        expect("cgsGrantOverrides" in source).toBe(false);
+        expect(source["==cgsGrantOverrides"].senses).toEqual([]);
+    });
+
+    it("initializes plain cgsGrantOverrides when present but nullish", () => {
+        const source = { cgsGrantOverrides: null };
+        migrateDataCgsGrantOverrides(source);
+        expect(source.cgsGrantOverrides).toEqual({ grants: [], senses: [] });
     });
 });
