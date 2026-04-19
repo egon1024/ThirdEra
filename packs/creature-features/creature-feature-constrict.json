@@ -1,0 +1,17 @@
+{
+  "name": "Constrict",
+  "type": "creatureFeature",
+  "img": "icons/svg/trap.svg",
+  "system": {
+    "key": "creatureConstrict",
+    "description": "<p><strong>What it does (SRD):</strong> On a successful grapple check, the creature deals <strong>extra bludgeoning damage</strong> (the amount is given in the creature’s stat block). Constrict usually requires a successful grapple after a grab-capable attack.</p><p><strong>ThirdEra:</strong> Leave <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty here; enter the printed constriction damage and any special rules in the NPC’s <strong>Description</strong> or natural attack notes so it matches the SRD stat block.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

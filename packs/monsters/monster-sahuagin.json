@@ -147,7 +147,31 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Blindsense",
+      "type": "creatureFeature",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "key": "creatureBlindsense30",
+        "description": "<p><strong>What it does (SRD):</strong> Within <strong>30 ft.</strong>, the creature notices things it cannot see using nonvisual senses (hearing, vibration, echolocation, etc.). It still has the normal limits against <strong>total concealment</strong> (attack miss chance can still apply).</p><p><strong>ThirdEra:</strong> Blindsense (<strong>30 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other vision and senses from items and race; it does <strong>not</strong> add numeric attack or AC bonuses by itself.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "blindsense",
+              "range": "30 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

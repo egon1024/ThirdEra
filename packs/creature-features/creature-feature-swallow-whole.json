@@ -1,0 +1,17 @@
+{
+  "name": "Swallow Whole",
+  "type": "creatureFeature",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "key": "creatureSwallowWhole",
+    "description": "<p><strong>What it does (SRD):</strong> If the creature starts its turn with an opponent <strong>grappled in its mouth</strong>, it can swallow that opponent with another successful grapple check. Swallowed creatures can attack from inside, may be affected by <strong>acid or bludgeoning</strong> damage from the gizzard, and escape by cutting free or escaping the grapple.</p><p><strong>ThirdEra:</strong> This item is <strong>prose-first</strong>: keep <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty unless you add a homebrew numeric row. Use the printed bite/gizzard damage, AC to cut out, and interior space from the stat block.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

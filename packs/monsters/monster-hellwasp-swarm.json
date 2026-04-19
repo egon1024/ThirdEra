@@ -153,7 +153,58 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Resistance to Fire",
+      "type": "creatureFeature",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "key": "creatureResistanceFire10",
+        "description": "<p><strong>What it does (SRD):</strong> The first <strong>10 points of damage from each fire attack or effect</strong> are ignored (same pattern as <em>resist energy</em> for fire). This is not immunity: larger hits still deal leftover damage after subtracting 10.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, resist fire <strong>10</strong> is under <strong>Capability grants</strong> (energy resistance), not in <strong>Mechanical effects</strong>. When the creature takes fire damage, apply this reduction together with any other fire resistance or immunity from its traits.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "energyResistance",
+              "energyType": "fire",
+              "amount": 10,
+              "label": "Resist fire 10 (SRD-style innate resistance)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
+    },
+    {
+      "name": "Damage Reduction 10/magic",
+      "type": "creatureFeature",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "key": "creatureDamageReduction10Magic",
+        "description": "<p><strong>What it does (SRD):</strong> The creature ignores <strong>10 points of damage</strong> from each successful weapon hit unless the attack is made with a <strong>magic weapon</strong> (or another source overcomes DR as the rules specify).</p><p><strong>ThirdEra:</strong> Set DR on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (damage reduction), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 10,
+              "bypass": "magic",
+              "label": "Damage reduction 10/magic (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 998
+    }
+  ],
   "flags": {
     "thirdera": {
       "srdHubTraits": {

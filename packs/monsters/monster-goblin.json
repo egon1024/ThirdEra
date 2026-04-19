@@ -69,7 +69,7 @@
       "senses": [],
       "specialAbilities": "<p><strong>Attack:</strong> Morningstar +2 melee (1d6) or javelin +3 ranged (1d4).</p><p><strong>Special:</strong> Darkvision 60 ft.</p>",
       "environment": "Temperate plains",
-      "organization": "Gang (4\u20139), band, or tribe",
+      "organization": "Gang (4–9), band, or tribe",
       "treasure": "Standard",
       "advancement": "By character class",
       "levelAdjustment": 0
@@ -121,7 +121,7 @@
         "total": 0
       }
     },
-    "biography": "<p>A goblin stands 3 to 3\u00bd feet tall and weigh 40 to 45 pounds. Its eyes are usually dull and glazed, varying in color from red to yellow. A goblin's skin color ranges from yellow through any shade of orange to a deep red; usually all members of a single tribe are about the same color. Goblins wear clothing of dark leather, tending toward drab, soiled-looking colors. Goblins speak Goblin; those with Intelligence scores of 12 or higher also speak Common.</p><p>Most goblins encountered outside their homes are warriors; the information in the statistics block is for one of 1st level.</p>",
+    "biography": "<p>A goblin stands 3 to 3½ feet tall and weigh 40 to 45 pounds. Its eyes are usually dull and glazed, varying in color from red to yellow. A goblin's skin color ranges from yellow through any shade of orange to a deep red; usually all members of a single tribe are about the same color. Goblins wear clothing of dark leather, tending toward drab, soiled-looking colors. Goblins speak Goblin; those with Intelligence scores of 12 or higher also speak Common.</p><p>Most goblins encountered outside their homes are warriors; the information in the statistics block is for one of 1st level.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -338,6 +338,29 @@
       "flags": {},
       "folder": null,
       "sort": 105
+    },
+    {
+      "name": "Darkvision",
+      "type": "creatureFeature",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "key": "creatureDarkvision60",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to <strong>60 ft.</strong> Darkvision is <strong>black and white</strong> only; it does not let the creature see through magical darkness unless another rule says so.</p><p><strong>ThirdEra:</strong> Darkvision (<strong>60 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other vision and senses from items and race; it does not add numeric attack or save bonuses on its own.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": "60 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 100
     }
   ],
   "flags": {},

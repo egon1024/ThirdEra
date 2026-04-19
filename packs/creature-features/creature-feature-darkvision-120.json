@@ -1,0 +1,17 @@
+{
+  "name": "Darkvision (120 ft.)",
+  "type": "creatureFeature",
+  "img": "icons/svg/explosion.svg",
+  "system": {
+    "key": "creatureDarkvision120",
+    "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to <strong>120 ft.</strong> Darkvision is <strong>black and white</strong> only unless another rule says otherwise.</p><p><strong>ThirdEra:</strong> Darkvision (<strong>120 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "darkvision", "range": "120 ft" }]
+    }
+  },
+  "flags": {},
+  "folder": null
+}

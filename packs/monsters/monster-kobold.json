@@ -67,7 +67,7 @@
       },
       "spellResistance": 0,
       "senses": [],
-      "specialAbilities": "<p><strong>Attack:</strong> Spear +1 melee (1d6\u20131) or sling +3 ranged (1d3).</p><p><strong>Special:</strong> Darkvision 60 ft.; light sensitivity.</p>",
+      "specialAbilities": "<p><strong>Attack:</strong> Spear +1 melee (1d6–1) or sling +3 ranged (1d3).</p><p><strong>Special:</strong> Darkvision 60 ft.; light sensitivity.</p>",
       "environment": "Temperate forests",
       "organization": "Tribe",
       "treasure": "Standard",
@@ -121,7 +121,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Kobolds are short, reptilian humanoids with cowardly and sadistic tendencies.</p><p>A kobold's scaly skin ranges from dark rusty brown to a rusty black color. It has glowing red eyes. Its tail is nonprehensile. Kobolds wear ragged clothing, favoring red and orange. A kobold is 2 to 2\u00bd feet tall and weighs 35 to 45 pounds. Kobolds speak Draconic with a voice that sounds like that of a yapping dog.</p>",
+    "biography": "<p>Kobolds are short, reptilian humanoids with cowardly and sadistic tendencies.</p><p>A kobold's scaly skin ranges from dark rusty brown to a rusty black color. It has glowing red eyes. Its tail is nonprehensile. Kobolds wear ragged clothing, favoring red and orange. A kobold is 2 to 2½ feet tall and weighs 35 to 45 pounds. Kobolds speak Draconic with a voice that sounds like that of a yapping dog.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -356,6 +356,29 @@
       "flags": {},
       "folder": null,
       "sort": 107
+    },
+    {
+      "name": "Darkvision",
+      "type": "creatureFeature",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "key": "creatureDarkvision60",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to <strong>60 ft.</strong> Darkvision is <strong>black and white</strong> only; it does not let the creature see through magical darkness unless another rule says so.</p><p><strong>ThirdEra:</strong> Darkvision (<strong>60 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other vision and senses from items and race; it does not add numeric attack or save bonuses on its own.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": "60 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 100
     }
   ],
   "flags": {},

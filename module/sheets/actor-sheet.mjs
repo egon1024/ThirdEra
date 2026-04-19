@@ -7,6 +7,7 @@ import { addDomainSpellsToActor, getSpellsForDomain, populateCompendiumCache } f
 import { normalizeQuery, spellMatches, SPELL_SEARCH_HIDDEN_CLASS } from "../logic/spell-search.mjs";
 import { getXpForLevel, getNextLevelXp, getMidpointXpForLevel } from "../logic/xp-table.mjs";
 import { createAutoGrantedFeatsForLevel } from "../logic/auto-granted-feats.mjs";
+import { isFeatLinkedToBundledFeatsCompendium } from "../logic/feat-embed-display.mjs";
 import { getAllSkills, getNpcSkillAddOptions } from "../applications/skill-picker-dialog.mjs";
 import { dedupeNpcEmbeddedSkillItemsForDisplay, npcActorWouldDuplicateSkillEmbed } from "../logic/npc-embedded-skill-identity.mjs";
 import { ApplyDamageHealingDialog } from "../applications/apply-damage-healing-dialog.mjs";
@@ -2286,6 +2287,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         const equipment = [];
         const spells = [];
         const feats = [];
+        const featsCompendiumLinked = [];
+        const featsStatblockEmbedded = [];
         const creatureFeatures = [];
         const classFeatures = [];
         const skills = [];
@@ -2343,9 +2346,12 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             } else if (item.type === 'equipment') {
                 equipment.push(itemData);
                 itemsNotInContainers.equipment.push(itemData);
-            } else if (item.type === 'spell') spells.push(itemData);
-            else if (item.type === 'feat') feats.push(itemData);
-            else if (item.type === 'creatureFeature') creatureFeatures.push(itemData);
+            }             else if (item.type === 'spell') spells.push(itemData);
+            else if (item.type === 'feat') {
+                feats.push(itemData);
+                if (isFeatLinkedToBundledFeatsCompendium(item)) featsCompendiumLinked.push(itemData);
+                else featsStatblockEmbedded.push(itemData);
+            } else if (item.type === 'creatureFeature') creatureFeatures.push(itemData);
             else if (item.type === 'feature') classFeatures.push(itemData);
             else if (item.type === 'skill') skills.push(itemData);
             else if (item.type === 'race' && !race) race = itemData;
@@ -2406,6 +2412,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
         skills.sort((a, b) => a.name.localeCompare(b.name));
         classFeatures.sort((a, b) => a.name.localeCompare(b.name));
         feats.sort((a, b) => a.name.localeCompare(b.name));
+        featsCompendiumLinked.sort((a, b) => a.name.localeCompare(b.name));
+        featsStatblockEmbedded.sort((a, b) => a.name.localeCompare(b.name));
         creatureFeatures.sort((a, b) => a.name.localeCompare(b.name));
 
         if (actorType === "npc" && skills.length > 0) {
@@ -2419,6 +2427,8 @@ export class ThirdEraActorSheet extends foundry.applications.api.HandlebarsAppli
             equipment, 
             spells, 
             feats,
+            featsCompendiumLinked,
+            featsStatblockEmbedded,
             creatureFeatures,
             classFeatures, 
             skills, 

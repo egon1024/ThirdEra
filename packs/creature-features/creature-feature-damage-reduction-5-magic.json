@@ -1,0 +1,24 @@
+{
+  "name": "Damage Reduction 5/magic",
+  "type": "creatureFeature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "key": "creatureDamageReduction5Magic",
+    "description": "<p><strong>What it does (SRD):</strong> The creature ignores <strong>5 points of damage</strong> from each successful weapon hit unless the attack is made with a <strong>magic weapon</strong> (or another source overcomes DR as the rules specify).</p><p><strong>ThirdEra:</strong> Set DR on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (damage reduction), not in <strong>Mechanical effects</strong>. Combine with other DR rows when applying damage.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "damageReduction",
+          "value": 5,
+          "bypass": "magic",
+          "label": "Damage reduction 5/magic (SRD)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

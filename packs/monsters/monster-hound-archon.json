@@ -154,7 +154,31 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
+    }
+  ],
   "flags": {
     "thirdera": {
       "srdHubTraits": {

@@ -1,0 +1,17 @@
+{
+  "name": "Trample",
+  "type": "creatureFeature",
+  "img": "icons/svg/walk.svg",
+  "system": {
+    "key": "creatureTrample",
+    "description": "<p><strong>What it does (SRD):</strong> The creature can <strong>run over</strong> opponents at least <strong>two size categories smaller</strong>. Targets can attempt <strong>attacks of opportunity</strong> or <strong>Reflex saves</strong> to avoid (per stat block). Damage is typically based on the creature’s slam or listed trample damage.</p><p><strong>ThirdEra:</strong> Use the printed DC and damage from the stat block during movement. This seed leaves <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty so you can copy the exact numbers from the SRD entry.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

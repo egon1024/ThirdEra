@@ -1,0 +1,17 @@
+{
+  "name": "Blindsight",
+  "type": "creatureFeature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "key": "creatureBlindsight60",
+    "description": "<p><strong>What it does (SRD):</strong> The creature perceives its surroundings to <strong>60 ft.</strong> without vision, ignoring darkness and invisibility, though it still cannot see through solid objects and may still suffer concealment from fog or similar.</p><p><strong>ThirdEra:</strong> Blindsight (<strong>60 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet lists it with other senses; automated token vision from CGS remains a future enhancement.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "blindsight", "range": "60 ft" }]
+    }
+  },
+  "flags": {},
+  "folder": null
+}

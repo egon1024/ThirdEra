@@ -1,0 +1,17 @@
+{
+  "name": "Blood Drain",
+  "type": "creatureFeature",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "key": "creatureBloodDrain",
+    "description": "<p><strong>What it does (SRD):</strong> At the end of its turn, the creature deals <strong>Constitution damage</strong> (or the stat block’s listed effect) to a <strong>grappled</strong> or <strong>attached</strong> victim. Some entries specify healing to the attacker when it drains blood.</p><p><strong>ThirdEra:</strong> Constitution drain or damage is applied manually in play from the printed values. This item keeps <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty so the DC, damage, and rider effects stay faithful to each stat block.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

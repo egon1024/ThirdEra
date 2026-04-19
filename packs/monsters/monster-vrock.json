@@ -149,7 +149,57 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Poison Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
+    },
+    {
+      "name": "Resistance to Acid",
+      "type": "creatureFeature",
+      "img": "icons/svg/acid.svg",
+      "system": {
+        "key": "creatureResistanceAcid10",
+        "description": "<p><strong>What it does (SRD):</strong> The first <strong>10 points of damage from each acid attack or effect</strong> are ignored. Larger hits still deal leftover damage after subtracting 10.</p><p><strong>ThirdEra:</strong> Resist acid <strong>10</strong> is under <strong>Capability grants</strong> on the item’s <strong>Details</strong> tab (energy resistance), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "energyResistance",
+              "energyType": "acid",
+              "amount": 10,
+              "label": "Resist acid 10 (SRD-style innate resistance)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 998
+    }
+  ],
   "flags": {
     "thirdera": {
       "srdHubTraits": {

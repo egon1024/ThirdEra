@@ -192,7 +192,7 @@
       "sort": 0
     },
     {
-      "name": "Skill Focus",
+      "name": "Skill Focus (Hide)",
       "type": "feat",
       "img": "icons/svg/book.svg",
       "system": {

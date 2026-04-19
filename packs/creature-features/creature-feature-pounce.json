@@ -1,0 +1,17 @@
+{
+  "name": "Pounce",
+  "type": "creatureFeature",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "key": "creaturePounce",
+    "description": "<p><strong>What it does (SRD):</strong> If the creature <strong>charges</strong>, it can still make a <strong>full attack</strong> at the end of the charge (including rake attacks if listed).</p><p><strong>ThirdEra:</strong> This is a <strong>full-attack pattern</strong>, not a numeric modifier here. Leave <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty unless you add a custom row. Resolve charge distance and attacks using the NPC sheet and combat tracker as usual.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

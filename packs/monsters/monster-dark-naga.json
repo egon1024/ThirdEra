@@ -145,7 +145,32 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Poison Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
+    }
+  ],
   "flags": {
     "thirdera": {
       "srdHubTraits": {

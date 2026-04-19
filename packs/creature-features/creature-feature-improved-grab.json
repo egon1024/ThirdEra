@@ -1,0 +1,17 @@
+{
+  "name": "Improved Grab",
+  "type": "creatureFeature",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "key": "creatureImprovedGrab",
+    "description": "<p><strong>What it does (SRD):</strong> If the creature hits with a listed natural weapon, it can attempt to start a <strong>grapple</strong> as a <strong>free action</strong> without provoking attacks of opportunity. Details (size modifiers, opposed checks, holding vs pinning) follow the grapple rules.</p><p><strong>ThirdEra:</strong> This template has <strong>no</strong> numeric rows in <strong>Mechanical effects</strong> or <strong>Capability grants</strong>. Track grapple state in play; use the NPC’s natural attacks and CMB/CMD from the sheet when resolving the grapple.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

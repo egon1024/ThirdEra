@@ -153,7 +153,56 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
+    },
+    {
+      "name": "Resistance to Fire",
+      "type": "creatureFeature",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "key": "creatureResistanceFire10",
+        "description": "<p><strong>What it does (SRD):</strong> The first <strong>10 points of damage from each fire attack or effect</strong> are ignored (same pattern as <em>resist energy</em> for fire). This is not immunity: larger hits still deal leftover damage after subtracting 10.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, resist fire <strong>10</strong> is under <strong>Capability grants</strong> (energy resistance), not in <strong>Mechanical effects</strong>. When the creature takes fire damage, apply this reduction together with any other fire resistance or immunity from its traits.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "energyResistance",
+              "energyType": "fire",
+              "amount": 10,
+              "label": "Resist fire 10 (SRD-style innate resistance)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 998
+    }
+  ],
   "flags": {
     "thirdera": {
       "srdHubTraits": {

@@ -249,6 +249,102 @@
       "flags": {},
       "folder": null,
       "sort": 103
+    },
+    {
+      "name": "Immunity to Sleep",
+      "type": "creatureFeature",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "key": "creatureImmunitySleep",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 100
+    },
+    {
+      "name": "Poison Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 99
+    },
+    {
+      "name": "Immunity to Paralysis",
+      "type": "creatureFeature",
+      "img": "icons/svg/daze.svg",
+      "system": {
+        "key": "creatureImmunityParalysis",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "paralysis",
+              "label": "Immune to paralysis (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 98
+    },
+    {
+      "name": "Immunity to Stunning",
+      "type": "creatureFeature",
+      "img": "icons/svg/daze.svg",
+      "system": {
+        "key": "creatureImmunityStunning",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "stunning",
+              "label": "Immune to stunning (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 97
     }
   ],
   "flags": {},

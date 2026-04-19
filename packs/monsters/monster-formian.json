@@ -138,7 +138,80 @@
       "cp": 0
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Darkvision",
+      "type": "creatureFeature",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "key": "creatureDarkvision60",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to <strong>60 ft.</strong> Darkvision is <strong>black and white</strong> only; it does not let the creature see through magical darkness unless another rule says so.</p><p><strong>ThirdEra:</strong> Darkvision (<strong>60 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other vision and senses from items and race; it does not add numeric attack or save bonuses on its own.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": "60 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
+    },
+    {
+      "name": "Poison Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 998
+    },
+    {
+      "name": "Resistance to Electricity",
+      "type": "creatureFeature",
+      "img": "icons/svg/lightning.svg",
+      "system": {
+        "key": "creatureResistanceElectricity10",
+        "description": "<p><strong>What it does (SRD):</strong> The first <strong>10 points of damage from each electricity attack or effect</strong> are ignored. Larger hits still deal leftover damage after subtracting 10.</p><p><strong>ThirdEra:</strong> Resist electricity <strong>10</strong> is under <strong>Capability grants</strong> on the item’s <strong>Details</strong> tab (energy resistance), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "energyResistance",
+              "energyType": "electricity",
+              "amount": 10,
+              "label": "Resist electricity 10 (SRD-style innate resistance)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 997
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

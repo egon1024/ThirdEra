@@ -1,0 +1,17 @@
+{
+  "name": "Rend",
+  "type": "creatureFeature",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "key": "creatureRend",
+    "description": "<p><strong>What it does (SRD):</strong> If the creature hits the same foe with <strong>two or more specified natural weapons</strong> in the same round, it deals <strong>extra damage</strong> (often the same dice as one claw plus a static bonus—use the stat block’s exact amount).</p><p><strong>ThirdEra:</strong> Leave <strong>Mechanical effects</strong> empty unless you mirror a specific printed bonus. Rend damage is normally read straight from the monster entry after you confirm both attacks hit.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

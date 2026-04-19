@@ -1,0 +1,23 @@
+{
+  "name": "Immunity to Paralysis",
+  "type": "creatureFeature",
+  "img": "icons/svg/daze.svg",
+  "system": {
+    "key": "creatureImmunityParalysis",
+    "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "paralysis",
+          "label": "Immune to paralysis (SRD)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

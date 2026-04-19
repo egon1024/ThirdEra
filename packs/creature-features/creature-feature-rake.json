@@ -1,0 +1,17 @@
+{
+  "name": "Rake",
+  "type": "creatureFeature",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "key": "creatureRake",
+    "description": "<p><strong>What it does (SRD):</strong> When the creature <strong>grapples</strong> or sometimes when it <strong>pounces</strong>, it can make <strong>extra natural attacks</strong> (usually two claw rakes) at the listed attack bonus against a grappled or appropriate target.</p><p><strong>ThirdEra:</strong> Add rake attacks to the NPC’s <strong>Natural attacks</strong> list on the sheet (or note them in Description) so attack bonuses match the stat block. This template keeps <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

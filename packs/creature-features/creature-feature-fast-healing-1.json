@@ -1,0 +1,17 @@
+{
+  "name": "Fast Healing 1",
+  "type": "creatureFeature",
+  "img": "icons/svg/heal.svg",
+  "system": {
+    "key": "creatureFastHealing1",
+    "description": "<p><strong>What it does (SRD):</strong> The creature regains <strong>1 hit point</strong> each round (at the start of its turn unless the stat block says otherwise). Fast healing does not restore hit points lost from starvation, thirst, or suffocation, and it does not let a dead creature recover.</p><p><strong>ThirdEra:</strong> There is no separate fast-healing numeric key in <strong>Mechanical effects</strong> yet; track healing at the table or add a custom note on the NPC. <strong>Capability grants</strong> is left empty. Duplicate this item in the world and adjust the name if you need fast healing 2, 5, etc.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

@@ -152,7 +152,33 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Resistance to Cold",
+      "type": "creatureFeature",
+      "img": "icons/svg/frozen.svg",
+      "system": {
+        "key": "creatureResistanceCold10",
+        "description": "<p><strong>What it does (SRD):</strong> The first <strong>10 points of damage from each cold attack or effect</strong> are ignored. Larger hits still deal leftover damage after subtracting 10.</p><p><strong>ThirdEra:</strong> Resist cold <strong>10</strong> is under <strong>Capability grants</strong> on the item’s <strong>Details</strong> tab (energy resistance), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "energyResistance",
+              "energyType": "cold",
+              "amount": 10,
+              "label": "Resist cold 10 (SRD-style innate resistance)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

@@ -1,0 +1,23 @@
+{
+  "name": "Immunity to Disease",
+  "type": "creatureFeature",
+  "img": "icons/svg/biohazard.svg",
+  "system": {
+    "key": "creatureImmunityDisease",
+    "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to disease</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "disease",
+          "label": "Immune to disease (SRD)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

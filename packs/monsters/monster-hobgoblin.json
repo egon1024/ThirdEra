@@ -67,7 +67,7 @@
       },
       "spellResistance": 0,
       "senses": [],
-      "specialAbilities": "<p><strong>Attack:</strong> Longsword +2 melee (1d8+1/19\u201320) or javelin +2 ranged (1d6+1).</p><p><strong>Special:</strong> Darkvision 60 ft.</p>",
+      "specialAbilities": "<p><strong>Attack:</strong> Longsword +2 melee (1d8+1/19–20) or javelin +2 ranged (1d6+1).</p><p><strong>Special:</strong> Darkvision 60 ft.</p>",
       "environment": "Warm hills",
       "organization": "Gang, band, warband, or tribe",
       "treasure": "Standard",
@@ -313,6 +313,29 @@
       "flags": {},
       "folder": null,
       "sort": 104
+    },
+    {
+      "name": "Darkvision",
+      "type": "creatureFeature",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "key": "creatureDarkvision60",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to <strong>60 ft.</strong> Darkvision is <strong>black and white</strong> only; it does not let the creature see through magical darkness unless another rule says so.</p><p><strong>ThirdEra:</strong> Darkvision (<strong>60 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other vision and senses from items and race; it does not add numeric attack or save bonuses on its own.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": "60 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 100
     }
   ],
   "flags": {},

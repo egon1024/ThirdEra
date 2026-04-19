@@ -599,6 +599,12 @@
         "Feat": {
             "FighterBonusEligible": "Fighter bonus feat eligible"
         },
+        "Feats": {
+            "SectionCompendiumLinked": "Compendium feats",
+            "SectionCompendiumLinkedHint": "Feat items linked to the Feats compendium (for example, added from the compendium sidebar).",
+            "SectionStatblockEmbedded": "Embedded feats (stat block)",
+            "SectionStatblockEmbeddedHint": "Feat data stored on this actor without a Feats compendium link—typical for bundled NPC stat blocks. Open the item sheet for full description, benefit, and mechanical effects."
+        },
         "FeatPrereq": {
             "RequiredFeats": "Required feats",
             "MinBAB": "Minimum BAB",
