@@ -82,7 +82,7 @@
       "senses": [],
       "specialAbilities": "<p><strong>Improved grab (Ex)</strong> with bite. <strong>Hold breath (Ex).</strong> +8 racial Swim; can run while swimming in a straight line. *Hide +4 in water (included in misc).</p>",
       "environment": "Warm marshes",
-      "organization": "Solitary or colony (6–11)",
+      "organization": "Solitary or colony (6\u201311)",
       "treasure": "None",
       "advancement": "",
       "levelAdjustment": 0
@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>11–12-foot aggressive river predators.</p>",
+    "biography": "<p>11\u201312-foot aggressive river predators.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -158,11 +158,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>You are particularly observant.</p>",
+        "description": "",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "benefit": "",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],

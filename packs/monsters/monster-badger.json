@@ -131,14 +131,14 @@
     {
       "name": "Track",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/footprint.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can follow the trails of creatures and characters across most types of terrain.</p>",
         "key": "track",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "prerequisites": "Survival 1 rank",
+        "benefit": "<p>To find tracks or to follow them for 1 hour requires a Survival check. You must make another Survival check every hour to continue following the tracks. The DC depends on the surface and the prevailing conditions.</p>",
+        "special": "A ranger automatically gains Track as a bonus feat at 1st level. He need not select it.",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -150,8 +150,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,

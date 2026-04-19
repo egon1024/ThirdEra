@@ -45,7 +45,14 @@ describe("fuzzyScore", () => {
     it("can fail match when string is too far from query", () => {
         const r = fuzzyScore("zzzz", "appraise");
         expect(r.matched).toBe(false);
-        expect(r.score).toBeGreaterThan(0.65);
+        expect(r.score).toBeGreaterThan(0.44);
+    });
+
+    it("does not Levenshtein-match unrelated multi-word names to a specific query", () => {
+        expect(fuzzyScore("dire ape", "Dark Naga").matched).toBe(false);
+        expect(fuzzyScore("dire ape", "Darkmantle").matched).toBe(false);
+        expect(fuzzyScore("dire ape", "Fire Elemental").matched).toBe(false);
+        expect(fuzzyScore("dire ape", "Dire Ape").matched).toBe(true);
     });
 
     it("handles nullish name and key", () => {

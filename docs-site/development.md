@@ -217,6 +217,7 @@ When any item above moves from “not yet” to “supported,” **update this s
 
 See **[Compendium guide](compendium-guide.md)** for the full guide.
 
+- **Monsters (NPC JSON):** Prefer embedded **`feat`** when an augmentation matches a PC feat; use embedded **`creatureFeature`** only when the effect cannot be modeled acceptably as that feat (e.g. CGS). See [Compendium guide — Feat vs creature feature (authoring)](compendium-guide.md#monster-npc-feat-vs-creature-feature).
 - Declared in `system.json` with `ownership`. Pack names use **underscores** (e.g. `thirdera_races`) for V14.
 - Content in LevelDB; JSON in `packs/` is imported by `CompendiumLoader`. Collection IDs: `{systemId}.{packName}`.
 - Unlock before create/update. Remove invalid `_id`; use `Document.createDocuments()` / `updateDocuments()` with `{pack: pack.collection}`. Loader can update by name/key for content fixes.

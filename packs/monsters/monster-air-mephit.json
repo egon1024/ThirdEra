@@ -154,12 +154,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are skilled at using light weapons.</p>",
         "key": "weaponFinesse",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "prerequisites": "Base attack bonus +1",
+        "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+        "special": "Natural weapons are considered light weapons.",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -171,8 +171,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -181,32 +180,27 @@
     {
       "name": "Dodge",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are adept at dodging blows.</p>",
         "key": "dodge",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
         "prerequisiteAbilityScores": {
           "str": 0,
-          "dex": 0,
+          "dex": 13,
           "con": 0,
           "int": 0,
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": [
-          {
-            "key": "ac",
-            "value": 1
-          }
-        ]
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,

@@ -75,7 +75,7 @@
       "senses": [],
       "specialAbilities": "<p><strong>Petrification (Su):</strong> Bite, Fort DC 15 negates (Con-based).</p>",
       "environment": "Temperate plains",
-      "organization": "Solitary, pair, flight (3–5), or flock (6–13)",
+      "organization": "Solitary, pair, flight (3\u20135), or flock (6\u201313)",
       "treasure": "None",
       "advancement": "",
       "levelAdjustment": 0
@@ -155,11 +155,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>You are particularly observant.</p>",
+        "description": "",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "benefit": "",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],

@@ -131,14 +131,14 @@
     {
       "name": "Endurance",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "description": "",
+        "description": "<p>You have enhanced physical stamina.</p>",
         "key": "endurance",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "benefit": "<p>You gain a +4 bonus on the following checks and saves: Swim checks made to resist nonlethal damage from exhaustion; Constitution checks made to continue running; Constitution checks made to avoid nonlethal damage from a forced march; Constitution checks made to hold your breath; Constitution checks made to avoid nonlethal damage from starvation or thirst; Fortitude saves made to avoid nonlethal damage from hot or cold environments; and Fortitude saves made to resist damage from suffocation.</p><p>Also, you may sleep in light or medium armor without becoming fatigued.</p>",
+        "special": "A ranger automatically gains Endurance as a bonus feat at 3rd level. He need not select it.",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -150,8 +150,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,

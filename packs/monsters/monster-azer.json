@@ -206,11 +206,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
         "key": "powerAttack",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Str 13",
+        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -223,8 +224,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,

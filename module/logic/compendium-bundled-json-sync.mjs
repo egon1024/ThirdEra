@@ -16,7 +16,7 @@ export const BUNDLED_COMPENDIUM_SYNC_WORLD_SETTING = "bundledCompendiumSyncMigra
  * Bump when bundled JSON for any pack in {@link BUNDLED_COMPENDIUM_SYNC_PACK_COLLECTIONS} should be
  * re-applied to worlds that already have a non-empty compendium index.
  */
-export const BUNDLED_COMPENDIUM_SYNC_MIGRATION_REVISION = 1;
+export const BUNDLED_COMPENDIUM_SYNC_MIGRATION_REVISION = 3;
 
 /** `pack.collection` ids to refresh from disk when the migration revision advances. */
 export const BUNDLED_COMPENDIUM_SYNC_PACK_COLLECTIONS = Object.freeze(["thirdera.thirdera_creature_features"]);

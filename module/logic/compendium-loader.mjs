@@ -5,6 +5,10 @@
  */
 import { parseSpellFields, applyParsedSpellFields } from "./spell-description-parser.mjs";
 import { resolveMonsterPackNpcKeys } from "./monster-pack-keys.mjs";
+import {
+    dedupeMonsterPackActorUpdateRowsPreferMoreEmbeddedItems,
+    stripEmbeddedItemsFromActorUpdateRows
+} from "./monster-pack-compendium-embedded-items.mjs";
 import { yieldToMain } from "./client-main-thread-cooperation.mjs";
 import {
     buildCreatureTypeKeyToUuidMap,
@@ -34,8 +38,8 @@ function getStableKey(doc) {
     return undefined;
 }
 
-/** Reserved `system.key` values for removed pack scaffolding (Phase 1 creature features placeholder). */
-export const OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS = new Set(["creatureFeaturePlaceholder"]);
+/** Reserved `system.key` values for removed pack scaffolding or superseded seeds (no longer shipped in JSON). */
+export const OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS = new Set(["creatureFeaturePlaceholder", "creatureAlertness"]);
 
 /**
  * @param {Array<{ id?: string, system?: { key?: string } }>} docs
@@ -69,16 +73,16 @@ export class CompendiumLoader {
         "thirdera.thirdera_feats": [
             "feat-acrobatic.json", "feat-agile.json", "feat-alertness.json", "feat-animal-affinity.json", "feat-athletic.json",
             "feat-armor-proficiency-heavy.json", "feat-armor-proficiency-light.json", "feat-armor-proficiency-medium.json",
-            "feat-augment-summoning.json", "feat-blind-fight.json", "feat-brew-potion.json", "feat-cleave.json",
+            "feat-augment-summoning.json", "feat-awesome-blow.json", "feat-blind-fight.json", "feat-brew-potion.json", "feat-cleave.json",
             "feat-combat-casting.json", "feat-combat-expertise.json", "feat-combat-reflexes.json", "feat-craft-magic-arms-and-armor.json",
             "feat-craft-rod.json", "feat-craft-staff.json", "feat-craft-wand.json",
             "feat-craft-wondrous-item.json", "feat-deceitful.json", "feat-deft-hands.json", "feat-deflect-arrows.json",
             "feat-diehard.json", "feat-diligent.json", "feat-dodge.json", "feat-empower-spell.json",
             "feat-endurance.json", "feat-enlarge-spell.json", "feat-eschew-materials.json",
-            "feat-exotic-weapon-proficiency.json", "feat-extend-spell.json", "feat-extra-turning.json", "feat-far-shot.json",
+            "feat-exotic-weapon-proficiency.json", "feat-extend-spell.json", "feat-extra-turning.json", "feat-far-shot.json", "feat-flyby-attack.json",
             "feat-forge-ring.json", "feat-great-cleave.json", "feat-great-fortitude.json", "feat-greater-spell-focus.json", "feat-greater-spell-penetration.json",
             "feat-greater-two-weapon-fighting.json", "feat-greater-weapon-focus.json", "feat-greater-weapon-specialization.json",
-            "feat-heighten-spell.json", "feat-improved-bull-rush.json", "feat-improved-counterspell.json", "feat-improved-familiar.json", "feat-improved-critical.json", "feat-improved-disarm.json", "feat-improved-feint.json",
+            "feat-heighten-spell.json", "feat-hover.json", "feat-improved-bull-rush.json", "feat-improved-counterspell.json", "feat-improved-familiar.json", "feat-improved-critical.json", "feat-improved-disarm.json", "feat-improved-feint.json",
             "feat-improved-grapple.json", "feat-improved-initiative.json", "feat-improved-overrun.json", "feat-improved-precise-shot.json", "feat-improved-sunder.json", "feat-improved-trip.json", "feat-improved-turning.json", "feat-improved-two-weapon-fighting.json",
             "feat-improved-unarmed-strike.json", "feat-investigator.json", "feat-iron-will.json",
             "feat-leadership.json", "feat-lightning-reflexes.json", "feat-magical-aptitude.json",
@@ -903,6 +907,88 @@ export class CompendiumLoader {
     }
 
     /**
+     * Replace embedded Items on compendium NPCs after a bulk update that omitted `items` (see monsters pack path).
+     * Deletes all existing embedded Items, then creates from JSON (sanitized ids).
+     * @param {*} pack - `CompendiumCollection` (client)
+     * @param {Array<Record<string, unknown>>} toUpdateRows - Full update rows (including `items` before strip)
+     */
+    static async replaceMonsterPackEmbeddedItemsAfterUpdate(pack, toUpdateRows) {
+        const duplicate =
+            typeof globalThis.foundry?.utils?.duplicate === "function"
+                ? globalThis.foundry.utils.duplicate.bind(globalThis.foundry.utils)
+                : /** @param {unknown} x */ (x) => structuredClone(x);
+
+        let n = 0;
+        for (const row of toUpdateRows) {
+            if (row.type != null && row.type !== "npc") continue;
+            const actorId = typeof row._id === "string" ? row._id : "";
+            if (!actorId) continue;
+
+            const actor = await pack.getDocument(actorId);
+            if (!actor) {
+                console.warn(`Third Era | Compendium ${pack.collection}: could not load actor ${actorId} for embedded item replace`);
+                continue;
+            }
+
+            const delIds = actor.items.map((it) => it.id);
+            if (delIds.length > 0) {
+                await actor.deleteEmbeddedDocuments("Item", delIds);
+            }
+
+            const incoming = Array.isArray(row.items) ? row.items : [];
+            if (incoming.length === 0) {
+                // #region agent log
+                fetch("http://127.0.0.1:7249/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "e73453" },
+                    body: JSON.stringify({
+                        sessionId: "e73453",
+                        hypothesisId: "H_empty_skip",
+                        location: "compendium-loader.mjs:replaceMonsterPackEmbeddedItemsAfterUpdate",
+                        message: "skip createEmbeddedDocuments — incoming items empty after delete",
+                        data: {
+                            actorId,
+                            npcKey: row.system?.key,
+                            npcName: row.name,
+                            deletedCount: delIds.length
+                        },
+                        timestamp: Date.now()
+                    })
+                }).catch(() => {});
+                // #endregion
+                continue;
+            }
+
+            const payload = { items: duplicate(incoming) };
+            CompendiumLoader.sanitizeCompendiumDocumentForImport(payload);
+            const createdDocs = await actor.createEmbeddedDocuments("Item", payload.items ?? []);
+            // #region agent log
+            fetch("http://127.0.0.1:7249/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "e73453" },
+                body: JSON.stringify({
+                    sessionId: "e73453",
+                    hypothesisId: "H_create",
+                    location: "compendium-loader.mjs:replaceMonsterPackEmbeddedItemsAfterUpdate",
+                    message: "createEmbeddedDocuments finished",
+                    data: {
+                        actorId,
+                        npcKey: row.system?.key,
+                        incomingLen: incoming.length,
+                        createdLen: Array.isArray(createdDocs) ? createdDocs.length : -1,
+                        createdTypes: Array.isArray(createdDocs) ? createdDocs.map((d) => d.type) : []
+                    },
+                    timestamp: Date.now()
+                })
+            }).catch(() => {});
+            // #endregion
+
+            n++;
+            if (n % 10 === 0 && typeof yieldToMain === "function") await yieldToMain();
+        }
+    }
+
+    /**
      * Initialize compendiums by loading JSON files
      */
     static async init() {
@@ -1308,9 +1394,83 @@ export class CompendiumLoader {
             }
             // Update existing documents
             if (toUpdate.length > 0) {
-                await DocumentClass.implementation.updateDocuments(toUpdate, {pack: pack.collection});
-                console.log(`Third Era | Updated ${toUpdate.length} documents in ${pack.collection}`);
-                updated = toUpdate.length;
+                if (pack.collection === "thirdera.thirdera_monsters") {
+                    // #region agent log
+                    {
+                        const idCounts = new Map();
+                        for (const r of toUpdate) {
+                            const id = typeof r._id === "string" ? r._id : "";
+                            if (!id) continue;
+                            idCounts.set(id, (idCounts.get(id) ?? 0) + 1);
+                        }
+                        const duplicateIds = [...idCounts.entries()].filter(([, c]) => c > 1);
+                        const direApeRows = toUpdate.filter((r) => r.system?.key === "monsterDireApe");
+                        fetch("http://127.0.0.1:7249/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "e73453" },
+                            body: JSON.stringify({
+                                sessionId: "e73453",
+                                hypothesisId: "H_dup",
+                                location: "compendium-loader.mjs:monsters-toUpdate",
+                                message: "monster pack toUpdate duplicate _id scan (pre-dedupe)",
+                                data: {
+                                    toUpdateLen: toUpdate.length,
+                                    duplicateActorIdCounts: duplicateIds,
+                                    monsterDireApeRowCount: direApeRows.length,
+                                    monsterDireApeItemLengths: direApeRows.map((r) =>
+                                        Array.isArray(r.items) ? r.items.length : -1
+                                    )
+                                },
+                                timestamp: Date.now()
+                            })
+                        }).catch(() => {});
+                    }
+                    // #endregion
+                    const dedupedToUpdate = dedupeMonsterPackActorUpdateRowsPreferMoreEmbeddedItems(toUpdate);
+                    // #region agent log
+                    {
+                        const idCounts2 = new Map();
+                        for (const r of dedupedToUpdate) {
+                            const id = typeof r._id === "string" ? r._id : "";
+                            if (!id) continue;
+                            idCounts2.set(id, (idCounts2.get(id) ?? 0) + 1);
+                        }
+                        const duplicateIds2 = [...idCounts2.entries()].filter(([, c]) => c > 1);
+                        const direApeRows2 = dedupedToUpdate.filter((r) => r.system?.key === "monsterDireApe");
+                        fetch("http://127.0.0.1:7249/ingest/f5e99a0d-308a-4c43-85be-d30a1480ecc3", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "e73453" },
+                            body: JSON.stringify({
+                                sessionId: "e73453",
+                                hypothesisId: "H_dedupe",
+                                location: "compendium-loader.mjs:monsters-toUpdate-deduped",
+                                message: "monster pack toUpdate after dedupe-by-max-items",
+                                data: {
+                                    dedupedLen: dedupedToUpdate.length,
+                                    duplicateActorIdCounts: duplicateIds2,
+                                    monsterDireApeRowCount: direApeRows2.length,
+                                    monsterDireApeItemLengths: direApeRows2.map((r) =>
+                                        Array.isArray(r.items) ? r.items.length : -1
+                                    )
+                                },
+                                timestamp: Date.now()
+                            })
+                        }).catch(() => {});
+                    }
+                    // #endregion
+                    // Bulk Actor update merges embedded `items` by _id; JSON templates omit valid ids → duplicate feats.
+                    const withoutItems = stripEmbeddedItemsFromActorUpdateRows(dedupedToUpdate);
+                    await DocumentClass.implementation.updateDocuments(withoutItems, {pack: pack.collection});
+                    console.log(
+                        `Third Era | Updated ${dedupedToUpdate.length} documents in ${pack.collection} (embedded items replaced)`
+                    );
+                    await CompendiumLoader.replaceMonsterPackEmbeddedItemsAfterUpdate(pack, dedupedToUpdate);
+                    updated = dedupedToUpdate.length;
+                } else {
+                    await DocumentClass.implementation.updateDocuments(toUpdate, {pack: pack.collection});
+                    console.log(`Third Era | Updated ${toUpdate.length} documents in ${pack.collection}`);
+                    updated = toUpdate.length;
+                }
             }
 
             // Create new documents

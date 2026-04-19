@@ -67,7 +67,7 @@
       },
       "spellResistance": 0,
       "senses": [],
-      "specialAbilities": "<p><strong>Attack:</strong> Spear +1 melee (1d6–1) or sling +3 ranged (1d3).</p><p><strong>Special:</strong> Darkvision 60 ft.; light sensitivity.</p>",
+      "specialAbilities": "<p><strong>Attack:</strong> Spear +1 melee (1d6\u20131) or sling +3 ranged (1d3).</p><p><strong>Special:</strong> Darkvision 60 ft.; light sensitivity.</p>",
       "environment": "Temperate forests",
       "organization": "Tribe",
       "treasure": "Standard",
@@ -121,7 +121,7 @@
         "total": 0
       }
     },
-    "biography": "<p>Kobolds are short, reptilian humanoids with cowardly and sadistic tendencies.</p><p>A kobold's scaly skin ranges from dark rusty brown to a rusty black color. It has glowing red eyes. Its tail is nonprehensile. Kobolds wear ragged clothing, favoring red and orange. A kobold is 2 to 2½ feet tall and weighs 35 to 45 pounds. Kobolds speak Draconic with a voice that sounds like that of a yapping dog.</p>",
+    "biography": "<p>Kobolds are short, reptilian humanoids with cowardly and sadistic tendencies.</p><p>A kobold's scaly skin ranges from dark rusty brown to a rusty black color. It has glowing red eyes. Its tail is nonprehensile. Kobolds wear ragged clothing, favoring red and orange. A kobold is 2 to 2\u00bd feet tall and weighs 35 to 45 pounds. Kobolds speak Draconic with a voice that sounds like that of a yapping dog.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -163,11 +163,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>You are particularly observant.</p>",
+        "description": "",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "benefit": "",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],

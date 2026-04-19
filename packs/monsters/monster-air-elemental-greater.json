@@ -190,14 +190,15 @@
     {
       "name": "Blind-Fight",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/invisible.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are skilled at fighting opponents you cannot clearly see.</p>",
         "key": "blindFight",
         "type": "General",
+        "fighterBonusEligible": "true",
         "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "benefit": "<p>In melee, every time you miss because of concealment, you can reroll your miss chance percentile roll one time to see if you actually hit.</p><p>An invisible attacker gets no advantages related to hitting you in melee. That is, you don't lose your Dexterity bonus to Armor Class, and the attacker doesn't get the usual +2 bonus to hit you. The invisible attacker's bonuses do still apply for ranged attacks, however.</p><p>You take only half the usual penalty to speed for being unable to see. Darkness and poor visibility in general reduces your speed to three-quarters normal, instead of one-half.</p>",
+        "special": "A fighter may select Blind-Fight as one of his fighter bonus feats.",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -209,8 +210,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -221,11 +221,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can make additional attacks of opportunity.</p>",
         "key": "combatReflexes",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -238,8 +239,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -248,14 +248,15 @@
     {
       "name": "Flyby Attack",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/wing.svg",
       "system": {
-        "description": "<p>The creature can take a move action and another standard action at any point during the move.</p>",
+        "description": "<p>Use a standard action at any point while flying (including during a dive).</p>",
         "key": "flybyAttack",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "fighterBonusEligible": "false",
+        "prerequisites": "Fly speed",
+        "benefit": "<p>When flying, the creature can take a move action (including a dive) and another standard action at any point during the move. The creature cannot take a second move action during a round when it makes a flyby attack.</p>",
+        "special": "<p><strong>Normal:</strong> Without this feat, the creature takes a standard action either before or after its move.</p>",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -267,8 +268,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -279,11 +279,11 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are exceptionally quick and alert.</p>",
         "key": "improvedInitiative",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -311,13 +311,13 @@
     {
       "name": "Iron Will",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "description": "",
+        "description": "<p>You have a stronger will than normal.</p>",
         "key": "ironWill",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Will saving throws.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -345,27 +345,29 @@
     {
       "name": "Mobility",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/walk.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are skilled at dodging past opponents and avoiding their attacks.</p>",
         "key": "mobility",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13, Dodge",
+        "benefit": "<p>You get a +4 dodge bonus to Armor Class against attacks of opportunity caused when you move out of or within a threatened area. A condition that makes you lose your Dexterity bonus to Armor Class (if any) also makes you lose dodge bonuses. Dodge bonuses stack with each other, unlike most types of bonuses.</p>",
+        "special": "A fighter may select Mobility as one of his fighter bonus feats.",
         "scalingTable": [],
-        "prerequisiteFeatKeys": [],
+        "prerequisiteFeatKeys": [
+          "dodge"
+        ],
         "prerequisiteBAB": 0,
         "prerequisiteAbilityScores": {
           "str": 0,
-          "dex": 0,
+          "dex": 13,
           "con": 0,
           "int": 0,
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -376,11 +378,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
         "key": "powerAttack",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Str 13",
+        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -393,8 +396,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -405,25 +407,28 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can move, attack, and move again before your foes can react.</p>",
         "key": "springAttack",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13, Dodge, Mobility, base attack bonus +4",
+        "benefit": "<p>As a full-round action, you can move up to your speed and make a single melee attack at any point during your movement. You must move at least 10 feet before and after your attack. You may not take a 5-foot step before, during, or after this action.</p>",
+        "special": "A fighter may select Spring Attack as one of his fighter bonus feats.",
         "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
+        "prerequisiteFeatKeys": [
+          "dodge",
+          "mobility"
+        ],
+        "prerequisiteBAB": 4,
         "prerequisiteAbilityScores": {
           "str": 0,
-          "dex": 0,
+          "dex": 13,
           "con": 0,
           "int": 0,
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -434,12 +439,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are skilled at using light weapons.</p>",
         "key": "weaponFinesse",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "prerequisites": "Base attack bonus +1",
+        "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+        "special": "Natural weapons are considered light weapons.",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -451,8 +456,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,

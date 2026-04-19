@@ -159,15 +159,19 @@
       "system": {
         "description": "<p>As a standard action, the creature may choose to subtract 4 from its melee attack roll and deliver an awesome blow.</p>",
         "key": "awesomeBlow",
-        "type": "General",
+        "type": "Monster",
+        "fighterBonusEligible": "false",
         "prerequisites": "Str 25, Power Attack, Improved Bull Rush, size Large or larger",
         "benefit": "<p>If the creature hits a Huge or smaller opponent with an awesome blow, the opponent must succeed on a Fortitude save (DC = damage dealt) or be knocked flying 10 feet in a direction of the attacker’s choice and fall prone.</p>",
         "special": "",
         "scalingTable": [],
-        "prerequisiteFeatKeys": [],
+        "prerequisiteFeatKeys": [
+          "powerAttack",
+          "improvedBullRush"
+        ],
         "prerequisiteBAB": 0,
         "prerequisiteAbilityScores": {
-          "str": 0,
+          "str": 25,
           "dex": 0,
           "con": 0,
           "int": 0,

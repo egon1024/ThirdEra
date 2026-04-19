@@ -147,25 +147,27 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can strike two adjacent foes with a single swing.</p>",
         "key": "cleave",
-        "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "type": "Fighter Bonus",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Power Attack, Str 13",
+        "benefit": "<p>As a standard action, you can make a single attack at your full base attack bonus against a foe within reach. If you hit, you deal damage normally and can make an additional attack (using your full base attack bonus) against a foe that is adjacent to the first and also within reach. You can only make one additional attack per round with this feat. You cannot use this feat if you are wearing heavy armor.</p>",
+        "special": "A fighter may select Cleave as one of his fighter bonus feats.",
         "scalingTable": [],
-        "prerequisiteFeatKeys": [],
+        "prerequisiteFeatKeys": [
+          "powerAttack"
+        ],
         "prerequisiteBAB": 0,
         "prerequisiteAbilityScores": {
-          "str": 0,
+          "str": 13,
           "dex": 0,
           "con": 0,
           "int": 0,
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -176,11 +178,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
         "key": "powerAttack",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Str 13",
+        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -193,8 +196,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -205,11 +207,11 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are exceptionally quick and alert.</p>",
         "key": "improvedInitiative",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],

@@ -69,7 +69,7 @@
       "senses": [],
       "specialAbilities": "<p><strong>Attack:</strong> Morningstar +2 melee (1d6) or javelin +3 ranged (1d4).</p><p><strong>Special:</strong> Darkvision 60 ft.</p>",
       "environment": "Temperate plains",
-      "organization": "Gang (4–9), band, or tribe",
+      "organization": "Gang (4\u20139), band, or tribe",
       "treasure": "Standard",
       "advancement": "By character class",
       "levelAdjustment": 0
@@ -121,7 +121,7 @@
         "total": 0
       }
     },
-    "biography": "<p>A goblin stands 3 to 3½ feet tall and weigh 40 to 45 pounds. Its eyes are usually dull and glazed, varying in color from red to yellow. A goblin's skin color ranges from yellow through any shade of orange to a deep red; usually all members of a single tribe are about the same color. Goblins wear clothing of dark leather, tending toward drab, soiled-looking colors. Goblins speak Goblin; those with Intelligence scores of 12 or higher also speak Common.</p><p>Most goblins encountered outside their homes are warriors; the information in the statistics block is for one of 1st level.</p>",
+    "biography": "<p>A goblin stands 3 to 3\u00bd feet tall and weigh 40 to 45 pounds. Its eyes are usually dull and glazed, varying in color from red to yellow. A goblin's skin color ranges from yellow through any shade of orange to a deep red; usually all members of a single tribe are about the same color. Goblins wear clothing of dark leather, tending toward drab, soiled-looking colors. Goblins speak Goblin; those with Intelligence scores of 12 or higher also speak Common.</p><p>Most goblins encountered outside their homes are warriors; the information in the statistics block is for one of 1st level.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -191,11 +191,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>You are particularly observant.</p>",
+        "description": "",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "benefit": "",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],

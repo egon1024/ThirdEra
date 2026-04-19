@@ -3,6 +3,9 @@
  * @module utils/fuzzy
  */
 
+/** Max normalized Levenshtein distance to count as a match (lower = stricter). */
+const FUZZY_MAX_NORMALIZED_LEVENSHTEIN = 0.44;
+
 /**
  * Levenshtein distance between two strings.
  * @param {string} a
@@ -50,7 +53,8 @@ function isSubsequence(query, text) {
 
 /**
  * Score for fuzzy match: lower is better. Substring match wins (score 0); then subsequence; else Levenshtein.
- * Uses Levenshtein when no substring/subsequence; matched if normalized distance <= 0.65 (e.g. "apr" matches "appraise").
+ * Uses Levenshtein when no substring/subsequence; matched only if normalized distance is at most
+ * `FUZZY_MAX_NORMALIZED_LEVENSHTEIN` (substring/subsequence still catch ordered-letter typos).
  * @param {string} query
  * @param {string} name
  * @param {string} [key] - optional key (e.g. skill key) to also match
@@ -68,5 +72,5 @@ export function fuzzyScore(query, name, key = "") {
     const score = Math.min(distName, distKey);
     const maxLen = Math.max(n.length, k.length, 1);
     const normalized = score / maxLen;
-    return { score: normalized, matched: normalized <= 0.65 };
+    return { score: normalized, matched: normalized <= FUZZY_MAX_NORMALIZED_LEVENSHTEIN };
 }

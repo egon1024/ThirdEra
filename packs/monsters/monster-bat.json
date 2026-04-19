@@ -143,12 +143,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are skilled at using light weapons.</p>",
         "key": "weaponFinesse",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "prerequisites": "Base attack bonus +1",
+        "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+        "special": "Natural weapons are considered light weapons.",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -160,8 +160,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,

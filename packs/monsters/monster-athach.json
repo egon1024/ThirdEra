@@ -236,11 +236,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can make additional attacks of opportunity.</p>",
         "key": "combatReflexes",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -253,8 +254,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -263,13 +263,13 @@
     {
       "name": "Iron Will",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "description": "",
+        "description": "<p>You have a stronger will than normal.</p>",
         "key": "ironWill",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Will saving throws.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -299,11 +299,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
         "key": "powerAttack",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Str 13",
+        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -316,8 +317,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,

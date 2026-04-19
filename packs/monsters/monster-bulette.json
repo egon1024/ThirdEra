@@ -169,13 +169,13 @@
     {
       "name": "Iron Will",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "description": "",
+        "description": "<p>You have a stronger will than normal.</p>",
         "key": "ironWill",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Will saving throws.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],

@@ -82,7 +82,7 @@
       "senses": [],
       "specialAbilities": "<p><strong>Moan, engulf, shadow shift</strong> (see SRD). <strong>Full attack:</strong> Tail +8, bite +3 (reach 5 ft.).</p>",
       "environment": "Underground",
-      "organization": "Solitary, mob (3–6), or flock (7–12)",
+      "organization": "Solitary, mob (3\u20136), or flock (7\u201312)",
       "treasure": "Standard",
       "advancement": "",
       "levelAdjustment": 0
@@ -158,11 +158,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>You are particularly observant.</p>",
+        "description": "",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "benefit": "",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],

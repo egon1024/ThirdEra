@@ -154,11 +154,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You can make additional attacks of opportunity.</p>",
         "key": "combatReflexes",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -171,8 +172,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -181,32 +181,27 @@
     {
       "name": "Dodge",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are adept at dodging blows.</p>",
         "key": "dodge",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
         "prerequisiteAbilityScores": {
           "str": 0,
-          "dex": 0,
+          "dex": 13,
           "con": 0,
           "int": 0,
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": [
-          {
-            "key": "ac",
-            "value": 1
-          }
-        ]
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -215,14 +210,15 @@
     {
       "name": "Flyby Attack",
       "type": "feat",
-      "img": "icons/svg/sword.svg",
+      "img": "icons/svg/wing.svg",
       "system": {
-        "description": "<p>The creature can take a move action and another standard action at any point during the move.</p>",
+        "description": "<p>Use a standard action at any point while flying (including during a dive).</p>",
         "key": "flybyAttack",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "fighterBonusEligible": "false",
+        "prerequisites": "Fly speed",
+        "benefit": "<p>When flying, the creature can take a move action (including a dive) and another standard action at any point during the move. The creature cannot take a second move action during a round when it makes a flyby attack.</p>",
+        "special": "<p><strong>Normal:</strong> Without this feat, the creature takes a standard action either before or after its move.</p>",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -234,8 +230,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
@@ -246,11 +241,11 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are exceptionally quick and alert.</p>",
         "key": "improvedInitiative",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -280,12 +275,12 @@
       "type": "feat",
       "img": "icons/svg/sword.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are skilled at using light weapons.</p>",
         "key": "weaponFinesse",
         "type": "General",
-        "prerequisites": "",
-        "benefit": "",
-        "special": "",
+        "prerequisites": "Base attack bonus +1",
+        "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+        "special": "Natural weapons are considered light weapons.",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
@@ -297,8 +292,7 @@
           "wis": 0,
           "cha": 0
         },
-        "prerequisiteFeatUuids": [],
-        "changes": []
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,

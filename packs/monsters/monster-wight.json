@@ -73,11 +73,11 @@
       },
       "spellResistance": 0,
       "senses": [],
-      "specialAbilities": "<p><strong>Slam +3</strong> (1d4+1 plus energy drain).</p><p><strong>Energy drain (Su):</strong> One negative level (Fort DC 14 to remove). Charisma-based.</p><p><strong>Create spawn (Su):</strong> Humanoids slain become wights under creator’s control.</p>",
+      "specialAbilities": "<p><strong>Slam +3</strong> (1d4+1 plus energy drain).</p><p><strong>Energy drain (Su):</strong> One negative level (Fort DC 14 to remove). Charisma-based.</p><p><strong>Create spawn (Su):</strong> Humanoids slain become wights under creator\u2019s control.</p>",
       "environment": "Any",
       "organization": "Solitary, pair, gang, or pack",
       "treasure": "None",
-      "advancement": "5–8 HD (Medium)",
+      "advancement": "5\u20138 HD (Medium)",
       "levelAdjustment": 0
     },
     "attributes": {
@@ -151,11 +151,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>You are particularly observant.</p>",
+        "description": "",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "benefit": "",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],

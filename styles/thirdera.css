@@ -37,8 +37,10 @@
   /* Skills subtab (Attributes): inline actions + default item art on parchment */
   --color-sheet-skills-row-action-icon: var(--color-character-border);
   --color-sheet-skills-row-action-icon-hover: var(--color-hover);
-  /* Default item/skill thumbnails are often light-on-dark; darken for light sheet bg (see also spell list) */
-  --filter-sheet-skills-item-image: brightness(0);
+  /* Item row thumbnails on light parchment (skills, feats, creature features): stock art is often light-on-dark */
+  --filter-sheet-item-thumb-on-light-bg: brightness(0);
+  /* Legacy alias — same as --filter-sheet-item-thumb-on-light-bg */
+  --filter-sheet-skills-item-image: var(--filter-sheet-item-thumb-on-light-bg);
 
   /* Status indicators */
   --color-modified: #b8860b;
@@ -3979,7 +3981,7 @@ form.thirdera.sheet.flexcol > .sheet-body {
 }
 
 .thirdera .abilities .subtab[data-tab="skills"] .skills-list .item .item-image img {
-  filter: var(--filter-sheet-skills-item-image);
+  filter: var(--filter-sheet-item-thumb-on-light-bg);
 }
 
 /* Skill reference lists (class skills on class sheet, excluded skills on race sheet) */
@@ -4326,6 +4328,12 @@ form.thirdera.sheet.flexcol > .sheet-body {
   font-size: var(--font-size-note);
   color: var(--color-text-muted);
   font-style: italic;
+}
+
+/* Feats + creature features subtabs: darken default item art on light bg (same as skills / spell list) */
+.thirdera .abilities .subtab[data-tab="feats"] .items-list .item .item-image img,
+.thirdera .abilities .subtab[data-tab="creature-features"] .items-list .item .item-image img {
+  filter: var(--filter-sheet-item-thumb-on-light-bg);
 }
 
 /* Feats subtab: tighten row spacing so feat lists don't become unnecessarily tall */

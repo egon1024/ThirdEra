@@ -77,7 +77,7 @@
       "environment": "Temperate forests",
       "organization": "Solitary or pack",
       "treasure": "None",
-      "advancement": "4–6 HD (Large); 7–12 HD (Huge)",
+      "advancement": "4\u20136 HD (Large); 7\u201312 HD (Huge)",
       "levelAdjustment": 0
     },
     "attributes": {
@@ -155,11 +155,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>You are particularly observant.</p>",
+        "description": "",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "benefit": "",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
