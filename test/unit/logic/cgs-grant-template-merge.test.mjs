@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
     cgsGrantRowMergeKey,
     getEffectiveCgsGrantShapeForOwnedItem,
+    getOwnedItemCgsSourceIdUuidCandidate,
+    getOwnedItemCgsTemplateUuidCandidate,
     mergeCgsGrantsTemplateWithOverrides,
     normalizeCgsGrantsShape,
     resolveTemplateCgsGrantsShape,
@@ -100,5 +102,21 @@ describe("getEffectiveCgsGrantShapeForOwnedItem", () => {
 describe("resolveTemplateCgsGrantsShape", () => {
     it("returns null when uuid missing", () => {
         expect(resolveTemplateCgsGrantsShape({ system: {} }, { fromUuidSync: () => null })).toBe(null);
+    });
+});
+
+describe("getOwnedItemCgsSourceIdUuidCandidate / getOwnedItemCgsTemplateUuidCandidate", () => {
+    it("sourceId candidate ignores explicit template field", () => {
+        const item = {
+            sourceId: "Compendium.x.Item.src",
+            system: { cgsTemplateUuid: "Compendium.x.Item.explicit" }
+        };
+        expect(getOwnedItemCgsSourceIdUuidCandidate(item)).toBe("Compendium.x.Item.src");
+        expect(getOwnedItemCgsTemplateUuidCandidate(item)).toBe("Compendium.x.Item.explicit");
+    });
+
+    it("reads flags.core.sourceId when top-level missing", () => {
+        const item = { system: {}, flags: { core: { sourceId: "Compendium.p.Item.q" } } };
+        expect(getOwnedItemCgsSourceIdUuidCandidate(item)).toBe("Compendium.p.Item.q");
     });
 });

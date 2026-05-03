@@ -196,6 +196,17 @@ export function getOwnedItemCgsTemplateUuidCandidate(item) {
     );
     const explicit = typeof sys.cgsTemplateUuid === "string" ? sys.cgsTemplateUuid.trim() : "";
     if (explicit) return explicit;
+    return getOwnedItemCgsSourceIdUuidCandidate(item);
+}
+
+/**
+ * Compendium/world Item UUID from `sourceId` / `flags.core.sourceId` only (ignores `system.cgsTemplateUuid`).
+ * Used for UI when comparing explicit template override vs origin link.
+ * @param {unknown} item
+ * @returns {string}
+ */
+export function getOwnedItemCgsSourceIdUuidCandidate(item) {
+    if (!item || typeof item !== "object") return "";
     const sid = typeof /** @type {{ sourceId?: string }} */ (item).sourceId === "string" ? item.sourceId.trim() : "";
     if (sid && (sid.includes(".") || sid.startsWith("Compendium."))) return sid;
     const flags = /** @type {{ flags?: { core?: { sourceId?: string } } }} */ (item).flags;

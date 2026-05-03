@@ -1,0 +1,18 @@
+{
+  "name": "Tremorsense",
+  "type": "creatureFeature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "key": "creatureTremorsense",
+    "description": "<p><strong>What it does (SRD):</strong> The creature can automatically sense the location of anything in contact with the ground within the distance on each copy.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range; set distance under <strong>CGS parameters and overrides</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "tremorsense", "range": "" }]
+    },
+    "cgsGrantOverrides": { "grants": [], "senses": [] }
+  },
+  "flags": {},
+  "folder": null
+}

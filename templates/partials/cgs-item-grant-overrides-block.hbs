@@ -1,15 +1,35 @@
 <section class="cgs-item-grant-overrides-block form-group">
-  <h3 class="form-header">{{localize "THIRDERA.CGS.GrantOverridesSection"}}</h3>
+  <h3 class="form-header" title="{{localize 'THIRDERA.CGS.GrantOverridesHintTitle'}}">{{localize "THIRDERA.CGS.GrantOverridesSection"}}</h3>
   <p class="notes">{{localize "THIRDERA.CGS.GrantOverridesHint"}}</p>
-  <div class="form-fields flexcol">
-    <label class="flexrow">
-      <span class="cgs-template-uuid-label">{{localize "THIRDERA.CGS.TemplateUuidLabel"}}</span>
-      <input type="text" name="system.cgsTemplateUuid" class="details-input flex1" value="{{system.cgsTemplateUuid}}"
-        placeholder="{{localize 'THIRDERA.CGS.TemplateUuidPlaceholder'}}"
-        title="{{localize 'THIRDERA.CGS.TemplateUuidTooltip'}}"
-        {{#unless editable}}disabled{{/unless}} />
-    </label>
+  {{#if cgsTemplateUi}}
+  <div class="cgs-template-link-panel form-fields flexcol">
+    <p class="cgs-template-link-status">{{cgsTemplateUi.statusLine}}</p>
+    {{#if cgsTemplateUi.effectiveUuid}}
+    {{#unless cgsTemplateUi.broken}}
+    <p class="notes cgs-template-link-origin">
+      {{localize "THIRDERA.CGS.TemplateLinkOriginLabel"}}:
+      <strong>{{cgsTemplateUi.templateDisplayName}}</strong>
+      {{#if cgsTemplateUi.originText}}<span class="cgs-template-link-pack"> ({{cgsTemplateUi.originText}})</span>{{/if}}
+    </p>
+    {{/unless}}
+    {{/if}}
+    {{#if editable}}
+    <div class="flexrow cgs-template-link-actions" style="flex-wrap: wrap; gap: 0.35em;">
+      <button type="button" class="button" data-action="pickCgsTemplateItem" title="{{localize 'THIRDERA.CGS.TemplateLinkPickTooltip'}}">
+        {{localize "THIRDERA.CGS.TemplateLinkPickButton"}}
+      </button>
+      {{#if (or cgsTemplateUi.explicitUuid cgsTemplateUi.conflict)}}
+      <button type="button" class="button" data-action="clearCgsTemplateUuid" title="{{localize 'THIRDERA.CGS.TemplateLinkClearExplicitTooltip'}}">
+        {{localize "THIRDERA.CGS.TemplateLinkClearExplicit"}}
+      </button>
+      {{/if}}
+    </div>
+    <div class="cgs-template-drop-zone form-group" data-cgs-template-drop data-tooltip="{{localize 'THIRDERA.CGS.TemplateLinkDropHint'}}">
+      <label class="cgs-template-drop-label">{{localize "THIRDERA.CGS.TemplateLinkDropHint"}}</label>
+    </div>
+    {{/if}}
   </div>
+  {{/if}}
   {{> "systems/thirdera/templates/partials/cgs-mechanics-senses-override.hbs"}}
   {{> "systems/thirdera/templates/partials/cgs-mechanics-spell-grants-override.hbs"}}
   {{> "systems/thirdera/templates/partials/cgs-mechanics-typed-defenses-override.hbs"}}

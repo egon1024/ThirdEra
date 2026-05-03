@@ -1,0 +1,18 @@
+{
+  "name": "Blindsense",
+  "type": "creatureFeature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "key": "creatureBlindsense",
+    "description": "<p><strong>What it does (SRD):</strong> The creature notices and locates creatures and objects within the distance on each copy using nonvisual senses.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range; set distance under <strong>CGS parameters and overrides</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "blindsense", "range": "" }]
+    },
+    "cgsGrantOverrides": { "grants": [], "senses": [] }
+  },
+  "flags": {},
+  "folder": null
+}

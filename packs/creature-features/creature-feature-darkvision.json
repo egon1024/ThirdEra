@@ -1,0 +1,18 @@
+{
+  "name": "Darkvision",
+  "type": "creatureFeature",
+  "img": "icons/svg/explosion.svg",
+  "system": {
+    "key": "creatureDarkvision",
+    "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to the distance set on each copy (overrides or the stat block). Darkvision is <strong>black and white</strong> only unless another rule says otherwise.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range under <strong>Capability grants</strong>; set per-copy distance under <strong>CGS parameters and overrides</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "darkvision", "range": "" }]
+    },
+    "cgsGrantOverrides": { "grants": [], "senses": [] }
+  },
+  "flags": {},
+  "folder": null
+}

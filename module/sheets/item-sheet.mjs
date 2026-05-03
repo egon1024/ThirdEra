@@ -30,6 +30,9 @@ import {
     buildSystemUpdatePatchFromCgsOverrideSnapshot,
     snapshotCgsTemplateOverrideFieldsFromItem
 } from "../logic/cgs-embed-override-sync-preservation.mjs";
+import { describeCgsTemplateLink } from "../logic/cgs-template-link-display.mjs";
+import { readCgsGrantsShapeFromTemplateItem } from "../logic/cgs-grant-template-merge.mjs";
+import { CgsTemplateItemPickerDialog } from "../applications/cgs-template-item-picker-dialog.mjs";
 
 export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplicationMixin(
     foundry.applications.sheets.ItemSheetV2
@@ -102,6 +105,8 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             addCgsTypeOverlay: ThirdEraItemSheet.onAddCgsTypeOverlay,
             removeCgsTypeOverlay: ThirdEraItemSheet.onRemoveCgsTypeOverlay,
             resetCgsGrantOverrides: ThirdEraItemSheet.onResetCgsGrantOverrides,
+            pickCgsTemplateItem: ThirdEraItemSheet.onPickCgsTemplateItem,
+            clearCgsTemplateUuid: ThirdEraItemSheet.onClearCgsTemplateUuid,
             removeMechanicalCreatureGate: ThirdEraItemSheet.onRemoveMechanicalCreatureGate,
             removeSpellCreatureTypeTarget: ThirdEraItemSheet.onRemoveSpellCreatureTypeTarget,
             addSpellCreatureTypeTargetFromSelect: ThirdEraItemSheet.onAddSpellCreatureTypeTargetFromSelect
@@ -810,6 +815,53 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             hasSpellCreatureTypeChoicesForAdd = hasSpellCreatureTypeChoiceTypes || hasSpellCreatureTypeChoiceSubtypes;
         }
 
+        /** @type {Record<string, unknown> | null} */
+        let cgsTemplateUi = null;
+        if (ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(item.type) && item.type !== "race") {
+            const link = describeCgsTemplateLink(item);
+            let templateDisplayName = "";
+            let originText = "";
+            if (link.effectiveUuid) {
+                try {
+                    const d = foundry.utils.fromUuidSync(link.effectiveUuid);
+                    if (d?.name) templateDisplayName = String(d.name);
+                    const pack = /** @type {{ metadata?: { label?: string, name?: string }, collection?: string } | null | undefined }} */ (
+                        d?.pack
+                    );
+                    if (pack?.metadata?.label) originText = String(pack.metadata.label);
+                    else if (pack?.metadata?.name) originText = String(pack.metadata.name);
+                    else if (d && !pack) {
+                        originText = game.i18n?.localize?.("THIRDERA.CGS.TemplateLinkSourceWorld") ?? "World";
+                    }
+                } catch {
+                    /* leave display name empty */
+                }
+            }
+            const broken = Boolean(link.effectiveUuid && !link.isResolvable);
+            const localize = (key) => (typeof game !== "undefined" && game.i18n?.localize ? game.i18n.localize(key) : key);
+            const format = (key, data) =>
+                typeof game !== "undefined" && game.i18n?.format ? game.i18n.format(key, data) : localize(key);
+            let statusLine = "";
+            if (!link.effectiveUuid) {
+                statusLine = localize("THIRDERA.CGS.TemplateLinkStatusNone");
+            } else if (broken) {
+                statusLine = localize("THIRDERA.CGS.TemplateLinkStatusBroken");
+            } else if (link.mode === "explicit" && link.conflict) {
+                statusLine = format("THIRDERA.CGS.TemplateLinkStatusExplicitConflict", { name: templateDisplayName || "—" });
+            } else if (link.mode === "explicit") {
+                statusLine = format("THIRDERA.CGS.TemplateLinkStatusExplicit", { name: templateDisplayName || "—" });
+            } else {
+                statusLine = format("THIRDERA.CGS.TemplateLinkStatusSourceId", { name: templateDisplayName || "—" });
+            }
+            cgsTemplateUi = {
+                ...link,
+                templateDisplayName: templateDisplayName || "—",
+                originText,
+                broken,
+                statusLine
+            };
+        }
+
         if (item.type === "class") {
             const rawSystem = item._source?.system ?? item.toObject?.()?.system;
             const systemPlain = (rawSystem && typeof rawSystem === "object")
@@ -878,6 +930,7 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             cgsSubtypeOverlayRows,
             showCgsGrantOverridesSection:
                 ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(item.type) && item.type !== "race",
+            cgsTemplateUi,
             cgsOverrideSpellGrantRows,
             cgsOverrideImmunityRows,
             cgsOverrideEnergyResistanceRows,
@@ -1244,10 +1297,37 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             return;
         }
 
+        const inCgsItemUi = ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document.type);
+        const cgsTemplateDrop = event.target.closest?.("[data-cgs-template-drop]");
+        const cgsTemplateItemTypes = new Set(["feat", "creatureFeature", "feature", "armor", "weapon", "equipment"]);
+        if (cgsTemplateDrop && inCgsItemUi && cgsTemplateItemTypes.has(droppedItem.type)) {
+            if (!this.isEditable) {
+                ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+                return;
+            }
+            const tplShape = readCgsGrantsShapeFromTemplateItem(droppedItem);
+            if (!tplShape || (tplShape.grants.length === 0 && tplShape.senses.length === 0)) {
+                ui.notifications?.warn?.(game.i18n.localize("THIRDERA.CGS.TemplateLinkDropRejected"));
+                return;
+            }
+            const uuid = (droppedItem.uuid ?? "").trim();
+            if (!uuid) return;
+            const tab = this.element?.querySelector?.(".sheet-body .tab.active");
+            if (tab) this._preservedScrollTop = tab.scrollTop;
+            try {
+                await this.document.update({ "system.cgsTemplateUuid": uuid });
+                await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+                await this.render(true);
+            } catch (err) {
+                const msg = err instanceof Error ? err.message : String(err);
+                ui.notifications?.error?.(msg);
+            }
+            return;
+        }
+
         const spellGrantDropRow = event.target.closest?.("[data-cgs-spell-grant-drop]");
         const spellGrantPanel = event.target.closest?.(".cgs-spell-grants-panel:not(.cgs-spell-grants-panel--overrides)");
         const spellGrantPanelOverride = event.target.closest?.(".cgs-spell-grants-panel--overrides");
-        const inCgsItemUi = ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document.type);
         const spellDropOnGrantUi =
             inCgsItemUi && droppedItem.type === "spell" && (spellGrantDropRow || spellGrantPanel || spellGrantPanelOverride);
         if (spellDropOnGrantUi) {
@@ -3093,6 +3173,52 @@ export class ThirdEraItemSheet extends foundry.applications.api.HandlebarsApplic
             } else {
                 await ThirdEraItemSheet.#applyCgsGrantsThroughSheetSubmit(this, cgsPayload);
             }
+            await ThirdEraItemSheet.#afterCgsSensesMutation(this);
+            await this.render(true);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            ui.notifications?.error?.(msg);
+        }
+    }
+
+    /** Open browser to set `system.cgsTemplateUuid` from a feat, creature feature, class feature, or gear item. */
+    static async onPickCgsTemplateItem(event, _target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type) || this.document.type === "race") return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const tab = event?.target?.closest?.(".tab");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        const sheet = this;
+        const dlg = new CgsTemplateItemPickerDialog({
+            editingItemUuid: sheet.document.uuid ?? "",
+            resolve: async (uuid) => {
+                const u = (uuid ?? "").trim();
+                if (!u) return;
+                await sheet.document.update({ "system.cgsTemplateUuid": u });
+                await ThirdEraItemSheet.#afterCgsSensesMutation(sheet);
+                await sheet.render(true);
+            }
+        });
+        await dlg.render(true);
+    }
+
+    /** Clear explicit `system.cgsTemplateUuid` so template resolution follows `sourceId` again. */
+    static async onClearCgsTemplateUuid(event, _target) {
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        if (!ThirdEraItemSheet.#itemTypesWithCgsSensesUi.has(this.document?.type) || this.document.type === "race") return;
+        if (!this.isEditable) {
+            ui.notifications?.warn?.(game.i18n.localize("THIRDERA.ItemSheet.SenseEditNotAllowed"));
+            return;
+        }
+        const tab = event?.target?.closest?.(".tab") ?? this.element?.querySelector?.(".sheet-body .tab.active");
+        if (tab) this._preservedScrollTop = tab.scrollTop;
+        try {
+            await this.document.update({ "system.cgsTemplateUuid": "" });
             await ThirdEraItemSheet.#afterCgsSensesMutation(this);
             await this.render(true);
         } catch (err) {

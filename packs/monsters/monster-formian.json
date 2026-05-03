@@ -144,11 +144,20 @@
       "type": "creatureFeature",
       "img": "icons/svg/explosion.svg",
       "system": {
-        "key": "creatureDarkvision60",
-        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to <strong>60 ft.</strong> Darkvision is <strong>black and white</strong> only; it does not let the creature see through magical darkness unless another rule says so.</p><p><strong>ThirdEra:</strong> Darkvision (<strong>60 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other vision and senses from items and race; it does not add numeric attack or save bonuses on its own.</p>",
+        "key": "creatureDarkvision",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to the distance set on this copy (default from the stat block). Darkvision is <strong>black and white</strong> only unless another rule says otherwise.</p><p><strong>ThirdEra:</strong> Distance is under <strong>CGS parameters and overrides</strong> on this item (merged over the canonical template). The stat block’s distance is preserved when migrating from older packs.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": ""
+            }
+          ]
+        },
+        "cgsGrantOverrides": {
           "grants": [],
           "senses": [
             {
@@ -187,15 +196,19 @@
       "sort": 998
     },
     {
-      "name": "Resistance to Electricity",
+      "name": "Energy Resistance",
       "type": "creatureFeature",
       "img": "icons/svg/lightning.svg",
       "system": {
-        "key": "creatureResistanceElectricity10",
-        "description": "<p><strong>What it does (SRD):</strong> The first <strong>10 points of damage from each electricity attack or effect</strong> are ignored. Larger hits still deal leftover damage after subtracting 10.</p><p><strong>ThirdEra:</strong> Resist electricity <strong>10</strong> is under <strong>Capability grants</strong> on the item’s <strong>Details</strong> tab (energy resistance), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creatureEnergyResistance",
+        "description": "<p><strong>What it does (SRD):</strong> The creature ignores the first <strong>N</strong> points of damage from each attack or effect of the listed energy type.</p><p><strong>ThirdEra:</strong> Type and amount are set under <strong>CGS parameters and overrides</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
+          "grants": [],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
           "grants": [
             {
               "category": "energyResistance",

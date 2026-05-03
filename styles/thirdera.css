@@ -228,6 +228,19 @@
   margin-top: 8px;
 }
 
+.thirdera .cgs-template-link-panel .cgs-template-link-status {
+  margin: 0.25em 0 0.35em;
+}
+
+.thirdera .cgs-template-drop-zone {
+  border: 1px dashed var(--color-border);
+  border-radius: 4px;
+  padding: 0.5em 0.65em;
+  margin-top: 0.35em;
+  font-size: var(--font-size-12);
+  color: var(--color-text-muted);
+}
+
 
 
 /* Window controls dropdown (three-dot menu) */

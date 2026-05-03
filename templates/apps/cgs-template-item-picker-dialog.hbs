@@ -1,0 +1,20 @@
+<div class="skill-picker-dialog-body cgs-template-picker-body">
+  <div class="form-group">
+    <label for="cgs-template-picker-search">{{localize "THIRDERA.CGS.TemplateLinkSearch"}}</label>
+    <input type="text" id="cgs-template-picker-search" name="cgsTemplatePickerSearch" value="{{query}}"
+      placeholder="{{localize "THIRDERA.CGS.TemplateLinkSearchPlaceholder"}}"
+      class="skill-picker-search" />
+  </div>
+  <ol class="skill-picker-list cgs-template-picker-list">
+    {{#each rows as |row|}}
+    <li>
+      <button type="button" class="skill-picker-item" data-action="selectRow" data-uuid="{{row.uuid}}" title="{{row.label}}">
+        {{row.label}}
+      </button>
+    </li>
+    {{/each}}
+  </ol>
+  {{#if (eq rows.length 0)}}
+  <p class="note">{{localize "THIRDERA.CGS.TemplateLinkNoMatch"}}</p>
+  {{/if}}
+</div>

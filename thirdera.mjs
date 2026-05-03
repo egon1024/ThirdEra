@@ -605,7 +605,8 @@ Hooks.once("init", async function () {
         "systems/thirdera/templates/partials/item-mechanical-creature-gate.hbs",
         "systems/thirdera/templates/partials/spell-creature-type-targeting.hbs",
         "systems/thirdera/templates/apps/spell-list-browser.hbs",
-        "systems/thirdera/templates/apps/skill-picker-dialog.hbs"
+        "systems/thirdera/templates/apps/skill-picker-dialog.hbs",
+        "systems/thirdera/templates/apps/cgs-template-item-picker-dialog.hbs"
     ]);
 
     // Register modifier-source providers after CONFIG.THIRDERA exists

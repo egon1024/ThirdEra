@@ -155,15 +155,19 @@
   },
   "items": [
     {
-      "name": "Resistance to Electricity",
+      "name": "Energy Resistance",
       "type": "creatureFeature",
       "img": "icons/svg/lightning.svg",
       "system": {
-        "key": "creatureResistanceElectricity10",
-        "description": "<p><strong>What it does (SRD):</strong> The first <strong>10 points of damage from each electricity attack or effect</strong> are ignored. Larger hits still deal leftover damage after subtracting 10.</p><p><strong>ThirdEra:</strong> Resist electricity <strong>10</strong> is under <strong>Capability grants</strong> on the item’s <strong>Details</strong> tab (energy resistance), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creatureEnergyResistance",
+        "description": "<p><strong>What it does (SRD):</strong> The creature ignores the first <strong>N</strong> points of damage from each attack or effect of the listed energy type.</p><p><strong>ThirdEra:</strong> Type and amount are set under <strong>CGS parameters and overrides</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
+          "grants": [],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
           "grants": [
             {
               "category": "energyResistance",

@@ -18,6 +18,7 @@ import {
     resolveMechanicalCreatureGateKeys,
     resolveCgsGrantReferenceKeys
 } from "./cgs-compendium-reference-resolve.mjs";
+import { getLegacyCreatureFeatureKeysForConsolidation } from "./cgs-creature-feature-consolidation.mjs";
 
 /**
  * Returns a stable key for matching compendium documents (incoming JSON or existing).
@@ -41,14 +42,33 @@ function getStableKey(doc) {
 /** Reserved `system.key` values for removed pack scaffolding or superseded seeds (no longer shipped in JSON). */
 export const OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS = new Set(["creatureFeaturePlaceholder", "creatureAlertness"]);
 
+/** @type {Set<string> | null} */
+let _creatureFeatureCompendiumPurgeKeys = null;
+
+/**
+ * Keys whose creature-feature compendium rows are deleted on GM ready after JSON import
+ * (placeholders plus pre-template-consolidation `system.key` values superseded by canonical templates).
+ * @returns {ReadonlySet<string>}
+ */
+export function getCreatureFeatureCompendiumPurgeKeys() {
+    if (!_creatureFeatureCompendiumPurgeKeys) {
+        _creatureFeatureCompendiumPurgeKeys = new Set([
+            ...OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS,
+            ...getLegacyCreatureFeatureKeysForConsolidation()
+        ]);
+    }
+    return _creatureFeatureCompendiumPurgeKeys;
+}
+
 /**
  * @param {Array<{ id?: string, system?: { key?: string } }>} docs
  * @returns {string[]}
  */
 export function collectObsoleteCreatureFeatureCompendiumDocIds(docs) {
     if (!Array.isArray(docs)) return [];
+    const purge = getCreatureFeatureCompendiumPurgeKeys();
     return docs
-        .filter((d) => OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS.has(d.system?.key) && d.id)
+        .filter((d) => purge.has(d.system?.key) && d.id)
         .map((d) => d.id);
 }
 
@@ -408,19 +428,17 @@ export class CompendiumLoader {
             "subtype-orc.json", "subtype-reptilian.json", "subtype-shapechanger.json", "subtype-swarm.json", "subtype-water.json"
         ],
         "thirdera.thirdera_creature_features": [
-            "creature-feature-blindsight-60.json",
-            "creature-feature-blindsense-30.json",
+            "creature-feature-blindsight.json",
+            "creature-feature-blindsense.json",
             "creature-feature-blood-drain.json",
             "creature-feature-brute-blows.json",
             "creature-feature-chameleon-hide.json",
             "creature-feature-constrict.json",
-            "creature-feature-damage-reduction-10-magic.json",
-            "creature-feature-damage-reduction-2.json",
-            "creature-feature-damage-reduction-5-magic.json",
-            "creature-feature-darkvision-120.json",
-            "creature-feature-darkvision-60.json",
-            "creature-feature-darkvision-90.json",
-            "creature-feature-fast-healing-1.json",
+            "creature-feature-damage-reduction-magic.json",
+            "creature-feature-damage-reduction-none.json",
+            "creature-feature-darkvision.json",
+            "creature-feature-energy-resistance.json",
+            "creature-feature-fast-healing.json",
             "creature-feature-improved-grab.json",
             "creature-feature-immunity-disease.json",
             "creature-feature-immunity-paralysis.json",
@@ -434,14 +452,10 @@ export class CompendiumLoader {
             "creature-feature-rake.json",
             "creature-feature-reflexive-dodge.json",
             "creature-feature-rend.json",
-            "creature-feature-resistance-acid-10.json",
-            "creature-feature-resistance-cold-10.json",
-            "creature-feature-resistance-electricity-10.json",
-            "creature-feature-resistance-fire-10.json",
             "creature-feature-scent-ability.json",
             "creature-feature-swallow-whole.json",
             "creature-feature-trample.json",
-            "creature-feature-tremorsense-20.json"
+            "creature-feature-tremorsense.json"
         ],
         "thirdera.thirdera_monsters": [
             "monster-aasimar.json",
@@ -1074,7 +1088,8 @@ export class CompendiumLoader {
     }
 
     /**
-     * Remove legacy Phase-1 placeholder rows from the creature features compendium (not shipped in JSON anymore).
+     * Remove creature-feature compendium rows that are no longer shipped: Phase-1 placeholders and
+     * pre-consolidation `system.key` values superseded by canonical templates (see {@link getCreatureFeatureCompendiumPurgeKeys}).
      */
     static async deleteObsoleteCreatureFeaturePlaceholders() {
         if (!game?.user?.isGM) return;
@@ -1098,7 +1113,9 @@ export class CompendiumLoader {
             await pack.configure({ locked: false });
         }
         await Impl.deleteDocuments(ids, { pack: pack.collection });
-        console.log(`Third Era | Removed ${ids.length} obsolete creature feature pack placeholder(s)`);
+        console.log(
+            `Third Era | Removed ${ids.length} obsolete or superseded creature feature compendium document(s) (placeholder keys and pre-consolidation system.key values).`
+        );
     }
 
     /**

@@ -1,0 +1,25 @@
+{
+  "name": "Damage Reduction (magic)",
+  "type": "creatureFeature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "key": "creatureDamageReductionMagic",
+    "description": "<p><strong>What it does (SRD):</strong> The creature ignores weapon damage unless the attack overcomes <strong>DR X/magic</strong>.</p><p><strong>ThirdEra:</strong> Canonical template uses value <strong>0</strong> with bypass <strong>magic</strong>; set the real DR value under <strong>CGS parameters and overrides</strong>.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "damageReduction",
+          "value": 0,
+          "bypass": "magic",
+          "label": "Damage reduction /magic; value from overrides."
+        }
+      ],
+      "senses": []
+    },
+    "cgsGrantOverrides": { "grants": [], "senses": [] }
+  },
+  "flags": {},
+  "folder": null
+}

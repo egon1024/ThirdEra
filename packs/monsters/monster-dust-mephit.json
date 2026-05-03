@@ -150,15 +150,26 @@
   },
   "items": [
     {
-      "name": "Damage Reduction 5/magic",
+      "name": "Damage Reduction (magic)",
       "type": "creatureFeature",
       "img": "icons/svg/shield.svg",
       "system": {
-        "key": "creatureDamageReduction5Magic",
-        "description": "<p><strong>What it does (SRD):</strong> The creature ignores <strong>5 points of damage</strong> from each successful weapon hit unless the attack is made with a <strong>magic weapon</strong> (or another source overcomes DR as the rules specify).</p><p><strong>ThirdEra:</strong> Set DR on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (damage reduction), not in <strong>Mechanical effects</strong>. Combine with other DR rows when applying damage.</p>",
+        "key": "creatureDamageReductionMagic",
+        "description": "<p><strong>What it does (SRD):</strong> The creature ignores weapon damage unless the attack overcomes the listed DR (commonly <strong>magic</strong>).</p><p><strong>ThirdEra:</strong> Bypass stays <strong>magic</strong>; set the numeric value under <strong>CGS parameters and overrides</strong>.</p>",
         "abilityKind": "Su",
         "changes": [],
         "cgsGrants": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 0,
+              "bypass": "magic",
+              "label": "Damage reduction /magic; value from overrides."
+            }
+          ],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
           "grants": [
             {
               "category": "damageReduction",

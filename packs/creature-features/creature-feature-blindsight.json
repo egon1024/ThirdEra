@@ -1,0 +1,18 @@
+{
+  "name": "Blindsight",
+  "type": "creatureFeature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "key": "creatureBlindsight",
+    "description": "<p><strong>What it does (SRD):</strong> The creature perceives its surroundings without vision out to the distance on each copy, within blindsight limits.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range; set distance under <strong>CGS parameters and overrides</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": [{ "type": "blindsight", "range": "" }]
+    },
+    "cgsGrantOverrides": { "grants": [], "senses": [] }
+  },
+  "flags": {},
+  "folder": null
+}

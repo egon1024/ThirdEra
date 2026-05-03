@@ -1,0 +1,18 @@
+{
+  "name": "Energy Resistance",
+  "type": "creatureFeature",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "key": "creatureEnergyResistance",
+    "description": "<p><strong>What it does (SRD):</strong> The creature ignores the first <strong>N</strong> points of damage from each attack or effect of a listed energy type.</p><p><strong>ThirdEra:</strong> Canonical template has no base energy-resistance rows; add the type and amount under <strong>CGS parameters and overrides</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    },
+    "cgsGrantOverrides": { "grants": [], "senses": [] }
+  },
+  "flags": {},
+  "folder": null
+}

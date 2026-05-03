@@ -1,0 +1,18 @@
+{
+  "name": "Fast Healing",
+  "type": "creatureFeature",
+  "img": "icons/svg/heal.svg",
+  "system": {
+    "key": "creatureFastHealing",
+    "description": "<p><strong>What it does (SRD):</strong> The creature regains hit points each round at the rate given in the stat block (unless the rules say otherwise).</p><p><strong>ThirdEra:</strong> There is no separate fast-healing numeric CGS row yet; track rounds at the table.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    },
+    "cgsGrantOverrides": { "grants": [], "senses": [] }
+  },
+  "flags": {},
+  "folder": null
+}

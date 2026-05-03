@@ -36,4 +36,42 @@ describe("runCgsGrantOverridesWorldMigrationIfNeeded", () => {
         expect(second.skipped).toBe(true);
         expect(second.reason).toBe("already-applied");
     });
+
+    it("calls update on legacy creature feature embeds", async () => {
+        const settings = new Map();
+        const item = {
+            type: "creatureFeature",
+            system: {
+                key: "creatureDarkvision60",
+                abilityKind: "Ex",
+                changes: [],
+                cgsGrants: { grants: [], senses: [{ type: "darkvision", range: "60 ft" }] }
+            },
+            toObject: () => ({
+                type: "creatureFeature",
+                system: {
+                    key: "creatureDarkvision60",
+                    abilityKind: "Ex",
+                    changes: [],
+                    cgsGrants: { grants: [], senses: [{ type: "darkvision", range: "60 ft" }] }
+                }
+            }),
+            update: vi.fn().mockResolvedValue(undefined)
+        };
+        const game = {
+            user: { isGM: true },
+            actors: [{ items: { values: () => [item] } }],
+            settings: {
+                get: (ns, k) => (ns === "thirdera" && k === "cgsGrantOverridesWorldMigrationRevision" ? settings.get(k) ?? 0 : 0),
+                set: vi.fn(async (ns, k, v) => {
+                    if (ns === "thirdera" && k === "cgsGrantOverridesWorldMigrationRevision") settings.set(k, v);
+                })
+            }
+        };
+        const out = await runCgsGrantOverridesWorldMigrationIfNeeded({ game });
+        expect(out.skipped).toBe(false);
+        expect(out.creatureFeaturesMigrated).toBe(1);
+        expect(item.update).toHaveBeenCalledTimes(1);
+        expect(item.update.mock.calls[0][0].system.key).toBe("creatureDarkvision");
+    });
 });

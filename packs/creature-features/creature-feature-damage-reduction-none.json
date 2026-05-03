@@ -1,0 +1,25 @@
+{
+  "name": "Thick Hide",
+  "type": "creatureFeature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "key": "creatureDamageReductionNone",
+    "description": "<p><strong>What it does (SRD):</strong> Thick hide or similar quality gives <strong>damage reduction</strong> with <strong>no bypass</strong> (e.g. DR 2/—).</p><p><strong>ThirdEra:</strong> Canonical template uses value <strong>0</strong> on the DR grant; set the real value under <strong>CGS parameters and overrides</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "damageReduction",
+          "value": 0,
+          "bypass": "",
+          "label": "Damage reduction (no bypass); value from overrides."
+        }
+      ],
+      "senses": []
+    },
+    "cgsGrantOverrides": { "grants": [], "senses": [] }
+  },
+  "flags": {},
+  "folder": null
+}
