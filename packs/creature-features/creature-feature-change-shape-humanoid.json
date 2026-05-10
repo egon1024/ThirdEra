@@ -1,0 +1,17 @@
+{
+  "name": "Change Shape",
+  "type": "creatureFeature",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "key": "creatureChangeShapeHumanoid",
+    "description": "<p><strong>Change Shape (Su):</strong> The creature can assume the form of any Small or Medium humanoid unless its stat block specifies otherwise.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

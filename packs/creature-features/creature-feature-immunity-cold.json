@@ -1,0 +1,23 @@
+{
+  "name": "Cold Immunity",
+  "type": "creatureFeature",
+  "img": "icons/svg/mountain.svg",
+  "system": {
+    "key": "creatureImmunityCold",
+    "description": "<p><strong>SRD:</strong> The creature is immune to <strong>cold</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "cold",
+          "label": "Immune to cold."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

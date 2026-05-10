@@ -160,11 +160,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are particularly observant.</p>",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -191,7 +191,36 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 48
+    },
+    {
+      "name": "Combat Casting",
+      "type": "feat",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "description": "<p>You are adept at casting spells in melee.</p>",
+        "key": "combatCasting",
+        "type": "General",
+        "fighterBonusEligible": "false",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on Concentration checks made to cast a spell or use a spell-like ability while on the defensive or while you are grappling or pinned.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
     },
     {
       "name": "Iron Will",
@@ -225,17 +254,17 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 50
     },
     {
-      "name": "Listen",
+      "name": "Concentration",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/aura.svg",
       "system": {
-        "description": "",
-        "key": "listen",
-        "ability": "wis",
-        "ranks": 13,
+        "description": "<p>Make a Concentration check whenever you might be distracted (by taking damage, by harsh weather, and so on) while engaged in some action that requires your full attention.</p>",
+        "key": "concentration",
+        "ability": "con",
+        "ranks": 11,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -250,11 +279,55 @@
       "sort": 101
     },
     {
+      "name": "Knowledge (Arcana) (any one)",
+      "type": "skill",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "<p>Ancient mysteries, magic traditions, arcane symbols, cryptic phrases, constructs, dragons, magical beasts. Like other Knowledge skills, each Knowledge field is a separate skill with its own ranks.</p>",
+        "key": "knowledge-arcana",
+        "ability": "int",
+        "ranks": 11,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "true",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 13,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
       "name": "Spot",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
         "ranks": 13,
@@ -269,29 +342,65 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 102
+      "sort": 104
     },
     {
       "name": "Swim",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/waterfall.svg",
       "system": {
-        "description": "",
+        "description": "<p>Make a Swim check once per round while you are in the water. Success means you may swim at up to one-half your speed (as a full-round action) or at one-quarter your speed (as a move action).</p>",
         "key": "swim",
         "ability": "str",
-        "ranks": 8,
+        "ranks": 0,
         "modifier": {
           "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
-      "sort": 103
+      "sort": 105
+    },
+    {
+      "name": "Enslave",
+      "type": "creatureFeature",
+      "img": "icons/svg/padlock.svg",
+      "system": {
+        "key": "creatureEnslave",
+        "description": "<p><strong>Enslave (Su):</strong> Three times per day, the aboleth can attempt to enslave any creature within 30 feet (Will negates, DC as listed in the creature’s statistics).</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Mucus Cloud",
+      "type": "creatureFeature",
+      "img": "icons/svg/poison.svg",
+      "system": {
+        "key": "creatureMucusCloud",
+        "description": "<p><strong>Mucus Cloud (Ex):</strong> While underwater, an aboleth exudes a cloud of transparent slime. Contact can cause inability to breathe air and other effects per the SRD.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
     }
   ],
   "flags": {},

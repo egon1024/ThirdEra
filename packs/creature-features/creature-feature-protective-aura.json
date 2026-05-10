@@ -1,0 +1,17 @@
+{
+  "name": "Protective Aura",
+  "type": "creatureFeature",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "key": "creatureProtectiveAura",
+    "description": "<p><strong>Protective Aura (Su):</strong> Against attacks made or effects created by evil creatures, this ability provides a <strong>+4 deflection</strong> bonus to AC and a <strong>+4 resistance</strong> bonus on saving throws to anyone within <strong>20 feet</strong> of the angel. Otherwise, it functions as <em>magic circle against evil</em> and <em>lesser globe of invulnerability</em>, both with a radius of 20 feet (caster level equals the angel’s HD). The aura can be dispelled; the angel can recreate it as a free action on its next turn. Defensive benefits from the circle are not included in the printed statistics block.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

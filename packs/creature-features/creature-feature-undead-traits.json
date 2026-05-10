@@ -1,0 +1,78 @@
+{
+  "name": "Undead Traits",
+  "type": "creatureFeature",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "key": "creatureUndeadTraits",
+    "description": "<p><strong>SRD (undead type):</strong> Immune to mind-affecting, poison, sleep, paralysis, stunning, disease, and death effects; not subject to critical hits, nonlethal damage, ability drain, fatigue/exhaustion, or energy drain; uses Charisma for Concentration; darkvision as listed.</p><p><strong>ThirdEra:</strong> Matching typed grants are under <strong>Capability grants</strong>. Mindless undead need additional handling for skills/will (stat block). Many necromancy effects still interact — track exceptions on specific monsters.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "mindAffecting",
+          "label": "Immune to mind-affecting (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "poison",
+          "label": "Immune to poison (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "disease",
+          "label": "Immune to disease (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "sleep",
+          "label": "Immune to sleep (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "paralysis",
+          "label": "Immune to paralysis (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "stunning",
+          "label": "Immune to stunning (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "death",
+          "label": "Immune to death effects (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "criticalHits",
+          "label": "Not subject to critical hits (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "abilityDamage",
+          "label": "Immune to ability damage (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "abilityDrain",
+          "label": "Immune to ability drain (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "exhaustion",
+          "label": "Immune to fatigue/exhaustion (undead traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "energyDrain",
+          "label": "Immune to energy drain (undead traits)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Earth Mastery",
+  "type": "creatureFeature",
+  "img": "icons/svg/mountain.svg",
+  "system": {
+    "key": "creatureEarthMastery",
+    "description": "<p><strong>Earth mastery (Ex):</strong> +1 bonus on attack and damage rolls if both the elemental and its foe are touching the ground. If an opponent is airborne or waterborne, the elemental takes a <strong>−4 penalty</strong> on attack and damage rolls (SRD — modifiers not baked into the printed stat block).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

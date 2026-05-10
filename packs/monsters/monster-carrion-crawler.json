@@ -189,70 +189,22 @@
       "sort": 0
     },
     {
-      "name": "Climb",
-      "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "name": "Carrion Crawler — Paralysis",
+      "type": "creatureFeature",
+      "img": "icons/svg/poison.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
-        "key": "climb",
-        "ability": "str",
-        "ranks": 4,
-        "modifier": {
-          "misc": 0,
-          "total": 0
-        },
-        "trainedOnly": "false",
-        "armorCheckPenalty": "true",
-        "exclusive": "false",
-        "npcClassSkill": true
+        "key": "creatureCarrionCrawlerSpecial",
+        "description": "<p><strong>Paralysis (Ex):</strong> Tentacle hits deliver paralysis poison — Fort DC and duration per statistics.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
       },
       "flags": {},
       "folder": null,
-      "sort": 101
-    },
-    {
-      "name": "Listen",
-      "type": "skill",
-      "img": "icons/svg/eye.svg",
-      "system": {
-        "description": "<p>SRD skill.</p>",
-        "key": "listen",
-        "ability": "wis",
-        "ranks": 4,
-        "modifier": {
-          "misc": 0,
-          "total": 0
-        },
-        "trainedOnly": "false",
-        "armorCheckPenalty": "false",
-        "exclusive": "false",
-        "npcClassSkill": true
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 102
-    },
-    {
-      "name": "Spot",
-      "type": "skill",
-      "img": "icons/svg/eye.svg",
-      "system": {
-        "description": "<p>SRD skill.</p>",
-        "key": "spot",
-        "ability": "wis",
-        "ranks": 4,
-        "modifier": {
-          "misc": 0,
-          "total": 0
-        },
-        "trainedOnly": "false",
-        "armorCheckPenalty": "false",
-        "exclusive": "false",
-        "npcClassSkill": true
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 103
+      "sort": 120
     }
   ],
   "flags": {},

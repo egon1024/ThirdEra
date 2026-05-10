@@ -1,0 +1,17 @@
+{
+  "name": "Earth Glide & Push",
+  "type": "creatureFeature",
+  "img": "icons/svg/mountain.svg",
+  "system": {
+    "key": "creatureEarthGlidePush",
+    "description": "<p><strong>Push (Ex):</strong> Can start a bull rush without provoking an attack of opportunity; earth mastery modifiers apply to opposed Strength checks.</p><p><strong>Earth glide (Ex):</strong> Burrow through earth and stone (not metal) without leaving a tunnel; <em>move earth</em> may fling the elemental back and stun it on a failed Fortitude save (SRD).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

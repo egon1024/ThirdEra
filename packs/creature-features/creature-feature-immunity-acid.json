@@ -1,0 +1,23 @@
+{
+  "name": "Acid Immunity",
+  "type": "creatureFeature",
+  "img": "icons/svg/acid.svg",
+  "system": {
+    "key": "creatureImmunityAcid",
+    "description": "<p><strong>SRD:</strong> Immune to <strong>acid</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "acid",
+          "label": "Immune to acid."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

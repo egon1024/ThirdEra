@@ -1,0 +1,40 @@
+{
+  "name": "Devil Traits",
+  "type": "creatureFeature",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "key": "creatureDevilTraits",
+    "description": "<p><strong>SRD (devil subtype):</strong> Immunity to <strong>fire</strong> and <strong>poison</strong>; resistance to <strong>acid 10</strong> and <strong>cold 10</strong>; see in darkness, telepathy, and summon noted in the creature entry.</p><p><strong>ThirdEra:</strong> Typed immunities and energy resistance rows are under <strong>Capability grants</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "fire",
+          "label": "Immune to fire (devil traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "poison",
+          "label": "Immune to poison (devil traits)."
+        },
+        {
+          "category": "energyResistance",
+          "energyType": "acid",
+          "amount": 10,
+          "label": "Resist acid 10 (devil traits)."
+        },
+        {
+          "category": "energyResistance",
+          "energyType": "cold",
+          "amount": 10,
+          "label": "Resist cold 10 (devil traits)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

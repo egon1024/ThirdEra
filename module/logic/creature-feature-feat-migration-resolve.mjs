@@ -9,7 +9,7 @@ import path from "path";
  * @property {string} monsterKey - NPC `system.key`
  * @property {string} oldFeatKey
  * @property {string} newCreatureFeatureKey
- * @property {string} [monsterPackBasename] - e.g. `"monster-ape-dire.json"` (basename only; must stay under `monstersDir`)
+ * @property {string} [monsterPackBasename] - e.g. `"monster-dire-ape.json"` (basename only; must stay under `monstersDir`)
  * @property {string} [note]
  *
  * @param {CreatureFeatureFeatMigrationManifestRow} row

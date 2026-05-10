@@ -1,0 +1,33 @@
+{
+  "name": "Angel Traits — Immunities",
+  "type": "creatureFeature",
+  "img": "icons/svg/bones.svg",
+  "system": {
+    "key": "creatureAngelImmunities",
+    "description": "<p><strong>SRD (angel traits):</strong> Immunity to <strong>acid</strong>, <strong>cold</strong>, and <strong>petrification</strong>.</p><p><strong>ThirdEra:</strong> Typed immunities are listed under <strong>Capability grants</strong> on this item.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "acid",
+          "label": "Immune to acid (angel traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "cold",
+          "label": "Immune to cold (angel traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "petrification",
+          "label": "Immune to petrification (angel traits)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

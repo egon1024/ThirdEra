@@ -1,0 +1,17 @@
+{
+  "name": "Tongues",
+  "type": "creatureFeature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "key": "creatureTonguesConstant",
+    "description": "<p><strong>Tongues (Su):</strong> The creature can speak with any creature that has a language, as though using a <em>tongues</em> spell; caster level equals its Hit Dice. This ability is always active.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

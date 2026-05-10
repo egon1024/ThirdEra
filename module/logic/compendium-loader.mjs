@@ -42,6 +42,124 @@ function getStableKey(doc) {
 /** Reserved `system.key` values for removed pack scaffolding or superseded seeds (no longer shipped in JSON). */
 export const OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS = new Set(["creatureFeaturePlaceholder", "creatureAlertness"]);
 
+/**
+ * Letter-"A" creatures embed these templates on monster JSON only; bundled creature-features pack omits them.
+ * Purge removes stale compendium rows left from older releases.
+ */
+export const LETTER_A_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureAasimarEnergyResistances",
+    "creatureAcidSpray",
+    "creatureAirMephitSpells",
+    "creatureBabble",
+    "creatureBlackCloud",
+    "creatureBreathWeaponAirMephit",
+    "creatureElectricityRay",
+    "creatureEnslave",
+    "creatureFastHealingAirMephit",
+    "creatureHeatAzer",
+    "creatureImmunityElectricityPetrification",
+    "creatureMucusCloud",
+    "creatureSpellsAndrosphinx",
+    "creatureSpellsAnnis",
+    "creatureSpellsAranea",
+    "creatureSpellsAstralDeva",
+    "creatureSpellsAvoral",
+    "creatureSpellsPlanetar",
+    "creatureSpellsSolar",
+    "creatureStunMaceAstralDeva"
+]);
+
+/** Letter-"B" embed-only templates (`scripts/data/embed-only-creature-features-letter-b.json`). */
+export const LETTER_B_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureBabauSpecial",
+    "creatureBalorSpecial",
+    "creatureBarbedDevilSpecial",
+    "creatureBarghestSpecial",
+    "creatureBasiliskSpecial",
+    "creatureBeardedDevilSpecial",
+    "creatureBebilithSpecial",
+    "creatureBehirSpecial",
+    "creatureBelkerSpecial",
+    "creatureBlackPuddingSpecial",
+    "creatureBlinkDogSpecial",
+    "creatureBoneDevilSpecial",
+    "creatureBralaniSpells",
+    "creatureBuletteSpecial",
+    "creatureDragonCoreTraits",
+    "creatureSpellsBlackDragon",
+    "creatureSpellsBlueDragon",
+    "creatureSpellsBrassDragon",
+    "creatureSpellsBronzeDragon"
+]);
+
+/** Letter-"C" embed-only templates (`scripts/data/embed-only-creature-features-letter-c.json`). */
+export const LETTER_C_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureCarrionCrawlerSpecial",
+    "creatureCauchemarSpecial",
+    "creatureCentipedeSwarmSpecial",
+    "creatureChainDevilKytonSpecial",
+    "creatureChaosBeastSpecial",
+    "creatureChimeraSpecial",
+    "creatureChokerSpecial",
+    "creatureChuulSpecial",
+    "creatureClayGolemSpecial",
+    "creatureCloakerSpecial",
+    "creatureCloudGiantSpecial",
+    "creatureCockatriceSpecial",
+    "creatureCouatlSpecial",
+    "creatureCriosphinxSpecial",
+    "creatureCryohydraSpecial",
+    "creatureSpellsCopperDragon"
+]);
+
+/** Letter-"D" embed-only templates (`scripts/data/embed-only-creature-features-letter-d.json`). */
+export const LETTER_D_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureBreathWeaponDustMephit",
+    "creatureDarkmantleSpecial",
+    "creatureDarkNagaSpecial",
+    "creatureDelverSpecial",
+    "creatureDerroSpecial",
+    "creatureDestrachanSpecial",
+    "creatureDevourerSpecial",
+    "creatureDigesterSpecial",
+    "creatureDisplacerBeastSpecial",
+    "creatureDjinniSpecial",
+    "creatureDoppelgangerSpecial",
+    "creatureDragonneSpecial",
+    "creatureDragonTurtleSpecial",
+    "creatureDriderSpecial",
+    "creatureDretchSpecial",
+    "creatureDryadSpecial",
+    "creatureDustMephitSpells",
+    "creatureFastHealingDustMephit"
+]);
+
+/** Letter-"E" embed-only templates (`scripts/data/embed-only-creature-features-letter-e.json`). */
+export const LETTER_E_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureBreathWeaponEarthMephit",
+    "creatureEarthMephitChangeSize",
+    "creatureEarthMephitSpells",
+    "creatureEfreetiSpecial",
+    "creatureErinyesSpecial",
+    "creatureEtherealFilcherSpecial",
+    "creatureEtherealMarauderSpecial",
+    "creatureEttercapSpecial",
+    "creatureEttinSpecial",
+    "creatureFastHealingEarthMephit",
+    "creatureGiantEagleSpecial"
+]);
+
+/** Letter-"F" embed-only templates (`scripts/data/embed-only-creature-features-letter-f.json`). */
+export const LETTER_F_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureBreathWeaponFireMephit",
+    "creatureFastHealingFireMephit",
+    "creatureFireMephitSpells",
+    "creatureFleshGolemSpecial",
+    "creatureFormianColdPetrifyImmunities",
+    "creatureFormianSpecial",
+    "creatureFrostWormSpecial"
+]);
+
 /** @type {Set<string> | null} */
 let _creatureFeatureCompendiumPurgeKeys = null;
 
@@ -54,7 +172,13 @@ export function getCreatureFeatureCompendiumPurgeKeys() {
     if (!_creatureFeatureCompendiumPurgeKeys) {
         _creatureFeatureCompendiumPurgeKeys = new Set([
             ...OBSOLETE_CREATURE_FEATURE_COMPENDIUM_KEYS,
-            ...getLegacyCreatureFeatureKeysForConsolidation()
+            ...getLegacyCreatureFeatureKeysForConsolidation(),
+            ...LETTER_A_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_B_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_C_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_D_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_E_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_F_EMBED_ONLY_CREATURE_FEATURE_KEYS
         ]);
     }
     return _creatureFeatureCompendiumPurgeKeys;
@@ -428,34 +552,60 @@ export class CompendiumLoader {
             "subtype-orc.json", "subtype-reptilian.json", "subtype-shapechanger.json", "subtype-swarm.json", "subtype-water.json"
         ],
         "thirdera.thirdera_creature_features": [
-            "creature-feature-blindsight.json",
+            "creature-feature-air-mastery.json",
+            "creature-feature-angel-immunities.json",
             "creature-feature-blindsense.json",
+            "creature-feature-blindsight.json",
             "creature-feature-blood-drain.json",
             "creature-feature-brute-blows.json",
             "creature-feature-chameleon-hide.json",
+            "creature-feature-change-shape-humanoid.json",
             "creature-feature-constrict.json",
+            "creature-feature-construct-traits.json",
             "creature-feature-damage-reduction-magic.json",
             "creature-feature-damage-reduction-none.json",
             "creature-feature-darkvision.json",
+            "creature-feature-daylight-sla.json",
+            "creature-feature-demon-traits.json",
+            "creature-feature-devil-traits.json",
+            "creature-feature-earth-elemental-movement.json",
+            "creature-feature-earth-mastery.json",
             "creature-feature-energy-resistance.json",
             "creature-feature-fast-healing.json",
-            "creature-feature-improved-grab.json",
+            "creature-feature-fear-aura.json",
+            "creature-feature-fire-burn.json",
+            "creature-feature-immunity-acid.json",
+            "creature-feature-immunity-cold.json",
             "creature-feature-immunity-disease.json",
+            "creature-feature-immunity-electricity.json",
+            "creature-feature-immunity-fire.json",
             "creature-feature-immunity-paralysis.json",
             "creature-feature-immunity-sleep.json",
             "creature-feature-immunity-stunning.json",
+            "creature-feature-improved-grab.json",
             "creature-feature-keen-senses-initiative.json",
+            "creature-feature-lay-on-hands.json",
             "creature-feature-low-light-vision.json",
+            "creature-feature-mephit-combat-traits.json",
             "creature-feature-multiattack.json",
             "creature-feature-poison-immunity.json",
             "creature-feature-pounce.json",
+            "creature-feature-protective-aura.json",
             "creature-feature-rake.json",
             "creature-feature-reflexive-dodge.json",
             "creature-feature-rend.json",
+            "creature-feature-rock-throwing.json",
             "creature-feature-scent-ability.json",
+            "creature-feature-speak-with-animals.json",
+            "creature-feature-summon-mephit.json",
             "creature-feature-swallow-whole.json",
+            "creature-feature-tongues-constant.json",
             "creature-feature-trample.json",
-            "creature-feature-tremorsense.json"
+            "creature-feature-tremorsense.json",
+            "creature-feature-true-seeing.json",
+            "creature-feature-undead-traits.json",
+            "creature-feature-web-ex.json",
+            "creature-feature-whirlwind-elemental.json"
         ],
         "thirdera.thirdera_monsters": [
             "monster-aasimar.json",
@@ -471,13 +621,11 @@ export class CompendiumLoader {
             "monster-air-mephit.json",
             "monster-allip.json",
             "monster-androsphinx.json",
-            "monster-angel-astral-deva.json",
             "monster-angel-planetar.json",
             "monster-angel-solar.json",
             "monster-animated-object.json",
             "monster-ankheg.json",
             "monster-annis.json",
-            "monster-ape-dire.json",
             "monster-ape.json",
             "monster-aranea.json",
             "monster-arrowhawk.json",

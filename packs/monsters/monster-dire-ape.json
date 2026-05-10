@@ -47,7 +47,7 @@
       "size": "Large"
     },
     "statBlock": {
-      "naturalArmor": 4,
+      "naturalArmor": 3,
       "space": "10 ft",
       "reach": "10 ft",
       "movement": {
@@ -56,14 +56,21 @@
         "flyManeuverability": "",
         "swim": 0,
         "burrow": 0,
-        "climb": 15
+        "climb": 30
       },
       "naturalAttacks": [
         {
-          "name": "Bite",
-          "dice": "1d6+6",
+          "name": "Claw",
+          "dice": "1d8",
           "damageType": "slashing",
           "primary": "true",
+          "reach": ""
+        },
+        {
+          "name": "Bite",
+          "dice": "1d6",
+          "damageType": "piercing",
+          "primary": "false",
           "reach": ""
         }
       ],
@@ -73,37 +80,37 @@
       },
       "spellResistance": 0,
       "senses": [],
-      "specialAbilities": "<p><strong>Special Attacks:</strong> Rend 2d6+9</p><p><strong>Special Qualities:</strong> Low-light vision, scent</p><p>Imported from the d20 SRD; verify attacks and skills in-game. Full rules at d20srd.org.</p>",
+      "specialAbilities": "<p><strong>Rend (Ex):</strong> Two claw hits deal extra 2d6+12.</p><p><strong>Full attack:</strong> 2 claws +10, bite +5.</p>",
       "environment": "Warm forests",
-      "organization": "Solitary or company (5-8)",
+      "organization": "Solitary or troop (2-5)",
       "treasure": "None",
-      "advancement": "6-15 HD (Large)",
+      "advancement": "6-10 HD (Large)",
       "levelAdjustment": 0
     },
     "attributes": {
       "hp": {
-        "value": 35,
-        "max": 35,
+        "value": 30,
+        "max": 30,
         "temp": 0,
         "nonlethal": 0,
         "stable": false
       },
       "ac": {
         "value": 10,
-        "touch": 11,
-        "flatFooted": 13,
+        "touch": 12,
+        "flatFooted": 15,
         "misc": 0
       },
       "initiative": {
         "bonus": 2
       },
       "speed": {
-        "value": 30
+        "value": 40
       }
     },
     "saves": {
       "fort": {
-        "base": 6,
+        "base": 7,
         "total": 0
       },
       "ref": {
@@ -111,12 +118,12 @@
         "total": 0
       },
       "will": {
-        "base": 5,
+        "base": 2,
         "total": 0
       }
     },
     "combat": {
-      "bab": 3,
+      "bab": 4,
       "grapple": 0,
       "meleeAttack": {
         "misc": 0,
@@ -127,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>\n\tA dire ape stands about 9 feet tall and weighs from 800 to 1,200 pounds.\n</p>\n\n<h2>Combat</h2>\n<p>\n\tDire apes attack anything that enters their territory, even other dire apes. If an opponent’s armor foils a dire ape’s attacks, the creature will attempt to grapple and pin, then rend the prone opponent.\n</p>\n\n<h5>Rend (Ex)</h5>\n<p>\n\tA dire ape that hits with both claw attacks latches onto the opponent’s body and tears the flesh. This attack automatically deals an extra 2d6+9 points of damage.\n</p>\n\n<h5>Skills</h5>\n<p>\n\tDire apes have a +8 racial bonus on Climb checks and can always choose to take 10 on Climb checks, even if rushed or threatened.\n</p>",
+    "biography": "<p>Massive simian predators with crushing forelimbs.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -139,17 +146,214 @@
         {
           "type": "lowLight",
           "range": ""
-        },
-        {
-          "type": "scent",
-          "range": ""
         }
       ],
       "creatureTypeOverlayUuids": [],
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Toughness",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have enhanced physical stamina.</p>",
+        "key": "toughness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You gain +3 hit points. For every Hit Die beyond 3, you gain an additional +1 hit point. If you have more than 3 Hit Dice, you gain +1 hit points whenever you gain a Hit Die (such as when you gain a level).</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Climb",
+      "type": "skill",
+      "img": "icons/svg/mountain.svg",
+      "system": {
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
+        "key": "climb",
+        "ability": "str",
+        "ranks": 8,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Scent",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureScent",
+        "description": "<p><strong>What it does (SRD):</strong> <strong>Scent</strong> lets the creature detect opponents by smell, usually out to about <strong>30 ft.</strong> (strong scents farther, very weak scents closer). It can use scent to <strong>pinpoint</strong> a square once it is within 5 ft., and to <strong>track</strong> by Survival. Wind and water affect what it can smell.</p><p><strong>ThirdEra:</strong> Scent (<strong>30 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other senses; Survival checks to track by scent still use the normal skill rules unless you add separate bonuses elsewhere.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "scent",
+              "range": "30 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

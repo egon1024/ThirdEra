@@ -1,0 +1,17 @@
+{
+  "name": "Burn (Fire Elemental)",
+  "type": "creatureFeature",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "key": "creatureFireBurn",
+    "description": "<p><strong>Burn (Ex):</strong> Slam deals bludgeoning plus fire; Reflex save or catch fire (DC varies by size — see stat block / SRD table). Creatures striking with natural weapons or unarmed attacks take fire damage and may catch fire unless they save.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

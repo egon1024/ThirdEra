@@ -228,17 +228,17 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 48
     },
     {
-      "name": "Climb",
+      "name": "Appraise",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/coins.svg",
       "system": {
-        "description": "",
-        "key": "climb",
-        "ability": "str",
-        "ranks": 4,
+        "description": "<p>You can evaluate the monetary value of an object.</p>",
+        "key": "appraise",
+        "ability": "int",
+        "ranks": 5,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -253,12 +253,103 @@
       "sort": 101
     },
     {
-      "name": "Craft (armorsmithing)",
+      "name": "Climb",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/mountain.svg",
       "system": {
-        "description": "",
-        "key": "craft-armorsmithing",
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
+        "key": "climb",
+        "ability": "str",
+        "ranks": 0,
+        "modifier": {
+          "misc": -1,
+          "total": 0,
+          "miscLabel": "SRD total vs ability (sheet)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 0,
+        "modifier": {
+          "misc": -1,
+          "total": 0,
+          "miscLabel": "SRD total vs ability (sheet)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Jump",
+      "type": "skill",
+      "img": "icons/svg/jump.svg",
+      "system": {
+        "description": "<p>You can make running or standing jumps.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 0,
+        "modifier": {
+          "misc": -7,
+          "total": 0,
+          "miscLabel": "SRD total vs ability (sheet)"
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
         "ability": "int",
         "ranks": 5,
         "modifier": {
@@ -272,14 +363,14 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 102
+      "sort": 106
     },
     {
       "name": "Spot",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
         "ranks": 5,
@@ -294,7 +385,49 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 103
+      "sort": 107
+    },
+    {
+      "name": "Heat",
+      "type": "creatureFeature",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "key": "creatureHeatAzer",
+        "description": "<p><strong>Heat (Ex):</strong> An azer’s body is intensely hot; striking it with a metal weapon deals extra fire damage to the attacker per the SRD.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Fire Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "key": "creatureImmunityFire",
+        "description": "<p><strong>SRD:</strong> The creature is immune to <strong>fire</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "fire",
+              "label": "Immune to fire."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
     }
   ],
   "flags": {},

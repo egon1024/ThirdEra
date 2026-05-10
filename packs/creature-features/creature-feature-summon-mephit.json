@@ -1,0 +1,17 @@
+{
+  "name": "Summon Mephit",
+  "type": "creatureFeature",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "key": "creatureSummonMephit",
+    "description": "<p><strong>Summon Mephit (Sp):</strong> Once per day the mephit can attempt to summon another mephit of the same variety with a 25% chance of success; equivalent of a 2nd-level spell.</p>",
+    "abilityKind": "Sp",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

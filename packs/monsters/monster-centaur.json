@@ -147,70 +147,6 @@
   },
   "items": [
     {
-      "name": "Dodge",
-      "type": "feat",
-      "img": "icons/svg/shield.svg",
-      "system": {
-        "description": "<p>You are adept at dodging blows.</p>",
-        "key": "dodge",
-        "type": "General",
-        "fighterBonusEligible": "true",
-        "prerequisites": "Dex 13",
-        "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 13,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": []
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 2
-    },
-    {
-      "name": "Weapon Focus (hoof)",
-      "type": "feat",
-      "img": "icons/svg/sword.svg",
-      "system": {
-        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
-        "key": "weaponFocus",
-        "type": "General, Fighter",
-        "fighterBonusEligible": "true",
-        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
-        "benefit": "<p>+1 on attack rolls with hooves (SRD: Weapon Focus [hoof]).</p>",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 1,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 0,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": [],
-        "changes": [
-          {
-            "key": "attack",
-            "value": 1
-          }
-        ]
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 4
-    },
-    {
       "name": "Longsword",
       "type": "weapon",
       "img": "icons/svg/sword.svg",
@@ -273,14 +209,78 @@
       "sort": 1
     },
     {
+      "name": "Dodge",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You are adept at dodging blows.</p>",
+        "key": "dodge",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 13,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Weapon Focus",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
+        "key": "weaponFocus",
+        "type": "General, Fighter",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
+        "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 1,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "attack",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
       "name": "Listen",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 0,
+        "ranks": 2,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -297,9 +297,9 @@
     {
       "name": "Move Silently",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/walk.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
         "key": "moveSilently",
         "ability": "dex",
         "ranks": 2,
@@ -321,10 +321,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 0,
+        "ranks": 2,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -341,12 +341,12 @@
     {
       "name": "Survival",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/fire.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
         "key": "survival",
         "ability": "wis",
-        "ranks": 0,
+        "ranks": 1,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -359,6 +359,52 @@
       "flags": {},
       "folder": null,
       "sort": 104
+    },
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Scent",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureScent",
+        "description": "<p><strong>What it does (SRD):</strong> <strong>Scent</strong> lets the creature detect opponents by smell, usually out to about <strong>30 ft.</strong> (strong scents farther, very weak scents closer). It can use scent to <strong>pinpoint</strong> a square once it is within 5 ft., and to <strong>track</strong> by Survival. Wind and water affect what it can smell.</p><p><strong>ThirdEra:</strong> Scent (<strong>30 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other senses; Survival checks to track by scent still use the normal skill rules unless you add separate bonuses elsewhere.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "scent",
+              "range": "30 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
     }
   ],
   "flags": {},

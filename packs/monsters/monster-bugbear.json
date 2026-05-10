@@ -205,11 +205,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are particularly observant.</p>",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -236,7 +236,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 48
     },
     {
       "name": "Weapon Focus",
@@ -271,7 +271,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 49
     },
     {
       "name": "Climb",
@@ -281,7 +281,7 @@
         "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
         "key": "climb",
         "ability": "str",
-        "ranks": 2,
+        "ranks": 1,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -303,11 +303,10 @@
         "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
         "key": "hide",
         "ability": "dex",
-        "ranks": 0,
+        "ranks": 3,
         "modifier": {
-          "misc": 4,
-          "total": 0,
-          "miscLabel": "MM / size / racial (not auto on sheet)"
+          "misc": 0,
+          "total": 0
         },
         "trainedOnly": "false",
         "armorCheckPenalty": "true",
@@ -326,7 +325,7 @@
         "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 2,
+        "ranks": 4,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -348,7 +347,7 @@
         "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
         "key": "moveSilently",
         "ability": "dex",
-        "ranks": 2,
+        "ranks": 5,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -370,7 +369,7 @@
         "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 2,
+        "ranks": 4,
         "modifier": {
           "misc": 0,
           "total": 0

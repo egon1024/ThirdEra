@@ -1,0 +1,23 @@
+{
+  "name": "Fire Immunity",
+  "type": "creatureFeature",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "key": "creatureImmunityFire",
+    "description": "<p><strong>SRD:</strong> The creature is immune to <strong>fire</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "fire",
+          "label": "Immune to fire."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

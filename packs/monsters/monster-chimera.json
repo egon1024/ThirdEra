@@ -176,6 +176,73 @@
   },
   "items": [
     {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Hover",
+      "type": "feat",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "description": "<p>Stop in midair while flying and still take a full-round action or use natural attacks, a breath weapon, or spells.</p>",
+        "key": "hover",
+        "type": "General",
+        "fighterBonusEligible": "false",
+        "prerequisites": "Fly speed",
+        "benefit": "<p>When flying, the creature can halt its forward motion and hover in place as a move action. It can then fly in any direction, including straight down or straight up, at half speed, regardless of its maneuverability.</p><p>If a creature begins its turn hovering, it can hover in place for the turn and take a full-round action. A hovering creature cannot make wing attacks, but it can attack with all other limbs and appendages it could use in a full attack. The creature can instead use a breath weapon or cast a spell instead of making physical attacks, if it could normally do so.</p><p>If a creature of Large size or larger hovers within 20 feet of the ground in an area with lots of loose debris, the draft from its wings creates a hemispherical cloud with a radius of 60 feet. The winds so generated can snuff torches, small campfires, exposed lanterns, and other small, open flames of non-magical origin. Clear vision within the cloud is limited to 10 feet. Creatures have concealment at 15 to 20 feet (20% miss chance). At 25 feet or more, creatures have total concealment (50% miss chance, and opponents cannot use sight to locate the creature).</p><p>Those caught in the cloud must succeed on a Concentration check (DC 10 + 1/2 creature's HD) to cast a spell.</p>",
+        "special": "<p><strong>Normal:</strong> Without this feat, a creature must keep moving while flying unless it has perfect maneuverability.</p>",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
       "name": "Iron Will",
       "type": "feat",
       "img": "icons/svg/shield.svg",
@@ -210,35 +277,6 @@
       "sort": 50
     },
     {
-      "name": "Power Attack",
-      "type": "feat",
-      "img": "icons/svg/sword.svg",
-      "system": {
-        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
-        "key": "powerAttack",
-        "type": "General",
-        "fighterBonusEligible": "true",
-        "prerequisites": "Str 13",
-        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 0,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": []
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 51
-    },
-    {
       "name": "Multiattack",
       "type": "creatureFeature",
       "img": "icons/svg/sword.svg",
@@ -266,9 +304,8 @@
         "ability": "dex",
         "ranks": 0,
         "modifier": {
-          "misc": 6,
-          "total": 0,
-          "miscLabel": "MM / size / racial (not auto on sheet)"
+          "misc": 0,
+          "total": 0
         },
         "trainedOnly": "false",
         "armorCheckPenalty": "true",
@@ -322,6 +359,24 @@
       "flags": {},
       "folder": null,
       "sort": 103
+    },
+    {
+      "name": "Chimera — Breath Weapon & Heads",
+      "type": "creatureFeature",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "key": "creatureChimeraSpecial",
+        "description": "<p><strong>Breath weapon (Su):</strong> Dragon head breathes fire — damage, Reflex half, recharge interval per statistics.</p><p><strong>Multiple heads:</strong> Lion and goat bites and ram as listed in attack routine.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
     }
   ],
   "flags": {},

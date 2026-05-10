@@ -150,35 +150,6 @@
   },
   "items": [
     {
-      "name": "Dodge",
-      "type": "feat",
-      "img": "icons/svg/shield.svg",
-      "system": {
-        "description": "<p>You are adept at dodging blows.</p>",
-        "key": "dodge",
-        "type": "General",
-        "fighterBonusEligible": "true",
-        "prerequisites": "Dex 13",
-        "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
-        "special": "",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 13,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": []
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 48
-    },
-    {
       "name": "Flyby Attack",
       "type": "feat",
       "img": "icons/svg/wing.svg",
@@ -205,7 +176,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 49
+      "sort": 48
     },
     {
       "name": "Improved Initiative",
@@ -239,7 +210,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 49
     },
     {
       "name": "Weapon Finesse",
@@ -267,67 +238,23 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 50
     },
     {
-      "name": "Listen",
-      "type": "skill",
-      "img": "icons/svg/eye.svg",
-      "system": {
-        "description": "",
-        "key": "listen",
-        "ability": "wis",
-        "ranks": 3,
-        "modifier": {
-          "misc": 0,
-          "total": 0
-        },
-        "trainedOnly": "false",
-        "armorCheckPenalty": "false",
-        "exclusive": "false",
-        "npcClassSkill": true
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 101
-    },
-    {
-      "name": "Spot",
-      "type": "skill",
-      "img": "icons/svg/eye.svg",
-      "system": {
-        "description": "",
-        "key": "spot",
-        "ability": "wis",
-        "ranks": 4,
-        "modifier": {
-          "misc": 0,
-          "total": 0
-        },
-        "trainedOnly": "false",
-        "armorCheckPenalty": "false",
-        "exclusive": "false",
-        "npcClassSkill": true
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 102
-    },
-    {
-      "name": "Immunity to Sleep",
+      "name": "Immunity to Stunning",
       "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
+      "img": "icons/svg/daze.svg",
       "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creatureImmunityStunning",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
+              "tag": "stunning",
+              "label": "Immune to stunning (SRD)."
             }
           ],
           "senses": []
@@ -335,31 +262,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 100
-    },
-    {
-      "name": "Poison Immunity",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
-      "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "poison",
-              "label": "Immune to poison (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 99
+      "sort": 97
     },
     {
       "name": "Immunity to Paralysis",
@@ -386,20 +289,20 @@
       "sort": 98
     },
     {
-      "name": "Immunity to Stunning",
+      "name": "Poison Immunity",
       "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
+      "img": "icons/svg/biohazard.svg",
       "system": {
-        "key": "creatureImmunityStunning",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "stunning",
-              "label": "Immune to stunning (SRD)."
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
             }
           ],
           "senses": []
@@ -407,7 +310,111 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 97
+      "sort": 99
+    },
+    {
+      "name": "Immunity to Sleep",
+      "type": "creatureFeature",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "key": "creatureImmunitySleep",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 100
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Air Mastery",
+      "type": "creatureFeature",
+      "img": "icons/svg/lightning.svg",
+      "system": {
+        "key": "creatureAirMastery",
+        "description": "<p><strong>Air Mastery (Ex):</strong> Airborne creatures take a <strong>−1 penalty</strong> on attack and damage rolls against an air elemental.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Whirlwind",
+      "type": "creatureFeature",
+      "img": "icons/svg/lightning.svg",
+      "system": {
+        "key": "creatureWhirlwindElemental",
+        "description": "<p><strong>Whirlwind (Su):</strong> The elemental can transform into a whirlwind. Creatures caught take damage and may be lifted; Reflex half / avoid per the SRD elemental rules. <strong>Save DC</strong>, damage dice, and height vary by individual stat block—check this monster’s published numbers.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
     }
   ],
   "flags": {},

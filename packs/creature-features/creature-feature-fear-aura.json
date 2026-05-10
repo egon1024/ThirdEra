@@ -1,0 +1,17 @@
+{
+  "name": "Fear Aura",
+  "type": "creatureFeature",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "key": "creatureFearAura",
+    "description": "<p><strong>Fear Aura (Su):</strong> Creatures within radius that fail a Will save become frightened or shaken per the creature’s statistics.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

@@ -77,7 +77,7 @@
       "senses": [],
       "specialAbilities": "<p><strong>Constrict</strong> 3d6+5. <strong>Improved grab.</strong> <strong>Paralytic tentacles (Ex):</strong> Fort DC 19 or paralyzed 6 rounds. <strong>Amphibious.</strong> Immune to poison.</p>",
       "environment": "Temperate marshes",
-      "organization": "Solitary, pair, or pack (3\u20135)",
+      "organization": "Solitary, pair, or pack (3–5)",
       "treasure": "1/10 coins; 50% goods; standard items",
       "advancement": "",
       "levelAdjustment": 0
@@ -153,11 +153,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are particularly observant.</p>",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -184,7 +184,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 48
     },
     {
       "name": "Blind-Fight",
@@ -213,7 +213,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 49
     },
     {
       "name": "Combat Reflexes",
@@ -242,7 +242,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 1
+      "sort": 50
     },
     {
       "name": "Improved Initiative",
@@ -276,17 +276,17 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 8
+      "sort": 51
     },
     {
       "name": "Hide",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/invisible.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
         "key": "hide",
         "ability": "dex",
-        "ranks": 4,
+        "ranks": 10,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -305,10 +305,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 4,
+        "ranks": 9,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -327,10 +327,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 4,
+        "ranks": 9,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -347,24 +347,42 @@
     {
       "name": "Swim",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/waterfall.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make a Swim check once per round while you are in the water. Success means you may swim at up to one-half your speed (as a full-round action) or at one-quarter your speed (as a move action).</p>",
         "key": "swim",
         "ability": "str",
-        "ranks": 4,
+        "ranks": 8,
         "modifier": {
-          "misc": 8,
+          "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
       "sort": 104
+    },
+    {
+      "name": "Chuul — Paralytic Tentacles",
+      "type": "creatureFeature",
+      "img": "icons/svg/poison.svg",
+      "system": {
+        "key": "creatureChuulSpecial",
+        "description": "<p><strong>Paralytic tentacles (Ex):</strong> Contact poison on tentacle hits — Fort DC and paralysis duration per statistics.</p><p><strong>Amphibious:</strong> Can breathe air and water.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
     }
   ],
   "flags": {},

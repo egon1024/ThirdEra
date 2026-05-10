@@ -1,0 +1,25 @@
+{
+  "name": "Daylight",
+  "type": "creatureFeature",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "key": "creatureDaylightSla",
+    "description": "<p><strong>Daylight (Sp):</strong> Once per day as a caster level equal to 1st or the creature’s class levels, whichever is higher (per SRD).</p><p><strong>ThirdEra:</strong> A <strong>spell grant</strong> row references the <em>daylight</em> spell compendium entry by key for UUID resolution at load.</p>",
+    "abilityKind": "Sp",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "spellGrant",
+          "spellKey": "daylight",
+          "usesPerDay": 1,
+          "casterLevel": 1,
+          "label": "Daylight (Sp), 1/day"
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

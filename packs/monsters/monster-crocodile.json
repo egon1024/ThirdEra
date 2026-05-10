@@ -82,7 +82,7 @@
       "senses": [],
       "specialAbilities": "<p><strong>Improved grab (Ex)</strong> with bite. <strong>Hold breath (Ex).</strong> +8 racial Swim; can run while swimming in a straight line. *Hide +4 in water (included in misc).</p>",
       "environment": "Warm marshes",
-      "organization": "Solitary or colony (6\u201311)",
+      "organization": "Solitary or colony (6–11)",
       "treasure": "None",
       "advancement": "",
       "levelAdjustment": 0
@@ -134,7 +134,7 @@
         "total": 0
       }
     },
-    "biography": "<p>11\u201312-foot aggressive river predators.</p>",
+    "biography": "<p>11–12-foot aggressive river predators.</p>",
     "currency": {
       "pp": 0,
       "gp": 0,
@@ -158,11 +158,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are particularly observant.</p>",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -189,10 +189,10 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 48
     },
     {
-      "name": "Skill Focus (Hide)",
+      "name": "Skill Focus",
       "type": "feat",
       "img": "icons/svg/book.svg",
       "system": {
@@ -200,7 +200,7 @@
         "key": "skillFocus",
         "type": "General",
         "prerequisites": "",
-        "benefit": "<p>+3 on Hide checks (SRD: Skill Focus [Hide]).</p>",
+        "benefit": "<p>You get a +3 bonus on all checks involving the chosen skill.</p>",
         "special": "You can gain Skill Focus multiple times. Each time you take the feat, it applies to a new skill.",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -217,19 +217,19 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 49
     },
     {
       "name": "Hide",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/invisible.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
         "key": "hide",
         "ability": "dex",
-        "ranks": 2,
+        "ranks": 6,
         "modifier": {
-          "misc": 4,
+          "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
@@ -246,10 +246,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 2,
+        "ranks": 3,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -268,10 +268,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 2,
+        "ranks": 3,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -288,24 +288,70 @@
     {
       "name": "Swim",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/waterfall.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make a Swim check once per round while you are in the water. Success means you may swim at up to one-half your speed (as a full-round action) or at one-quarter your speed (as a move action).</p>",
         "key": "swim",
         "ability": "str",
-        "ranks": 2,
+        "ranks": 8,
         "modifier": {
-          "misc": 8,
+          "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
       "sort": 104
+    },
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Scent",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureScent",
+        "description": "<p><strong>What it does (SRD):</strong> <strong>Scent</strong> lets the creature detect opponents by smell, usually out to about <strong>30 ft.</strong> (strong scents farther, very weak scents closer). It can use scent to <strong>pinpoint</strong> a square once it is within 5 ft., and to <strong>track</strong> by Survival. Wind and water affect what it can smell.</p><p><strong>ThirdEra:</strong> Scent (<strong>30 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other senses; Survival checks to track by scent still use the normal skill rules unless you add separate bonuses elsewhere.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "scent",
+              "range": "30 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
     }
   ],
   "flags": {},

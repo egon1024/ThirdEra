@@ -1,0 +1,23 @@
+{
+  "name": "Electricity Immunity",
+  "type": "creatureFeature",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "key": "creatureImmunityElectricity",
+    "description": "<p><strong>SRD:</strong> Immune to <strong>electricity</strong>.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "electricity",
+          "label": "Immune to electricity."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

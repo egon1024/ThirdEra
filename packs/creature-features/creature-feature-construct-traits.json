@@ -1,0 +1,83 @@
+{
+  "name": "Construct Traits",
+  "type": "creatureFeature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "key": "creatureConstructTraits",
+    "description": "<p><strong>SRD (construct type):</strong> Immunity to mind-affecting effects, poison, sleep, paralysis, stunning, disease, death effects, and necromancy; not subject to critical hits, ability damage/drain, fatigue/exhaustion, or energy drain; cannot heal damage normally unless noted.</p><p><strong>ThirdEra:</strong> Matching typed rows are under <strong>Capability grants</strong>. Track nonlethal, healing limits, and construct-specific exceptions (e.g. golem <strong>Immunity to Magic</strong>) in the stat block or extra items.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "mindAffecting",
+          "label": "Immune to mind-affecting (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "poison",
+          "label": "Immune to poison (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "disease",
+          "label": "Immune to disease (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "sleep",
+          "label": "Immune to sleep (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "paralysis",
+          "label": "Immune to paralysis (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "stunning",
+          "label": "Immune to stunning (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "death",
+          "label": "Immune to death effects (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "necromancy",
+          "label": "Immune to necromancy effects (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "criticalHits",
+          "label": "Not subject to critical hits (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "abilityDamage",
+          "label": "Immune to ability damage (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "abilityDrain",
+          "label": "Immune to ability drain (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "exhaustion",
+          "label": "Immune to fatigue/exhaustion (construct traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "energyDrain",
+          "label": "Immune to energy drain (construct traits)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

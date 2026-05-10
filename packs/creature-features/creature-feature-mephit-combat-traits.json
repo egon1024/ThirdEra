@@ -1,0 +1,17 @@
+{
+  "name": "Mephit Combat Traits",
+  "type": "creatureFeature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "key": "creatureMephitCombatTraits",
+    "description": "<p><strong>Natural weapons:</strong> A mephit’s natural weapons are treated as magic weapons for overcoming damage reduction.</p><p><strong>Fast healing:</strong> See the separate <strong>Fast Healing</strong> creature feature for environmental conditions.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

@@ -1,0 +1,17 @@
+{
+  "name": "True Seeing",
+  "type": "creatureFeature",
+  "img": "icons/svg/eye.svg",
+  "system": {
+    "key": "creatureTrueSeeingConstant",
+    "description": "<p><strong>True Seeing (Su):</strong> Constant <em>true seeing</em> as the spell; range and caster level per statistics.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

@@ -696,7 +696,13 @@ const COMPENDIUM_MISSING_ICONS = new Set([
     "raven.svg",
     "run.svg",
     "camera.svg",
-    "wave.svg"
+    "wave.svg",
+    /** Not shipped in Foundry core `public/icons/svg` (ThirdEra pack authoring). */
+    "blob.svg",
+    "light-bulb.svg",
+    "skeleton.svg",
+    "smoke.svg",
+    "item-journal.svg"
 ]);
 
 function resolveIndexImgPaths(index) {

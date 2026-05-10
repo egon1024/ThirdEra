@@ -26,14 +26,14 @@ describe("resolveMonsterPackPathForMigration", () => {
         const out = resolveMonsterPackPathForMigration(
             {
                 monsterKey: "monsterDireApe",
-                monsterPackBasename: "monster-ape-dire.json",
+                monsterPackBasename: "monster-dire-ape.json",
                 oldFeatKey: "multiattack",
                 newCreatureFeatureKey: "creatureMultiattack"
             },
             new Map(),
             monstersDir
         );
-        expect(out).toEqual({ ok: true, fp: path.join(monstersDir, "monster-ape-dire.json") });
+        expect(out).toEqual({ ok: true, fp: path.join(monstersDir, "monster-dire-ape.json") });
     });
 
     it("rejects non-basename monsterPackBasename", () => {

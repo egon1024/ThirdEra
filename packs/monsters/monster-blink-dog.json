@@ -129,23 +129,84 @@
   },
   "items": [
     {
-      "name": "Dodge",
+      "name": "Iron Will",
       "type": "feat",
       "img": "icons/svg/shield.svg",
       "system": {
-        "description": "<p>You are adept at dodging blows.</p>",
-        "key": "dodge",
+        "description": "<p>You have a stronger will than normal.</p>",
+        "key": "ironWill",
         "type": "General",
-        "fighterBonusEligible": "true",
-        "prerequisites": "Dex 13",
-        "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Will saving throws.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
         "prerequisiteBAB": 0,
         "prerequisiteAbilityScores": {
           "str": 0,
-          "dex": 13,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveWill",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Run",
+      "type": "feat",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>You are swift of foot.</p>",
+        "key": "run",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>When running, you move five times your normal speed (if wearing medium, light, or no armor and carrying no more than a medium load) or four times your speed (if wearing heavy armor or carrying a heavy load). If you make a jump after a running start (see the Jump skill description), you gain a +4 bonus on your Jump check. While running, you retain your Dexterity bonus to AC.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Track",
+      "type": "feat",
+      "img": "icons/svg/footprint.svg",
+      "system": {
+        "description": "<p>You can follow the trails of creatures and characters across most types of terrain.</p>",
+        "key": "track",
+        "type": "General",
+        "prerequisites": "Survival 1 rank",
+        "benefit": "<p>To find tracks or to follow them for 1 hour requires a Survival check. You must make another Survival check every hour to continue following the tracks. The DC depends on the surface and the prevailing conditions.</p>",
+        "special": "A ranger automatically gains Track as a bonus feat at 1st level. He need not select it.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
           "con": 0,
           "int": 0,
           "wis": 0,
@@ -156,81 +217,6 @@
       "flags": {},
       "folder": null,
       "sort": 50
-    },
-    {
-      "name": "Mobility",
-      "type": "feat",
-      "img": "icons/svg/walk.svg",
-      "system": {
-        "description": "<p>You are skilled at dodging past opponents and avoiding their attacks.</p>",
-        "key": "mobility",
-        "type": "General",
-        "fighterBonusEligible": "true",
-        "prerequisites": "Dex 13, Dodge",
-        "benefit": "<p>You get a +4 dodge bonus to Armor Class against attacks of opportunity caused when you move out of or within a threatened area. A condition that makes you lose your Dexterity bonus to Armor Class (if any) also makes you lose dodge bonuses. Dodge bonuses stack with each other, unlike most types of bonuses.</p>",
-        "special": "A fighter may select Mobility as one of his fighter bonus feats.",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [
-          "dodge"
-        ],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 13,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": []
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 51
-    },
-    {
-      "name": "Listen",
-      "type": "skill",
-      "img": "icons/svg/eye.svg",
-      "system": {
-        "description": "",
-        "key": "listen",
-        "ability": "wis",
-        "ranks": 5,
-        "modifier": {
-          "misc": 0,
-          "total": 0
-        },
-        "trainedOnly": "false",
-        "armorCheckPenalty": "false",
-        "exclusive": "false",
-        "npcClassSkill": true
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 101
-    },
-    {
-      "name": "Spot",
-      "type": "skill",
-      "img": "icons/svg/eye.svg",
-      "system": {
-        "description": "",
-        "key": "spot",
-        "ability": "wis",
-        "ranks": 5,
-        "modifier": {
-          "misc": 0,
-          "total": 0
-        },
-        "trainedOnly": "false",
-        "armorCheckPenalty": "false",
-        "exclusive": "false",
-        "npcClassSkill": true
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 102
     },
     {
       "name": "Darkvision",
@@ -263,6 +249,134 @@
       "flags": {},
       "folder": null,
       "sort": 100
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Sense Motive",
+      "type": "skill",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "description": "<p>You can get a hunch about a social situation or read a person.</p>",
+        "key": "senseMotive",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Survival",
+      "type": "skill",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
+        "key": "survival",
+        "ability": "wis",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Blink Dog — Blink",
+      "type": "creatureFeature",
+      "img": "icons/svg/light.svg",
+      "system": {
+        "key": "creatureBlinkDogSpecial",
+        "description": "<p><strong>Blink (Su):</strong> As the <em>blink</em> spell, usable at will; caster level per statistics.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
     }
   ],
   "flags": {},

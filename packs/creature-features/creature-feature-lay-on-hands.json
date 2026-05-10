@@ -1,0 +1,17 @@
+{
+  "name": "Lay on Hands",
+  "type": "creatureFeature",
+  "img": "icons/svg/angel.svg",
+  "system": {
+    "key": "creatureLayOnHands",
+    "description": "<p><strong>Lay on Hands (Su):</strong> Heals damage per Hit Dice as the paladin class feature; can harm undead with a touch.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

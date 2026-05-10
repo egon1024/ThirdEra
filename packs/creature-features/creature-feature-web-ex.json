@@ -1,0 +1,17 @@
+{
+  "name": "Web",
+  "type": "creatureFeature",
+  "img": "icons/svg/net.svg",
+  "system": {
+    "key": "creatureWebEx",
+    "description": "<p><strong>Web (Ex):</strong> The creature can cast a web as a ranged touch attack (range increments and escape DC per the SRD/stat block).</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

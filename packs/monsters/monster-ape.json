@@ -158,11 +158,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are particularly observant.</p>",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -189,23 +189,51 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 48
+    },
+    {
+      "name": "Toughness",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have enhanced physical stamina.</p>",
+        "key": "toughness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You gain +3 hit points. For every Hit Die beyond 3, you gain an additional +1 hit point. If you have more than 3 Hit Dice, you gain +1 hit points whenever you gain a Hit Die (such as when you gain a level).</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
     },
     {
       "name": "Climb",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/mountain.svg",
       "system": {
-        "description": "",
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
         "key": "climb",
         "ability": "str",
-        "ranks": 6,
+        "ranks": 9,
         "modifier": {
           "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "false",
+        "armorCheckPenalty": "true",
         "exclusive": "false",
         "npcClassSkill": true
       },
@@ -218,10 +246,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 3,
+        "ranks": 5,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -240,10 +268,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 3,
+        "ranks": 5,
         "modifier": {
           "misc": 0,
           "total": 0

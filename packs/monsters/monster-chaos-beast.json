@@ -168,7 +168,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 2
+      "sort": 48
     },
     {
       "name": "Improved Initiative",
@@ -202,7 +202,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 8
+      "sort": 49
     },
     {
       "name": "Mobility",
@@ -233,17 +233,17 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 50
     },
     {
       "name": "Climb",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/mountain.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
         "key": "climb",
         "ability": "str",
-        "ranks": 4,
+        "ranks": 11,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -260,12 +260,12 @@
     {
       "name": "Escape Artist",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make an Escape Artist check to slip out of bonds or escape from a grapple.</p>",
         "key": "escapeArtist",
         "ability": "dex",
-        "ranks": 4,
+        "ranks": 11,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -282,12 +282,12 @@
     {
       "name": "Hide",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/invisible.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
         "key": "hide",
         "ability": "dex",
-        "ranks": 4,
+        "ranks": 11,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -304,12 +304,12 @@
     {
       "name": "Jump",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/jump.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>You can make running or standing jumps.</p>",
         "key": "jump",
         "ability": "str",
-        "ranks": 4,
+        "ranks": 7,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -328,10 +328,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 4,
+        "ranks": 11,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -350,10 +350,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
         "key": "search",
         "ability": "int",
-        "ranks": 4,
+        "ranks": 11,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -372,10 +372,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 4,
+        "ranks": 11,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -392,9 +392,9 @@
     {
       "name": "Survival",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/fire.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
         "key": "survival",
         "ability": "wis",
         "ranks": 0,
@@ -414,19 +414,19 @@
     {
       "name": "Tumble",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/jump.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>You can't use this skill if your speed has been reduced by armor, excess equipment, or loot.</p>",
         "key": "tumble",
         "ability": "dex",
-        "ranks": 4,
+        "ranks": 13,
         "modifier": {
           "misc": 0,
           "total": 0
         },
-        "trainedOnly": "false",
+        "trainedOnly": "true",
         "armorCheckPenalty": "true",
-        "exclusive": "false",
+        "exclusive": "true",
         "npcClassSkill": true
       },
       "flags": {},
@@ -436,9 +436,9 @@
     {
       "name": "Use Rope",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/item-bag.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Most tasks with a rope are relatively simple. The DCs for various tasks utilizing this skill are summarized on the table below.</p>",
         "key": "useRope",
         "ability": "dex",
         "ranks": 0,
@@ -447,13 +447,31 @@
           "total": 0
         },
         "trainedOnly": "false",
-        "armorCheckPenalty": "true",
+        "armorCheckPenalty": "false",
         "exclusive": "false",
         "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
       "sort": 110
+    },
+    {
+      "name": "Chaos Beast — Corporeal Instability",
+      "type": "creatureFeature",
+      "img": "icons/svg/mystery-man.svg",
+      "system": {
+        "key": "creatureChaosBeastSpecial",
+        "description": "<p><strong>Corporeal instability (Su):</strong> Touch Fort save or warp — confusion-like transformation stages until stabilization at DC and duration per SRD.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
     }
   ],
   "flags": {},

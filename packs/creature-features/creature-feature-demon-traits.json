@@ -1,0 +1,46 @@
+{
+  "name": "Demon Traits",
+  "type": "creatureFeature",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "key": "creatureDemonTraits",
+    "description": "<p><strong>SRD (demon subtype):</strong> Immunity to <strong>electricity</strong> and <strong>poison</strong>; resistance to <strong>acid 10</strong>, <strong>cold 10</strong>, and <strong>fire 10</strong>; summon and telepathy noted in the creature entry.</p><p><strong>ThirdEra:</strong> Typed immunities and energy resistance rows are listed under <strong>Capability grants</strong> on this item.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [
+        {
+          "category": "immunity",
+          "tag": "electricity",
+          "label": "Immune to electricity (demon traits)."
+        },
+        {
+          "category": "immunity",
+          "tag": "poison",
+          "label": "Immune to poison (demon traits)."
+        },
+        {
+          "category": "energyResistance",
+          "energyType": "acid",
+          "amount": 10,
+          "label": "Resist acid 10 (demon traits)."
+        },
+        {
+          "category": "energyResistance",
+          "energyType": "cold",
+          "amount": 10,
+          "label": "Resist cold 10 (demon traits)."
+        },
+        {
+          "category": "energyResistance",
+          "energyType": "fire",
+          "amount": 10,
+          "label": "Resist fire 10 (demon traits)."
+        }
+      ],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

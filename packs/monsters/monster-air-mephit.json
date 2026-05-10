@@ -150,34 +150,6 @@
   },
   "items": [
     {
-      "name": "Weapon Finesse",
-      "type": "feat",
-      "img": "icons/svg/sword.svg",
-      "system": {
-        "description": "<p>You are skilled at using light weapons.</p>",
-        "key": "weaponFinesse",
-        "type": "General",
-        "prerequisites": "Base attack bonus +1",
-        "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
-        "special": "Natural weapons are considered light weapons.",
-        "scalingTable": [],
-        "prerequisiteFeatKeys": [],
-        "prerequisiteBAB": 0,
-        "prerequisiteAbilityScores": {
-          "str": 0,
-          "dex": 0,
-          "con": 0,
-          "int": 0,
-          "wis": 0,
-          "cha": 0
-        },
-        "prerequisiteFeatUuids": []
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 50
-    },
-    {
       "name": "Dodge",
       "type": "feat",
       "img": "icons/svg/shield.svg",
@@ -204,14 +176,48 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 48
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
     },
     {
       "name": "Bluff",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/sound.svg",
       "system": {
-        "description": "",
+        "description": "<p>You know how to tell a lie.</p>",
         "key": "bluff",
         "ability": "cha",
         "ranks": 6,
@@ -229,14 +235,14 @@
       "sort": 101
     },
     {
-      "name": "Hide",
+      "name": "Diplomacy",
       "type": "skill",
-      "img": "icons/svg/book.svg",
+      "img": "icons/svg/coins.svg",
       "system": {
-        "description": "",
-        "key": "hide",
-        "ability": "dex",
-        "ranks": 3,
+        "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+        "key": "diplomacy",
+        "ability": "cha",
+        "ranks": 2,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -251,14 +257,14 @@
       "sort": 102
     },
     {
-      "name": "Listen",
+      "name": "Disguise",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/invisible.svg",
       "system": {
-        "description": "",
-        "key": "listen",
-        "ability": "wis",
-        "ranks": 6,
+        "description": "<p>You are skilled at changing your appearance.</p>",
+        "key": "disguise",
+        "ability": "cha",
+        "ranks": 0,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -273,11 +279,121 @@
       "sort": 103
     },
     {
+      "name": "Escape Artist",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Make an Escape Artist check to slip out of bonds or escape from a grapple.</p>",
+        "key": "escapeArtist",
+        "ability": "dex",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 10,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Intimidate",
+      "type": "skill",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can use this skill to frighten opponents or to get them to act in a way that benefits you.</p>",
+        "key": "intimidate",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 107
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 108
+    },
+    {
       "name": "Spot",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
         "ranks": 6,
@@ -292,7 +408,131 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 104
+      "sort": 109
+    },
+    {
+      "name": "Use Rope",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Most tasks with a rope are relatively simple. The DCs for various tasks utilizing this skill are summarized on the table below.</p>",
+        "key": "useRope",
+        "ability": "dex",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Mephit Combat Traits",
+      "type": "creatureFeature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "key": "creatureMephitCombatTraits",
+        "description": "<p><strong>Natural weapons:</strong> A mephit’s natural weapons are treated as magic weapons for overcoming damage reduction.</p><p><strong>Fast healing:</strong> See the separate <strong>Fast Healing</strong> creature feature for environmental conditions.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Breath Weapon (Air Mephit)",
+      "type": "creatureFeature",
+      "img": "icons/svg/lightning.svg",
+      "system": {
+        "key": "creatureBreathWeaponAirMephit",
+        "description": "<p><strong>Breath Weapon (Su):</strong> 15-foot cone of dust and grit; damage and chance of blindness per SRD air mephit entry. Typically usable once every 1d4 rounds.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Summon Mephit",
+      "type": "creatureFeature",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "key": "creatureSummonMephit",
+        "description": "<p><strong>Summon Mephit (Sp):</strong> Once per day the mephit can attempt to summon another mephit of the same variety with a 25% chance of success; equivalent of a 2nd-level spell.</p>",
+        "abilityKind": "Sp",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 122
+    },
+    {
+      "name": "Fast Healing (Air Mephit)",
+      "type": "creatureFeature",
+      "img": "icons/svg/heal.svg",
+      "system": {
+        "key": "creatureFastHealingAirMephit",
+        "description": "<p><strong>Fast Healing (Ex):</strong> An air mephit heals <strong>2</strong> hit points per round only while <strong>airborne</strong> (touching nothing solid—SRD).</p><p><strong>ThirdEra:</strong> No automated environmental gate yet—track healing at the table when the condition applies.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 123
+    },
+    {
+      "name": "Spell-Like Abilities (Air Mephit)",
+      "type": "creatureFeature",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "key": "creatureAirMephitSpells",
+        "description": "<p><strong>Spell-like abilities:</strong> <em>blur</em> 1/day (caster level 6th). Save DCs are Charisma-based where applicable.</p>",
+        "abilityKind": "Sp",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "spellGrant",
+              "spellKey": "blur",
+              "usesPerDay": 1,
+              "casterLevel": 6,
+              "label": "Blur (Sp), 1/day"
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 124
     }
   ],
   "flags": {

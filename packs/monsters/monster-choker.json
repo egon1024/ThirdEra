@@ -178,7 +178,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 8
+      "sort": 48
     },
     {
       "name": "Lightning Reflexes",
@@ -212,7 +212,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 49
     },
     {
       "name": "Stealthy",
@@ -250,19 +250,19 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 50
     },
     {
       "name": "Climb",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/mountain.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
         "key": "climb",
         "ability": "str",
-        "ranks": 4,
+        "ranks": 10,
         "modifier": {
-          "misc": 8,
+          "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
@@ -277,14 +277,14 @@
     {
       "name": "Hide",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/invisible.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
         "key": "hide",
         "ability": "dex",
-        "ranks": 4,
+        "ranks": 8,
         "modifier": {
-          "misc": 4,
+          "misc": 0,
           "total": 0
         },
         "trainedOnly": "false",
@@ -299,12 +299,12 @@
     {
       "name": "Move Silently",
       "type": "skill",
-      "img": "icons/svg/eye.svg",
+      "img": "icons/svg/walk.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
         "key": "moveSilently",
         "ability": "dex",
-        "ranks": 2,
+        "ranks": 4,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -317,6 +317,24 @@
       "flags": {},
       "folder": null,
       "sort": 103
+    },
+    {
+      "name": "Choker — Quickness & Grab",
+      "type": "creatureFeature",
+      "img": "icons/svg/net.svg",
+      "system": {
+        "key": "creatureChokerSpecial",
+        "description": "<p><strong>Quickness (Su):</strong> Extra partial action or equivalent initiative trickery per SRD.</p><p><strong>Improved grab:</strong> Tentacle attacks may start grapples.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
     }
   ],
   "flags": {},

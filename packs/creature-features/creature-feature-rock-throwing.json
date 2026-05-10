@@ -1,0 +1,17 @@
+{
+  "name": "Rock Throwing",
+  "type": "creatureFeature",
+  "img": "icons/svg/mountain.svg",
+  "system": {
+    "key": "creatureRockThrowing",
+    "description": "<p><strong>Rock Throwing (Ex):</strong> The creature is an accomplished rock thrower and has a range increment as listed in its statistics.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

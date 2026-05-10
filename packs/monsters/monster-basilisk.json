@@ -151,6 +151,44 @@
   },
   "items": [
     {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
       "name": "Blind-Fight",
       "type": "feat",
       "img": "icons/svg/invisible.svg",
@@ -177,7 +215,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 49
     },
     {
       "name": "Great Fortitude",
@@ -211,7 +249,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 50
     },
     {
       "name": "Hide",
@@ -221,11 +259,10 @@
         "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
         "key": "hide",
         "ability": "dex",
-        "ranks": 0,
+        "ranks": 1,
         "modifier": {
-          "misc": 8,
-          "total": 0,
-          "miscLabel": "Large (Hide) + MM total (size not auto)"
+          "misc": 0,
+          "total": 0
         },
         "trainedOnly": "false",
         "armorCheckPenalty": "true",
@@ -244,7 +281,7 @@
         "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 5,
+        "ranks": 6,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -279,6 +316,24 @@
       "flags": {},
       "folder": null,
       "sort": 103
+    },
+    {
+      "name": "Basilisk — Petrifying Gaze",
+      "type": "creatureFeature",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "key": "creatureBasiliskSpecial",
+        "description": "<p><strong>Petrifying gaze (Su):</strong> Range and Fortitude DC per statistics; turning to stone on failed saves per SRD basilisk rules.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
     }
   ],
   "flags": {},

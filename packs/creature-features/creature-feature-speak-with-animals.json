@@ -1,0 +1,17 @@
+{
+  "name": "Speak with Animals",
+  "type": "creatureFeature",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "key": "creatureSpeakWithAnimals",
+    "description": "<p><strong>Speak with Animals (Su):</strong> The creature can use <em>speak with animals</em> at will.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

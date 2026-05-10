@@ -1,0 +1,17 @@
+{
+  "name": "Air Mastery",
+  "type": "creatureFeature",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "key": "creatureAirMastery",
+    "description": "<p><strong>Air Mastery (Ex):</strong> Airborne creatures take a <strong>−1 penalty</strong> on attack and damage rolls against an air elemental.</p>",
+    "abilityKind": "Ex",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

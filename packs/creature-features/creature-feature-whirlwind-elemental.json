@@ -1,0 +1,17 @@
+{
+  "name": "Whirlwind",
+  "type": "creatureFeature",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "key": "creatureWhirlwindElemental",
+    "description": "<p><strong>Whirlwind (Su):</strong> The elemental can transform into a whirlwind. Creatures caught take damage and may be lifted; Reflex half / avoid per the SRD elemental rules. <strong>Save DC</strong>, damage dice, and height vary by individual stat block—check this monster’s published numbers.</p>",
+    "abilityKind": "Su",
+    "changes": [],
+    "cgsGrants": {
+      "grants": [],
+      "senses": []
+    }
+  },
+  "flags": {},
+  "folder": null
+}

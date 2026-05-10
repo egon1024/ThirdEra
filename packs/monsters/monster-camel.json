@@ -73,9 +73,9 @@
       },
       "spellResistance": 0,
       "senses": [],
-      "specialAbilities": "<p><strong>Bite:</strong> Secondary attack; half Str bonus to damage.</p><p><strong>Carrying capacity:</strong> Light load up to 300 lb.; medium 301\u2013600; heavy 601\u2013900; drag 4,500 lb.</p>",
+      "specialAbilities": "<p><strong>Bite:</strong> Secondary attack; half Str bonus to damage.</p><p><strong>Carrying capacity:</strong> Light load up to 300 lb.; medium 301–600; heavy 601–900; drag 4,500 lb.</p>",
       "environment": "Warm deserts",
-      "organization": "Domesticated or herd (6\u201330)",
+      "organization": "Domesticated or herd (6–30)",
       "treasure": "None",
       "advancement": "",
       "levelAdjustment": 0
@@ -155,11 +155,11 @@
       "type": "feat",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "",
+        "description": "<p>You are particularly observant.</p>",
         "key": "alertness",
         "type": "General",
         "prerequisites": "",
-        "benefit": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
         "special": "",
         "scalingTable": [],
         "prerequisiteFeatKeys": [],
@@ -186,7 +186,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 48
     },
     {
       "name": "Endurance",
@@ -214,17 +214,17 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 0
+      "sort": 49
     },
     {
       "name": "Listen",
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 2,
+        "ranks": 5,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -243,10 +243,10 @@
       "type": "skill",
       "img": "icons/svg/eye.svg",
       "system": {
-        "description": "<p>SRD skill.</p>",
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 2,
+        "ranks": 5,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -259,6 +259,52 @@
       "flags": {},
       "folder": null,
       "sort": 102
+    },
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Scent",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureScent",
+        "description": "<p><strong>What it does (SRD):</strong> <strong>Scent</strong> lets the creature detect opponents by smell, usually out to about <strong>30 ft.</strong> (strong scents farther, very weak scents closer). It can use scent to <strong>pinpoint</strong> a square once it is within 5 ft., and to <strong>track</strong> by Survival. Wind and water affect what it can smell.</p><p><strong>ThirdEra:</strong> Scent (<strong>30 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other senses; Survival checks to track by scent still use the normal skill rules unless you add separate bonuses elsewhere.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "scent",
+              "range": "30 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
     }
   ],
   "flags": {},
