@@ -153,7 +153,142 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Track",
+      "type": "feat",
+      "img": "icons/svg/footprint.svg",
+      "system": {
+        "description": "<p>You can follow the trails of creatures and characters across most types of terrain.</p>",
+        "key": "track",
+        "type": "General",
+        "prerequisites": "Survival 1 rank",
+        "benefit": "<p>To find tracks or to follow them for 1 hour requires a Survival check. You must make another Survival check every hour to continue following the tracks. The DC depends on the surface and the prevailing conditions.</p>",
+        "special": "A ranger automatically gains Track as a bonus feat at 1st level. He need not select it.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Jump",
+      "type": "skill",
+      "img": "icons/svg/jump.svg",
+      "system": {
+        "description": "<p>You can make running or standing jumps.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 9,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Krenshar — Scare",
+      "type": "creatureFeature",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "key": "creatureKrensharSpecial",
+        "description": "<p><strong>Scare (Ex or Su):</strong> As a standard action, pull skin back from the head — often enough to scare foes (treat as a Bluff check with a <strong>+3 bonus</strong>).</p><p>Combining the display with a loud screech duplicates <em>scare</em> as from a <strong>3rd-level</strong> caster (Will DC <strong>13</strong> partial). A creature that saves is immune to that krenshar’s scare for <strong>24 hours</strong>. The shriek does not affect other krenshars. Supernatural, sonic, mind-affecting fear; DC Charisma-based.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

@@ -147,44 +147,354 @@
   },
   "items": [
     {
-      "name": "Immunity to Sleep",
-      "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Dodge",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You are adept at dodging blows.</p>",
+        "key": "dodge",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 13,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Lightning Reflexes",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have faster reflexes than normal.</p>",
+        "key": "lightningReflexes",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Reflex saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveRef",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Mobility",
+      "type": "feat",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>You are skilled at dodging past opponents and avoiding their attacks.</p>",
+        "key": "mobility",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13, Dodge",
+        "benefit": "<p>You get a +4 dodge bonus to Armor Class against attacks of opportunity caused when you move out of or within a threatened area. A condition that makes you lose your Dexterity bonus to Armor Class (if any) also makes you lose dodge bonuses. Dodge bonuses stack with each other, unlike most types of bonuses.</p>",
+        "special": "A fighter may select Mobility as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "dodge"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 13,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 52
+    },
+    {
+      "name": "Climb",
+      "type": "skill",
+      "img": "icons/svg/mountain.svg",
+      "system": {
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
+        "key": "climb",
+        "ability": "str",
+        "ranks": 8,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 17,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 11,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 17,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 15,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Swim",
+      "type": "skill",
+      "img": "icons/svg/waterfall.svg",
+      "system": {
+        "description": "<p>Make a Swim check once per round while you are in the water. Success means you may swim at up to one-half your speed (as a full-round action) or at one-quarter your speed (as a move action).</p>",
+        "key": "swim",
+        "ability": "str",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Improved Grab",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureImprovedGrab",
+        "description": "<p><strong>What it does (SRD):</strong> If the creature hits with a listed natural weapon, it can attempt to start a <strong>grapple</strong> as a <strong>free action</strong> without provoking attacks of opportunity. Details (size modifiers, opposed checks, holding vs pinning) follow the grapple rules.</p><p><strong>ThirdEra:</strong> This template has <strong>no</strong> numeric rows in <strong>Mechanical effects</strong> or <strong>Capability grants</strong>. Track grapple state in play; use the NPC’s natural attacks and CMB/CMD from the sheet when resolving the grapple.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
-            }
-          ],
+          "grants": [],
           "senses": []
         }
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 120
     },
     {
-      "name": "Poison Immunity",
+      "name": "Mohrg — Paralyzing Touch & Create Spawn",
+      "type": "creatureFeature",
+      "img": "icons/svg/blood.svg",
+      "system": {
+        "key": "creatureMohrgSpecial",
+        "description": "<p><strong>Paralyzing touch (Su):</strong> Tongue touch — Fort save or paralyzed for 1d4 minutes (DC Charisma-based).</p><p><strong>Create spawn (Su):</strong> Creatures killed by the mohrg rise after 1d4 days as zombies under its control without their living abilities.</p><p><strong>Undead traits:</strong> As standard undead (mind-affecting immunity, poison, sleep, paralysis, stunning, disease, death effects, necromancy; no crits; no Con score; no nonmagical healing unless noted).</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Immunity to Disease",
       "type": "creatureFeature",
       "img": "icons/svg/biohazard.svg",
       "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "key": "creatureImmunityDisease",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to disease</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "poison",
-              "label": "Immune to poison (SRD)."
+              "tag": "disease",
+              "label": "Immune to disease (SRD)."
             }
           ],
           "senses": []
@@ -192,31 +502,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 998
-    },
-    {
-      "name": "Immunity to Paralysis",
-      "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
-      "system": {
-        "key": "creatureImmunityParalysis",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "paralysis",
-              "label": "Immune to paralysis (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 997
+      "sort": 995
     },
     {
       "name": "Immunity to Stunning",
@@ -243,20 +529,20 @@
       "sort": 996
     },
     {
-      "name": "Immunity to Disease",
+      "name": "Immunity to Paralysis",
       "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
+      "img": "icons/svg/daze.svg",
       "system": {
-        "key": "creatureImmunityDisease",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to disease</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creatureImmunityParalysis",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "disease",
-              "label": "Immune to disease (SRD)."
+              "tag": "paralysis",
+              "label": "Immune to paralysis (SRD)."
             }
           ],
           "senses": []
@@ -264,7 +550,55 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 995
+      "sort": 997
+    },
+    {
+      "name": "Poison Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 998
+    },
+    {
+      "name": "Immunity to Sleep",
+      "type": "creatureFeature",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "key": "creatureImmunitySleep",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
     }
   ],
   "flags": {},

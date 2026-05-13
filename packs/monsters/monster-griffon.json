@@ -193,7 +193,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 48
     },
     {
       "name": "Weapon Focus",
@@ -228,7 +228,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 49
     },
     {
       "name": "Jump",
@@ -238,7 +238,7 @@
         "description": "<p>You can make running or standing jumps.</p>",
         "key": "jump",
         "ability": "str",
-        "ranks": 10,
+        "ranks": 4,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -282,7 +282,7 @@
         "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 8,
+        "ranks": 9,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -297,26 +297,50 @@
       "sort": 103
     },
     {
-      "name": "Survival",
-      "type": "skill",
-      "img": "icons/svg/fire.svg",
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
       "system": {
-        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
-        "key": "survival",
-        "ability": "wis",
-        "ranks": 2,
-        "modifier": {
-          "misc": 0,
-          "total": 0
-        },
-        "trainedOnly": "false",
-        "armorCheckPenalty": "false",
-        "exclusive": "false",
-        "npcClassSkill": true
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
       },
       "flags": {},
       "folder": null,
-      "sort": 104
+      "sort": 110
+    },
+    {
+      "name": "Scent",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureScent",
+        "description": "<p><strong>What it does (SRD):</strong> <strong>Scent</strong> lets the creature detect opponents by smell, usually out to about <strong>30 ft.</strong> (strong scents farther, very weak scents closer). It can use scent to <strong>pinpoint</strong> a square once it is within 5 ft., and to <strong>track</strong> by Survival. Wind and water affect what it can smell.</p><p><strong>ThirdEra:</strong> Scent (<strong>30 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other senses; Survival checks to track by scent still use the normal skill rules unless you add separate bonuses elsewhere.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "scent",
+              "range": "30 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
     }
   ],
   "flags": {},

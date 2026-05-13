@@ -147,44 +147,226 @@
   },
   "items": [
     {
-      "name": "Immunity to Sleep",
-      "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Great Fortitude",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have a knack for avoiding death.</p>",
+        "key": "greatFortitude",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Fortitude saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveFort",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Toughness",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have enhanced physical stamina.</p>",
+        "key": "toughness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You gain +3 hit points. For every Hit Die beyond 3, you gain an additional +1 hit point. If you have more than 3 Hit Dice, you gain +1 hit points whenever you gain a Hit Die (such as when you gain a level).</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Mummy — Despair & Mummy Rot",
+      "type": "creatureFeature",
+      "img": "icons/svg/skull.svg",
+      "system": {
+        "key": "creatureMummySpecial",
+        "description": "<p><strong>Despair (Su):</strong> At the start of its turn, creatures within 30 ft. that see the mummy may become paralyzed with fear (Will negates; DC Charisma-based). Whether or not the save succeeds, that creature is immune to that mummy’s despair for 24 hours.</p><p><strong>Mummy rot (Su):</strong> Slam — supernatural disease (Fort negates onset; DC per stat block, Charisma-based). Successive saves do not cure; requires <em>remove curse</em> or similar plus <em>remove disease</em> (or stronger magic) to remove.</p><p><strong>Undead traits:</strong> Mind-affecting immunity, poison, sleep, paralysis, stunning, disease, death effects, necromancy; no crits; no ability damage/drain, fatigue, exhaustion, or energy drain; no nonmagical healing unless noted.</p>",
+        "abilityKind": "Su",
         "changes": [],
         "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
-            }
-          ],
+          "grants": [],
           "senses": []
         }
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 120
     },
     {
-      "name": "Poison Immunity",
+      "name": "Immunity to Disease",
       "type": "creatureFeature",
       "img": "icons/svg/biohazard.svg",
       "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "key": "creatureImmunityDisease",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to disease</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "poison",
-              "label": "Immune to poison (SRD)."
+              "tag": "disease",
+              "label": "Immune to disease (SRD)."
             }
           ],
           "senses": []
@@ -192,31 +374,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 998
-    },
-    {
-      "name": "Immunity to Paralysis",
-      "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
-      "system": {
-        "key": "creatureImmunityParalysis",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "paralysis",
-              "label": "Immune to paralysis (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 997
+      "sort": 995
     },
     {
       "name": "Immunity to Stunning",
@@ -243,20 +401,20 @@
       "sort": 996
     },
     {
-      "name": "Immunity to Disease",
+      "name": "Immunity to Paralysis",
       "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
+      "img": "icons/svg/daze.svg",
       "system": {
-        "key": "creatureImmunityDisease",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to disease</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creatureImmunityParalysis",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "disease",
-              "label": "Immune to disease (SRD)."
+              "tag": "paralysis",
+              "label": "Immune to paralysis (SRD)."
             }
           ],
           "senses": []
@@ -264,7 +422,55 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 995
+      "sort": 997
+    },
+    {
+      "name": "Poison Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 998
+    },
+    {
+      "name": "Immunity to Sleep",
+      "type": "creatureFeature",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "key": "creatureImmunitySleep",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
     }
   ],
   "flags": {},

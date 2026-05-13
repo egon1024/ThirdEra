@@ -160,6 +160,110 @@ export const LETTER_F_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
     "creatureFrostWormSpecial"
 ]);
 
+/** Letter-"G" embed-only templates (`scripts/data/embed-only-creature-features-letter-g.json`). */
+export const LETTER_G_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureGargoyleSpecial",
+    "creatureGelatinousCubeSpecial",
+    "creatureGhaeleSpecial",
+    "creatureGhoulSpecial",
+    "creatureGibberingMoutherSpecial",
+    "creatureGirallonSpecial",
+    "creatureGlabrezuSpecial",
+    "creatureGorgonSpecial",
+    "creatureGrayOozeSpecial",
+    "creatureGrayRenderSpecial",
+    "creatureGreenHagSpecial",
+    "creatureGrickSpecial",
+    "creatureGrigSpecial",
+    "creatureGrimlockSpecial",
+    "creatureGuardianNagaSpecial",
+    "creatureGynosphinxSpecial",
+    "creatureSpellsGoldDragon",
+    "creatureSpellsGreenDragon"
+]);
+
+/** Letter-"H" embed-only templates (`scripts/data/embed-only-creature-features-letter-h.json`). */
+export const LETTER_H_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureHarpySpecial",
+    "creatureHellcatBezekiraSpecial",
+    "creatureHellHoundSpecial",
+    "creatureHellwaspSwarmSpecial",
+    "creatureHezrouSpecial",
+    "creatureHillGiantDireWereboarSpecial",
+    "creatureHippogriffSpecial",
+    "creatureHomunculusSpecial",
+    "creatureHornedDevilCornugonSpecial",
+    "creatureHoundArchonSpecial",
+    "creatureHowlerSpecial",
+    "creatureHyenaSpecial"
+]);
+
+/** Letter-"I" embed-only templates (`scripts/data/embed-only-creature-features-letter-i.json`). */
+export const LETTER_I_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureBreathWeaponIceMephit",
+    "creatureFastHealingIceMephit",
+    "creatureIceDevilGelugonSpecial",
+    "creatureIceMephitSpells",
+    "creatureImpSpecial",
+    "creatureInvisibleStalkerSpecial",
+    "creatureIronGolemSpecial"
+]);
+
+/** Letter-"J" embed-only templates (`scripts/data/embed-only-creature-features-letter-j.json`). */
+export const LETTER_J_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze(["creatureJanniSpecial"]);
+
+/** Letter-"K" embed-only templates (`scripts/data/embed-only-creature-features-letter-k.json`). */
+export const LETTER_K_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureKoboldSpecial",
+    "creatureKolyarutSpecial",
+    "creatureKrakenSpecial",
+    "creatureKrensharSpecial"
+]);
+
+/** Letter-"L" embed-only templates (`scripts/data/embed-only-creature-features-letter-l.json`). */
+export const LETTER_L_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureLanternArchonSpecial",
+    "creatureLeonalSpecial",
+    "creatureLemureEnergyResistanceCold",
+    "creatureLemureSpecial",
+    "creatureLillendSpecial",
+    "creatureLamiaSpecial",
+    "creatureLammasuSpecial",
+    "creatureLizardSpecial",
+    "creatureLizardMonitorSpecial",
+    "creatureLizardfolkSpecial",
+    "creatureLocathahSpecial",
+    "creatureLocustSwarmSpecial"
+]);
+
+/** Letter-"M" embed-only templates (`scripts/data/embed-only-creature-features-letter-m.json`). */
+export const LETTER_M_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureBreathWeaponMagmaMephit",
+    "creatureFastHealingMagmaMephit",
+    "creatureMagmaMephitSpells",
+    "creatureMagminSpecial",
+    "creatureManticoreSpecial",
+    "creatureMarilithSpecial",
+    "creatureMantaRaySpecial",
+    "creatureMarutSpecial",
+    "creatureMedusaSpecial",
+    "creatureMegaraptorSpecial",
+    "creatureMerfolkSpecial",
+    "creatureMimicSpecial",
+    "creatureMinotaurSpecial",
+    "creatureMohrgSpecial",
+    "creatureMonkeySpecial",
+    "creatureMonstrousCentipedePoisonHuge",
+    "creatureMonstrousCentipedePoisonLarge",
+    "creatureMonstrousCentipedePoisonMedium",
+    "creatureMonstrousCentipedePoisonSmall",
+    "creatureMonstrousCentipedePoisonTiny",
+    "creatureMonstrousCentipedeSkills",
+    "creatureMonstrousScorpionSpecial",
+    "creatureMonstrousSpiderTinyPoison",
+    "creatureMummySpecial"
+]);
+
 /** @type {Set<string> | null} */
 let _creatureFeatureCompendiumPurgeKeys = null;
 
@@ -178,7 +282,14 @@ export function getCreatureFeatureCompendiumPurgeKeys() {
             ...LETTER_C_EMBED_ONLY_CREATURE_FEATURE_KEYS,
             ...LETTER_D_EMBED_ONLY_CREATURE_FEATURE_KEYS,
             ...LETTER_E_EMBED_ONLY_CREATURE_FEATURE_KEYS,
-            ...LETTER_F_EMBED_ONLY_CREATURE_FEATURE_KEYS
+            ...LETTER_F_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_G_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_H_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_I_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_J_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_K_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_L_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_M_EMBED_ONLY_CREATURE_FEATURE_KEYS
         ]);
     }
     return _creatureFeatureCompendiumPurgeKeys;

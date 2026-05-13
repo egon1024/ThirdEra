@@ -145,7 +145,187 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Weapon Finesse",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are skilled at using light weapons.</p>",
+        "key": "weaponFinesse",
+        "type": "General",
+        "prerequisites": "Base attack bonus +1",
+        "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+        "special": "Natural weapons are considered light weapons.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Climb",
+      "type": "skill",
+      "img": "icons/svg/mountain.svg",
+      "system": {
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
+        "key": "climb",
+        "ability": "str",
+        "ranks": 15,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 12,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Jump",
+      "type": "skill",
+      "img": "icons/svg/jump.svg",
+      "system": {
+        "description": "<p>You can make running or standing jumps.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Web",
+      "type": "creatureFeature",
+      "img": "icons/svg/net.svg",
+      "system": {
+        "key": "creatureWebEx",
+        "description": "<p><strong>Web (Ex):</strong> The creature can cast a web as a ranged touch attack (range increments and escape DC per the SRD/stat block).</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Poison (Monstrous Spider, Tiny)",
+      "type": "creatureFeature",
+      "img": "icons/svg/poison.svg",
+      "system": {
+        "key": "creatureMonstrousSpiderTinyPoison",
+        "description": "<p><strong>Poison (Ex):</strong> Injury; Fort <strong>DC 10</strong>; initial and secondary <strong>1d2 Str</strong> damage. Save DC is Constitution-based.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Tremorsense",
+      "type": "creatureFeature",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "key": "creatureTremorsense",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can automatically sense the location of anything in contact with the ground within the distance on each copy.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range; set distance under <strong>CGS parameters and overrides</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "tremorsense",
+              "range": ""
+            }
+          ]
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 122
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

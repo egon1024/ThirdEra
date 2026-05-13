@@ -149,7 +149,284 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Run",
+      "type": "feat",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>You are swift of foot.</p>",
+        "key": "run",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>When running, you move five times your normal speed (if wearing medium, light, or no armor and carrying no more than a medium load) or four times your speed (if wearing heavy armor or carrying a heavy load). If you make a jump after a running start (see the Jump skill description), you gain a +4 bonus on your Jump check. While running, you retain your Dexterity bonus to AC.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Toughness",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have enhanced physical stamina.</p>",
+        "key": "toughness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You gain +3 hit points. For every Hit Die beyond 3, you gain an additional +1 hit point. If you have more than 3 Hit Dice, you gain +1 hit points whenever you gain a Hit Die (such as when you gain a level).</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Track",
+      "type": "feat",
+      "img": "icons/svg/footprint.svg",
+      "system": {
+        "description": "<p>You can follow the trails of creatures and characters across most types of terrain.</p>",
+        "key": "track",
+        "type": "General",
+        "prerequisites": "Survival 1 rank",
+        "benefit": "<p>To find tracks or to follow them for 1 hour requires a Survival check. You must make another Survival check every hour to continue following the tracks. The DC depends on the surface and the prevailing conditions.</p>",
+        "special": "A ranger automatically gains Track as a bonus feat at 1st level. He need not select it.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Jump",
+      "type": "skill",
+      "img": "icons/svg/jump.svg",
+      "system": {
+        "description": "<p>You can make running or standing jumps.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 22,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 10,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 10,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Survival",
+      "type": "skill",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
+        "key": "survival",
+        "ability": "wis",
+        "ranks": 10,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Pounce",
+      "type": "creatureFeature",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "key": "creaturePounce",
+        "description": "<p><strong>What it does (SRD):</strong> If the creature <strong>charges</strong>, it can still make a <strong>full attack</strong> at the end of the charge (including rake attacks if listed).</p><p><strong>ThirdEra:</strong> This is a <strong>full-attack pattern</strong>, not a numeric modifier here. Leave <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty unless you add a custom row. Resolve charge distance and attacks using the NPC sheet and combat tracker as usual.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Scent",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureScent",
+        "description": "<p><strong>What it does (SRD):</strong> <strong>Scent</strong> lets the creature detect opponents by smell, usually out to about <strong>30 ft.</strong> (strong scents farther, very weak scents closer). It can use scent to <strong>pinpoint</strong> a square once it is within 5 ft., and to <strong>track</strong> by Survival. Wind and water affect what it can smell.</p><p><strong>ThirdEra:</strong> Scent (<strong>30 ft.</strong>) is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong>. The character sheet includes it with other senses; Survival checks to track by scent still use the normal skill rules unless you add separate bonuses elsewhere.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "scent",
+              "range": "30 ft"
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 122
+    },
+    {
+      "name": "Megaraptor — Running Charge & Skills",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureMegaraptorSpecial",
+        "description": "<p><strong>Running charge (Ex):</strong> Can run while charging across open ground.</p><p><strong>Skills:</strong> +8 racial on Hide, Jump, Listen, Spot, and Survival checks.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 123
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

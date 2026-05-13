@@ -149,7 +149,306 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Dodge",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You are adept at dodging blows.</p>",
+        "key": "dodge",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>During your action, you designate an opponent and receive a +1 dodge bonus to Armor Class against attacks from that opponent. You can select a new opponent on any action.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 13,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Iron Will",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have a stronger will than normal.</p>",
+        "key": "ironWill",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Will saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveWill",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Mobility",
+      "type": "feat",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>You are skilled at dodging past opponents and avoiding their attacks.</p>",
+        "key": "mobility",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13, Dodge",
+        "benefit": "<p>You get a +4 dodge bonus to Armor Class against attacks of opportunity caused when you move out of or within a threatened area. A condition that makes you lose your Dexterity bonus to Armor Class (if any) also makes you lose dodge bonuses. Dodge bonuses stack with each other, unlike most types of bonuses.</p>",
+        "special": "A fighter may select Mobility as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "dodge"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 13,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Spring Attack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can move, attack, and move again before your foes can react.</p>",
+        "key": "springAttack",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13, Dodge, Mobility, base attack bonus +4",
+        "benefit": "<p>As a full-round action, you can move up to your speed and make a single melee attack at any point during your movement. You must move at least 10 feet before and after your attack. You may not take a 5-foot step before, during, or after this action.</p>",
+        "special": "A fighter may select Spring Attack as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "dodge",
+          "mobility"
+        ],
+        "prerequisiteBAB": 4,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 13,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Bluff",
+      "type": "skill",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "description": "<p>You know how to tell a lie.</p>",
+        "key": "bluff",
+        "ability": "cha",
+        "ranks": 13,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Concentration",
+      "type": "skill",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "description": "<p>Make a Concentration check whenever you might be distracted (by taking damage, by harsh weather, and so on) while engaged in some action that requires your full attention.</p>",
+        "key": "concentration",
+        "ability": "con",
+        "ranks": 9,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Diplomacy",
+      "type": "skill",
+      "img": "icons/svg/coins.svg",
+      "system": {
+        "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+        "key": "diplomacy",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Disguise",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>You are skilled at changing your appearance.</p>",
+        "key": "disguise",
+        "ability": "cha",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 9,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Intimidate",
+      "type": "skill",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can use this skill to frighten opponents or to get them to act in a way that benefits you.</p>",
+        "key": "intimidate",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 9,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 107
+    },
+    {
+      "name": "Lamia — Spell-Like Abilities & Wisdom Drain",
+      "type": "creatureFeature",
+      "img": "icons/svg/poison.svg",
+      "system": {
+        "key": "creatureLamiaSpecial",
+        "description": "<p><strong>Spell-like abilities:</strong> At will — <em>disguise self</em>, <em>ventriloquism</em>; 3/day — <em>charm monster</em> (DC 15), <em>major image</em> (DC 14), <em>mirror image</em>, <em>suggestion</em> (DC 14); 1/day — <em>deep slumber</em> (DC 14). Caster level <strong>9th</strong>; save DCs Charisma-based.</p><p><strong>Wisdom drain (Su):</strong> Each successful melee <strong>touch</strong> attack drains <strong>1d4</strong> Wisdom (this lamia does <strong>not</strong> heal damage when using this drain).</p><p><strong>Skills:</strong> +4 racial on Bluff and Hide.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

@@ -200,7 +200,377 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 29,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
+        "ability": "int",
+        "ranks": 29,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 29,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Disguise",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>You are skilled at changing your appearance.</p>",
+        "key": "disguise",
+        "ability": "cha",
+        "ranks": 29,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Heal",
+      "type": "skill",
+      "img": "icons/svg/heal.svg",
+      "system": {
+        "description": "<p>You are skilled at tending to wounds and ailments.</p>",
+        "key": "heal",
+        "ability": "wis",
+        "ranks": 29,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Swim",
+      "type": "skill",
+      "img": "icons/svg/waterfall.svg",
+      "system": {
+        "description": "<p>Make a Swim check once per round while you are in the water. Success means you may swim at up to one-half your speed (as a full-round action) or at one-quarter your speed (as a move action).</p>",
+        "key": "swim",
+        "ability": "str",
+        "ranks": 29,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Dragon — Core Traits",
+      "type": "creatureFeature",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "key": "creatureDragonCoreTraits",
+        "description": "<p><strong>SRD (true dragons):</strong> <strong>Blindsense</strong> 60 ft., <strong>keen senses</strong>, and <strong>frightful presence</strong>. Skills / DCs for frightful presence follow the creature’s statistics.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "blindsense",
+              "range": "60 ft."
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Spell-Like Abilities (Gold Dragon)",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureSpellsGoldDragon",
+        "description": "<p><strong>Gold dragon spell-like abilities</strong> vary by age (SRD): typically include <em>bless</em>, luck and weal themed powers, and <em>detect gems</em> or similar divinations; older dragons add powerful arcane abilities. Use the printed stat block for exact lists, caster levels, frequencies, and DCs (Charisma-based).</p>",
+        "abilityKind": "Sp",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Use Magic Device",
+      "type": "skill",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "description": "<p>You can use this skill to read a scroll or activate a magic item even if you normally couldn't use it.</p>",
+        "key": "useMagicDevice",
+        "ability": "cha",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "true",
+        "armorCheckPenalty": "false",
+        "exclusive": "true",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 245
+    },
+    {
+      "name": "Knowledge (Arcana)",
+      "type": "skill",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "<p>Ancient mysteries, magic traditions, arcane symbols, cryptic phrases, constructs, dragons, magical beasts. Like other Knowledge skills, each Knowledge field is a separate skill with its own ranks.</p>",
+        "key": "knowledge-arcana",
+        "ability": "int",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "true",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 246
+    },
+    {
+      "name": "Concentration",
+      "type": "skill",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "description": "<p>Make a Concentration check whenever you might be distracted (by taking damage, by harsh weather, and so on) while engaged in some action that requires your full attention.</p>",
+        "key": "concentration",
+        "ability": "con",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 247
+    },
+    {
+      "name": "Diplomacy",
+      "type": "skill",
+      "img": "icons/svg/coins.svg",
+      "system": {
+        "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+        "key": "diplomacy",
+        "ability": "cha",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 248
+    },
+    {
+      "name": "Intimidate",
+      "type": "skill",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can use this skill to frighten opponents or to get them to act in a way that benefits you.</p>",
+        "key": "intimidate",
+        "ability": "cha",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 249
+    },
+    {
+      "name": "Sense Motive",
+      "type": "skill",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "description": "<p>You can get a hunch about a social situation or read a person.</p>",
+        "key": "senseMotive",
+        "ability": "wis",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 250
+    },
+    {
+      "name": "Escape Artist",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Make an Escape Artist check to slip out of bonds or escape from a grapple.</p>",
+        "key": "escapeArtist",
+        "ability": "dex",
+        "ranks": 1,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 251
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

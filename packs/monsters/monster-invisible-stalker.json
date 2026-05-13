@@ -150,44 +150,246 @@
   },
   "items": [
     {
-      "name": "Immunity to Sleep",
-      "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
+      "name": "Combat Reflexes",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
       "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
-            }
-          ],
-          "senses": []
-        }
+        "description": "<p>You can make additional attacks of opportunity.</p>",
+        "key": "combatReflexes",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 48
     },
     {
-      "name": "Poison Immunity",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
       "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Weapon Focus",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
+        "key": "weaponFocus",
+        "type": "General, Fighter",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
+        "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 1,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "attack",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 11,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 11,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
+        "ability": "int",
+        "ranks": 11,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 11,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Survival",
+      "type": "skill",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
+        "key": "survival",
+        "ability": "wis",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Invisible Stalker — Natural Invisibility & Tracking",
+      "type": "creatureFeature",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "key": "creatureInvisibleStalkerSpecial",
+        "description": "<p><strong>Natural invisibility (Su):</strong> Remains invisible even when attacking; inherent — not ended by <em>invisibility purge</em>.</p><p><strong>Improved tracking (Ex):</strong> Uses Spot instead of Survival to follow a trail.</p><p><strong>Tasked service:</strong> Obeys summoner’s commands; may resent long or complex missions.</p><p><strong>True death:</strong> Destroyed only on the Elemental Plane of Air; otherwise returns home when reduced to 0 hp elsewhere (SRD).</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Immunity to Stunning",
+      "type": "creatureFeature",
+      "img": "icons/svg/daze.svg",
+      "system": {
+        "key": "creatureImmunityStunning",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "poison",
-              "label": "Immune to poison (SRD)."
+              "tag": "stunning",
+              "label": "Immune to stunning (SRD)."
             }
           ],
           "senses": []
@@ -195,7 +397,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 998
+      "sort": 996
     },
     {
       "name": "Immunity to Paralysis",
@@ -222,20 +424,20 @@
       "sort": 997
     },
     {
-      "name": "Immunity to Stunning",
+      "name": "Poison Immunity",
       "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
+      "img": "icons/svg/biohazard.svg",
       "system": {
-        "key": "creatureImmunityStunning",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "stunning",
-              "label": "Immune to stunning (SRD)."
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
             }
           ],
           "senses": []
@@ -243,7 +445,31 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 996
+      "sort": 998
+    },
+    {
+      "name": "Immunity to Sleep",
+      "type": "creatureFeature",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "key": "creatureImmunitySleep",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
     }
   ],
   "flags": {},

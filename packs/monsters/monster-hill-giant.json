@@ -147,6 +147,290 @@
   },
   "items": [
     {
+      "name": "Cleave",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can strike two adjacent foes with a single swing.</p>",
+        "key": "cleave",
+        "type": "Fighter Bonus",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Power Attack, Str 13",
+        "benefit": "<p>As a standard action, you can make a single attack at your full base attack bonus against a foe within reach. If you hit, you deal damage normally and can make an additional attack (using your full base attack bonus) against a foe that is adjacent to the first and also within reach. You can only make one additional attack per round with this feat. You cannot use this feat if you are wearing heavy armor.</p>",
+        "special": "A fighter may select Cleave as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "powerAttack"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 13,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Improved Bull Rush",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are skilled at pushing your opponents around.</p>",
+        "key": "improvedBullRush",
+        "type": "Fighter Bonus",
+        "prerequisites": "Str 13, Power Attack",
+        "benefit": "<p>When you perform a bull rush, you do not provoke an attack of opportunity from the defender. You also gain a +4 bonus on the opposed Strength check you make to push back the defender.</p>",
+        "special": "A fighter may select Improved Bull Rush as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "powerAttack"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 13,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Power Attack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
+        "key": "powerAttack",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Str 13",
+        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Improved Sunder",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are skilled at damaging your opponents' weapons and armor.</p>",
+        "key": "improvedSunder",
+        "type": "General",
+        "prerequisites": "Str 13, Power Attack",
+        "benefit": "<p>When you strike at an opponent's weapon or shield, you do not provoke an attack of opportunity. You also gain a +4 bonus on any attack roll made to attack an object held or carried by another character.</p>",
+        "special": "A fighter may select Improved Sunder as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "powerAttack"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 13,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Weapon Focus",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
+        "key": "weaponFocus",
+        "type": "General, Fighter",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
+        "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 1,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "attack",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 52
+    },
+    {
+      "name": "Climb",
+      "type": "skill",
+      "img": "icons/svg/mountain.svg",
+      "system": {
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
+        "key": "climb",
+        "ability": "str",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Jump",
+      "type": "skill",
+      "img": "icons/svg/jump.svg",
+      "system": {
+        "description": "<p>You can make running or standing jumps.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Rock Throwing",
+      "type": "creatureFeature",
+      "img": "icons/svg/mountain.svg",
+      "system": {
+        "key": "creatureRockThrowing",
+        "description": "<p><strong>Rock Throwing (Ex):</strong> The creature is an accomplished rock thrower and has a range increment as listed in its statistics.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
+    },
+    {
       "name": "Darkvision",
       "type": "creatureFeature",
       "img": "icons/svg/explosion.svg",

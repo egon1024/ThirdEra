@@ -151,28 +151,488 @@
   },
   "items": [
     {
-      "name": "Poison Immunity",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
+      "name": "Combat Expertise",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
       "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "description": "<p>You can increase your defense at the expense of your accuracy.</p>",
+        "key": "combatExpertise",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Int 13",
+        "benefit": "<p>When you use the attack action or the full attack action in melee, you can take a penalty of as much as -5 on your attack roll and add the same number (+5 or less) as a dodge bonus to your Armor Class. This number may not exceed your base attack bonus. The changes to attack rolls and Armor Class last until your next turn.</p>",
+        "special": "A fighter may select Combat Expertise as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 13,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Combat Reflexes",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can make additional attacks of opportunity.</p>",
+        "key": "combatReflexes",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Dex 13",
+        "benefit": "<p>You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Power Attack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
+        "key": "powerAttack",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Str 13",
+        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Weapon Focus",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
+        "key": "weaponFocus",
+        "type": "General, Fighter",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
+        "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 1,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "attack",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Bluff",
+      "type": "skill",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "description": "<p>You know how to tell a lie.</p>",
+        "key": "bluff",
+        "ability": "cha",
+        "ranks": 19,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Concentration",
+      "type": "skill",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "description": "<p>Make a Concentration check whenever you might be distracted (by taking damage, by harsh weather, and so on) while engaged in some action that requires your full attention.</p>",
+        "key": "concentration",
+        "ability": "con",
+        "ranks": 19,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Diplomacy",
+      "type": "skill",
+      "img": "icons/svg/coins.svg",
+      "system": {
+        "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+        "key": "diplomacy",
+        "ability": "cha",
+        "ranks": 23,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Disguise",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>You are skilled at changing your appearance.</p>",
+        "key": "disguise",
+        "ability": "cha",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 15,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Intimidate",
+      "type": "skill",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can use this skill to frighten opponents or to get them to act in a way that benefits you.</p>",
+        "key": "intimidate",
+        "ability": "cha",
+        "ranks": 21,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 27,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 107
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 19,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 108
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
+        "ability": "int",
+        "ranks": 19,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 109
+    },
+    {
+      "name": "Sense Motive",
+      "type": "skill",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "description": "<p>You can get a hunch about a social situation or read a person.</p>",
+        "key": "senseMotive",
+        "ability": "wis",
+        "ranks": 19,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Spellcraft",
+      "type": "skill",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "description": "<p>You are skilled at working with magic and can identify spells as they are cast or spells already in place.</p>",
+        "key": "spellcraft",
+        "ability": "int",
+        "ranks": 19,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "true",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 27,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 112
+    },
+    {
+      "name": "Survival",
+      "type": "skill",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
+        "key": "survival",
+        "ability": "wis",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 113
+    },
+    {
+      "name": "Use Magic Device",
+      "type": "skill",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "description": "<p>You can use this skill to read a scroll or activate a magic item even if you normally couldn't use it.</p>",
+        "key": "useMagicDevice",
+        "ability": "cha",
+        "ranks": 19,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "true",
+        "armorCheckPenalty": "false",
+        "exclusive": "true",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 114
+    },
+    {
+      "name": "Constrict",
+      "type": "creatureFeature",
+      "img": "icons/svg/trap.svg",
+      "system": {
+        "key": "creatureConstrict",
+        "description": "<p><strong>What it does (SRD):</strong> On a successful grapple check, the creature deals <strong>extra bludgeoning damage</strong> (the amount is given in the creature’s stat block). Constrict usually requires a successful grapple after a grab-capable attack.</p><p><strong>ThirdEra:</strong> Leave <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty here; enter the printed constriction damage and any special rules in the NPC’s <strong>Description</strong> or natural attack notes so it matches the SRD stat block.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "poison",
-              "label": "Immune to poison (SRD)."
-            }
-          ],
+          "grants": [],
           "senses": []
         }
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 120
+    },
+    {
+      "name": "Improved Grab",
+      "type": "creatureFeature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "key": "creatureImprovedGrab",
+        "description": "<p><strong>What it does (SRD):</strong> If the creature hits with a listed natural weapon, it can attempt to start a <strong>grapple</strong> as a <strong>free action</strong> without provoking attacks of opportunity. Details (size modifiers, opposed checks, holding vs pinning) follow the grapple rules.</p><p><strong>ThirdEra:</strong> This template has <strong>no</strong> numeric rows in <strong>Mechanical effects</strong> or <strong>Capability grants</strong>. Track grapple state in play; use the NPC’s natural attacks and CMB/CMD from the sheet when resolving the grapple.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Marilith — Multiweapon, SLAs & Defenses",
+      "type": "creatureFeature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "key": "creatureMarilithSpecial",
+        "description": "<p><strong>Damage reduction (Ex):</strong> <strong>10/cold iron and good</strong> unless otherwise noted on the stat block.</p><p><strong>Spell resistance (Ex):</strong> Per stat block.</p><p><strong>True seeing (Su):</strong> Continuous, range as listed.</p><p><strong>Spell-like abilities:</strong> At will — <em>blade barrier</em>, <em>fly</em>, <em>greater teleport</em> (self plus 50 lb. only), <em>telekinesis</em> (DC Charisma-based); 1/day — <em>power word stun</em>. Caster level per stat block.</p><p><strong>Summon (Sp):</strong> Once per day can summon a balor or other listed demon with chance of success per stat block.</p><p><strong>Skills:</strong> +8 racial on Balance and Jump checks.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 122
     },
     {
       "name": "Energy Resistance",
@@ -202,6 +662,30 @@
       "flags": {},
       "folder": null,
       "sort": 998
+    },
+    {
+      "name": "Poison Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
     }
   ],
   "flags": {

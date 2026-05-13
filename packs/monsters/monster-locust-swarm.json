@@ -147,7 +147,70 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Locust Swarm — Distraction & Skills",
+      "type": "creatureFeature",
+      "img": "icons/svg/hazard.svg",
+      "system": {
+        "key": "creatureLocustSwarmSpecial",
+        "description": "<p><strong>Distraction (Ex):</strong> Living creatures that begin their turn with the swarm in their space must succeed on a Fort save (<strong>DC 12</strong>, Constitution-based) or be <strong>nauseated</strong> for 1 round.</p><p><strong>Swarm damage:</strong> Deals listed swarm damage to creatures whose space it occupies at the end of its move (see stat block).</p><p><strong>Skills:</strong> +4 racial on Listen and Spot.</p><p><strong>Swarm / vermin traits:</strong> See stat block hub for immunity to weapon damage, swarm shape, and vermin traits.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    }
+  ],
   "flags": {
     "thirdera": {
       "srdHubTraits": {

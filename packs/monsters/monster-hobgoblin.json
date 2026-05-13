@@ -222,7 +222,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 48
     },
     {
       "name": "Darkvision",
@@ -264,16 +264,15 @@
         "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
         "key": "hide",
         "ability": "dex",
-        "ranks": 0,
+        "ranks": 2,
         "modifier": {
-          "misc": 4,
-          "total": 0,
-          "miscLabel": "MM / size / racial (not auto on sheet)"
+          "misc": 0,
+          "total": 0
         },
         "trainedOnly": "false",
         "armorCheckPenalty": "true",
         "exclusive": "false",
-        "npcClassSkill": false
+        "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
@@ -287,7 +286,7 @@
         "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 1,
+        "ranks": 3,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -295,7 +294,7 @@
         "trainedOnly": "false",
         "armorCheckPenalty": "false",
         "exclusive": "false",
-        "npcClassSkill": false
+        "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
@@ -309,16 +308,15 @@
         "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
         "key": "moveSilently",
         "ability": "dex",
-        "ranks": 0,
+        "ranks": 2,
         "modifier": {
-          "misc": 4,
-          "total": 0,
-          "miscLabel": "MM / size / racial (not auto on sheet)"
+          "misc": 0,
+          "total": 0
         },
         "trainedOnly": "false",
         "armorCheckPenalty": "true",
         "exclusive": "false",
-        "npcClassSkill": false
+        "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
@@ -332,7 +330,7 @@
         "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 1,
+        "ranks": 3,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -340,7 +338,7 @@
         "trainedOnly": "false",
         "armorCheckPenalty": "false",
         "exclusive": "false",
-        "npcClassSkill": false
+        "npcClassSkill": true
       },
       "flags": {},
       "folder": null,

@@ -145,7 +145,246 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Point-Blank Shot",
+      "type": "feat",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "description": "<p>You are skilled at making well-placed shots with ranged weapons at close range.</p>",
+        "key": "pointBlankShot",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "",
+        "benefit": "<p>You get a +1 bonus on attack and damage rolls with ranged weapons against opponents within 30 feet.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Precise Shot",
+      "type": "feat",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "description": "<p>You are skilled at timing ranged attacks so that you avoid hitting your comrades.</p>",
+        "key": "preciseShot",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Point Blank Shot",
+        "benefit": "<p>You can shoot or throw ranged weapons at an opponent engaged in melee without taking the standard -4 penalty on your attack roll.</p>",
+        "special": "A fighter may select Precise Shot as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "pointBlankShot"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Weapon Finesse",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are skilled at using light weapons.</p>",
+        "key": "weaponFinesse",
+        "type": "General",
+        "prerequisites": "Base attack bonus +1",
+        "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+        "special": "Natural weapons are considered light weapons.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Bluff",
+      "type": "skill",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "description": "<p>You know how to tell a lie.</p>",
+        "key": "bluff",
+        "ability": "cha",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Diplomacy",
+      "type": "skill",
+      "img": "icons/svg/coins.svg",
+      "system": {
+        "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+        "key": "diplomacy",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Disguise",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>You are skilled at changing your appearance.</p>",
+        "key": "disguise",
+        "ability": "cha",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Intimidate",
+      "type": "skill",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can use this skill to frighten opponents or to get them to act in a way that benefits you.</p>",
+        "key": "intimidate",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Medusa — Petrifying Gaze & Poison",
+      "type": "creatureFeature",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "key": "creatureMedusaSpecial",
+        "description": "<p><strong>Petrifying gaze (Su):</strong> Turn to stone permanently, range 30 ft.; Fortitude negates. Each opponent within range at the start of the medusa’s turn must save (averting eyes or closing eyes grants chances to miss or concealment per SRD).</p><p><strong>Poison (Ex):</strong> Snake hair delivers injury poison (Fort DC Constitution-based; Str damage per stat block).</p><p><strong>Darkvision (Ex):</strong> 60 ft.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

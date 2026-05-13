@@ -151,20 +151,185 @@
   },
   "items": [
     {
-      "name": "Poison Immunity",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
+      "name": "Cleave",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
       "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "description": "<p>You can strike two adjacent foes with a single swing.</p>",
+        "key": "cleave",
+        "type": "Fighter Bonus",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Power Attack, Str 13",
+        "benefit": "<p>As a standard action, you can make a single attack at your full base attack bonus against a foe within reach. If you hit, you deal damage normally and can make an additional attack (using your full base attack bonus) against a foe that is adjacent to the first and also within reach. You can only make one additional attack per round with this feat. You cannot use this feat if you are wearing heavy armor.</p>",
+        "special": "A fighter may select Cleave as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "powerAttack"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 13,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Great Cleave",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can strike many adjacent foes with a single swing.</p>",
+        "key": "greatCleave",
+        "type": "Fighter Bonus",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Cleave, Power Attack, Str 13, base attack bonus +4",
+        "benefit": "<p>As a standard action, you can make a single attack at your full base attack bonus against a foe within reach. If you hit, you deal damage normally and can make an additional attack (using your full base attack bonus) against a foe that is adjacent to the first and also within reach. If you hit that foe, you can continue to make attacks against other adjacent foes so long as you keep hitting. You cannot attack an individual foe more than once per round with this feat. You cannot use this feat if you are wearing heavy armor.</p>",
+        "special": "A fighter may select Great Cleave as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "cleave",
+          "powerAttack"
+        ],
+        "prerequisiteBAB": 4,
+        "prerequisiteAbilityScores": {
+          "str": 13,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Iron Will",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have a stronger will than normal.</p>",
+        "key": "ironWill",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Will saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveWill",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Power Attack",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can make exceptionally powerful melee attacks.</p>",
+        "key": "powerAttack",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Str 13",
+        "benefit": "<p>On your action, before making attack rolls for a round, you may choose to subtract a number from all melee attack rolls and add the same number to all melee damage rolls. This number may not exceed your base attack bonus. The penalty on attacks and bonus on damage apply until your next turn.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 52
+    },
+    {
+      "name": "Energy Resistance (Cold — Lemure)",
+      "type": "creatureFeature",
+      "img": "icons/svg/frozen.svg",
+      "system": {
+        "key": "creatureLemureEnergyResistanceCold",
+        "description": "<p><strong>Resistance to cold (Ex):</strong> Ignores the first <strong>10</strong> points of cold damage from each source (devil trait).</p><p><strong>ThirdEra:</strong> Amount is under <strong>CGS parameters and overrides</strong> on this item.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
+          "grants": [],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
           "grants": [
             {
-              "category": "immunity",
-              "tag": "poison",
-              "label": "Immune to poison (SRD)."
+              "category": "energyResistance",
+              "energyType": "cold",
+              "amount": 10,
+              "label": "Resist cold 10 (lemure / devil traits)."
             }
           ],
           "senses": []
@@ -172,7 +337,25 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 120
+    },
+    {
+      "name": "Lemure — Mindless, See in Darkness & DR",
+      "type": "creatureFeature",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "key": "creatureLemureSpecial",
+        "description": "<p><strong>Mindless (Ex):</strong> Immunity to mind-affecting effects (charms, compulsions, phantasms, patterns, and morale effects).</p><p><strong>See in darkness (Su):</strong> See perfectly in any darkness, including <em>deeper darkness</em> (devil trait).</p><p><strong>Damage reduction (Ex):</strong> <strong>5/good or silver</strong>.</p><p><strong>Weapons (Ex):</strong> Natural weapons (and weapons wielded) are <strong>evil</strong> and <strong>lawful</strong> for overcoming DR.</p><p><strong>Devil traits (hub):</strong> Fire and poison immunity; resistance to <strong>acid 10</strong> and <strong>cold 10</strong> (use the separate embedded item for cold; acid is on another embedded item).</p><p><strong>Combat:</strong> Obeys telepathic commands from other devils.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
     },
     {
       "name": "Energy Resistance",
@@ -202,6 +385,30 @@
       "flags": {},
       "folder": null,
       "sort": 998
+    },
+    {
+      "name": "Poison Immunity",
+      "type": "creatureFeature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
     }
   ],
   "flags": {

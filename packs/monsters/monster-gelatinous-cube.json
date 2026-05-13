@@ -147,44 +147,38 @@
   },
   "items": [
     {
-      "name": "Immunity to Sleep",
-      "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
-      "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 999
-    },
-    {
-      "name": "Poison Immunity",
+      "name": "Gelatinous Cube — Engulf & Paralysis",
       "type": "creatureFeature",
       "img": "icons/svg/biohazard.svg",
       "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "key": "creatureGelatinousCubeSpecial",
+        "description": "<p><strong>Acid (Ex):</strong> Acid does not harm metal or stone; damages other materials per slam/engulf.</p><p><strong>Engulf (Ex):</strong> Move over Large or smaller foes — Reflex vs engulf or pushed aside; engulfed victims are grappled inside the cube and exposed to paralysis and acid.</p><p><strong>Paralysis (Ex):</strong> Fort save vs paralysis from melee or engulf (DC per stat block, Constitution-based).</p><p><strong>Transparent (Ex):</strong> DC 15 Spot to notice; walking into an unnoticed cube causes automatic engulf.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Immunity to Stunning",
+      "type": "creatureFeature",
+      "img": "icons/svg/daze.svg",
+      "system": {
+        "key": "creatureImmunityStunning",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "poison",
-              "label": "Immune to poison (SRD)."
+              "tag": "stunning",
+              "label": "Immune to stunning (SRD)."
             }
           ],
           "senses": []
@@ -192,7 +186,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 998
+      "sort": 996
     },
     {
       "name": "Immunity to Paralysis",
@@ -219,20 +213,20 @@
       "sort": 997
     },
     {
-      "name": "Immunity to Stunning",
+      "name": "Poison Immunity",
       "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
+      "img": "icons/svg/biohazard.svg",
       "system": {
-        "key": "creatureImmunityStunning",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "stunning",
-              "label": "Immune to stunning (SRD)."
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
             }
           ],
           "senses": []
@@ -240,7 +234,31 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 996
+      "sort": 998
+    },
+    {
+      "name": "Immunity to Sleep",
+      "type": "creatureFeature",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "key": "creatureImmunitySleep",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
     }
   ],
   "flags": {

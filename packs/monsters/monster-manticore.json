@@ -162,6 +162,35 @@
   },
   "items": [
     {
+      "name": "Flyby Attack",
+      "type": "feat",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "description": "<p>Use a standard action at any point while flying (including during a dive).</p>",
+        "key": "flybyAttack",
+        "type": "General",
+        "fighterBonusEligible": "false",
+        "prerequisites": "Fly speed",
+        "benefit": "<p>When flying, the creature can take a move action (including a dive) and another standard action at any point during the move. The creature cannot take a second move action during a round when it makes a flyby attack.</p>",
+        "special": "<p><strong>Normal:</strong> Without this feat, the creature takes a standard action either before or after its move.</p>",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
       "name": "Track",
       "type": "feat",
       "img": "icons/svg/footprint.svg",
@@ -187,7 +216,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 49
     },
     {
       "name": "Weapon Focus",
@@ -222,7 +251,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 50
     },
     {
       "name": "Listen",
@@ -276,7 +305,7 @@
         "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
         "key": "survival",
         "ability": "wis",
-        "ranks": 2,
+        "ranks": 0,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -289,6 +318,24 @@
       "flags": {},
       "folder": null,
       "sort": 103
+    },
+    {
+      "name": "Manticore — Spikes & Flight",
+      "type": "creatureFeature",
+      "img": "icons/svg/arrow.svg",
+      "system": {
+        "key": "creatureManticoreSpecial",
+        "description": "<p><strong>Spike volley (Ex):</strong> As a standard action, launch tail spikes (range increment and volley size per stat block); treat as ranged attacks with listed attack bonus.</p><p><strong>Flight (Ex):</strong> Wings allow flight at listed speed and maneuverability.</p><p><strong>Skills:</strong> +4 racial on Spot and Listen checks.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
     }
   ],
   "flags": {},
