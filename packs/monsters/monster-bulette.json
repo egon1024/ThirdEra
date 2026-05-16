@@ -203,7 +203,7 @@
     {
       "name": "Track",
       "type": "feat",
-      "img": "icons/svg/footprint.svg",
+      "img": "icons/svg/pawprint.svg",
       "system": {
         "description": "<p>You can follow the trails of creatures and characters across most types of terrain.</p>",
         "key": "track",

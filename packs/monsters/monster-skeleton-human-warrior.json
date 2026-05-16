@@ -209,92 +209,75 @@
       "sort": 1
     },
     {
-      "name": "Immunity to Disease",
+      "name": "Undead Traits",
       "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
+      "img": "icons/svg/skull.svg",
       "system": {
-        "key": "creatureImmunityDisease",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to disease</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creatureUndeadTraits",
+        "description": "<p><strong>SRD (undead type):</strong> Immune to mind-affecting, poison, sleep, paralysis, stunning, disease, and death effects; not subject to critical hits, nonlethal damage, ability drain, fatigue/exhaustion, or energy drain; uses Charisma for Concentration; darkvision as listed.</p><p><strong>ThirdEra:</strong> Matching typed grants are under <strong>Capability grants</strong>. Mindless undead need additional handling for skills/will (stat block). Many necromancy effects still interact — track exceptions on specific monsters.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "disease",
-              "label": "Immune to disease (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 995
-    },
-    {
-      "name": "Immunity to Stunning",
-      "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
-      "system": {
-        "key": "creatureImmunityStunning",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "stunning",
-              "label": "Immune to stunning (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 996
-    },
-    {
-      "name": "Immunity to Paralysis",
-      "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
-      "system": {
-        "key": "creatureImmunityParalysis",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "paralysis",
-              "label": "Immune to paralysis (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 997
-    },
-    {
-      "name": "Poison Immunity",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
-      "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
+              "tag": "mindAffecting",
+              "label": "Immune to mind-affecting (undead traits)."
+            },
             {
               "category": "immunity",
               "tag": "poison",
-              "label": "Immune to poison (SRD)."
+              "label": "Immune to poison (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "disease",
+              "label": "Immune to disease (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "paralysis",
+              "label": "Immune to paralysis (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "stunning",
+              "label": "Immune to stunning (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "death",
+              "label": "Immune to death effects (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "criticalHits",
+              "label": "Not subject to critical hits (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "abilityDamage",
+              "label": "Immune to ability damage (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "abilityDrain",
+              "label": "Immune to ability drain (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "exhaustion",
+              "label": "Immune to fatigue/exhaustion (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "energyDrain",
+              "label": "Immune to energy drain (undead traits)."
             }
           ],
           "senses": []
@@ -302,23 +285,23 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 998
+      "sort": 120
     },
     {
-      "name": "Immunity to Sleep",
+      "name": "Cold Immunity",
       "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
+      "img": "icons/svg/mountain.svg",
       "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creatureImmunityCold",
+        "description": "<p><strong>SRD:</strong> The creature is immune to <strong>cold</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
+              "tag": "cold",
+              "label": "Immune to cold."
             }
           ],
           "senses": []
@@ -326,7 +309,61 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 121
+    },
+    {
+      "name": "Damage Reduction (Skeleton)",
+      "type": "creatureFeature",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "key": "creatureSkeletonHumanWarriorDamageReduction",
+        "description": "<p><strong>Damage reduction:</strong> <strong>5/bludgeoning</strong> (SRD).</p><p><strong>ThirdEra:</strong> Value and bypass are under <strong>Capability grants</strong> via overrides on this copy.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 0,
+              "bypass": "",
+              "label": "Damage reduction; value and bypass from overrides."
+            }
+          ],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 5,
+              "bypass": "bludgeoning",
+              "label": "Damage reduction 5/bludgeoning (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 122
+    },
+    {
+      "name": "Skeleton — Single Actions",
+      "type": "creatureFeature",
+      "img": "icons/svg/mystery-man.svg",
+      "system": {
+        "key": "creatureSkeletonHumanWarriorSpecial",
+        "description": "<p><strong>Single actions only (Ex):</strong> Mindless skeletons get a single move or standard action each round unless commanded.</p><p><strong>Equipment:</strong> This stock warrior uses listed arms and armor from the stat block.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 123
     }
   ],
   "flags": {},

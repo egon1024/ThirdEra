@@ -73,7 +73,7 @@
       ],
       "damageReduction": {
         "value": 5,
-        "bypass": "cold"
+        "bypass": "cold iron or good"
       },
       "spellResistance": 0,
       "senses": [],
@@ -151,20 +151,347 @@
   },
   "items": [
     {
-      "name": "Poison Immunity",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
       "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Weapon Finesse",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are skilled at using light weapons.</p>",
+        "key": "weaponFinesse",
+        "type": "General",
+        "prerequisites": "Base attack bonus +1",
+        "benefit": "With a light weapon, rapier, whip, or spiked chain made for a creature of your size category, you may use your Dexterity modifier instead of your Strength modifier on attack rolls. If you carry a shield, its armor check penalty applies to your attack rolls.",
+        "special": "Natural weapons are considered light weapons.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Bluff",
+      "type": "skill",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "description": "<p>You know how to tell a lie.</p>",
+        "key": "bluff",
+        "ability": "cha",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Diplomacy",
+      "type": "skill",
+      "img": "icons/svg/coins.svg",
+      "system": {
+        "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+        "key": "diplomacy",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Disguise",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>You are skilled at changing your appearance.</p>",
+        "key": "disguise",
+        "ability": "cha",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 14,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Intimidate",
+      "type": "skill",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You can use this skill to frighten opponents or to get them to act in a way that benefits you.</p>",
+        "key": "intimidate",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Knowledge (Arcana) (any one)",
+      "type": "skill",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "<p>Ancient mysteries, magic traditions, arcane symbols, cryptic phrases, constructs, dragons, magical beasts. Like other Knowledge skills, each Knowledge field is a separate skill with its own ranks.</p>",
+        "key": "knowledge-arcana",
+        "ability": "int",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "true",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 107
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 108
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
+        "ability": "int",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 109
+    },
+    {
+      "name": "Spellcraft",
+      "type": "skill",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "description": "<p>You are skilled at working with magic and can identify spells as they are cast or spells already in place.</p>",
+        "key": "spellcraft",
+        "ability": "int",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "true",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
+    },
+    {
+      "name": "Demon Traits",
+      "type": "creatureFeature",
+      "img": "icons/svg/skull.svg",
+      "system": {
+        "key": "creatureDemonTraits",
+        "description": "<p><strong>SRD (demon subtype):</strong> Immunity to <strong>electricity</strong> and <strong>poison</strong>; resistance to <strong>acid 10</strong>, <strong>cold 10</strong>, and <strong>fire 10</strong>; summon and telepathy noted in the creature entry.</p><p><strong>ThirdEra:</strong> Typed immunities and energy resistance rows are listed under <strong>Capability grants</strong> on this item.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
+              "tag": "electricity",
+              "label": "Immune to electricity (demon traits)."
+            },
+            {
+              "category": "immunity",
               "tag": "poison",
-              "label": "Immune to poison (SRD)."
+              "label": "Immune to poison (demon traits)."
+            },
+            {
+              "category": "energyResistance",
+              "energyType": "acid",
+              "amount": 10,
+              "label": "Resist acid 10 (demon traits)."
+            },
+            {
+              "category": "energyResistance",
+              "energyType": "cold",
+              "amount": 10,
+              "label": "Resist cold 10 (demon traits)."
+            },
+            {
+              "category": "energyResistance",
+              "energyType": "fire",
+              "amount": 10,
+              "label": "Resist fire 10 (demon traits)."
             }
           ],
           "senses": []
@@ -172,36 +499,83 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 120
     },
     {
-      "name": "Energy Resistance",
+      "name": "Damage Reduction (Quasit)",
       "type": "creatureFeature",
-      "img": "icons/svg/fire.svg",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "key": "creatureEnergyResistance",
-        "description": "<p><strong>What it does (SRD):</strong> The creature ignores the first <strong>N</strong> points of damage from each attack or effect of the listed energy type.</p><p><strong>ThirdEra:</strong> Type and amount are set under <strong>CGS parameters and overrides</strong>.</p>",
+        "key": "creatureQuasitDamageReduction",
+        "description": "<p><strong>Damage reduction (Ex):</strong> <strong>5/cold iron or good</strong> (SRD quasit).</p><p><strong>ThirdEra:</strong> Numeric value and bypass are under <strong>Capability grants</strong> via overrides on this copy.</p>",
         "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 0,
+              "bypass": "",
+              "label": "Damage reduction; value and bypass from overrides."
+            }
+          ],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 5,
+              "bypass": "cold iron or good",
+              "label": "Damage reduction 5/cold iron or good (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Fast Healing",
+      "type": "creatureFeature",
+      "img": "icons/svg/heal.svg",
+      "system": {
+        "key": "creatureFastHealing",
+        "description": "<p><strong>What it does (SRD):</strong> The creature regains hit points each round at the rate given in the stat block (unless the rules say otherwise).</p><p><strong>ThirdEra:</strong> There is no separate fast-healing numeric CGS row yet; track rounds at the table.</p>",
+        "abilityKind": "Su",
         "changes": [],
         "cgsGrants": {
           "grants": [],
           "senses": []
         },
         "cgsGrantOverrides": {
-          "grants": [
-            {
-              "category": "energyResistance",
-              "energyType": "fire",
-              "amount": 10,
-              "label": "Resist fire 10 (SRD-style innate resistance)."
-            }
-          ],
+          "grants": [],
           "senses": []
         }
       },
       "flags": {},
       "folder": null,
-      "sort": 998
+      "sort": 122
+    },
+    {
+      "name": "Quasit — Poison, SLAs & Alternate Form",
+      "type": "creatureFeature",
+      "img": "icons/svg/poison.svg",
+      "system": {
+        "key": "creatureQuasitSpecial",
+        "description": "<p><strong>Poison (Ex):</strong> Injury — Fort <strong>DC 13</strong>; initial <strong>1d4 Dex</strong>, secondary <strong>2d4 Dex</strong>; Constitution-based with <strong>+2 racial</strong> to DC.</p><p><strong>Spell-like abilities:</strong> At will — <em>detect good</em>, <em>detect magic</em>, <em>invisibility</em> (self only); <strong>1/day</strong> — <em>cause fear</em> (30-ft. radius from quasit, DC <strong>11</strong>); <strong>1/week</strong> — <em>commune</em> (six questions, CL <strong>12th</strong>). Other CL <strong>6th</strong>; save DCs Charisma-based.</p><p><strong>Alternate form (Su):</strong> Standard action — assume one or two forms from: bat, Small or Medium monstrous centipede, toad, wolf.</p><p><strong>Fast healing (Ex):</strong> <strong>2</strong> (see embedded fast healing item).</p><p><strong>Demon traits:</strong> Summon and telepathy are summarized on the demon hub linked from the stat block.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 123
     }
   ],
   "flags": {

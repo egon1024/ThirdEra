@@ -194,7 +194,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 48
     },
     {
       "name": "Darkvision",
@@ -236,16 +236,15 @@
         "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 0,
+        "ranks": 3,
         "modifier": {
-          "misc": 1,
-          "total": 0,
-          "miscLabel": "MM / size / racial (not auto on sheet)"
+          "misc": 0,
+          "total": 0
         },
         "trainedOnly": "false",
         "armorCheckPenalty": "false",
         "exclusive": "false",
-        "npcClassSkill": false
+        "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
@@ -259,20 +258,37 @@
         "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 0,
+        "ranks": 3,
         "modifier": {
-          "misc": 1,
-          "total": 0,
-          "miscLabel": "MM / size / racial (not auto on sheet)"
+          "misc": 0,
+          "total": 0
         },
         "trainedOnly": "false",
         "armorCheckPenalty": "false",
         "exclusive": "false",
-        "npcClassSkill": false
+        "npcClassSkill": true
       },
       "flags": {},
       "folder": null,
       "sort": 102
+    },
+    {
+      "name": "Orc — Light Sensitivity",
+      "type": "creatureFeature",
+      "img": "icons/svg/light.svg",
+      "system": {
+        "key": "creatureOrcSpecial",
+        "description": "<p><strong>Light sensitivity (Ex):</strong> Abrupt exposure to bright light (such as daylight or the <em>daylight</em> spell) blinds an orc for 1 round. On subsequent rounds while the bright light remains, it is <strong>dazzled</strong> as long as it is in the area.</p><p><strong>ThirdEra:</strong> Dazzled/blinded conditions are not auto-applied from this item — apply when lighting changes in play.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
     }
   ],
   "flags": {},

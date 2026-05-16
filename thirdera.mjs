@@ -44,6 +44,7 @@ import { migrateAllNpcPhase6StatBlockSenses } from "./module/logic/cgs-phase6-np
 import { runCgsGrantOverridesWorldMigrationIfNeeded } from "./module/logic/cgs-grant-overrides-world-migrate.mjs";
 import { populateCompendiumCache } from "./module/logic/domain-spells.mjs";
 import { yieldToMain } from "./module/logic/client-main-thread-cooperation.mjs";
+import { iconFilenameFromPath, ITEM_IMAGE_REPLACEMENTS, resolveItemImagePath } from "./module/utils/item-image-path.mjs";
 import {
     syncDerivedHpCondition,
     syncFlatFootedForCombat,
@@ -688,31 +689,13 @@ async function buildConditionStatusEffects() {
  * The UI uses the index populated from metadata at load (constructor), not getIndex(), so we must
  * resolve both the existing index and wrap getIndex for future refreshes.
  */
-// Icons that don't exist in Foundry core — use shield instead so thumbnails don't 404.
-const COMPENDIUM_MISSING_ICONS = new Set([
-    "wolf.svg",
-    "star.svg",
-    "dodge.svg",
-    "raven.svg",
-    "run.svg",
-    "camera.svg",
-    "wave.svg",
-    /** Not shipped in Foundry core `public/icons/svg` (ThirdEra pack authoring). */
-    "blob.svg",
-    "light-bulb.svg",
-    "skeleton.svg",
-    "smoke.svg",
-    "item-journal.svg"
-]);
-
 function resolveIndexImgPaths(index) {
     const base = typeof window !== "undefined" && window.location?.origin
         ? window.location.origin
         : "";
     for (const entry of index.values()) {
         if (!entry.img) continue;
-        const filename = (entry.img.split("/").pop() ?? "").split("?")[0];
-        if (COMPENDIUM_MISSING_ICONS.has(filename)) entry.img = "icons/svg/shield.svg";
+        entry.img = resolveItemImagePath(entry.img);
         const isRelative = !entry.img.startsWith("/") && !entry.img.startsWith("http");
         if (isRelative) {
             const path = foundry.utils.getRoute(entry.img);
@@ -751,33 +734,31 @@ async function applyCompendiumImageRouteFix() {
     }
 
     const base = window.location?.origin ?? "";
-    const fixThumbnailSrc = (rawSrc) => {
-        const filename = (rawSrc.split("/").pop() ?? "").split("?")[0];
-        if (COMPENDIUM_MISSING_ICONS.has(filename)) return "icons/svg/shield.svg";
-        return rawSrc;
-    };
+    const fixThumbnailSrc = (rawSrc) => resolveItemImagePath(rawSrc);
     const setThumbnailSrc = (img, rawSrc) => {
         const src = fixThumbnailSrc(rawSrc);
         const path = src.startsWith("/") ? src : foundry.utils.getRoute(src);
         img.setAttribute("src", `${base}${path.startsWith("/") ? path : `/${path}`}`);
     };
 
-    // Fix any compendium thumbnail img that has a bad src (run on a single element or a root).
-    const fixThumbnailsIn = (root) => {
+    // Fix compendium thumbnails and sheet item-row icons that reference missing core SVGs.
+    const fixKnownBadImagesIn = (root) => {
         if (!root?.querySelectorAll) return;
-        for (const img of root.querySelectorAll("img.thumbnail")) {
+        for (const img of root.querySelectorAll("img.thumbnail, .item-image img")) {
             const src = (img.getAttribute("src") ?? img.src ?? "").trim();
             if (!src || src.startsWith("data:")) continue;
             setThumbnailSrc(img, src);
         }
     };
 
-    // Run when compendium app renders.
+    // Run when compendium or actor/item sheets render.
     Hooks.on("renderApplication", (app, html, _data) => {
-        if (!app?.options?.id?.startsWith("compendium-")) return;
-        fixThumbnailsIn(app?.element ?? html);
-        setTimeout(() => fixThumbnailsIn(app?.element), 0);
-        setTimeout(() => fixThumbnailsIn(app?.element), 100);
+        const root = app?.element ?? html;
+        const id = app?.options?.id ?? "";
+        if (!id.startsWith("compendium-") && !id.includes("Actor") && !id.includes("Item")) return;
+        fixKnownBadImagesIn(root);
+        setTimeout(() => fixKnownBadImagesIn(root), 0);
+        setTimeout(() => fixKnownBadImagesIn(root), 100);
     });
 
     // Fix thumbnails as soon as they are added to the DOM (before the browser requests the bad URL).
@@ -789,22 +770,21 @@ async function applyCompendiumImageRouteFix() {
                     const src = (node.getAttribute("src") ?? node.src ?? "").trim();
                     if (src && !src.startsWith("data:")) setThumbnailSrc(node, src);
                 }
-                fixThumbnailsIn(node);
+                fixKnownBadImagesIn(node);
             }
         }
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // When a compendium thumbnail fails to load, replace with fallback icon so it displays.
+    // When an icon fails to load (compendium thumbnails, sheet item rows, etc.), swap known-bad paths.
     document.body.addEventListener(
         "error",
         (e) => {
-            if (e.target?.tagName !== "IMG" || !e.target.classList?.contains("thumbnail")) return;
+            if (e.target?.tagName !== "IMG") return;
             const src = e.target.src || e.target.getAttribute("src") || "";
-            const filename = (src.split("/").pop() ?? "").split("?")[0];
-            if (COMPENDIUM_MISSING_ICONS.has(filename)) {
-                setThumbnailSrc(e.target, "icons/svg/shield.svg");
-            }
+            const filename = iconFilenameFromPath(src);
+            if (!ITEM_IMAGE_REPLACEMENTS.has(filename)) return;
+            setThumbnailSrc(e.target, resolveItemImagePath(src));
         },
         true
     );
