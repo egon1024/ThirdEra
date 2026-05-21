@@ -147,44 +147,61 @@
   },
   "items": [
     {
-      "name": "Immunity to Sleep",
+      "name": "Low-Light Vision",
       "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
+      "img": "icons/svg/sun.svg",
       "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
-          "grants": [
+          "grants": [],
+          "senses": [
             {
-              "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
+              "type": "lowLight",
+              "range": ""
             }
-          ],
-          "senses": []
+          ]
         }
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 120
     },
     {
-      "name": "Poison Immunity",
+      "name": "Violet Fungus — Poison & Plant Traits",
       "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
+      "img": "icons/svg/poison.svg",
       "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
+        "key": "creatureVioletFungusSpecial",
+        "description": "<p><strong>Poison (Ex):</strong> Tentacle — injury Fort <strong>DC 14</strong>; initial and secondary <strong>1d4</strong> Str and <strong>1d4</strong> Con; Constitution-based.</p><p><strong>Plant traits:</strong> Low-light vision; immunity to mind-affecting, poison, sleep, paralysis, stunning, and polymorph; not subject to critical hits.</p><p><strong>Reach:</strong> <strong>10 ft.</strong> with tentacles (see natural attacks).</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Immunity to Stunning",
+      "type": "creatureFeature",
+      "img": "icons/svg/daze.svg",
+      "system": {
+        "key": "creatureImmunityStunning",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "poison",
-              "label": "Immune to poison (SRD)."
+              "tag": "stunning",
+              "label": "Immune to stunning (SRD)."
             }
           ],
           "senses": []
@@ -192,7 +209,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 998
+      "sort": 996
     },
     {
       "name": "Immunity to Paralysis",
@@ -219,20 +236,20 @@
       "sort": 997
     },
     {
-      "name": "Immunity to Stunning",
+      "name": "Poison Immunity",
       "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
+      "img": "icons/svg/biohazard.svg",
       "system": {
-        "key": "creatureImmunityStunning",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "key": "creaturePoisonImmunity",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "stunning",
-              "label": "Immune to stunning (SRD)."
+              "tag": "poison",
+              "label": "Immune to poison (SRD)."
             }
           ],
           "senses": []
@@ -240,7 +257,31 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 996
+      "sort": 998
+    },
+    {
+      "name": "Immunity to Sleep",
+      "type": "creatureFeature",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "key": "creatureImmunitySleep",
+        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 999
     }
   ],
   "flags": {

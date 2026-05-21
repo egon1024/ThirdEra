@@ -149,6 +149,135 @@
   },
   "items": [
     {
+      "name": "Weapon Focus",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>Choose one type of weapon. You can also choose unarmed strike or grapple as your weapon for purposes of this feat.</p>",
+        "key": "weaponFocus",
+        "type": "General, Fighter",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Proficiency with selected weapon, base attack bonus +1",
+        "benefit": "<p>You gain a +1 bonus on all attack rolls you make using the selected weapon.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 1,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "attack",
+            "value": 1
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Darkvision",
+      "type": "creatureFeature",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "key": "creatureDarkvision",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to the distance set on each copy (overrides or the stat block). Darkvision is <strong>black and white</strong> only unless another rule says otherwise.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range under <strong>Capability grants</strong>; set per-copy distance under <strong>CGS parameters and overrides</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": ""
+            }
+          ]
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": "90 ft."
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Troglodyte — Stench",
+      "type": "creatureFeature",
+      "img": "icons/svg/poison.svg",
+      "system": {
+        "key": "creatureTroglodyteSpecial",
+        "description": "<p><strong>Stench (Ex):</strong> <strong>90-ft.</strong> spread — Fort save or sickened for <strong>10</strong> rounds; immunity for <strong>24</strong> hours after a successful save. Constitution-based DC per stat block.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
       "name": "Poison Immunity",
       "type": "creatureFeature",
       "img": "icons/svg/biohazard.svg",

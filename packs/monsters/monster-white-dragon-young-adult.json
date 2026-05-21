@@ -192,7 +192,259 @@
       "subtypeOverlayUuids": []
     }
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 18,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
+        "ability": "int",
+        "ranks": 18,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 18,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 12,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 12,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Swim",
+      "type": "skill",
+      "img": "icons/svg/waterfall.svg",
+      "system": {
+        "description": "<p>Make a Swim check once per round while you are in the water. Success means you may swim at up to one-half your speed (as a full-round action) or at one-quarter your speed (as a move action).</p>",
+        "key": "swim",
+        "ability": "str",
+        "ranks": 12,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Dragon — Core Traits",
+      "type": "creatureFeature",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "key": "creatureDragonCoreTraits",
+        "description": "<p><strong>SRD (true dragons):</strong> <strong>Blindsense</strong> 60 ft., <strong>keen senses</strong>, and <strong>frightful presence</strong>. Skills / DCs for frightful presence follow the creature’s statistics.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "blindsense",
+              "range": "60 ft."
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Spell-Like Abilities (White Dragon)",
+      "type": "creatureFeature",
+      "img": "icons/svg/snowflake.svg",
+      "system": {
+        "key": "creatureSpellsWhiteDragon",
+        "description": "<p><strong>White dragon spell-like abilities</strong> vary by age (SRD): <em>fog cloud</em> (juvenile+), <em>gust of wind</em> (adult+), <em>wall of ice</em> (ancient+), <em>control weather</em> (great wyrm); caster levels and DCs per stat block (Charisma-based). <strong>Icewalking</strong> (wyrmling+), <strong>freezing fog</strong> (old+), and breath weapon (cone of cold) per age category.</p>",
+        "abilityKind": "Sp",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Damage Reduction (magic)",
+      "type": "creatureFeature",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "key": "creatureDamageReductionMagic",
+        "description": "<p><strong>What it does (SRD):</strong> The creature ignores weapon damage unless the attack overcomes <strong>DR X/magic</strong>.</p><p><strong>ThirdEra:</strong> Canonical template uses value <strong>0</strong> with bypass <strong>magic</strong>; set the real DR value under <strong>CGS parameters and overrides</strong>.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 0,
+              "bypass": "magic",
+              "label": "Damage reduction /magic; value from overrides."
+            }
+          ],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 5,
+              "bypass": "magic",
+              "label": "Damage reduction 5/magic (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 122
+    }
+  ],
   "flags": {},
   "folder": null,
   "sort": 0,

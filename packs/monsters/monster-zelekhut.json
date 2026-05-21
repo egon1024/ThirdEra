@@ -154,116 +154,309 @@
   },
   "items": [
     {
-      "name": "Immunity to Sleep",
-      "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
+      "name": "Great Fortitude",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "description": "<p>You have a knack for avoiding death.</p>",
+        "key": "greatFortitude",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Fortitude saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveFort",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Ride-By Attack",
+      "type": "feat",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "description": "<p>You are skilled at making mounted attacks while moving.</p>",
+        "key": "rideByAttack",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Ride 1 rank, Mounted Combat",
+        "benefit": "<p>When you are mounted and use the charge action, you may move and attack as if with a standard charge and then move again (continuing the straight line of the charge). Your total movement for the round can't exceed double your mounted speed. You and your mount do not provoke an attack of opportunity from the opponent that you attack.</p>",
+        "special": "A fighter may select Ride-By Attack as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "mountedCombat"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Spirited Charge",
+      "type": "feat",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "description": "<p>You are skilled at charging while mounted.</p>",
+        "key": "spiritedCharge",
+        "type": "General",
+        "fighterBonusEligible": "true",
+        "prerequisites": "Ride 1 rank, Mounted Combat, Ride-By Attack",
+        "benefit": "<p>When mounted and using the charge action, you deal double damage with a melee weapon (or triple damage with a lance).</p>",
+        "special": "A fighter may select Spirited Charge as one of his fighter bonus feats.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [
+          "mountedCombat",
+          "rideByAttack"
+        ],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Diplomacy",
+      "type": "skill",
+      "img": "icons/svg/coins.svg",
+      "system": {
+        "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+        "key": "diplomacy",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
+        "ability": "int",
+        "ranks": 9,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Sense Motive",
+      "type": "skill",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "description": "<p>You can get a hunch about a social situation or read a person.</p>",
+        "key": "senseMotive",
+        "ability": "wis",
+        "ranks": 9,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 6,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Survival",
+      "type": "skill",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "description": "<p>You are skilled at surviving in the wild and at following tracks.</p>",
+        "key": "survival",
+        "ability": "wis",
+        "ranks": 0,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Construct Traits",
+      "type": "creatureFeature",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "key": "creatureConstructTraits",
+        "description": "<p><strong>SRD (construct type):</strong> Immunity to mind-affecting effects, poison, sleep, paralysis, stunning, disease, death effects, and necromancy; not subject to critical hits, ability damage/drain, fatigue/exhaustion, or energy drain; cannot heal damage normally unless noted.</p><p><strong>ThirdEra:</strong> Matching typed rows are under <strong>Capability grants</strong>. Track nonlethal, healing limits, and construct-specific exceptions (e.g. golem <strong>Immunity to Magic</strong>) in the stat block or extra items.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 999
-    },
-    {
-      "name": "Poison Immunity",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
-      "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
+              "tag": "mindAffecting",
+              "label": "Immune to mind-affecting (construct traits)."
+            },
             {
               "category": "immunity",
               "tag": "poison",
-              "label": "Immune to poison (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 998
-    },
-    {
-      "name": "Immunity to Paralysis",
-      "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
-      "system": {
-        "key": "creatureImmunityParalysis",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "paralysis",
-              "label": "Immune to paralysis (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 997
-    },
-    {
-      "name": "Immunity to Stunning",
-      "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
-      "system": {
-        "key": "creatureImmunityStunning",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "stunning",
-              "label": "Immune to stunning (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 996
-    },
-    {
-      "name": "Immunity to Disease",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
-      "system": {
-        "key": "creatureImmunityDisease",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to disease</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
+              "label": "Immune to poison (construct traits)."
+            },
             {
               "category": "immunity",
               "tag": "disease",
-              "label": "Immune to disease (SRD)."
+              "label": "Immune to disease (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "paralysis",
+              "label": "Immune to paralysis (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "stunning",
+              "label": "Immune to stunning (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "death",
+              "label": "Immune to death effects (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "necromancy",
+              "label": "Immune to necromancy effects (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "criticalHits",
+              "label": "Not subject to critical hits (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "abilityDamage",
+              "label": "Immune to ability damage (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "abilityDrain",
+              "label": "Immune to ability drain (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "exhaustion",
+              "label": "Immune to fatigue/exhaustion (construct traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "energyDrain",
+              "label": "Immune to energy drain (construct traits)."
             }
           ],
           "senses": []
@@ -271,7 +464,156 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 995
+      "sort": 120
+    },
+    {
+      "name": "Thick Hide",
+      "type": "creatureFeature",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "key": "creatureDamageReductionNone",
+        "description": "<p><strong>What it does (SRD):</strong> Thick hide or similar quality gives <strong>damage reduction</strong> with <strong>no bypass</strong> (e.g. DR 2/—).</p><p><strong>ThirdEra:</strong> Canonical template uses value <strong>0</strong> on the DR grant; set the real value under <strong>CGS parameters and overrides</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 0,
+              "bypass": "",
+              "label": "Damage reduction (no bypass); value from overrides."
+            }
+          ],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 10,
+              "bypass": "chaotic",
+              "label": "Damage reduction 10/chaotic (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Fast Healing",
+      "type": "creatureFeature",
+      "img": "icons/svg/heal.svg",
+      "system": {
+        "key": "creatureFastHealing",
+        "description": "<p><strong>What it does (SRD):</strong> The creature regains hit points each round at the rate given in the stat block (unless the rules say otherwise).</p><p><strong>ThirdEra:</strong> There is no separate fast-healing numeric CGS row yet; track rounds at the table.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 122
+    },
+    {
+      "name": "Low-Light Vision",
+      "type": "creatureFeature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "key": "creatureLowLightVision",
+        "description": "<p><strong>What it does (SRD):</strong> In <strong>starlight, moonlight, torchlight, and similar dim lighting</strong>, the creature can see <strong>twice as far</strong> as a human can in the same light. It retains the ability to distinguish color and detail under those conditions that a human could not.</p><p><strong>ThirdEra:</strong> Low-light vision is set on this item’s <strong>Details</strong> tab under <strong>Capability grants</strong> (vision and senses), not in <strong>Mechanical effects</strong> (no extra distance is needed for the usual reading of the rule). The character sheet includes it with other vision from items and race.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "lowLight",
+              "range": ""
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 123
+    },
+    {
+      "name": "Darkvision",
+      "type": "creatureFeature",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "key": "creatureDarkvision",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to the distance set on each copy (overrides or the stat block). Darkvision is <strong>black and white</strong> only unless another rule says otherwise.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range under <strong>Capability grants</strong>; set per-copy distance under <strong>CGS parameters and overrides</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": ""
+            }
+          ]
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": "60 ft."
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 124
+    },
+    {
+      "name": "Spell-Like Abilities (Zelekhut)",
+      "type": "creatureFeature",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "key": "creatureSpellsZelekhut",
+        "description": "<p><strong>At will:</strong> <em>clairaudience/clairvoyance</em>, <em>dimensional anchor</em>, <em>dispel magic</em>, <em>fear</em> (DC <strong>16</strong>), <em>hold person</em> (DC <strong>15</strong>), <em>locate creature</em>, <em>true seeing</em>.</p><p><strong>3/day:</strong> <em>hold monster</em> (DC <strong>17</strong>), <em>mark of justice</em>.</p><p><strong>1/week:</strong> <em>lesser geas</em> (DC <strong>16</strong>). Caster level <strong>8th</strong>; save DCs Charisma-based.</p>",
+        "abilityKind": "Sp",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 125
+    },
+    {
+      "name": "Zelekhut — Chains, Wings & Skills",
+      "type": "creatureFeature",
+      "img": "icons/svg/chain.svg",
+      "system": {
+        "key": "creatureZelekhutSpecial",
+        "description": "<p><strong>Spiked chains (Ex):</strong> Free action — two chains spring from forearms (reach and damage per stat block); retract as free action. Natural weapons count as <strong>lawful</strong> for overcoming DR.</p><p><strong>Wings (Ex):</strong> Metallic wings emerge from back (flight per stat block).</p><p><strong>Construct traits:</strong> Immunities per SRD inevitable entry; not subject to critical hits, nonlethal damage, etc.</p><p><strong>Fast healing (Ex):</strong> <strong>5</strong>. <strong>Spell resistance</strong> <strong>20</strong>.</p><p><strong>Skills:</strong> +4 racial on Search and Sense Motive. Qualifies for Mounted Combat–related feats due to centaur-like build.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 126
     }
   ],
   "flags": {},

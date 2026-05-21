@@ -147,19 +147,154 @@
   },
   "items": [
     {
-      "name": "Darkvision",
-      "type": "creatureFeature",
-      "img": "icons/svg/explosion.svg",
+      "name": "Endurance",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
       "system": {
-        "key": "creatureDarkvision",
-        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to the distance set on this copy (default from the stat block). Darkvision is <strong>black and white</strong> only unless another rule says otherwise.</p><p><strong>ThirdEra:</strong> Distance is under <strong>CGS parameters and overrides</strong> on this item (merged over the canonical template). The stat block’s distance is preserved when migrating from older packs.</p>",
+        "description": "<p>You have enhanced physical stamina.</p>",
+        "key": "endurance",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You gain a +4 bonus on the following checks and saves: Swim checks made to resist nonlethal damage from exhaustion; Constitution checks made to continue running; Constitution checks made to avoid nonlethal damage from a forced march; Constitution checks made to hold your breath; Constitution checks made to avoid nonlethal damage from starvation or thirst; Fortitude saves made to avoid nonlethal damage from hot or cold environments; and Fortitude saves made to resist damage from suffocation.</p><p>Also, you may sleep in light or medium armor without becoming fatigued.</p>",
+        "special": "A ranger automatically gains Endurance as a bonus feat at 3rd level. He need not select it.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Flyby Attack",
+      "type": "feat",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "description": "<p>Use a standard action at any point while flying (including during a dive).</p>",
+        "key": "flybyAttack",
+        "type": "General",
+        "fighterBonusEligible": "false",
+        "prerequisites": "Fly speed",
+        "benefit": "<p>When flying, the creature can take a move action (including a dive) and another standard action at any point during the move. The creature cannot take a second move action during a round when it makes a flyby attack.</p>",
+        "special": "<p><strong>Normal:</strong> Without this feat, the creature takes a standard action either before or after its move.</p>",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 11,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 8,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Blindsight",
+      "type": "creatureFeature",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "key": "creatureBlindsight",
+        "description": "<p><strong>What it does (SRD):</strong> The creature perceives its surroundings without vision out to the distance on each copy, within blindsight limits.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range; set distance under <strong>CGS parameters and overrides</strong>.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [],
           "senses": [
             {
-              "type": "darkvision",
+              "type": "blindsight",
               "range": ""
             }
           ]
@@ -168,15 +303,33 @@
           "grants": [],
           "senses": [
             {
-              "type": "darkvision",
-              "range": "60 ft"
+              "type": "blindsight",
+              "range": "120 ft."
             }
           ]
         }
       },
       "flags": {},
       "folder": null,
-      "sort": 999
+      "sort": 120
+    },
+    {
+      "name": "Yrthak — Sonic Lance & Explosion",
+      "type": "creatureFeature",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "key": "creatureYrthakSpecial",
+        "description": "<p><strong>Sonic lance (Su):</strong> Every <strong>2 rounds</strong>, ray up to <strong>60 ft.</strong> (ranged touch) for <strong>6d6</strong> sonic damage.</p><p><strong>Explosion (Su):</strong> Sonic lance fired at stone creates <strong>2d6</strong> piercing damage in <strong>10-ft.</strong> radius; counts as lance use (never same round as prior lance).</p><p><strong>Blindsight (Ex):</strong> <strong>120 ft.</strong> — immune to gaze, illusions, and sight-based attacks; deafened = effectively blinded.</p><p><strong>Vulnerability:</strong> Sonic.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
     }
   ],
   "flags": {},

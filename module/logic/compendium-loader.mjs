@@ -374,6 +374,88 @@ export const LETTER_S_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
     "creatureSuccubusSpecial"
 ]);
 
+/** Letter-"T" embed-only templates (`scripts/data/embed-only-creature-features-letter-t.json`). */
+export const LETTER_T_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureSpellsTitan",
+    "creatureSpellsTriton",
+    "creatureTieflingResistances",
+    "creatureTarrasqueSpecial",
+    "creatureTendriculosSpecial",
+    "creatureThoqquaSpecial",
+    "creatureTieflingSpecial",
+    "creatureTitanSpecial",
+    "creatureToadSpecial",
+    "creatureTojanidaSpecial",
+    "creatureTreantSpecial",
+    "creatureTriceratopsSpecial",
+    "creatureTroglodyteSpecial",
+    "creatureTrollSpecial",
+    "creatureTrumpetArchonSpecial"
+]);
+
+/** Letter-"U" embed-only templates (`scripts/data/embed-only-creature-features-letter-u.json`). */
+export const LETTER_U_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureUnicornImmunityCharmCompulsion",
+    "creatureSpellsUnicorn",
+    "creatureUnicornSpecial"
+]);
+
+/** Letter-"V" embed-only templates (`scripts/data/embed-only-creature-features-letter-v.json`). */
+export const LETTER_V_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureSpellsVrock",
+    "creatureVampireSpawnSpecial",
+    "creatureVargouilleSpecial",
+    "creatureVioletFungusSpecial",
+    "creatureViperSnakeSpecial",
+    "creatureVrockSpecial"
+]);
+
+/** Letter-"W" embed-only templates (`scripts/data/embed-only-creature-features-letter-w.json`). */
+export const LETTER_W_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureSpellsWhiteDragon",
+    "creatureWaterMastery",
+    "creatureDrench",
+    "creatureVortexWaterElemental",
+    "creatureBreathWeaponWaterMephit",
+    "creatureFastHealingWaterMephit",
+    "creatureWaterMephitSpecial",
+    "creatureWaterNagaSpecial",
+    "creatureWerebearSpecial",
+    "creatureWereboarSpecial",
+    "creatureWereratSpecial",
+    "creatureWeretigerSpecial",
+    "creatureWerewolfSpecial",
+    "creatureWerewolfLordSpecial",
+    "creatureWightSpecial",
+    "creatureWillOWispSpecial",
+    "creatureWinterWolfSpecial",
+    "creatureWolfSpecial",
+    "creatureWolverineSpecial",
+    "creatureWorgSpecial",
+    "creatureWraithSpecial",
+    "creatureWyvernSpecial",
+    "creatureWeaselSpecial"
+]);
+
+/** Letter-"X" embed-only templates (`scripts/data/embed-only-creature-features-letter-x.json`). */
+export const LETTER_X_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureXillSpecial",
+    "creatureXornSpecial"
+]);
+
+/** Letter-"Y" embed-only templates (`scripts/data/embed-only-creature-features-letter-y.json`). */
+export const LETTER_Y_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureYethHoundSpecial",
+    "creatureYrthakSpecial"
+]);
+
+/** Letter-"Z" embed-only templates (`scripts/data/embed-only-creature-features-letter-z.json`). */
+export const LETTER_Z_EMBED_ONLY_CREATURE_FEATURE_KEYS = Object.freeze([
+    "creatureSpellsZelekhut",
+    "creatureZelekhutSpecial",
+    "creatureZombieSpecial"
+]);
+
 /** @type {Set<string> | null} */
 let _creatureFeatureCompendiumPurgeKeys = null;
 
@@ -405,7 +487,14 @@ export function getCreatureFeatureCompendiumPurgeKeys() {
             ...LETTER_P_EMBED_ONLY_CREATURE_FEATURE_KEYS,
             ...LETTER_Q_EMBED_ONLY_CREATURE_FEATURE_KEYS,
             ...LETTER_R_EMBED_ONLY_CREATURE_FEATURE_KEYS,
-            ...LETTER_S_EMBED_ONLY_CREATURE_FEATURE_KEYS
+            ...LETTER_S_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_T_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_U_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_V_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_W_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_X_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_Y_EMBED_ONLY_CREATURE_FEATURE_KEYS,
+            ...LETTER_Z_EMBED_ONLY_CREATURE_FEATURE_KEYS
         ]);
     }
     return _creatureFeatureCompendiumPurgeKeys;

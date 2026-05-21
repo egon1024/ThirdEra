@@ -147,116 +147,479 @@
   },
   "items": [
     {
-      "name": "Immunity to Sleep",
-      "type": "creatureFeature",
-      "img": "icons/svg/sleep.svg",
+      "name": "Alertness",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
       "system": {
-        "key": "creatureImmunitySleep",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to sleep effects</strong> (including magical sleep) unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
+        "description": "<p>You are particularly observant.</p>",
+        "key": "alertness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Listen checks and Spot checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "skill.listen",
+            "value": 2
+          },
+          {
+            "key": "skill.spot",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 48
+    },
+    {
+      "name": "Improved Initiative",
+      "type": "feat",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "description": "<p>You are exceptionally quick and alert.</p>",
+        "key": "improvedInitiative",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +4 bonus on initiative checks.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "initiative",
+            "value": 4
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 49
+    },
+    {
+      "name": "Lightning Reflexes",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have faster reflexes than normal.</p>",
+        "key": "lightningReflexes",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +2 bonus on all Reflex saving throws.</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": [],
+        "changes": [
+          {
+            "key": "saveRef",
+            "value": 2
+          }
+        ]
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 50
+    },
+    {
+      "name": "Skill Focus",
+      "type": "feat",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "description": "<p>Choose a skill. You are particularly capable at that skill.</p>",
+        "key": "skillFocus",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You get a +3 bonus on all checks involving the chosen skill.</p>",
+        "special": "You can gain Skill Focus multiple times. Each time you take the feat, it applies to a new skill.",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 51
+    },
+    {
+      "name": "Toughness",
+      "type": "feat",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "description": "<p>You have enhanced physical stamina.</p>",
+        "key": "toughness",
+        "type": "General",
+        "prerequisites": "",
+        "benefit": "<p>You gain +3 hit points. For every Hit Die beyond 3, you gain an additional +1 hit point. If you have more than 3 Hit Dice, you gain +1 hit points whenever you gain a Hit Die (such as when you gain a level).</p>",
+        "special": "",
+        "scalingTable": [],
+        "prerequisiteFeatKeys": [],
+        "prerequisiteBAB": 0,
+        "prerequisiteAbilityScores": {
+          "str": 0,
+          "dex": 0,
+          "con": 0,
+          "int": 0,
+          "wis": 0,
+          "cha": 0
+        },
+        "prerequisiteFeatUuids": []
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 52
+    },
+    {
+      "name": "Bluff",
+      "type": "skill",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "description": "<p>You know how to tell a lie.</p>",
+        "key": "bluff",
+        "ability": "cha",
+        "ranks": 4,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 101
+    },
+    {
+      "name": "Climb",
+      "type": "skill",
+      "img": "icons/svg/mountain.svg",
+      "system": {
+        "description": "<p>Check: With each successful Climb check, you can advance up, down, or across a slope, wall, or other steep incline (or even a ceiling with handholds) at one-quarter your normal speed.</p>",
+        "key": "climb",
+        "ability": "str",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 102
+    },
+    {
+      "name": "Diplomacy",
+      "type": "skill",
+      "img": "icons/svg/coins.svg",
+      "system": {
+        "description": "<p>You can use this skill to persuade others to agree with your arguments, to resolve differences, and to gather valuable information or rumors from people.</p>",
+        "key": "diplomacy",
+        "ability": "cha",
+        "ranks": 2,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 103
+    },
+    {
+      "name": "Hide",
+      "type": "skill",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "description": "<p>Make a Hide check to conceal yourself from enemies, slink past guards, slip away without being noticed, or sneak up on people without being seen or heard.</p>",
+        "key": "hide",
+        "ability": "dex",
+        "ranks": 8,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 104
+    },
+    {
+      "name": "Jump",
+      "type": "skill",
+      "img": "icons/svg/jump.svg",
+      "system": {
+        "description": "<p>You can make running or standing jumps.</p>",
+        "key": "jump",
+        "ability": "str",
+        "ranks": 5,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 105
+    },
+    {
+      "name": "Listen",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
+        "key": "listen",
+        "ability": "wis",
+        "ranks": 10,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 106
+    },
+    {
+      "name": "Move Silently",
+      "type": "skill",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "description": "<p>Make a Move Silently check when you try to sneak past enemies or move without being heard.</p>",
+        "key": "moveSilently",
+        "ability": "dex",
+        "ranks": 8,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "true",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 107
+    },
+    {
+      "name": "Profession (any one)",
+      "type": "skill",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "description": "<p>Like Craft, Knowledge, and Perform, Profession is actually a number of separate skills. You could have several Profession skills, each with its own ranks, each purchased as a separate skill.</p>",
+        "key": "profession",
+        "ability": "wis",
+        "ranks": 3,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "true",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 108
+    },
+    {
+      "name": "Search",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>You can find secret doors, traps, and hidden objects.</p>",
+        "key": "search",
+        "ability": "int",
+        "ranks": 7,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 109
+    },
+    {
+      "name": "Sense Motive",
+      "type": "skill",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "description": "<p>You can get a hunch about a social situation or read a person.</p>",
+        "key": "senseMotive",
+        "ability": "wis",
+        "ranks": 10,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 110
+    },
+    {
+      "name": "Spot",
+      "type": "skill",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
+        "key": "spot",
+        "ability": "wis",
+        "ranks": 10,
+        "modifier": {
+          "misc": 0,
+          "total": 0
+        },
+        "trainedOnly": "false",
+        "armorCheckPenalty": "false",
+        "exclusive": "false",
+        "npcClassSkill": true
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 111
+    },
+    {
+      "name": "Undead Traits",
+      "type": "creatureFeature",
+      "img": "icons/svg/skull.svg",
+      "system": {
+        "key": "creatureUndeadTraits",
+        "description": "<p><strong>SRD (undead type):</strong> Immune to mind-affecting, poison, sleep, paralysis, stunning, disease, and death effects; not subject to critical hits, nonlethal damage, ability drain, fatigue/exhaustion, or energy drain; uses Charisma for Concentration; darkvision as listed.</p><p><strong>ThirdEra:</strong> Matching typed grants are under <strong>Capability grants</strong>. Mindless undead need additional handling for skills/will (stat block). Many necromancy effects still interact — track exceptions on specific monsters.</p>",
         "abilityKind": "Ex",
         "changes": [],
         "cgsGrants": {
           "grants": [
             {
               "category": "immunity",
-              "tag": "sleep",
-              "label": "Immune to sleep (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 999
-    },
-    {
-      "name": "Poison Immunity",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
-      "system": {
-        "key": "creaturePoisonImmunity",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to poison</strong>: it does not take ability damage or hit point damage from poison, and it ignores other harmful poison effects unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, poison immunity is under <strong>Capability grants</strong> (immunity), not as save or AC bonuses in <strong>Mechanical effects</strong>. The character sheet lists it with other immunities and defenses from the creature’s items and features.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
+              "tag": "mindAffecting",
+              "label": "Immune to mind-affecting (undead traits)."
+            },
             {
               "category": "immunity",
               "tag": "poison",
-              "label": "Immune to poison (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 998
-    },
-    {
-      "name": "Immunity to Paralysis",
-      "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
-      "system": {
-        "key": "creatureImmunityParalysis",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to paralysis</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "paralysis",
-              "label": "Immune to paralysis (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 997
-    },
-    {
-      "name": "Immunity to Stunning",
-      "type": "creatureFeature",
-      "img": "icons/svg/daze.svg",
-      "system": {
-        "key": "creatureImmunityStunning",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to stunning</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
-            {
-              "category": "immunity",
-              "tag": "stunning",
-              "label": "Immune to stunning (SRD)."
-            }
-          ],
-          "senses": []
-        }
-      },
-      "flags": {},
-      "folder": null,
-      "sort": 996
-    },
-    {
-      "name": "Immunity to Disease",
-      "type": "creatureFeature",
-      "img": "icons/svg/biohazard.svg",
-      "system": {
-        "key": "creatureImmunityDisease",
-        "description": "<p><strong>What it does (SRD):</strong> The creature is <strong>immune to disease</strong> unless a specific effect overrides immunity.</p><p><strong>ThirdEra:</strong> On this item’s <strong>Details</strong> tab, the immunity is under <strong>Capability grants</strong> (immunity), not in <strong>Mechanical effects</strong>.</p>",
-        "abilityKind": "Ex",
-        "changes": [],
-        "cgsGrants": {
-          "grants": [
+              "label": "Immune to poison (undead traits)."
+            },
             {
               "category": "immunity",
               "tag": "disease",
-              "label": "Immune to disease (SRD)."
+              "label": "Immune to disease (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "sleep",
+              "label": "Immune to sleep (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "paralysis",
+              "label": "Immune to paralysis (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "stunning",
+              "label": "Immune to stunning (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "death",
+              "label": "Immune to death effects (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "criticalHits",
+              "label": "Not subject to critical hits (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "abilityDamage",
+              "label": "Immune to ability damage (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "abilityDrain",
+              "label": "Immune to ability drain (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "exhaustion",
+              "label": "Immune to fatigue/exhaustion (undead traits)."
+            },
+            {
+              "category": "immunity",
+              "tag": "energyDrain",
+              "label": "Immune to energy drain (undead traits)."
             }
           ],
           "senses": []
@@ -264,7 +627,133 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 995
+      "sort": 120
+    },
+    {
+      "name": "Thick Hide",
+      "type": "creatureFeature",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "key": "creatureDamageReductionNone",
+        "description": "<p><strong>What it does (SRD):</strong> Thick hide or similar quality gives <strong>damage reduction</strong> with <strong>no bypass</strong> (e.g. DR 2/—).</p><p><strong>ThirdEra:</strong> Canonical template uses value <strong>0</strong> on the DR grant; set the real value under <strong>CGS parameters and overrides</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 0,
+              "bypass": "",
+              "label": "Damage reduction (no bypass); value from overrides."
+            }
+          ],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [
+            {
+              "category": "damageReduction",
+              "value": 5,
+              "bypass": "silver",
+              "label": "Damage reduction 5/silver (SRD)."
+            }
+          ],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
+    },
+    {
+      "name": "Darkvision",
+      "type": "creatureFeature",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "key": "creatureDarkvision",
+        "description": "<p><strong>What it does (SRD):</strong> The creature can see in <strong>total darkness</strong> out to the distance set on each copy (overrides or the stat block). Darkvision is <strong>black and white</strong> only unless another rule says otherwise.</p><p><strong>ThirdEra:</strong> Canonical template uses a blank range under <strong>Capability grants</strong>; set per-copy distance under <strong>CGS parameters and overrides</strong>.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": ""
+            }
+          ]
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": [
+            {
+              "type": "darkvision",
+              "range": "60 ft."
+            }
+          ]
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 122
+    },
+    {
+      "name": "Fast Healing",
+      "type": "creatureFeature",
+      "img": "icons/svg/heal.svg",
+      "system": {
+        "key": "creatureFastHealing",
+        "description": "<p><strong>What it does (SRD):</strong> The creature regains hit points each round at the rate given in the stat block (unless the rules say otherwise).</p><p><strong>ThirdEra:</strong> There is no separate fast-healing numeric CGS row yet; track rounds at the table.</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        },
+        "cgsGrantOverrides": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 123
+    },
+    {
+      "name": "Blood Drain",
+      "type": "creatureFeature",
+      "img": "icons/svg/blood.svg",
+      "system": {
+        "key": "creatureBloodDrain",
+        "description": "<p><strong>What it does (SRD):</strong> At the end of its turn, the creature deals <strong>Constitution damage</strong> (or the stat block’s listed effect) to a <strong>grappled</strong> or <strong>attached</strong> victim. Some entries specify healing to the attacker when it drains blood.</p><p><strong>ThirdEra:</strong> Constitution drain or damage is applied manually in play from the printed values. This item keeps <strong>Mechanical effects</strong> and <strong>Capability grants</strong> empty so the DC, damage, and rider effects stay faithful to each stat block.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 124
+    },
+    {
+      "name": "Vampire Spawn — Domination, Drain & Gaseous Form",
+      "type": "creatureFeature",
+      "img": "icons/svg/blood.svg",
+      "system": {
+        "key": "creatureVampireSpawnSpecial",
+        "description": "<p><strong>Domination (Su):</strong> Standard action gaze — Will <strong>DC 14</strong> or <em>dominate person</em> (CL <strong>5th</strong>); <strong>30 ft.</strong>; Charisma-based.</p><p><strong>Energy drain (Su):</strong> Slam — one negative level; Fort <strong>DC 14</strong> to remove; Charisma-based.</p><p><strong>Gaseous form (Su):</strong> At will as the spell (CL <strong>6th</strong>); fly <strong>20 ft.</strong> (perfect); indefinite duration.</p><p><strong>Spider climb (Ex):</strong> As <em>spider climb</em>.</p><p><strong>Turn resistance +2 (Ex):</strong> +2 on turn/rebuke checks against this creature.</p><p><strong>Fast healing:</strong> See separate <strong>Fast Healing</strong> creature feature (<strong>2</strong>/round).</p>",
+        "abilityKind": "Su",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 126
     },
     {
       "name": "Energy Resistance",
@@ -285,7 +774,13 @@
               "category": "energyResistance",
               "energyType": "cold",
               "amount": 10,
-              "label": "Resist cold 10 (SRD-style innate resistance)."
+              "label": "Resist cold 10 (SRD)."
+            },
+            {
+              "category": "energyResistance",
+              "energyType": "electricity",
+              "amount": 10,
+              "label": "Resist electricity 10 (SRD)."
             }
           ],
           "senses": []

@@ -197,7 +197,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 50
+      "sort": 48
     },
     {
       "name": "Iron Will",
@@ -231,7 +231,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 51
+      "sort": 49
     },
     {
       "name": "Track",
@@ -259,7 +259,7 @@
       },
       "flags": {},
       "folder": null,
-      "sort": 52
+      "sort": 50
     },
     {
       "name": "Listen",
@@ -269,7 +269,7 @@
         "description": "<p>Your Listen check is either made against a DC that reflects how quiet the noise is that you might hear, or it is opposed by the target's Move Silently check.</p>",
         "key": "listen",
         "ability": "wis",
-        "ranks": 4,
+        "ranks": 6,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -291,7 +291,7 @@
         "description": "<p>Your Spot check is either made against a DC that reflects how obvious the object is, or it is opposed by the target's Hide check.</p>",
         "key": "spot",
         "ability": "wis",
-        "ranks": 5,
+        "ranks": 7,
         "modifier": {
           "misc": 0,
           "total": 0
@@ -304,6 +304,42 @@
       "flags": {},
       "folder": null,
       "sort": 102
+    },
+    {
+      "name": "Rend",
+      "type": "creatureFeature",
+      "img": "icons/svg/blood.svg",
+      "system": {
+        "key": "creatureRend",
+        "description": "<p><strong>What it does (SRD):</strong> If the creature hits the same foe with <strong>two or more specified natural weapons</strong> in the same round, it deals <strong>extra damage</strong> (often the same dice as one claw plus a static bonus—use the stat block’s exact amount).</p><p><strong>ThirdEra:</strong> Leave <strong>Mechanical effects</strong> empty unless you mirror a specific printed bonus. Rend damage is normally read straight from the monster entry after you confirm both attacks hit.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 120
+    },
+    {
+      "name": "Troll — Regeneration",
+      "type": "creatureFeature",
+      "img": "icons/svg/heal.svg",
+      "system": {
+        "key": "creatureTrollSpecial",
+        "description": "<p><strong>Regeneration (Ex):</strong> <strong>5</strong> per round. Acid and fire deal <strong>normal</strong> damage (do not regenerate that damage). Severed limbs continue to fight; only acid or fire can prevent regrowth per SRD.</p><p><strong>Rend (Ex):</strong> If both claws hit, extra damage per stat block.</p>",
+        "abilityKind": "Ex",
+        "changes": [],
+        "cgsGrants": {
+          "grants": [],
+          "senses": []
+        }
+      },
+      "flags": {},
+      "folder": null,
+      "sort": 121
     }
   ],
   "flags": {},
