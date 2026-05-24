@@ -25,7 +25,7 @@
       "path": "packs/races",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/races-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -39,7 +39,7 @@
       "path": "packs/classes",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/classes-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -53,7 +53,7 @@
       "path": "packs/skills",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/skills-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -67,7 +67,7 @@
       "path": "packs/feats",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/feats-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -81,7 +81,7 @@
       "path": "packs/features",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/class-features-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -95,7 +95,7 @@
       "path": "packs/spells",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/spells-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -109,7 +109,7 @@
       "path": "packs/weapons",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/weapons-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -123,7 +123,7 @@
       "path": "packs/armor",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/armor-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -137,7 +137,7 @@
       "path": "packs/equipment",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/equipment-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -151,7 +151,7 @@
       "path": "packs/schools",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/schools-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -165,7 +165,7 @@
       "path": "packs/domains",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/domains-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -179,7 +179,7 @@
       "path": "packs/conditions",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/conditions-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -193,7 +193,7 @@
       "path": "packs/creature_types",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/creature-types-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -207,7 +207,7 @@
       "path": "packs/subtypes",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/subtypes-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -221,7 +221,7 @@
       "path": "packs/creature-features",
       "type": "Item",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/monsters-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
@@ -231,11 +231,11 @@
     },
     {
       "name": "thirdera_monsters",
-      "label": "Monsters (SRD)",
+      "label": "Monsters",
       "path": "packs/monsters",
       "type": "Actor",
       "system": "thirdera",
-      "banner": "systems/thirdera/assets/banners/monsters-banner.webp",
+      "banner": "systems/thirdera/assets/banners/banner-back.webp",
       "ownership": {
         "GAMEMASTER": "OWNER",
         "ASSISTANT": "OWNER",
